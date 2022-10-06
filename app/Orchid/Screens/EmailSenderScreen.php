@@ -79,7 +79,7 @@ class EmailSenderScreen extends Screen
                     ->help('Enter the subject line for your message'),
 
                 Relation::make('users.')
-                    ->title('Recipients')
+                    ->title('Reipients')
                     ->multiple()
                     ->required()
                     ->placeholder('Email addresses')
