@@ -1,5 +1,7 @@
 <?php
 
+//this file is for the emailing service
+
 namespace App\Orchid\Screens;
 
 use App\Models\User;
