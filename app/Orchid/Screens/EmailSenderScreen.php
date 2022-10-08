@@ -1,7 +1,6 @@
 <?php
 
 //this file is for the emailing service
-//test
 
 namespace App\Orchid\Screens;
 
