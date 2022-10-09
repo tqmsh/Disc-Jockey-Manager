@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('localadmin', function (Blueprint $table) {
             $table->id();
-            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
@@ -26,7 +25,12 @@ return new class extends Migration
             $table->string('lastname')->nullable();
             $table->bigInteger('phonenumber')->nullable();
             $table->string('email')->nullable();
-            $table->string('school');
+            $table->string('school')->index();
+            $table->foreign('school')
+                ->references('school_name')
+                ->on('schools')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');            
             $table->timestamps();
         });
     }
