@@ -2,7 +2,9 @@
 
 namespace App\Orchid\Screens;
 
+use Orchid\Alert\Alert;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
 
 class EditSchoolScreen extends Screen
 {
