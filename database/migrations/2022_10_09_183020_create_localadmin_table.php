@@ -30,7 +30,7 @@ return new class extends Migration
                 ->references('school_name')
                 ->on('schools')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');            
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
