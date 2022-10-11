@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('event_name')->nullable();
             $table->dateTime('event_start_time')->nullable();
             $table->dateTime('event_finish_time')->nullable();
-            $table->string('school')->index();
+            $table->string('school')->index()->nullable();
             $table->tinyText('event_address')->nullable();
             $table->text('event_zip_postal')->nullable();
             $table->text('event_info')->nullable();

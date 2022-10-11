@@ -35,10 +35,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->badge(function () {
                     return 6;
                 }),
-            
+
+            //student nav option
             Menu::make('Student List')
                 ->icon('friends')
-                ->route('platform.students'),
+                ->route('platform.students.list'),
                 
 
             Menu::make('Dropdown menu')
