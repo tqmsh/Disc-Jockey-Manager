@@ -6,6 +6,7 @@ use Orchid\Screen\TD;
 use App\Models\School;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
+use Orchid\Screen\Fields\CheckBox;
 
 class ViewSchoolLayout extends Table
 {
@@ -27,6 +28,12 @@ class ViewSchoolLayout extends Table
     protected function columns(): iterable
     {
         return [
+            
+            TD::make('checkox', '')
+                ->render(function (School $school) {
+                    return CheckBox::make('free')
+                        ->sendTrueOrFalse();
+                }),
             TD::make('id', 'Id')
                 ->render(function (School $school) {
                     return Link::make($school->id)
@@ -49,7 +56,7 @@ class ViewSchoolLayout extends Table
                 }),
             TD::make('teacher', 'Teacher')
                 ->render(function (School $school) {
-                    return Link::make($school->teacher)
+                    return Link::make($school->teacher_name)
                         ->route('platform.school.edit', $school->id);
                 }),
             TD::make('teacher_email', 'Teacher Email')

@@ -4,6 +4,8 @@ namespace App\Orchid\Screens;
 
 use App\Models\School;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Button;
 use App\Orchid\Layouts\ViewSchoolLayout;
 
 class ViewSchoolScreen extends Screen
@@ -37,7 +39,11 @@ class ViewSchoolScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Delete Selected Schools')
+                ->icon('trash')
+                ->method('deleteSchools')
+        ];
     }
 
     /**
@@ -50,5 +56,10 @@ class ViewSchoolScreen extends Screen
         return [
             ViewSchoolLayout::class
         ];
+    }
+
+    public function deleteSchools(Request $request)
+    {
+        alert('School(s) deleted succesfully');
     }
 }
