@@ -2,9 +2,11 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\School;
 use Orchid\Screen\Screen;
+use App\Orchid\Layouts\ViewSchoolLayout;
 
-class EditStudentScreen extends Screen
+class ViewSchoolScreen extends Screen
 {
     /**
      * Query data.
@@ -13,7 +15,9 @@ class EditStudentScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'schools' => School::paginate(10)
+        ];
     }
 
     /**
@@ -23,7 +27,7 @@ class EditStudentScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Student';
+        return 'Schools List';
     }
 
     /**
@@ -43,6 +47,8 @@ class EditStudentScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ViewSchoolLayout::class
+        ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Orchid\Screens;
 
 use Orchid\Screen\Screen;
 
-class EditStudentScreen extends Screen
+class EditSchoolScreen extends Screen
 {
     /**
      * Query data.
@@ -23,7 +23,7 @@ class EditStudentScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Student';
+        return 'Edit School';
     }
 
     /**

@@ -23,7 +23,7 @@ class ViewStudentScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'View Students';
+        return 'Students List';
     }
 
     /**
