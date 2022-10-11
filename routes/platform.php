@@ -5,6 +5,9 @@ declare(strict_types=1);
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\EditSchoolScreen;
+use App\Orchid\Screens\ViewSchoolScreen;
+use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -39,11 +42,19 @@ Route::screen('/main', PlatformScreen::class)
 //email route
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 
-//view students
+//show students
 Route::screen('/students', ViewStudentScreen::class)->name('platform.students.list');
 
-//edit students
-Route::screen('/students/{id}', ViewStudentScreen::class)->name('platform.students.edit');
+//show edit students screen
+Route::screen('/schools/{id}', EditStudentScreen::class)->name('platform.students.edit');
+
+//show schools
+Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list');
+
+//show edit schools screen
+Route::screen('/schools/{id}', EditSchoolScreen::class)->name('platform.school.edit');
+
+
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
