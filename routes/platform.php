@@ -40,7 +40,10 @@ Route::screen('/main', PlatformScreen::class)
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 
 //view students
-Route::screen('/students', ViewStudentScreen::class)->name('platform.students');
+Route::screen('/students', ViewStudentScreen::class)->name('platform.students.list');
+
+//edit students
+Route::screen('/students/{id}', ViewStudentScreen::class)->name('platform.students.edit');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
-            $table->string('school_name');
+            $table->string('school_name')->index();
             $table->string('country');
             $table->string('state_province');
             $table->string('school_board');
