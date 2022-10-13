@@ -10,6 +10,7 @@ use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
+use App\Orchid\Screens\CreateSchoolScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
@@ -36,8 +37,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 
 
 // Main
-Route::screen('/main', PlatformScreen::class)
-    ->name('platform.main');
+Route::screen('/main', PlatformScreen::class)->name('platform.main');
 
 //email route
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
@@ -50,6 +50,10 @@ Route::screen('/students/{id}', EditStudentScreen::class)->name('platform.studen
 
 //show schools
 Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list');
+
+//show create school screen
+Route::screen('/schools/create', CreateSchoolScreen::class)->name('platform.school.create');
+
 
 //show edit schools screen
 Route::screen('/schools/{id}', EditSchoolScreen::class)->name('platform.school.edit');
