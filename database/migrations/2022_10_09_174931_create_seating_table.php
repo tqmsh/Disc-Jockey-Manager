@@ -15,9 +15,15 @@ return new class extends Migration
     {
         Schema::create('seating', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('event_id');
             $table->string('tablename');
-            $table->integer('event_id');
             $table->timestamps();
+
+            $table->foreign('event_id')
+                ->references('id')
+                ->on('events')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
