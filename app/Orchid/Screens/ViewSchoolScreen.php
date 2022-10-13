@@ -2,10 +2,12 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use App\Orchid\Layouts\ViewSchoolLayout;
 
 class ViewSchoolScreen extends Screen
@@ -59,7 +61,28 @@ class ViewSchoolScreen extends Screen
     }
 
     public function deleteSchools(Request $request)
-    {
-        alert('School(s) deleted succesfully');
+    {   
+        //get all schools from post request
+        $schools = $request-> get('schools');
+        
+        try{
+
+            //if the array is not empty
+            if(!empty($schools)){
+
+                //loop through the schools and delete them from db
+                foreach($schools as $school){
+                    School::where('id', $school)->delete();
+                }
+
+                Alert::success('Selected schools deleted succesfully');
+
+            }else{
+                Alert::warning('Please select schools in order to delete');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the selected schools. Error Message: ' . $e);
+        }
     }
 }
