@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('zip_postal');
             $table->string('phone_number');
-            $table->string('fax');
+            $table->string('fax')->nullable();
             $table->string('teacher_name');
             $table->string('teacher_email');
             $table->string('teacher_cell');

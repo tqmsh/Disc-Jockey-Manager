@@ -6,6 +6,7 @@ use Exception;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use App\Orchid\Layouts\ViewSchoolLayout;
@@ -31,7 +32,7 @@ class ViewSchoolScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Schools List';
+        return 'School List';
     }
 
     /**
@@ -42,6 +43,10 @@ class ViewSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Add School')
+                ->icon('plus')
+                ->route('platform.school.create'),
+
             Button::make('Delete Selected Schools')
                 ->icon('trash')
                 ->method('deleteSchools')
