@@ -36,23 +36,25 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 */
 
 
-// Main
+// Orchid main menu
 Route::screen('/main', PlatformScreen::class)->name('platform.main');
 
-//email route
+//show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 
-//show students
+//show students screen
 Route::screen('/students', ViewStudentScreen::class)->name('platform.students.list');
 
 //show edit students screen
 Route::screen('/students/{id}', EditStudentScreen::class)->name('platform.students.edit');
 
-//show schools
+//show schools screen
 Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list');
 
 //show create school screen
 Route::screen('/schools/create', CreateSchoolScreen::class)->name('platform.school.create');
+
+//show edit school screen
 
 
 //show edit schools screen
