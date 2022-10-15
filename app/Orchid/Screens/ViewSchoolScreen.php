@@ -43,7 +43,7 @@ class ViewSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add School')
+            Link::make('Add New School')
                 ->icon('plus')
                 ->route('platform.school.create'),
 
@@ -83,7 +83,7 @@ class ViewSchoolScreen extends Screen
                 Alert::success('Selected schools deleted succesfully');
 
             }else{
-                Alert::warning('Please select schools in order to delete');
+                Alert::warning('No schools selected');
             }
 
         }catch(Exception $e){

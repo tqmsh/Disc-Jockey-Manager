@@ -16,16 +16,16 @@ return new class extends Migration
         Schema::create('localadmin', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->bigInteger('phonenumber')->nullable();
             $table->string('email')->nullable();
             $table->string('school')->index();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreign('school')
                 ->references('school_name')
                 ->on('schools')
