@@ -30,7 +30,7 @@ class CreateSchoolScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Create a School';
+        return 'Add a New School';
     }
 
     /**
@@ -41,7 +41,7 @@ class CreateSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Add School')
+            Button::make('Add')
                 ->icon('plus')
                 ->method('createSchool'),
 
