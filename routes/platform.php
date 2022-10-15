@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\School;
+use Illuminate\Http\Request;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
@@ -54,11 +56,8 @@ Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list')
 //show create school screen
 Route::screen('/schools/create', CreateSchoolScreen::class)->name('platform.school.create');
 
-//show edit school screen
-
-
 //show edit schools screen
-Route::screen('/schools/{id}', EditSchoolScreen::class)->name('platform.school.edit');
+Route::screen('/schools/{school}/edit', EditSchoolScreen::class)->name('platform.school.edit');
 
 
 
