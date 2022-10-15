@@ -145,6 +145,7 @@ class CreateSchoolScreen extends Screen
 
     public function createSchool(Request $request){
         $formFields = $request->all();
+        
         School::create($formFields);
 
         Alert::success('School Added Succesfully');

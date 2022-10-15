@@ -80,7 +80,7 @@ class ViewSchoolScreen extends Screen
                     School::where('id', $school)->delete();
                 }
 
-                Alert::success('Selected schools deleted succesfully');
+                Alert::info('Selected schools deleted succesfully');
 
             }else{
                 Alert::warning('Please select schools in order to delete');
