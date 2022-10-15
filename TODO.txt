@@ -1,1 +1,1 @@
-- Fix the seating relation with the event in db
+
