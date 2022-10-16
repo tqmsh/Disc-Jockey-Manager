@@ -39,7 +39,7 @@ class PlatformProvider extends OrchidServiceProvider
             //student nav option
             Menu::make('Student List')
                 ->icon('friends')
-                ->route('platform.students.list'),
+                ->route('platform.student.list'),
 
             //school nav option
             Menu::make('Schools')
