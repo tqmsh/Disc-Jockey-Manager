@@ -13,6 +13,7 @@ use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\CreateSchoolScreen;
+use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
@@ -45,10 +46,13 @@ Route::screen('/main', PlatformScreen::class)->name('platform.main');
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 
 //show students screen
-Route::screen('/students', ViewStudentScreen::class)->name('platform.students.list');
+Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
+
+//show create student screen
+Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
 
 //show edit students screen
-Route::screen('/students/{id}', EditStudentScreen::class)->name('platform.students.edit');
+Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
 
 //show schools screen
 Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list');

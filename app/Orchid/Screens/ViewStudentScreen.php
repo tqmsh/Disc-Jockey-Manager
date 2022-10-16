@@ -2,7 +2,14 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
+use App\Models\Student;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
+use App\Orchid\Layouts\ViewStudentLayout;
 
 class ViewStudentScreen extends Screen
 {
@@ -13,7 +20,9 @@ class ViewStudentScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'students' => Student::paginate(10)
+        ];
     }
 
     /**
@@ -33,7 +42,19 @@ class ViewStudentScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Add New Student')
+                ->icon('plus')
+                ->route('platform.student.create'),
+
+            Button::make('Delete Selected Students')
+                ->icon('trash')
+                ->method('deleteStudents'),
+                
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.student.list')
+        ];
     }
 
     /**
@@ -43,6 +64,34 @@ class ViewStudentScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ViewStudentLayout::class
+        ];
+    }
+
+    public function deleteStudents(Request $request)
+    {   
+        //get all schools from post request
+        $students = $request->get('students');
+        
+        try{
+
+            //if the array is not empty
+            if(!empty($students)){
+
+                //loop through the schools and delete them from db
+                foreach($students as $student){
+                    Student::where('id', $student)->delete();
+                }
+
+                Alert::success('Selected students deleted succesfully');
+
+            }else{
+                Alert::warning('Please select students in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the selected students. Error Message: ' . $e);
+        }
     }
 }
