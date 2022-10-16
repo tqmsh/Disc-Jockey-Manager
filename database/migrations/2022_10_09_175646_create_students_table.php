@@ -16,11 +16,6 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->tinyInteger('grade')->nullable();
@@ -28,14 +23,21 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('ticketstatus')->nullable();
             $table->unsignedBigInteger('table_id');
+            $table->string('school')->nullable()->index();
+            $table->unsignedBigInteger('event_id')->nullable()->index();
+            $table->string('allergies')->nullable();
+
             $table->foreign('table_id')
+            ->references('id')
+            ->on('seating')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+            
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('seating')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('school')->nullable()->nullable();
-            $table->unsignedBigInteger('event_id')->nullable();
-            $table->string('allergies')->nullable();
             $table->timestamps();
         });
     }
