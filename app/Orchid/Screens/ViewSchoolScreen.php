@@ -49,7 +49,11 @@ class ViewSchoolScreen extends Screen
 
             Button::make('Delete Selected Schools')
                 ->icon('trash')
-                ->method('deleteSchools')
+                ->method('deleteSchools'),
+                
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.school.list')
         ];
     }
 
@@ -68,7 +72,7 @@ class ViewSchoolScreen extends Screen
     public function deleteSchools(Request $request)
     {   
         //get all schools from post request
-        $schools = $request-> get('schools');
+        $schools = $request->get('schools');
         
         try{
 
@@ -83,7 +87,7 @@ class ViewSchoolScreen extends Screen
                 Alert::success('Selected schools deleted succesfully');
 
             }else{
-                Alert::warning('No schools selected');
+                Alert::warning('Please select schools in order to delete them');
             }
 
         }catch(Exception $e){

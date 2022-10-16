@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('seating', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('event_id');
+            $table->unsignedBigInteger('event_id')->index();
             $table->string('tablename');
             $table->timestamps();
         });
