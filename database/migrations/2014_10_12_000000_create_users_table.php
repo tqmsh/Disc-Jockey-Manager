@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->string('email')->unique();
+            $table->string('phonenumber')->nullable();
             $table->string('role')->nullable();
             $table->string('country')->nullable();
             $table->string('currentPlan')->nullable();

@@ -35,11 +35,6 @@ class ViewSchoolLayout extends Table
                         ->value($school->id)
                         ->checked(false);
                 }),
-            TD::make('id', 'Id')
-                ->render(function (School $school) {
-                    return Link::make($school->id)
-                        ->route('platform.school.edit', $school);
-                }),
             TD::make('school_name', 'School Name')
                 ->render(function (School $school) {
                     return Link::make($school->school_name)
