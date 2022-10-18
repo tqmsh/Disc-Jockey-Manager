@@ -18,6 +18,9 @@ use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
+use App\Orchid\Screens\EditLocaladminScreen;
+use App\Orchid\Screens\ViewLocaladminScreen;
+use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
@@ -59,6 +62,15 @@ Route::screen('/schools/create', CreateSchoolScreen::class)->name('platform.scho
 
 //show edit schools screen
 Route::screen('/schools/{school}/edit', EditSchoolScreen::class)->name('platform.school.edit');
+
+//show localadmin screen
+Route::screen('/localadmins', ViewLocaladminScreen::class)->name('platform.localadmin.list');
+
+//show edit localadmin screen
+Route::screen('/localadmins/{localadmin}/edit', EditLocaladminScreen::class)->name('platform.localadmin.edit');
+
+//show create local admin screen
+Route::screen('/localadmins/create', CreateLocaladminScreen::class)->name('platform.localadmin.create');
 
 
 

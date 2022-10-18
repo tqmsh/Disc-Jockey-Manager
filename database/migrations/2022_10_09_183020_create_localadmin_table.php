@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('localadmin', function (Blueprint $table) {
+        Schema::create('localadmins', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('firstname')->nullable();
