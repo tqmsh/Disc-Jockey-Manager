@@ -27,7 +27,7 @@ return new class extends Migration
             
             $table->foreign('event_creator')
                 ->references('id')
-                ->on('users')
+                ->on('localadmin')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->foreign('school')
