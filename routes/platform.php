@@ -48,9 +48,6 @@ Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 //show students screen
 Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
 
-//show create student screen
-Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
-
 //show edit students screen
 Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
 
