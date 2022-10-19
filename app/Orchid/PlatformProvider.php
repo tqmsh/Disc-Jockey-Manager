@@ -47,7 +47,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.school.list'),
 
             //localadmin nav option
-            Menu::make('Localadmins')
+            Menu::make('Local Admins')
                 ->icon('friends')
                 ->route('platform.localadmin.list'),
                 

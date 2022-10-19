@@ -68,7 +68,7 @@ class ViewStudentScreen extends Screen
 
     public function deleteStudents(Request $request)
     {   
-        //get all schools from post request
+        //get all students from post request
         $students = $request->get('students');
         
         try{
@@ -76,7 +76,7 @@ class ViewStudentScreen extends Screen
             //if the array is not empty
             if(!empty($students)){
 
-                //loop through the schools and delete them from db
+                //loop through the students and delete them from db
                 foreach($students as $student){
                     Student::where('id', $student)->delete();
                 }

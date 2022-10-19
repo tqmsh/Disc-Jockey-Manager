@@ -12,11 +12,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
+        'firstname',
+        'lastname',
+        'country',
+        'role',
+        'phonenumber',
         'name',
         'email',
-        'role',
         'password',
-        'permissions',
+        'updated_at',
+        'created_at',
     ];
 
     /**
@@ -47,9 +53,15 @@ class User extends Authenticatable
      */
     protected $allowedFilters = [
         'id',
+        'firstname',
+        'lastname',
+        'country',
+        'role',
+        'phonenumber',
         'name',
         'email',
-        'permissions',
+        'updated_at',
+        'created_at',
     ];
 
     /**
@@ -59,6 +71,11 @@ class User extends Authenticatable
      */
     protected $allowedSorts = [
         'id',
+        'firstname',
+        'lastname',
+        'country',
+        'role',
+        'phonenumber',
         'name',
         'email',
         'updated_at',
