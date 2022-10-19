@@ -30,7 +30,7 @@ class ViewLocaladminLayout extends Table
         return [
             TD::make()
                 ->render(function (Localadmin $Localadmin){
-                    return CheckBox::make('Localadmins[]')
+                    return CheckBox::make('localadmins[]')
                         ->value($Localadmin->id)
                         ->checked(false);
                 }),
