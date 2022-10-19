@@ -10,4 +10,6 @@ class Localadmin extends Model
 {
     use HasFactory;
     use AsSource;
+
+    protected $fillable = ['user_id', 'firstname', 'lastname', 'phonenumber', 'email', 'school'];
 }
