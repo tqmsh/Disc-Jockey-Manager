@@ -182,14 +182,19 @@ class EditStudentScreen extends Screen
             'status' => $request->input('ticketstatus'),
         ];
 
+        //check if the new email exists in the datbase
+        if(empty(Student::where('email', $request->input('email'))->whereNot('id', $student->id)->get())){
+            
+            $student->update($studentTableFields);
+            
+            User::where('id', $student->user_id)->update($userTableFields);
+            
+            Alert::success('You have successfully updated the student.');
 
-        $student->update($studentTableFields);
-        
-        User::where('id', $student->user_id)->update($userTableFields);
-        
-        Alert::info('You have successfully updated the student.');
-
-        return redirect()->route('platform.student.list');
+            return redirect()->route('platform.student.list');   
+        } else{
+            Alert::error('Email already exists.');
+        }
     }
 
     public function delete(Student $student)
