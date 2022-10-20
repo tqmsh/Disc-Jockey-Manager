@@ -155,11 +155,13 @@ class CreateLocaladminScreen extends Screen
 
         if(empty(User::where('email', $request->input('email'))->get())){
 
-            //email is unique
+            //check if the email exists in database
             User::create($userTableFields);
             Localadmin::create($localAdminTableFields);
-
+            
             Alert::success('Local Admin Added Succesfully');
+            return redirect()->route('platform.localadmin.list');
+
 
         }else{
             Alert::error('Email already exists');
