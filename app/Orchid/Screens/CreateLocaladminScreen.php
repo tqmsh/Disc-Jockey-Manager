@@ -152,9 +152,18 @@ class CreateLocaladminScreen extends Screen
             'role' =>'localadmin',
         ];
 
-        User::create($userTableFields);
-        Localadmin::create($localAdminTableFields);
 
-        Alert::success('Local Admin Added Succesfully');
+        if(empty(User::where('email', $request->input('email'))->get())){
+
+            //email is unique
+            User::create($userTableFields);
+            Localadmin::create($localAdminTableFields);
+
+            Alert::success('Local Admin Added Succesfully');
+
+        }else{
+            Alert::error('Email already exists');
+        }
+
     }
 }
