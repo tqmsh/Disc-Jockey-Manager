@@ -3,13 +3,17 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewStudentLayout;
+use App\Orchid\Layouts\StudentFilterListener;
 
 class ViewStudentScreen extends Screen
 {
@@ -21,9 +25,10 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::paginate(10)
+            'students' => Student::filter(request(['country']))->paginate(10)
         ];
     }
+
 
     /**
      * Display header name.
@@ -62,8 +67,20 @@ class ViewStudentScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::rows([
+                Select::make('country')
+                    ->title('Country')
+                    ->empty(request('country') == null ? '' : request('country'))
+                    ->fromModel(School::class, 'country', 'country'),
+                Button::make('Filter')
+                    ->method('filter')
+            ]),
             ViewStudentLayout::class
         ];
+    }
+
+    public function filter(Request $request){
+        return redirect('http://127.0.0.1:8000/admin/students?country=' . $request->get('country'));
     }
 
     public function deleteStudents(Request $request)
@@ -92,3 +109,4 @@ class ViewStudentScreen extends Screen
         }
     }
 }
+

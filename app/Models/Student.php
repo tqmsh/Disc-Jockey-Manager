@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Orchid\Platform\Models\User;
+use App\Models\User;
 use Orchid\Screen\AsSource;
 
 
@@ -14,10 +14,17 @@ class Student extends Model
     use AsSource;
 
     protected $fillable = ['user_id', 'firstname', 'lastname', 'grade', 'phonenumber', 'email', 'ticketstatus', 'table_id', 'school', 'event_id', 'allergies'];
+    
+    public function scopeFilter($query, array $filters){
 
-    //relatioships
-    public function getCountry($user_id){
-        return User::find($user_id)->country;
+        if($filters['country'] ?? false){
+            $query ->join('users', 'students.user_id', '=', 'users.id')
+                    ->where('country', 'like', '%' . request('country') . '%');
+        }
+    }
+
+    public function getCountry($email){
+        return User::where('email', $email)->get('country')->value('country');
     }
 
     
