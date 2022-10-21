@@ -51,7 +51,7 @@ class ViewStudentLayout extends Table
                 }),
             TD::make('country', 'Country')
                 ->render(function (Student $student) {
-                    return Link::make($student->getCountry($student->user_id))
+                    return Link::make($student->getCountry($student->email))
                         ->route('platform.student.edit', $student);
                 }),
             TD::make('school', 'School')
