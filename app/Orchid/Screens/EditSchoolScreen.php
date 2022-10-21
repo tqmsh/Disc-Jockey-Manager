@@ -52,7 +52,9 @@ class EditSchoolScreen extends Screen
 
             Button::make('Delete School')
                 ->icon('trash')
-                ->method('delete'),
+                ->method('delete')
+                ->confirm(__('Are you sure you want to delete this school?')),
+
 
             Link::make('Back')
                 ->icon('arrow-left')

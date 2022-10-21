@@ -51,7 +51,8 @@ class ViewStudentScreen extends Screen
 
             Button::make('Delete Selected Students')
                 ->icon('trash')
-                ->method('deleteStudents'),
+                ->method('deleteStudents')
+                ->confirm(__('Are you sure you want to delete the selected students?')),
                 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -74,13 +75,14 @@ class ViewStudentScreen extends Screen
                     ->fromModel(School::class, 'country', 'country'),
                 Button::make('Filter')
                     ->method('filter')
+                    ->icon('filter')
             ]),
             ViewStudentLayout::class
         ];
     }
 
     public function filter(Request $request){
-        return redirect('http://127.0.0.1:8000/admin/students?country=' . $request->get('country'));
+        return redirect('/admin/students?country=' . $request->get('country'));
     }
 
     public function deleteStudents(Request $request)
