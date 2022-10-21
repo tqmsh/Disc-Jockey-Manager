@@ -99,26 +99,22 @@ class EditStudentScreen extends Screen
                     ->title('School')
                     ->required()
                     ->horizontal()
-                    ->empty($this->student->school == null ? 'No selection' : $this->student->school)
                     ->fromModel(School::class, 'school_name', 'school_name'),
 
                 Select::make('country')
                     ->title('Country')
                     ->required()
                     ->horizontal()
-                    ->empty($this->student->getCountry($this->student->user_id) == null ? 'No selection' : $this->student->getCountry($this->student->user_id))
                     ->fromModel(School::class, 'country', 'country'),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->empty()
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
                 Select::make('school_board')
                     ->title('School Board')
                     ->horizontal()
-                    ->empty()
                     ->fromModel(School::class, 'school_board', 'school_board'),
                     
                 Input::make('grade')
@@ -138,14 +134,12 @@ class EditStudentScreen extends Screen
                 Select::make('event_id')
                     ->title('Event ID')
                     ->horizontal()
-                    ->empty($this->student->event_id == null ? 'No selection' : $this->student->event_id)
                     ->fromModel(Events::class, 'id'),
 
                 Select::make('ticketstatus')
                     ->title('Ticket Status')
                     ->required()
                     ->horizontal()
-                    ->empty($this->student->ticketstatus == null ? 'No selection' : $this->student->ticketstatus)
                     ->options([
                         'Paid'   => 'Paid',
                         'Unpaid' => 'Unpaid',
@@ -182,20 +176,23 @@ class EditStudentScreen extends Screen
             'status' => $request->input('ticketstatus'),
         ];
 
-        //check if the new email exists in the datbase
-        if(empty(Student::where('email', $request->input('email'))->whereNot('id', $student->id)->get())){
+        //check for duplicate
+        if(count(User::whereNot('id', $student->user_id)->where('email', $request->input('email'))->get()) == 0){
             
+            //email not changed
             $student->update($studentTableFields);
             
             User::where('id', $student->user_id)->update($userTableFields);
             
             Alert::success('You have successfully updated the student.');
 
-            return redirect()->route('platform.student.list');   
-        } else{
+            return redirect()->route('platform.student.list');
+          
+        }else{
+            //duplicate email found
             Alert::error('Email already exists.');
         }
-    }
+    } 
 
     public function delete(Student $student)
     {

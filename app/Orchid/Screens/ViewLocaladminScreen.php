@@ -49,7 +49,9 @@ class ViewLocaladminScreen extends Screen
 
             Button::make('Delete Selected Local Admins')
                 ->icon('trash')
-                ->method('deleteLocaladmins'),
+                ->method('deleteLocaladmins')
+                ->confirm(__('Are you sure you want to delete the selected local admins?')),
+
                 
             Link::make('Back')
                 ->icon('arrow-left')
