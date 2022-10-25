@@ -156,6 +156,9 @@ class EditStudentScreen extends Screen
 
     public function update(Student $student, Request $request)
     {
+
+        //!PUT ALL THIS CODE IN A TRY CATCH
+
         $studentTableFields = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
@@ -184,7 +187,7 @@ class EditStudentScreen extends Screen
             
             User::where('id', $student->user_id)->update($userTableFields);
             
-            Alert::success('You have successfully updated the student.');
+            Alert::success('You have successfully updated ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
 
             return redirect()->route('platform.student.list');
           
@@ -196,6 +199,7 @@ class EditStudentScreen extends Screen
 
     public function delete(Student $student)
     {
+        //!PUT ALL THIS CODE IN A TRY CATCH
         $student->delete();
 
         Alert::info('You have successfully deleted the student.');
