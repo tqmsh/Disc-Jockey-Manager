@@ -7,8 +7,10 @@ use App\Models\User;
 use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
@@ -26,7 +28,7 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::filter(request(['country']))->paginate(10)
+            'students' => Student::latest('students.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
         ];
     }
 
@@ -70,20 +72,46 @@ class ViewStudentScreen extends Screen
     {
         return [
             Layout::rows([
-                Select::make('country')
-                    ->title('Country')
-                    ->empty(request('country') == null ? '' : request('country'))
-                    ->fromModel(User::class, 'country', 'country'),
+
+                Group::make([
+                    
+                    Select::make('school')
+                        ->title('School')
+                        ->empty('No selection')
+                        ->fromModel(Student::class, 'school', 'school'),
+
+                    Select::make('country')
+                        ->title('Country')
+                        ->empty('No selection')
+                        ->fromModel(User::class, 'country', 'country'),
+
+                    Select::make('school_board')
+                        ->title('School Board')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'school_board', 'school_board'),
+
+                    Select::make('state_province')
+                        ->title('State/Province')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'state_province', 'state_province'),
+                ]),
+                
                 Button::make('Filter')
-                    ->method('filter')
                     ->icon('filter')
+                    ->method('filter')
+                    ->type(Color::DEFAULT()),
             ]),
+
             ViewStudentLayout::class
         ];
     }
 
     public function filter(Request $request){
-        return redirect('/admin/students?country=' . $request->get('country'));
+        return redirect('/admin/students?' 
+                    .'&school=' . $request->get('school')
+                    .'&country=' . $request->get('country')
+                    .'&school_board=' . $request->get('school_board')
+                    .'&state_province=' . $request->get('state_province'));
     }
 
     public function deleteStudents(Request $request)
