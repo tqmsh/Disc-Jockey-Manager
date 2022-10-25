@@ -17,8 +17,13 @@ class Student extends Model
     
     public function scopeFilter($query, array $filters){
 
-        if($filters['country'] ?? false){
-            $query ->join('users', 'students.user_id', '=', 'users.id')
+
+        if(isset($filters['school'])){
+            $query ->where('school', 'like', '%' . request('school') . '%');
+        }
+
+        if(isset($filters['country'])){
+            $query->join('users', 'users.id', '=', 'students.user_id')
                     ->where('country', 'like', '%' . request('country') . '%');
         }
     }

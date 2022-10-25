@@ -144,10 +144,14 @@ class CreateSchoolScreen extends Screen
     }
 
     public function createSchool(Request $request){
+
+        //!PUT ALL THIS IN A TRY CATCH
         $formFields = $request->all();
         
         School::create($formFields);
 
         Alert::success('School Added Succesfully');
+        
+        return redirect()->route('platform.student.list');
     }
 }

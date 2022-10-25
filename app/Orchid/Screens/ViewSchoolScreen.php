@@ -21,7 +21,7 @@ class ViewSchoolScreen extends Screen
     public function query(): iterable
     {
         return [
-            'schools' => School::paginate(10)
+            'schools' => School::latest()->paginate(10)
         ];
     }
 
