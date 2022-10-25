@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
@@ -72,7 +73,7 @@ class ViewStudentScreen extends Screen
                 Select::make('country')
                     ->title('Country')
                     ->empty(request('country') == null ? '' : request('country'))
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->fromModel(User::class, 'country', 'country'),
                 Button::make('Filter')
                     ->method('filter')
                     ->icon('filter')
