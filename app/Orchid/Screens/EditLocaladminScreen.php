@@ -144,7 +144,7 @@ class EditLocaladminScreen extends Screen
             'country' => $request->input('country'),
         ];
 
-        //check for duplicate
+        //check for duplicate email
         if(count(User::whereNot('id', $localadmin->user_id)->where('email', $request->input('email'))->get()) == 0){
 
             
