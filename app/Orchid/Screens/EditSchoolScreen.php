@@ -7,6 +7,7 @@ use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
@@ -78,29 +79,21 @@ class EditSchoolScreen extends Screen
                     ->value($this->school->school_name)
                     ->horizontal(),
 
-                Input::make('country')
+                Select::make('country')
                     ->title('Country')
-                    ->type('text')
                     ->required()
-                    ->value($this->school->country)
                     ->horizontal()
-                    ->placeholder('Ex. Canada'),
+                    ->fromModel(School::class, 'country', 'country'),
 
-                Input::make('state_province')
+                Select::make('state_province')
                     ->title('State/Province')
-                    ->type('text')
-                    ->required()
-                    ->value($this->school->state_province)
                     ->horizontal()
-                    ->placeholder('Ex. Ontario'),
+                    ->fromModel(School::class, 'state_province', 'state_province'),
 
-                Input::make('school_board')
+                Select::make('school_board')
                     ->title('School Board')
-                    ->type('text')
-                    ->required()
-                    ->value($this->school->school_board)
                     ->horizontal()
-                    ->placeholder('Ex. OCDSB'),
+                    ->fromModel(School::class, 'school_board', 'school_board'),   
 
                 Input::make('address')
                     ->title('Address')
@@ -164,14 +157,22 @@ class EditSchoolScreen extends Screen
     
     public function update(School $school, Request $request)
     {
-    
         //!PUT ALL THIS CODE IN A TRY CATCH
 
-        $school->fill($request->all())->save();
+        //check for duplicate email
+        if(count(School::whereNot('id', $school->id)->where('teacher_email', $request->input('teacher_email'))->get()) == 0){
 
-        Alert::success('You have successfully updated ' . $request->input('school_name') . '.');
+            //email not changed
+            $school->fill($request->all())->save();
 
-        return redirect()->route('platform.school.list');
+            Alert::success('You have successfully updated ' . $request->input('school_name') . '.');
+
+            return redirect()->route('platform.school.list');
+          
+        }else{
+            //duplicate email found
+            Alert::error('Teacher email already exists.');
+        }
     }
 
     public function delete(School $school)
