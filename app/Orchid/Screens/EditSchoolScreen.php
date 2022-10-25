@@ -164,15 +164,19 @@ class EditSchoolScreen extends Screen
     
     public function update(School $school, Request $request)
     {
+    
+        //!PUT ALL THIS CODE IN A TRY CATCH
+
         $school->fill($request->all())->save();
 
-        Alert::info('You have successfully updated the school.');
+        Alert::success('You have successfully updated ' . $request->input('school_name') . '.');
 
         return redirect()->route('platform.school.list');
     }
 
     public function delete(School $school)
     {
+        //!PUT ALL THIS CODE IN A TRY CATCH
         $school->delete();
 
         Alert::info('You have successfully deleted the school.');
