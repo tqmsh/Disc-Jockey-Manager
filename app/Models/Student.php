@@ -26,6 +26,16 @@ class Student extends Model
             $query->join('users', 'users.id', '=', 'students.user_id')
                     ->where('country', 'like', '%' . request('country') . '%');
         }
+
+        if(isset($filters['school_board'])){
+            $query->join('schools', 'school_name', '=', 'school')
+                    ->where('school_board', 'like', '%' . request('school_board') . '%');
+        }
+
+        if(isset($filters['country'])){
+            $query->join('users', 'users.id', '=', 'students.user_id')
+                    ->where('country', 'like', '%' . request('country') . '%');
+        }
     }
 
     public function getCountry($email){
