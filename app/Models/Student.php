@@ -17,14 +17,15 @@ class Student extends Model
     
     public function scopeFilter($query, array $filters){
 
+        $query->join('users', 'users.id', '=', 'students.user_id');
+
 
         if(isset($filters['school'])){
             $query ->where('school', 'like', '%' . request('school') . '%');
         }
 
         if(isset($filters['country'])){
-            $query->join('users', 'users.id', '=', 'students.user_id')
-                    ->where('country', 'like', '%' . request('country') . '%');
+            $query->where('users.country', 'like', '%' . request('country') . '%');
         }
 
         if(isset($filters['school_board'])){
@@ -32,10 +33,9 @@ class Student extends Model
                     ->where('school_board', 'like', '%' . request('school_board') . '%');
         }
 
-        if(isset($filters['country'])){
-            $query->join('users', 'users.id', '=', 'students.user_id')
-                    ->where('country', 'like', '%' . request('country') . '%');
-        }
+        // if(isset($filters['country'])){
+        //     $query->where('country', 'like', '%' . request('country') . '%');
+        // }
     }
 
     public function getCountry($email){
