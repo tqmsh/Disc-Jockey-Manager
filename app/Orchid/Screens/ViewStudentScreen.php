@@ -16,7 +16,6 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewStudentLayout;
-use App\Orchid\Layouts\StudentFilterListener;
 
 class ViewStudentScreen extends Screen
 {

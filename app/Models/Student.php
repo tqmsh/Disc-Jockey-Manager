@@ -17,25 +17,27 @@ class Student extends Model
     
     public function scopeFilter($query, array $filters){
 
+        $query  ->join('users', 'users.id', '=', 'students.user_id')
+                ->join('schools', 'school_name', '=', 'school');
+
 
         if(isset($filters['school'])){
             $query ->where('school', 'like', '%' . request('school') . '%');
         }
 
         if(isset($filters['country'])){
-            $query->join('users', 'users.id', '=', 'students.user_id')
-                    ->where('country', 'like', '%' . request('country') . '%');
+            $query->where('users.country', 'like', '%' . request('country') . '%');
         }
 
         if(isset($filters['school_board'])){
-            $query->join('schools', 'school_name', '=', 'school')
-                    ->where('school_board', 'like', '%' . request('school_board') . '%');
+            $query->where('school_board', 'like', '%' . request('school_board') . '%');
         }
 
-        if(isset($filters['country'])){
-            $query->join('users', 'users.id', '=', 'students.user_id')
-                    ->where('country', 'like', '%' . request('country') . '%');
+        if(isset($filters['state_province'])){
+            $query->where('state_province', 'like', '%' . request('state_province') . '%');
         }
+
+        $query->select('students.*');
     }
 
     public function getCountry($email){
