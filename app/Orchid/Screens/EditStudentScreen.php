@@ -27,7 +27,7 @@ class EditStudentScreen extends Screen
     public function query(Student $student): iterable
     {
         return [
-            'student' => $student,
+            'student' => $student
         ];
     }
 

@@ -36,6 +36,8 @@ class Student extends Model
         if(isset($filters['state_province'])){
             $query->where('state_province', 'like', '%' . request('state_province') . '%');
         }
+
+        $query->select('students.*');
     }
 
     public function getCountry($email){

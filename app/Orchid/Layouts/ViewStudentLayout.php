@@ -34,6 +34,11 @@ class ViewStudentLayout extends Table
                         ->value($student->id)
                         ->checked(false);
                 }),
+            TD::make('id', 'Id')
+                ->render(function (Student $student) {
+                    return Link::make($student->id)
+                        ->route('platform.student.edit', $student);
+                }),
             TD::make('firstname', 'First Name')
                 ->render(function (Student $student) {
                     return Link::make($student->firstname)
