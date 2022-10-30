@@ -18,7 +18,7 @@ class ViewLocaladminLayout extends Table
      *
      * @var string
      */
-    protected $target = 'Localadmin';
+    protected $target = 'localadmins';
 
     /**
      * Get the table cells to be displayed.

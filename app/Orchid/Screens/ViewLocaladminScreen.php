@@ -3,12 +3,18 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
+use App\Models\School;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewLocaladminLayout;
 
 class ViewLocaladminScreen extends Screen
@@ -21,7 +27,7 @@ class ViewLocaladminScreen extends Screen
     public function query(): iterable
     {
         return [
-            'Localadmin' => Localadmin::paginate(10)
+            'localadmins' => Localadmin::latest('localadmins.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
         ];
     }
 
@@ -67,8 +73,47 @@ class ViewLocaladminScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::rows([
+
+                Group::make([
+                    
+                    Select::make('school')
+                        ->title('School')
+                        ->empty('No selection')
+                        ->fromModel(Localadmin::class, 'school', 'school'),
+
+                    Select::make('country')
+                        ->title('Country')
+                        ->empty('No selection')
+                        ->fromModel(User::class, 'country', 'country'),
+
+                    Select::make('school_board')
+                        ->title('School Board')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'school_board', 'school_board'),
+
+                    Select::make('state_province')
+                        ->title('State/Province')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'state_province', 'state_province'),
+                ]),
+                
+                Button::make('Filter')
+                    ->icon('filter')
+                    ->method('filter')
+                    ->type(Color::DEFAULT()),
+            ]),
+
             ViewLocaladminLayout::class
         ];
+    }
+
+    public function filter(Request $request){
+        return redirect('/admin/localadmins?' 
+                    .'&school=' . $request->get('school')
+                    .'&country=' . $request->get('country')
+                    .'&school_board=' . $request->get('school_board')
+                    .'&state_province=' . $request->get('state_province'));
     }
 
     public function deleteLocaladmins(Request $request)
