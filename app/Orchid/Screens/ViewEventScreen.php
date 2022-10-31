@@ -2,10 +2,19 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Events;
+use App\Models\School;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Layout;
+use App\Orchid\Layouts\ViewEventLayout;
 
 class ViewEventScreen extends Screen
 {
@@ -62,6 +71,73 @@ class ViewEventScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::rows([
+
+                Group::make([
+                    
+                    Select::make('school')
+                        ->title('School')
+                        ->empty('No selection')
+                        ->fromModel(Events::class, 'school', 'school'),
+
+                    Select::make('country')
+                        ->title('Country')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'country', 'country'),
+
+                    Select::make('school_board')
+                        ->title('School Board')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'school_board', 'school_board'),
+
+                    Select::make('state_province')
+                        ->title('State/Province')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'state_province', 'state_province'),
+                ]),
+                
+                Button::make('Filter')
+                    ->icon('filter')
+                    ->method('filter')
+                    ->type(Color::DEFAULT()),
+            ]),
+
+            ViewEventLayout::class
+        ];
+    }
+
+    public function filter(Request $request){
+        return redirect('/admin/events?' 
+                    .'&school=' . $request->get('school')
+                    .'&country=' . $request->get('country')
+                    .'&school_board=' . $request->get('school_board')
+                    .'&state_province=' . $request->get('state_province'));
+    }
+
+    public function deleteEvents(Request $request)
+    {   
+        //get all localadmins from post request
+        $events = $request->get('events');
+        
+        try{
+
+            //if the array is not empty
+            if(!empty($events)){
+
+                //loop through the events and delete them from db
+                foreach($events as $event){
+                    Events::where('id', $event)->delete();
+                }
+
+                Alert::success('Selected events deleted succesfully');
+
+            }else{
+                Alert::warning('Please select events in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
     }
 }
