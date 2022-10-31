@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\EditEventScreen;
+use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\EditSchoolScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
+use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
@@ -71,6 +74,16 @@ Route::screen('/localadmins/{localadmin}/edit', EditLocaladminScreen::class)->na
 
 //show create local admin screen
 Route::screen('/localadmins/create', CreateLocaladminScreen::class)->name('platform.localadmin.create');
+
+//show events screen
+Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
+
+//show edit event screen
+Route::screen('/events/{event}/edit', EditEventScreen::class)->name('platform.event.edit');
+
+//show create event screen
+Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.create');
+
 
 
 

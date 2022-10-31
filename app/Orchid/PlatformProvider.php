@@ -41,6 +41,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('friends')
                 ->route('platform.student.list'),
 
+            //student nav option
+            Menu::make('Events')
+                ->icon('diamond')
+                ->route('platform.event.list'),
+
             //school nav option
             Menu::make('Schools')
                 ->icon('building')
