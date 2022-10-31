@@ -99,6 +99,8 @@ class EditLocaladminScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
+                    ->mask('(999) 999-9999')
+                    ->placeholder('Ex. (613) 859-5863')
                     ->value($this->localadmin->phonenumber),
                 
                 Select::make('school')
