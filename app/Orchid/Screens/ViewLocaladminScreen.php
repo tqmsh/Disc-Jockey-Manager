@@ -38,7 +38,7 @@ class ViewLocaladminScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Local Admin List';
+        return 'Local Admins';
     }
 
     /**
