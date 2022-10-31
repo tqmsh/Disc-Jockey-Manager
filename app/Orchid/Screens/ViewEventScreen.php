@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Events;
 use App\Models\School;
 use Orchid\Screen\Screen;
@@ -11,6 +12,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventLayout;
 
@@ -111,5 +113,31 @@ class ViewEventScreen extends Screen
                     .'&country=' . $request->get('country')
                     .'&school_board=' . $request->get('school_board')
                     .'&state_province=' . $request->get('state_province'));
+    }
+
+    public function deleteEvents(Request $request)
+    {   
+        //get all localadmins from post request
+        $events = $request->get('events');
+        
+        try{
+
+            //if the array is not empty
+            if(!empty($events)){
+
+                //loop through the events and delete them from db
+                foreach($events as $event){
+                    Events::where('id', $event)->delete();
+                }
+
+                Alert::success('Selected events deleted succesfully');
+
+            }else{
+                Alert::warning('Please select events in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
     }
 }
