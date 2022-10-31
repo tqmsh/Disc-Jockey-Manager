@@ -34,6 +34,11 @@ class ViewLocaladminLayout extends Table
                         ->value($Localadmin->id)
                         ->checked(false);
                 }),
+            TD::make('id', 'Id')
+                ->render(function (Localadmin $Localadmin) {
+                    return Link::make($Localadmin->id)
+                        ->route('platform.localadmin.edit', $Localadmin);
+                }),
             TD::make('firstname', 'First Name')
                 ->render(function (Localadmin $Localadmin) {
                     return Link::make($Localadmin->firstname)
