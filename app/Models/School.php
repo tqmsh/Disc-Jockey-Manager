@@ -13,19 +13,25 @@ class School extends Model
 
     protected $fillable = ['school_name', 'country', 'state_province', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'teacher_name', 'teacher_email', 'teacher_cell'];
 
-        protected $allowedFilters = [
-        'school_name',
-        'country',
-        'state_province',
-        'school_board',
-    ];
+    public function scopeFilter($query, array $filters){
 
-        protected $allowedSorts = [
-        'id',
-        'school_name',
-        'country',
-        'state_province',
-        'school_board',
-    ];
+        if(isset($filters['school'])){
+            $query ->where('school_name', 'like', '%' . request('school') . '%');
+        }
+
+        if(isset($filters['country'])){
+            $query->where('country', 'like', '%' . request('country') . '%');
+        }
+
+        if(isset($filters['school_board'])){
+            $query->where('school_board', 'like', '%' . request('school_board') . '%');
+        }
+
+        if(isset($filters['state_province'])){
+            $query->where('state_province', 'like', '%' . request('state_province') . '%');
+        }
+
+        $query->select('schools.*');
+    }
 
 }
