@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -109,6 +110,7 @@ class CreateLocaladminScreen extends Screen
                 Select::make('school')
                     ->title('School')
                     ->required()
+                    ->empty('No Selection')
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name'),
 
@@ -121,12 +123,13 @@ class CreateLocaladminScreen extends Screen
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->empty()
+                    ->empty('No Selection')
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
                 Select::make('school_board')
                     ->title('School Board')
                     ->horizontal()
+                    ->empty('No Selection')
                     ->fromModel(School::class, 'school_board', 'school_board'),
             ]),
         ];
@@ -139,6 +142,7 @@ class CreateLocaladminScreen extends Screen
             'email' => $request->input('email'),
             'phonenumber' => $request->input('phonenumber'),
             'school' => $request->input('school'),
+            'user_id' => null,
         ];
 
         $userTableFields = [
@@ -149,6 +153,7 @@ class CreateLocaladminScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'phonenumber' => $request->input('phonenumber'),
+            'remember_token' => Str::random(10),
             'role' =>'localadmin',
         ];
 
@@ -158,6 +163,7 @@ class CreateLocaladminScreen extends Screen
             
             //no duplicates found
             User::create($userTableFields);
+            $localAdminTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
             Localadmin::create($localAdminTableFields);
             
             Alert::success('Local Admin Added Succesfully');
