@@ -17,6 +17,7 @@ use Orchid\Support\Facades\Layout;
 class EditLocaladminScreen extends Screen
 {
     public $localadmin;
+    public $school;
 
     /**
      * Query data.
@@ -49,7 +50,7 @@ class EditLocaladminScreen extends Screen
     {
         return [
             Button::make('Submit')
-                ->icon('plus')
+                ->icon('check')
                 ->method('update'),
 
             Button::make('Delete Local Admin')
@@ -69,6 +70,8 @@ class EditLocaladminScreen extends Screen
      */
     public function layout(): iterable
     {
+        $this->school = $this->localadmin->getSchool($this->localadmin->school);
+
         return [
             
                 Layout::rows([
@@ -107,29 +110,37 @@ class EditLocaladminScreen extends Screen
                     ->title('School')
                     ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'school_name', 'school_name'),
+                    ->fromModel(School::class, 'school_name', 'school_name')
+                    ->value($this->localadmin->school),
 
                 Select::make('country')
                     ->title('Country')
                     ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->fromModel(School::class, 'country', 'country')
+                    ->value($this->localadmin->getUser($this->localadmin->email)->value('country')),
+
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->fromModel(School::class, 'state_province', 'state_province'),
+                    ->fromModel(School::class, 'state_province', 'state_province')
+                    ->value($this->school->value('state_province')),
+
 
                 Select::make('school_board')
                     ->title('School Board')
                     ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board'),             
+                    ->fromModel(School::class, 'school_board', 'school_board')
+                    ->value($this->school->value('school_board')),
+             
             ]),
         ];
     }
     public function update(Localadmin $localadmin, Request $request)
     {
         //!PUT ALL THIS CODE IN A TRY CATCH
+        //!MAKE SURE THE SCHOOL AND SCHOOL BOARD MATCH
 
         $localadminTableFields = [
             'firstname' => $request->input('firstname'),

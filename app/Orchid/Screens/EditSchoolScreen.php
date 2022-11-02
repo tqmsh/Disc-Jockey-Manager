@@ -48,7 +48,7 @@ class EditSchoolScreen extends Screen
     {
         return [
             Button::make('Submit')
-                ->icon('plus')
+                ->icon('check')
                 ->method('update'),
 
             Button::make('Delete School')
@@ -79,21 +79,21 @@ class EditSchoolScreen extends Screen
                     ->value($this->school->school_name)
                     ->horizontal(),
 
-                Select::make('country')
+                Input::make('country')
                     ->title('Country')
                     ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->value($this->school->country),
 
-                Select::make('state_province')
+                Input::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->fromModel(School::class, 'state_province', 'state_province'),
+                    ->value($this->school->state_province),
 
-                Select::make('school_board')
+                Input::make('school_board')
                     ->title('School Board')
                     ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board'),   
+                    ->value($this->school->school_board),
 
                 Input::make('address')
                     ->title('Address')

@@ -18,6 +18,7 @@ use Orchid\Support\Facades\Layout;
 class EditStudentScreen extends Screen
 {
     public $student;
+    public $school;
 
     /**
      * Query data.
@@ -50,7 +51,7 @@ class EditStudentScreen extends Screen
     {
         return [
             Button::make('Submit')
-                ->icon('plus')
+                ->icon('check')
                 ->method('update'),
 
             Button::make('Delete Student')
@@ -63,6 +64,7 @@ class EditStudentScreen extends Screen
         ];
     }
 
+
     /**
      * Views.
      *
@@ -70,6 +72,8 @@ class EditStudentScreen extends Screen
      */
     public function layout(): iterable
     {
+        $this->school = $this->student->getSchool($this->student->school);
+
         return [
 
             Layout::rows([
@@ -99,24 +103,29 @@ class EditStudentScreen extends Screen
                     ->title('School')
                     ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'school_name', 'school_name'),
+                    ->fromModel(School::class, 'school_name', 'school_name')
+                    ->value($this->school->value('school_name')),
 
                 Select::make('country')
                     ->title('Country')
                     ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->fromModel(School::class, 'country', 'country')
+                    ->value($this->student->getUser($this->student->email)->value('country')),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->fromModel(School::class, 'state_province', 'state_province'),
+                    ->fromModel(School::class, 'state_province', 'state_province')
+                    ->value($this->school->value('state_province')),
+
 
                 Select::make('school_board')
                     ->title('School Board')
                     ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board'),
-                    
+                    ->fromModel(School::class, 'school_board', 'school_board')
+                    ->value($this->school->value('school_board')),
+                   
                 Input::make('grade')
                     ->title('Grade')
                     ->type('number')
@@ -136,12 +145,14 @@ class EditStudentScreen extends Screen
                 Select::make('event_id')
                     ->title('Event ID')
                     ->horizontal()
-                    ->fromModel(Events::class, 'id'),
+                    ->fromModel(Events::class, 'id')
+                    ->value($this->student->event_id),
 
                 Select::make('ticketstatus')
                     ->title('Ticket Status')
                     ->required()
                     ->horizontal()
+                    ->value($this->student->ticketstatus)
                     ->options([
                         'Paid'   => 'Paid',
                         'Unpaid' => 'Unpaid',
@@ -160,6 +171,7 @@ class EditStudentScreen extends Screen
     {
 
         //!PUT ALL THIS CODE IN A TRY CATCH
+        //!CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
 
         $studentTableFields = [
             'firstname' => $request->input('firstname'),

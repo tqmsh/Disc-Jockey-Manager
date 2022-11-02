@@ -84,7 +84,7 @@ class CreateLocaladminScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. KingKhan456'),
+                    ->placeholder('Ex. KingKhan435'),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')

@@ -27,7 +27,9 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::latest('students.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'students' => 
+            Student::latest('students.created_at')->filter(request(['country', 'state_province', 'school', 'school_board', 'ticketstatus']))
+            ->paginate(10)
         ];
     }
 
@@ -73,6 +75,14 @@ class ViewStudentScreen extends Screen
             Layout::rows([
 
                 Group::make([
+
+                    Select::make('ticketstatus')
+                        ->title('Ticket Status')
+                        ->empty('No selection')
+                        ->options([
+                            'Paid' => 'Paid',
+                            'Unpaid' => 'Unpaid'
+                        ]),
                     
                     Select::make('school')
                         ->title('School')
@@ -106,7 +116,8 @@ class ViewStudentScreen extends Screen
     }
 
     public function filter(Request $request){
-        return redirect('/admin/students?' 
+        return redirect('/admin/students?'
+                    .'&ticketstatus=' . $request->get('ticketstatus') 
                     .'&school=' . $request->get('school')
                     .'&country=' . $request->get('country')
                     .'&school_board=' . $request->get('school_board')
