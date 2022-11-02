@@ -84,6 +84,9 @@ Route::screen('/events/{event}/edit', EditEventScreen::class)->name('platform.ev
 //show create event screen
 Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.create');
 
+//show add table screen for a event
+Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platform.table.create');
+
 
 
 
