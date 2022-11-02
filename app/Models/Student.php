@@ -37,15 +37,19 @@ class Student extends Model
             $query->where('state_province', 'like', '%' . request('state_province') . '%');
         }
 
+        if(isset($filters['ticketstatus'])){
+            $query->where('ticketstatus', '=', request('ticketstatus'));
+        }
+
         $query->select('students.*');
     }
 
-    public function getCountry($email){
-        return User::where('email', $email)->get('country')->value('country');
+    public function getSchool($school){
+        return School::where('school_name', $school)->get();
     }
 
     
-    public function getUser($user_id){
-        return User::find($user_id);
+    public function getUser($email){
+        return User::where('email', $email)->get();
     }
 }
