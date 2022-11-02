@@ -38,4 +38,8 @@ class Events extends Model
 
         $query->select('events.*');
     }
+    
+    public function getSchool($school){
+        return School::where('school_name', $school)->get();
+    }
 }

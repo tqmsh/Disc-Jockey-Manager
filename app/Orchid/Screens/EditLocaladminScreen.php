@@ -73,7 +73,6 @@ class EditLocaladminScreen extends Screen
         $this->school = $this->localadmin->getSchool($this->localadmin->school);
 
         return [
-            
                 Layout::rows([
 
                 Input::make('firstname')
@@ -133,7 +132,6 @@ class EditLocaladminScreen extends Screen
                     ->horizontal()
                     ->fromModel(School::class, 'school_board', 'school_board')
                     ->value($this->school->value('school_board')),
-             
             ]),
         ];
     }
@@ -179,6 +177,7 @@ class EditLocaladminScreen extends Screen
     public function delete(Localadmin $localadmin)
     {
         //!PUT ALL THIS CODE IN A TRY CATCH
+        
         $localadmin->delete();
 
         Alert::info('You have successfully deleted the Local Admin.');
