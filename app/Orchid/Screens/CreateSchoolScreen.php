@@ -9,6 +9,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
 class CreateSchoolScreen extends Screen
@@ -150,7 +151,7 @@ class CreateSchoolScreen extends Screen
         
         School::create($formFields);
 
-        Alert::success('School Added Succesfully');
+        Toast::success('School Added Succesfully');
         
         return redirect()->route('platform.student.list');
     }

@@ -14,6 +14,7 @@ use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewLocaladminLayout;
 
@@ -131,14 +132,14 @@ class ViewLocaladminScreen extends Screen
                     Localadmin::where('id', $localadmin)->delete();
                 }
 
-                Alert::success('Selected local admins deleted succesfully');
+                Toast::success('Selected local admins deleted succesfully');
 
             }else{
-                Alert::warning('Please select local admins in order to delete them');
+                Toast::warning('Please select local admins in order to delete them');
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
         }
     }
 }

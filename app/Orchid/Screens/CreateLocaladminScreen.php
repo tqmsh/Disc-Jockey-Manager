@@ -13,6 +13,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
 class CreateLocaladminScreen extends Screen
@@ -166,12 +167,12 @@ class CreateLocaladminScreen extends Screen
             $localAdminTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
             Localadmin::create($localAdminTableFields);
             
-            Alert::success('Local Admin Added Succesfully');
+            Toast::success('Local Admin Added Succesfully');
             return redirect()->route('platform.localadmin.list');
           
         }else{
             //duplicate email found
-            Alert::error('Email already exists.');
+            Toast::error('Email already exists.');
         }
     }
 }

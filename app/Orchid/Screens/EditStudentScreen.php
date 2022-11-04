@@ -8,11 +8,13 @@ use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
+use App\Notifications\LoggedIn;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
 class EditStudentScreen extends Screen
@@ -201,13 +203,13 @@ class EditStudentScreen extends Screen
             
             User::where('id', $student->user_id)->update($userTableFields);
             
-            Alert::success('You have successfully updated ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+            Toast::success('You have successfully updated: ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
 
             return redirect()->route('platform.student.list');
           
         }else{
             //duplicate email found
-            Alert::error('Email already exists.');
+            Toast::error('Email already exists.');
         }
     } 
 
@@ -216,7 +218,7 @@ class EditStudentScreen extends Screen
         //!PUT ALL THIS CODE IN A TRY CATCH
         $student->delete();
 
-        Alert::info('You have successfully deleted the student.');
+        Toast::info('You have successfully deleted the student.');
 
         return redirect()->route('platform.student.list');
     }

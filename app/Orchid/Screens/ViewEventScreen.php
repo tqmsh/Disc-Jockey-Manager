@@ -12,7 +12,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventLayout;
 
@@ -130,14 +130,14 @@ class ViewEventScreen extends Screen
                     Events::where('id', $event)->delete();
                 }
 
-                Alert::success('Selected events deleted succesfully');
+                Toast::success('Selected events deleted succesfully');
 
             }else{
-                Alert::warning('Please select events in order to delete them');
+                Toast::warning('Please select events in order to delete them');
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
         }
     }
 }
