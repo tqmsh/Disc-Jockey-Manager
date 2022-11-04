@@ -12,6 +12,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
 class EditLocaladminScreen extends Screen
@@ -164,13 +165,13 @@ class EditLocaladminScreen extends Screen
             
             User::where('id', $localadmin->user_id)->update($userTableFields);
             
-            Alert::success('You have successfully updated ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+            Toast::success('You have successfully updated ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
 
             return redirect()->route('platform.localadmin.list');
           
         }else{
             //duplicate email found
-            Alert::error('Email already exists.');
+            Toast::error('Email already exists.');
         }
     } 
 
@@ -180,7 +181,7 @@ class EditLocaladminScreen extends Screen
         
         $localadmin->delete();
 
-        Alert::info('You have successfully deleted the Local Admin.');
+        Toast::info('You have successfully deleted the Local Admin.');
 
         return redirect()->route('platform.localadmin.list');
     }

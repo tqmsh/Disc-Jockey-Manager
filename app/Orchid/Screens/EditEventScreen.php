@@ -11,6 +11,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 
@@ -170,7 +171,7 @@ class EditEventScreen extends Screen
 
         $event->fill($request->all())->save();
 
-        Alert::success('You have successfully updated ' . $request->input('event_name') . '.');
+        Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
 
         return redirect()->route('platform.event.list');
     }
@@ -181,7 +182,7 @@ class EditEventScreen extends Screen
         
         $event->delete();
 
-        Alert::success('You have successfully deleted the event.');
+        Toast::success('You have successfully deleted the event.');
 
         return redirect()->route('platform.event.list');
     }

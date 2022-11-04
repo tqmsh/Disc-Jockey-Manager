@@ -14,6 +14,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
 class CreateStudentScreen extends Screen
@@ -196,12 +197,12 @@ class CreateStudentScreen extends Screen
             $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
             Student::create($studentTableFields);
             
-            Alert::success('Student Added Succesfully');
+            Toast::success('Student Added Succesfully');
             return redirect()->route('platform.student.list');
           
         }else{
             //duplicate email found
-            Alert::error('Email already exists.');
+            Toast::error('Email already exists.');
         }
     }
 }

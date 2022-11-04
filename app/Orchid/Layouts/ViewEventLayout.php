@@ -20,6 +20,7 @@ class ViewEventLayout extends Table
      */
     protected $target = 'events';
 
+
     /**
      * Get the table cells to be displayed.
      *

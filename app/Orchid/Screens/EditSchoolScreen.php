@@ -10,6 +10,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
 class EditSchoolScreen extends Screen
@@ -165,13 +166,13 @@ class EditSchoolScreen extends Screen
             //email not changed
             $school->fill($request->all())->save();
 
-            Alert::success('You have successfully updated ' . $request->input('school_name') . '.');
+            Toast::success('You have successfully updated ' . $request->input('school_name') . '.');
 
             return redirect()->route('platform.school.list');
           
         }else{
             //duplicate email found
-            Alert::error('Teacher email already exists.');
+            Toast::error('Teacher email already exists.');
         }
     }
 
@@ -180,7 +181,7 @@ class EditSchoolScreen extends Screen
         //!PUT ALL THIS CODE IN A TRY CATCH
         $school->delete();
 
-        Alert::info('You have successfully deleted the school.');
+        Toast::info('You have successfully deleted the school.');
 
         return redirect()->route('platform.school.list');
     }
