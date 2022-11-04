@@ -155,12 +155,6 @@ class EditEventScreen extends Screen
                     ->horizontal()
                     ->fromModel(School::class, 'school_board', 'school_board')
                     ->value($this->school->value('school_board')),
-
-                // Select::make('school_board')
-                //     ->title('School Board')
-                //     ->horizontal()
-                //     ->fromModel(School::class, 'school_board', 'school_board')
-                //     ->value($this->school->value('school_board')),
             ]),
         ];
     }
