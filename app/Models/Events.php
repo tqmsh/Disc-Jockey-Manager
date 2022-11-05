@@ -17,8 +17,7 @@ class Events extends Model
 
     public function scopeFilter($query, array $filters){
 
-        $query  ->join('seating', 'seating.event_id', '=', 'events.id')
-                ->join('schools', 'school_name', '=', 'school');
+        $query->join('schools', 'school_name', '=', 'school');
 
 
         if(isset($filters['school'])){
