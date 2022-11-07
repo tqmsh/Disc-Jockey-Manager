@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
@@ -164,45 +165,53 @@ class CreateStudentScreen extends Screen
 
 
     public function createStudent(Request $request){
-        $studentTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'phonenumber' => $request->input('phonenumber'),
-            'school' => $request->input('school'),
-            'grade' => $request->input('grade'),
-            'event_id' => $request->input('event_id'),
-            'allergies' => $request->input('allergies'),
-            'user_id' => null,
-        ];
 
-        $userTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
-            'name' => $request->input('name'),
-            'country' => $request->input('country'),
-            'phonenumber' => $request->input('phonenumber'),
-            'remember_token' => Str::random(10),
-            'role' =>'student',
-        ];
+        try{
+
+            $studentTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'phonenumber' => $request->input('phonenumber'),
+                'school' => $request->input('school'),
+                'grade' => $request->input('grade'),
+                'event_id' => $request->input('event_id'),
+                'allergies' => $request->input('allergies'),
+                'user_id' => null,
+            ];
+
+            $userTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+                'name' => $request->input('name'),
+                'country' => $request->input('country'),
+                'phonenumber' => $request->input('phonenumber'),
+                'remember_token' => Str::random(10),
+                'role' =>'student',
+            ];
 
 
-        //check for duplicate email
-        if(count(User::where('email', $request->input('email'))->get()) == 0){
+            //check for duplicate email
+            if(count(User::where('email', $request->input('email'))->get()) == 0){
+                
+                //no duplicates found
+                User::create($userTableFields);
+                $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                Student::create($studentTableFields);
+                
+                Toast::success('Student Added Succesfully');
+                return redirect()->route('platform.student.list');
             
-            //no duplicates found
-            User::create($userTableFields);
-            $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
-            Student::create($studentTableFields);
-            
-            Toast::success('Student Added Succesfully');
-            return redirect()->route('platform.student.list');
-          
-        }else{
-            //duplicate email found
-            Toast::error('Email already exists.');
+            }else{
+                //duplicate email found
+                Toast::error('Email already exists.');
+            }
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error creating this school. Error Code: ' . $e);
         }
     }
 }

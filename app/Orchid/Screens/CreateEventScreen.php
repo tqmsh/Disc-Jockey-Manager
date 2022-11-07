@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use App\Models\Events;
 use App\Models\School;
+use Exception;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -146,14 +147,20 @@ class CreateEventScreen extends Screen
 
     public function createEvent(Request $request){
 
-        //!PUT ALL THIS IN A TRY CATCH
-        $formFields = $request->all();
-        $formFields['event_creator'] = auth()->id();
-        
-        Events::create($formFields);
+        try{
 
-        Toast::success('Event Added Succesfully');
-        
-        return redirect()->route('platform.event.list');
+            $formFields = $request->all();
+            $formFields['event_creator'] = auth()->id();
+            
+            Events::create($formFields);
+
+            Toast::success('Event Added Succesfully');
+            
+            return redirect()->route('platform.event.list');
+
+        }catch(Exception $e){
+            
+            Toast::error('There was an error creating this event. Error Code: ' . $e);
+        }
     }
 }

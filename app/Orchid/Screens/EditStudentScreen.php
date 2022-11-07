@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
@@ -171,55 +172,65 @@ class EditStudentScreen extends Screen
 
     public function update(Student $student, Request $request)
     {
+        //TODO CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
 
-        //!PUT ALL THIS CODE IN A TRY CATCH
-        //!CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
+        try{
 
-        $studentTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'grade' => $request->input('grade'),
-            'phonenumber' => $request->input('phonenumber'),
-            'ticketstatus' => $request->input('ticketstatus'),
-            'school' => $request->input('school'),
-            'event_id' => $request->input('event_id'),
-            'allergies' => $request->input('allergies'),
-        ];
+            $studentTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'grade' => $request->input('grade'),
+                'phonenumber' => $request->input('phonenumber'),
+                'ticketstatus' => $request->input('ticketstatus'),
+                'school' => $request->input('school'),
+                'event_id' => $request->input('event_id'),
+                'allergies' => $request->input('allergies'),
+            ];
 
-        $userTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'country' => $request->input('country'),
-            'status' => $request->input('ticketstatus'),
-        ];
+            $userTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'country' => $request->input('country'),
+                'status' => $request->input('ticketstatus'),
+            ];
 
-        //check for duplicate
-        if(count(User::whereNot('id', $student->user_id)->where('email', $request->input('email'))->get()) == 0){
+            //check for duplicate
+            if(count(User::whereNot('id', $student->user_id)->where('email', $request->input('email'))->get()) == 0){
+                
+                //email not changed
+                $student->update($studentTableFields);
+                
+                User::where('id', $student->user_id)->update($userTableFields);
+                
+                Toast::success('You have successfully updated: ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+
+                return redirect()->route('platform.student.list');
             
-            //email not changed
-            $student->update($studentTableFields);
-            
-            User::where('id', $student->user_id)->update($userTableFields);
-            
-            Toast::success('You have successfully updated: ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+            }else{
+                //duplicate email found
+                Toast::error('Email already exists.');
+            }
 
-            return redirect()->route('platform.student.list');
-          
-        }else{
-            //duplicate email found
-            Toast::error('Email already exists.');
+        }catch(Exception $e){
+
+            Alert::error('There was an error editing this student. Error Code: ' . $e);
         }
     } 
 
     public function delete(Student $student)
     {
-        //!PUT ALL THIS CODE IN A TRY CATCH
-        $student->delete();
+        try{
+            $student->delete();
 
-        Toast::info('You have successfully deleted the student.');
+            Toast::info('You have successfully deleted the student.');
 
-        return redirect()->route('platform.student.list');
+            return redirect()->route('platform.student.list');
+
+        }catch(Exception $e){
+            
+            Alert::error('There was an error deleting this school. Error Code: ' . $e);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Events;
 use App\Models\School;
 use Orchid\Screen\Screen;
@@ -161,23 +162,33 @@ class EditEventScreen extends Screen
 
     public function update(Events $event, Request $request)
     {
-        //!PUT ALL THIS CODE IN A TRY CATCH
+        try{
 
-        $event->fill($request->all())->save();
+            $event->fill($request->all())->save();
 
-        Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
+            Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
 
-        return redirect()->route('platform.event.list');
+            return redirect()->route('platform.event.list');
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error editing this event. Error Code: ' . $e);
+        }
     }
 
     public function delete(Events $event)
     {
-        //!PUT ALL THIS CODE IN A TRY CATCH
-        
-        $event->delete();
+        try{
 
-        Toast::success('You have successfully deleted the event.');
+            $event->delete();
 
-        return redirect()->route('platform.event.list');
+            Toast::success('You have successfully deleted the event.');
+
+            return redirect()->route('platform.event.list');
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error deleting this event. Error Code: ' . $e);
+        }     
     }
 }

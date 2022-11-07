@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -137,42 +138,53 @@ class CreateLocaladminScreen extends Screen
     }
 
     public function createLocaladmin(Request $request){
-        $localAdminTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'phonenumber' => $request->input('phonenumber'),
-            'school' => $request->input('school'),
-            'user_id' => null,
-        ];
 
-        $userTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
-            'name' => $request->input('name'),
-            'country' => $request->input('country'),
-            'phonenumber' => $request->input('phonenumber'),
-            'remember_token' => Str::random(10),
-            'role' =>'localadmin',
-        ];
+        try{
+
+            $localAdminTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'phonenumber' => $request->input('phonenumber'),
+                'school' => $request->input('school'),
+                'user_id' => null,
+            ];
+
+            $userTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+                'name' => $request->input('name'),
+                'country' => $request->input('country'),
+                'phonenumber' => $request->input('phonenumber'),
+                'remember_token' => Str::random(10),
+                'role' =>'localadmin',
+            ];
 
 
-        //check for duplicate email
-        if(count(User::where('email', $request->input('email'))->get()) == 0){
+            //check for duplicate email
+            if(count(User::where('email', $request->input('email'))->get()) == 0){
+                
+                //no duplicates found
+                User::create($userTableFields);
+                $localAdminTableFields['user_id'] = User::where('email', $request->input('email'))
+                ->get('id')->value('id');
+
+                Localadmin::create($localAdminTableFields);
+                
+                Toast::success('Local Admin Added Succesfully');
+                return redirect()->route('platform.localadmin.list');
             
-            //no duplicates found
-            User::create($userTableFields);
-            $localAdminTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
-            Localadmin::create($localAdminTableFields);
+            }else{
+
+                //duplicate email found
+                Toast::error('Email already exists.');
+            }
+
+        }catch(Exception $e){
             
-            Toast::success('Local Admin Added Succesfully');
-            return redirect()->route('platform.localadmin.list');
-          
-        }else{
-            //duplicate email found
-            Toast::error('Email already exists.');
+            Alert::error('There was an error creating this local admin Error Code: ' . $e);
         }
     }
 }
