@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\User;
 use App\Models\School;
 use Orchid\Screen\Screen;
@@ -138,51 +139,62 @@ class EditLocaladminScreen extends Screen
     }
     public function update(Localadmin $localadmin, Request $request)
     {
-        //!PUT ALL THIS CODE IN A TRY CATCH
-        //!MAKE SURE THE SCHOOL AND SCHOOL BOARD MATCH
+        //TODO MAKE SURE THE SCHOOL AND SCHOOL BOARD MATCH
 
-        $localadminTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'phonenumber' => $request->input('phonenumber'),
-            'school' => $request->input('school'),
-        ];
+        try{
 
-        $userTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'country' => $request->input('country'),
-        ];
+            $localadminTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'phonenumber' => $request->input('phonenumber'),
+                'school' => $request->input('school'),
+            ];
 
-        //check for duplicate email
-        if(count(User::whereNot('id', $localadmin->user_id)->where('email', $request->input('email'))->get()) == 0){
+            $userTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'country' => $request->input('country'),
+            ];
 
+            //check for duplicate email
+            if(count(User::whereNot('id', $localadmin->user_id)->where('email', $request->input('email'))->get()) == 0){
+
+                
+                //email not changed
+                $localadmin->update($localadminTableFields);
+                
+                User::where('id', $localadmin->user_id)->update($userTableFields);
+                
+                Toast::success('You have successfully updated ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+
+                return redirect()->route('platform.localadmin.list');
             
-            //email not changed
-            $localadmin->update($localadminTableFields);
-            
-            User::where('id', $localadmin->user_id)->update($userTableFields);
-            
-            Toast::success('You have successfully updated ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+            }else{
+                //duplicate email found
+                Toast::error('Email already exists.');
+            }
 
-            return redirect()->route('platform.localadmin.list');
-          
-        }else{
-            //duplicate email found
-            Toast::error('Email already exists.');
+        }catch(Exception $e){
+
+            Alert::error('There was an error editing this local admin. Error Code: ' . $e);
         }
     } 
 
     public function delete(Localadmin $localadmin)
     {
-        //!PUT ALL THIS CODE IN A TRY CATCH
-        
-        $localadmin->delete();
+        try{
 
-        Toast::info('You have successfully deleted the Local Admin.');
+            $localadmin->delete();
 
-        return redirect()->route('platform.localadmin.list');
+            Toast::info('You have successfully deleted the Local Admin.');
+
+            return redirect()->route('platform.localadmin.list');
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error deleting this local admin. Error Code: ' . $e);
+        }
     }
 }

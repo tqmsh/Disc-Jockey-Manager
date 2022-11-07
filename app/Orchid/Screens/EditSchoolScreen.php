@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\School;
+use Exception;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -158,21 +159,27 @@ class EditSchoolScreen extends Screen
     
     public function update(School $school, Request $request)
     {
-        //!PUT ALL THIS CODE IN A TRY CATCH
+        try{
 
-        //check for duplicate email
-        if(count(School::whereNot('id', $school->id)->where('teacher_email', $request->input('teacher_email'))->get()) == 0){
+            //check for duplicate email
+            if(count(School::whereNot('id', $school->id)->where('teacher_email', $request->input('teacher_email'))->get()) == 0){
 
-            //email not changed
-            $school->fill($request->all())->save();
+                //email not changed
+                $school->fill($request->all())->save();
 
-            Toast::success('You have successfully updated ' . $request->input('school_name') . '.');
+                Toast::success('You have successfully updated ' . $request->input('school_name') . '.');
 
-            return redirect()->route('platform.school.list');
-          
-        }else{
-            //duplicate email found
-            Toast::error('Teacher email already exists.');
+                return redirect()->route('platform.school.list');
+            
+            }else{
+
+                //duplicate email found
+                Toast::error('Teacher email already exists.');
+            }
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error editing this school. Error Code: ' . $e);
         }
     }
 

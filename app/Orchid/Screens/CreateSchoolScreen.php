@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
@@ -146,13 +147,20 @@ class CreateSchoolScreen extends Screen
 
     public function createSchool(Request $request){
 
-        //!PUT ALL THIS IN A TRY CATCH
-        $formFields = $request->all();
-        
-        School::create($formFields);
+        //TODO CHECK FOR DUPLICATE SCHOOLS BEFORE ENTERING
 
-        Toast::success('School Added Succesfully');
-        
-        return redirect()->route('platform.student.list');
+        try{
+            $formFields = $request->all();
+            
+            School::create($formFields);
+
+            Toast::success('School Added Succesfully');
+            
+            return redirect()->route('platform.student.list');
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error creating this school. Error Code: ' . $e);
+        }
     }
 }
