@@ -50,7 +50,7 @@ class ViewSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New School')
+            Link::make('Add New Schools')
                 ->icon('plus')
                 ->route('platform.school.create'),
 

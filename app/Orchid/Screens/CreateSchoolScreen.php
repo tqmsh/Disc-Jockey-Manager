@@ -5,13 +5,16 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\School;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Actions\ModalToggle;
 
 class CreateSchoolScreen extends Screen
 {
@@ -43,6 +46,12 @@ class CreateSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+
+            ModalToggle::make('Mass Import Schools')
+                ->modal('massImportModal')
+                ->method('massImport')
+                ->icon('plus'),
+
             Button::make('Add')
                 ->icon('plus')
                 ->method('createSchool'),
@@ -61,6 +70,20 @@ class CreateSchoolScreen extends Screen
     public function layout(): iterable
     {
         return [
+
+            Layout::modal('massImportModal',[
+
+                Layout::rows([
+
+                    Upload::make('school_csv')
+                        ->title('File type must be in CSV format. (Ex. schools.cvs)')  
+                        ->acceptedFiles('.csv'),
+                ])
+                
+            ])
+            ->title('Mass Import Schools')
+            ->applyButton('Import')
+            ->withoutCloseButton(),
 
             Layout::rows([
 
@@ -140,11 +163,14 @@ class CreateSchoolScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 852-4563'),                
+                    ->placeholder('Ex. (613) 852-4563'),
+                
+
             ]),
         ];
     }
 
+    //this method will add a single school to the database
     public function createSchool(Request $request){
 
         //TODO CHECK FOR DUPLICATE SCHOOLS BEFORE ENTERING
@@ -156,11 +182,23 @@ class CreateSchoolScreen extends Screen
 
             Toast::success('School Added Succesfully');
             
-            return redirect()->route('platform.student.list');
+            return redirect()->route('platform.school.list');
 
         }catch(Exception $e){
 
             Alert::error('There was an error creating this school. Error Code: ' . $e);
         }
+    }
+
+    //this method will mass import schools from a csv file
+    public function massImport(Request $request){
+
+
+        return redirect()->route('platform.school.list');
+    }
+
+    private function csvToArray($test){
+
+
     }
 }
