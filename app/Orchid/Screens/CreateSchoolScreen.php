@@ -189,8 +189,7 @@ class CreateSchoolScreen extends Screen
         try{
 
             //check for duplicate schools
-            if(count(School::where('school_name', $request->input('school_name'))->where('school_board', $request->input('school_board'))->where('state_province', $request->input('state_province'))->get()) == 0){
-
+            if($this->validSchool($request)){
                 
                 School::create($request->all());
 
@@ -213,12 +212,28 @@ class CreateSchoolScreen extends Screen
     //this method will mass import schools from a csv file
     public function massImport(Request $request){
 
+        try{
 
-        return redirect()->route('platform.school.list');
+            //convert csv file to array then insert in db
+
+
+            return redirect()->route('platform.school.list');
+
+        }catch(Exception $e){
+            
+            Alert::error('There was an error mass importing the schools. Error Code: ' . $e);
+        }
+
     }
 
     private function csvToArray($test){
 
 
+    }
+
+    //this method checks for duplicate schools
+    private function validSchool($request){
+
+        return count(School::where('school_name', $request->input('school_name'))->where('school_board', $request->input('school_board'))->where('state_province', $request->input('state_province'))->get()) == 0;
     }
 }
