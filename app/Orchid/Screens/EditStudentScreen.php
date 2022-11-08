@@ -173,6 +173,9 @@ class EditStudentScreen extends Screen
     public function update(Student $student, Request $request)
     {
         //TODO CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
+        //TODO CHECK IF THE COUNTRY MATCHES THE COUNTRY OF THE SCHOOL
+        //TODO CHECK IF THE STATE/PROVICE MATCHES THE STATE/PROVICE OF THE SCHOOL
+
 
         try{
 

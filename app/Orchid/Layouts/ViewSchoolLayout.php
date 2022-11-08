@@ -55,21 +55,7 @@ class ViewSchoolLayout extends Table
                     return Link::make($school->state_province)
                         ->route('platform.school.edit', $school);
                 }),
-            TD::make('teacher', 'Teacher')
-                ->render(function (School $school) {
-                    return Link::make($school->teacher_name)
-                        ->route('platform.school.edit', $school);
-                }),
-            TD::make('teacher_email', 'Teacher Email')
-                ->render(function (School $school) {
-                    return Link::make($school->teacher_email)
-                        ->route('platform.school.edit', $school);
-                }),
-            TD::make('teacher_cell', 'Teacher Cell')
-                ->render(function (School $school) {
-                    return Link::make($school->teacher_cell)
-                        ->route('platform.school.edit', $school);
-                }),
+                
             TD::make('address', 'Address')
                 ->render(function (School $school) {
                     return Link::make($school->address)

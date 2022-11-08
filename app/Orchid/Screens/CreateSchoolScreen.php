@@ -76,7 +76,7 @@ class CreateSchoolScreen extends Screen
                 Layout::rows([
 
                     Upload::make('school_csv')
-                        ->title('File type must be in CSV format. (Ex. schools.cvs)')  
+                        ->title('File type must be in CSV format. (Ex. schools.csv)')  
                         ->acceptedFiles('.csv'),
                 ])
                 
