@@ -46,15 +46,16 @@ class CreateSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            
+            Button::make('Add')
+                ->icon('plus')
+                ->method('createSchool'),
 
             ModalToggle::make('Mass Import Schools')
                 ->modal('massImportModal')
                 ->method('massImport')
                 ->icon('plus'),
 
-            Button::make('Add')
-                ->icon('plus')
-                ->method('createSchool'),
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -86,6 +87,12 @@ class CreateSchoolScreen extends Screen
             ->withoutCloseButton(),
 
             Layout::rows([
+
+                Input::make('nces_id')
+                    ->title('NCES ID')
+                    ->type('number')
+                    ->horizontal()
+                    ->placeholder('Ex. 546879123'),
 
                 Input::make('school_name')
                     ->title('School Name')
@@ -143,29 +150,35 @@ class CreateSchoolScreen extends Screen
                     ->horizontal()
                     ->placeholder('Ex. 546879123'),
 
-                Input::make('teacher_name')
-                    ->title('Teacher name')
+                Input::make('metropolitan_region')
+                    ->title('Metropolitan Region')
                     ->type('text')
-                    ->required()
                     ->horizontal()
-                    ->placeholder('Ex. John Doe'),
+                    ->placeholder('Ex. Greater Ottawa Metropolitan Area'),
 
-                Input::make('teacher_email')
-                    ->title('Teacher Email')
-                    ->type('email')
-                    ->required()
-                    ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
-
-                Input::make('teacher_cell')
-                    ->title('Teacher Contact Number')
+                Input::make('county')
+                    ->title('County')
                     ->type('text')
-                    ->mask('(999) 999-9999')
-                    ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 852-4563'),
-                
+                    ->placeholder('Ex. Suffolk County'),
 
+                Input::make('website')
+                    ->title('Website')
+                    ->type('text')
+                    ->horizontal()
+                    ->placeholder('Ex. www.colonelby.com'),
+
+                Input::make('school_data')
+                    ->title('School Data')
+                    ->type('text')
+                    ->horizontal()
+                    ->placeholder('Ex. 546879123'),
+
+                Input::make('total_students')
+                    ->title('Total Students')
+                    ->type('number')
+                    ->horizontal()
+                    ->placeholder('Ex. 1024'),
             ]),
         ];
     }
@@ -173,16 +186,23 @@ class CreateSchoolScreen extends Screen
     //this method will add a single school to the database
     public function createSchool(Request $request){
 
-        //TODO CHECK FOR DUPLICATE SCHOOLS BEFORE ENTERING
-
         try{
-            $formFields = $request->all();
-            
-            School::create($formFields);
 
-            Toast::success('School Added Succesfully');
+            //check for duplicate schools
+            if(count(School::where('school_name', $request->input('school_name'))->where('school_board', $request->input('school_board'))->where('state_province', $request->input('state_province'))->get()) == 0){
+
+                
+                School::create($request->all());
+
+                Toast::success('You have successfully created ' . $request->input('school_name') . '.');
+
+                return redirect()->route('platform.school.list');
             
-            return redirect()->route('platform.school.list');
+            }else{
+
+                //duplicate school found
+                Toast::error('School already exists.');
+            }
 
         }catch(Exception $e){
 
