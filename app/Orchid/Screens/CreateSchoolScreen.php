@@ -5,13 +5,16 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\School;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Actions\ModalToggle;
 
 class CreateSchoolScreen extends Screen
 {
@@ -43,9 +46,16 @@ class CreateSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            
             Button::make('Add')
                 ->icon('plus')
                 ->method('createSchool'),
+
+            ModalToggle::make('Mass Import Schools')
+                ->modal('massImportModal')
+                ->method('massImport')
+                ->icon('plus'),
+
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -62,7 +72,27 @@ class CreateSchoolScreen extends Screen
     {
         return [
 
+            Layout::modal('massImportModal',[
+
+                Layout::rows([
+
+                    Upload::make('school_csv')
+                        ->title('File type must be in CSV format. (Ex. schools.csv)')  
+                        ->acceptedFiles('.csv'),
+                ])
+                
+            ])
+            ->title('Mass Import Schools')
+            ->applyButton('Import')
+            ->withoutCloseButton(),
+
             Layout::rows([
+
+                Input::make('nces_id')
+                    ->title('NCES ID')
+                    ->type('number')
+                    ->horizontal()
+                    ->placeholder('Ex. 546879123'),
 
                 Input::make('school_name')
                     ->title('School Name')
@@ -120,47 +150,90 @@ class CreateSchoolScreen extends Screen
                     ->horizontal()
                     ->placeholder('Ex. 546879123'),
 
-                Input::make('teacher_name')
-                    ->title('Teacher name')
+                Input::make('metropolitan_region')
+                    ->title('Metropolitan Region')
                     ->type('text')
-                    ->required()
                     ->horizontal()
-                    ->placeholder('Ex. John Doe'),
+                    ->placeholder('Ex. Greater Ottawa Metropolitan Area'),
 
-                Input::make('teacher_email')
-                    ->title('Teacher Email')
-                    ->type('email')
-                    ->required()
-                    ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
-
-                Input::make('teacher_cell')
-                    ->title('Teacher Contact Number')
+                Input::make('county')
+                    ->title('County')
                     ->type('text')
-                    ->mask('(999) 999-9999')
-                    ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 852-4563'),                
+                    ->placeholder('Ex. Suffolk County'),
+
+                Input::make('website')
+                    ->title('Website')
+                    ->type('text')
+                    ->horizontal()
+                    ->placeholder('Ex. www.colonelby.com'),
+
+                Input::make('school_data')
+                    ->title('School Data')
+                    ->type('text')
+                    ->horizontal()
+                    ->placeholder('Ex. 546879123'),
+
+                Input::make('total_students')
+                    ->title('Total Students')
+                    ->type('number')
+                    ->horizontal()
+                    ->placeholder('Ex. 1024'),
             ]),
         ];
     }
 
+    //this method will add a single school to the database
     public function createSchool(Request $request){
 
-        //TODO CHECK FOR DUPLICATE SCHOOLS BEFORE ENTERING
-
         try{
-            $formFields = $request->all();
-            
-            School::create($formFields);
 
-            Toast::success('School Added Succesfully');
+            //check for duplicate schools
+            if($this->validSchool($request)){
+                
+                School::create($request->all());
+
+                Toast::success('You have successfully created ' . $request->input('school_name') . '.');
+
+                return redirect()->route('platform.school.list');
             
-            return redirect()->route('platform.student.list');
+            }else{
+
+                //duplicate school found
+                Toast::error('School already exists.');
+            }
 
         }catch(Exception $e){
 
             Alert::error('There was an error creating this school. Error Code: ' . $e);
         }
+    }
+
+    //this method will mass import schools from a csv file
+    public function massImport(Request $request){
+
+        try{
+
+            //convert csv file to array then insert in db
+
+
+            return redirect()->route('platform.school.list');
+
+        }catch(Exception $e){
+            
+            Alert::error('There was an error mass importing the schools. Error Code: ' . $e);
+        }
+
+    }
+
+    private function csvToArray($test){
+
+
+    }
+
+    //this method checks for duplicate schools
+    private function validSchool($request){
+
+        return count(School::where('school_name', $request->input('school_name'))->where('school_board', $request->input('school_board'))->where('state_province', $request->input('state_province'))->get()) == 0;
     }
 }

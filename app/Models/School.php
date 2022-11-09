@@ -11,7 +11,7 @@ class School extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['school_name', 'country', 'state_province', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'teacher_name', 'teacher_email', 'teacher_cell'];
+    protected $fillable = ['school_name', 'county', 'country', 'state_province', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'metropolitan_region', 'city_municipality', 'total_students', 'school_data', 'website', 'nces_id'];
 
     public function scopeFilter($query, array $filters){
 

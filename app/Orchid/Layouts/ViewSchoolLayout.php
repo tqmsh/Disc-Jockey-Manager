@@ -35,41 +35,43 @@ class ViewSchoolLayout extends Table
                         ->value($school->id)
                         ->checked(false);
                 }),
+
             TD::make('id', 'Id')
                 ->render(function (School $school) {
                     return Link::make($school->id)
                         ->route('platform.school.edit', $school);
                 }),
+
             TD::make('school_name', 'School Name')
                 ->render(function (School $school) {
                     return Link::make($school->school_name)
                         ->route('platform.school.edit', $school);
                 }),
+
+            TD::make('school_board', 'School Board')
+                ->render(function (School $school) {
+                    return Link::make($school->school_board)
+                        ->route('platform.school.edit', $school);
+                }),
+
             TD::make('country', 'Country')
                 ->render(function (School $school) {
                     return Link::make($school->country)
                         ->route('platform.school.edit', $school);
                 }),
+
             TD::make('state_province', 'State/Province')
                 ->render(function (School $school) {
                     return Link::make($school->state_province)
                         ->route('platform.school.edit', $school);
                 }),
-            TD::make('teacher', 'Teacher')
+
+            TD::make('total_students', 'Total Students')
                 ->render(function (School $school) {
-                    return Link::make($school->teacher_name)
+                    return Link::make($school->total_students)
                         ->route('platform.school.edit', $school);
                 }),
-            TD::make('teacher_email', 'Teacher Email')
-                ->render(function (School $school) {
-                    return Link::make($school->teacher_email)
-                        ->route('platform.school.edit', $school);
-                }),
-            TD::make('teacher_cell', 'Teacher Cell')
-                ->render(function (School $school) {
-                    return Link::make($school->teacher_cell)
-                        ->route('platform.school.edit', $school);
-                }),
+                
             TD::make('address', 'Address')
                 ->render(function (School $school) {
                     return Link::make($school->address)

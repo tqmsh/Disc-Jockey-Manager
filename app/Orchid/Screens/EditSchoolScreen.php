@@ -2,9 +2,10 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\School;
 use Exception;
+use App\Models\School;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -74,6 +75,7 @@ class EditSchoolScreen extends Screen
     {
         return [
             Layout::rows([
+
                 Input::make('school_name')
                     ->title('School Name')
                     ->type()
@@ -91,6 +93,14 @@ class EditSchoolScreen extends Screen
                     ->title('State/Province')
                     ->horizontal()
                     ->value($this->school->state_province),
+                
+                Input::make('city_municipality')
+                    ->title('City/Municipality')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->school->city_municipality)
+                    ->placeholder('Ex. Ottawa'),
 
                 Input::make('school_board')
                     ->title('School Board')
@@ -127,32 +137,48 @@ class EditSchoolScreen extends Screen
                     ->type('number')
                     ->horizontal()
                     ->value($this->school->fax)
+                    ->placeholder('Ex. 546879123'),   
+
+
+                Input::make('metropolitan_region')
+                    ->title('Metropolitan Region')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->school->metropolitan_region)
+                    ->placeholder('Ex. Greater Ottawa Metropolitan Area'),
+
+                Input::make('county')
+                    ->title('County')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->school->county)
+                    ->placeholder('Ex. Suffolk County'),
+
+                Input::make('website')
+                    ->title('Website')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->school->website)
+                    ->placeholder('Ex. www.colonelby.com'),
+
+                Input::make('school_data')
+                    ->title('School Data')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->school->school_data)
                     ->placeholder('Ex. 546879123'),
 
-                Input::make('teacher_name')
-                    ->title('Teacher name')
-                    ->type('text')
-                    ->required()
-                    ->value($this->school->teacher_name)
+                Input::make('total_students')
+                    ->title('Total Students')
+                    ->type('number')
                     ->horizontal()
-                    ->placeholder('Ex. John Doe'),
-
-                Input::make('teacher_email')
-                    ->title('Teacher Email')
-                    ->type('email')
-                    ->required()
-                    ->value($this->school->teacher_email)
-                    ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
-
-                Input::make('teacher_cell')
-                    ->title('Teacher Contact Number')
-                    ->type('text')
-                    ->mask('(999) 999-9999')
-                    ->required()
-                    ->value($this->school->teacher_cell)
-                    ->horizontal()
-                    ->placeholder('Ex. (613) 852-4563'),                
+                    ->value($this->school->total_students)
+                    ->placeholder('Ex. 1024'),
+                    
+                Button::make('Update')
+                    ->icon('check')
+                    ->method('update')
+                    ->type(Color::DEFAULT()),
             ]),
         ];
     }
@@ -161,8 +187,8 @@ class EditSchoolScreen extends Screen
     {
         try{
 
-            //check for duplicate email
-            if(count(School::whereNot('id', $school->id)->where('teacher_email', $request->input('teacher_email'))->get()) == 0){
+            //check for duplicate schools
+            if(count(School::whereNot('id', $school->id)->where('school_name', $request->input('school_name'))->where('school_board', $request->input('school_board'))->where('state_province', $request->input('state_province'))->get()) == 0){
 
                 //email not changed
                 $school->fill($request->all())->save();
@@ -173,8 +199,8 @@ class EditSchoolScreen extends Screen
             
             }else{
 
-                //duplicate email found
-                Toast::error('Teacher email already exists.');
+                //duplicate school found
+                Toast::error('School already exists.');
             }
 
         }catch(Exception $e){

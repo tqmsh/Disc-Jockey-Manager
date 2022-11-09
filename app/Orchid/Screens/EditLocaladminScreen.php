@@ -139,8 +139,10 @@ class EditLocaladminScreen extends Screen
     }
     public function update(Localadmin $localadmin, Request $request)
     {
-        //TODO MAKE SURE THE SCHOOL AND SCHOOL BOARD MATCH
-
+        //TODO CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
+        //TODO CHECK IF THE COUNTRY MATCHES THE COUNTRY OF THE SCHOOL
+        //TODO CHECK IF THE STATE/PROVICE MATCHES THE STATE/PROVICE OF THE SCHOOL
+        
         try{
 
             $localadminTableFields = [
