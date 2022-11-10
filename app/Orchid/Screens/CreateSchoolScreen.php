@@ -188,7 +188,7 @@ class CreateSchoolScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. John '),
+                    ->placeholder('Ex. John'),
 
                 Input::make('lastname')
                     ->title('Teacher Last Name')
@@ -320,7 +320,7 @@ class CreateSchoolScreen extends Screen
 
     //check for duplicate emails
     private function validEmail($request){
-        return count(User::where('email', $request->input('email'))->get()) == 0;
+        return count(User::where('email', $request->input('teacher_email'))->get()) == 0;
     }
 
     //this method checks for duplicate schools
