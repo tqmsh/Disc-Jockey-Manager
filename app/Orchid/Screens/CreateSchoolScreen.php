@@ -3,11 +3,13 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Actions\Button;
@@ -92,6 +94,7 @@ class CreateSchoolScreen extends Screen
                     ->title('NCES ID')
                     ->type('number')
                     ->horizontal()
+                    ->required()
                     ->placeholder('Ex. 546879123'),
 
                 Input::make('school_name')
@@ -156,6 +159,12 @@ class CreateSchoolScreen extends Screen
                     ->horizontal()
                     ->placeholder('Ex. Greater Ottawa Metropolitan Area'),
 
+                Input::make('city_municipality')
+                    ->title('City/Municipality')
+                    ->type('text')
+                    ->horizontal()
+                    ->placeholder('Ex. Ottawa'),
+
                 Input::make('county')
                     ->title('County')
                     ->type('text')
@@ -172,7 +181,37 @@ class CreateSchoolScreen extends Screen
                     ->title('School Data')
                     ->type('text')
                     ->horizontal()
-                    ->placeholder('Ex. 546879123'),
+                    ->placeholder('Ex. Ex. www.colonelby.com?Search=1&InstName=newton&State=25&SchoolType=1'),
+
+                Input::make('firstname')
+                    ->title('Teacher First Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. John '),
+
+                Input::make('lastname')
+                    ->title('Teacher Last Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. Doe'),
+
+
+                Input::make('teacher_email')
+                    ->title('Teacher Email')
+                    ->type('email')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. johndoe@gmail.com'),
+
+                Input::make('teacher_cell')
+                    ->title('Teacher Contact Number')
+                    ->type('text')
+                    ->mask('(999) 999-9999')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. (613) 852-4563'),  
 
                 Input::make('total_students')
                     ->title('Total Students')
@@ -189,9 +228,18 @@ class CreateSchoolScreen extends Screen
         try{
 
             //check for duplicate schools
-            if($this->validSchool($request)){
+            if($this->validSchool($request) && $this->validEmail($request)){
+
+                //collect the school table values and user table values
+                $userTableFields = $this->getUserFields($request);
+                $schoolTableFields = $this->getSchoolFields($request);
+
+                //make the user first, then get the id and insert that along with other fields in the school table
+                User::create($userTableFields);
+
+                $schoolTableFields['teacher_id'] = User::where('email', $request->input('teacher_email'))->get('id')->value('id');
                 
-                School::create($request->all());
+                School::create($schoolTableFields);
 
                 Toast::success('You have successfully created ' . $request->input('school_name') . '.');
 
@@ -226,9 +274,53 @@ class CreateSchoolScreen extends Screen
 
     }
 
-    private function csvToArray($test){
+    private function csvToArray(){
 
 
+    }
+
+    //this functions returns the values that need to be inserted in the school table in the db
+    private function getSchoolFields($request){
+        $schoolTableFields = [
+            'nces_id' => $request->input('nces_id'),
+            'school_name' => $request->input('school_name'),
+            'country' => $request->input('country'),
+            'state_province' => $request->input('state_province'),
+            'address' => $request->input('address'),
+            'zip_postal' => $request->input('zip_postal'),
+            'fax' => $request->input('fax'),
+            'metropolitan_region' => $request->input('metropolitan_region'),
+            'county' => $request->input('county'),
+            'website' => $request->input('website'),
+            'school_data' => $request->input('school_data'),
+            'total_students' => $request->input('total_students'),
+            'city_municipality' => $request->input('city_municipality'),
+            'school_board' => $request->input('school_board'),
+            'phone_number' => $request->input('phone_number'),
+            'teacher_id' => null,
+        ];
+        
+        return $schoolTableFields;
+    }
+
+    //this functions returns the values that need to be inserted in the user table in the db
+    private function getUserFields($request){
+        $userTableFields = [
+            'name' => $request->input('firstname') . $request->input('lastname'),
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'phonenumber' => $request->input('teacher_cell'),
+            'email' => $request->input('teacher_email'),
+            'role' => 'teacher',
+            'country' => $request->input('country'),
+        ];
+        
+        return $userTableFields;
+    }
+
+    //check for duplicate emails
+    private function validEmail($request){
+        return count(User::where('email', $request->input('email'))->get()) == 0;
     }
 
     //this method checks for duplicate schools
