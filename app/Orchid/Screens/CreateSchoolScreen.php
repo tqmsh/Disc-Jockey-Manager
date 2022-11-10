@@ -79,10 +79,11 @@ class CreateSchoolScreen extends Screen
                 Layout::rows([
 
                     Upload::make('school_csv')
-                        ->title('File type must be in CSV format. (Ex. schools.csv)')  
+                        ->title('File type must be in CSV format. (Ex. schools.csv)')
+                        ->maxFiles(1)
+                        ->storage('public')
                         ->acceptedFiles('.csv'),
-                ])
-                
+                ]) 
             ])
             ->title('Mass Import Schools')
             ->applyButton('Import')
@@ -157,17 +158,20 @@ class CreateSchoolScreen extends Screen
                     ->title('Metropolitan Region')
                     ->type('text')
                     ->horizontal()
+                    ->required()
                     ->placeholder('Ex. Greater Ottawa Metropolitan Area'),
 
                 Input::make('city_municipality')
                     ->title('City/Municipality')
                     ->type('text')
                     ->horizontal()
+                    ->required()
                     ->placeholder('Ex. Ottawa'),
 
                 Input::make('county')
                     ->title('County')
                     ->type('text')
+                    ->required()
                     ->horizontal()
                     ->placeholder('Ex. Suffolk County'),
 
@@ -217,6 +221,7 @@ class CreateSchoolScreen extends Screen
                     ->title('Total Students')
                     ->type('number')
                     ->horizontal()
+                    ->required()
                     ->placeholder('Ex. 1024'),
             ]),
         ];
@@ -262,10 +267,7 @@ class CreateSchoolScreen extends Screen
 
         try{
 
-            //convert csv file to array then insert in db
-
-
-            return redirect()->route('platform.school.list');
+            // return redirect()->route('platform.school.list');
 
         }catch(Exception $e){
             
@@ -274,9 +276,29 @@ class CreateSchoolScreen extends Screen
 
     }
 
-    private function csvToArray(){
+    //this function will convert the csv file to an array
+    private function csvToArray($filename = '', $delimiter = ','){
+        
+        if (!file_exists($filename) || !is_readable($filename)){
+            return false;
+        }
 
+        $header = null;
+        $data = array();
 
+        if (($handle = fopen($filename, 'r')) !== false){
+
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false){
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $data;
     }
 
     //this functions returns the values that need to be inserted in the school table in the db
