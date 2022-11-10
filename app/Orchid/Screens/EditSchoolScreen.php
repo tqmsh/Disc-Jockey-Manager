@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -19,6 +20,7 @@ class EditSchoolScreen extends Screen
 {
 
     public $school;
+    public $user;
 
     /**
      * Query data.
@@ -73,6 +75,8 @@ class EditSchoolScreen extends Screen
      */
     public function layout(): iterable
     {
+        $this->user = User::where('id', $this->school->teacher_id)->first();
+
         return [
             Layout::rows([
 
@@ -168,6 +172,39 @@ class EditSchoolScreen extends Screen
                     ->value($this->school->school_data)
                     ->placeholder('Ex. 546879123'),
 
+                Input::make('firstname')
+                    ->title('Teacher First Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->user->firstname)
+                    ->placeholder('Ex. John'),
+
+                Input::make('lastname')
+                    ->title('Teacher Last Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->user->lastname)
+                    ->placeholder('Ex. Doe'),
+
+                Input::make('teacher_email')
+                    ->title('Teacher Email')
+                    ->type('email')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->user->email)
+                    ->placeholder('Ex. johndoe@gmail.com'),
+
+                Input::make('teacher_cell')
+                    ->title('Teacher Contact Number')
+                    ->type('text')
+                    ->mask('(999) 999-9999')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->user->phonenumber)
+                    ->placeholder('Ex. (613) 852-4563'), 
+
                 Input::make('total_students')
                     ->title('Total Students')
                     ->type('number')
@@ -188,7 +225,7 @@ class EditSchoolScreen extends Screen
         try{
 
             //check for duplicate schools
-            if(count(School::whereNot('id', $school->id)->where('school_name', $request->input('school_name'))->where('school_board', $request->input('school_board'))->where('state_province', $request->input('state_province'))->get()) == 0){
+            if($this->validSchool($request, $school) && $this->validEmail($request, $school)){
 
                 //email not changed
                 $school->fill($request->all())->save();
@@ -200,7 +237,7 @@ class EditSchoolScreen extends Screen
             }else{
 
                 //duplicate school found
-                Toast::error('School already exists.');
+                Toast::error('School already exists or we have found duplicate emails with another user.');
             }
 
         }catch(Exception $e){
@@ -217,5 +254,16 @@ class EditSchoolScreen extends Screen
         Toast::info('You have successfully deleted the school.');
 
         return redirect()->route('platform.school.list');
+    }
+
+    //check for duplicate emails
+    private function validEmail($request, $school){
+        return count(User::whereNot('id', $school->teacher_id)->where('email', $request->input('teacher_email'))->get()) == 0;
+    }
+
+    //this method checks for duplicate schools
+    private function validSchool($request, $school){
+
+        return count(School::whereNot('id', $school->id)->where('school_name', $request->input('school_name'))->where('school_board', $request->input('school_board'))->where('state_province', $request->input('state_province'))->get()) == 0;
     }
 }
