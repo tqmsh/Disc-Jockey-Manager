@@ -198,7 +198,9 @@ class CreateStudentScreen extends Screen
                 
                 //no duplicates found
                 User::create($userTableFields);
+
                 $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                
                 Student::create($studentTableFields);
                 
                 Toast::success('Student Added Succesfully');
