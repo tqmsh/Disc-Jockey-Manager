@@ -248,12 +248,17 @@ class EditSchoolScreen extends Screen
 
     public function delete(School $school)
     {
-        //!PUT ALL THIS CODE IN A TRY CATCH
-        $school->delete();
+        try{
+            $school->delete();
+    
+            Toast::info('You have successfully deleted the school.');
+    
+            return redirect()->route('platform.school.list');
 
-        Toast::info('You have successfully deleted the school.');
+        }catch(Exception $e){
 
-        return redirect()->route('platform.school.list');
+            Alert::error('There was an error deleting this school. Error Code: ' . $e);
+        }
     }
 
     //check for duplicate emails
