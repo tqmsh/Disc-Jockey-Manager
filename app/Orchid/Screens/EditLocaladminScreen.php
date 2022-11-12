@@ -145,25 +145,13 @@ class EditLocaladminScreen extends Screen
         
         try{
 
-            $localadminTableFields = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'phonenumber' => $request->input('phonenumber'),
-                'school' => $request->input('school'),
-            ];
+            $localadminTableFields = $this->getLocalAdminFields($request);
 
-            $userTableFields = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'country' => $request->input('country'),
-            ];
+            $userTableFields = $this->getUserFields($request);
 
             //check for duplicate email
-            if(count(User::whereNot('id', $localadmin->user_id)->where('email', $request->input('email'))->get()) == 0){
+            if($this->validEmail($request, $localadmin)){
 
-                
                 //email not changed
                 $localadmin->update($localadminTableFields);
                 
@@ -174,6 +162,7 @@ class EditLocaladminScreen extends Screen
                 return redirect()->route('platform.localadmin.list');
             
             }else{
+
                 //duplicate email found
                 Toast::error('Email already exists.');
             }
@@ -198,5 +187,35 @@ class EditLocaladminScreen extends Screen
 
             Alert::error('There was an error deleting this local admin. Error Code: ' . $e);
         }
+    }
+
+    //check for duplicate emails
+    private function validEmail($request, $localadmin){
+        return count(User::whereNot('id', $localadmin->user_id)->where('email', $request->input('email'))->get()) == 0;
+    }
+
+    //this functions returns the values that need to be inserted in the localadmin table in the db
+    private function getLocalAdminFields($request){
+        $localadminTableFields = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'phonenumber' => $request->input('phonenumber'),
+            'school' => $request->input('school'),
+        ];
+        
+        return $localadminTableFields;
+    }
+
+    //this functions returns the values that need to be inserted in the user table in the db
+    private function getUserFields($request){
+        $userTableFields = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'country' => $request->input('country'),
+        ];
+        
+        return $userTableFields;
     }
 }

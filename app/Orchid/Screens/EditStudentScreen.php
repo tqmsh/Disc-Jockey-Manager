@@ -176,31 +176,15 @@ class EditStudentScreen extends Screen
         //TODO CHECK IF THE COUNTRY MATCHES THE COUNTRY OF THE SCHOOL
         //TODO CHECK IF THE STATE/PROVICE MATCHES THE STATE/PROVICE OF THE SCHOOL
 
-
         try{
 
-            $studentTableFields = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'grade' => $request->input('grade'),
-                'phonenumber' => $request->input('phonenumber'),
-                'ticketstatus' => $request->input('ticketstatus'),
-                'school' => $request->input('school'),
-                'event_id' => $request->input('event_id'),
-                'allergies' => $request->input('allergies'),
-            ];
+            $studentTableFields = $this->getStudentFields($request);
 
-            $userTableFields = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'country' => $request->input('country'),
-                'status' => $request->input('ticketstatus'),
-            ];
+            $userTableFields = $this->getUserFields($request);
+
 
             //check for duplicate
-            if(count(User::whereNot('id', $student->user_id)->where('email', $request->input('email'))->get()) == 0){
+            if($this->validEmail($request, $student)){
                 
                 //email not changed
                 $student->update($studentTableFields);
@@ -235,5 +219,42 @@ class EditStudentScreen extends Screen
             
             Alert::error('There was an error deleting this school. Error Code: ' . $e);
         }
+    }
+
+    //check for duplicate emails
+    private function validEmail($request, $student){
+        return count(User::whereNot('id', $student->user_id)->where('email', $request->input('email'))->get()) == 0;
+    }
+
+    //this functions returns the values that need to be inserted in the localadmin table in the db
+    private function getStudentFields($request){
+
+        $studentTableFields = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'grade' => $request->input('grade'),
+            'phonenumber' => $request->input('phonenumber'),
+            'ticketstatus' => $request->input('ticketstatus'),
+            'school' => $request->input('school'),
+            'event_id' => $request->input('event_id'),
+            'allergies' => $request->input('allergies'),
+        ];
+        
+        return $studentTableFields;
+    }
+
+    //this functions returns the values that need to be inserted in the user table in the db
+    private function getUserFields($request){
+
+        $userTableFields = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'country' => $request->input('country'),
+            'status' => $request->input('ticketstatus'),
+        ];
+        
+        return $userTableFields;
     }
 }

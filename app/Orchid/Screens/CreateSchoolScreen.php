@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Orchid\Screens;
-
 use Exception;
 use App\Models\User;
 use App\Models\School;
