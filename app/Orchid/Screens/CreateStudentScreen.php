@@ -122,23 +122,27 @@ class CreateStudentScreen extends Screen
                     ->title('Country')
                     ->required()
                     ->horizontal()
+                    ->required()
                     ->fromModel(School::class, 'country', 'country'),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->empty('No Selection')
+                    ->required()
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
                 Select::make('school_board')
                     ->title('School Board')
                     ->horizontal()
+                    ->required()
                     ->empty('No Selection')
                     ->fromModel(School::class, 'school_board', 'school_board'),
 
                 Select::make('grade')
                     ->title('Grade')
                     ->horizontal()
+                    ->required()
                     ->empty('No Selection')
                     ->options([
                         '9' => 9,
@@ -150,13 +154,13 @@ class CreateStudentScreen extends Screen
                 Select::make('event_id')
                     ->title('Event')
                     ->horizontal()
+                    ->required()
                     ->empty('No Selection')
                     ->fromModel(Events::class, 'id'),
 
                 Input::make('allergies')
                     ->title('Allergies')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->placeholder('Ex. Peanuts'),
             ]),
@@ -168,33 +172,12 @@ class CreateStudentScreen extends Screen
 
         try{
 
-            $studentTableFields = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'phonenumber' => $request->input('phonenumber'),
-                'school' => $request->input('school'),
-                'grade' => $request->input('grade'),
-                'event_id' => $request->input('event_id'),
-                'allergies' => $request->input('allergies'),
-                'user_id' => null,
-            ];
+            $studentTableFields = $this->getStudentFields($request);
 
-            $userTableFields = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'password' => bcrypt($request->input('password')),
-                'name' => $request->input('name'),
-                'country' => $request->input('country'),
-                'phonenumber' => $request->input('phonenumber'),
-                'remember_token' => Str::random(10),
-                'role' =>'student',
-            ];
-
+            $userTableFields = $this->getUserFields($request);
 
             //check for duplicate email
-            if(count(User::where('email', $request->input('email'))->get()) == 0){
+            if($this->validEmail($request)){
                 
                 //no duplicates found
                 User::create($userTableFields);
@@ -204,6 +187,7 @@ class CreateStudentScreen extends Screen
                 Student::create($studentTableFields);
                 
                 Toast::success('Student Added Succesfully');
+
                 return redirect()->route('platform.student.list');
             
             }else{
@@ -215,5 +199,46 @@ class CreateStudentScreen extends Screen
 
             Alert::error('There was an error creating this school. Error Code: ' . $e);
         }
+    }
+
+    //check for duplicate emails
+    private function validEmail($request){
+        return count(User::where('email', $request->input('email'))->get()) == 0;
+    }
+
+    //this functions returns the values that need to be inserted in the localadmin table in the db
+    private function getStudentFields($request){
+
+        $studentTableFields = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'phonenumber' => $request->input('phonenumber'),
+            'school' => $request->input('school'),
+            'grade' => $request->input('grade'),
+            'event_id' => $request->input('event_id'),
+            'allergies' => $request->input('allergies'),
+            'user_id' => null,
+        ];
+        
+        return $studentTableFields;
+    }
+
+    //this functions returns the values that need to be inserted in the user table in the db
+    private function getUserFields($request){
+
+        $userTableFields = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+            'name' => $request->input('name'),
+            'country' => $request->input('country'),
+            'phonenumber' => $request->input('phonenumber'),
+            'remember_token' => Str::random(10),
+            'role' =>'student',
+        ];
+        
+        return $userTableFields;
     }
 }
