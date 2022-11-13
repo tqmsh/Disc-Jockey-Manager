@@ -182,7 +182,6 @@ class EditStudentScreen extends Screen
 
             $userTableFields = $this->getUserFields($request);
 
-
             //check for duplicate
             if($this->validEmail($request, $student)){
                 
