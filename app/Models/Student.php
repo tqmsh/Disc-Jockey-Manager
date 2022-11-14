@@ -43,12 +43,4 @@ class Student extends Model
 
         $query->select('students.*');
     }
-
-    public function getSchool($school_id){
-        return School::find('id', $school_id);
-    }
-    
-    public function getUser($id){
-        return User::find($id);
-    }
 }

@@ -75,7 +75,7 @@ class EditStudentScreen extends Screen
      */
     public function layout(): iterable
     {
-        $this->school = $this->student->getSchool($this->student->school);
+        $this->school = School::find($this->student->school_id);
 
         return [
 
@@ -114,20 +114,21 @@ class EditStudentScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country')
-                    ->value($this->student->getUser($this->student->email)->value('country')),
+                    ->value(User::find($this->student->user_id)->country),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province')
-                    ->value($this->school->value('state_province')),
+                    ->value($this->school->state_province),
 
-
-                Select::make('school_board')
-                    ->title('School Board')
+                Select::make('county')
+                    ->title('County')
+                    ->empty('No Selection')
+                    ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board')
-                    ->value($this->school->value('school_board')),
+                    ->fromModel(School::class, 'county', 'county')
+                    ->value($this->school->county),
                    
                 Input::make('grade')
                     ->title('Grade')

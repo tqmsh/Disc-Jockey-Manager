@@ -37,12 +37,4 @@ class Localadmin extends Model
 
         $query->select('localadmins.*');
     }
-    
-    public function getSchool($school_id){
-        return School::find('id', $school_id);
-    }
-    
-    public function getUser($id){
-        return User::find($id);
-    }
 }
