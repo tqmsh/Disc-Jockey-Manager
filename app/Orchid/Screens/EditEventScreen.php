@@ -72,7 +72,7 @@ class EditEventScreen extends Screen
      */
     public function layout(): iterable
     {
-        $this->school = $this->event->getSchool($this->event->school);
+        $this->school = School::find($this->event->school_id);
 
         return [
             
@@ -134,28 +134,28 @@ class EditEventScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name')
-                    ->value($this->event->school),
+                    ->value($this->school->school_name),
 
                 Select::make('country')
                     ->title('Country')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country')
-                    ->value($this->school->value('country')),
-
+                    ->value($this->school->country),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province')
-                    ->value($this->school->value('state_province')),
+                    ->value($this->school->state_province),
 
-
-                Select::make('school_board')
-                    ->title('School Board')
+                Select::make('county')
+                    ->title('County')
+                    ->empty('No Selection')
+                    ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board')
-                    ->value($this->school->value('school_board')),
+                    ->fromModel(School::class, 'county', 'county')
+                    ->value($this->school->county),
             ]),
         ];
     }
@@ -164,7 +164,19 @@ class EditEventScreen extends Screen
     {
         try{
 
-            $event->fill($request->all())->save();
+            $school_id = School::where('school_name', $request->input('school'))
+                                ->where('county', $request->input('county'))
+                                ->where('state_province', $request->input('state_province'))
+                                ->get('id')->value('id');
+
+            if(is_null($school_id)){
+                throw New Exception('You are trying to enter a invalid school');
+            }
+
+            $eventsFields = $request->all();
+            $eventsFields['school_id'] = $school_id;
+
+            $event->update($eventsFields);
 
             Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
 
@@ -172,7 +184,7 @@ class EditEventScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error editing this event. Error Code: ' . $e);
+            Alert::error('There was an error editing this event. Error Code: ' . $e->getMessage());
         }
     }
 

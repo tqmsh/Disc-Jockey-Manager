@@ -66,6 +66,12 @@ class ViewSchoolLayout extends Table
                         ->route('platform.school.edit', $school);
                 }),
 
+            TD::make('county', 'County')
+                ->render(function (School $school) {
+                    return Link::make($school->county)
+                        ->route('platform.school.edit', $school);
+                }),
+
             TD::make('total_students', 'Total Students')
                 ->render(function (School $school) {
                     return Link::make($school->total_students)

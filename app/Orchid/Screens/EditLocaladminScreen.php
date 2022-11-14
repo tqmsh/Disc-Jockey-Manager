@@ -72,7 +72,7 @@ class EditLocaladminScreen extends Screen
      */
     public function layout(): iterable
     {
-        $this->school = $this->localadmin->getSchool($this->localadmin->school);
+        $this->school = School::find($this->localadmin->school_id);
 
         return [
                 Layout::rows([
@@ -112,36 +112,26 @@ class EditLocaladminScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name')
-                    ->value($this->localadmin->school),
-
-                Select::make('country')
-                    ->title('Country')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'country', 'country')
-                    ->value($this->localadmin->getUser($this->localadmin->email)->value('country')),
-
+                    ->value($this->school->school_name),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province')
-                    ->value($this->school->value('state_province')),
+                    ->value($this->school->state_province),
 
-
-                Select::make('school_board')
-                    ->title('School Board')
+                Select::make('county')
+                    ->title('County')
+                    ->empty('No Selection')
+                    ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board')
-                    ->value($this->school->value('school_board')),
+                    ->fromModel(School::class, 'county', 'county')
+                    ->value($this->school->county),
             ]),
         ];
     }
     public function update(Localadmin $localadmin, Request $request)
     {
-        //TODO CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
-        //TODO CHECK IF THE COUNTRY MATCHES THE COUNTRY OF THE SCHOOL
-        //TODO CHECK IF THE STATE/PROVICE MATCHES THE STATE/PROVICE OF THE SCHOOL
         
         try{
 
@@ -169,7 +159,7 @@ class EditLocaladminScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error editing this local admin. Error Code: ' . $e);
+            Alert::error('There was an error editing this local admin. Error Code: ' . $e->getMessage());
         }
     } 
 
@@ -185,7 +175,7 @@ class EditLocaladminScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this local admin. Error Code: ' . $e);
+            Alert::error('There was an error deleting this local admin. Error Code: ' . $e->getMessage());
         }
     }
 
@@ -196,12 +186,24 @@ class EditLocaladminScreen extends Screen
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getLocalAdminFields($request){
+        
+
+        $school_id = School::where('school_name', $request->input('school'))
+                            ->where('county', $request->input('county'))
+                            ->where('state_province', $request->input('state_province'))
+                            ->get('id')->value('id');
+                            
+        if(is_null($school_id)){
+            throw New Exception('You are trying to enter a invalid school');
+        }
+
         $localadminTableFields = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'phonenumber' => $request->input('phonenumber'),
             'school' => $request->input('school'),
+            'school_id' => $school_id
         ];
         
         return $localadminTableFields;

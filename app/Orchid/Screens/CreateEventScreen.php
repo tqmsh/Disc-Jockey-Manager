@@ -2,15 +2,16 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Events;
 use App\Models\School;
-use Exception;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
@@ -128,19 +129,18 @@ class CreateEventScreen extends Screen
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country'),
 
+                Select::make('county')
+                    ->title('County')
+                    ->required()
+                    ->empty('No Selection')
+                    ->horizontal()
+                    ->fromModel(School::class, 'county', 'county'),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->empty('No Selection')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province'),
-
-
-                Select::make('school_board')
-                    ->title('School Board')
-                    ->empty('No Selection')
-                    ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board'),
             ]),
         ];
     }
@@ -149,9 +149,20 @@ class CreateEventScreen extends Screen
 
         try{
 
+            $school_id = School::where('school_name', $request->input('school'))
+                                ->where('county', $request->input('county'))
+                                ->where('state_province', $request->input('state_province'))
+                                ->where('country', $request->input('country'))
+                                ->get('id')->value('id');
+
+            if(is_null($school_id)){
+                throw New Exception('You are trying to enter a invalid school');
+            }
+
             $formFields = $request->all();
             $formFields['event_creator'] = auth()->id();
-            
+            $formFields['school_id'] = $school_id;
+
             Events::create($formFields);
 
             Toast::success('Event Added Succesfully');
@@ -160,7 +171,7 @@ class CreateEventScreen extends Screen
 
         }catch(Exception $e){
             
-            Toast::error('There was an error creating this event. Error Code: ' . $e);
+            Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
         }
     }
 }

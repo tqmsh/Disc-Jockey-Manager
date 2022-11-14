@@ -11,12 +11,12 @@ class Localadmin extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['user_id', 'firstname', 'lastname', 'phonenumber', 'email', 'school'];
+    protected $fillable = ['user_id', 'school_id', 'firstname', 'lastname', 'phonenumber', 'email', 'school'];
 
     public function scopeFilter($query, array $filters){
 
         $query  ->join('users', 'users.id', '=', 'localadmins.user_id')
-                ->join('schools', 'school_name', '=', 'school');
+                ->join('schools', 'schools.id', '=', 'localadmins.school_id');
 
 
         if(isset($filters['school'])){
@@ -36,14 +36,5 @@ class Localadmin extends Model
         }
 
         $query->select('localadmins.*');
-    }
-    
-    public function getSchool($school){
-        return School::where('school_name', $school)->get();
-    }
-
-    
-    public function getUser($email){
-        return User::where('email', $email)->get();
     }
 }

@@ -1,3 +1,9 @@
-- add the school_id fieldin the student and localadmin table so we can get the proper school if there are any duplicate names
+- fix the bug where we cant pull the csv file from the request
 
-- when adding or editing a student or localadmin, we need to take the school_name, county and state_province and find that exact school from the db, get the id of that school and insert it in the "school_id" field in the student and localadmin table
+- put all filtering in a try and catch block
+
+- search for the country when checking for duplicate schools 
+
+**BIG GOAL**
+- finish the mass import for schools and students
+- fix any other bugs that arise

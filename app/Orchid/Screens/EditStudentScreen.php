@@ -16,6 +16,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 
 class EditStudentScreen extends Screen
@@ -75,7 +76,7 @@ class EditStudentScreen extends Screen
      */
     public function layout(): iterable
     {
-        $this->school = $this->student->getSchool($this->student->school);
+        $this->school = School::find($this->student->school_id);
 
         return [
 
@@ -107,27 +108,28 @@ class EditStudentScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name')
-                    ->value($this->school->value('school_name')),
+                    ->value($this->school->school_name),
 
                 Select::make('country')
                     ->title('Country')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country')
-                    ->value($this->student->getUser($this->student->email)->value('country')),
+                    ->value(User::find($this->student->user_id)->country),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province')
-                    ->value($this->school->value('state_province')),
+                    ->value($this->school->state_province),
 
-
-                Select::make('school_board')
-                    ->title('School Board')
+                Select::make('county')
+                    ->title('County')
+                    ->empty('No Selection')
+                    ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'school_board', 'school_board')
-                    ->value($this->school->value('school_board')),
+                    ->fromModel(School::class, 'county', 'county')
+                    ->value($this->school->county),
                    
                 Input::make('grade')
                     ->title('Grade')
@@ -145,9 +147,12 @@ class EditStudentScreen extends Screen
                     ->placeholder('Ex. (613) 859-5863')
                     ->value($this->student->phonenumber),
 
-                Select::make('event_id')
-                    ->title('Event ID')
+                Relation::make('event_id')
+                    ->title('Event')
                     ->horizontal()
+                    ->displayAppend('full')
+                    ->required()
+                    ->empty('No Selection')
                     ->fromModel(Events::class, 'id')
                     ->value($this->student->event_id),
 
@@ -172,10 +177,6 @@ class EditStudentScreen extends Screen
 
     public function update(Student $student, Request $request)
     {
-        //TODO CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
-        //TODO CHECK IF THE COUNTRY MATCHES THE COUNTRY OF THE SCHOOL
-        //TODO CHECK IF THE STATE/PROVICE MATCHES THE STATE/PROVICE OF THE SCHOOL
-
         try{
 
             $studentTableFields = $this->getStudentFields($request);
@@ -201,7 +202,7 @@ class EditStudentScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error editing this student. Error Code: ' . $e);
+            Alert::error('There was an error editing this student. Error Code: ' . $e->getMessage());
         }
     } 
 
@@ -216,7 +217,7 @@ class EditStudentScreen extends Screen
 
         }catch(Exception $e){
             
-            Alert::error('There was an error deleting this school. Error Code: ' . $e);
+            Alert::error('There was an error deleting this student. Error Code: ' . $e);
         }
     }
 
@@ -228,6 +229,14 @@ class EditStudentScreen extends Screen
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
 
+        $school_id = School::where('school_name', $request->input('school'))
+                                    ->where('county', $request->input('county'))
+                                    ->where('state_province', $request->input('state_province'))
+                                    ->get('id')->value('id');
+        if(is_null($school_id)){
+            throw New Exception('You are trying to enter a invalid school');
+        }
+
         $studentTableFields = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
@@ -237,6 +246,7 @@ class EditStudentScreen extends Screen
             'ticketstatus' => $request->input('ticketstatus'),
             'school' => $request->input('school'),
             'event_id' => $request->input('event_id'),
+            'school_id' =>$school_id,
             'allergies' => $request->input('allergies'),
         ];
         

@@ -34,4 +34,9 @@ class School extends Model
         $query->select('schools.*');
     }
 
+    public function getFullAttribute(): string
+    {
+        return $this->attributes['school_name'] . ' (' . $this->attributes['county'] . ', ' . $this->attributes['state_province'] .')';
+    }
+
 }
