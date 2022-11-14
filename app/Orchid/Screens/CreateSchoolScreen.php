@@ -252,7 +252,7 @@ class CreateSchoolScreen extends Screen
             }else{
 
                 //duplicate school found
-                Toast::error('School already exists.');
+                Toast::error('School already exists or email already in use.');
             }
 
         }catch(Exception $e){

@@ -2,11 +2,11 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\User;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
-use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -15,6 +15,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 
 class CreateLocaladminScreen extends Screen
@@ -109,15 +110,17 @@ class CreateLocaladminScreen extends Screen
                     ->required()
                     ->horizontal(),
 
-                Select::make('school')
+                Relation::make('school')
                     ->title('School')
                     ->required()
                     ->empty('No Selection')
+                    ->displayAppend('full')
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name'),
 
                 Select::make('country')
                     ->title('Country')
+                    ->empty('No Selection')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country'),
@@ -128,11 +131,12 @@ class CreateLocaladminScreen extends Screen
                     ->empty('No Selection')
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
-                Select::make('school_board')
-                    ->title('School Board')
-                    ->horizontal()
+                Select::make('county')
+                    ->title('County')
                     ->empty('No Selection')
-                    ->fromModel(School::class, 'school_board', 'school_board'),
+                    ->required()
+                    ->horizontal()
+                    ->fromModel(School::class, 'county', 'county'),
             ]),
         ];
     }
@@ -185,6 +189,10 @@ class CreateLocaladminScreen extends Screen
             'phonenumber' => $request->input('phonenumber'),
             'school' => $request->input('school'),
             'user_id' => null,
+            'school_id' => School::where('school_name', $request->input('school'))
+                                    ->where('county', $request->input('county'))
+                                    ->where('state_province', $request->input('state_province'))
+                                    ->get('id')->value('id'),
         ];
         
         return $localadminTableFields;

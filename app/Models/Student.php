@@ -13,12 +13,12 @@ class Student extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['user_id', 'firstname', 'lastname', 'grade', 'phonenumber', 'email', 'ticketstatus', 'table_id', 'school', 'event_id', 'allergies'];
+    protected $fillable = ['user_id', 'school_id', 'firstname', 'lastname', 'grade', 'phonenumber', 'email', 'ticketstatus', 'table_id', 'school', 'event_id', 'allergies'];
     
     public function scopeFilter($query, array $filters){
 
         $query  ->join('users', 'users.id', '=', 'students.user_id')
-                ->join('schools', 'school_name', '=', 'school');
+                ->join('schools', 'schools.id', '=', 'students.school_id');
 
 
         if(isset($filters['school'])){
@@ -44,12 +44,11 @@ class Student extends Model
         $query->select('students.*');
     }
 
-    public function getSchool($school){
-        return School::where('school_name', $school)->get();
+    public function getSchool($school_id){
+        return School::find('id', $school_id);
     }
-
     
-    public function getUser($email){
-        return User::where('email', $email)->get();
+    public function getUser($id){
+        return User::find($id);
     }
 }
