@@ -165,14 +165,16 @@ class EditEventScreen extends Screen
         try{
 
             $school_id = School::where('school_name', $request->input('school'))
-                                        ->where('county', $request->input('county'))
-                                        ->where('state_province', $request->input('state_province'))
-                                        ->get('id')->value('id');
+                                ->where('county', $request->input('county'))
+                                ->where('state_province', $request->input('state_province'))
+                                ->get('id')->value('id');
+
             if(is_null($school_id)){
                 throw New Exception('You are trying to enter a invalid school');
             }
 
-            $eventsFields = $this->getEventsTableFields($request);
+            $eventsFields = $request->all();
+            $eventsFields['school_id'] = $school_id;
 
             $event->update($eventsFields);
 
@@ -200,27 +202,5 @@ class EditEventScreen extends Screen
 
             Alert::error('There was an error deleting this event. Error Code: ' . $e);
         }     
-    }
-    
-    private function getEventsTableFields($request){
-        $eventsTableFields = [
-            'event_name' => $request->input('event_name'),
-            'event_start_time' => $request->input('event_start_time'),
-            'event_finish_time' => $request->input('event_finish_time'),
-            'event_address' => $request->input('event_address'),
-            'event_zip_postal' => $request->input('event_zip_postal'),
-            'event_info' => $request->input('event_info'),
-            'event_rules' => $request->input('event_rules'),
-            'school' => $request->input('school'),
-            'country' => $request->input('country'),
-            'state_province' => $request->input('state_province'),
-            'county' => $request->input('county'),
-            'school_id' => School::where('school_name', $request->input('school'))
-                                    ->where('county', $request->input('county'))
-                                    ->where('state_province', $request->input('state_province'))
-                                    ->get('id')->value('id'),
-        ];
-        
-        return $eventsTableFields;
     }
 }

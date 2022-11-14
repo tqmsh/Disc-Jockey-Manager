@@ -189,9 +189,9 @@ class CreateLocaladminScreen extends Screen
             'school' => $request->input('school'),
             'user_id' => null,
             'school_id' => School::where('school_name', $request->input('school'))
-                                    ->where('county', $request->input('county'))
-                                    ->where('state_province', $request->input('state_province'))
-                                    ->get('id')->value('id'),
+                                ->where('county', $request->input('county'))
+                                ->where('state_province', $request->input('state_province'))
+                                ->get('id')->value('id'),
         ];
         
         return $localadminTableFields;

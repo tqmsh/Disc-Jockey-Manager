@@ -189,9 +189,10 @@ class EditLocaladminScreen extends Screen
         
 
         $school_id = School::where('school_name', $request->input('school'))
-                                    ->where('county', $request->input('county'))
-                                    ->where('state_province', $request->input('state_province'))
-                                    ->get('id')->value('id');
+                            ->where('county', $request->input('county'))
+                            ->where('state_province', $request->input('state_province'))
+                            ->get('id')->value('id');
+                            
         if(is_null($school_id)){
             throw New Exception('You are trying to enter a invalid school');
         }
