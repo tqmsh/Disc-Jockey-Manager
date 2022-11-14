@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
+use App\Models\User;
 use Orchid\Screen\TD;
 use App\Models\Student;
 use Orchid\Screen\Actions\Link;
@@ -56,7 +57,7 @@ class ViewStudentLayout extends Table
                 }),
             TD::make('country', 'Country')
                 ->render(function (Student $student) {
-                    return Link::make($student->getUser($student->user_id)->value('country'))
+                    return Link::make(User::find($student->user_id)->country)
                         ->route('platform.student.edit', $student);
                 }),
             TD::make('school', 'School')

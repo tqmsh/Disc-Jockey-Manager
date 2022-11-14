@@ -107,7 +107,7 @@ class EditStudentScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name')
-                    ->value($this->school->value('school_name')),
+                    ->value($this->school->school_name),
 
                 Select::make('country')
                     ->title('Country')
@@ -202,7 +202,7 @@ class EditStudentScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error editing this student. Error Code: ' . $e);
+            Alert::error('There was an error editing this student. Error Code: ' . $e->getMessage());
         }
     } 
 
@@ -217,7 +217,7 @@ class EditStudentScreen extends Screen
 
         }catch(Exception $e){
             
-            Alert::error('There was an error deleting this school. Error Code: ' . $e);
+            Alert::error('There was an error deleting this student. Error Code: ' . $e);
         }
     }
 
@@ -229,6 +229,14 @@ class EditStudentScreen extends Screen
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
 
+        $school_id = School::where('school_name', $request->input('school'))
+                                    ->where('county', $request->input('county'))
+                                    ->where('state_province', $request->input('state_province'))
+                                    ->get('id')->value('id');
+        if(is_null($school_id)){
+            throw New Exception('You are trying to enter a invalid school');
+        }
+
         $studentTableFields = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
@@ -238,6 +246,7 @@ class EditStudentScreen extends Screen
             'ticketstatus' => $request->input('ticketstatus'),
             'school' => $request->input('school'),
             'event_id' => $request->input('event_id'),
+            'school_id' =>$school_id,
             'allergies' => $request->input('allergies'),
         ];
         
