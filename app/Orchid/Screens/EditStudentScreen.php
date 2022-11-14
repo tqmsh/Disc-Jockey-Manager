@@ -16,6 +16,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 
 class EditStudentScreen extends Screen
@@ -146,9 +147,12 @@ class EditStudentScreen extends Screen
                     ->placeholder('Ex. (613) 859-5863')
                     ->value($this->student->phonenumber),
 
-                Select::make('event_id')
-                    ->title('Event ID')
+                Relation::make('event_id')
+                    ->title('Event')
                     ->horizontal()
+                    ->displayAppend('full')
+                    ->required()
+                    ->empty('No Selection')
                     ->fromModel(Events::class, 'id')
                     ->value($this->student->event_id),
 
@@ -173,10 +177,6 @@ class EditStudentScreen extends Screen
 
     public function update(Student $student, Request $request)
     {
-        //TODO CHECK IF SCHOOL BOARD MATCHES THE SCHOOL BEFORE UPDATING
-        //TODO CHECK IF THE COUNTRY MATCHES THE COUNTRY OF THE SCHOOL
-        //TODO CHECK IF THE STATE/PROVICE MATCHES THE STATE/PROVICE OF THE SCHOOL
-
         try{
 
             $studentTableFields = $this->getStudentFields($request);

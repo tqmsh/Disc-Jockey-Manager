@@ -114,13 +114,6 @@ class EditLocaladminScreen extends Screen
                     ->fromModel(School::class, 'school_name', 'school_name')
                     ->value($this->school->school_name),
 
-                Select::make('country')
-                    ->title('Country')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'country', 'country')
-                    ->value(User::find($this->localadmin->user_id)->country),
-
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()

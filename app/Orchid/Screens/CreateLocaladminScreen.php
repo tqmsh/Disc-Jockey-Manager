@@ -110,11 +110,10 @@ class CreateLocaladminScreen extends Screen
                     ->required()
                     ->horizontal(),
 
-                Relation::make('school')
+                Select::make('school')
                     ->title('School')
                     ->required()
                     ->empty('No Selection')
-                    ->displayAppend('full')
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name'),
 

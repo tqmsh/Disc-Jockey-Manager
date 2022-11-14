@@ -16,6 +16,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 
 class CreateStudentScreen extends Screen
@@ -151,9 +152,10 @@ class CreateStudentScreen extends Screen
                         '12' => 12,
                     ]),
 
-                Select::make('event_id')
+                Relation::make('event_id')
                     ->title('Event')
                     ->horizontal()
+                    ->displayAppend('full')
                     ->required()
                     ->empty('No Selection')
                     ->fromModel(Events::class, 'id'),
