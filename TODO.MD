@@ -2,6 +2,8 @@
 
 - put all filtering in a try and catch block
 
+- search for the country when checking for duplicate schools 
+
 **BIG GOAL**
 - finish the mass import for schools and students
 - fix any other bugs that arise
