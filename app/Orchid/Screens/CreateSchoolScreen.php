@@ -347,6 +347,6 @@ class CreateSchoolScreen extends Screen
     //this method checks for duplicate schools
     private function validSchool($request){
 
-        return count(School::where('school_name', $request->input('school_name'))->where('county', $request->input('county'))->where('state_province', $request->input('state_province'))->get()) == 0;
+        return count(School::where('school_name', $request->input('school_name'))->where('county', $request->input('county'))->where('state_province', $request->input('state_province'))->where('country', $request->input('country'))->get()) == 0;
     }
 }
