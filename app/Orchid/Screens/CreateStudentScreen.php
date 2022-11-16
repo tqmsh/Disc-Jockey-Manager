@@ -199,7 +199,7 @@ class CreateStudentScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error creating this school. Error Code: ' . $e);
+            Alert::error('There was an error creating this school. Error Code: ' . $e->getMessage());
         }
     }
 
@@ -210,6 +210,15 @@ class CreateStudentScreen extends Screen
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
+        $school_id = School::where('school_name', $request->input('school'))
+                            ->where('county', $request->input('county'))
+                            ->where('state_province', $request->input('state_province'))
+                            ->where('country', $request->input('country'))
+                            ->get('id')->value('id');
+
+        if(is_null($school_id)){
+            throw New Exception('You are trying to enter a invalid school');
+        }
 
         $studentTableFields = [
             'firstname' => $request->input('firstname'),
@@ -217,6 +226,7 @@ class CreateStudentScreen extends Screen
             'email' => $request->input('email'),
             'phonenumber' => $request->input('phonenumber'),
             'school' => $request->input('school'),
+            'school_id' => $school_id,
             'grade' => $request->input('grade'),
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),

@@ -269,6 +269,6 @@ class EditSchoolScreen extends Screen
     //this method checks for duplicate schools
     private function validSchool($request, $school){
 
-        return count(School::whereNot('id', $school->id)->where('school_name', $request->input('school_name'))->where('county', $request->input('school_board'))->where('county', $request->input('state_province'))->get()) == 0;
+        return count(School::whereNot('id', $school->id)->where('school_name', $request->input('school_name'))->where('county', $request->input('county'))->where('state_province', $request->input('state_province'))->where('country', $request->input('country'))->get()) == 0;
     }
 }

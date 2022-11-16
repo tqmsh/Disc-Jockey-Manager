@@ -191,6 +191,7 @@ class EditLocaladminScreen extends Screen
         $school_id = School::where('school_name', $request->input('school'))
                             ->where('county', $request->input('county'))
                             ->where('state_province', $request->input('state_province'))
+                            ->where('country', $request->input('country'))
                             ->get('id')->value('id');
                             
         if(is_null($school_id)){
@@ -216,6 +217,7 @@ class EditLocaladminScreen extends Screen
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'country' => $request->input('country'),
+            'phonenumber' => $request->input('phonenumber'),
         ];
         
         return $userTableFields;

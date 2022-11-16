@@ -230,9 +230,11 @@ class EditStudentScreen extends Screen
     private function getStudentFields($request){
 
         $school_id = School::where('school_name', $request->input('school'))
-                                    ->where('county', $request->input('county'))
-                                    ->where('state_province', $request->input('state_province'))
-                                    ->get('id')->value('id');
+                            ->where('county', $request->input('county'))
+                            ->where('state_province', $request->input('state_province'))
+                            ->where('country', $request->input('country'))
+                            ->get('id')->value('id');
+
         if(is_null($school_id)){
             throw New Exception('You are trying to enter a invalid school');
         }
@@ -262,6 +264,7 @@ class EditStudentScreen extends Screen
             'email' => $request->input('email'),
             'country' => $request->input('country'),
             'status' => $request->input('ticketstatus'),
+            'phonenumber' => $request->input('phonenumber'),
         ];
         
         return $userTableFields;

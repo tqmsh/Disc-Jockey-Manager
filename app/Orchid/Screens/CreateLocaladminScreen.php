@@ -170,7 +170,7 @@ class CreateLocaladminScreen extends Screen
 
         }catch(Exception $e){
             
-            Alert::error('There was an error creating this local admin Error Code: ' . $e);
+            Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage());
         }
     }
 
@@ -181,20 +181,35 @@ class CreateLocaladminScreen extends Screen
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getLocalAdminFields($request){
-        $localadminTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'phonenumber' => $request->input('phonenumber'),
-            'school' => $request->input('school'),
-            'user_id' => null,
-            'school_id' => School::where('school_name', $request->input('school'))
+
+        try{
+
+            $school_id = School::where('school_name', $request->input('school'))
                                 ->where('county', $request->input('county'))
                                 ->where('state_province', $request->input('state_province'))
-                                ->get('id')->value('id'),
-        ];
-        
-        return $localadminTableFields;
+                                ->where('country', $request->input('country'))
+                                ->get('id')->value('id');
+
+            if(is_null($school_id)){
+                throw New Exception('You are trying to enter a invalid school');
+            }
+
+            $localadminTableFields = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'phonenumber' => $request->input('phonenumber'),
+                'school' => $request->input('school'),
+                'user_id' => null,
+                'school_id' => $school_id
+            ];
+            
+            return $localadminTableFields;
+
+        }catch(Exception $e){
+            Alert::error('There was an error creating this local admin Error Code: ' . $e);
+        }
+
     }
 
     //this functions returns the values that need to be inserted in the user table in the db
