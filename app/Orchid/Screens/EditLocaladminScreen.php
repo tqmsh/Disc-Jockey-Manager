@@ -216,6 +216,7 @@ class EditLocaladminScreen extends Screen
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'country' => $request->input('country'),
+            'phonenumber' => $request->input('phonenumber'),
         ];
         
         return $userTableFields;
