@@ -7,6 +7,7 @@ use App\Models\School;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
+use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
@@ -101,5 +102,13 @@ class ViewPendingLocaladminScreen extends Screen
 
             ViewPendingLocaladminLayout::class
         ];
+    }
+
+    public function filter(Request $request){
+        return redirect('/admin/pendinglocaladmins?' 
+                    .'&school=' . $request->get('school')
+                    .'&country=' . $request->get('country')
+                    .'&school_board=' . $request->get('school_board')
+                    .'&state_province=' . $request->get('state_province'));
     }
 }
