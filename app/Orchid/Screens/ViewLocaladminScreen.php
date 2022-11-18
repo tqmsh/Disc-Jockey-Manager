@@ -28,7 +28,9 @@ class ViewLocaladminScreen extends Screen
     public function query(): iterable
     {
         return [
-            'localadmins' => Localadmin::latest('localadmins.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'localadmins' => Localadmin::latest('localadmins.created_at')
+                                        ->filter(request(['country', 'state_province', 'school', 'school_board']))
+                                        ->where('localadmins.account_status', 1)->paginate(10)
         ];
     }
 

@@ -51,8 +51,7 @@ class ViewPendingLocaladminScreen extends Screen
             Button::make('Accept Selected Local Admins')
                 ->icon('plus')
                 ->method('deleteLocaladmins')
-                ->confirm(__('Are you sure you want to accept the selected local admins?'))
-                ->route('platform.school.create'),
+                ->confirm(__('Are you sure you want to accept the selected local admins?')),
 
             Button::make('Delete Selected Local Admins')
                 ->icon('trash')
