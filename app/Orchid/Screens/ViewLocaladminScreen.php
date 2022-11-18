@@ -130,8 +130,8 @@ class ViewLocaladminScreen extends Screen
             if(!empty($localadmins)){
 
                 //loop through the localadmins and delete them from db
-                foreach($localadmins as $localadmin){
-                    Localadmin::where('id', $localadmin)->delete();
+                foreach($localadmins as $localadmin_id){
+                    Localadmin::where('id', $localadmin_id)->delete();
                 }
 
                 Toast::success('Selected local admins deleted succesfully');
@@ -141,7 +141,7 @@ class ViewLocaladminScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
+            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
         }
     }
 }

@@ -13,7 +13,7 @@ class Student extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['user_id', 'school_id', 'firstname', 'lastname', 'grade', 'phonenumber', 'email', 'ticketstatus', 'table_id', 'school', 'event_id', 'allergies'];
+    protected $fillable = ['user_id', 'school_id', 'created_at', 'updated_at', 'firstname', 'lastname', 'grade', 'phonenumber', 'email', 'ticketstatus', 'table_id', 'school', 'event_id', 'allergies'];
     
     public function scopeFilter($query, array $filters){
 

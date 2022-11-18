@@ -20,6 +20,8 @@ class User extends Authenticatable
         'phonenumber',
         'name',
         'email',
+        'account_status',
+        'permissions',
         'password',
         'updated_at',
         'created_at',
