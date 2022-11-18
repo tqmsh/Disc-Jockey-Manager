@@ -36,7 +36,7 @@ class PlatformProvider extends OrchidServiceProvider
                 
             //student nav option
             Menu::make('Student List')
-                ->icon('friends')
+                ->icon('graduation')
                 ->route('platform.student.list'),
 
             //student nav option
@@ -48,6 +48,11 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Local Admins')
                 ->icon('friends')
                 ->route('platform.localadmin.list'),
+
+            //pending localadmin nav option
+            Menu::make('Pending Local Admins')
+                ->icon('user-follow')
+                ->route('platform.pendinglocaladmin.list'),
                 
             Menu::make('Example screen')
                 ->icon('monitor')

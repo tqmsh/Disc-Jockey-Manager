@@ -2,23 +2,18 @@
 
 namespace App\Orchid\Screens;
 
-use Exception;
 use App\Models\User;
 use App\Models\School;
-use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use Illuminate\Http\Request;
-use Orchid\Screen\Actions\Link;
+use App\Models\Localadmin;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Alert;
-use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewSchoolLayout;
+use App\Orchid\Layouts\ViewPendingLocaladminLayout;
 
-class ViewSchoolScreen extends Screen
+class ViewPendingLocaladminScreen extends Screen
 {
     /**
      * Query data.
@@ -28,7 +23,9 @@ class ViewSchoolScreen extends Screen
     public function query(): iterable
     {
         return [
-            'schools' => School::latest('schools.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'pending_localadmins' => Localadmin::latest('localadmins.created_at')
+                                    ->filter(request(['country', 'state_province', 'school', 'school_board']))
+                                    ->where('localadmins.account_status', 0)->paginate(10)
         ];
     }
 
@@ -39,7 +36,7 @@ class ViewSchoolScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'School List';
+        return 'Pending Local Admins';
     }
 
     /**
@@ -50,19 +47,16 @@ class ViewSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New Schools')
+            Button::make('Accept Selected Local Admins')
                 ->icon('plus')
+                ->method('deleteLocaladmins')
+                ->confirm(__('Are you sure you want to accept the selected local admins?'))
                 ->route('platform.school.create'),
 
-            Button::make('Delete Selected Schools')
+            Button::make('Delete Selected Local Admins')
                 ->icon('trash')
-                ->method('deleteSchools')
-                ->confirm(__('Are you sure you want to delete the selected schools?')),
-
-                
-            Link::make('Back')
-                ->icon('arrow-left')
-                ->route('platform.school.list')
+                ->method('deleteLocaladmins')
+                ->confirm(__('Are you sure you want to delete the selected local admins?')),
         ];
     }
 
@@ -105,41 +99,7 @@ class ViewSchoolScreen extends Screen
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewSchoolLayout::class
+            ViewPendingLocaladminLayout::class
         ];
-    }
-    
-    public function filter(Request $request){
-        return redirect('/admin/schools?' 
-                    .'&school=' . $request->get('school')
-                    .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
-                    .'&state_province=' . $request->get('state_province'));
-    }
-
-    public function deleteSchools(Request $request)
-    {   
-        //get all schools from post request
-        $schools = $request->get('schools');
-        
-        try{
-
-            //if the array is not empty
-            if(!empty($schools)){
-
-                //loop through the schools and delete them from db
-                foreach($schools as $school){
-                    School::where('id', $school)->delete();
-                }
-
-                Toast::success('Selected schools deleted succesfully');
-
-            }else{
-                Toast::warning('Please select schools in order to delete them');
-            }
-
-        }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected schools. Error Message: ' . $e);
-        }
     }
 }

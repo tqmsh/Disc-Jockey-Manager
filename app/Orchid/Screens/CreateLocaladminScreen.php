@@ -222,6 +222,7 @@ class CreateLocaladminScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'phonenumber' => $request->input('phonenumber'),
+            'permissions' =>'{"platform.index":true}',
             'remember_token' => Str::random(10),
             'role' =>'localadmin',
         ];

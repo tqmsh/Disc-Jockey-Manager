@@ -25,6 +25,7 @@ use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
+use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
@@ -88,7 +89,8 @@ Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.
 //show add table screen for a event
 Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platform.table.create');
 
-
+//show pending localadmin screen
+Route::screen('/pendinglocaladmins', ViewPendingLocaladminScreen::class)->name('platform.pendinglocaladmin.list');
 
 
 // Platform > Profile
