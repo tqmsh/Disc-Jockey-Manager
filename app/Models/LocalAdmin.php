@@ -11,7 +11,7 @@ class Localadmin extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['user_id', 'school_id', 'firstname', 'lastname', 'phonenumber', 'email', 'school'];
+    protected $fillable = ['user_id', 'account_status', 'school_id', 'firstname', 'created_at', 'updated_at', 'lastname', 'phonenumber', 'email', 'school'];
 
     public function scopeFilter($query, array $filters){
 

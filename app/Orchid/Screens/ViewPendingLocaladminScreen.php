@@ -5,20 +5,20 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\User;
 use App\Models\School;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
-use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewLocaladminLayout;
+use App\Orchid\Layouts\ViewPendingLocaladminLayout;
 
-class ViewLocaladminScreen extends Screen
+class ViewPendingLocaladminScreen extends Screen
 {
     /**
      * Query data.
@@ -28,9 +28,9 @@ class ViewLocaladminScreen extends Screen
     public function query(): iterable
     {
         return [
-            'localadmins' => Localadmin::latest('localadmins.created_at')
-                                        ->filter(request(['country', 'state_province', 'school', 'school_board']))
-                                        ->where('localadmins.account_status', 1)->paginate(10)
+            'pending_localadmins' => Localadmin::latest('localadmins.created_at')
+                                    ->filter(request(['country', 'state_province', 'school', 'school_board']))
+                                    ->where('localadmins.account_status', 0)->paginate(10)
         ];
     }
 
@@ -41,7 +41,7 @@ class ViewLocaladminScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Local Admins';
+        return 'Pending Local Admins';
     }
 
     /**
@@ -52,19 +52,15 @@ class ViewLocaladminScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New Local Admin')
+            Button::make('Accept Selected Local Admins')
                 ->icon('plus')
-                ->route('platform.localadmin.create'),
+                ->method('acceptLocaladmins')
+                ->confirm(__('Are you sure you want to accept the selected local admins?')),
 
-            Button::make('Delete Selected Local Admins')
+            Button::make('Reject Selected Local Admins')
                 ->icon('trash')
                 ->method('deleteLocaladmins')
                 ->confirm(__('Are you sure you want to delete the selected local admins?')),
-
-                
-            Link::make('Back')
-                ->icon('arrow-left')
-                ->route('platform.localadmin.list')
         ];
     }
 
@@ -83,7 +79,7 @@ class ViewLocaladminScreen extends Screen
                     Select::make('school')
                         ->title('School')
                         ->empty('No selection')
-                        ->fromModel(Localadmin::class, 'school', 'school'),
+                        ->fromModel(School::class, 'school_name', 'school_name'),
 
                     Select::make('country')
                         ->title('Country')
@@ -107,20 +103,56 @@ class ViewLocaladminScreen extends Screen
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewLocaladminLayout::class
+            ViewPendingLocaladminLayout::class
         ];
     }
 
     public function filter(Request $request){
-        return redirect('/admin/localadmins?' 
+        return redirect('/admin/pendinglocaladmins?' 
                     .'&school=' . $request->get('school')
                     .'&country=' . $request->get('country')
                     .'&school_board=' . $request->get('school_board')
                     .'&state_province=' . $request->get('state_province'));
     }
 
-    public function deleteLocaladmins(Request $request)
-    {   
+    public function acceptLocaladmins(Request $request){
+
+        //get all localadmins from post request
+        $localadmins = $request->get('localadmins');
+        
+        try{
+            //if the array is not empty
+            if(!empty($localadmins)){
+
+                //loop through the localadmins set account status to 1 and give them permissions to access dashboard
+                foreach($localadmins as $localadmin_id){
+
+                    $userTableFields = [
+                        'account_status' => 1,
+                        'permissions' => '{"platform.index":true}'
+                    ];
+
+                    $localAdminFields = [
+                        'account_status' => 1,
+                    ];
+
+                    User::where('id', $localadmin_id)->update($userTableFields);
+                    Localadmin::where('user_id', $localadmin_id)->update($localAdminFields);
+                }
+
+                Toast::success('Selected local admins accepted succesfully');
+
+            }else{
+                Toast::warning('Please select local admins in order to accept them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to accept the selected local admins. Error Message: ' . $e);
+        }
+    }
+
+    public function deleteLocaladmins(Request $request){  
+
         //get all localadmins from post request
         $localadmins = $request->get('localadmins');
         
@@ -131,7 +163,7 @@ class ViewLocaladminScreen extends Screen
 
                 //loop through the localadmins and delete them from db
                 foreach($localadmins as $localadmin_id){
-                    Localadmin::where('id', $localadmin_id)->delete();
+                    Localadmin::where('user_id', $localadmin_id)->delete();
                 }
 
                 Toast::success('Selected local admins deleted succesfully');
@@ -141,7 +173,7 @@ class ViewLocaladminScreen extends Screen
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
         }
     }
 }

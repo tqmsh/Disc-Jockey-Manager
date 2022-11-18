@@ -133,12 +133,12 @@ class CreateStudentScreen extends Screen
                     ->required()
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
-                Select::make('school_board')
-                    ->title('School Board')
+                Select::make('county')
+                    ->title('County')
                     ->horizontal()
                     ->required()
                     ->empty('No Selection')
-                    ->fromModel(School::class, 'school_board', 'school_board'),
+                    ->fromModel(School::class, 'county', 'county'),
 
                 Select::make('grade')
                     ->title('Grade')

@@ -10,4 +10,7 @@ class RoleUsers extends Model
 {
     use HasFactory;
     use AsSource;
+
+    protected $fillable = ['user_id', 'role_id'];
+
 }

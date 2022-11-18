@@ -108,7 +108,7 @@ class ViewSchoolScreen extends Screen
             ViewSchoolLayout::class
         ];
     }
-
+    
     public function filter(Request $request){
         return redirect('/admin/schools?' 
                     .'&school=' . $request->get('school')
