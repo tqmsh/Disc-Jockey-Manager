@@ -200,6 +200,7 @@ class CreateLocaladminScreen extends Screen
                 'email' => $request->input('email'),
                 'phonenumber' => $request->input('phonenumber'),
                 'school' => $request->input('school'),
+                'account_status' => 1,
                 'user_id' => null,
                 'school_id' => $school_id
             ];
@@ -221,6 +222,7 @@ class CreateLocaladminScreen extends Screen
             'password' => bcrypt($request->input('password')),
             'name' => $request->input('name'),
             'country' => $request->input('country'),
+            'account_status' => 1,
             'phonenumber' => $request->input('phonenumber'),
             'permissions' =>'{"platform.index":true}',
             'remember_token' => Str::random(10),

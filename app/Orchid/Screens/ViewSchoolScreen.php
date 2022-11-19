@@ -12,10 +12,12 @@ use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
+use Illuminate\Http\JsonResponse;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewSchoolLayout;
 
 class ViewSchoolScreen extends Screen
@@ -25,7 +27,7 @@ class ViewSchoolScreen extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Request $request): iterable
     {
         return [
             'schools' => School::latest('schools.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
