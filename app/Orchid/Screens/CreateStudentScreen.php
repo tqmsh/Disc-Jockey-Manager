@@ -156,9 +156,17 @@ class CreateStudentScreen extends Screen
                     ->title('Event')
                     ->horizontal()
                     ->displayAppend('full')
-                    ->required()
                     ->empty('No Selection')
                     ->fromModel(Events::class, 'id'),
+
+                Select::make('ticketstatus')
+                    ->title('Ticket Status')
+                    ->required()
+                    ->horizontal()
+                    ->options([
+                        'Paid'   => 'Paid',
+                        'Unpaid' => 'Unpaid',
+                    ]),
 
                 Input::make('allergies')
                     ->title('Allergies')
@@ -230,6 +238,7 @@ class CreateStudentScreen extends Screen
             'grade' => $request->input('grade'),
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),
+            'ticketstatus'=> $request->input('ticketstatus'),
             'user_id' => null,
         ];
         
@@ -246,6 +255,8 @@ class CreateStudentScreen extends Screen
             'password' => bcrypt($request->input('password')),
             'name' => $request->input('name'),
             'country' => $request->input('country'),
+            'account_status' => 1,
+            'permissions' =>'{"platform.index":true}',
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
             'role' =>'student',
