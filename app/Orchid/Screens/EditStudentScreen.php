@@ -263,7 +263,6 @@ class EditStudentScreen extends Screen
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'country' => $request->input('country'),
-            'status' => $request->input('ticketstatus'),
             'phonenumber' => $request->input('phonenumber'),
         ];
         

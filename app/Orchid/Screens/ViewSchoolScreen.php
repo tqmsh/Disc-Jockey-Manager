@@ -30,7 +30,7 @@ class ViewSchoolScreen extends Screen
     public function query(Request $request): iterable
     {
         return [
-            'schools' => School::latest('schools.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'schools' => School::latest('schools.created_at')->filter(request(['country', 'state_province', 'school', 'county']))->paginate(10)
         ];
     }
 
@@ -89,16 +89,17 @@ class ViewSchoolScreen extends Screen
                         ->title('Country')
                         ->empty('No selection')
                         ->fromModel(User::class, 'country', 'country'),
-
-                    Select::make('school_board')
-                        ->title('School Board')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'school_board', 'school_board'),
-
+                    
                     Select::make('state_province')
                         ->title('State/Province')
                         ->empty('No selection')
                         ->fromModel(School::class, 'state_province', 'state_province'),
+                        
+                    Select::make('county')
+                        ->title('County')
+                        ->empty('No selection')
+                        ->fromModel(School::class, 'county', 'county'),
+
                 ]),
                 
                 Button::make('Filter')
@@ -114,8 +115,8 @@ class ViewSchoolScreen extends Screen
     public function filter(Request $request){
         return redirect('/admin/schools?' 
                     .'&school=' . $request->get('school')
+                    .'&county=' . $request->get('county')
                     .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
                     .'&state_province=' . $request->get('state_province'));
     }
 

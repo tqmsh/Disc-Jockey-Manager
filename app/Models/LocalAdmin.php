@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use Orchid\Screen\AsSource;
+use Orchid\Support\Facades\Alert;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Localadmin extends Model
 {
@@ -15,26 +17,33 @@ class Localadmin extends Model
 
     public function scopeFilter($query, array $filters){
 
-        $query  ->join('users', 'users.id', '=', 'localadmins.user_id')
-                ->join('schools', 'schools.id', '=', 'localadmins.school_id');
+        try{
+
+            $query->join('users', 'users.id', '=', 'localadmins.user_id')
+                    ->join('schools', 'schools.id', '=', 'localadmins.school_id');
+
+            if(isset($filters['school'])){
+                $query ->where('school', 'like', '%' . request('school') . '%');
+            }
+
+            if(isset($filters['country'])){
+                $query->where('country', 'like', '%' . request('country') . '%');
+            }
+
+            if(isset($filters['school_board'])){
+                $query->where('school_board', 'like', '%' . request('school_board') . '%');
+            }
+
+            if(isset($filters['state_province'])){
+                $query->where('state_province', 'like', '%' . request('state_province') . '%');
+            }
+
+            $query->select('localadmins.*');
 
 
-        if(isset($filters['school'])){
-            $query ->where('school', 'like', '%' . request('school') . '%');
+        }catch(Exception $e){
+
+            Alert::error('There was an error processing the filter. Error Message: ' . $e);
         }
-
-        if(isset($filters['country'])){
-            $query->where('users.country', 'like', '%' . request('country') . '%');
-        }
-
-        if(isset($filters['school_board'])){
-            $query->where('school_board', 'like', '%' . request('school_board') . '%');
-        }
-
-        if(isset($filters['state_province'])){
-            $query->where('state_province', 'like', '%' . request('state_province') . '%');
-        }
-
-        $query->select('localadmins.*');
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use App\Models\User;
 use Orchid\Screen\AsSource;
+use Orchid\Support\Facades\Alert;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class Student extends Model
@@ -17,30 +19,35 @@ class Student extends Model
     
     public function scopeFilter($query, array $filters){
 
-        $query  ->join('users', 'users.id', '=', 'students.user_id')
-                ->join('schools', 'schools.id', '=', 'students.school_id');
+        
+        
+        try{
+            
+            $query  ->join('users', 'users.id', '=', 'students.user_id')
+                    ->join('schools', 'schools.id', '=', 'students.school_id');
 
+            if(isset($filters['school'])){
+                $query ->where('school', 'like', '%' . request('school') . '%');
+            }
 
-        if(isset($filters['school'])){
-            $query ->where('school', 'like', '%' . request('school') . '%');
+            if(isset($filters['country'])){
+                $query->where('country', 'like', '%' . request('country') . '%');
+            }
+
+            if(isset($filters['school_board'])){
+                $query->where('school_board', 'like', '%' . request('school_board') . '%');
+            }
+
+            if(isset($filters['state_province'])){
+                $query->where('state_province', 'like', '%' . request('state_province') . '%');
+            }
+
+            $query->select('students.*');
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error processing the filter. Error Message: ' . $e);
         }
 
-        if(isset($filters['country'])){
-            $query->where('users.country', 'like', '%' . request('country') . '%');
-        }
-
-        if(isset($filters['school_board'])){
-            $query->where('school_board', 'like', '%' . request('school_board') . '%');
-        }
-
-        if(isset($filters['state_province'])){
-            $query->where('state_province', 'like', '%' . request('state_province') . '%');
-        }
-
-        if(isset($filters['ticketstatus'])){
-            $query->where('ticketstatus', '=', request('ticketstatus'));
-        }
-
-        $query->select('students.*');
     }
 }
