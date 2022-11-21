@@ -8,8 +8,6 @@
 
 - add the PendingStudentsScreen with full functionality 
 
-- add the 'CORE'title right above school section menu
+- add the 'CORE' title right above school section menu
 
 - add the 'PLACEHOLDERS' title right above the Navigation section menu
-
-- remove id and address coulooumns

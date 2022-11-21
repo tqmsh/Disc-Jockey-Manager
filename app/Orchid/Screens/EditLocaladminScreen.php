@@ -106,13 +106,21 @@ class EditLocaladminScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->placeholder('Ex. (613) 859-5863')
                     ->value($this->localadmin->phonenumber),
-                
+
                 Select::make('school')
                     ->title('School')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name')
                     ->value($this->school->school_name),
+                
+                Select::make('country')
+                    ->title('Country')
+                    ->empty('No Selection')
+                    ->required()
+                    ->horizontal()
+                    ->fromModel(School::class, 'country', 'country')
+                    ->value($this->school->county),
 
                 Select::make('state_province')
                     ->title('State/Province')
