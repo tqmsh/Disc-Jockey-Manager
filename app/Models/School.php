@@ -20,7 +20,7 @@ class School extends Model
         try{
 
             if(isset($filters['school'])){
-                $query ->where('school', 'like', '%' . request('school') . '%');
+                $query ->where('school_name', 'like', '%' . request('school') . '%');
             }
 
             if(isset($filters['country'])){
