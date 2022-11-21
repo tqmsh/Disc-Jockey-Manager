@@ -36,12 +36,6 @@ class ViewSchoolLayout extends Table
                         ->checked(false);
                 }),
 
-            TD::make('id', 'Id')
-                ->render(function (School $school) {
-                    return Link::make($school->id)
-                        ->route('platform.school.edit', $school);
-                }),
-
             TD::make('school_name', 'School Name')
                 ->render(function (School $school) {
                     return Link::make($school->school_name)
@@ -75,12 +69,6 @@ class ViewSchoolLayout extends Table
             TD::make('total_students', 'Total Students')
                 ->render(function (School $school) {
                     return Link::make($school->total_students)
-                        ->route('platform.school.edit', $school);
-                }),
-                
-            TD::make('address', 'Address')
-                ->render(function (School $school) {
-                    return Link::make($school->address)
                         ->route('platform.school.edit', $school);
                 }),
         ];
