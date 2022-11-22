@@ -54,10 +54,16 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Pending Local Admins')
                 ->icon('user-follow')
                 ->route('platform.pendinglocaladmin.list'),
+
+            //pending student nav option
+            Menu::make('Pending Students')
+                ->icon('user-follow')
+                ->route('platform.pendingstudent.list'),
                 
-            Menu::make('Examples')
+            Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
                 ->icon('arrow-down')
+                ->size()
                 ->list([
                         Menu::make('Example screen')
                             ->icon('monitor')

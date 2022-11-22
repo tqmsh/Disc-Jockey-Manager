@@ -27,9 +27,9 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => 
-            Student::latest('students.created_at')->filter(request(['country', 'state_province', 'school', 'school_board', 'ticketstatus']))
-            ->paginate(10)
+            'students' => Student::latest('students.created_at')
+            ->filter(request(['country', 'state_province', 'school', 'school_board', 'ticketstatus']))
+            ->where('students.account_status', 1)->paginate(10)
         ];
     }
 
