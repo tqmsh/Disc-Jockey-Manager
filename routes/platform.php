@@ -22,6 +22,7 @@ use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -89,6 +90,9 @@ Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platfor
 
 //show pending localadmin screen
 Route::screen('/pendinglocaladmins', ViewPendingLocaladminScreen::class)->name('platform.pendinglocaladmin.list');
+
+//show pending student screen
+Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
 
 
 // Platform > Profile
