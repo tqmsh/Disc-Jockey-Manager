@@ -31,6 +31,7 @@ class PlatformProvider extends OrchidServiceProvider
             
             //school nav option
             Menu::make('Schools')
+                ->title('CORE')
                 ->icon('building')
                 ->route('platform.school.list'),
                 
@@ -54,70 +55,76 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('user-follow')
                 ->route('platform.pendinglocaladmin.list'),
                 
-            Menu::make('Example screen')
-                ->icon('monitor')
-                ->route('platform.example')
-                ->title('Navigation')
-                ->badge(function () {
-                    return 6;
-                }),
-
-            Menu::make('Dropdown menu')
+            Menu::make('Examples')
+                ->title('PLACEHOLDERS')
                 ->icon('code')
                 ->list([
-                    Menu::make('Sub element item 1')->icon('bag'),
-                    Menu::make('Sub element item 2')->icon('heart'),
+                        Menu::make('Example screen')
+                            ->icon('monitor')
+                            ->route('platform.example')
+                            ->title('Navigation')
+                            ->badge(function () {
+                                return 6;
+                            }),
+                        
+
+                        Menu::make('Dropdown menu')
+                            ->icon('code')
+                            ->list([
+                                Menu::make('Sub element item 1')->icon('bag'),
+                                Menu::make('Sub element item 2')->icon('heart'),
+                            ]),
+
+                        Menu::make('Email sender')
+                            ->icon('envelope-letter')
+                            ->route('platform.email')
+                            ->title('Tools'),
+
+                        Menu::make('Basic Elements')
+                            ->title('Form controls')
+                            ->icon('note')
+                            ->route('platform.example.fields'),
+
+                        Menu::make('Advanced Elements')
+                            ->icon('briefcase')
+                            ->route('platform.example.advanced'),
+
+                        Menu::make('Text Editors')
+                            ->icon('list')
+                            ->route('platform.example.editors'),
+
+                        Menu::make('Overview layouts')
+                            ->title('Layouts')
+                            ->icon('layers')
+                            ->route('platform.example.layouts'),
+
+                        Menu::make('Chart tools')
+                            ->icon('bar-chart')
+                            ->route('platform.example.charts'),
+
+                        Menu::make('Cards')
+                            ->icon('grid')
+                            ->route('platform.example.cards')
+                            ->divider(),
+
+                        Menu::make('Documentation')
+                            ->title('Docs')
+                            ->icon('docs')
+                            ->url('https://orchid.software/en/docs'),
+
+                        Menu::make('Changelog')
+                            ->icon('shuffle')
+                            ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
+                            ->target('_blank')
+                            ->badge(function () {
+                                return Dashboard::version();
+                            }, Color::DARK()),
+
+                        Menu::make(__('Roles'))
+                            ->icon('lock')
+                            ->route('platform.systems.roles')
+                            ->permission('platform.systems.roles'),
                 ]),
-
-            Menu::make('Email sender')
-                ->icon('envelope-letter')
-                ->route('platform.email')
-                ->title('Tools'),
-
-            Menu::make('Basic Elements')
-                ->title('Form controls')
-                ->icon('note')
-                ->route('platform.example.fields'),
-
-            Menu::make('Advanced Elements')
-                ->icon('briefcase')
-                ->route('platform.example.advanced'),
-
-            Menu::make('Text Editors')
-                ->icon('list')
-                ->route('platform.example.editors'),
-
-            Menu::make('Overview layouts')
-                ->title('Layouts')
-                ->icon('layers')
-                ->route('platform.example.layouts'),
-
-            Menu::make('Chart tools')
-                ->icon('bar-chart')
-                ->route('platform.example.charts'),
-
-            Menu::make('Cards')
-                ->icon('grid')
-                ->route('platform.example.cards')
-                ->divider(),
-
-            Menu::make('Documentation')
-                ->title('Docs')
-                ->icon('docs')
-                ->url('https://orchid.software/en/docs'),
-
-            Menu::make('Changelog')
-                ->icon('shuffle')
-                ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
-                ->target('_blank')
-                ->badge(function () {
-                    return Dashboard::version();
-                }, Color::DARK()),
-
-            Menu::make(__('Roles'))
-                ->icon('lock')
-                ->route('platform.systems.roles')
-                ->permission('platform.systems.roles'),
         ];
     }
 

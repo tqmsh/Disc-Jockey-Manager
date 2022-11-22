@@ -120,7 +120,7 @@ class EditLocaladminScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country')
-                    ->value($this->school->county),
+                    ->value($this->school->country),
 
                 Select::make('state_province')
                     ->title('State/Province')

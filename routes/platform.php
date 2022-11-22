@@ -17,8 +17,6 @@ use App\Orchid\Screens\CreateSchoolScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
-use App\Orchid\Screens\User\UserEditScreen;
-use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\EditLocaladminScreen;
 use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
@@ -54,7 +52,7 @@ Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
 
 //show create student screen
-Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
+Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');        
 
 //show edit students screen
 Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
@@ -134,7 +132,6 @@ Route::screen('example', ExampleScreen::class)
     ->name('platform.example')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
-            ->parent('platform.index')
             ->push('Example screen');
     });
 

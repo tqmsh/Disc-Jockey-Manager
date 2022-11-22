@@ -15,6 +15,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\Password;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 
@@ -104,7 +105,7 @@ class CreateLocaladminScreen extends Screen
                     ->horizontal()
                     ->placeholder('Ex. johndoe@gmail.com'),
 
-                Input::make('password')
+                Password::make('password')
                     ->title('Password')
                     ->type('password')
                     ->required()
