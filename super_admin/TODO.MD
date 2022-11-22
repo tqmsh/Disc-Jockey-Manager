@@ -6,4 +6,3 @@
 
 - make 3 more super admins with xyz@promplanner.com
 
-- add the PendingStudentsScreen with full functionality 
