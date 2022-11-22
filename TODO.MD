@@ -7,5 +7,3 @@
 - make 3 more super admins with xyz@promplanner.com
 
 - add the PendingStudentsScreen with full functionality 
-
-- add the 'PLACEHOLDERS' title right above the Navigation section menu

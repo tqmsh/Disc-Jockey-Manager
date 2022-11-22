@@ -57,7 +57,7 @@ class PlatformProvider extends OrchidServiceProvider
                 
             Menu::make('Examples')
                 ->title('PLACEHOLDERS')
-                ->icon('code')
+                ->icon('arrow-down')
                 ->list([
                         Menu::make('Example screen')
                             ->icon('monitor')
