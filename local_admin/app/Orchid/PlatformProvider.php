@@ -30,35 +30,18 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
-            
-            //school nav option
-            Menu::make('Schools')
-                ->title('CORE')
-                ->icon('building')
-                ->route('platform.school.list'),
                 
+            //student nav option
+            Menu::make('Events')
+                ->icon('diamond')
+                ->title('CORE')
+                ->route('platform.event.list'),
+
             //student nav option
             Menu::make('Student List')
                 ->icon('graduation')
                 ->route('platform.student.list'),
 
-            //student nav option
-            Menu::make('Events')
-                ->icon('diamond')
-                ->route('platform.event.list'),
-
-            //localadmin nav option
-            Menu::make('Local Admins')
-                ->icon('friends')
-                ->route('platform.localadmin.list'),
-
-            //pending localadmin nav option
-            Menu::make('Pending Local Admins')
-                ->icon('user-follow')
-                ->badge(function () {
-                            return count(Localadmin::where('account_status', 0)->get());
-                        })
-                ->route('platform.pendinglocaladmin.list'),
 
             //pending student nav option
             Menu::make('Pending Students')

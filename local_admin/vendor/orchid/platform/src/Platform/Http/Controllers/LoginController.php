@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\JsonResponse;
+use Orchid\Support\Facades\Alert;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
@@ -138,6 +139,24 @@ class LoginController extends Controller
             'isLockUser' => optional($model)->exists ?? false,
             'lockUser'   => $model,
         ]);
+    }
+
+    public function showRegisterForm(Request $request){
+        $user = $request->cookie('lockUser');
+
+        /** @var EloquentUserProvider $provider */
+        $provider = $this->guard->getProvider();
+
+        $model = $provider->createModel()->find($user);
+
+        return view('platform::auth.register', [
+            'isLockUser' => optional($model)->exists ?? false,
+            'lockUser'   => $model,
+        ]);    
+    }
+
+    public function register(Request $request){
+        return redirect('/');
     }
 
     /**

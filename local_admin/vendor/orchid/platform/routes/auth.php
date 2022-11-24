@@ -13,7 +13,13 @@ if (config('platform.auth', true)) {
         ->post('login', [LoginController::class, 'login'])
         ->name('login.auth');
 
+    Route::post('create', [LoginController::class, 'register'])->name('register');
+
     Route::get('lock', [LoginController::class, 'resetCookieLockMe'])->name('login.lock');
+
+    //show create account form
+    Route::get('register', [LoginController::class, 'showRegisterForm'])->name('register');
+
 }
 
 Route::get('switch-logout', [LoginController::class, 'switchLogout']);
