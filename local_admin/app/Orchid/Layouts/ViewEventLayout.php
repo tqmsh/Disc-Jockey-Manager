@@ -35,11 +35,7 @@ class ViewEventLayout extends Table
                         ->value($event->id)
                         ->checked(false);
                 }),
-            TD::make('id', 'Id')
-                ->render(function (Events $event) {
-                    return Link::make($event->id)
-                        ->route('platform.event.edit', $event);
-                }),
+
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
                     return Link::make($event->event_name)
