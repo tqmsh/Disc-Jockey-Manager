@@ -14,7 +14,6 @@ use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
-use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewStudentLayout;
 
@@ -143,10 +142,10 @@ class ViewStudentScreen extends Screen
                     Student::where('id', $student)->delete();
                 }
 
-                Toast::success('Selected students deleted succesfully');
+                Alert::success('Selected students deleted succesfully');
 
             }else{
-                Toast::warning('Please select students in order to delete them');
+                Alert::warning('Please select students in order to delete them');
             }
 
         }catch(Exception $e){
