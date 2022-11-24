@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\Student;
+use Orchid\Support\Color;
+use App\Models\Localadmin;
 use Orchid\Platform\Dashboard;
+use Orchid\Screen\Actions\Menu;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
-use Orchid\Screen\Actions\Menu;
-use Orchid\Support\Color;
 
 class PlatformProvider extends OrchidServiceProvider
 {
@@ -53,11 +55,17 @@ class PlatformProvider extends OrchidServiceProvider
             //pending localadmin nav option
             Menu::make('Pending Local Admins')
                 ->icon('user-follow')
+                ->badge(function () {
+                            return count(Localadmin::where('account_status', 0)->get());
+                        })
                 ->route('platform.pendinglocaladmin.list'),
 
             //pending student nav option
             Menu::make('Pending Students')
                 ->icon('user-follow')
+                ->badge(function () {
+                            return count(Student::where('account_status', 0)->get());
+                        })
                 ->route('platform.pendingstudent.list'),
                 
             Menu::make('Examples Layouts')
