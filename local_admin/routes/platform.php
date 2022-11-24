@@ -7,24 +7,17 @@ use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
-use App\Orchid\Screens\EditSchoolScreen;
-use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
-use App\Orchid\Screens\CreateSchoolScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
-use App\Orchid\Screens\EditLocaladminScreen;
-use App\Orchid\Screens\ViewLocaladminScreen;
-use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
-use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
@@ -58,24 +51,6 @@ Route::screen('/students/create', CreateStudentScreen::class)->name('platform.st
 //show edit students screen
 Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
 
-//show schools screen
-Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list');
-
-//show create school screen
-Route::screen('/schools/create', CreateSchoolScreen::class)->name('platform.school.create');
-
-//show edit schools screen
-Route::screen('/schools/{school}/edit', EditSchoolScreen::class)->name('platform.school.edit');
-
-//show localadmin screen
-Route::screen('/localadmins', ViewLocaladminScreen::class)->name('platform.localadmin.list');
-
-//show edit localadmin screen
-Route::screen('/localadmins/{localadmin}/edit', EditLocaladminScreen::class)->name('platform.localadmin.edit');
-
-//show create local admin screen
-Route::screen('/localadmins/create', CreateLocaladminScreen::class)->name('platform.localadmin.create');
-
 //show events screen
 Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
 
@@ -87,9 +62,6 @@ Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.
 
 //show add table screen for a event
 Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platform.table.create');
-
-//show pending localadmin screen
-Route::screen('/pendinglocaladmins', ViewPendingLocaladminScreen::class)->name('platform.pendinglocaladmin.list');
 
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
