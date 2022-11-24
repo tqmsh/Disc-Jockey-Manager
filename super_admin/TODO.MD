@@ -5,5 +5,3 @@
 - finish the mass import for schools and students
 
 - make 3 more super admins with xyz@promplanner.com
-
-- re-design the columns to Jordan's specefications
