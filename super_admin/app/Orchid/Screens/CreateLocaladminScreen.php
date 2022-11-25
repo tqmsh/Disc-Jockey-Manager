@@ -210,7 +210,6 @@ class CreateLocaladminScreen extends Screen
         }catch(Exception $e){
             Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage);
         }
-
     }
 
     //this functions returns the values that need to be inserted in the user table in the db
