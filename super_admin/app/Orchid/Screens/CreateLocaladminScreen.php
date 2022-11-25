@@ -16,7 +16,6 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\Password;
-use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 
 class CreateLocaladminScreen extends Screen
@@ -155,9 +154,9 @@ class CreateLocaladminScreen extends Screen
                 
                 //no duplicates found
                 User::create($userTableFields);
+                User::where('email', $request->input('email'))->update(['permissions' => '{"platform.index":true}']);
 
-                $localAdminTableFields['user_id'] = User::where('email', $request->input('email'))
-                ->get('id')->value('id');
+                $localAdminTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
 
                 Localadmin::create($localAdminTableFields);
                 
@@ -209,13 +208,14 @@ class CreateLocaladminScreen extends Screen
             return $localadminTableFields;
 
         }catch(Exception $e){
-            Alert::error('There was an error creating this local admin Error Code: ' . $e);
+            Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage);
         }
 
     }
 
     //this functions returns the values that need to be inserted in the user table in the db
     private function getUserFields($request){
+
         $userTableFields = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
@@ -224,7 +224,6 @@ class CreateLocaladminScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'account_status' => 1,
-            'permissions' =>'{"platform.index":true}',
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
             'role' =>'localadmin',
@@ -232,4 +231,5 @@ class CreateLocaladminScreen extends Screen
         
         return $userTableFields;
     }
+
 }
