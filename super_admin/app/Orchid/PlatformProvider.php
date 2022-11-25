@@ -80,14 +80,6 @@ class PlatformProvider extends OrchidServiceProvider
                             ->badge(function () {
                                 return 6;
                             }),
-                        
-
-                        Menu::make('Dropdown menu')
-                            ->icon('code')
-                            ->list([
-                                Menu::make('Sub element item 1')->icon('bag'),
-                                Menu::make('Sub element item 2')->icon('heart'),
-                            ]),
 
                         Menu::make('Email sender')
                             ->icon('envelope-letter')

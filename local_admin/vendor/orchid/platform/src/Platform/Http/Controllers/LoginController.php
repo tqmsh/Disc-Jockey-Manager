@@ -9,15 +9,16 @@ use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
+use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\JsonResponse;
-use Orchid\Support\Facades\Alert;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -156,7 +157,26 @@ class LoginController extends Controller
     }
 
     public function register(Request $request){
-        return redirect('/');
+        $formFields = $request->validate([
+            'name' => ['required'],
+            'firstname' => ['required'],
+            'lastname' => ['required', 'min:3'],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'password' => 'required|confirmed|min:6',
+            'password_confirmation' => ['required'],
+            'phonenumber' => ['required'],
+            'school' => ['required'],
+            'country' => ['required'],
+            'state_province' => ['required'],
+            'county' => ['required'],
+        ]);
+
+        // Hash Password
+        $formFields['password'] = bcrypt($formFields['password']);
+        
+        Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
+
+        return redirect('/admin/login');    
     }
 
     /**

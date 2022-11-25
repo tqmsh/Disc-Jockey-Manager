@@ -47,7 +47,7 @@
         {{ __('Confirm Password') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Password::make('confirm_password')->required()->autofocus()->tabindex(2)->placeholder(__('Enter your password again')) !!}
+    {!! \Orchid\Screen\Fields\Password::make('password_confirmation')->required()->autofocus()->tabindex(2)->placeholder(__('Enter your password again')) !!}
 </div>
 
 <div class="mb-3">
