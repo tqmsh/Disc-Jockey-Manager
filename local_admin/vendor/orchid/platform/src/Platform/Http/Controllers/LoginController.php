@@ -8,6 +8,7 @@ use Exception;
 use App\Models\User;
 use App\Models\School;
 use Illuminate\View\View;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
 use Illuminate\Validation\Rule;
@@ -172,6 +173,7 @@ class LoginController extends Controller
                 'country' => ['required'],
                 'state_province' => ['required'],
                 'county' => ['required'],
+                'role' => 'localadmin',
             ]);
     
             // Hash Password
@@ -199,12 +201,41 @@ class LoginController extends Controller
                 Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
     
                 return redirect('/admin/register');
-            }
+
+            }else{
+
+                try{
+
+                    $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
+                    $userTableFields['password'] = $formFields['password'];
+                    $userTableFields['role'] = $formFields['role'];
+
+                    $userCreateSuccess = User::create($userTableFields);
     
+                    if($userCreateSuccess){
+                        
+                        $localadminTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school']);
+                        $localadminTableFields['school_id'] = $school_id;
+                        $localadminTableFields['user_id'] = User::where('email', $localadminTableFields['email'])->get('id')->value('id');
+
+
+                        $localadminCreateSuccess = Localadmin::create($localadminTableFields);
+
+                        if($localadminCreateSuccess){
+                            Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
+                    
+                            return redirect('/admin/login');  
+                        }
+                    }
+
+                }catch(Exception $e){
+
+                    Session::flash('message', 'There was an error creating your account. Please contact one of the admins of Prom Planner.');
             
-            Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
-    
-            return redirect('/admin/login');   
+                    return redirect('/admin/register');
+                }
+
+            }
     }
 
     /**
