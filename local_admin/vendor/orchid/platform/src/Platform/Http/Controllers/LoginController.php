@@ -6,6 +6,7 @@ namespace Orchid\Platform\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Models\School;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
@@ -15,10 +16,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -157,26 +158,48 @@ class LoginController extends Controller
     }
 
     public function register(Request $request){
-        $formFields = $request->validate([
-            'name' => ['required'],
-            'firstname' => ['required'],
-            'lastname' => ['required', 'min:3'],
-            'email' => ['required', 'email', Rule::unique('users', 'email')],
-            'password' => 'required|confirmed|min:6',
-            'password_confirmation' => ['required'],
-            'phonenumber' => ['required'],
-            'school' => ['required'],
-            'country' => ['required'],
-            'state_province' => ['required'],
-            'county' => ['required'],
-        ]);
 
-        // Hash Password
-        $formFields['password'] = bcrypt($formFields['password']);
-        
-        Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
+        try{
+            //$request->validate will automatically validate unique emails and other specefied validations
+            $formFields = $request->validate([
+                'name' => ['required'],
+                'firstname' => ['required'],
+                'lastname' => ['required', 'min:3'],
+                'email' => ['required', 'email', Rule::unique('users', 'email')],
+                'password' => 'required|confirmed|min:6',
+                'password_confirmation' => ['required'],
+                'phonenumber' => ['required'],
+                'school' => ['required'],
+                'country' => ['required'],
+                'state_province' => ['required'],
+                'county' => ['required'],
+            ]);
+    
+            // Hash Password
+            $formFields['password'] = bcrypt($formFields['password']);
+    
+            //check if the school the user entered is valid
+            $school_id = School::where('school_name', $formFields['school'])
+                                ->where('county',  $formFields['county'])
+                                ->where('state_province', $formFields['state_province'])
+                                ->where('country', $formFields['country'])
+                                ->get('id')->value('id');
+    
+            if(is_null($school_id)){
+                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
+    
+                return redirect('/admin/register');
+            }
+    
+            
+            Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
+    
+            return redirect('/admin/login');   
 
-        return redirect('/admin/login');    
+        }catch(Exception $e){
+            Session::flash('message', 'There was an error creating your account, please contact one of the admins of Prom Planner.');
+            return redirect('/admin/register');
+        }
     }
 
     /**
