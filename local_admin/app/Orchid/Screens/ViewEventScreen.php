@@ -7,6 +7,7 @@ use App\Models\Events;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -14,6 +15,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
 
 class ViewEventScreen extends Screen
@@ -26,7 +28,7 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         return [
-            'events' => Events::latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
         ];
     }
 
