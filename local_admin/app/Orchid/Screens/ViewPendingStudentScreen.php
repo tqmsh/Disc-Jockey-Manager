@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
@@ -15,6 +16,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewPendingStudentLayout;
 
 class ViewPendingStudentScreen extends Screen
@@ -28,8 +30,9 @@ class ViewPendingStudentScreen extends Screen
     {
         return [
             'pending_students' => Student::latest('students.created_at')
-                                    ->filter(request(['country', 'state_province', 'school', 'school_board']))
-                                    ->where('students.account_status', 0)->paginate(10)
+                                ->filter(request(['country', 'state_province', 'school', 'school_board']))
+                                ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))
+                                ->where('students.account_status', 0)->paginate(10)
         ];
     }
 
