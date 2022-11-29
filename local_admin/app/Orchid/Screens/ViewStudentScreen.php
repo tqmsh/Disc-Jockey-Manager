@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -15,6 +16,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewStudentLayout;
 
 class ViewStudentScreen extends Screen
@@ -27,7 +29,7 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::latest('students.created_at')
+            'students' => Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('students.created_at')
             ->filter(request(['country', 'state_province', 'school', 'school_board', 'ticketstatus']))
             ->where('students.account_status', 1)->paginate(10)
         ];
