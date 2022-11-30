@@ -3,8 +3,6 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\User;
-use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -29,8 +27,7 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::latest('students.created_at')
-                        ->filter(request(['country', 'state_province', 'school', 'school_board', 'ticketstatus']))
+            'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))
                         ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))
                         ->where('students.account_status', 1)->paginate(10)
         ];
@@ -82,33 +79,14 @@ class ViewStudentScreen extends Screen
 
                 Group::make([
 
-                    Select::make('ticketstatus')
-                        ->title('Ticket Status')
+                    Select::make('sort_option')
+                        ->title('Order Students By:')
                         ->empty('No selection')
                         ->options([
-                            'Paid' => 'Paid',
-                            'Unpaid' => 'Unpaid'
+                            'firstname' => 'First Name',
+                            'lastname' => 'Last Name',
+                            'grade' => 'Grade'
                         ]),
-                    
-                    Select::make('school')
-                        ->title('School')
-                        ->empty('No selection')
-                        ->fromModel(Student::class, 'school', 'school'),
-
-                    Select::make('country')
-                        ->title('Country')
-                        ->empty('No selection')
-                        ->fromModel(User::class, 'country', 'country'),
-
-                    Select::make('school_board')
-                        ->title('School Board')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'school_board', 'school_board'),
-
-                    Select::make('state_province')
-                        ->title('State/Province')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'state_province', 'state_province'),
                 ]),
                 
                 Button::make('Filter')
@@ -123,11 +101,10 @@ class ViewStudentScreen extends Screen
 
     public function filter(Request $request){
         return redirect('/admin/students?'
+                    .'&sort_option=' . $request->get('sort_option')
                     .'&ticketstatus=' . $request->get('ticketstatus') 
-                    .'&school=' . $request->get('school')
-                    .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
-                    .'&state_province=' . $request->get('state_province'));
+                    .'&event_id=' . $request->get('event_id') 
+                );
     }
 
     public function deleteStudents(Request $request)
