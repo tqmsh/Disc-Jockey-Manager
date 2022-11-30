@@ -10,6 +10,7 @@ use App\Models\Localadmin;
 use Orchid\Platform\Dashboard;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Platform\ItemPermission;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\OrchidServiceProvider;
 
 class PlatformProvider extends OrchidServiceProvider
@@ -47,7 +48,7 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Pending Students')
                 ->icon('user-follow')
                 ->badge(function () {
-                            return count(Student::where('account_status', 0)->get());
+                            return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
                         })
                 ->route('platform.pendingstudent.list'),
                 

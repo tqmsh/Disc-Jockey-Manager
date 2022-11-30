@@ -8,8 +8,8 @@ use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
-use App\Notifications\LoggedIn;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -18,6 +18,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 
 class EditStudentScreen extends Screen
 {
@@ -77,6 +78,10 @@ class EditStudentScreen extends Screen
     public function layout(): iterable
     {
         $this->school = School::find($this->student->school_id);
+
+        if($this->student->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')){
+            abort(403, 'Unauthorized.');
+        }
 
         return [
 

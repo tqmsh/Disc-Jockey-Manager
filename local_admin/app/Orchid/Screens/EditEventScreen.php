@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Events;
 use App\Models\School;
 use Orchid\Screen\Screen;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -15,6 +16,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
+use Illuminate\Support\Facades\Auth;
 
 class EditEventScreen extends Screen
 {
@@ -73,7 +75,11 @@ class EditEventScreen extends Screen
     public function layout(): iterable
     {
         $this->school = School::find($this->event->school_id);
-
+        
+        if($this->event->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')){
+            abort(403, 'Unauthorized.');
+        }
+        
         return [
             
             Layout::rows([
