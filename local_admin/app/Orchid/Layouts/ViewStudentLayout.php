@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts;
 
 use App\Models\User;
 use Orchid\Screen\TD;
+use App\Models\Events;
 use App\Models\Student;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -51,11 +52,13 @@ class ViewStudentLayout extends Table
                     return Link::make($student->email)
                         ->route('platform.student.edit', $student);
                 }),
-            TD::make('country', 'Country')
+                
+            TD::make('phonenumber', 'Phone Number')
                 ->render(function (Student $student) {
-                    return Link::make(User::find($student->user_id)->country)
+                    return Link::make($student->phonenumber)
                         ->route('platform.student.edit', $student);
                 }),
+                
             TD::make('school', 'School')
                 ->render(function (Student $student) {
                     return Link::make($student->school)
@@ -66,19 +69,14 @@ class ViewStudentLayout extends Table
                     return Link::make($student->grade)
                         ->route('platform.student.edit', $student);
                 }),
-            TD::make('event_id', 'Event ID')
+            TD::make('event_id', 'Event')
                 ->render(function (Student $student) {
-                    return Link::make($student->event_id)
+                    return Link::make(Events::where('id', $student->event_id)->get('event_name')->value('event_name'))
                         ->route('platform.student.edit', $student);
                 }),
             TD::make('ticketstatus', 'Ticket Status')
                 ->render(function (Student $student) {
                     return Link::make($student->ticketstatus)
-                        ->route('platform.student.edit', $student);
-                }),
-            TD::make('phonenumber', 'Phone Number')
-                ->render(function (Student $student) {
-                    return Link::make($student->phonenumber)
                         ->route('platform.student.edit', $student);
                 }),
             TD::make('allergies', 'Allergies')
