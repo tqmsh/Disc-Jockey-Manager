@@ -2,7 +2,6 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\User;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Student;
@@ -58,7 +57,7 @@ class ViewStudentLayout extends Table
                     return Link::make($student->phonenumber)
                         ->route('platform.student.edit', $student);
                 }),
-                
+
             TD::make('school', 'School')
                 ->render(function (Student $student) {
                     return Link::make($student->school)

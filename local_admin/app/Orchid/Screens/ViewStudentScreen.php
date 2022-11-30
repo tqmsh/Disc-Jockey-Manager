@@ -3,8 +3,6 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\User;
-use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;

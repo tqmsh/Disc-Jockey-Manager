@@ -6,4 +6,3 @@
 
 - make it so local admins can filter students by events
 
-- make it so local admins can see the events students are attending 
