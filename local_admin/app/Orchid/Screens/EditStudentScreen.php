@@ -80,9 +80,7 @@ class EditStudentScreen extends Screen
         $this->school = School::find($this->student->school_id);
 
         if($this->student->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')){
-
             abort(403, 'Unauthorized.');
-
         }
 
         return [
