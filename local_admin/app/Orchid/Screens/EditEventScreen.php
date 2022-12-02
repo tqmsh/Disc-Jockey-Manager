@@ -76,9 +76,8 @@ class EditEventScreen extends Screen
     {
         $this->school = School::find($this->event->school_id);
         
-        if($this->event->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')){
-            abort(403, 'Unauthorized.');
-        }
+        abort_if($this->event->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'), 403);
+
         
         return [
             
