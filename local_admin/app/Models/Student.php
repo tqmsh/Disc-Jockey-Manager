@@ -34,12 +34,11 @@ class Student extends Model
                 $query->where('ticketstatus', $filters['ticketstatus']);
             }
 
-
             $query->select('students.*');
 
         }catch(Exception $e){
 
-            Alert::error('There was an error processing the filter. Error Message: ' . $e);
+            Alert::error('There was an error processing the scope filter. Error Message: ' . $e);
         }
 
     }
