@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\Events;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -13,9 +14,11 @@ use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewStudentLayout;
+use Locale;
 
 class ViewStudentScreen extends Screen
 {
@@ -27,7 +30,7 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))
+            'students' => Student::filter(request(['sort_option','event_name', 'ticketstatus']))
                         ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))
                         ->where('students.account_status', 1)->paginate(10)
         ];
@@ -87,14 +90,27 @@ class ViewStudentScreen extends Screen
                             'lastname' => 'Last Name',
                             'grade' => 'Grade'
                         ]),
+
+                    Select::make('event_name')
+                        ->title('Event:')
+                        ->empty('No selection')
+                        ->fromQuery(Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name'),
+
+                    Select::make('ticketstatus')
+                        ->title('Ticket Status')
+                        ->empty('No selection')
+                        ->options([
+                            'Paid' => 'Paid',
+                            'Unpaid' => 'Unpaid'
+                        ]),
                 ]),
-                
+                    
                 Button::make('Filter')
                     ->icon('filter')
                     ->method('filter')
                     ->type(Color::DEFAULT()),
             ]),
-
+                
             ViewStudentLayout::class
         ];
     }
@@ -103,7 +119,7 @@ class ViewStudentScreen extends Screen
         return redirect('/admin/students?'
                     .'&sort_option=' . $request->get('sort_option')
                     .'&ticketstatus=' . $request->get('ticketstatus') 
-                    .'&event_id=' . $request->get('event_id') 
+                    .'&event_name=' . $request->get('event_name') 
                 );
     }
 

@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Exception;
-use App\Models\School;
 use Orchid\Screen\AsSource;
 use Orchid\Support\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Events extends Model
