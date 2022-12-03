@@ -8,3 +8,5 @@
 
 - make it so student can choose what table to sit in
 
+- make it so students can choose an event to enter in
+
