@@ -192,6 +192,7 @@ class CreateStudentScreen extends Screen
                 
                 //no duplicates found
                 User::create($userTableFields);
+                User::where('email', $request->input('email'))->update(['permissions' => '{"platform.index":true}']);
 
                 $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
                 
@@ -237,7 +238,7 @@ class CreateStudentScreen extends Screen
             'school' => $request->input('school'),
             'school_id' => $school_id,
             'grade' => $request->input('grade'),
-            // 'account_status' =>1,
+            'account_status' =>1,
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
@@ -257,8 +258,7 @@ class CreateStudentScreen extends Screen
             'password' => bcrypt($request->input('password')),
             'name' => $request->input('name'),
             'country' => $request->input('country'),
-            // 'account_status' => 1,
-            // 'permissions' =>'{"platform.index":true}',
+            'account_status' => 1,
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
             'role' =>'student',

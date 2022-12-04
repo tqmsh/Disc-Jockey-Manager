@@ -42,6 +42,8 @@ Route::screen('/main', PlatformScreen::class)->name('platform.main');
 //show events screen
 Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
 
+//show event registration screen
+Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platform.event.register');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

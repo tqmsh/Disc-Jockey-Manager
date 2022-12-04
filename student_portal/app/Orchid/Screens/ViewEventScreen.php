@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
+use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
@@ -28,7 +29,7 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         return [
-            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'events' => Events::where('school_id', Student::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
         ];
     }
 
@@ -50,16 +51,6 @@ class ViewEventScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New Event')
-                ->icon('plus')
-                ->route('platform.event.create'),
-
-            Button::make('Delete Selected Events')
-                ->icon('trash')
-                ->method('deleteEvents')
-                ->confirm(__('Are you sure you want to delete the selected events?')),
-
-                
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')

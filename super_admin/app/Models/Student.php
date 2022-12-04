@@ -42,6 +42,10 @@ class Student extends Model
                 $query->where('state_province', 'like', '%' . request('state_province') . '%');
             }
 
+            if(isset($filters['ticketstatus'])){
+                $query->where('ticketstatus', '=', request('ticketstatus'));
+            }
+
             $query->select('students.*');
 
         }catch(Exception $e){

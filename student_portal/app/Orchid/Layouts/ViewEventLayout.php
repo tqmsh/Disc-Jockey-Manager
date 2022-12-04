@@ -29,48 +29,42 @@ class ViewEventLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
-                ->render(function (Events $event){
-                    return CheckBox::make('events[]')
-                        ->value($event->id)
-                        ->checked(false);
-                }),
 
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
                     return Link::make($event->event_name)
-                        ->route('platform.event.edit', $event);
+                        ->route('platform.event.register', $event);
                 }),
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {
                     return Link::make($event->event_start_time)
-                        ->route('platform.event.edit', $event);
+                        ->route('platform.event.register', $event);
                 }),
             TD::make('school', 'School')
                 ->render(function (Events $event) {
                     return Link::make($event->school)
-                        ->route('platform.event.edit', $event);
+                        ->route('platform.event.register', $event);
                 }),
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {
                     return Link::make($event->event_address)
-                        ->route('platform.event.edit', $event);
+                        ->route('platform.event.register', $event);
                 }),
             TD::make('event_zip_postal', 'Event Zip/Postal')
                 ->render(function (Events $event) {
                     return Link::make($event->event_zip_postal)
-                        ->route('platform.event.edit', $event);
+                        ->route('platform.event.register', $event);
                 }),
             TD::make('event_info', 'Event Info')
                 ->render(function (Events $event) {
                     return Link::make($event->event_info)
-                        ->route('platform.event.edit', $event);
+                        ->route('platform.event.register', $event);
                 }),
 
             TD::make('event_rules', 'Event Rules')
                 ->render(function (Events $event) {
                     return Link::make($event->event_rules)
-                        ->route('platform.event.edit', $event);
+                        ->route('platform.event.register', $event);
                 }),
         ];    
     }
