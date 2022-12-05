@@ -209,7 +209,7 @@ class CreateStudentScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error creating this school. Error Code: ' . $e->getMessage());
+            Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
     }
 

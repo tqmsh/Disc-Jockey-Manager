@@ -209,7 +209,7 @@ class CreateStudentScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error creating this school. Error Code: ' . $e->getMessage());
+            Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
     }
 
@@ -238,7 +238,7 @@ class CreateStudentScreen extends Screen
             'school' => $request->input('school'),
             'school_id' => $school_id,
             'grade' => $request->input('grade'),
-            'account_status' =>1,
+            'account_status' => 1,
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
