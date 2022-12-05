@@ -7,8 +7,8 @@ namespace Orchid\Platform\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Models\School;
+use App\Models\Student;
 use Illuminate\View\View;
-use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
 use Illuminate\Validation\Rule;
@@ -173,7 +173,8 @@ class LoginController extends Controller
                 'country' => ['required'],
                 'state_province' => ['required'],
                 'county' => ['required'],
-                'role' => 'localadmin',
+                'grade' => ['required'],
+                'allergies' => ['nullable'],
             ]);
     
             // Hash Password
@@ -208,20 +209,20 @@ class LoginController extends Controller
 
                     $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
                     $userTableFields['password'] = $formFields['password'];
-                    $userTableFields['role'] = $formFields['role'];
+                    $userTableFields['role'] = 'student';
 
                     $userCreateSuccess = User::create($userTableFields);
     
                     if($userCreateSuccess){
                         
-                        $localadminTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school']);
-                        $localadminTableFields['school_id'] = $school_id;
-                        $localadminTableFields['user_id'] = User::where('email', $localadminTableFields['email'])->get('id')->value('id');
+                        $studentTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school', 'grade', 'allergies']);
+                        $studentTableFields['school_id'] = $school_id;
+                        $studentTableFields['user_id'] = User::where('email', $studentTableFields['email'])->get('id')->value('id');
 
 
-                        $localadminCreateSuccess = Localadmin::create($localadminTableFields);
+                        $studentCreateSuccess = Student::create($studentTableFields);
 
-                        if($localadminCreateSuccess){
+                        if($studentCreateSuccess){
                             Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
                     
                             return redirect('/admin/login');  
@@ -230,11 +231,10 @@ class LoginController extends Controller
 
                 }catch(Exception $e){
 
-                    Session::flash('message', 'There was an error creating your account. Please contact one of the admins of Prom Planner.');
+                    Session::flash('message', 'There was an error creating your account. Please contact one of the admins of Prom Planner.' . $e);
             
                     return redirect('/admin/register');
                 }
-
             }
     }
 
