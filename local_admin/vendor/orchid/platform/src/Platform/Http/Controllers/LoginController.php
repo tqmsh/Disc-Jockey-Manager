@@ -173,7 +173,6 @@ class LoginController extends Controller
                 'country' => ['required'],
                 'state_province' => ['required'],
                 'county' => ['required'],
-                'role' => 'localadmin',
             ]);
     
             // Hash Password
@@ -208,7 +207,7 @@ class LoginController extends Controller
 
                     $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
                     $userTableFields['password'] = $formFields['password'];
-                    $userTableFields['role'] = $formFields['role'];
+                    $userTableFields['role'] = 'localadmin';
 
                     $userCreateSuccess = User::create($userTableFields);
     

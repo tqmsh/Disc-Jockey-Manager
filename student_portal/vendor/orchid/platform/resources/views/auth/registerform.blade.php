@@ -96,6 +96,24 @@
     {!! \Orchid\Screen\Fields\Select::make('county')->fromModel(App\Models\School::class, 'county', 'county')->autofocus()->empty('No Selection') !!}
 </div>
 
+<div class="mb-3">
+
+    <label class="form-label">
+        {{ __('Grade') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Select::make('grade')->options(['9' => 9, '10' => 10, '11' => 11, '12' => 12])->autofocus()->empty('No Selection') !!}
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">
+        {{ __('Allergies') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Input::make('allergies')->autofocus()->placeholder('Ex. Peanuts') !!}
+</div>
+
 
 <div class="mt-5 row align-items-center">
     <div class="col-md-6 col-xs-12">
