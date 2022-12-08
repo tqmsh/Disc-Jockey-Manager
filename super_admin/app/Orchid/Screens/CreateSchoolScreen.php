@@ -82,7 +82,7 @@ class CreateSchoolScreen extends Screen
                     Input::make('school_csv')
                         ->type('file')
                         ->title('File must be in csv format. Ex. schools.csv')
-                        ->help('The following fields are required and need to be named accordingly to successfully import the schools: <br>
+                        ->help('The csv file MUST HAVE these fields and they need to be named accordingly to successfully import the schools: <br>
                             • nces_id <br>
                             • school_name <br>
                             • school_board <br>
@@ -281,7 +281,27 @@ class CreateSchoolScreen extends Screen
 
         try{
 
-            $path = $request->file('school_csv')->getRealPath();
+            $path = '';
+
+            if(!is_null($request->file('school_csv'))){
+
+                $path = $request->file('school_csv')->getRealPath();
+
+                if(!is_null($path)){
+
+                    $extension = $request->file('school_csv')->extension();
+                    
+                    if($extension != 'csv'){Toast::error('Incorrect file type.'); return;}
+
+                } else{
+                    Toast::error('An error has occured.'); return;
+                }
+
+            } else{
+                Toast::error('Upload a csv file to import schools.'); return;
+            }
+
+
 
             $schools = $this->csvToArray($path);
 
@@ -311,7 +331,7 @@ class CreateSchoolScreen extends Screen
 
             Toast::success('Schools imported successfully!');
 
-            return redirect()->route('platform.school.list');
+            return redirect()->route('platform.school.create');
 
         }catch(Exception $e){
             
