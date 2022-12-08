@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Orchid\Screens;
+use DateTime;
 use Exception;
 use App\Models\User;
 use App\Models\School;
@@ -14,11 +15,13 @@ use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\DB;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\ModalToggle;
 
 class CreateSchoolScreen extends Screen
 {
+    public $requiredFields = ['nces_id', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
     /**
      * Query data.
      *
@@ -77,12 +80,25 @@ class CreateSchoolScreen extends Screen
 
                 Layout::rows([
 
-                    Upload::make('school_csv')
-                        ->title('File type must be in CSV format. (Ex. schools.csv)')
-                        ->maxFiles(1)
-                        ->storage('public')
-                        ->acceptedFiles('.csv'),
-                ]) 
+                    Input::make('school_csv')
+                        ->type('file')
+                        ->title('File must be in csv format. Ex. schools.csv')
+                        ->help('The csv file MUST HAVE these fields and they need to be named accordingly to successfully import the schools: <br>
+                            • nces_id <br>
+                            • school_name <br>
+                            • school_board <br>
+                            • county <br>
+                            • address <br>
+                            • city_municipality <br>
+                            • state_province <br>
+                            • zip_postal <br>
+                            • metropolitan_region <br>
+                            • phone_number <br>
+                            • fax <br>
+                            • website <br>
+                            • total_students <br>
+                            • school_data <br>')
+                ]),
             ])
             ->title('Mass Import Schools')
             ->applyButton('Import')
@@ -266,7 +282,67 @@ class CreateSchoolScreen extends Screen
 
         try{
 
-            // return redirect()->route('platform.school.list');
+            $path = '';
+
+            if(!is_null($request->file('school_csv'))){
+
+                $path = $request->file('school_csv')->getRealPath();
+
+                if(!is_null($path)){
+
+                    $extension = $request->file('school_csv')->extension();
+
+                    if($extension != 'csv'){Toast::error('Incorrect file type.'); return;}
+
+                } else{
+                    Toast::error('An error has occured.'); return;
+                }
+
+            } else{
+                Toast::error('Upload a csv file to import schools.'); return;
+            }
+
+            $schools = $this->csvToArray($path);
+
+            $data = [];
+
+            $keys = array_keys($schools[0]);
+
+            //check if the user has the required values
+            foreach($this->requiredFields as $field){
+
+                if(!in_array($field, $keys)){
+                    Toast::error('There are missing field(s) in your csv file.'); return;
+                }
+            }
+
+            //loop through the array of schools and re-write the keys
+            for ($i = 0; $i < count($schools); $i ++){
+
+                $data[] = [
+                    'nces_id' => ($schools[$i]['nces_id']),
+                    'school_name' => $schools[$i]['school_name'],
+                    'school_board' => $schools[$i]['school_board'],
+                    'county' => $schools[$i]['county'],
+                    'address' => $schools[$i]['address'],
+                    'city_municipality' => $schools[$i]['city_municipality'],
+                    'state_province' => $schools[$i]['state_province'],
+                    'zip_postal' => $schools[$i]['zip_postal'],
+                    'metropolitan_region' => $schools[$i]['metropolitan_region'],
+                    'phone_number' => $schools[$i]['phone_number'],
+                    'fax' => $schools[$i]['fax'],
+                    'website' => $schools[$i]['website'],
+                    'total_students' => $schools[$i]['total_students'],
+                    'school_data' => $schools[$i]['school_data'],
+                    'created_at' => new DateTime()
+                ];
+            }
+
+            DB::table('schools')->insert($data);
+
+            Toast::success('Schools imported successfully!');
+
+            return redirect()->route('platform.school.list');
 
         }catch(Exception $e){
             
@@ -279,7 +355,8 @@ class CreateSchoolScreen extends Screen
     private function csvToArray($filename = '', $delimiter = ','){
         
         if (!file_exists($filename) || !is_readable($filename)){
-            return false;
+            Alert::error('There has been an error finding this file.');
+            return;
         }
 
         $header = null;

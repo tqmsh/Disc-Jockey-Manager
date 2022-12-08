@@ -1,5 +1,7 @@
 **BIG GOALS**
 
-- fix the bug where we cant pull the csv file from the input request
+- before inserting the schools/localadmins/students from the csv file, we need to make sure that there are no duplicates that are already in the database. If there are duplicates, remove that record from the array
 
-- finish the mass import for schools and students
+- add mass import feature for students and local admins
+
+- add in the country when mass importing schools
