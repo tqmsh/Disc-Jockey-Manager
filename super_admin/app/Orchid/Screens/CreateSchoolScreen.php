@@ -82,6 +82,21 @@ class CreateSchoolScreen extends Screen
                     Input::make('school_csv')
                         ->type('file')
                         ->title('File must be in csv format. Ex. schools.csv')
+                        ->help('The following fields are required and need to be named accordingly to successfully import the schools: <br>
+                            • nces_id <br>
+                            • school_name <br>
+                            • school_board <br>
+                            • county <br>
+                            • address <br>
+                            • city_municipality <br>
+                            • state_province <br>
+                            • zip_postal <br>
+                            • metropolitan_region <br>
+                            • phone_number <br>
+                            • fax <br>
+                            • website <br>
+                            • total_students <br>
+                            • school_data <br>')
                 ]),
             ])
             ->title('Mass Import Schools')
