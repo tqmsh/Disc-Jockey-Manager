@@ -21,6 +21,7 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateSchoolScreen extends Screen
 {
+    public $requiredFields = ['nces_id', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
     /**
      * Query data.
      *
@@ -290,7 +291,7 @@ class CreateSchoolScreen extends Screen
                 if(!is_null($path)){
 
                     $extension = $request->file('school_csv')->extension();
-                    
+
                     if($extension != 'csv'){Toast::error('Incorrect file type.'); return;}
 
                 } else{
@@ -301,13 +302,23 @@ class CreateSchoolScreen extends Screen
                 Toast::error('Upload a csv file to import schools.'); return;
             }
 
-
-
             $schools = $this->csvToArray($path);
 
             $data = [];
 
+            $keys = array_keys($schools[0]);
+
+            //check if the user has the required values
+            foreach($this->requiredFields as $field){
+
+                if(!in_array($field, $keys)){
+                    Toast::error('There are missing field(s) in your csv file.'); return;
+                }
+            }
+
+            //loop through the array of schools and re-write the keys
             for ($i = 0; $i < count($schools); $i ++){
+
                 $data[] = [
                     'nces_id' => ($schools[$i]['nces_id']),
                     'school_name' => $schools[$i]['school_name'],
@@ -331,7 +342,7 @@ class CreateSchoolScreen extends Screen
 
             Toast::success('Schools imported successfully!');
 
-            return redirect()->route('platform.school.create');
+            return redirect()->route('platform.school.list');
 
         }catch(Exception $e){
             
