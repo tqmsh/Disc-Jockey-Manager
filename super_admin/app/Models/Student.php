@@ -24,7 +24,8 @@ class Student extends Model
         try{
             
             $query  ->join('users', 'users.id', '=', 'students.user_id')
-                    ->join('schools', 'schools.id', '=', 'students.school_id');
+                    ->join('schools', 'schools.id', '=', 'students.school_id')
+                    ->join('events', 'events.id', '=', 'students.event_id');
 
             if(isset($filters['school'])){
                 $query ->where('school', 'like', '%' . request('school') . '%');
@@ -44,6 +45,10 @@ class Student extends Model
 
             if(isset($filters['ticketstatus'])){
                 $query->where('ticketstatus', '=', request('ticketstatus'));
+            }
+
+            if(isset($filters['event_id'])){
+                $query->where('event_id', '=', request('event_id'));
             }
 
             $query->select('students.*');
