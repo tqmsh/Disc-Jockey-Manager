@@ -24,7 +24,8 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateStudentScreen extends Screen
 {
-    public $requiredFields = ['firstname', 'lastname', 'email', 'county', 'password', 'phonenumber', 'allergies', 'grade', 'school', 'state_province', 'country', 'county'];
+    public $requiredFields = ['firstname', 'lastname', 'email', 'county', 'password', 'phonenumber', 'allergies', 'grade', 'school', 'state_province', 'country'];
+    public $dupes =[];
 
     /**
      * Query data.
@@ -257,8 +258,6 @@ class CreateStudentScreen extends Screen
 
                 $students = $this->csvToArray($path);
 
-                $data = [];
-
                 $keys = array_keys($students[0]);
 
                 //check if the user has the required values
@@ -273,21 +272,43 @@ class CreateStudentScreen extends Screen
                 for ($i = 0; $i < count($students); $i ++){
 
                     if($this->validEmail($students[$i]['email'])){
+                        
+                        $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['state_province']);
 
+                        
+                        User::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'password' => bcrypt($students[$i]['password']), 'country' => $students[$i]['country'], 'role' => 'student', 'name' => $students[$i]['firstname'], 'account_status' => 1]);
+                        
+                        User::where('email', $students[$i]['email'])->update(['permissions' => '{"platform.index":true}']);
 
+                        $students[$i]['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
+
+                        Student::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'grade' => $students[$i]['grade'], 'school_id' => $students[$i]['school_id'], 'user_id' => $students[$i]['user_id'], 'account_status' => 1, 'school' => $students[$i]['school']]);
+
+                    }else{
+                        array_push($this->dupes, $students[$i]['email']);                    
                     }
                 }
 
+                if(!empty($this->dupes)){
+                    $message = 'Accounts with these emails have not been added as they already have an account in our system: ';
 
-                Toast::success('Students imported successfully!');
+                    foreach($this->dupes as $email){
+
+                        $message .="| " . $email . " | ";
+                    }
+
+                    Alert::error($message);
+                }else{
+
+                    Toast::success('Students imported successfully!');
+                }
+
 
                 return redirect()->route('platform.student.list');
-            }else{
-                Toast::error('An unknown error has occured, please contact one of the admins of Prom Planner.');
             }
         }catch(Exception $e){
             
-            Alert::error('There was an error mass importing the students. Error Code: ' . $e);
+            Alert::error('There was an error mass importing the students. Error Code: ' . $e->getMessage());
         }
     }
 
@@ -295,13 +316,13 @@ class CreateStudentScreen extends Screen
 
         $path = '';
 
-        if(!is_null($request->file('school_csv'))){
+        if(!is_null($request->file('student_csv'))){
 
-            $path = $request->file('school_csv')->getRealPath();
+            $path = $request->file('student_csv')->getRealPath();
 
             if(!is_null($path)){
 
-                $extension = $request->file('school_csv')->extension();
+                $extension = $request->file('student_csv')->extension();
 
                 if($extension != 'csv'){
 
@@ -356,7 +377,7 @@ class CreateStudentScreen extends Screen
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
 
-        $school_id = $this->getSchoolID($request);
+        $school_id = $this->getSchoolIDByReq($request);
 
         $studentTableFields = [
             'firstname' => $request->input('firstname'),
@@ -376,11 +397,28 @@ class CreateStudentScreen extends Screen
         return $studentTableFields;
     }
 
-    private function getSchoolID($request){
+    private function getSchoolIDByReq($request){
         $school_id = School::where('school_name', $request->input('school'))
                             ->where('county', $request->input('county'))
                             ->where('state_province', $request->input('state_province'))
                             ->where('country', $request->input('country'))
+                            ->get('id')->value('id');
+
+        if(is_null($school_id)){
+
+            throw New Exception('You are trying to enter a invalid school');
+
+        } else{
+
+            return $school_id;
+        }
+    }
+
+    private function getSchoolID($country, $school, $county, $state_province){
+        $school_id = School::where('school_name', $school)
+                            ->where('county', $county)
+                            ->where('state_province', $state_province)
+                            ->where('country', $country)
                             ->get('id')->value('id');
 
         if(is_null($school_id)){
