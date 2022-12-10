@@ -4,3 +4,5 @@
 
 - make it so local admins can create tables and add/remove students to/from tables
 
+- make it so local admins can mass import students
+
