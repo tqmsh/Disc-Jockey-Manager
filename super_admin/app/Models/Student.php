@@ -19,13 +19,11 @@ class Student extends Model
     
     public function scopeFilter($query, array $filters){
 
-        
-        
         try{
             
             $query  ->join('users', 'users.id', '=', 'students.user_id')
-                    ->join('schools', 'schools.id', '=', 'students.school_id')
-                    ->join('events', 'events.id', '=', 'students.event_id');
+                    ->join('schools', 'schools.id', '=', 'students.school_id');
+                    
 
             if(isset($filters['school'])){
                 $query ->where('school', 'like', '%' . request('school') . '%');
@@ -43,13 +41,16 @@ class Student extends Model
                 $query->where('state_province', 'like', '%' . request('state_province') . '%');
             }
 
+            if(isset($filters['event_id'])){
+                
+                $query->join('events', 'events.id', '=', 'students.event_id');
+                $query->where('event_id', '=', request('event_id'));
+            }
+
             if(isset($filters['ticketstatus'])){
                 $query->where('ticketstatus', '=', request('ticketstatus'));
             }
 
-            if(isset($filters['event_id'])){
-                $query->where('event_id', '=', request('event_id'));
-            }
 
             $query->select('students.*');
 
