@@ -17,9 +17,13 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\Password;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Actions\ModalToggle;
 
 class CreateLocaladminScreen extends Screen
 {
+    public $requiredFields = ['firstname', 'lastname', 'email', 'county', 'password', 'phonenumber', 'school', 'state_province', 'country'];
+    public $dupes =[];
+
     /**
      * Query data.
      *
@@ -51,6 +55,11 @@ class CreateLocaladminScreen extends Screen
             Button::make('Add')
                 ->icon('plus')
                 ->method('createLocaladmin'),
+                
+            ModalToggle::make('Mass Import Local Admins')
+                ->modal('massImportModal')
+                ->method('massImport')
+                ->icon('plus'),
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -66,6 +75,29 @@ class CreateLocaladminScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('massImportModal',[
+
+                Layout::rows([
+
+                    Input::make('localadmin_csv')
+                        ->type('file')
+                        ->title('File must be in csv format. Ex. localadmins.csv')
+                        ->help('The csv file MUST HAVE these fields and they need to be named accordingly to successfully import the local admins: <br>
+                            • firstname <br>
+                            • lastname <br>
+                            • phonenumber <br>
+                            • email <br>
+                            • password <br>
+                            • school <br>
+                            • state_province <br>
+                            • country <br>
+                            • county <br>')
+                ]),
+            ])
+            ->title('Mass Import Local Admins')
+            ->applyButton('Import')
+            ->withoutCloseButton(),
+
             Layout::rows([
 
                 Input::make('firstname')
@@ -150,7 +182,7 @@ class CreateLocaladminScreen extends Screen
 
 
             //check for duplicate email
-            if($this->validEmail($request)){
+            if($this->validEmail($request->input('email'))){
                 
                 //no duplicates found
                 User::create($userTableFields);
@@ -174,25 +206,138 @@ class CreateLocaladminScreen extends Screen
         }
     }
 
+    //this method will mass import schools from a csv file
+    public function massImport(Request $request){
+
+        try{
+
+            $path = $this->validFile($request);
+
+            if($path){
+
+                $localadmins = $this->csvToArray($path);
+
+                $keys = array_keys($localadmins[0]);
+
+                //check if the user has the required values in the csv file
+                foreach($this->requiredFields as $field){
+
+                    if(!in_array($field, $keys)){
+                        Toast::error('There are missing field(s) in your csv file.'); return;
+                    }
+                }
+
+                //loop through the array of schools and re-write the keys to insert in db
+                for ($i = 0; $i < count($localadmins); $i ++){
+
+                    if($this->validEmail($localadmins[$i]['email'])){
+                        
+                        $localadmins[$i]['school_id'] = $this->getSchoolID($localadmins[$i]['country'], $localadmins[$i]['school'], $localadmins[$i]['county'], $localadmins[$i]['state_province']);
+
+                        
+                        User::create(['firstname' => $localadmins[$i]['firstname'], 'lastname' => $localadmins[$i]['lastname'], 'phonenumber' => $localadmins[$i]['phonenumber'], 'email' => $localadmins[$i]['email'], 'password' => bcrypt($localadmins[$i]['password']), 'country' => $localadmins[$i]['country'], 'role' => 'localadmin', 'name' => $localadmins[$i]['firstname'], 'account_status' => 1]);
+                        
+                        User::where('email', $localadmins[$i]['email'])->update(['permissions' => '{"platform.index":true}']);
+
+                        $localadmins[$i]['user_id'] = User::where('email',$localadmins[$i]['email'])->get('id')->value('id');
+
+                        Localadmin::create(['firstname' => $localadmins[$i]['firstname'], 'lastname' => $localadmins[$i]['lastname'], 'phonenumber' => $localadmins[$i]['phonenumber'], 'email' => $localadmins[$i]['email'], 'school_id' => $localadmins[$i]['school_id'], 'user_id' => $localadmins[$i]['user_id'], 'account_status' => 1, 'school' => $localadmins[$i]['school']]);
+
+                    }else{
+                        array_push($this->dupes, $localadmins[$i]['email']);                    
+                    }
+                }
+
+                if(!empty($this->dupes)){
+                    $message = 'Accounts with these emails have not been added as they already have an account in our system: ';
+
+                    foreach($this->dupes as $email){
+
+                        $message .="| " . $email . " | ";
+                    }
+
+                    Alert::error($message);
+                }else{
+
+                    Toast::success('Local Admins imported successfully!');
+                }
+
+
+                return redirect()->route('platform.localadmin.list');
+            }
+        }catch(Exception $e){
+            
+            Alert::error('There was an error mass importing the local admins. Error Code: ' . $e->getMessage());
+        }
+    }
+
+    private function validFile(Request $request){
+
+        $path = '';
+
+        if(!is_null($request->file('localadmin_csv'))){
+
+            $path = $request->file('localadmin_csv')->getRealPath();
+
+            if(!is_null($path)){
+
+                $extension = $request->file('localadmin_csv')->extension();
+
+                if($extension != 'csv'){
+
+                    Toast::error('Incorrect file type.'); return false;
+                }else{
+
+                    return $path;
+                }
+
+            } else{
+                
+                Toast::error('An error has occured.'); return;
+            }
+
+        } else{
+
+            Toast::error('Upload a csv file to import local admins.'); return false;
+        }
+    }
+    
+    //this function will convert the csv file to an array
+    private function csvToArray($filename = '', $delimiter = ','){
+        
+        if (!file_exists($filename) || !is_readable($filename)){
+            Alert::error('There has been an error finding this file.');
+            return;
+        }
+
+        $header = null;
+        $data = array();
+
+        if (($handle = fopen($filename, 'r')) !== false){
+
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false){
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
     //check for duplicate emails
-    private function validEmail($request){
-        return count(User::where('email', $request->input('email'))->get()) == 0;
+    private function validEmail($email){
+        return count(User::where('email', $email)->get()) == 0;
     }
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getLocalAdminFields($request){
 
         try{
-
-            $school_id = School::where('school_name', $request->input('school'))
-                                ->where('county', $request->input('county'))
-                                ->where('state_province', $request->input('state_province'))
-                                ->where('country', $request->input('country'))
-                                ->get('id')->value('id');
-
-            if(is_null($school_id)){
-                throw New Exception('You are trying to enter a invalid school');
-            }
+            $school_id = $this->getSchoolIDByReq($request);
 
             $localadminTableFields = [
                 'firstname' => $request->input('firstname'),
@@ -231,4 +376,37 @@ class CreateLocaladminScreen extends Screen
         return $userTableFields;
     }
 
+    private function getSchoolIDByReq($request){
+        $school_id = School::where('school_name', $request->input('school'))
+                            ->where('county', $request->input('county'))
+                            ->where('state_province', $request->input('state_province'))
+                            ->where('country', $request->input('country'))
+                            ->get('id')->value('id');
+
+        if(is_null($school_id)){
+
+            throw New Exception('You are trying to enter a invalid school');
+
+        } else{
+
+            return $school_id;
+        }
+    }
+
+    private function getSchoolID($country, $school, $county, $state_province){
+        $school_id = School::where('school_name', $school)
+                            ->where('county', $county)
+                            ->where('state_province', $state_province)
+                            ->where('country', $country)
+                            ->get('id')->value('id');
+
+        if(is_null($school_id)){
+
+            throw New Exception('You are trying to enter a invalid school');
+
+        } else{
+
+            return $school_id;
+        }
+    }
 }

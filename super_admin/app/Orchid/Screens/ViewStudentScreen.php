@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
+use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
@@ -28,7 +29,7 @@ class ViewStudentScreen extends Screen
     {
         return [
             'students' => Student::latest('students.created_at')
-            ->filter(request(['country', 'state_province', 'school', 'school_board', 'ticketstatus']))
+            ->filter(request(['country', 'state_province', 'school', 'school_board', 'event_id', 'ticketstatus']))
             ->where('students.account_status', 1)->paginate(10)
         ];
     }
@@ -86,6 +87,11 @@ class ViewStudentScreen extends Screen
                             'Paid' => 'Paid',
                             'Unpaid' => 'Unpaid'
                         ]),
+
+                    Select::make('event_id')
+                        ->title('Event:')
+                        ->empty('No selection')
+                        ->fromQuery(Events::query(), 'event_name'),
                     
                     Select::make('school')
                         ->title('School')
@@ -124,6 +130,7 @@ class ViewStudentScreen extends Screen
                     .'&school=' . $request->get('school')
                     .'&country=' . $request->get('country')
                     .'&school_board=' . $request->get('school_board')
+                    .'&event_id=' . $request->get('event_id')
                     .'&state_province=' . $request->get('state_province'));
     }
 
