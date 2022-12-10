@@ -154,7 +154,6 @@ class EditStudentScreen extends Screen
                     ->title('Event')
                     ->horizontal()
                     ->displayAppend('full')
-                    ->required()
                     ->empty('No Selection')
                     ->fromModel(Events::class, 'id')
                     ->value($this->student->event_id),
