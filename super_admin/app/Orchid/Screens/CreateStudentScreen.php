@@ -100,7 +100,7 @@ class CreateStudentScreen extends Screen
                             • county <br>')
                 ]),
             ])
-            ->title('Mass Import Schools')
+            ->title('Mass Import Students')
             ->applyButton('Import')
             ->withoutCloseButton(),
 
@@ -247,6 +247,7 @@ class CreateStudentScreen extends Screen
             Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
     }
+    
     //this method will mass import schools from a csv file
     public function massImport(Request $request){
 
