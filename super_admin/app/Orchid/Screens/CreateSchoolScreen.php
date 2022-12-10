@@ -90,6 +90,7 @@ class CreateSchoolScreen extends Screen
                             • county <br>
                             • address <br>
                             • city_municipality <br>
+                            • country <br>
                             • state_province <br>
                             • zip_postal <br>
                             • metropolitan_region <br>
@@ -100,7 +101,7 @@ class CreateSchoolScreen extends Screen
                             • school_data <br>')
                 ]),
             ])
-            ->title('Mass Import Schools')
+            ->title('Mass Import Students')
             ->applyButton('Import')
             ->withoutCloseButton(),
 
@@ -316,7 +317,7 @@ class CreateSchoolScreen extends Screen
                 }
             }
 
-            //loop through the array of schools and re-write the keys
+            //loop through the array of schools and re-write the keys to insert in db
             for ($i = 0; $i < count($schools); $i ++){
 
                 $data[] = [
@@ -331,6 +332,7 @@ class CreateSchoolScreen extends Screen
                     'metropolitan_region' => $schools[$i]['metropolitan_region'],
                     'phone_number' => $schools[$i]['phone_number'],
                     'fax' => $schools[$i]['fax'],
+                    'country' => $schools[$i]['country'],
                     'website' => $schools[$i]['website'],
                     'total_students' => $schools[$i]['total_students'],
                     'school_data' => $schools[$i]['school_data'],
@@ -348,7 +350,6 @@ class CreateSchoolScreen extends Screen
             
             Alert::error('There was an error mass importing the schools. Error Code: ' . $e);
         }
-
     }
 
     //this function will convert the csv file to an array
