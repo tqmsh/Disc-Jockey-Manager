@@ -260,7 +260,7 @@ class CreateStudentScreen extends Screen
 
                 $keys = array_keys($students[0]);
 
-                //check if the user has the required values
+                //check if the user has the required values in the csv file
                 foreach($this->requiredFields as $field){
 
                     if(!in_array($field, $keys)){
@@ -339,7 +339,7 @@ class CreateStudentScreen extends Screen
 
         } else{
 
-            Toast::error('Upload a csv file to import schools.'); return false;
+            Toast::error('Upload a csv file to import students.'); return false;
         }
     }
     

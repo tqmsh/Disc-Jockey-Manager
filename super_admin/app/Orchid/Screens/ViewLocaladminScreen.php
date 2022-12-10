@@ -52,7 +52,7 @@ class ViewLocaladminScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New Local Admin')
+            Link::make('Add New Local Admins')
                 ->icon('plus')
                 ->route('platform.localadmin.create'),
 

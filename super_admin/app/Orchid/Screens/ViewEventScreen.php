@@ -48,7 +48,7 @@ class ViewEventScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New Event')
+            Link::make('Add New Events')
                 ->icon('plus')
                 ->route('platform.event.create'),
 
