@@ -282,7 +282,7 @@ class CreateStudentScreen extends Screen
 
                         $students[$i]['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
 
-                        Student::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'grade' => $students[$i]['grade'], 'school_id' => $students[$i]['school_id'], 'user_id' => $students[$i]['user_id'], 'account_status' => 1, 'school' => $students[$i]['school']]);
+                        Student::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'grade' => $students[$i]['grade'], 'school_id' => $students[$i]['school_id'], 'allergies' => $students[$i]['allergies'], 'user_id' => $students[$i]['user_id'], 'account_status' => 1, 'school' => $students[$i]['school']]);
 
                     }else{
                         array_push($this->dupes, $students[$i]['email']);                    
