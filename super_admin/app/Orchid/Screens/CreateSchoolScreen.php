@@ -21,7 +21,7 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateSchoolScreen extends Screen
 {
-    public $requiredFields = ['nces_id', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
+    public $requiredFields = ['nces_id', 'country', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
     /**
      * Query data.
      *
@@ -206,14 +206,12 @@ class CreateSchoolScreen extends Screen
                 Input::make('firstname')
                     ->title('Teacher First Name')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->placeholder('Ex. John'),
 
                 Input::make('lastname')
                     ->title('Teacher Last Name')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->placeholder('Ex. Doe'),
 
@@ -221,7 +219,6 @@ class CreateSchoolScreen extends Screen
                 Input::make('teacher_email')
                     ->title('Teacher Email')
                     ->type('email')
-                    ->required()
                     ->horizontal()
                     ->placeholder('Ex. johndoe@gmail.com'),
 
@@ -229,7 +226,6 @@ class CreateSchoolScreen extends Screen
                     ->title('Teacher Contact Number')
                     ->type('text')
                     ->mask('(999) 999-9999')
-                    ->required()
                     ->horizontal()
                     ->placeholder('Ex. (613) 852-4563'),  
 

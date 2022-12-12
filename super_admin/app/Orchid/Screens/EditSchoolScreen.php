@@ -175,34 +175,30 @@ class EditSchoolScreen extends Screen
                 Input::make('firstname')
                     ->title('Teacher First Name')
                     ->type('text')
-                    ->required()
                     ->horizontal()
-                    ->value($this->user->firstname)
+                    ->value((is_null($this->user)) ? 'N/A' : $this->user->firstname)
                     ->placeholder('Ex. John'),
 
                 Input::make('lastname')
                     ->title('Teacher Last Name')
                     ->type('text')
-                    ->required()
                     ->horizontal()
-                    ->value($this->user->lastname)
+                    ->value((is_null($this->user)) ? 'N/A' : $this->user->lastname)
                     ->placeholder('Ex. Doe'),
 
                 Input::make('teacher_email')
                     ->title('Teacher Email')
                     ->type('email')
-                    ->required()
                     ->horizontal()
-                    ->value($this->user->email)
+                    ->value((is_null($this->user)) ? 'NA@NA.com' : $this->user->teacher_email)
                     ->placeholder('Ex. johndoe@gmail.com'),
 
                 Input::make('teacher_cell')
                     ->title('Teacher Contact Number')
                     ->type('text')
                     ->mask('(999) 999-9999')
-                    ->required()
                     ->horizontal()
-                    ->value($this->user->phonenumber)
+                    ->value((is_null($this->user)) ? '' : $this->user->teacher_cell)
                     ->placeholder('Ex. (613) 852-4563'), 
 
                 Input::make('total_students')
