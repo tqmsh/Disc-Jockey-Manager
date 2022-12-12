@@ -21,7 +21,7 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateSchoolScreen extends Screen
 {
-    public $requiredFields = ['nces_id', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
+    public $requiredFields = ['nces_id', 'country', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
     /**
      * Query data.
      *
@@ -332,7 +332,7 @@ class CreateSchoolScreen extends Screen
                     'metropolitan_region' => $schools[$i]['metropolitan_region'],
                     'phone_number' => $schools[$i]['phone_number'],
                     'fax' => $schools[$i]['fax'],
-                    'country' => (isset($schools[$i]['country'])) ? $schools[$i]['country'] : 'N/A',
+                    'country' => $schools[$i]['country'],
                     'website' => $schools[$i]['website'],
                     'total_students' => $schools[$i]['total_students'],
                     'school_data' => $schools[$i]['school_data'],
