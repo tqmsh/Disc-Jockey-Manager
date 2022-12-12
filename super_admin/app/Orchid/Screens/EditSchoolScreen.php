@@ -190,7 +190,7 @@ class EditSchoolScreen extends Screen
                     ->title('Teacher Email')
                     ->type('email')
                     ->horizontal()
-                    ->value((is_null($this->user)) ? 'N/A' : $this->user->teacher_email)
+                    ->value((is_null($this->user)) ? 'NA@NA.com' : $this->user->teacher_email)
                     ->placeholder('Ex. johndoe@gmail.com'),
 
                 Input::make('teacher_cell')
@@ -198,7 +198,7 @@ class EditSchoolScreen extends Screen
                     ->type('text')
                     ->mask('(999) 999-9999')
                     ->horizontal()
-                    ->value((is_null($this->user)) ? 'N/A' : $this->user->teacher_cell)
+                    ->value((is_null($this->user)) ? '' : $this->user->teacher_cell)
                     ->placeholder('Ex. (613) 852-4563'), 
 
                 Input::make('total_students')
