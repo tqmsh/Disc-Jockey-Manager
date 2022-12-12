@@ -175,7 +175,6 @@ class EditSchoolScreen extends Screen
                 Input::make('firstname')
                     ->title('Teacher First Name')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->value((is_null($this->user)) ? 'N/A' : $this->user->firstname)
                     ->placeholder('Ex. John'),
@@ -183,7 +182,6 @@ class EditSchoolScreen extends Screen
                 Input::make('lastname')
                     ->title('Teacher Last Name')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->value((is_null($this->user)) ? 'N/A' : $this->user->lastname)
                     ->placeholder('Ex. Doe'),
@@ -191,7 +189,6 @@ class EditSchoolScreen extends Screen
                 Input::make('teacher_email')
                     ->title('Teacher Email')
                     ->type('email')
-                    ->required()
                     ->horizontal()
                     ->value((is_null($this->user)) ? 'N/A' : $this->user->teacher_email)
                     ->placeholder('Ex. johndoe@gmail.com'),
@@ -200,7 +197,6 @@ class EditSchoolScreen extends Screen
                     ->title('Teacher Contact Number')
                     ->type('text')
                     ->mask('(999) 999-9999')
-                    ->required()
                     ->horizontal()
                     ->value((is_null($this->user)) ? 'N/A' : $this->user->teacher_cell)
                     ->placeholder('Ex. (613) 852-4563'), 
