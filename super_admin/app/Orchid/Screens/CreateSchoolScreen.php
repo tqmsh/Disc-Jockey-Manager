@@ -332,7 +332,7 @@ class CreateSchoolScreen extends Screen
                     'metropolitan_region' => $schools[$i]['metropolitan_region'],
                     'phone_number' => $schools[$i]['phone_number'],
                     'fax' => $schools[$i]['fax'],
-                    'country' => $schools[$i]['country'],
+                    'country' => (isset($schools[$i]['country'])) ? $schools[$i]['country'] : 'N/A',
                     'website' => $schools[$i]['website'],
                     'total_students' => $schools[$i]['total_students'],
                     'school_data' => $schools[$i]['school_data'],
