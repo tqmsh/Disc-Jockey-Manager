@@ -32,25 +32,23 @@ class PlatformProvider extends OrchidServiceProvider
     {
         return [
                 
+            //MONEY MAKER
+            Menu::make('Dashboard')
+            ->icon('monitor')
+            ->title('CORE')
+            ->route('platform.example'),
+
             //student nav option
             Menu::make('Events')
-                ->icon('diamond')
-                ->title('CORE')
-                ->route('platform.event.list'),
+            ->icon('diamond')
+            ->route('platform.event.list'),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
                 ->icon('arrow-down')
                 ->size()
                 ->list([
-                        Menu::make('Example screen')
-                            ->icon('monitor')
-                            ->route('platform.example')
-                            ->title('Navigation')
-                            ->badge(function () {
-                                return 6;
-                            }),
-
+                    
                         Menu::make('Basic Elements')
                             ->title('Form controls')
                             ->icon('note')

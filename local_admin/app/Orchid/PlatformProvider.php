@@ -31,12 +31,17 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
-                
+            
+            //MONEY MAKER
+            Menu::make('Dashboard')
+            ->icon('monitor')
+            ->title('CORE')
+            ->route('platform.example'),
+
             //student nav option
             Menu::make('Events')
-                ->icon('diamond')
-                ->title('CORE')
-                ->route('platform.event.list'),
+            ->icon('diamond')
+            ->route('platform.event.list'),
 
             //student nav option
             Menu::make('Student List')
@@ -51,20 +56,13 @@ class PlatformProvider extends OrchidServiceProvider
                             return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
                         })
                 ->route('platform.pendingstudent.list'),
+            
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
                 ->icon('arrow-down')
                 ->size()
-                ->list([
-                        Menu::make('Example screen')
-                            ->icon('monitor')
-                            ->route('platform.example')
-                            ->title('Navigation')
-                            ->badge(function () {
-                                return 6;
-                            }),
-
+                ->list([    
                         Menu::make('Email sender')
                             ->icon('envelope-letter')
                             ->route('platform.email')
