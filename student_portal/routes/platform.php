@@ -82,11 +82,11 @@ Route::screen('roles', RoleListScreen::class)
     });
 
 // Example...
-Route::screen('example', ExampleScreen::class)
+Route::screen('dashboard', ExampleScreen::class)
     ->name('platform.example')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
-            ->push('Example screen');
+            ->push('Dashboard');
     });
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
