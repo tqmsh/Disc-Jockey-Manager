@@ -74,6 +74,7 @@ class ViewEventScreen extends Screen
     public function layout(): iterable
     {
         return [
+            
             Layout::rows([
 
                 Group::make([
