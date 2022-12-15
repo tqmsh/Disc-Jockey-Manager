@@ -33,7 +33,7 @@ class PlatformProvider extends OrchidServiceProvider
 
             //MONEY MAKER
             Menu::make('Dashboard')
-            ->icon('monitor')
+            ->icon('home')
             ->title('CORE')
             ->route('platform.example'),
             

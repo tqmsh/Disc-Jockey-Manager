@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
+use Orchid\Support\Facades\Dashboard;
 
 class LoginController extends Controller
 {
@@ -79,8 +80,8 @@ class LoginController extends Controller
                 $request->filled('remember')
             );
 
-            if ($auth) {
 
+            if ($auth) {
                 $user = User::where('email', $request->input('email'))->first();
 
                 if(is_null($user->role)==true || strcmp($user->role, 'vendor') !== 0 || is_null($user->permissions)==true){
@@ -102,6 +103,7 @@ class LoginController extends Controller
             throw ValidationException::withMessages([
                 'email' => __('The details you entered did not match our records. Please double-check and try again.'),
             ]);
+            
         }catch(Exception $e){
             throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
         }
