@@ -20,6 +20,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\Password;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Dashboard;
 use Orchid\Screen\Actions\ModalToggle;
 
 class CreateStudentScreen extends Screen
@@ -227,7 +228,6 @@ class CreateStudentScreen extends Screen
                 
                 //no duplicates found
                 User::create($userTableFields);
-                User::where('email', $request->input('email'))->update(['permissions' => '{"platform.index":true}']);
 
                 $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
                 
@@ -276,11 +276,8 @@ class CreateStudentScreen extends Screen
                         
                         $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['state_province']);
 
+                        User::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'password' => bcrypt($students[$i]['password']), 'country' => $students[$i]['country'], 'role' => 'student', 'name' => $students[$i]['firstname'], 'account_status' => 1, 'permissions' => Dashboard::getAllowAllPermission()]);
                         
-                        User::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'password' => bcrypt($students[$i]['password']), 'country' => $students[$i]['country'], 'role' => 'student', 'name' => $students[$i]['firstname'], 'account_status' => 1]);
-                        
-                        User::where('email', $students[$i]['email'])->update(['permissions' => '{"platform.index":true}']);
-
                         $students[$i]['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
 
                         Student::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'grade' => $students[$i]['grade'], 'school_id' => $students[$i]['school_id'], 'allergies' => $students[$i]['allergies'], 'user_id' => $students[$i]['user_id'], 'account_status' => 1, 'school' => $students[$i]['school']]);
@@ -443,6 +440,7 @@ class CreateStudentScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'account_status' => 1,
+            'permissions' => Dashboard::getAllowAllPermission(),
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
             'role' =>'student',
