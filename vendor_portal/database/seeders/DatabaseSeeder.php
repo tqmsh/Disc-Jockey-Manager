@@ -15,7 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::create(['name' => 'Super Admin 3', 'firstname'=>'Admin003','lastname'=>'Admin003', 'email' => 'admin003@promplanner.com', 'account_status' => 1, 'password' => bcrypt('admin003$')]);
+
+        // \App\Models\User::create(['name' => 'Vendor 1', 'firstname'=>'Vendor 1','lastname'=>'Vendor 1', 'email' => 'vendor001@promplanner.com', 'account_status' => 1, 
+        // 'password' => bcrypt('vendor001$$')]);
 
         //  \App\Models\User::factory(20)->create();
         //  \App\Models\School::factory(10)->create();
