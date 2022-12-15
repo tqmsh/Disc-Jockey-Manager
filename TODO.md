@@ -1,0 +1,1 @@
+- add the new tables as models in the Models folder in App folder. Do this by using the php artisan command
