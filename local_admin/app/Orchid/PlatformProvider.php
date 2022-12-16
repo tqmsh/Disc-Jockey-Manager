@@ -107,11 +107,6 @@ class PlatformProvider extends OrchidServiceProvider
                             ->badge(function () {
                                 return Dashboard::version();
                             }, Color::DARK()),
-
-                        Menu::make(__('Roles'))
-                            ->icon('lock')
-                            ->route('platform.systems.roles')
-                            ->permission('platform.systems.roles'),
                 ]),
         ];
     }
