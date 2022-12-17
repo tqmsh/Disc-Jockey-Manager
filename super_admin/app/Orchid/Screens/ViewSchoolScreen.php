@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
+use App\Models\Region;
 use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
@@ -30,7 +31,7 @@ class ViewSchoolScreen extends Screen
     public function query(Request $request): iterable
     {
         return [
-            'schools' => School::latest('schools.created_at')->filter(request(['country', 'state_province', 'school', 'county']))->paginate(10)
+            'schools' => School::latest('schools.created_at')->filter(request(['country', 'region_id', 'state_province', 'school', 'county']))->paginate(10)
         ];
     }
 
@@ -85,6 +86,11 @@ class ViewSchoolScreen extends Screen
                         ->empty('No selection')
                         ->fromModel(School::class, 'school_name', 'school_name'),
 
+                    Select::make('region_id')
+                        ->title('Region')
+                        ->empty('No selection')
+                        ->fromQuery(Region::query(), 'name'),
+
                     Select::make('country')
                         ->title('Country')
                         ->empty('No selection')
@@ -116,6 +122,7 @@ class ViewSchoolScreen extends Screen
         return redirect('/admin/schools?' 
                     .'&school=' . $request->get('school')
                     .'&county=' . $request->get('county')
+                    .'&region_id=' . $request->get('region_id')
                     .'&country=' . $request->get('country')
                     .'&state_province=' . $request->get('state_province'));
     }

@@ -23,6 +23,10 @@ class School extends Model
                 $query ->where('school_name', 'like', '%' . request('school') . '%');
             }
 
+            if(isset($filters['region_id'])){
+                $query ->where('region_id', request('region_id'));
+            }
+
             if(isset($filters['country'])){
                 $query->where('country', 'like', '%' . request('country') . '%');
             }
