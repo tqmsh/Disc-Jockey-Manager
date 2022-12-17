@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
+use App\Models\Region;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -92,6 +93,14 @@ class EditSchoolScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->school->country),
+
+                Select::make('region_id')
+                    ->title('Region')
+                    ->required()
+                    ->horizontal()
+                    ->empty('No selection')
+                    ->fromQuery(Region::query(), 'name')
+                    ->value($this->school->region_id),
 
                 Input::make('state_province')
                     ->title('State/Province')

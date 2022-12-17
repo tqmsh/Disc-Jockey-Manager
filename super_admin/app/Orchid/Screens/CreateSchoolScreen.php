@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 use DateTime;
 use Exception;
 use App\Models\User;
+use App\Models\Region;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
@@ -135,6 +137,13 @@ class CreateSchoolScreen extends Screen
                     ->horizontal()
                     ->placeholder('Ex. Ontario'),
 
+                Select::make('region_id')
+                    ->title('Region')
+                    ->required()
+                    ->horizontal()
+                    ->empty('No selection')
+                    ->fromQuery(Region::query(), 'name'),
+
                 Input::make('school_board')
                     ->title('School Board')
                     ->type('text')
@@ -207,24 +216,28 @@ class CreateSchoolScreen extends Screen
                     ->title('Teacher First Name')
                     ->type('text')
                     ->horizontal()
+                    ->required()
                     ->placeholder('Ex. John'),
 
                 Input::make('lastname')
                     ->title('Teacher Last Name')
                     ->type('text')
                     ->horizontal()
+                    ->required()
                     ->placeholder('Ex. Doe'),
 
 
                 Input::make('teacher_email')
                     ->title('Teacher Email')
                     ->type('email')
+                    ->required()
                     ->horizontal()
                     ->placeholder('Ex. johndoe@gmail.com'),
 
                 Input::make('teacher_cell')
                     ->title('Teacher Contact Number')
                     ->type('text')
+                    ->required()
                     ->mask('(999) 999-9999')
                     ->horizontal()
                     ->placeholder('Ex. (613) 852-4563'),  
@@ -233,7 +246,6 @@ class CreateSchoolScreen extends Screen
                     ->title('Total Students')
                     ->type('number')
                     ->horizontal()
-                    ->required()
                     ->placeholder('Ex. 1024'),
             ]),
         ];
@@ -376,24 +388,8 @@ class CreateSchoolScreen extends Screen
 
     //this functions returns the values that need to be inserted in the school table in the db
     private function getSchoolFields($request){
-        $schoolTableFields = [
-            'nces_id' => $request->input('nces_id'),
-            'school_name' => $request->input('school_name'),
-            'country' => $request->input('country'),
-            'state_province' => $request->input('state_province'),
-            'address' => $request->input('address'),
-            'zip_postal' => $request->input('zip_postal'),
-            'fax' => $request->input('fax'),
-            'metropolitan_region' => $request->input('metropolitan_region'),
-            'county' => $request->input('county'),
-            'website' => $request->input('website'),
-            'school_data' => $request->input('school_data'),
-            'total_students' => $request->input('total_students'),
-            'city_municipality' => $request->input('city_municipality'),
-            'school_board' => $request->input('school_board'),
-            'phone_number' => $request->input('phone_number'),
-            'teacher_id' => null,
-        ];
+
+        $schoolTableFields = $request->except(['firstname', 'lastname', 'teacher_email', 'teacher_cell']);
         
         return $schoolTableFields;
     }

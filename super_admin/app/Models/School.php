@@ -13,7 +13,7 @@ class School extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['school_name', 'county', 'country', 'state_province', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'metropolitan_region', 'city_municipality', 'total_students', 'school_data', 'website', 'teacher_id', 'nces_id', 'created_at'];
+    protected $fillable = ['school_name', 'region_id', 'county', 'country', 'state_province', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'metropolitan_region', 'city_municipality', 'total_students', 'school_data', 'website', 'teacher_id', 'nces_id', 'created_at'];
 
     public function scopeFilter($query, array $filters){
 
@@ -21,6 +21,10 @@ class School extends Model
 
             if(isset($filters['school'])){
                 $query ->where('school_name', 'like', '%' . request('school') . '%');
+            }
+
+            if(isset($filters['region_id'])){
+                $query ->where('region_id', request('region_id'));
             }
 
             if(isset($filters['country'])){

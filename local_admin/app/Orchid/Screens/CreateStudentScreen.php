@@ -145,34 +145,6 @@ class CreateStudentScreen extends Screen
                     ->required()
                     ->horizontal(),
 
-                Select::make('school')
-                    ->title('School')
-                    ->required()
-                    ->empty('No Selection')
-                    ->horizontal()
-                    ->fromModel(School::class, 'school_name', 'school_name'),
-
-                Select::make('country')
-                    ->title('Country')
-                    ->required()
-                    ->horizontal()
-                    ->required()
-                    ->fromModel(School::class, 'country', 'country'),
-
-                Select::make('state_province')
-                    ->title('State/Province')
-                    ->horizontal()
-                    ->empty('No Selection')
-                    ->required()
-                    ->fromModel(School::class, 'state_province', 'state_province'),
-
-                Select::make('county')
-                    ->title('County')
-                    ->horizontal()
-                    ->required()
-                    ->empty('No Selection')
-                    ->fromModel(School::class, 'county', 'county'),
-
                 Select::make('grade')
                     ->title('Grade')
                     ->horizontal()
@@ -224,7 +196,6 @@ class CreateStudentScreen extends Screen
                 
                 //no duplicates found
                 User::create($userTableFields);
-                User::where('email', $request->input('email'))->update(['permissions' => '{"platform.index":true}']);
 
                 $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
                 
@@ -371,15 +342,16 @@ class CreateStudentScreen extends Screen
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
-        $school_id = $this->getSchoolIDByReq($request);
+
+        $school = School::where('id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->first();
 
         $studentTableFields = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'phonenumber' => $request->input('phonenumber'),
-            'school' => $request->input('school'),
-            'school_id' => $school_id,
+            'school' => $school->school_name,
+            'school_id' => $school->id,
             'grade' => $request->input('grade'),
             'account_status' =>1,
             'event_id' => $request->input('event_id'),
@@ -400,7 +372,7 @@ class CreateStudentScreen extends Screen
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
             'name' => $request->input('name'),
-            'country' => $request->input('country'),
+            'country' => Auth::user()->country,
             'permissions' => Dashboard::getAllowAllPermission(),
             'account_status' => 1,
             'phonenumber' => $request->input('phonenumber'),
@@ -409,22 +381,5 @@ class CreateStudentScreen extends Screen
         ];
         
         return $userTableFields;
-    }
-
-    private function getSchoolIDByReq($request){
-        $school_id = School::where('school_name', $request->input('school'))
-                            ->where('county', $request->input('county'))
-                            ->where('state_province', $request->input('state_province'))
-                            ->where('country', $request->input('country'))
-                            ->get('id')->value('id');
-
-        if(is_null($school_id)){
-
-            throw New Exception('You are trying to enter a invalid school');
-
-        } else{
-
-            return $school_id;
-        }
     }
 }
