@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
+use App\Models\Region;
 use App\Models\School;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -51,6 +52,12 @@ class ViewSchoolLayout extends Table
             TD::make('country', 'Country')
                 ->render(function (School $school) {
                     return Link::make($school->country)
+                        ->route('platform.school.edit', $school);
+                }),
+                
+            TD::make('region_id', 'Region')
+                ->render(function (School $school) {
+                    return Link::make(Region::find($school->region_id)->name)
                         ->route('platform.school.edit', $school);
                 }),
 
