@@ -59,14 +59,6 @@
     {!! \Orchid\Screen\Fields\Input::make('phonenumber')->type('text')->required()->mask('(999) 999-9999')->tabindex(1)->autofocus()->placeholder(__('Enter your phone number')) !!}
 </div>
 
-<div class="mb-3">
-
-    <label class="form-label">
-        {{ __('School') }}
-    </label>
-
-    {!! \Orchid\Screen\Fields\Select::make('school')->fromModel(App\Models\School::class, 'school_name', 'school_name')->autofocus()->empty('No Selection')!!}
-</div>
 
 <div class="mb-3">
 
@@ -95,25 +87,6 @@
 
     {!! \Orchid\Screen\Fields\Select::make('county')->fromModel(App\Models\School::class, 'county', 'county')->autofocus()->empty('No Selection') !!}
 </div>
-
-<div class="mb-3">
-
-    <label class="form-label">
-        {{ __('Grade') }}
-    </label>
-
-    {!! \Orchid\Screen\Fields\Select::make('grade')->options(['9' => 9, '10' => 10, '11' => 11, '12' => 12])->autofocus()->empty('No Selection') !!}
-</div>
-
-<div class="mb-3">
-
-    <label class="form-label">
-        {{ __('Allergies') }}
-    </label>
-
-    {!! \Orchid\Screen\Fields\Input::make('allergies')->autofocus()->placeholder('Ex. Peanuts') !!}
-</div>
-
 
 <div class="mt-5 row align-items-center">
     <div class="col-md-6 col-xs-12">
