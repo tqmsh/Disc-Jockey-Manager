@@ -1,3 +1,12 @@
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="mb-3">
     
     <label class="form-label">
@@ -28,10 +37,19 @@
 <div class="mb-3">
 
     <label class="form-label">
-        {{ __('Email Address') }}
+        {{ __('Company Name') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Input::make('email')->type('email')->required()->tabindex(1)->autofocus()->inputmode('email')->placeholder(__('Enter your email')) !!}
+    {!! \Orchid\Screen\Fields\Input::make('company_name')->type('text')->required()->tabindex(1)->autofocus()->placeholder(__('Enter your company name')) !!}
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">
+        {{ __('Company Email') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Input::make('email')->type('email')->required()->tabindex(1)->autofocus()->inputmode('email')->placeholder(__('Enter your company email')) !!}
 </div>
 
 <div class="mb-3">
@@ -56,9 +74,26 @@
         {{ __('Phone Number') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Input::make('phonenumber')->type('text')->required()->mask('(999) 999-9999')->tabindex(1)->autofocus()->placeholder(__('Enter your phone number')) !!}
+    {!! \Orchid\Screen\Fields\Input::make('phone')->type('text')->required()->mask('(999) 999-9999')->tabindex(1)->autofocus()->placeholder(__('Enter your company phone number')) !!}
 </div>
 
+<div class="mb-3">
+
+    <label class="form-label">
+        {{ __('Address') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Input::make('address')->type('text')->required()->tabindex(1)->autofocus()->placeholder(__('Enter your company address')) !!}
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">
+        {{ __('Catagory') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Select::make('category_id')->fromQuery(App\Models\Catagories::query(), 'name')->autofocus()->empty('No Selection') !!}
+</div>
 
 <div class="mb-3">
 
@@ -82,10 +117,28 @@
 <div class="mb-3">
 
     <label class="form-label">
-        {{ __('County') }}
+        {{ __('City') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('county')->fromModel(App\Models\School::class, 'county', 'county')->autofocus()->empty('No Selection') !!}
+    {!! \Orchid\Screen\Fields\Input::make('city')->type('text')->required()->tabindex(1)->autofocus()->placeholder(__('Enter your city')) !!}
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">
+        {{ __('Zip/Postal') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Input::make('zip_postal')->type('text')->required()->tabindex(1)->autofocus()->placeholder(__('Enter your Zip/Postal Code')) !!}
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">
+        {{ __('Company Website') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Input::make('website')->type('url')->tabindex(1)->autofocus()->placeholder(__('Enter your company website')) !!}
 </div>
 
 <div class="mt-5 row align-items-center">

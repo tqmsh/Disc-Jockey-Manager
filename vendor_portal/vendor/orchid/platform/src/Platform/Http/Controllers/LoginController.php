@@ -8,6 +8,7 @@ use Exception;
 use App\Models\User;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\Vendors;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
@@ -16,12 +17,12 @@ use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
+use Orchid\Support\Facades\Dashboard;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
-use Orchid\Support\Facades\Dashboard;
 
 class LoginController extends Controller
 {
@@ -162,82 +163,58 @@ class LoginController extends Controller
 
     public function register(Request $request){
 
-            //$request->validate will automatically validate unique emails and other specefied validations
-            $formFields = $request->validate([
-                'name' => ['required'],
-                'firstname' => ['required'],
-                'lastname' => ['required', 'min:3'],
-                'email' => ['required', 'email', Rule::unique('users', 'email')],
-                'password' => 'required|confirmed|min:6',
-                'password_confirmation' => ['required'],
-                'phonenumber' => ['required'],
-                'school' => ['required'],
-                'country' => ['required'],
-                'state_province' => ['required'],
-                'county' => ['required'],
-                'grade' => ['required'],
-                'allergies' => ['nullable'],
-            ]);
+        //$request->validate will automatically validate unique emails and other specefied validations
+        $formFields = $request->validate([
+            'name' => ['required'],
+            'firstname' => ['required'],
+            'lastname' => ['required'],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'password' => 'required|confirmed|min:6',
+            'password_confirmation' => ['required'],
+            'company_name' => ['required'],
+            'phone' => ['required'],
+            'address' => ['required'],
+            'country' => ['required'],
+            'city' => ['required'],
+            'category_id' => 'nullable',
+            'zip_postal' => ['required'],
+            'state_province' => ['required'],
+        ]);
+
+        // Hash Password
+        $formFields['password'] = bcrypt($formFields['password']);
+
+        try{
     
-            // Hash Password
-            $formFields['password'] = bcrypt($formFields['password']);
+            $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']);
+
+            $userTableFields['password'] = $formFields['password'];
+
+            $userTableFields['role'] = 'vendor';
+
+            $userCreateSuccess = User::create($userTableFields);
+
+            if($userCreateSuccess){
+                
+                $vendorTableFields = $request->except(['firstname', 'lastname', 'name', 'password', 'password_confirmation']);
+
+                $vendorTableFields['user_id'] = User::where('email', $vendorTableFields['email'])->get('id')->value('id');
+
+                $vendorCreateSuccess = Vendors::create($vendorTableFields);
+
+                if($vendorCreateSuccess){
+                    Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
             
-            try{
-
-                //check if the school the user entered is valid
-                $school_id = School::where('school_name', $formFields['school'])
-                                    ->where('county',  $formFields['county'])
-                                    ->where('state_province', $formFields['state_province'])
-                                    ->where('country', $formFields['country'])
-                                    ->get('id')->value('id');
-
-            }catch(Exception $e){
-
-                Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
-    
-                return redirect('/admin/register');
-            }
-
-    
-            if(is_null($school_id)){
-
-                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
-    
-                return redirect('/admin/register');
-
-            }else{
-
-                try{
-
-                    $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
-                    $userTableFields['password'] = $formFields['password'];
-                    $userTableFields['role'] = 'student';
-
-                    $userCreateSuccess = User::create($userTableFields);
-    
-                    if($userCreateSuccess){
-                        
-                        $studentTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school', 'grade', 'allergies']);
-                        $studentTableFields['school_id'] = $school_id;
-                        $studentTableFields['user_id'] = User::where('email', $studentTableFields['email'])->get('id')->value('id');
-
-
-                        $studentCreateSuccess = Student::create($studentTableFields);
-
-                        if($studentCreateSuccess){
-                            Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
-                    
-                            return redirect('/admin/login');  
-                        }
-                    }
-
-                }catch(Exception $e){
-
-                    Session::flash('message', 'There was an error creating your account. Please contact one of the admins of Prom Planner.' . $e);
-            
-                    return redirect('/admin/register');
+                    return redirect('/admin/login');  
                 }
             }
+
+        }catch(Exception $e){
+
+            Session::flash('message', 'There was an error creating your account. Please contact one of the admins of Prom Planner.' . $e->getMessage());
+    
+            return redirect('/admin/register');
+        }
     }
 
     /**
