@@ -171,32 +171,14 @@ class LoginController extends Controller
                 'password' => 'required|confirmed|min:6',
                 'password_confirmation' => ['required'],
                 'phonenumber' => ['required'],
-                'school' => ['required'],
                 'country' => ['required'],
                 'state_province' => ['required'],
-                'county' => ['required'],
-                'grade' => ['required'],
-                'allergies' => ['nullable'],
             ]);
     
             // Hash Password
             $formFields['password'] = bcrypt($formFields['password']);
-            
-            try{
 
-                //check if the school the user entered is valid
-                $school_id = School::where('school_name', $formFields['school'])
-                                    ->where('county',  $formFields['county'])
-                                    ->where('state_province', $formFields['state_province'])
-                                    ->where('country', $formFields['country'])
-                                    ->get('id')->value('id');
-
-            }catch(Exception $e){
-
-                Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
-    
-                return redirect('/admin/register');
-            }
+            $school_id = 1;
 
     
             if(is_null($school_id)){
@@ -209,8 +191,10 @@ class LoginController extends Controller
 
                 try{
 
-                    $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
+                    $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']);
+
                     $userTableFields['password'] = $formFields['password'];
+
                     $userTableFields['role'] = 'student';
 
                     $userCreateSuccess = User::create($userTableFields);
@@ -218,9 +202,10 @@ class LoginController extends Controller
                     if($userCreateSuccess){
                         
                         $studentTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school', 'grade', 'allergies']);
-                        $studentTableFields['school_id'] = $school_id;
-                        $studentTableFields['user_id'] = User::where('email', $studentTableFields['email'])->get('id')->value('id');
 
+                        $studentTableFields['school_id'] = $school_id;
+
+                        $studentTableFields['user_id'] = User::where('email', $studentTableFields['email'])->get('id')->value('id');
 
                         $studentCreateSuccess = Student::create($studentTableFields);
 
