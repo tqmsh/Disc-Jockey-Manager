@@ -28,8 +28,7 @@ class ViewVendorScreen extends Screen
     public function query(): iterable
     {
         return [
-            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province']))->paginate(10)
-
+            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province']))->where('vendors.account_status', 1)->paginate(10)
         ];
     }
 

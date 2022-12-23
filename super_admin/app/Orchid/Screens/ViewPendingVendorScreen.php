@@ -9,6 +9,7 @@ use App\Models\vendor;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -29,7 +30,7 @@ class ViewPendingVendorScreen extends Screen
     public function query(): iterable
     {
         return [
-            'pending_vendors' => Vendors::latest('vendors.created_at')->where('vendors.account_status', 0)->paginate(10),
+            'pending_vendors' => Vendors::latest('vendors.created_at')->where('vendors.account_status', 0)->filter(request(['country', 'category_id', 'state_province']))->paginate(10),
         ];
     }
 
@@ -79,26 +80,22 @@ class ViewPendingVendorScreen extends Screen
             Layout::rows([
 
                 Group::make([
-                    
-                    Select::make('school')
-                        ->title('School')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'school_name', 'school_name'),
 
                     Select::make('country')
                         ->title('Country')
                         ->empty('No selection')
-                        ->fromModel(User::class, 'country', 'country'),
+                        ->fromModel(Vendors::class, 'country', 'country'),
 
-                    Select::make('school_board')
-                        ->title('School Board')
+                    Select::make('category_id')
+                        ->title('Category')
                         ->empty('No selection')
-                        ->fromModel(School::class, 'school_board', 'school_board'),
-
+                        ->fromQuery(Categories::query(), 'name'),
+                    
                     Select::make('state_province')
                         ->title('State/Province')
                         ->empty('No selection')
-                        ->fromModel(School::class, 'state_province', 'state_province'),
+                        ->fromModel(Vendors::class, 'state_province', 'state_province'),
+
                 ]),
                 
                 Button::make('Filter')
