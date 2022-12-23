@@ -4,7 +4,8 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
-use App\Models\Region;
+use App\Models\School;
+use App\Models\vendor;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -14,11 +15,12 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewVendorLayout;
+use App\Orchid\Layouts\ViewPendingVendorLayout;
 
-class ViewVendorScreen extends Screen
+class ViewPendingVendorScreen extends Screen
 {
     /**
      * Query data.
@@ -28,7 +30,7 @@ class ViewVendorScreen extends Screen
     public function query(): iterable
     {
         return [
-            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province']))->where('vendors.account_status', 1)->paginate(10)
+            'pending_vendors' => Vendors::latest('vendors.created_at')->where('vendors.account_status', 0)->filter(request(['country', 'category_id', 'state_province']))->paginate(10),
         ];
     }
 
@@ -39,7 +41,7 @@ class ViewVendorScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Vendors';
+        return 'Pending Vendors';
     }
 
     /**
@@ -51,15 +53,15 @@ class ViewVendorScreen extends Screen
     {
         return [
 
-            Link::make('Add New Vendors')
-                ->icon('plus')
-                ->route('platform.vendor.create'),
+            Button::make('Accept Selected Vendors')
+                ->icon('check')
+                ->method('acceptVendors')
+                ->confirm(__('Are you sure you want to accept the selected vendors?')),
 
-            Button::make('Delete Selected Vendors')
+            Button::make('Reject Selected Vendors')
                 ->icon('trash')
                 ->method('deleteVendors')
                 ->confirm(__('Are you sure you want to delete the selected vendors?')),
-
                 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -102,15 +104,53 @@ class ViewVendorScreen extends Screen
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewVendorLayout::class
+            ViewPendingVendorLayout::class
         ];
     }
 
     public function filter(Request $request){
-        return redirect('/admin/vendors?' 
+        return redirect('/admin/pendingvendors?' 
+                    .'&school=' . $request->get('school')
                     .'&country=' . $request->get('country')
-                    .'&category_id=' . $request->get('category_id')
+                    .'&school_board=' . $request->get('school_board')
                     .'&state_province=' . $request->get('state_province'));
+    }
+
+    public function acceptVendors(Request $request){
+
+        //get all vendors from post request
+        $vendors = $request->get('vendors');
+        
+        try{
+            //if the array is not empty
+            if(!empty($vendors)){
+
+                //loop through the vendors set account status to 1 and give them permissions to access dashboard
+                foreach($vendors as $vendor_id){
+
+                    $userTableFields = [
+                        'account_status' => 1,
+                        'permissions' => '{"platform.index":true}'
+                    ];
+
+                    $vendorFields = [
+                        'account_status' => 1,
+                    ];
+
+                    User::where('id', $vendor_id)->update($userTableFields);
+
+                    Vendors::where('user_id', $vendor_id)->update($vendorFields);
+                }
+
+                Toast::success('Selected vendors accepted succesfully');
+
+            }else{
+                Toast::warning('Please select vendors in order to accept them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to accept the selected vendors. Error Message: ' . $e);
+        }
     }
 
     public function deletevendors(Request $request){  

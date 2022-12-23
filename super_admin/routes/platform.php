@@ -8,12 +8,15 @@ use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\EditSchoolScreen;
+use App\Orchid\Screens\EditVendorScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
+use App\Orchid\Screens\ViewVendorScreen;
 use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\CreateSchoolScreen;
+use App\Orchid\Screens\CreateVendorScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -22,6 +25,7 @@ use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
@@ -58,6 +62,15 @@ Route::screen('/students/create', CreateStudentScreen::class)->name('platform.st
 //show edit students screen
 Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
 
+//show vendors screen
+Route::screen('/vendors', ViewVendorScreen::class)->name('platform.vendor.list');
+
+//show create vendors screen
+Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');        
+
+//show edit vendors screen
+Route::screen('/vendors/{vendor}/edit', EditVendorScreen::class)->name('platform.vendor.edit');
+
 //show schools screen
 Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list');
 
@@ -90,6 +103,9 @@ Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platfor
 
 //show pending localadmin screen
 Route::screen('/pendinglocaladmins', ViewPendingLocaladminScreen::class)->name('platform.pendinglocaladmin.list');
+
+//show pending vendors screen
+Route::screen('/pendingvendors', ViewPendingVendorScreen::class)->name('platform.pendingvendor.list');
 
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');

@@ -28,7 +28,7 @@ class ViewSchoolScreen extends Screen
      *
      * @return array
      */
-    public function query(Request $request): iterable
+    public function query(): iterable
     {
         return [
             'schools' => School::latest('schools.created_at')->filter(request(['country', 'region_id', 'state_province', 'school', 'county']))->paginate(10)
@@ -42,7 +42,7 @@ class ViewSchoolScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'School List';
+        return 'Schools';
     }
 
     /**

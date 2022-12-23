@@ -7,6 +7,7 @@ namespace App\Orchid;
 use App\Models\Student;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
+use App\Models\Vendors;
 use Orchid\Platform\Dashboard;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Platform\ItemPermission;
@@ -41,6 +42,11 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Schools')
                 ->icon('building')
                 ->route('platform.school.list'),
+
+            //school nav option
+            Menu::make('Vendors')
+                ->icon('dollar')
+                ->route('platform.vendor.list'),
                 
             //student nav option
             Menu::make('Student List')
@@ -57,6 +63,13 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('diamond')
                 ->route('platform.event.list'),
 
+            //pending localadmin nav option
+            Menu::make('Pending Vendors')
+                ->icon('user-follow')
+                ->badge(function () {
+                            return count(Vendors::where('account_status', 0)->get());
+                        })
+                ->route('platform.pendingvendor.list'),
 
             //pending localadmin nav option
             Menu::make('Pending Local Admins')
