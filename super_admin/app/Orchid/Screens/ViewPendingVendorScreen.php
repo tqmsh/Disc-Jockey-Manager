@@ -2,19 +2,20 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\User;
 use App\Models\School;
+use App\Models\vendor;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use App\Models\vendor;
 use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
-use Exception;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewPendingVendorLayout;
 
@@ -60,6 +61,10 @@ class ViewPendingVendorScreen extends Screen
                 ->icon('trash')
                 ->method('deleteVendors')
                 ->confirm(__('Are you sure you want to delete the selected vendors?')),
+                
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.vendor.list')
         ];
     }
 

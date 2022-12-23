@@ -20,7 +20,7 @@ class ViewVendorLayout extends Table
      *
      * @var string
      */
-    protected $target = '';
+    protected $target = 'vendors';
 
     /**
      * Get the table cells to be displayed.
