@@ -4,8 +4,6 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
-use App\Models\School;
-use App\Models\vendor;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -156,17 +154,16 @@ class ViewPendingVendorScreen extends Screen
     public function deletevendors(Request $request){  
 
         //get all vendors from post request
-        $vendors = $request->get('vendors');
+        $vendor_ids = $request->get('vendors');
         
         try{
 
             //if the array is not empty
-            if(!empty($vendors)){
+            if(!empty($vendor_ids)){
 
                 //loop through the vendors and delete them from db
-                foreach($vendors as $vendor_id){
-                    Vendors::where('user_id', $vendor_id)->delete();
-                    User::where('id', $vendor_id)->delete();
+                foreach($vendor_ids as $vendor_id){
+                    $this->deleteVendor($vendor_id);
                 }
 
                 Toast::success('Selected vendors deleted succesfully');
@@ -178,5 +175,13 @@ class ViewPendingVendorScreen extends Screen
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected vendors. Error Message: ' . $e);
         }
+    }
+
+    public function deleteVendor($vendor_id){
+        // delete vendor from the vendors table
+        Vendors::where('user_id', $vendor_id)->delete();
+        
+        // delete vendor from the users table
+        User::where('id', $vendor_id)->delete();
     }
 }
