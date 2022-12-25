@@ -209,6 +209,7 @@ class EditStudentScreen extends Screen
     {
         try{
             $student->delete();
+            User::where('id', $student->user_id)->delete();
 
             Toast::info('You have successfully deleted the student.');
 

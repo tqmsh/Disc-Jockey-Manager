@@ -209,6 +209,8 @@ class EditVendorScreen extends Screen
         try{
 
             $vendor->delete();
+            User::where('id', $vendor->user_id)->delete();
+
 
             Toast::info('You have successfully deleted the vendor.');
 

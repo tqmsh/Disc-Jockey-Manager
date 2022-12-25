@@ -254,8 +254,10 @@ class EditSchoolScreen extends Screen
     public function delete(School $school)
     {
         try{
+            
             $school->delete();
-    
+            User::where('id', $school->teacher_id)->delete();
+
             Toast::info('You have successfully deleted the school.');
     
             return redirect()->route('platform.school.list');
