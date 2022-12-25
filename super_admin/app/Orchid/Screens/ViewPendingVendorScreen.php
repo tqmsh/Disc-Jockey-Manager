@@ -150,7 +150,7 @@ class ViewPendingVendorScreen extends Screen
         }
     }
 
-    public function deletevendors(Request $request){  
+    public function deleteVendors(Request $request){  
 
         //get all vendors from post request
         $vendor_ids = $request->get('vendors');
