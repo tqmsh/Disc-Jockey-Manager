@@ -57,7 +57,8 @@ class EditLocaladminScreen extends Screen
 
             Button::make('Delete Local Admin')
                 ->icon('trash')
-                ->method('delete'),
+                ->method('delete')
+                ->confirm(__('Are you sure you want to delete this local admin?')),
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -138,6 +139,7 @@ class EditLocaladminScreen extends Screen
             ]),
         ];
     }
+    
     public function update(Localadmin $localadmin, Request $request)
     {
         

@@ -172,7 +172,7 @@ class LoginController extends Controller
             'password' => 'required|confirmed|min:6',
             'password_confirmation' => ['required'],
             'company_name' => ['required'],
-            'phone' => ['required'],
+            'phonenumber' => ['required'],
             'address' => ['required'],
             'country' => ['required'],
             'city' => ['required'],

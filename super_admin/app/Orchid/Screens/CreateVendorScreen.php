@@ -234,7 +234,7 @@ class CreateVendorScreen extends Screen
                 'zip_postal' => $request->input('zip_postal'),
                 'city' => $request->input('city'),
                 'website' => $request->input('company_website'),
-                'phone' => $request->input('phonenumber'),
+                'phonenumber' => $request->input('phonenumber'),
                 'account_status' => 1,
             ];
             

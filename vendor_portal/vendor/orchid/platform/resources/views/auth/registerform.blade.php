@@ -83,7 +83,7 @@
         {{ __('Phone Number') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Input::make('phone')->type('text')->required()->mask('(999) 999-9999')->tabindex(1)->autofocus()->placeholder(__('Enter your company phone number')) !!}
+    {!! \Orchid\Screen\Fields\Input::make('phonenumber')->type('text')->required()->mask('(999) 999-9999')->tabindex(1)->autofocus()->placeholder(__('Enter your company phone number')) !!}
 </div>
 
 <div class="mb-3">
