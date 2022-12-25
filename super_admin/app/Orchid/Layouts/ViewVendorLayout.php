@@ -30,6 +30,7 @@ class ViewVendorLayout extends Table
     protected function columns(): iterable
     {
         return [
+            
             TD::make()
                 ->render(function (Vendors $vendor){
                     return CheckBox::make('vendors[]')
@@ -57,7 +58,7 @@ class ViewVendorLayout extends Table
 
             TD::make('phone', 'Phone Number')
                 ->render(function (Vendors $vendor) {
-                    return Link::make($vendor->phone)
+                    return Link::make($vendor->phonenumber)
                         ->route('platform.vendor.edit', $vendor);
                 }),
 
