@@ -46,6 +46,15 @@
 <div class="mb-3">
 
     <label class="form-label">
+        {{ __('Company Website') }}
+    </label>
+
+    {!! \Orchid\Screen\Fields\Input::make('website')->type('url')->tabindex(1)->autofocus()->placeholder(__('Enter your company website')) !!}
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">
         {{ __('Company Email') }}
     </label>
 
@@ -130,15 +139,6 @@
     </label>
 
     {!! \Orchid\Screen\Fields\Input::make('zip_postal')->type('text')->required()->tabindex(1)->autofocus()->placeholder(__('Enter your Zip/Postal Code')) !!}
-</div>
-
-<div class="mb-3">
-
-    <label class="form-label">
-        {{ __('Company Website') }}
-    </label>
-
-    {!! \Orchid\Screen\Fields\Input::make('website')->type('url')->tabindex(1)->autofocus()->placeholder(__('Enter your company website')) !!}
 </div>
 
 <div class="mt-5 row align-items-center">

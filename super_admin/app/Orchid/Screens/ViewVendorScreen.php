@@ -4,7 +4,6 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
-use App\Models\Region;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -60,7 +59,6 @@ class ViewVendorScreen extends Screen
                 ->method('deleteVendors')
                 ->confirm(__('Are you sure you want to delete the selected vendors?')),
 
-                
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.vendor.list')
@@ -113,20 +111,19 @@ class ViewVendorScreen extends Screen
                     .'&state_province=' . $request->get('state_province'));
     }
 
-    public function deletevendors(Request $request){  
+    public function deleteVendors(Request $request){  
 
         //get all vendors from post request
-        $vendors = $request->get('vendors');
+        $vendor_ids = $request->get('vendors');
         
         try{
 
             //if the array is not empty
-            if(!empty($vendors)){
+            if(!empty($vendor_ids)){
 
                 //loop through the vendors and delete them from db
-                foreach($vendors as $vendor_id){
-                    Vendors::where('user_id', $vendor_id)->delete();
-                    User::where('id', $vendor_id)->delete();
+                foreach($vendor_ids as $vendor_id){
+                    $this->deleteVendor($vendor_id);
                 }
 
                 Toast::success('Selected vendors deleted succesfully');
@@ -138,5 +135,13 @@ class ViewVendorScreen extends Screen
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected vendors. Error Message: ' . $e);
         }
+    }
+
+    public function deleteVendor($vendor_id){
+        // delete vendor from the vendors table
+        Vendors::where('user_id', $vendor_id)->delete();
+        
+        // delete vendor from the users table
+        User::where('id', $vendor_id)->delete();
     }
 }

@@ -108,9 +108,8 @@ class ViewPendingVendorScreen extends Screen
 
     public function filter(Request $request){
         return redirect('/admin/pendingvendors?' 
-                    .'&school=' . $request->get('school')
                     .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
+                    .'&category_id=' . $request->get('category_id')
                     .'&state_province=' . $request->get('state_province'));
     }
 
