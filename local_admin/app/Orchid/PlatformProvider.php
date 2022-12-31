@@ -43,20 +43,23 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('diamond')
             ->route('platform.event.list'),
 
-            //student nav option
-            Menu::make('Student List')
+            Menu::make('Students')
                 ->icon('graduation')
-                ->route('platform.student.list'),
-
-
-            //pending student nav option
-            Menu::make('Pending Students')
-                ->icon('user-follow')
-                ->badge(function () {
-                            return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
-                        })
-                ->route('platform.pendingstudent.list'),
-            
+                ->size()
+                ->list([
+                    //student nav option
+                    Menu::make('List')
+                        ->icon('list')
+                        ->route('platform.student.list'),
+                        
+                    //pending student nav option
+                    Menu::make('Pending Students')
+                        ->icon('user-follow')
+                        ->badge(function () {
+                                    return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
+                                })
+                        ->route('platform.pendingstudent.list'),
+                ]),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
