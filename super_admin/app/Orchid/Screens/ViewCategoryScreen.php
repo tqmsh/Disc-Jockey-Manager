@@ -2,14 +2,15 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Categories;
 use Orchid\Screen\Screen;
-use Orchid\Screen\Actions\Button;
+use App\Models\Categories;
 use Orchid\Screen\Fields\Input;
-use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
+use Orchid\Support\Facades\Layout;
+use App\Orchid\Layouts\ViewCategoryLayout;
 
-class CreateCatagoryScreen extends Screen
+class ViewCategoryScreen extends Screen
 {
     /**
      * Query data.
@@ -18,7 +19,9 @@ class CreateCatagoryScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'categories' => Categories::paginate(8),
+        ];
     }
 
     /**
@@ -28,7 +31,7 @@ class CreateCatagoryScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Create a New Category';
+        return 'Categories';
     }
 
     /**
@@ -38,11 +41,7 @@ class CreateCatagoryScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-            Button::make('Add')
-                ->icon('plus')
-                ->method('createCategory'),
-        ];
+        return [];
     }
 
     /**
@@ -53,13 +52,19 @@ class CreateCatagoryScreen extends Screen
     public function layout(): iterable
     {
         return [
+
+            ViewCategoryLayout::class,
+
             Layout::rows([
 
                 Input::make('category_name')
                     ->title('Category Name')
                     ->placeholder('Enter the name of the category')
-                    ->help('This is the name of the category that will be displayed to the user.')
-                    ->required(),
+                    ->help('This is the name of the category that will be displayed to the user.'),
+                    
+                Button::make('Add')
+                    ->icon('plus')
+                    ->method('createCategory'),
             ])
         ];
     }
@@ -70,10 +75,13 @@ class CreateCatagoryScreen extends Screen
         //take category from request then check for duplicate
         $category = request('category_name');
 
-        if(!empty(Categories::where('name', $category)->first())){
+        if(is_null($category)){
+            
+            Toast::error('Category name cannot be empty');
+
+        }else if(!empty(Categories::where('name', $category)->first())){
             
             Toast::error('Category already exists');
-            return redirect()->route('platform.category.create');
             
         }else{
 
@@ -83,12 +91,10 @@ class CreateCatagoryScreen extends Screen
             if($check){
 
                 Toast::success('Category created successfully');
-                return redirect()->route('platform.category.create');
 
             }else{
 
                 Toast::error('Category could not be created for an unknown reason');
-                return redirect()->route('platform.category.create');
             }
         }
     }

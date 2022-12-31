@@ -56,10 +56,10 @@ class PlatformProvider extends OrchidServiceProvider
                 })
                 ->route('platform.pendingvendor.list'),
 
-                //vendors nav option
-                Menu::make('Add Category')
-                ->icon('plus')
-                ->route('platform.category.create'),
+                //category nav option
+                Menu::make('Categories')
+                ->icon('layers')
+                ->route('platform.category.list'),
             ]),
             
             //school nav option
