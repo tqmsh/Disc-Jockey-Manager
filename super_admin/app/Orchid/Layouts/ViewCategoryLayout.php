@@ -6,6 +6,7 @@ use Orchid\Screen\TD;
 use App\Models\Categories;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
+use Orchid\Screen\Fields\CheckBox;
 
 class ViewCategoryLayout extends Table
 {
@@ -27,22 +28,26 @@ class ViewCategoryLayout extends Table
     protected function columns(): iterable
     {
         return [
-            
+
+            TD::make()
+                ->render(function (Categories $category){
+                    return CheckBox::make('categories[]')
+                        ->value($category->id)
+                        ->checked(false);
+                }),
+
             TD::make('name', 'Category Name')
-                        ->align(TD::ALIGN_CENTER)
                 ->render(function (Categories $category) {
                     return Link::make($category->name)
                         ->route('platform.category.edit', $category);
                 }),
 
             TD::make('created_at', 'Created At')
-                        ->align(TD::ALIGN_CENTER)
                 ->render(function (Categories $category) {
                     return Link::make($category->created_at)
                         ->route('platform.category.edit', $category);
                 }),
             TD::make('updated_at', 'Updated At')
-                        ->align(TD::ALIGN_CENTER)
                 ->render(function (Categories $category) {
                     return Link::make($category->updated_at)
                         ->route('platform.category.edit', $category);

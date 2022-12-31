@@ -3,12 +3,15 @@
 namespace App\Orchid\Screens;
 
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use App\Models\Categories;
+use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewCategoryLayout;
+use Exception;
 
 class ViewCategoryScreen extends Screen
 {
@@ -20,7 +23,7 @@ class ViewCategoryScreen extends Screen
     public function query(): iterable
     {
         return [
-            'categories' => Categories::paginate(8),
+            'categories' => Categories::latest()->paginate(8),
         ];
     }
 
@@ -41,7 +44,12 @@ class ViewCategoryScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Delete Selected Categories')
+                ->icon('trash')
+                ->method('deleteCats')
+                ->confirm(__('Are you sure you want to delete the selected categories?')),
+        ];
     }
 
     /**
@@ -59,11 +67,11 @@ class ViewCategoryScreen extends Screen
 
                 Input::make('category_name')
                     ->title('Category Name')
-                    ->placeholder('Enter the name of the category')
-                    ->help('This is the name of the category that will be displayed to the user.'),
+                    ->placeholder('Enter the name of the category'),
                     
                 Button::make('Add')
                     ->icon('plus')
+                    ->type(Color::DEFAULT())
                     ->method('createCategory'),
             ])
         ];
@@ -96,6 +104,31 @@ class ViewCategoryScreen extends Screen
 
                 Toast::error('Category could not be created for an unknown reason');
             }
+        }
+    }
+
+    public function deleteCats(Request $request)
+    {   
+        //get all categories from post request
+        $categories = $request->get('categories');
+        
+        try{
+            //if the array is not empty
+            if(!empty($categories)){
+
+                //loop through the categories and delete them from db
+                foreach($categories as $category){
+                    Categories::where('id', $category)->delete();
+                }
+
+                Toast::success('Selected categories deleted succesfully');
+
+            }else{
+                Toast::warning('Please select categories in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected categories. Error Message: ' . $e->getMessage());
         }
     }
 }
