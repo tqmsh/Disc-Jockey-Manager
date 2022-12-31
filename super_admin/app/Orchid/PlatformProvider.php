@@ -38,28 +38,34 @@ class PlatformProvider extends OrchidServiceProvider
             ->title('CORE')
             ->route('platform.example'),
             
+            
+            Menu::make('Vendors')
+            ->icon('dollar')
+            ->size()
+            ->list([
+                //vendors nav option
+                Menu::make('List')
+                ->icon('list')
+                ->route('platform.vendor.list'),
+                
+                //pending vendor nav option
+                Menu::make('Pending Vendors')
+                ->icon('user-follow')
+                ->badge(function () {
+                    return count(Vendors::where('account_status', 0)->get());
+                })
+                ->route('platform.pendingvendor.list'),
+
+                //vendors nav option
+                Menu::make('Add Category')
+                ->icon('plus')
+                ->route('platform.category.create'),
+            ]),
+            
             //school nav option
             Menu::make('Schools')
                 ->icon('building')
                 ->route('platform.school.list'),
-
-            Menu::make('Vendors')
-                ->icon('dollar')
-                ->size()
-                ->list([
-                        //vendors nav option
-                        Menu::make('List')
-                            ->icon('list')
-                            ->route('platform.vendor.list'),
-
-                        //pending vendor nav option
-                        Menu::make('Pending Vendors')
-                            ->icon('user-follow')
-                            ->badge(function () {
-                                        return count(Vendors::where('account_status', 0)->get());
-                                    })
-                            ->route('platform.pendingvendor.list'),
-                ]),
 
             Menu::make('Local Admins')
                 ->icon('people')

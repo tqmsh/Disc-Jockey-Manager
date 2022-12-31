@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\CreateCatagoryScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
@@ -109,6 +110,9 @@ Route::screen('/pendingvendors', ViewPendingVendorScreen::class)->name('platform
 
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
+
+//show add category screen
+Route::screen('/addcategory', CreateCatagoryScreen::class)->name('platform.category.create');
 
 
 // Platform > Profile
