@@ -17,6 +17,8 @@ use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\CreateSchoolScreen;
 use App\Orchid\Screens\CreateVendorScreen;
+use App\Orchid\Screens\EditCategoryScreen;
+use App\Orchid\Screens\ViewCategoryScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -34,7 +36,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewCategoryScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,6 +114,9 @@ Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platfo
 
 //show view category screen
 Route::screen('/categories', ViewCategoryScreen::class)->name('platform.category.list');
+
+//show edit category screen
+Route::screen('/categories/{category}', EditCategoryScreen::class)->name('platform.category.edit');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

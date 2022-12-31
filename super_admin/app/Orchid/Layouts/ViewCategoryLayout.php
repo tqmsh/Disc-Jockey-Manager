@@ -32,7 +32,20 @@ class ViewCategoryLayout extends Table
                         ->align(TD::ALIGN_CENTER)
                 ->render(function (Categories $category) {
                     return Link::make($category->name)
-                        ->route('platform.category.list', $category);
+                        ->route('platform.category.edit', $category);
+                }),
+
+            TD::make('created_at', 'Created At')
+                        ->align(TD::ALIGN_CENTER)
+                ->render(function (Categories $category) {
+                    return Link::make($category->created_at)
+                        ->route('platform.category.edit', $category);
+                }),
+            TD::make('updated_at', 'Updated At')
+                        ->align(TD::ALIGN_CENTER)
+                ->render(function (Categories $category) {
+                    return Link::make($category->updated_at)
+                        ->route('platform.category.edit', $category);
                 }),
         ];
     }
