@@ -43,49 +43,64 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('building')
                 ->route('platform.school.list'),
 
-            //school nav option
             Menu::make('Vendors')
                 ->icon('dollar')
-                ->route('platform.vendor.list'),
-                
-            //student nav option
-            Menu::make('Student List')
-                ->icon('graduation')
-                ->route('platform.student.list'),
+                ->size()
+                ->list([
+                        //vendors nav option
+                        Menu::make('List')
+                            ->icon('list')
+                            ->route('platform.vendor.list'),
 
-            //localadmin nav option
+                        //pending vendor nav option
+                        Menu::make('Pending Vendors')
+                            ->icon('user-follow')
+                            ->badge(function () {
+                                        return count(Vendors::where('account_status', 0)->get());
+                                    })
+                            ->route('platform.pendingvendor.list'),
+                ]),
+
             Menu::make('Local Admins')
-                ->icon('friends')
-                ->route('platform.localadmin.list'),
+                ->icon('people')
+                ->size()
+                ->list([
+                    //localadmin nav option
+                    Menu::make('List')
+                        ->icon('list')
+                        ->route('platform.localadmin.list'),
 
-            //student nav option
+                    //pending localadmin nav option
+                    Menu::make('Pending Local Admins')
+                        ->icon('user-follow')
+                        ->badge(function () {
+                                    return count(Localadmin::where('account_status', 0)->get());
+                                })
+                        ->route('platform.pendinglocaladmin.list'),
+                ]),
+
+            Menu::make('Students')
+                ->icon('graduation')
+                ->size()
+                ->list([
+                    //student nav option
+                    Menu::make('List')
+                        ->icon('list')
+                        ->route('platform.student.list'),
+                        
+                    //pending student nav option
+                    Menu::make('Pending Students')
+                        ->icon('user-follow')
+                        ->badge(function () {
+                                    return count(Student::where('account_status', 0)->get());
+                                })
+                        ->route('platform.pendingstudent.list'),
+                ]),
+
+            //event nav option
             Menu::make('Events')
                 ->icon('diamond')
                 ->route('platform.event.list'),
-
-            //pending localadmin nav option
-            Menu::make('Pending Vendors')
-                ->icon('user-follow')
-                ->badge(function () {
-                            return count(Vendors::where('account_status', 0)->get());
-                        })
-                ->route('platform.pendingvendor.list'),
-
-            //pending localadmin nav option
-            Menu::make('Pending Local Admins')
-                ->icon('user-follow')
-                ->badge(function () {
-                            return count(Localadmin::where('account_status', 0)->get());
-                        })
-                ->route('platform.pendinglocaladmin.list'),
-
-            //pending student nav option
-            Menu::make('Pending Students')
-                ->icon('user-follow')
-                ->badge(function () {
-                            return count(Student::where('account_status', 0)->get());
-                        })
-                ->route('platform.pendingstudent.list'),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
