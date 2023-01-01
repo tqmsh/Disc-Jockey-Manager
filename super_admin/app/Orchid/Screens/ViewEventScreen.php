@@ -117,7 +117,7 @@ class ViewEventScreen extends Screen
 
     public function deleteEvents(Request $request)
     {   
-        //get all localadmins from post request
+        //get all events from post request
         $events = $request->get('events');
         
         try{
