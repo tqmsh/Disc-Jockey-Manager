@@ -275,7 +275,7 @@ class CreateStudentScreen extends Screen
                     if($this->validEmail($students[$i]['email'])){
                         
                         $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['state_province']);
-
+                        
                         $student = [
                             'firstname' => $students[$i]['firstname'],
                             'lastname' => $students[$i]['lastname'],
@@ -288,7 +288,6 @@ class CreateStudentScreen extends Screen
                             'account_status' => 1,
                             'permissions' => Dashboard::getAllowAllPermission(),
                         ];
-                        
                         User::create($student);
                         
                         $student['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');

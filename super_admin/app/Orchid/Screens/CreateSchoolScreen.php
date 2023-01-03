@@ -24,6 +24,7 @@ use Orchid\Screen\Actions\ModalToggle;
 class CreateSchoolScreen extends Screen
 {
     public $requiredFields = ['nces_id', 'country', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
+    
     /**
      * Query data.
      *
@@ -61,7 +62,6 @@ class CreateSchoolScreen extends Screen
                 ->modal('massImportModal')
                 ->method('massImport')
                 ->icon('plus'),
-
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -103,7 +103,7 @@ class CreateSchoolScreen extends Screen
                             • school_data <br>')
                 ]),
             ])
-            ->title('Mass Import Students')
+            ->title('Mass Import Schools')
             ->applyButton('Import')
             ->withoutCloseButton(),
 
@@ -253,7 +253,6 @@ class CreateSchoolScreen extends Screen
 
     //this method will add a single school to the database
     public function createSchool(Request $request){
-
         try{
 
             //check for duplicate schools
@@ -291,25 +290,7 @@ class CreateSchoolScreen extends Screen
 
         try{
 
-            $path = '';
-
-            if(!is_null($request->file('school_csv'))){
-
-                $path = $request->file('school_csv')->getRealPath();
-
-                if(!is_null($path)){
-
-                    $extension = $request->file('school_csv')->extension();
-
-                    if($extension != 'csv'){Toast::error('Incorrect file type.'); return;}
-
-                } else{
-                    Toast::error('An error has occured.'); return;
-                }
-
-            } else{
-                Toast::error('Upload a csv file to import schools.'); return;
-            }
+            $path = $this->validFile($request);
 
             $schools = $this->csvToArray($path);
 
@@ -357,6 +338,37 @@ class CreateSchoolScreen extends Screen
         }catch(Exception $e){
             
             Alert::error('There was an error mass importing the schools. Error Code: ' . $e);
+        }
+    }
+
+    private function validFile(Request $request){
+
+        $path = '';
+
+        if(!is_null($request->file('school_csv'))){
+
+            $path = $request->file('school_csv')->getRealPath();
+
+            if(!is_null($path)){
+
+                $extension = $request->file('school_csv')->extension();
+
+                if($extension != 'csv'){
+
+                    Toast::error('Incorrect file type.'); return false;
+                }else{
+
+                    return $path;
+                }
+
+            } else{
+                
+                Toast::error('An error has occured.'); return;
+            }
+
+        } else{
+
+            Toast::error('Upload a csv file to import vendors.'); return false;
         }
     }
 
