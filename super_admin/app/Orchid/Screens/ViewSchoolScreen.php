@@ -61,7 +61,6 @@ class ViewSchoolScreen extends Screen
                 ->icon('trash')
                 ->method('deleteSchools')
                 ->confirm(__('Are you sure you want to delete the selected schools?')),
-
                 
             Link::make('Back')
                 ->icon('arrow-left')
