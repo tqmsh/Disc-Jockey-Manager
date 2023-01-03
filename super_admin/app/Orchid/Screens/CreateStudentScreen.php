@@ -275,12 +275,36 @@ class CreateStudentScreen extends Screen
                     if($this->validEmail($students[$i]['email'])){
                         
                         $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['state_province']);
-
-                        User::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'password' => bcrypt($students[$i]['password']), 'country' => $students[$i]['country'], 'role' => 'student', 'name' => $students[$i]['firstname'], 'account_status' => 1, 'permissions' => Dashboard::getAllowAllPermission()]);
                         
-                        $students[$i]['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
+                        $student = [
+                            'firstname' => $students[$i]['firstname'],
+                            'lastname' => $students[$i]['lastname'],
+                            'phonenumber' => $students[$i]['phonenumber'],
+                            'email' => $students[$i]['email'],
+                            'password' => bcrypt($students[$i]['password']),
+                            'country' => $students[$i]['country'],
+                            'role' => 'student',
+                            'name' => $students[$i]['firstname'],
+                            'account_status' => 1,
+                            'permissions' => Dashboard::getAllowAllPermission(),
+                        ];
+                        User::create($student);
+                        
+                        $student['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
 
-                        Student::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'grade' => $students[$i]['grade'], 'school_id' => $students[$i]['school_id'], 'allergies' => $students[$i]['allergies'], 'user_id' => $students[$i]['user_id'], 'account_status' => 1, 'school' => $students[$i]['school']]);
+                        $student = [
+                            'firstname' => $students[$i]['firstname'],
+                            'lastname' => $students[$i]['lastname'],
+                            'phonenumber' => $students[$i]['phonenumber'],
+                            'email' => $students[$i]['email'],
+                            'grade' => $students[$i]['grade'],
+                            'school_id' => $students[$i]['school_id'],
+                            'allergies' => $students[$i]['allergies'],
+                            'user_id' => $student['user_id'],
+                            'account_status' => 1,
+                            'school' => $students[$i]['school'],
+                        ];
+                        Student::create($student);
 
                     }else{
                         array_push($this->dupes, $students[$i]['email']);                    

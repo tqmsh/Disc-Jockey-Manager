@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use DateTime;
 use Exception;
 use App\Models\User;
 use App\Models\School;
@@ -16,12 +17,17 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Fields\Password;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Dashboard;
+use Orchid\Screen\Actions\ModalToggle;
 
 class CreateVendorScreen extends Screen
 {
+    public $requiredFields = ['country', 'school_name', 'firstname', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_Vendors', 'school_data'];
+    public $dupes =[];
+
     /**
      * Query data.
      *
@@ -54,6 +60,11 @@ class CreateVendorScreen extends Screen
             Button::make('Add')
                 ->icon('plus')
                 ->method('createVendor'),
+                
+            ModalToggle::make('Mass Import Vendors')
+                ->modal('massImportModal')
+                ->method('massImport')
+                ->icon('plus'),
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -69,6 +80,35 @@ class CreateVendorScreen extends Screen
     public function layout(): iterable
     {
         return [
+
+            Layout::modal('massImportModal',[
+
+                Layout::rows([
+
+                    Input::make('vendor_csv')
+                        ->type('file')
+                        ->title('File must be in csv format. Ex. vendors.csv')
+                        ->help('The csv file MUST HAVE these fields and they need to be named accordingly to successfully import the vendors: <br>
+                            • firstname <br>
+                            • lastname <br>
+                            • email <br>
+                            • password <br>
+                            • company_name <br>
+                            • city <br>
+                            • category_name <br>
+                            • address <br>
+                            • country <br>
+                            • state_province <br>
+                            • zip_postal <br>
+                            • phonenumber <br>
+                            • website <br>')
+                ]),
+            ])
+            ->title('Mass Import Vendors')
+            ->applyButton('Import')
+            ->withoutCloseButton(),
+
+
             Layout::rows([
 
                 Input::make('firstname')
@@ -212,6 +252,165 @@ class CreateVendorScreen extends Screen
         }
     }
 
+    //this method will mass import vendors from a csv file
+    
+    public function massImport(Request $request){
+        try{
+
+            $path = $this->validFile($request);
+
+            if($path){
+
+                $vendors = $this->csvToArray($path);
+
+                $keys = array_keys($vendors[0]);
+
+                //check if the user has the required values in the csv file
+                foreach($this->requiredFields as $field){
+
+                    if(!in_array($field, $keys)){
+                        Toast::error('There are missing field(s) in your csv file.'); return;
+                    }
+                }
+
+                //loop through the array of schools and re-write the keys to insert in db
+                for ($i = 0; $i < count($vendors); $i ++){
+
+                    if($this->validEmail($vendors[$i]['email'])){
+                        
+                        $vendor = [
+                            'firstname' => $vendors[$i]['firstname'],
+                            'lastname' => $vendors[$i]['lastname'],
+                            'phonenumber' => $vendors[$i]['phonenumber'],
+                            'email' => $vendors[$i]['email'],
+                            'password' => bcrypt($vendors[$i]['password']),
+                            'country' => $vendors[$i]['country'],
+                            'role' => 'vendor',
+                            'name' => $vendors[$i]['firstname'],
+                            'account_status' => 1,
+                            'permissions' => Dashboard::getAllowAllPermission(),
+                        ];
+
+                        User::create($vendor);
+                        
+                        $vendor['user_id'] = User::where('email', $vendors[$i]['email'])->get('id')->value('id');
+
+                        $vendor = [
+                            'firstname' => $vendors[$i]['firstname'],
+                            'lastname' => $vendors[$i]['lastname'],
+                            'phonenumber' => $vendors[$i]['phonenumber'],
+                            'email' => $vendors[$i]['email'],
+                            'company_name' => $vendors[$i]['company_name'],
+                            'category_id' => $this->getCategoryId($vendors[$i]['category_name']),
+                            'country' => $vendors[$i]['country'],
+                            'user_id' => $vendor['user_id'],
+                            'account_status' => 1,
+                            'address' => $vendors[$i]['address'],
+                            'website' => $vendors[$i]['website'],
+                            'city' => $vendors[$i]['city'],
+                            'state_province' => $vendors[$i]['state_province'],
+                            'account_status' => 1,
+                            'zip_postal' => $vendors[$i]['zip_postal'],
+                        ];
+                        
+                        Vendors::create($vendor);
+
+                    }else{
+                        array_push($this->dupes, $vendors[$i]['email']);                    
+                    }
+                }
+
+                if(!empty($this->dupes)){
+
+                    $message = 'Accounts with these emails have not been added as they already have an account in our system: ';
+
+                    foreach($this->dupes as $email){
+
+                        $message .="| " . $email . " | ";
+                    }
+
+                    Alert::error($message);
+                }else{
+
+                    Toast::success('Vendors imported successfully!');
+                }
+
+                return redirect()->route('platform.vendor.list');
+            }
+        }catch(Exception $e){
+            
+            Alert::error('There was an error mass importing the Vendors. Error Code: ' . $e->getMessage());
+        }
+    }
+
+    //this function will convert the csv file to an array
+    private function csvToArray($filename = '', $delimiter = ','){
+        
+        if (!file_exists($filename) || !is_readable($filename)){
+            Alert::error('There has been an error finding this file.');
+            return;
+        }
+
+        $header = null;
+        $data = array();
+
+        if (($handle = fopen($filename, 'r')) !== false){
+
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false){
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
+    private function validFile(Request $request){
+
+        $path = '';
+
+        if(!is_null($request->file('vendor_csv'))){
+
+            $path = $request->file('vendor_csv')->getRealPath();
+
+            if(!is_null($path)){
+
+                $extension = $request->file('vendor_csv')->extension();
+
+                if($extension != 'csv'){
+
+                    Toast::error('Incorrect file type.'); return false;
+                }else{
+
+                    return $path;
+                }
+
+            } else{
+                
+                Toast::error('An error has occured.'); return;
+            }
+
+        } else{
+
+            Toast::error('Upload a csv file to import vendors.'); return false;
+        }
+    }
+
+    private function getCategoryId($category_name){
+            
+            $category = Categories::where('name', 'like', '%' . $category_name . '%')->get();
+    
+            if(count($category) == 0){
+                return null;
+            }else{
+                return $category->value('id');
+            }
+    }
+
     //check for duplicate emails
     private function validEmail($email){
         return count(User::where('email', $email)->get()) == 0;
@@ -241,7 +440,7 @@ class CreateVendorScreen extends Screen
             return $vendorTableFields;
 
         }catch(Exception $e){
-            Alert::error('There was an error creating this vendor. Error Code: ' . $e->getMessage);
+            Alert::error('There was an error creating this vendor. Error Code: ' . $e->getMessage());
         }
     }
 
