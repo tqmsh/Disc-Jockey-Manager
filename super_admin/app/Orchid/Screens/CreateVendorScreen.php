@@ -25,7 +25,8 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateVendorScreen extends Screen
 {
-    public $requiredFields = ['country', 'school_name', 'firstname', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_Vendors', 'school_data'];
+    public $requiredFields = ['country', 'company_name', 'firstname', 'category_name', 'address', 'city', 'state_province', 'zip_postal', 'phonenumber', 'fax', 'website', 'email', 'password'];
+
     public $dupes =[];
 
     /**
@@ -253,7 +254,6 @@ class CreateVendorScreen extends Screen
     }
 
     //this method will mass import vendors from a csv file
-    
     public function massImport(Request $request){
         try{
 
@@ -309,7 +309,6 @@ class CreateVendorScreen extends Screen
                             'website' => $vendors[$i]['website'],
                             'city' => $vendors[$i]['city'],
                             'state_province' => $vendors[$i]['state_province'],
-                            'account_status' => 1,
                             'zip_postal' => $vendors[$i]['zip_postal'],
                         ];
                         
