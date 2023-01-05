@@ -269,7 +269,7 @@ class CreateVendorScreen extends Screen
                 foreach($this->requiredFields as $field){
 
                     if(!in_array($field, $keys)){
-                        Toast::error('There are missing field(s) in your csv file.'); return;
+                        Toast::error('"' . $field . '"' . 'is missing in your csv file.'); return;
                     }
                 }
 
