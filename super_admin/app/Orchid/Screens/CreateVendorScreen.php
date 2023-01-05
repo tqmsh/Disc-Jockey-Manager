@@ -212,7 +212,7 @@ class CreateVendorScreen extends Screen
     public function createVendor(Request $request){
 
         try{
-
+            
             //get vendor fields
             $vendorTableFields = $this->getVendorFields($request);
 
