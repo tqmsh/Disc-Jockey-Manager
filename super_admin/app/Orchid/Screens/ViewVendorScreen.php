@@ -8,6 +8,7 @@ use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\RoleUsers;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -138,6 +139,7 @@ class ViewVendorScreen extends Screen
     }
 
     public function deleteVendor($vendor_id){
+
         // delete vendor from the vendors table
         Vendors::where('user_id', $vendor_id)->delete();
         

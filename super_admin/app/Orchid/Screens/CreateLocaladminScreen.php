@@ -351,7 +351,7 @@ class CreateLocaladminScreen extends Screen
             return $localadminTableFields;
 
         }catch(Exception $e){
-            Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage);
+            Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage());
         }
     }
 

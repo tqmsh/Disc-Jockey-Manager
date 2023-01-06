@@ -79,7 +79,7 @@ class LoginController extends Controller
 
                 $user = User::where('email', $request->input('email'))->first();
 
-                if(is_null($user->role)==true || strcmp($user->role, 'superadmin') !== 0 || is_null($user->permissions)==true){
+                if(is_null($user->role) || $user->role != 1){
 
                     $this->guard->logout();
 
