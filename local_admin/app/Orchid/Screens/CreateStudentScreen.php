@@ -185,39 +185,47 @@ class CreateStudentScreen extends Screen
 
 
     public function createStudent(Request $request){
-
         try{
-
+            //get the student table fields
             $studentTableFields = $this->getStudentFields($request);
 
+            //get the user table fields
             $userTableFields = $this->getUserFields($request);
 
             //check for duplicate email
             if($this->validEmail($request->input('email'))){
-                
+
                 //no duplicates found
+                //create user
                 $user = User::create($userTableFields);
 
+                //add the user id to the student table fields
                 $studentTableFields['user_id'] = $user->id;
                 
+                //create student
                 Student::create($studentTableFields);
 
+                //attach the student to the role of student
                 RoleUsers::create([
                     'user_id' => $user->id,
                     'role_id' => 3,
                 ]);
                 
+                //notify the user
                 Toast::success('Student Added Succesfully');
 
+                //redirect to the student list
                 return redirect()->route('platform.student.list');
             
             }else{
                 //duplicate email found
+                //notify the user
                 Toast::error('Email already exists.');
             }
 
         }catch(Exception $e){
 
+            //notify the user
             Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
     }
@@ -313,31 +321,38 @@ class CreateStudentScreen extends Screen
 
     private function validFile(Request $request){
 
-        $path = '';
-
+        // First, check if the request has the file
         if(!is_null($request->file('student_csv'))){
 
+            // Get the path to the file
             $path = $request->file('student_csv')->getRealPath();
 
+            // If the path to the file is not null
             if(!is_null($path)){
 
+                // Get the extension of the file
                 $extension = $request->file('student_csv')->extension();
 
+                // Check if the extension is csv
                 if($extension != 'csv'){
 
+                    // If not, display an error message
                     Toast::error('Incorrect file type.'); return false;
                 }else{
 
+                    // If it is, return the path
                     return $path;
                 }
 
             } else{
                 
+                // If the path is null, display an error message
                 Toast::error('An error has occured.'); return;
             }
 
         } else{
 
+            // If the request does not have the file, display an error message
             Toast::error('Upload a csv file to import students.'); return false;
         }
     }
