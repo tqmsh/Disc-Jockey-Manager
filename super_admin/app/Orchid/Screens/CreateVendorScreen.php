@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
+use App\Models\RoleUsers;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -232,6 +233,12 @@ class CreateVendorScreen extends Screen
 
                 //create vendor
                 Vendors::create($vendorTableFields);
+
+                //give them permissions to enter the application
+                RoleUsers::create([
+                    'user_id' => $user->id,
+                    'role_id' => 4
+                ]);
                 
                 //toast success message
                 Toast::success('Vendor Added Succesfully');
@@ -312,6 +319,11 @@ class CreateVendorScreen extends Screen
                         ];
                         
                         Vendors::create($vendor);
+
+                        RoleUsers::create([
+                            'user_id' => $user->id,
+                            'role_id' => 4
+                        ]);
 
                     }else{
                         array_push($this->dupes, $vendors[$i]['email']);                    

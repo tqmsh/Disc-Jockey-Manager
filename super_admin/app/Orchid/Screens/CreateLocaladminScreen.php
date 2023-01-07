@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\School;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
+use App\Models\RoleUsers;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -191,6 +192,11 @@ class CreateLocaladminScreen extends Screen
                 $localAdminTableFields['user_id'] = $user->id;
 
                 Localadmin::create($localAdminTableFields);
+
+                RoleUsers::create([
+                    'user_id' => $user->id,
+                    'role_id' => 2
+                ]);
                 
                 Toast::success('Local Admin Added Succesfully');
 
@@ -258,6 +264,11 @@ class CreateLocaladminScreen extends Screen
                            'user_id' => $localadmins[$i]['user_id'],
                            'account_status' => 1,
                            'school' => $localadmins[$i]['school']
+                        ]);
+
+                        RoleUsers::create([
+                            'user_id' => $user->id,
+                            'role_id' => 2,
                         ]);
 
                     }else{

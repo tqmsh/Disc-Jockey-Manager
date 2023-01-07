@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -232,7 +233,12 @@ class CreateStudentScreen extends Screen
                 $studentTableFields['user_id'] = $user->id;
                 
                 Student::create($studentTableFields);
-                
+
+                RoleUsers::create([
+                    'user_id' => $user->id,
+                    'role_id' => 3,
+                ]);
+
                 Toast::success('Student Added Succesfully');
 
                 return redirect()->route('platform.student.list');
@@ -306,6 +312,11 @@ class CreateStudentScreen extends Screen
                         ];
 
                         Student::create($student);
+
+                        RoleUsers::create([
+                            'user_id' => $user->id,
+                            'role_id' => 3,
+                        ]);
 
                     }else{
                         array_push($this->dupes, $students[$i]['email']);                    
