@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
 use Illuminate\Support\Str;
@@ -195,11 +196,16 @@ class CreateStudentScreen extends Screen
             if($this->validEmail($request->input('email'))){
                 
                 //no duplicates found
-                User::create($userTableFields);
+                $user = User::create($userTableFields);
 
-                $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                $studentTableFields['user_id'] = $user->id;
                 
                 Student::create($studentTableFields);
+
+                RoleUsers::create([
+                    'user_id' => $user->id,
+                    'role_id' => 3,
+                ]);
                 
                 Toast::success('Student Added Succesfully');
 
@@ -244,11 +250,38 @@ class CreateStudentScreen extends Screen
                         
                         $students[$i]['school_id'] = Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id');
                         
-                        User::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'password' => bcrypt($students[$i]['password']), 'country' => Auth::user()->country, 'role' => 'student', 'name' => $students[$i]['firstname'], 'account_status' => 1, 'permissions' => Dashboard::getAllowAllPermission(),]);
+                        $user = User::create([
+                            'firstname' => $students[$i]['firstname'], 
+                            'lastname' => $students[$i]['lastname'], 
+                            'phonenumber' => $students[$i]['phonenumber'], 
+                            'email' => $students[$i]['email'], 
+                            'password' => bcrypt($students[$i]['password']), 
+                            'country' => Auth::user()->country, 
+                            'role' => 'student', 
+                            'name' => $students[$i]['firstname'], 
+                            'account_status' => 1, 
+                            'permissions' => Dashboard::getAllowAllPermission(),
+                        ]);
                         
-                        $students[$i]['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
+                        $students[$i]['user_id'] = $user->id;
 
-                        Student::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'grade' => $students[$i]['grade'], 'school_id' => $students[$i]['school_id'], 'allergies' => $students[$i]['allergies'], 'user_id' => $students[$i]['user_id'], 'account_status' => 1, 'school' => Localadmin::where('user_id', Auth::user()->id)->get('school')->value('school')]);
+                        Student::create([
+                            'firstname' => $students[$i]['firstname'], 
+                            'lastname' => $students[$i]['lastname'], 
+                            'phonenumber' => $students[$i]['phonenumber'], 
+                            'email' => $students[$i]['email'], 
+                            'grade' => $students[$i]['grade'], 
+                            'school_id' => $students[$i]['school_id'], 
+                            'allergies' => $students[$i]['allergies'], 
+                            'user_id' => $students[$i]['user_id'], 
+                            'account_status' => 1, 
+                            'school' => Localadmin::where('user_id', Auth::user()->id)->get('school')->value('school'),
+                        ]);
+
+                        RoleUsers::create([
+                            'user_id' => $user->id,
+                            'role_id' => 3,
+                        ]);
 
                     }else{
                         array_push($this->dupes, $students[$i]['email']);                    
@@ -357,7 +390,6 @@ class CreateStudentScreen extends Screen
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
-            'user_id' => null,
         ];
         
         return $studentTableFields;
@@ -373,11 +405,10 @@ class CreateStudentScreen extends Screen
             'password' => bcrypt($request->input('password')),
             'name' => $request->input('name'),
             'country' => Auth::user()->country,
-            'permissions' => Dashboard::getAllowAllPermission(),
             'account_status' => 1,
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
-            'role' =>'student',
+            'role' =>3,
         ];
         
         return $userTableFields;
