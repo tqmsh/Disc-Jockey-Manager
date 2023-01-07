@@ -85,7 +85,7 @@ class LoginController extends Controller
             if ($auth) {
                 $user = User::where('email', $request->input('email'))->first();
 
-                if(is_null($user->role)==true || strcmp($user->role, 'vendor') !== 0 || is_null($user->permissions)==true){
+                if(is_null($user->role) || $user->role != 4){
 
                     $this->guard->logout();
 
