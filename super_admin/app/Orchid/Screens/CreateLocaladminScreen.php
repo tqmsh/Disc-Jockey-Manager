@@ -186,9 +186,9 @@ class CreateLocaladminScreen extends Screen
             if($this->validEmail($request->input('email'))){
                 
                 //no duplicates found
-                User::create($userTableFields);
+                $user = User::create($userTableFields);
 
-                $localAdminTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                $localAdminTableFields['user_id'] = $user->id;
 
                 Localadmin::create($localAdminTableFields);
                 
@@ -235,11 +235,30 @@ class CreateLocaladminScreen extends Screen
                         $localadmins[$i]['school_id'] = $this->getSchoolID($localadmins[$i]['country'], $localadmins[$i]['school'], $localadmins[$i]['county'], $localadmins[$i]['state_province']);
 
                         
-                        User::create(['firstname' => $localadmins[$i]['firstname'], 'lastname' => $localadmins[$i]['lastname'], 'phonenumber' => $localadmins[$i]['phonenumber'], 'email' => $localadmins[$i]['email'], 'password' => bcrypt($localadmins[$i]['password']), 'country' => $localadmins[$i]['country'], 'role' => 'localadmin', 'name' => $localadmins[$i]['firstname'], 'account_status' => 1, 'permissions' => Dashboard::getAllowAllPermission()]);
-                        
-                        $localadmins[$i]['user_id'] = User::where('email',$localadmins[$i]['email'])->get('id')->value('id');
+                        $user = User::create([
+                           'firstname' => $localadmins[$i]['firstname'],
+                           'lastname' => $localadmins[$i]['lastname'],
+                           'phonenumber' => $localadmins[$i]['phonenumber'],
+                           'email' => $localadmins[$i]['email'],
+                           'password' => bcrypt($localadmins[$i]['password']),
+                           'country' => $localadmins[$i]['country'],
+                           'role' => 2,
+                           'name' => $localadmins[$i]['firstname'],
+                           'account_status' => 1,
+                        ]);
 
-                        Localadmin::create(['firstname' => $localadmins[$i]['firstname'], 'lastname' => $localadmins[$i]['lastname'], 'phonenumber' => $localadmins[$i]['phonenumber'], 'email' => $localadmins[$i]['email'], 'school_id' => $localadmins[$i]['school_id'], 'user_id' => $localadmins[$i]['user_id'], 'account_status' => 1, 'school' => $localadmins[$i]['school']]);
+                        $localadmins[$i]['user_id'] = $user->id;
+
+                        Localadmin::create([
+                           'firstname' => $localadmins[$i]['firstname'],
+                           'lastname' => $localadmins[$i]['lastname'],
+                           'phonenumber' => $localadmins[$i]['phonenumber'],
+                           'email' => $localadmins[$i]['email'],
+                           'school_id' => $localadmins[$i]['school_id'],
+                           'user_id' => $localadmins[$i]['user_id'],
+                           'account_status' => 1,
+                           'school' => $localadmins[$i]['school']
+                        ]);
 
                     }else{
                         array_push($this->dupes, $localadmins[$i]['email']);                    
@@ -366,10 +385,9 @@ class CreateLocaladminScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'account_status' => 1,
-            'permissions' => Dashboard::getAllowAllPermission(),
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
-            'role' =>'localadmin',
+            'role' =>2,
         ];
         
         return $userTableFields;

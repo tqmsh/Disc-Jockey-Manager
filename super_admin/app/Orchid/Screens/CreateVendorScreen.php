@@ -225,10 +225,10 @@ class CreateVendorScreen extends Screen
                 
                 //no duplicates found
                 //create user
-                User::create($userTableFields);
+                $user = User::create($userTableFields);
 
                 //get user id to be used as a foreign key for the vendor table
-                $vendorTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                $vendorTableFields['user_id'] = $user->id;
 
                 //create vendor
                 Vendors::create($vendorTableFields);
@@ -285,15 +285,14 @@ class CreateVendorScreen extends Screen
                             'email' => $vendors[$i]['email'],
                             'password' => bcrypt($vendors[$i]['password']),
                             'country' => $vendors[$i]['country'],
-                            'role' => 'vendor',
+                            'role' => 4,
                             'name' => $vendors[$i]['firstname'],
                             'account_status' => 1,
-                            'permissions' => Dashboard::getAllowAllPermission(),
                         ];
 
-                        User::create($vendor);
+                        $user = User::create($vendor);
                         
-                        $vendor['user_id'] = User::where('email', $vendors[$i]['email'])->get('id')->value('id');
+                        $vendor['user_id'] = $user->id;
 
                         $vendor = [
                             'firstname' => $vendors[$i]['firstname'],
@@ -454,9 +453,8 @@ class CreateVendorScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'account_status' => 1,
-            'permissions' => Dashboard::getAllowAllPermission(),
             'phonenumber' => $request->input('phonenumber'),
-            'role' =>'vendor',
+            'role' =>4,
         ];
         
         return $userTableFields;

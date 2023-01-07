@@ -227,9 +227,9 @@ class CreateStudentScreen extends Screen
             if($this->validEmail($request->input('email'))){
                 
                 //no duplicates found
-                User::create($userTableFields);
+                $user = User::create($userTableFields);
 
-                $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                $studentTableFields['user_id'] = $user->id;
                 
                 Student::create($studentTableFields);
                 
@@ -283,14 +283,14 @@ class CreateStudentScreen extends Screen
                             'email' => $students[$i]['email'],
                             'password' => bcrypt($students[$i]['password']),
                             'country' => $students[$i]['country'],
-                            'role' => 'student',
+                            'role' => 3,
                             'name' => $students[$i]['firstname'],
                             'account_status' => 1,
-                            'permissions' => Dashboard::getAllowAllPermission(),
                         ];
-                        User::create($student);
+
+                        $user = User::create($student);
                         
-                        $student['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
+                        $student['user_id'] = $user->id;
 
                         $student = [
                             'firstname' => $students[$i]['firstname'],
@@ -304,6 +304,7 @@ class CreateStudentScreen extends Screen
                             'account_status' => 1,
                             'school' => $students[$i]['school'],
                         ];
+
                         Student::create($student);
 
                     }else{
@@ -413,7 +414,6 @@ class CreateStudentScreen extends Screen
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
-            'user_id' => null,
         ];
         
         return $studentTableFields;
@@ -464,10 +464,9 @@ class CreateStudentScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'account_status' => 1,
-            'permissions' => Dashboard::getAllowAllPermission(),
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
-            'role' =>'student',
+            'role' =>3,
         ];
         
         return $userTableFields;
