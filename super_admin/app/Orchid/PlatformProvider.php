@@ -41,7 +41,6 @@ class PlatformProvider extends OrchidServiceProvider
             
             Menu::make('Vendors')
             ->icon('dollar')
-            ->size()
             ->list([
                 //vendors nav option
                 Menu::make('List')
@@ -64,7 +63,6 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make('Local Admins')
                 ->icon('people')
-                ->size()
                 ->list([
                     //localadmin nav option
                     Menu::make('List')
@@ -82,7 +80,6 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make('Students')
                 ->icon('graduation')
-                ->size()
                 ->list([
                     //student nav option
                     Menu::make('List')
@@ -98,10 +95,22 @@ class PlatformProvider extends OrchidServiceProvider
                         ->route('platform.pendingstudent.list'),
                 ]),
 
-            //school nav option
             Menu::make('Schools')
                 ->icon('building')
-                ->route('platform.school.list'),
+                ->list([
+
+                    //school nav option
+                    Menu::make('List')
+                        ->icon('list')
+                        ->route('platform.school.list'),
+
+                    //school nav option
+                    Menu::make('Regions')
+                        ->icon('globe')
+                        ->route('platform.region.list'),
+                ]),
+
+
 
             //event nav option
             Menu::make('Events')

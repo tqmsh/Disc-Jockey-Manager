@@ -240,7 +240,6 @@ class CreateLocaladminScreen extends Screen
                         
                         $localadmins[$i]['school_id'] = $this->getSchoolID($localadmins[$i]['country'], $localadmins[$i]['school'], $localadmins[$i]['county'], $localadmins[$i]['state_province']);
 
-                        
                         $user = User::create([
                            'firstname' => $localadmins[$i]['firstname'],
                            'lastname' => $localadmins[$i]['lastname'],
