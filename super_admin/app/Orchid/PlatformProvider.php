@@ -61,11 +61,6 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('layers')
                 ->route('platform.category.list'),
             ]),
-            
-            //school nav option
-            Menu::make('Schools')
-                ->icon('building')
-                ->route('platform.school.list'),
 
             Menu::make('Local Admins')
                 ->icon('people')
@@ -102,6 +97,11 @@ class PlatformProvider extends OrchidServiceProvider
                                 })
                         ->route('platform.pendingstudent.list'),
                 ]),
+
+            //school nav option
+            Menu::make('Schools')
+                ->icon('building')
+                ->route('platform.school.list'),
 
             //event nav option
             Menu::make('Events')

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
 use Illuminate\Support\Str;
@@ -184,34 +185,47 @@ class CreateStudentScreen extends Screen
 
 
     public function createStudent(Request $request){
-
         try{
-
+            //get the student table fields
             $studentTableFields = $this->getStudentFields($request);
 
+            //get the user table fields
             $userTableFields = $this->getUserFields($request);
 
             //check for duplicate email
             if($this->validEmail($request->input('email'))){
-                
-                //no duplicates found
-                User::create($userTableFields);
 
-                $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                //no duplicates found
+                //create user
+                $user = User::create($userTableFields);
+
+                //add the user id to the student table fields
+                $studentTableFields['user_id'] = $user->id;
                 
+                //create student
                 Student::create($studentTableFields);
+
+                //attach the student to the role of student
+                RoleUsers::create([
+                    'user_id' => $user->id,
+                    'role_id' => 3,
+                ]);
                 
+                //notify the user
                 Toast::success('Student Added Succesfully');
 
+                //redirect to the student list
                 return redirect()->route('platform.student.list');
             
             }else{
                 //duplicate email found
+                //notify the user
                 Toast::error('Email already exists.');
             }
 
         }catch(Exception $e){
 
+            //notify the user
             Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
     }
@@ -244,11 +258,38 @@ class CreateStudentScreen extends Screen
                         
                         $students[$i]['school_id'] = Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id');
                         
-                        User::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'password' => bcrypt($students[$i]['password']), 'country' => Auth::user()->country, 'role' => 'student', 'name' => $students[$i]['firstname'], 'account_status' => 1, 'permissions' => Dashboard::getAllowAllPermission(),]);
+                        $user = User::create([
+                            'firstname' => $students[$i]['firstname'], 
+                            'lastname' => $students[$i]['lastname'], 
+                            'phonenumber' => $students[$i]['phonenumber'], 
+                            'email' => $students[$i]['email'], 
+                            'password' => bcrypt($students[$i]['password']), 
+                            'country' => Auth::user()->country, 
+                            'role' => 'student', 
+                            'name' => $students[$i]['firstname'], 
+                            'account_status' => 1, 
+                            'permissions' => Dashboard::getAllowAllPermission(),
+                        ]);
                         
-                        $students[$i]['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
+                        $students[$i]['user_id'] = $user->id;
 
-                        Student::create(['firstname' => $students[$i]['firstname'], 'lastname' => $students[$i]['lastname'], 'phonenumber' => $students[$i]['phonenumber'], 'email' => $students[$i]['email'], 'grade' => $students[$i]['grade'], 'school_id' => $students[$i]['school_id'], 'allergies' => $students[$i]['allergies'], 'user_id' => $students[$i]['user_id'], 'account_status' => 1, 'school' => Localadmin::where('user_id', Auth::user()->id)->get('school')->value('school')]);
+                        Student::create([
+                            'firstname' => $students[$i]['firstname'], 
+                            'lastname' => $students[$i]['lastname'], 
+                            'phonenumber' => $students[$i]['phonenumber'], 
+                            'email' => $students[$i]['email'], 
+                            'grade' => $students[$i]['grade'], 
+                            'school_id' => $students[$i]['school_id'], 
+                            'allergies' => $students[$i]['allergies'], 
+                            'user_id' => $students[$i]['user_id'], 
+                            'account_status' => 1, 
+                            'school' => Localadmin::where('user_id', Auth::user()->id)->get('school')->value('school'),
+                        ]);
+
+                        RoleUsers::create([
+                            'user_id' => $user->id,
+                            'role_id' => 3,
+                        ]);
 
                     }else{
                         array_push($this->dupes, $students[$i]['email']);                    
@@ -280,31 +321,38 @@ class CreateStudentScreen extends Screen
 
     private function validFile(Request $request){
 
-        $path = '';
-
+        // First, check if the request has the file
         if(!is_null($request->file('student_csv'))){
 
+            // Get the path to the file
             $path = $request->file('student_csv')->getRealPath();
 
+            // If the path to the file is not null
             if(!is_null($path)){
 
+                // Get the extension of the file
                 $extension = $request->file('student_csv')->extension();
 
+                // Check if the extension is csv
                 if($extension != 'csv'){
 
+                    // If not, display an error message
                     Toast::error('Incorrect file type.'); return false;
                 }else{
 
+                    // If it is, return the path
                     return $path;
                 }
 
             } else{
                 
+                // If the path is null, display an error message
                 Toast::error('An error has occured.'); return;
             }
 
         } else{
 
+            // If the request does not have the file, display an error message
             Toast::error('Upload a csv file to import students.'); return false;
         }
     }
@@ -357,7 +405,6 @@ class CreateStudentScreen extends Screen
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
-            'user_id' => null,
         ];
         
         return $studentTableFields;
@@ -373,11 +420,10 @@ class CreateStudentScreen extends Screen
             'password' => bcrypt($request->input('password')),
             'name' => $request->input('name'),
             'country' => Auth::user()->country,
-            'permissions' => Dashboard::getAllowAllPermission(),
             'account_status' => 1,
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
-            'role' =>'student',
+            'role' =>3,
         ];
         
         return $userTableFields;

@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
+use App\Models\RoleUsers;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -225,13 +226,19 @@ class CreateVendorScreen extends Screen
                 
                 //no duplicates found
                 //create user
-                User::create($userTableFields);
+                $user = User::create($userTableFields);
 
                 //get user id to be used as a foreign key for the vendor table
-                $vendorTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
+                $vendorTableFields['user_id'] = $user->id;
 
                 //create vendor
                 Vendors::create($vendorTableFields);
+
+                //give them permissions to enter the application
+                RoleUsers::create([
+                    'user_id' => $user->id,
+                    'role_id' => 4
+                ]);
                 
                 //toast success message
                 Toast::success('Vendor Added Succesfully');
@@ -285,15 +292,14 @@ class CreateVendorScreen extends Screen
                             'email' => $vendors[$i]['email'],
                             'password' => bcrypt($vendors[$i]['password']),
                             'country' => $vendors[$i]['country'],
-                            'role' => 'vendor',
+                            'role' => 4,
                             'name' => $vendors[$i]['firstname'],
                             'account_status' => 1,
-                            'permissions' => Dashboard::getAllowAllPermission(),
                         ];
 
-                        User::create($vendor);
+                        $user = User::create($vendor);
                         
-                        $vendor['user_id'] = User::where('email', $vendors[$i]['email'])->get('id')->value('id');
+                        $vendor['user_id'] = $user->id;
 
                         $vendor = [
                             'firstname' => $vendors[$i]['firstname'],
@@ -313,6 +319,11 @@ class CreateVendorScreen extends Screen
                         ];
                         
                         Vendors::create($vendor);
+
+                        RoleUsers::create([
+                            'user_id' => $user->id,
+                            'role_id' => 4
+                        ]);
 
                     }else{
                         array_push($this->dupes, $vendors[$i]['email']);                    
@@ -454,9 +465,8 @@ class CreateVendorScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'account_status' => 1,
-            'permissions' => Dashboard::getAllowAllPermission(),
             'phonenumber' => $request->input('phonenumber'),
-            'role' =>'vendor',
+            'role' =>4,
         ];
         
         return $userTableFields;

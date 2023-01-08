@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -215,38 +216,53 @@ class CreateStudentScreen extends Screen
     }
 
 
-    public function createStudent(Request $request){
+ public function createStudent(Request $request){
 
-        try{
+    try{
 
-            $studentTableFields = $this->getStudentFields($request);
+        //get the student table fields
+        $studentTableFields = $this->getStudentFields($request);
 
-            $userTableFields = $this->getUserFields($request);
+        //get the user table fields
+        $userTableFields = $this->getUserFields($request);
 
-            //check for duplicate email
-            if($this->validEmail($request->input('email'))){
-                
-                //no duplicates found
-                User::create($userTableFields);
-
-                $studentTableFields['user_id'] = User::where('email', $request->input('email'))->get('id')->value('id');
-                
-                Student::create($studentTableFields);
-                
-                Toast::success('Student Added Succesfully');
-
-                return redirect()->route('platform.student.list');
+        //check for duplicate email
+        if($this->validEmail($request->input('email'))){
             
-            }else{
-                //duplicate email found
-                Toast::error('Email already exists.');
-            }
+            //no duplicates found
+            //create the user
+            $user = User::create($userTableFields);
 
-        }catch(Exception $e){
+            //add the user id to the student table fields
+            $studentTableFields['user_id'] = $user->id;
+            
+            //create the student
+            Student::create($studentTableFields);
 
-            Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
+            //create a role user entry for the student
+            RoleUsers::create([
+                'user_id' => $user->id,
+                'role_id' => 3,
+            ]);
+
+            //show a success toast
+            Toast::success('Student Added Succesfully');
+
+            //redirect to the student index
+            return redirect()->route('platform.student.list');
+        
+        }else{
+            //duplicate email found
+            //show an error toast
+            Toast::error('Email already exists.');
         }
+
+    }catch(Exception $e){
+
+        //show an error toast
+        Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
     }
+}
     
     //this method will mass import schools from a csv file
     public function massImport(Request $request){
@@ -283,14 +299,14 @@ class CreateStudentScreen extends Screen
                             'email' => $students[$i]['email'],
                             'password' => bcrypt($students[$i]['password']),
                             'country' => $students[$i]['country'],
-                            'role' => 'student',
+                            'role' => 3,
                             'name' => $students[$i]['firstname'],
                             'account_status' => 1,
-                            'permissions' => Dashboard::getAllowAllPermission(),
                         ];
-                        User::create($student);
+
+                        $user = User::create($student);
                         
-                        $student['user_id'] = User::where('email',$students[$i]['email'])->get('id')->value('id');
+                        $student['user_id'] = $user->id;
 
                         $student = [
                             'firstname' => $students[$i]['firstname'],
@@ -304,7 +320,13 @@ class CreateStudentScreen extends Screen
                             'account_status' => 1,
                             'school' => $students[$i]['school'],
                         ];
+
                         Student::create($student);
+
+                        RoleUsers::create([
+                            'user_id' => $user->id,
+                            'role_id' => 3,
+                        ]);
 
                     }else{
                         array_push($this->dupes, $students[$i]['email']);                    
@@ -413,7 +435,6 @@ class CreateStudentScreen extends Screen
             'event_id' => $request->input('event_id'),
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
-            'user_id' => null,
         ];
         
         return $studentTableFields;
@@ -464,10 +485,9 @@ class CreateStudentScreen extends Screen
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'account_status' => 1,
-            'permissions' => Dashboard::getAllowAllPermission(),
             'phonenumber' => $request->input('phonenumber'),
             'remember_token' => Str::random(10),
-            'role' =>'student',
+            'role' =>3,
         ];
         
         return $userTableFields;
