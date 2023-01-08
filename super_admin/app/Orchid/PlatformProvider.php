@@ -41,6 +41,7 @@ class PlatformProvider extends OrchidServiceProvider
             
             Menu::make('Vendors')
             ->icon('dollar')
+            ->size()
             ->list([
                 //vendors nav option
                 Menu::make('List')
@@ -61,8 +62,25 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.category.list'),
             ]),
 
+            Menu::make('Schools')
+                ->icon('building')
+                ->size()
+                ->list([
+
+                    //school nav option
+                    Menu::make('List')
+                        ->icon('list')
+                        ->route('platform.school.list'),
+
+                    //school nav option
+                    Menu::make('Regions')
+                        ->icon('globe')
+                        ->route('platform.region.list'),
+                ]),
+
             Menu::make('Local Admins')
                 ->icon('people')
+                ->size()
                 ->list([
                     //localadmin nav option
                     Menu::make('List')
@@ -80,6 +98,7 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make('Students')
                 ->icon('graduation')
+                ->size()
                 ->list([
                     //student nav option
                     Menu::make('List')
@@ -95,27 +114,16 @@ class PlatformProvider extends OrchidServiceProvider
                         ->route('platform.pendingstudent.list'),
                 ]),
 
-            Menu::make('Schools')
-                ->icon('building')
-                ->list([
-
-                    //school nav option
-                    Menu::make('List')
-                        ->icon('list')
-                        ->route('platform.school.list'),
-
-                    //school nav option
-                    Menu::make('Regions')
-                        ->icon('globe')
-                        ->route('platform.region.list'),
-                ]),
-
-
 
             //event nav option
             Menu::make('Events')
                 ->icon('diamond')
                 ->route('platform.event.list'),
+
+            Menu::make(__('Roles'))
+                ->icon('lock')
+                ->route('platform.systems.roles')
+                ->permission('platform.systems.roles'),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
@@ -166,11 +174,6 @@ class PlatformProvider extends OrchidServiceProvider
                             ->badge(function () {
                                 return Dashboard::version();
                             }, Color::DARK()),
-
-                        Menu::make(__('Roles'))
-                            ->icon('lock')
-                            ->route('platform.systems.roles')
-                            ->permission('platform.systems.roles'),
                 ]),
         ];
     }

@@ -26,7 +26,7 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateVendorScreen extends Screen
 {
-    public $requiredFields = ['country', 'company_name', 'firstname', 'category_name', 'address', 'city', 'state_province', 'zip_postal', 'phonenumber', 'fax', 'website', 'email', 'password'];
+    public $requiredFields = ['country', 'company_name', 'firstname', 'lastname', 'category_name', 'address', 'city', 'state_province', 'zip_postal', 'phonenumber', 'website', 'email', 'password'];
 
     public $dupes =[];
 
@@ -412,7 +412,7 @@ class CreateVendorScreen extends Screen
 
     private function getCategoryId($category_name){
             
-            $category = Categories::where('name', 'like', '%' . $category_name . '%')->get();
+            $category = Categories::where('name', $category_name)->get();
     
             if(count($category) == 0){
                 return null;
