@@ -61,18 +61,19 @@ class ViewVendorLayout extends Table
                     return Link::make($vendor->phonenumber)
                         ->route('platform.vendor.edit', $vendor);
                 }),
-
-            TD::make('website', 'Website')
-                ->render(function (Vendors $vendor) {
-                    return Link::make($vendor->website)
-                        ->href($vendor->website);
-                }),
                 
             TD::make('category_id', 'Category')
                 ->render(function (Vendors $vendor) {
                     return Link::make(Categories::find($vendor->category_id)->name)
                         ->route('platform.vendor.edit', $vendor);
                 }),
+                
+            TD::make('website', 'Website')
+                ->render(function (Vendors $vendor) {
+                    return Link::make($vendor->website)
+                        ->href($vendor->website);
+                }),
+                
 
             TD::make('country', 'Country')
                 ->render(function (Vendors $vendor) {

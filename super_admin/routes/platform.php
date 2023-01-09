@@ -25,6 +25,7 @@ use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\EditLocaladminScreen;
 use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
+use App\Orchid\Screens\EditRegionScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
@@ -36,6 +37,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewRegionScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +119,12 @@ Route::screen('/categories', ViewCategoryScreen::class)->name('platform.category
 
 //show edit category screen
 Route::screen('/categories/{category}', EditCategoryScreen::class)->name('platform.category.edit');
+
+//show view region screen
+Route::screen('/regions', ViewRegionScreen::class)->name('platform.region.list');
+
+//show edit region screen
+Route::screen('/regions/{regions}', EditRegionScreen::class)->name('platform.region.edit');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

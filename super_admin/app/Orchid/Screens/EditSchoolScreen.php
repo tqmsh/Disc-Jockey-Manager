@@ -256,6 +256,7 @@ class EditSchoolScreen extends Screen
         try{
             
             $school->delete();
+            
             User::where('id', $school->teacher_id)->delete();
 
             Toast::info('You have successfully deleted the school.');

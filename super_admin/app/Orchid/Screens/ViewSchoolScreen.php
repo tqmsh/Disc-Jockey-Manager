@@ -12,6 +12,7 @@ use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Illuminate\Http\JsonResponse;
 use Orchid\Screen\Actions\Button;
@@ -113,7 +114,7 @@ class ViewSchoolScreen extends Screen
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewSchoolLayout::class
+            ViewSchoolLayout::class,
         ];
     }
     

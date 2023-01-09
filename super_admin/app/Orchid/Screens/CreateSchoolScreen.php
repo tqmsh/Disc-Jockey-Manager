@@ -263,9 +263,9 @@ class CreateSchoolScreen extends Screen
                 $schoolTableFields = $this->getSchoolFields($request);
 
                 //make the user first, then get the id and insert that along with other fields in the school table
-                User::create($userTableFields);
+                $user = User::create($userTableFields);
 
-                $schoolTableFields['teacher_id'] = User::where('email', $request->input('teacher_email'))->get('id')->value('id');
+                $schoolTableFields['teacher_id'] = $user->id;
                 
                 School::create($schoolTableFields);
 
@@ -414,7 +414,7 @@ class CreateSchoolScreen extends Screen
             'lastname' => $request->input('lastname'),
             'phonenumber' => $request->input('teacher_cell'),
             'email' => $request->input('teacher_email'),
-            'role' => 'teacher',
+            'role' => 5,
             'country' => $request->input('country'),
         ];
         

@@ -2,9 +2,9 @@
 
 namespace App\Orchid\Screens;
 
-use Orchid\Screen\Screen;
-use App\Models\Categories;
 use Exception;
+use App\Models\Region;
+use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
@@ -12,19 +12,21 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
-class EditCategoryScreen extends Screen
+class EditRegionScreen extends Screen
 {
-    public $category;
+
+    public $region;
 
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Categories $category): iterable
+    public function query(Region $region): iterable
     {
         return [
-            'category' => $category
+            'region' => $region
+
         ];
     }
 
@@ -35,7 +37,7 @@ class EditCategoryScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit: ' . $this->category->name;
+        return 'Edit: ' . $this->region->name;
     }
 
     /**
@@ -46,18 +48,17 @@ class EditCategoryScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-
             Button::make('Submit')
                 ->icon('check')
                 ->method('update'),
 
-            Button::make('Delete Category')
+            Button::make('Delete Region')
                 ->icon('trash')
                 ->method('delete'),
 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.category.list')
+                ->route('platform.region.list')
         ];
     }
 
@@ -71,45 +72,45 @@ class EditCategoryScreen extends Screen
         return [
             Layout::rows([
 
-                Input::make('category_name')
-                    ->title('Category Name')
-                    ->placeholder('Enter the name of the category')
+                Input::make('region_name')
+                    ->title('Region Name')
+                    ->placeholder('Enter the name of the region')
                     ->help('This is the name of the category that will be displayed to the user.')
-                    ->value($this->category->name),
+                    ->value($this->region->name),
             ])
         ];
     }
 
-    public function update(Categories $category){
+    public function update(Region $region){
 
         try{
 
-            $category->name = request('category_name');
+            $region->name = request('region_name');
     
-            $category->save();
+            $region->save();
     
-            Toast::success('Category updated successfully.');
+            Toast::success('Region updated successfully.');
     
-            return redirect()->route('platform.category.list');
+            return redirect()->route('platform.region.list');
 
         }catch(Exception $e){
             Alert::error($e->getMessage());
         }
     }
 
-    public function delete(Categories $category)
+    public function delete(Region $region)
     {
         try{
             
-            $category->delete();
+            $region->delete();
 
-            Toast::info('You have successfully deleted the category.');
+            Toast::info('You have successfully deleted the region.');
     
-            return redirect()->route('platform.category.list');
+            return redirect()->route('platform.region.list');
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this category. Error Code: ' . $e);
+            Alert::error('There was an error deleting this region. Error Code: ' . $e);
         }
     }
 }
