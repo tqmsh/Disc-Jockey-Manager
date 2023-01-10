@@ -84,7 +84,7 @@ class LoginController extends Controller
 
                 $user = User::where('email', $request->input('email'))->first();
 
-                if ($user->role != 2 || $user->role != 5 || $user->account_status == 0){
+                if ($user->role != 2 && $user->role != 5 || $user->account_status == 0){
 
                     $this->guard->logout();
 
