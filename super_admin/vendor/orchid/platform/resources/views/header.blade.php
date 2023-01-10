@@ -1,9 +1,7 @@
 @push('head')
     <meta name="robots" content="noindex" />
     <link
-          href="{{ URL::asset('/image/Prom_VP_Line.png') }}"
-          sizes="any"
-          type="image/svg+xml"
+          href=""
           id="favicon"
           rel="icon"
     >
