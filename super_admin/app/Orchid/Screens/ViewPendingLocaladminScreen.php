@@ -127,17 +127,14 @@ class ViewPendingLocaladminScreen extends Screen
                 //loop through the localadmins set account status to 1 and give them permissions to access dashboard
                 foreach($localadmins as $localadmin_id){
 
-                    $userTableFields = [
-                        'account_status' => 1,
-                        'permissions' => '{"platform.index":true}'
-                    ];
+                    User::where('id', $localadmin_id)->update(['account_status' => 1]);
 
-                    $localAdminFields = [
-                        'account_status' => 1,
-                    ];
+                    Localadmin::where('user_id', $localadmin_id)->update(['account_status' => 1]);
 
-                    User::where('id', $localadmin_id)->update($userTableFields);
-                    Localadmin::where('user_id', $localadmin_id)->update($localAdminFields);
+                    RoleUsers::create([
+                        'user_id' => $localadmin_id,
+                        'role_id' => 2,
+                    ]);
                 }
 
                 Toast::success('Selected local admins accepted succesfully');
@@ -147,7 +144,7 @@ class ViewPendingLocaladminScreen extends Screen
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to accept the selected local admins. Error Message: ' . $e);
+            Alert::error('There was a error trying to accept the selected local admins. Error Message: ' . $e->getMessage());
         }
     }
 
