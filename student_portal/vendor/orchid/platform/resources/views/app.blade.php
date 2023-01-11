@@ -12,6 +12,7 @@
     </title>
     <meta name="csrf_token" content="{{  csrf_token() }}" id="csrf_token">
     <meta name="auth" content="{{  Auth::check() }}" id="auth">
+    <link href="{{ URL::asset('/image/Prom_VP_Line.png') }}" sizes="any" type="image/svg+xml" id="favicon" rel="icon">
     @if(\Orchid\Support\Locale::currentDir(app()->getLocale()) == "rtl")
         <link rel="stylesheet" type="text/css" href="{{  mix('/css/orchid.rtl.css','vendor/orchid') }}">
     @else

@@ -52,7 +52,7 @@ use App\Orchid\Screens\ViewRegionScreen;
 
 
 // Orchid main menu
-Route::screen('/main', PlatformScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
@@ -118,13 +118,13 @@ Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platfo
 Route::screen('/categories', ViewCategoryScreen::class)->name('platform.category.list');
 
 //show edit category screen
-Route::screen('/categories/{category}', EditCategoryScreen::class)->name('platform.category.edit');
+Route::screen('/categories/{category}/edit', EditCategoryScreen::class)->name('platform.category.edit');
 
 //show view region screen
 Route::screen('/regions', ViewRegionScreen::class)->name('platform.region.list');
 
 //show edit region screen
-Route::screen('/regions/{regions}', EditRegionScreen::class)->name('platform.region.edit');
+Route::screen('/regions/{regions}/edit', EditRegionScreen::class)->name('platform.region.edit');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

@@ -83,7 +83,7 @@ class LoginController extends Controller
 
                 $user = User::where('email', $request->input('email'))->first();
 
-                if(is_null($user->role) || $user->role != 3){
+                if($user->role != 3 || $user->account_status == 0){
 
                     $this->guard->logout();
 
@@ -209,16 +209,16 @@ class LoginController extends Controller
 
                     $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
                     $userTableFields['password'] = $formFields['password'];
-                    $userTableFields['role'] = 'student';
+                    $userTableFields['role'] = 3;
 
-                    $userCreateSuccess = User::create($userTableFields);
+                    $user = User::create($userTableFields);
     
-                    if($userCreateSuccess){
+                    if($user){
                         
                         $studentTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school', 'grade', 'allergies']);
+                        
                         $studentTableFields['school_id'] = $school_id;
-                        $studentTableFields['user_id'] = User::where('email', $studentTableFields['email'])->get('id')->value('id');
-
+                        $studentTableFields['user_id'] = $user->id;
 
                         $studentCreateSuccess = Student::create($studentTableFields);
 

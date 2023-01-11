@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\School;
 use Illuminate\View\View;
 use App\Models\Localadmin;
+use App\Models\RoleUsers;
 use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
 use Illuminate\Validation\Rule;
@@ -83,17 +84,15 @@ class LoginController extends Controller
 
                 $user = User::where('email', $request->input('email'))->first();
 
-                if(is_null($user->role) || $user->role != 2){
+                if ($user->role != 2 && $user->role != 5 || $user->account_status == 0){
 
                     $this->guard->logout();
-
-                    $cookieJar->forget('lockUser');
 
                     $request->session()->invalidate();
 
                     $request->session()->regenerateToken();
 
-                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
+                   throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
                 }
 
                 return $this->sendLoginResponse($request);
@@ -102,6 +101,7 @@ class LoginController extends Controller
             throw ValidationException::withMessages([
                 'email' => __('The details you entered did not match our records. Please double-check and try again.'),
             ]);
+            
         }catch(Exception $e){
             throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
         }
@@ -207,15 +207,15 @@ class LoginController extends Controller
 
                     $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
                     $userTableFields['password'] = $formFields['password'];
-                    $userTableFields['role'] = 'localadmin';
+                    $userTableFields['role'] = 2;
 
-                    $userCreateSuccess = User::create($userTableFields);
+                    $user = User::create($userTableFields);
     
-                    if($userCreateSuccess){
+                    if($user){
                         
                         $localadminTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school']);
                         $localadminTableFields['school_id'] = $school_id;
-                        $localadminTableFields['user_id'] = User::where('email', $localadminTableFields['email'])->get('id')->value('id');
+                        $localadminTableFields['user_id'] = $user->id;
 
 
                         $localadminCreateSuccess = Localadmin::create($localadminTableFields);

@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
@@ -129,17 +130,14 @@ class ViewPendingStudentScreen extends Screen
                 //loop through the students set account status to 1 and give them permissions to access dashboard
                 foreach($students as $student_id){
 
-                    $userTableFields = [
-                        'account_status' => 1,
-                        'permissions' => '{"platform.index":true}'
-                    ];
+                    User::where('id', $student_id)->update(['account_status' => 1]);
 
-                    $studentTableFields = [
-                        'account_status' => 1,
-                    ];
+                    Student::where('user_id', $student_id)->update(['account_status' => 1]);
 
-                    User::where('id', $student_id)->update($userTableFields);
-                    Student::where('user_id', $student_id)->update($studentTableFields);
+                    RoleUsers::create([
+                        'user_id' => $student_id,
+                        'role_id' => 3,
+                    ]);
                 }
 
                 Toast::success('Selected students accepted succesfully');

@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\User;
 use App\Models\Vendors;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
@@ -125,18 +126,14 @@ class ViewPendingVendorScreen extends Screen
                 //loop through the vendors set account status to 1 and give them permissions to access dashboard
                 foreach($vendors as $vendor_id){
 
-                    $userTableFields = [
-                        'account_status' => 1,
-                        'permissions' => '{"platform.index":true}'
-                    ];
+                    User::where('id', $vendor_id)->update(['account_status' => 1]);
 
-                    $vendorFields = [
-                        'account_status' => 1,
-                    ];
+                    Vendors::where('user_id', $vendor_id)->update(['account_status' => 1]);
 
-                    User::where('id', $vendor_id)->update($userTableFields);
-
-                    Vendors::where('user_id', $vendor_id)->update($vendorFields);
+                    RoleUsers::create([
+                        'user_id' => $vendor_id,
+                        'role_id' => 3,
+                    ]);
                 }
 
                 Toast::success('Selected vendors accepted succesfully');

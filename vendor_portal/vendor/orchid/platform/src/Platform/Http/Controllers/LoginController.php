@@ -85,7 +85,7 @@ class LoginController extends Controller
             if ($auth) {
                 $user = User::where('email', $request->input('email'))->first();
 
-                if(is_null($user->role) || $user->role != 4){
+                if($user->role != 4 || $user->account_status == 0){
 
                     $this->guard->logout();
 
@@ -190,15 +190,15 @@ class LoginController extends Controller
 
             $userTableFields['password'] = $formFields['password'];
 
-            $userTableFields['role'] = 'vendor';
+            $userTableFields['role'] = 4;
 
-            $userCreateSuccess = User::create($userTableFields);
+            $user = User::create($userTableFields);
 
-            if($userCreateSuccess){
+            if($user){
                 
                 $vendorTableFields = $request->except(['firstname', 'lastname', 'name', 'password', 'password_confirmation']);
 
-                $vendorTableFields['user_id'] = User::where('email', $vendorTableFields['email'])->get('id')->value('id');
+                $vendorTableFields['user_id'] = $user->id;
 
                 $vendorCreateSuccess = Vendors::create($vendorTableFields);
 
