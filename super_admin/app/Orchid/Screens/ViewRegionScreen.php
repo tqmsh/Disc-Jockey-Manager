@@ -2,19 +2,24 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Region;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewRegionLayout;
-use Exception;
 
 class ViewRegionScreen extends Screen
 {
+    public $requiredFields = ['name'];
+    public $dupes =[];
+
     /**
      * Query data.
      *
@@ -45,6 +50,12 @@ class ViewRegionScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+
+            ModalToggle::make('Mass Import Regions')
+                ->modal('massImportModal')
+                ->method('massImport')
+                ->icon('plus'),
+                
             Button::make('Delete Selected Regions')
                 ->icon('trash')
                 ->method('deleteRegions')
@@ -61,6 +72,21 @@ class ViewRegionScreen extends Screen
     {
         return [
 
+            Layout::modal('massImportModal',[
+
+                Layout::rows([
+
+                    Input::make('regions_csv')
+                        ->type('file')
+                        ->title('File must be in csv format. Ex. regions.csv')
+                        ->help('The csv file MUST HAVE these fields and they need to be named accordingly to successfully import the regions: <br>
+                            • name <br>')
+                ]),
+            ])
+            ->title('Mass Import Regions')
+            ->applyButton('Import')
+            ->withoutCloseButton(),
+
             ViewRegionLayout::class,
 
             Layout::rows([
@@ -75,6 +101,63 @@ class ViewRegionScreen extends Screen
                     ->method('createRegion'),
             ])
         ];
+    }
+
+    //this method will mass import schools from a csv file
+    public function massImport(Request $request){
+
+        try{
+
+            $path = $this->validFile($request);
+
+            if($path){
+
+                $regions = $this->csvToArray($path);
+
+                $keys = array_keys($regions[0]);
+
+                //check if the user has the required values in the csv file
+                foreach($this->requiredFields as $field){
+
+                    if(!in_array($field, $keys)){
+                        Toast::error('"' . $field . '"' . 'is missing in your csv file.'); return;
+                    }
+                }
+
+                //loop through the array of regions and re-write the keys to insert in db
+                for ($i = 0; $i < count($regions); $i ++){
+                    
+                    //check for duplicate regions
+                    if(count(Region::where('name', $regions[$i]['name'])->get()) == 0){
+                        
+                        Region::create(['name' => $regions[$i]['name']]);
+
+                    }else{
+                        array_push($this->dupes, $regions[$i]['name']);                    
+                    }
+                }
+
+                if(!empty($this->dupes)){
+                    $message = 'The following regions have not been added as they already exist: ';
+
+                    foreach($this->dupes as $region){
+
+                        $message .="| " . $region . " | ";
+                    }
+
+                    Alert::error($message);
+                }else{
+
+                    Toast::success('Regions imported successfully!');
+                }
+
+
+                return redirect()->route('platform.region.list');
+            }
+        }catch(Exception $e){
+            
+            Alert::error('There was an error mass importing the regions. Error Code: ' . $e->getMessage());
+        }
     }
 
     //this method will create the region
@@ -130,5 +213,62 @@ class ViewRegionScreen extends Screen
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected regions. Error Message: ' . $e->getMessage());
         }
+    }
+
+    private function validFile(Request $request){
+
+        $path = '';
+
+        if(!is_null($request->file('regions_csv'))){
+
+            $path = $request->file('regions_csv')->getRealPath();
+
+            if(!is_null($path)){
+
+                $extension = $request->file('regions_csv')->extension();
+
+                if($extension != 'csv' && $extension != 'txt'){
+
+                    Toast::error('Incorrect file type.'); return false;
+                }else{
+
+                    return $path;
+                }
+
+            } else{
+                
+                Toast::error('An error has occured.'); return;
+            }
+
+        } else{
+
+            Toast::error('Upload a csv file to import regions.'); return false;
+        }
+    }
+
+    //this function will convert the csv file to an array
+    private function csvToArray($filename = '', $delimiter = ','){
+        
+        if (!file_exists($filename) || !is_readable($filename)){
+            Alert::error('There has been an error finding this file.');
+            return;
+        }
+
+        $header = null;
+        $data = array();
+
+        if (($handle = fopen($filename, 'r')) !== false){
+
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false){
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $data;
     }
 }
