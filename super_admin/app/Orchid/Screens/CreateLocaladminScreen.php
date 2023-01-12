@@ -18,7 +18,6 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\Password;
 use Orchid\Support\Facades\Layout;
-use Orchid\Support\Facades\Dashboard;
 use Orchid\Screen\Actions\ModalToggle;
 
 class CreateLocaladminScreen extends Screen
@@ -212,7 +211,7 @@ class CreateLocaladminScreen extends Screen
         }
     }
 
-    //this method will mass import schools from a csv file
+    //this method will mass import localadmins from a csv file
     public function massImport(Request $request){
 
         try{
@@ -233,7 +232,7 @@ class CreateLocaladminScreen extends Screen
                     }
                 }
 
-                //loop through the array of schools and re-write the keys to insert in db
+                //loop through the array of local admins and re-write the keys to insert in db
                 for ($i = 0; $i < count($localadmins); $i ++){
 
                     if($this->validEmail($localadmins[$i]['email'])){
@@ -310,7 +309,7 @@ class CreateLocaladminScreen extends Screen
 
                 $extension = $request->file('localadmin_csv')->extension();
 
-                if($extension != 'csv'){
+                if($extension != 'csv' && $extension != 'txt'){
 
                     Toast::error('Incorrect file type.'); return false;
                 }else{
