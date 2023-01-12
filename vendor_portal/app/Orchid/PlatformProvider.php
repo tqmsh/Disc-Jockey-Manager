@@ -29,7 +29,7 @@ class PlatformProvider extends OrchidServiceProvider
      * @return Menu[]
      */
     public function registerMainMenu(): array
-    {
+    {  
         return [
                 
             //MONEY MAKER
@@ -39,7 +39,7 @@ class PlatformProvider extends OrchidServiceProvider
             ->route('platform.example'),
 
             //student nav option
-            Menu::make('Events')
+            Menu::make('Bid Opportunities ')
             ->icon('diamond')
             ->route('platform.event.list'),
                 

@@ -8,10 +8,12 @@ use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Categories;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
@@ -96,7 +98,20 @@ class ViewEventScreen extends Screen
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewEventLayout::class
+            ViewEventLayout::class,
+
+            Layout::rows([
+
+                Input::make('category_name')
+                    ->title('Suggest Category Name')
+                    ->placeholder('Enter the name of the category')
+                    ->help('Suggest a category to be reviewed and approved by an admin'),
+                    
+                Button::make('Add')
+                    ->icon('plus')
+                    ->type(Color::DEFAULT())
+                    ->method('createCategory'),
+            ])
         ];
     }
 
@@ -131,6 +146,36 @@ class ViewEventScreen extends Screen
 
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
+    }
+
+    //this method will create the category
+    public function createCategory()
+    {
+        //take category from request then check for duplicate
+        $category = request('category_name');
+
+        if(is_null($category)){
+            
+            Toast::error('Category name cannot be empty');
+
+        }else if(!empty(Categories::where('name', $category)->first())){
+            
+            Toast::error('Category already exists');
+            
+        }else{
+
+            //update the category if it already exists or create it if it doesnt
+            $check = Categories::create(['name' => $category, 'status' => 0]);
+
+            if($check){
+
+                Toast::success('Category has been created for review!');
+
+            }else{
+
+                Toast::error('Category could not be created for an unknown reason');
+            }
         }
     }
 }

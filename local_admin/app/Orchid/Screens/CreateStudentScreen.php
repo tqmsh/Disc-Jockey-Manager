@@ -334,7 +334,7 @@ class CreateStudentScreen extends Screen
                 $extension = $request->file('student_csv')->extension();
 
                 // Check if the extension is csv
-                if($extension != 'csv'){
+                if($extension != 'csv' && $extension != 'txt'){
 
                     // If not, display an error message
                     Toast::error('Incorrect file type.'); return false;

@@ -24,6 +24,7 @@ class ViewCategoryScreen extends Screen
     {
         return [
             'categories' => Categories::latest()->paginate(8),
+            'pending_categories' => Categories::latest()->where('status', 0)->paginate(8)
         ];
     }
 
