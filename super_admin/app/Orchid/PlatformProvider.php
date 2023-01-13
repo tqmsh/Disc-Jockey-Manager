@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\Categories;
 use App\Models\Student;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
@@ -59,6 +60,9 @@ class PlatformProvider extends OrchidServiceProvider
                 //category nav option
                 Menu::make('Categories')
                 ->icon('layers')
+                ->badge(function () {
+                    return count(Categories::where('status', 0)->get());
+                })
                 ->route('platform.category.list'),
             ]),
 
