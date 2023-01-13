@@ -11,6 +11,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewCategoryLayout;
+use App\Orchid\Layouts\ViewPendingCategoryLayout;
 use Exception;
 
 class ViewCategoryScreen extends Screen
@@ -46,6 +47,12 @@ class ViewCategoryScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+
+            Button::make('Approve Selected Pending Categories')
+                ->icon('check')
+                ->method('approveCats')
+                ->confirm(__('Are you sure you want to approve the selected categories?')),
+
             Button::make('Delete Selected Categories')
                 ->icon('trash')
                 ->method('deleteCats')
@@ -62,19 +69,21 @@ class ViewCategoryScreen extends Screen
     {
         return [
 
+            Layout::rows([
+                
+                Input::make('category_name')
+                ->title('Category Name')
+                ->placeholder('Enter the name of the category'),
+                
+                Button::make('Add')
+                ->icon('plus')
+                ->type(Color::DEFAULT())
+                ->method('createCategory'),
+            ]),
+            
             ViewCategoryLayout::class,
 
-            Layout::rows([
-
-                Input::make('category_name')
-                    ->title('Category Name')
-                    ->placeholder('Enter the name of the category'),
-                    
-                Button::make('Add')
-                    ->icon('plus')
-                    ->type(Color::DEFAULT())
-                    ->method('createCategory'),
-            ])
+            ViewPendingCategoryLayout::class,
         ];
     }
 
@@ -106,6 +115,31 @@ class ViewCategoryScreen extends Screen
                 Toast::error('Category could not be created for an unknown reason');
             }
         }
+    }
+
+    public function approveCats(){
+            
+            //get all categories from post request
+            $categories = request('pending_categories');
+    
+            try{
+                //if the array is not empty
+                if(!empty($categories)){
+    
+                    //loop through the categories and update them
+                    foreach($categories as $category){
+                        Categories::where('id', $category)->update(['status' => 1]);
+                    }
+    
+                    Toast::success('Selected categories approved succesfully');
+    
+                }else{
+                    Toast::warning('Please select categories in order to approve them');
+                }
+    
+            }catch(Exception $e){
+                Toast::error('There was a error trying to approve the selected categories. Error Message: ' . $e->getMessage());
+            }
     }
 
     public function deleteCats(Request $request)
