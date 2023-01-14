@@ -101,7 +101,7 @@
         {{ __('Catagory') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('category_id')->fromQuery(App\Models\Categories::query(), 'name')->autofocus()->empty('No Selection') !!}
+    {!! \Orchid\Screen\Fields\Select::make('category_id')->fromQuery(App\Models\Categories::query()->where('status', 1), 'name')->autofocus()->empty('No Selection') !!}
 </div>
 
 <div class="mb-3">
