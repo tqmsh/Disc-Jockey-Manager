@@ -153,7 +153,7 @@ class CreateVendorScreen extends Screen
                     ->empty('No Selection')
                     ->required()
                     ->horizontal()
-                    ->fromQuery(Categories::query(), 'name'),
+                    ->fromQuery(Categories::query()->where('status', 1), 'name'),
                     
                 Input::make('email')
                     ->title('Company Email')
@@ -302,8 +302,6 @@ class CreateVendorScreen extends Screen
                         $vendor['user_id'] = $user->id;
 
                         $vendor = [
-                            'firstname' => $vendors[$i]['firstname'],
-                            'lastname' => $vendors[$i]['lastname'],
                             'phonenumber' => $vendors[$i]['phonenumber'],
                             'email' => $vendors[$i]['email'],
                             'company_name' => $vendors[$i]['company_name'],

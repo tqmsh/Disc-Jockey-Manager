@@ -8,7 +8,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
 
-class ViewCategoryLayout extends Table
+class ViewPendingCategoryLayout extends Table
 {
     /**
      * Data source.
@@ -18,7 +18,7 @@ class ViewCategoryLayout extends Table
      *
      * @var string
      */
-    protected $target = 'categories';
+    protected $target = 'pending_categories';
 
     /**
      * Get the table cells to be displayed.
@@ -29,9 +29,9 @@ class ViewCategoryLayout extends Table
     {
         return [
             
-            TD::make('active', 'ACTIVE')
+            TD::make('pending', 'PENDING')
                 ->render(function (Categories $category){
-                    return CheckBox::make('categories[]')
+                    return CheckBox::make('pending_categories[]')
                         ->value($category->id)
                         ->checked(false);
                 }),
