@@ -16,7 +16,7 @@ class UserController extends Controller
         foreach ($users as $user) {
             $userNames[] = [
                 'first_name' => $user->firstname,
-                'last_name' => $user->lastname
+                'last_name' => $user->last_name
             ];
         }
         return $userNames;

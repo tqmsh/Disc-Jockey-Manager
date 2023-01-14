@@ -106,6 +106,7 @@ class ViewVendorScreen extends Screen
     }
 
     public function filter(Request $request){
+
         return redirect('/admin/vendors?' 
                     .'&country=' . $request->get('country')
                     .'&category_id=' . $request->get('category_id')
