@@ -87,19 +87,20 @@ class ViewRegionScreen extends Screen
             ->applyButton('Import')
             ->withoutCloseButton(),
 
-            ViewRegionLayout::class,
-
+            
             Layout::rows([
-
+                
                 Input::make('region_name')
-                    ->title('Region Name')
-                    ->placeholder('Enter the name of the region'),
-                    
+                ->title('Region Name')
+                ->placeholder('Enter the name of the region'),
+                
                 Button::make('Add')
-                    ->icon('plus')
-                    ->type(Color::DEFAULT())
-                    ->method('createRegion'),
-            ])
+                ->icon('plus')
+                ->type(Color::DEFAULT())
+                ->method('createRegion'),
+            ]),
+
+            ViewRegionLayout::class,
         ];
     }
 
