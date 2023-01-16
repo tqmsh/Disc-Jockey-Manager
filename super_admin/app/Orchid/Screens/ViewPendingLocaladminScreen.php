@@ -78,22 +78,23 @@ class ViewPendingLocaladminScreen extends Screen
                     
                     Select::make('school')
                         ->title('School')
-                        ->empty('No selection')
+                        ->help('Type in boxes to search')
+                        ->empty('No Selection')
                         ->fromModel(School::class, 'school_name', 'school_name'),
 
                     Select::make('country')
                         ->title('Country')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(User::class, 'country', 'country'),
 
                     Select::make('school_board')
                         ->title('School Board')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(School::class, 'school_board', 'school_board'),
 
                     Select::make('state_province')
                         ->title('State/Province')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(School::class, 'state_province', 'state_province'),
                 ]),
                 

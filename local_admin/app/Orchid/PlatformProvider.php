@@ -31,6 +31,8 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
+
+            //FARHAN AND ANDY WAS HERE 😉
             
             //MONEY MAKER
             Menu::make('Dashboard')

@@ -85,6 +85,7 @@ class ViewStudentScreen extends Screen
                     Select::make('sort_option')
                         ->title('Order Students By:')
                         ->empty('No selection')
+                        ->help('Start typing in boxes to search')
                         ->options([
                             'firstname' => 'First Name',
                             'lastname' => 'Last Name',

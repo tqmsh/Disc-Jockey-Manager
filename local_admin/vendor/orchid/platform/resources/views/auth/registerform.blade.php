@@ -65,7 +65,7 @@
         {{ __('School') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('school')->fromModel(App\Models\School::class, 'school_name', 'school_name')->autofocus()->empty('No Selection')!!}
+    {!! \Orchid\Screen\Fields\Select::make('school')->fromModel(App\Models\School::class, 'school_name', 'school_name')->autofocus()->empty('Start typing to search...')!!}
 </div>
 
 <div class="mb-3">
@@ -74,7 +74,7 @@
         {{ __('Country') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('country')->options(['Canada' => 'Canada', 'USA'=>'USA'])->autofocus()->empty('No Selection') !!}
+    {!! \Orchid\Screen\Fields\Select::make('country')->options(['Canada' => 'Canada', 'USA'=>'USA'])->autofocus()->empty('Start typing to search...') !!}
 </div>
 
 
@@ -84,7 +84,7 @@
         {{ __('State/Province') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('state_province')->fromModel(App\Models\School::class, 'state_province', 'state_province')->autofocus()->empty('No Selection')!!}
+    {!! \Orchid\Screen\Fields\Select::make('state_province')->fromModel(App\Models\School::class, 'state_province', 'state_province')->autofocus()->empty('Start typing to search...')!!}
 </div>
 
 <div class="mb-3">
@@ -93,7 +93,7 @@
         {{ __('County') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('county')->fromModel(App\Models\School::class, 'county', 'county')->autofocus()->empty('No Selection') !!}
+    {!! \Orchid\Screen\Fields\Select::make('county')->fromModel(App\Models\School::class, 'county', 'county')->autofocus()->empty('Start typing to search...') !!}
 </div>
 
 

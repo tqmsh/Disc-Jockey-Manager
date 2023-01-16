@@ -81,6 +81,7 @@ class ViewEventScreen extends Screen
                     
                     Select::make('school')
                         ->title('School')
+                        ->help('Type in boxes to search')
                         ->empty('No selection')
                         ->fromModel(Events::class, 'school', 'school'),
 

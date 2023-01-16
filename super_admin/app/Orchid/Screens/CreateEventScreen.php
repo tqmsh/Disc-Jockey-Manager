@@ -119,26 +119,26 @@ class CreateEventScreen extends Screen
                     ->title('School')
                     ->required()
                     ->horizontal()
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'school_name', 'school_name'),
 
                 Select::make('country')
                     ->title('Country')
                     ->required()
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country'),
 
                 Select::make('county')
                     ->title('County')
                     ->required()
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county'),
 
                 Select::make('state_province')
                     ->title('State/Province')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province'),
             ]),

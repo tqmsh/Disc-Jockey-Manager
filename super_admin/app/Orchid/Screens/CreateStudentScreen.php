@@ -153,7 +153,7 @@ class CreateStudentScreen extends Screen
                 Select::make('school')
                     ->title('School')
                     ->required()
-                    ->empty('No Selection')
+                    ->empty('Start typing to search...')
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name'),
 
@@ -161,13 +161,14 @@ class CreateStudentScreen extends Screen
                     ->title('Country')
                     ->required()
                     ->horizontal()
+                    ->empty('Start typing to search...')
                     ->required()
                     ->fromModel(School::class, 'country', 'country'),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->empty('No Selection')
+                    ->empty('Start typing to search...')
                     ->required()
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
@@ -175,14 +176,14 @@ class CreateStudentScreen extends Screen
                     ->title('County')
                     ->horizontal()
                     ->required()
-                    ->empty('No Selection')
+                    ->empty('Start typing to search...')
                     ->fromModel(School::class, 'county', 'county'),
 
                 Select::make('grade')
                     ->title('Grade')
                     ->horizontal()
                     ->required()
-                    ->empty('No Selection')
+                    ->empty('Start typing to search...')
                     ->options([
                         '9' => 9,
                         '10' => 10,
@@ -194,7 +195,7 @@ class CreateStudentScreen extends Screen
                     ->title('Event')
                     ->horizontal()
                     ->displayAppend('full')
-                    ->empty('No Selection')
+                    ->empty('Start typing to search...')
                     ->fromModel(Events::class, 'id'),
 
                 Select::make('ticketstatus')

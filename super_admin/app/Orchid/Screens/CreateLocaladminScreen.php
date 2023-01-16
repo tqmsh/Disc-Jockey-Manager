@@ -146,13 +146,13 @@ class CreateLocaladminScreen extends Screen
                 Select::make('school')
                     ->title('School')
                     ->required()
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name'),
 
                 Select::make('country')
                     ->title('Country')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country'),
@@ -160,12 +160,12 @@ class CreateLocaladminScreen extends Screen
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
                 Select::make('county')
                     ->title('County')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county'),

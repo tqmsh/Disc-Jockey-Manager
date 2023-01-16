@@ -98,7 +98,7 @@ class EditSchoolScreen extends Screen
                     ->title('Region')
                     ->required()
                     ->horizontal()
-                    ->empty('No selection')
+                    ->empty('Start typing to Search...')
                     ->fromQuery(Region::query(), 'name')
                     ->value($this->school->region_id),
 

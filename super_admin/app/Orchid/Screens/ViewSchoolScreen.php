@@ -83,27 +83,28 @@ class ViewSchoolScreen extends Screen
                     
                     Select::make('school')
                         ->title('School')
-                        ->empty('No selection')
+                        ->empty('No Selection')
+                        ->help('Type in boxes to search')
                         ->fromModel(School::class, 'school_name', 'school_name'),
 
                     Select::make('region_id')
                         ->title('Region')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromQuery(Region::query(), 'name'),
 
                     Select::make('country')
                         ->title('Country')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(User::class, 'country', 'country'),
                     
                     Select::make('state_province')
                         ->title('State/Province')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(School::class, 'state_province', 'state_province'),
                         
                     Select::make('county')
                         ->title('County')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(School::class, 'county', 'county'),
 
                 ]),
