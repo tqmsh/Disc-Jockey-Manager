@@ -83,6 +83,7 @@ class ViewStudentScreen extends Screen
                     Select::make('ticketstatus')
                         ->title('Ticket Status')
                         ->empty('No selection')
+                        ->help('Type in boxes to search')
                         ->options([
                             'Paid' => 'Paid',
                             'Unpaid' => 'Unpaid'
@@ -90,27 +91,27 @@ class ViewStudentScreen extends Screen
 
                     Select::make('event_id')
                         ->title('Event:')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromQuery(Events::query(), 'event_name'),
                     
                     Select::make('school')
                         ->title('School')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(Student::class, 'school', 'school'),
 
                     Select::make('country')
                         ->title('Country')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(User::class, 'country', 'country'),
 
                     Select::make('school_board')
                         ->title('School Board')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(School::class, 'school_board', 'school_board'),
 
                     Select::make('state_province')
                         ->title('State/Province')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(School::class, 'state_province', 'state_province'),
                 ]),
                 

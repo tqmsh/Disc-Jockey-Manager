@@ -114,7 +114,7 @@ class EditVendorScreen extends Screen
                 
                 Select::make('category_id')
                     ->title('Category')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromQuery(Categories::query(), 'name')
@@ -146,7 +146,7 @@ class EditVendorScreen extends Screen
 
                 Select::make('country')
                     ->title('Country')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country')
@@ -155,7 +155,7 @@ class EditVendorScreen extends Screen
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'state_province', 'state_province')
                     ->value($this->vendor->state_province),
 

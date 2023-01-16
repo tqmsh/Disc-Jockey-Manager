@@ -101,7 +101,7 @@
         {{ __('Catagory') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('category_id')->fromQuery(App\Models\Categories::query()->where('status', 1), 'name')->autofocus()->empty('No Selection') !!}
+    {!! \Orchid\Screen\Fields\Select::make('category_id')->fromQuery(App\Models\Categories::query()->where('status', 1), 'name')->autofocus()->empty('Start typing to search...') !!}
 </div>
 
 <div class="mb-3">
@@ -110,7 +110,7 @@
         {{ __('Country') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('country')->options(['Canada' => 'Canada', 'USA'=>'USA'])->autofocus()->empty('No Selection') !!}
+    {!! \Orchid\Screen\Fields\Select::make('country')->options(['Canada' => 'Canada', 'USA'=>'USA'])->autofocus()->empty('Start typing to search...') !!}
 </div>
 
 
@@ -120,7 +120,7 @@
         {{ __('State/Province') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('state_province')->fromModel(App\Models\School::class, 'state_province', 'state_province')->autofocus()->empty('No Selection')!!}
+    {!! \Orchid\Screen\Fields\Select::make('state_province')->fromModel(App\Models\School::class, 'state_province', 'state_province')->autofocus()->empty('Start typing to search...')!!}
 </div>
 
 <div class="mb-3">

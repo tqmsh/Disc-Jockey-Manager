@@ -133,34 +133,6 @@ class EditEventScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->event->event_rules),
-
-                Select::make('school')
-                    ->title('School')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'school_name', 'school_name')
-                    ->value($this->school->school_name),
-
-                Select::make('country')
-                    ->title('Country')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'country', 'country')
-                    ->value($this->school->country),
-
-                Select::make('state_province')
-                    ->title('State/Province')
-                    ->horizontal()
-                    ->fromModel(School::class, 'state_province', 'state_province')
-                    ->value($this->school->state_province),
-
-                Select::make('county')
-                    ->title('County')
-                    ->empty('No Selection')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'county', 'county')
-                    ->value($this->school->county),
             ]),
         ];
     }
@@ -169,17 +141,7 @@ class EditEventScreen extends Screen
     {
         try{
 
-            $school_id = School::where('school_name', $request->input('school'))
-                                ->where('county', $request->input('county'))
-                                ->where('state_province', $request->input('state_province'))
-                                ->get('id')->value('id');
-
-            if(is_null($school_id)){
-                throw New Exception('You are trying to enter a invalid school');
-            }
-
             $eventsFields = $request->all();
-            $eventsFields['school_id'] = $school_id;
 
             $event->update($eventsFields);
 

@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
+use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\RoleUsers;
@@ -78,44 +79,46 @@ class ViewPendingStudentScreen extends Screen
             Layout::rows([
 
                 Group::make([
-                    
-                    Select::make('school')
-                        ->title('School')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'school_name', 'school_name'),
 
-                    Select::make('country')
-                        ->title('Country')
+                    Select::make('sort_option')
+                        ->title('Order Students By:')
                         ->empty('No selection')
-                        ->fromModel(User::class, 'country', 'country'),
+                        ->help('Start typing in boxes to search')
+                        ->options([
+                            'firstname' => 'First Name',
+                            'lastname' => 'Last Name',
+                            'grade' => 'Grade'
+                        ]),
 
-                    Select::make('school_board')
-                        ->title('School Board')
+                    Select::make('event_name')
+                        ->title('Event:')
                         ->empty('No selection')
-                        ->fromModel(School::class, 'school_board', 'school_board'),
+                        ->fromQuery(Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name'),
 
-                    Select::make('state_province')
-                        ->title('State/Province')
+                    Select::make('ticketstatus')
+                        ->title('Ticket Status')
                         ->empty('No selection')
-                        ->fromModel(School::class, 'state_province', 'state_province'),
+                        ->options([
+                            'Paid' => 'Paid',
+                            'Unpaid' => 'Unpaid'
+                        ]),
                 ]),
-                
+                    
                 Button::make('Filter')
                     ->icon('filter')
                     ->method('filter')
                     ->type(Color::DEFAULT()),
             ]),
-
             ViewPendingStudentLayout::class
         ];
     }
 
     public function filter(Request $request){
-        return redirect('/admin/pendinglocaladmins?' 
-                    .'&school=' . $request->get('school')
-                    .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
-                    .'&state_province=' . $request->get('state_province'));
+        return redirect('/admin/pendingstudents?'
+                    .'&sort_option=' . $request->get('sort_option')
+                    .'&ticketstatus=' . $request->get('ticketstatus') 
+                    .'&event_name=' . $request->get('event_name') 
+                );
     }
 
     public function acceptStudents(Request $request){

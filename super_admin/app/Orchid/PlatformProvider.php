@@ -31,6 +31,7 @@ class PlatformProvider extends OrchidServiceProvider
      */
     public function registerMainMenu(): array
     {
+        //FARHAN & ANDY WAS HERE😉
         return [
 
             //MONEY MAKER
@@ -39,7 +40,7 @@ class PlatformProvider extends OrchidServiceProvider
             ->title('CORE')
             ->route('platform.example'),
             
-            
+            //MONEYYY MAKER
             Menu::make('Vendors')
             ->icon('dollar')
             ->size()

@@ -112,12 +112,13 @@ class EditLocaladminScreen extends Screen
                     ->title('School')
                     ->required()
                     ->horizontal()
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'school_name', 'school_name')
                     ->value($this->school->school_name),
                 
                 Select::make('country')
                     ->title('Country')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country')
@@ -126,12 +127,13 @@ class EditLocaladminScreen extends Screen
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'state_province', 'state_province')
                     ->value($this->school->state_province),
 
                 Select::make('county')
                     ->title('County')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county')

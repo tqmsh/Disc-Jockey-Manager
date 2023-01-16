@@ -80,17 +80,19 @@ class ViewVendorScreen extends Screen
 
                     Select::make('country')
                         ->title('Country')
-                        ->empty('No selection')
+                        ->empty('No Selection')
+                        ->help('Type in boxes to search')
                         ->fromModel(Vendors::class, 'country', 'country'),
 
                     Select::make('category_id')
                         ->title('Category')
-                        ->empty('No selection')
-                        ->fromQuery(Categories::query(), 'name'),
+                        ->empty('No Selection')
+                        ->fromQuery(Categories::query(), 'name')
+                        ->placeholder('Select Category'),
                     
                     Select::make('state_province')
                         ->title('State/Province')
-                        ->empty('No selection')
+                        ->empty('No Selection')
                         ->fromModel(Vendors::class, 'state_province', 'state_province'),
 
                 ]),

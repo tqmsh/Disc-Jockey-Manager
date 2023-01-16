@@ -107,6 +107,7 @@ class EditStudentScreen extends Screen
                     ->title('School')
                     ->required()
                     ->horizontal()
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'school_name', 'school_name')
                     ->value($this->school->school_name),
 
@@ -114,18 +115,20 @@ class EditStudentScreen extends Screen
                     ->title('Country')
                     ->required()
                     ->horizontal()
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'country', 'country')
                     ->value(User::find($this->student->user_id)->country),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'state_province', 'state_province')
                     ->value($this->school->state_province),
 
                 Select::make('county')
                     ->title('County')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county')
@@ -159,6 +162,7 @@ class EditStudentScreen extends Screen
                     ->title('Ticket Status')
                     ->required()
                     ->horizontal()
+                    ->empty('Start typing to Search...')
                     ->value($this->student->ticketstatus)
                     ->options([
                         'Paid'   => 'Paid',

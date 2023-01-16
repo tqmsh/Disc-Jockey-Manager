@@ -132,12 +132,14 @@ class EditEventScreen extends Screen
                 Select::make('school')
                     ->title('School')
                     ->required()
+                    ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'school_name', 'school_name')
                     ->value($this->school->school_name),
 
                 Select::make('country')
                     ->title('Country')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'country', 'country')
@@ -146,12 +148,13 @@ class EditEventScreen extends Screen
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
+                    ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'state_province', 'state_province')
                     ->value($this->school->state_province),
 
                 Select::make('county')
                     ->title('County')
-                    ->empty('No Selection')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county')

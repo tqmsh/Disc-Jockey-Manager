@@ -105,34 +105,6 @@ class EditStudentScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->student->email),
-                
-                Select::make('school')
-                    ->title('School')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'school_name', 'school_name')
-                    ->value($this->school->school_name),
-
-                Select::make('country')
-                    ->title('Country')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'country', 'country')
-                    ->value(User::find($this->student->user_id)->country),
-
-                Select::make('state_province')
-                    ->title('State/Province')
-                    ->horizontal()
-                    ->fromModel(School::class, 'state_province', 'state_province')
-                    ->value($this->school->state_province),
-
-                Select::make('county')
-                    ->title('County')
-                    ->empty('No Selection')
-                    ->required()
-                    ->horizontal()
-                    ->fromModel(School::class, 'county', 'county')
-                    ->value($this->school->county),
                    
                 Input::make('grade')
                     ->title('Grade')
@@ -231,16 +203,6 @@ class EditStudentScreen extends Screen
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
 
-        $school_id = School::where('school_name', $request->input('school'))
-                            ->where('county', $request->input('county'))
-                            ->where('state_province', $request->input('state_province'))
-                            ->where('country', $request->input('country'))
-                            ->get('id')->value('id');
-
-        if(is_null($school_id)){
-            throw New Exception('You are trying to enter a invalid school');
-        }
-
         $studentTableFields = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
@@ -250,7 +212,6 @@ class EditStudentScreen extends Screen
             'ticketstatus' => $request->input('ticketstatus'),
             'school' => $request->input('school'),
             'event_id' => $request->input('event_id'),
-            'school_id' =>$school_id,
             'allergies' => $request->input('allergies'),
         ];
         
@@ -264,7 +225,6 @@ class EditStudentScreen extends Screen
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
-            'country' => $request->input('country'),
             'phonenumber' => $request->input('phonenumber'),
         ];
         
