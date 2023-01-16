@@ -5,7 +5,9 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
+use App\Models\Vendors;
 use Orchid\Screen\Screen;
+use App\Models\Categories;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -17,6 +19,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Layouts\Selection;
 
 class CreateEventScreen extends Screen
 {
@@ -99,6 +102,11 @@ class CreateEventScreen extends Screen
                     ->title('Event Rules')
                     ->type('text')
                     ->placeholder('Ex. No Violence')
+                    ->horizontal(),
+
+                Select::make('venue_id')
+                    ->title('Venue')
+                    ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->horizontal(),
             ]),
         ];

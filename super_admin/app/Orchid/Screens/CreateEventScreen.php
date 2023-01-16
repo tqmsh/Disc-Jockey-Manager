@@ -5,7 +5,9 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
+use App\Models\Vendors;
 use Orchid\Screen\Screen;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -114,6 +116,11 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->placeholder('Ex. No Violence')
                     ->horizontal(),
+                    
+                Select::make('venue_id')
+                    ->title('Venue')
+                    ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
+                    ->horizontal(),
 
                 Select::make('school')
                     ->title('School')
@@ -141,6 +148,7 @@ class CreateEventScreen extends Screen
                     ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province'),
+                    
             ]),
         ];
     }

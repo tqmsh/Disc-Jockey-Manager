@@ -5,7 +5,9 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
+use App\Models\Vendors;
 use Orchid\Screen\Screen;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -159,6 +161,12 @@ class EditEventScreen extends Screen
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county')
                     ->value($this->school->county),
+
+                Select::make('venue_id')
+                    ->title('Venue')
+                    ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
+                    ->horizontal()
+                    ->value($this->event->venue_id),
             ]),
         ];
     }

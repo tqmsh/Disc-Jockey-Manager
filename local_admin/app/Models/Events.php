@@ -15,7 +15,7 @@ class Events extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['event_name', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'school', 'event_zip_postal', 'event_rules'];
+    protected $fillable = ['event_name', 'venue_id', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'school', 'event_zip_postal', 'event_rules'];
 
 
     public function scopeFilter($query, array $filters){
