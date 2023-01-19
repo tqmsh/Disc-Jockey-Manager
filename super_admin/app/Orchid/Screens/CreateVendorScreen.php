@@ -410,7 +410,7 @@ class CreateVendorScreen extends Screen
 
     private function getCategoryId($category_name){
             
-            $category = Categories::where('name', $category_name)->get();
+            $category = Categories::where('name', 'LIKE', '$'.$category_name.'%')->get();
     
             if(count($category) == 0){
                 return null;
