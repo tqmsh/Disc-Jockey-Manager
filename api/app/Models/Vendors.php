@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Vendors extends Model
 {
     use HasFactory;
-    
+
+    //FARHAN AND ANDY WERE HERE 😉
     protected $fillable = ['country', 'state_province', 'address', 'zip_postal', 'phonenumber', 'website', 'user_id', 'category_id', 'account_status', 'updated_at', 'created_at', 'email', 'city', 'company_name'];
 
     public function scopeFilter($query, array $filters){
@@ -19,7 +20,7 @@ class Vendors extends Model
 
             if(isset($filters['country'])){
                 $query->where('country', 'like', '%' . request('country') . '%');
-            }
+            } 
 
             if(isset($filters['state_province'])){
                 $query->where('state_province', 'like', '%' . request('state_province') . '%');
