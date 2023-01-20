@@ -8,10 +8,12 @@ use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\CreateEventScreen;
+use App\Orchid\Screens\CreatePackageScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\CreateStudentScreen;
+use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
@@ -23,6 +25,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewPackageScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +44,12 @@ Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show events screen
 Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
+
+Route::screen('/packages', ViewPackageScreen::class)->name('platform.package.list');
+
+Route::screen('/packages/create', CreatePackageScreen::class)->name('platform.package.create');
+
+Route::screen('/packages/{package}/edit', EditPackageScreen::class)->name('platform.package.edit');
 
 
 // Platform > Profile

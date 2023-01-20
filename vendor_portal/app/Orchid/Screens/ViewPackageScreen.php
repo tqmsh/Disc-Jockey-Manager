@@ -3,6 +3,8 @@
 namespace App\Orchid\Screens;
 
 use Orchid\Screen\Screen;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
 
 class ViewPackageScreen extends Screen
 {
@@ -23,7 +25,7 @@ class ViewPackageScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewPackageScreen';
+        return 'Your Packages';
     }
 
     /**
@@ -33,7 +35,21 @@ class ViewPackageScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+
+            Link::make('Create a New Package')
+                ->icon('plus')
+                ->route('platform.package.create'),
+
+            Button::make('Delete Selected Packages')
+                ->icon('trash')
+                ->method('deletePackages')
+                ->confirm(__('Are you sure you want to delete the selected packages?')),
+                
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.package.list')
+        ];
     }
 
     /**
