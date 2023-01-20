@@ -3,6 +3,8 @@
 namespace App\Orchid\Screens;
 
 use Orchid\Screen\Screen;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
 
 class ViewAdScreen extends Screen
 {
@@ -23,7 +25,7 @@ class ViewAdScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewAdScreen';
+        return 'Your Campaigns';
     }
 
     /**
@@ -33,7 +35,20 @@ class ViewAdScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Create a New Campaign')
+                ->icon('plus')
+                ->route('platform.ad.create'),
+
+            Button::make('Delete Selected Campaigns')
+                ->icon('trash')
+                ->method('deleteAds')
+                ->confirm(__('Are you sure you want to delete the selected campaigns?')),
+                
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.ad.list')
+        ];
     }
 
     /**
