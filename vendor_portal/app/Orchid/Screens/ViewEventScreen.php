@@ -10,6 +10,7 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\Localadmin;
+use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -30,8 +31,9 @@ class ViewEventScreen extends Screen
      */
     public function query(): iterable
     {
+        //!MAKE IT SO VENDORS ONLY SEE EVENTS IN THEIR REGION
         return [
-            'events' => Events::where('school_id', Student::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'events' => Events::all()
         ];
     }
 
@@ -42,7 +44,7 @@ class ViewEventScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Events';
+        return 'Bid Opportunities';
     }
 
     /**
@@ -123,32 +125,6 @@ class ViewEventScreen extends Screen
                     .'&state_province=' . $request->get('state_province'));
     }
 
-    public function deleteEvents(Request $request)
-    {   
-        //get all localadmins from post request
-        $events = $request->get('events');
-        
-        try{
-
-            //if the array is not empty
-            if(!empty($events)){
-
-                //loop through the events and delete them from db
-                foreach($events as $event){
-                    Events::where('id', $event)->delete();
-                }
-
-                Toast::success('Selected events deleted succesfully');
-
-            }else{
-                Toast::warning('Please select events in order to delete them');
-            }
-
-        }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
-        }
-    }
-
     //this method will create the category
     public function createCategory()
     {
@@ -177,5 +153,9 @@ class ViewEventScreen extends Screen
                 Toast::error('Category could not be created for an unknown reason');
             }
         }
+    }
+
+    public function redirect(){
+        return redirect()->route('platform.bid.create');
     }
 }
