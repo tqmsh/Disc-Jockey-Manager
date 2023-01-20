@@ -53,6 +53,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('diamond')
                 ->route('platform.package.list'),
             ]),
+
+            Menu::make('Campaigns')
+            ->icon('picture')
+            ->route('platform.ad.list'),
+
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')

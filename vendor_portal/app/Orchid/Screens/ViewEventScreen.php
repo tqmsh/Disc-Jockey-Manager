@@ -76,6 +76,7 @@ class ViewEventScreen extends Screen
                     Select::make('school')
                         ->title('School')
                         ->empty('No selection')
+                        ->help('**For Devs** FYI these are all the events in the database, not the ones this vendor paid for. This text will be deleted')
                         ->fromModel(Events::class, 'school', 'school'),
 
                     Select::make('country')
