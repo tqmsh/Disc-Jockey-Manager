@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Orchid;
 
 use App\Models\Student;
+use App\Models\Vendors;
 use Orchid\Support\Color;
+use App\Models\Categories;
 use App\Models\Localadmin;
 use Orchid\Platform\Dashboard;
 use Orchid\Screen\Actions\Menu;
@@ -38,10 +40,24 @@ class PlatformProvider extends OrchidServiceProvider
             ->title('CORE')
             ->route('platform.example'),
 
-            //student nav option
-            Menu::make('Bid Opportunities ')
+            //MONEYYY MAKER
+            Menu::make('Bids')
             ->icon('diamond')
-            ->route('platform.event.list'),
+            ->size()
+            ->list([
+                Menu::make('Bid Opportunities ')
+                ->icon('diamond')
+                ->route('platform.event.list'),
+
+                Menu::make('Your Packages ')
+                ->icon('diamond')
+                ->route('platform.package.list'),
+            ]),
+
+            Menu::make('Campaigns')
+            ->icon('picture')
+            ->route('platform.ad.list'),
+
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')

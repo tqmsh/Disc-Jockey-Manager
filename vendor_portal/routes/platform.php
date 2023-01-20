@@ -3,14 +3,21 @@
 declare(strict_types=1);
 
 use Tabuna\Breadcrumbs\Trail;
+use App\Orchid\Screens\EditAdScreen;
+use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
+use App\Orchid\Screens\CreateAdScreen;
+use App\Orchid\Screens\CreateBidScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\CreateEventScreen;
+use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
+use App\Orchid\Screens\ViewPackageScreen;
 use App\Orchid\Screens\ViewStudentScreen;
+use App\Orchid\Screens\CreatePackageScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -40,7 +47,21 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show events screen
-Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
+Route::screen('/bidopportunities', ViewEventScreen::class)->name('platform.event.list');
+
+Route::screen('/packages', ViewPackageScreen::class)->name('platform.package.list');
+
+Route::screen('/packages/create', CreatePackageScreen::class)->name('platform.package.create');
+
+Route::screen('/packages/{package}/edit', EditPackageScreen::class)->name('platform.package.edit');
+
+Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
+
+Route::screen('/campaigns/create', CreateAdScreen::class)->name('platform.ad.create');
+
+Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+
+Route::screen('/bid/create', CreateBidScreen::class)->name('platform.bid.create');
 
 
 // Platform > Profile
