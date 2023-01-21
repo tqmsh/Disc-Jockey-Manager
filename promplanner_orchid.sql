@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 16, 2023 at 09:31 PM
+-- Generation Time: Jan 21, 2023 at 01:06 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -155,7 +155,7 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `event_creator`, `school_id`, `venue_id`, `event_name`, `event_start_time`, `event_finish_time`, `school`, `event_address`, `event_zip_postal`, `event_info`, `event_rules`, `created_at`, `updated_at`) VALUES
-(6, 108, 32, NULL, 'Cool Kidz Party', '2022-11-11 15:05:41', '2022-11-18 15:05:41', 'Cool School', '789 Cool Street', 'ILK OL8', 'ONLY COOL KIDS ALLOWED', 'ONLY COOL KIDS ALLOWED', '2022-11-04 19:05:41', '2022-11-15 01:34:49'),
+(6, 108, 32, NULL, 'Cool Kidz Party', '2022-11-11 15:05:41', '2022-11-18 15:05:41', 'Cool School', '789 Cool Street', 'ILK OL8', 'Cool dresses ', 'ONLY COOL KIDS ALLOWED', '2022-11-04 19:05:41', '2022-11-15 01:34:49'),
 (13, 13, 53, NULL, 'Colonel By\'s Main Event', '2022-11-21 12:00:00', '2022-11-22 12:00:00', 'Colonel By Secondary School', '2381 Ogilvie Rd', 'K1J 7N4', 'Formal Attire', 'No Violence', '2022-11-20 11:16:51', '2022-11-20 11:16:51'),
 (14, 13, 51, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
 (15, 151, 51, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', '2022-12-02 01:03:59', '2022-12-02 01:03:59'),
@@ -457,7 +457,8 @@ INSERT INTO `role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALU
 (193, 2, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (194, 2, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 2, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
-(196, 4, '2023-01-17 01:10:39', '2023-01-17 01:10:39');
+(196, 4, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
+(197, 4, '2023-01-21 02:42:36', '2023-01-21 02:42:36');
 
 -- --------------------------------------------------------
 
@@ -494,7 +495,7 @@ CREATE TABLE `schools` (
 
 INSERT INTO `schools` (`id`, `nces_id`, `teacher_id`, `region_id`, `school_name`, `country`, `city_municipality`, `metropolitan_region`, `state_province`, `county`, `school_board`, `address`, `zip_postal`, `phone_number`, `fax`, `website`, `school_data`, `total_students`, `created_at`, `updated_at`) VALUES
 (1, NULL, 108, 1, 'Hansen, Morissette and Lemke', 'Germany', NULL, NULL, 'Oklahoma', 'Carleton County', 'OCDSB', '615 Candelario Radial Apt. 441Rolandoview, KS 27688', 'K1J 7N4', '(183) 098-8514', '3413923', NULL, NULL, NULL, '2022-10-16 21:13:36', '2022-10-25 22:02:27'),
-(2, NULL, 108, 1, 'Stracke, Gleason and Kertzmann', 'South Georgia and the South Sandwich Islands', NULL, NULL, 'Florida', 'Carleton County', 'OCDSB', '728 Eudora Way\nGleasontown, MA 14333-3992', 'K1J 7N4', '+16783196782', '70560378', NULL, NULL, NULL, '2022-10-16 21:13:36', '2022-10-16 21:13:36'),
+(2, NULL, 108, 10, 'Stracke, Gleason and Kertzmann', 'South Georgia and the South Sandwich Islands', NULL, NULL, 'Florida', 'Carleton County', 'OCDSB', '728 Eudora Way\nGleasontown, MA 14333-3992', 'K1J 7N4', '+16783196782', '70560378', NULL, NULL, NULL, '2022-10-16 21:13:36', '2022-10-16 21:13:36'),
 (3, NULL, 108, 1, 'Torphy-Cole', 'Philippines', NULL, NULL, 'South Carolina', 'Carleton County', 'OCDSB', '3922 Mitchell Ford Apt. 215\nMoiseshaven, PA 29093', 'K1J 7N4', '(539) 767-7757', '92060', NULL, NULL, NULL, '2022-10-16 21:13:36', '2022-10-16 21:13:36'),
 (4, NULL, 108, 1, 'Metz, Wiza and Larkin', 'Solomon Islands', NULL, NULL, 'New York', 'Carleton County', 'OCDSB', '32941 Adrianna Oval Suite 689\nCalebstad, MA 76865-1243', 'K1J 7N4', '+1 (781) 916-1916', '954', NULL, NULL, NULL, '2022-10-16 21:13:36', '2022-10-16 21:13:36'),
 (5, NULL, 108, 1, 'Bayer LLC', 'Pakistan', 'Toronto', NULL, 'Montana', 'Carleton County', 'MVPVIP', '2042 Mervin Village Apt. 230Sarinashire, NY 53851-5569', 'K1J 7N4', '(143) 284-3874', '7237130', NULL, NULL, '1028', '2022-10-16 21:13:36', '2022-11-27 20:45:35'),
@@ -502,9 +503,9 @@ INSERT INTO `schools` (`id`, `nces_id`, `teacher_id`, `region_id`, `school_name`
 (11, NULL, 108, 1, 'Cormier, Schaden and Kirlin', 'Iran', NULL, NULL, 'Delaware', 'Carleton County', 'OCDSB', '5668 Tressa Court Suite 148\nWest Jada, NV 04934', 'K1J 7N4', '(440) 450-3291', '5', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
 (12, NULL, 108, 1, 'Gottlieb-Kuhic', 'India', NULL, NULL, 'West Virginia', 'Carleton County', 'OCDSB', '17666 Auer Wall\nKshlerinhaven, NJ 30242-8206', 'K1J 7N4', '(484) 521-1162', '515', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
 (13, NULL, 108, 1, 'Trantow, Schuppe and Crist', 'Equatorial Guinea', NULL, NULL, 'Rhode Island', 'Carleton County', 'OCDSB', '265 Nitzsche Meadows\nGoodwinmouth, MT 88992', 'K1J 7N4', '(682) 747-3046', '14611', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
-(14, NULL, 108, 1, 'Renner-Mitchell', 'Cape Verde', NULL, NULL, 'Alabama', 'Carleton County', 'OCDSB', '6444 Yasmin Locks\nWest Floyd, PA 57742-0863', 'K1J 7N4', '309-846-9100', '99', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
+(14, NULL, 108, 12, 'Renner-Mitchell', 'Cape Verde', NULL, NULL, 'Alabama', 'Carleton County', 'OCDSB', '6444 Yasmin Locks\nWest Floyd, PA 57742-0863', 'K1J 7N4', '309-846-9100', '99', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
 (15, NULL, 108, 1, 'Hyatt, Terry and Rice', 'Niue', NULL, NULL, 'Louisiana', 'Carleton County', 'OCDSB', '987 Nicolas Unions\nMargarettborough, DC 52919', 'K1J 7N4', '(760) 802-7707', '626506351', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
-(16, NULL, 108, 1, 'Waelchi PLC', 'Bahamas', NULL, NULL, 'Texas', 'Carleton County', 'OCDSB', '1299 Jaunita Street\nEast Ettieton, TN 56557', 'K1J 7N4', '1-585-759-8721', '7601', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
+(16, NULL, 108, 9, 'Waelchi PLC', 'Bahamas', NULL, NULL, 'Texas', 'Carleton County', 'OCDSB', '1299 Jaunita Street\nEast Ettieton, TN 56557', 'K1J 7N4', '1-585-759-8721', '7601', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
 (17, NULL, 108, 1, 'Purdy, Grimes and Collier', 'Mauritius', NULL, NULL, 'Nebraska', 'Carleton County', 'OCDSB', '780 Bailey Fields\nGottliebport, PA 32939-4568', 'K1J 7N4', '+1-248-403-8298', '898078', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
 (18, NULL, 108, 1, 'Stokes-Welch', 'Costa Rica', NULL, NULL, 'New Hampshire', 'Carleton County', 'OCDSB', '86451 Domenica Route Suite 494\nNew Luciousstad, TN 15152-4743', 'K1J 7N4', '708-254-9843', '454748', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
 (19, NULL, 108, 1, 'Corkery Group', 'Tunisia', NULL, NULL, 'West Virginia', 'Carleton County', 'TDSB', '79013 Wehner Summit Apt. 025\nEast Adellburgh, KY 67028-2589', 'K1J 7N4', '508.426.3950', '5', NULL, NULL, NULL, '2022-10-16 22:33:16', '2022-10-16 22:33:16'),
@@ -519,7 +520,7 @@ INSERT INTO `schools` (`id`, `nces_id`, `teacher_id`, `region_id`, `school_name`
 (29, NULL, 108, 1, 'Hilpert, Graham and Simonis', 'Heard Island and McDonald Islands', NULL, NULL, 'District of Columbia', 'Carleton County', 'OCDSB', '3742 Riley Village\nMontanaburgh, AK 81250', 'K1J 7N4', '715.203.8868', '73963078', NULL, NULL, NULL, '2022-10-16 23:28:14', '2022-10-16 23:28:14'),
 (30, NULL, 108, 1, 'McKenzie-Gerlach', 'Haiti', NULL, NULL, 'Vermont', 'Carleton County', 'OCDSB', '29770 DuBuque Landing\nPort Willard, GA 20902-2532', 'K1J 7N4', '1-361-763-9845', '177408588', NULL, NULL, NULL, '2022-10-16 23:28:14', '2022-10-16 23:28:14'),
 (31, NULL, 108, 1, 'Fritsch and Sons', 'Somalia', NULL, NULL, 'Wisconsin', 'Carleton County', 'OCDSB', '23811 Elenor Ferry Apt. 924\nPort Martachester, WA 93256-0211', 'K1J 7N4', '+18204179980', '225610041', NULL, NULL, NULL, '2022-10-17 20:39:55', '2022-10-17 20:39:55'),
-(32, NULL, 108, 1, 'Cool School', 'Comoros', NULL, NULL, 'New York', 'Carleton County', 'OCDSB', '33989 Okey RouteUbaldoburgh, HI 83577', 'K1J 7N4', '(178) 599-3091', '59', NULL, NULL, NULL, '2022-10-17 20:39:55', '2022-11-04 22:44:25'),
+(32, NULL, 108, 12, 'Cool School', 'Comoros', NULL, NULL, 'New York', 'Carleton County', 'OCDSB', '33989 Okey RouteUbaldoburgh, HI 83577', 'K1J 7N4', '(178) 599-3091', '59', NULL, NULL, NULL, '2022-10-17 20:39:55', '2022-11-04 22:44:25'),
 (35, NULL, 108, 1, 'Kihn-Hoppe', 'Myanmar', NULL, NULL, 'Michigan', 'Carleton County', 'OCDSB', '78705 Elaina Plains\nOsinskitown, CO 43978-0728', 'K1J 7N4', '+1 (682) 333-0594', '590', NULL, NULL, NULL, '2022-10-17 20:39:55', '2022-10-17 20:39:55'),
 (36, NULL, 108, 1, 'Daniel, Hauck and Hammes', 'Bouvet Island (Bouvetoya)', NULL, NULL, 'Delaware', 'Carleton County', 'OCDSB', '8532 Drake Estate\nLake Emory, VT 95844-5519', 'K1J 7N4', '+1-445-664-3082', '2018', NULL, NULL, NULL, '2022-10-17 20:39:55', '2022-10-17 20:39:55'),
 (37, NULL, 108, 1, 'Emard, Nolan and McCullough', 'United States Virgin Islands', NULL, NULL, 'Nevada', 'Carleton County', 'OCDSB', '901 Jacobi Path\nNew Noemyland, TN 90570-6445', 'K1J 7N4', '(435) 758-3192', '3', NULL, NULL, NULL, '2022-10-17 20:39:55', '2022-10-17 20:39:55'),
@@ -645,7 +646,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'gbtMISprslZ1GYZhl9M2yTUld1eKBGPtfN1z3EaObMIx6qIsgostxehRf0To', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
+(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'u4kh570XyMEi2Cb8amhzVwweOHEHACs7tTec6DgROu8gpOfh0ELYE8GFUTrK', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
 (52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
 (67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
 (68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
@@ -680,7 +681,8 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (193, 'Local admin Import 1', 'Local admin Import 1', 'efwefwef', 'import111@gmail.com', '12345678910', 2, 'Canada', NULL, 1, NULL, '$2y$10$fBB56NJVIq2jzE5bUG4fPOSFcAEzFgs6WXy23DfxaoZfMuKdcFIIa', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
-(196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39');
+(196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
+(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'uEynsO6DmyOawanOrKrmqdk5Zlnbv56o2VGdJK1VkuiN0OOjZsZ9G8gO1KCv', '2023-01-21 02:41:46', '2023-01-21 02:42:36');
 
 -- --------------------------------------------------------
 
@@ -715,7 +717,42 @@ INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `paid_regions_ids`, `acco
 (2, 181, 13, NULL, 1, 'Update Vendor', 'Update Vendor', 'Ottawa', 'Ontario', 'Costa Rica', 'K1K 2G6', '(455) 674-9877', 'https://laravel.com/docs/9.x/requests#retrieving-a-portion-of-the-input-data', 'UpdateVendor@hotmail.com', '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
 (6, 188, 9, NULL, 1, 'Bidenn Corporatione', '4735 lol street', 'nah', 'nah', 'USA', '2353', 'dssdddsddss', 'https://www.youtube.com/', 'bidenjoe@isuck.com', '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
 (8, 190, 10, NULL, 1, 'Trump Party', '87 Dolla Dolla Bills', 'Money Land', 'fsdfs', 'USA', 'sdfsdf', 'dssdddsddss', 'https://www.youtube.com/', 'trumpman@maga.com', '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
-(9, 196, 9, NULL, 1, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', '(454) 546-4566', 'https://www.donaldjtrump.com/', 'donaldtrump@trump.com', '2023-01-17 01:10:39', '2023-01-17 01:10:39');
+(9, 196, 9, NULL, 1, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', '(454) 546-4566', 'https://www.donaldjtrump.com/', 'donaldtrump@trump.com', '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
+(10, 197, 11, NULL, 1, 'Vendor001', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', '2023-01-21 02:41:46', '2023-01-21 02:42:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendor_bids`
+--
+
+CREATE TABLE `vendor_bids` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `event_date` datetime NOT NULL,
+  `school_name` varchar(255) NOT NULL,
+  `event_venue_id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) UNSIGNED NOT NULL,
+  `notes` longtext DEFAULT NULL,
+  `contact_instructions` longtext NOT NULL,
+  `company_name` varchar(255) NOT NULL,
+  `url` longtext DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendor_packages`
+--
+
+CREATE TABLE `vendor_packages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `package_name` varchar(255) NOT NULL,
+  `description` longtext DEFAULT NULL,
+  `price` decimal(10,0) UNSIGNED NOT NULL,
+  `url` longtext DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -905,6 +942,18 @@ ALTER TABLE `vendors`
   ADD KEY `catagory_id` (`category_id`);
 
 --
+-- Indexes for table `vendor_bids`
+--
+ALTER TABLE `vendor_bids`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `vendor_packages`
+--
+ALTER TABLE `vendor_packages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1020,13 +1069,25 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
 
 --
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `vendor_bids`
+--
+ALTER TABLE `vendor_bids`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vendor_packages`
+--
+ALTER TABLE `vendor_packages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
