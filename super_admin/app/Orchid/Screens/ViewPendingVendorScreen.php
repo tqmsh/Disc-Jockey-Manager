@@ -133,7 +133,7 @@ class ViewPendingVendorScreen extends Screen
 
                     RoleUsers::create([
                         'user_id' => $vendor_id,
-                        'role_id' => 3,
+                        'role_id' => 4,
                     ]);
                 }
 
