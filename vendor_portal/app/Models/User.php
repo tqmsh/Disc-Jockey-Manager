@@ -83,4 +83,10 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    //relationsip with packages
+    public function packages()
+    {
+        return $this->hasMany(VendorPackage::class, 'user_id');
+    }
 }

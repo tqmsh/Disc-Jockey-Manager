@@ -156,8 +156,7 @@ class ViewEventScreen extends Screen
         }
     }
 
-    public function redirect($event){
-        dd($event);
-        return redirect()->route('platform.bid.create');
+    public function redirect($event_id){
+        return redirect()->route('platform.bid.create', $event_id);
     }
 }
