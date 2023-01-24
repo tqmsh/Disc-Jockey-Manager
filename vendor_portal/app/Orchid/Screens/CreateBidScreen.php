@@ -2,18 +2,41 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Events;
+use App\Models\Vendors;
+use Orchid\Screen\Sight;
+use App\Models\VendorBids;
 use Orchid\Screen\Screen;
+use App\Models\Categories;
+use Exception;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
+use Orchid\Support\Facades\Alert;
 
 class CreateBidScreen extends Screen
 {
+    public $event;
+    public $vendor; 
+
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event): iterable
     {
-        return [];
+        $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
+        
+        return [
+            'event' => $event
+        ];
     }
 
     /**
@@ -23,7 +46,7 @@ class CreateBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'CreateBidScreen';
+        return 'Create Bid For: ' . $this->event->event_name;
     }
 
     /**
@@ -33,7 +56,16 @@ class CreateBidScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+
+            Button::make('Create Bid')
+                ->icon('plus')
+                ->method('createBid'),
+
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.event.list')
+        ];
     }
 
     /**
@@ -43,6 +75,97 @@ class CreateBidScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::legend('event',[
+                Sight::make('event_start_time', 'Event Date'),
+                Sight::make('school', 'School Name'),
+                Sight::make('venue_id', 'Venue')->render(function (){
+
+                    $venue = Vendors::find($this->event->venue_id);
+
+                    return $venue === null ? '<i class="text-danger">●</i> Undecided' : $venue->company_name;
+                }),
+
+                Sight::make('company_name', 'Your Company Name')->render(function(){
+
+                    return $this->vendor->company_name;
+                }),
+
+                Sight::make('category_id', 'Your Category')->render(function(){
+
+                    $catName = Categories::find($this->vendor->category_id)->name;
+
+                    return $catName;
+                }),
+
+                Sight::make('website', 'Your Website')->render(function(){
+
+                    return Link::make($this->vendor->website)->href($this->vendor->website);
+                }),
+            ])->title('Bid Information'),
+
+            Layout::rows([
+
+                Select::make('package_id')
+                    ->title('Package')
+                    ->options(function (){
+
+                        $packages = Auth::user()->packages;
+
+                        $options = [];
+
+                        foreach ($packages as $package){
+                            $options[$package->id] = $package->package_name;
+                        }
+
+                        return $options;
+                    })
+                    ->required()
+                    ->empty('Start typing to search...')
+                    ->help('Select the package you would like to bid on for this event.'), 
+
+                TextArea::make('notes')
+                    ->title('Bid Notes')
+                    ->placeholder('Enter your bid notes')
+                    ->rows(5)
+                    ->help('Enter any notes you would like to include with your bid. This is optional.'),
+
+                TextArea::make('contact_instructions')
+                    ->title('Contact Instructions')
+                    ->placeholder('Enter your contact instructions')
+                    ->rows(5)
+                    ->help('Enter any instructions you would like.')
+
+            ])->title('Your Bid')
+        ];
+    }
+
+    public function createBid(Events $event){
+
+        $vendor = Vendors::where('user_id', Auth::user()->id)->first();
+
+        try{            
+            VendorBids::create([
+                'user_id' => $vendor->user_id,
+                'event_id' => $event->id,
+                'package_id' => request('package_id'),
+                'notes' => request('notes'),
+                'category_id' => $vendor->category_id,
+                'event_date' => $event->event_start_time,
+                'school_name' => $event->school,
+                'company_name' => $vendor->company_name,
+                'url' => $vendor->website,
+                'event_venue_id' => $event->venue_id,
+                'contact_instructions' => request('contact_instructions'),
+                'status' => 'pending'
+            ]);
+    
+            Toast::success('Bid created succesfully');
+    
+            return redirect()->route('platform.event.list');
+
+        }catch(Exception $e){
+            Alert::error('Error: ' . $e);
+        }
     }
 }
