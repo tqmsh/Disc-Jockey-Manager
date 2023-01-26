@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 24, 2023 at 09:34 PM
+-- Generation Time: Jan 26, 2023 at 09:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -764,16 +764,19 @@ CREATE TABLE `vendor_packages` (
   `package_name` varchar(255) NOT NULL,
   `description` longtext DEFAULT NULL,
   `price` decimal(10,0) UNSIGNED NOT NULL,
-  `url` longtext DEFAULT NULL
+  `url` longtext DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `vendor_packages`
 --
 
-INSERT INTO `vendor_packages` (`id`, `user_id`, `package_name`, `description`, `price`, `url`) VALUES
-(1, 197, 'Executive Venue', 'Best of the best venue!', '999', 'https://promplanner.app/'),
-(2, 197, 'Laid Back Venue', 'Venue for your laid back needs!', '199', NULL);
+INSERT INTO `vendor_packages` (`id`, `user_id`, `package_name`, `description`, `price`, `url`, `created_at`, `updated_at`) VALUES
+(1, 197, 'Executive Venue', 'Best of the best venue!', '99999999', 'https://promplanner.app/', '2023-01-26 18:17:56', '2023-01-27 00:21:31'),
+(2, 197, 'Laid Back Venue', 'Venue for your laid back needs!', '199', 'https://promvendors.com/', '2023-01-26 18:17:56', NULL),
+(3, 197, 'LIFETIME VENDOR LICENSE', 'Purchasing this License gives the Vendor unrestricted LIFETIME access to the Vendor portal of Prom Planner for one region and one business category ONLY. If multiple regions are needed, then a separate license for each region must be purchased.', '2990', 'https://promplanner.app/product/lifetime-vendor-license/', '2023-01-26 23:19:21', '2023-01-26 23:19:21');
 
 --
 -- Indexes for dumped tables
@@ -1110,7 +1113,7 @@ ALTER TABLE `vendor_bids`
 -- AUTO_INCREMENT for table `vendor_packages`
 --
 ALTER TABLE `vendor_packages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
