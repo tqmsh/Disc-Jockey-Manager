@@ -43,7 +43,7 @@ class ViewPackageLayout extends Table
                         ->route('platform.package.edit', $package);
                 }),
             TD::make('description', 'Package Description')
-                ->width('350')
+                ->width('300')
                 ->render(function (VendorPackage $package) {
                     return "<a href=packages/{$package->id}/edit>{$package->description}</a>";
                 }),
