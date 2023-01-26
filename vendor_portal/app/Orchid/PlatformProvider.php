@@ -46,11 +46,11 @@ class PlatformProvider extends OrchidServiceProvider
             ->size()
             ->list([
                 Menu::make('Bid Opportunities ')
-                ->icon('diamond')
+                ->icon('dollar')
                 ->route('platform.event.list'),
 
                 Menu::make('Your Packages ')
-                ->icon('diamond')
+                ->icon('present')
                 ->route('platform.package.list'),
             ]),
 
