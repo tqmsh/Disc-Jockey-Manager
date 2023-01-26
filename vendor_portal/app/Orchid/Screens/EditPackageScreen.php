@@ -3,17 +3,31 @@
 namespace App\Orchid\Screens;
 
 use Orchid\Screen\Screen;
+use App\Models\VendorPackage;
+use Exception;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Support\Facades\Layout;
 
 class EditPackageScreen extends Screen
 {
+    public $package;
+
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(VendorPackage $package): iterable
     {
-        return [];
+        return [
+            'package' => $package
+        ];
     }
 
     /**
@@ -23,7 +37,7 @@ class EditPackageScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'EditPackageScreen';
+        return 'Edit Package';
     }
 
     /**
@@ -33,7 +47,19 @@ class EditPackageScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Update')
+                ->icon('check')
+                ->method('update'),
+
+            Button::make('Delete Package')
+                ->icon('trash')
+                ->method('delete'),
+
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.package.list')
+        ];
     }
 
     /**
@@ -43,6 +69,70 @@ class EditPackageScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+           Layout::rows([
+
+                Input::make('package_name')
+                    ->title('Package Name')
+                    ->placeholder('Enter your package name')
+                    ->required()
+                    ->help('Enter the name of your package.')
+                    ->value($this->package->package_name),
+
+                Input::make('price')
+                    ->title('Package Price - $USD')
+                    ->placeholder('Enter your package price')
+                    ->type('number')
+                    ->required()
+                    ->help('Enter the price of your package.')
+                    ->value($this->package->price),
+
+                TextArea::make('description')
+                    ->title('Description')
+                    ->placeholder('Enter your package description')
+                    ->rows(5)
+                    ->help('Enter a description you would like to include with your package.')
+                    ->value($this->package->description),
+
+                Input::make('url')
+                    ->title('URL for Package')
+                    ->placeholder('https://promplanner.app/product/lifetime-vendor-license/')
+                    ->type('url')
+                    ->help('Enter the url that leads to your package.')
+                    ->value($this->package->url),
+
+            ])->title($this->package->package_name)
+        ];
+    }
+
+    public function update(VendorPackage $package, Request $request){
+
+        try{
+
+            $package->fill($request->all())->save();
+    
+            Toast::success('Package updated successfully.');
+    
+            return redirect()->route('platform.package.list');
+
+        }catch(Exception $e){
+            Alert::error('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function delete(VendorPackage $package)
+    {
+        try{
+            
+            $package->delete();
+
+            Toast::info('You have successfully deleted the package.');
+    
+            return redirect()->route('platform.package.list');
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error deleting this package. Error Code: ' . $e);
+        }
     }
 }
