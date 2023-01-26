@@ -62,7 +62,7 @@ class ViewEventLayout extends Table
                 ->width('150px')
                 ->align(TD::ALIGN_RIGHT)
                 ->render(function($event){
-                    return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('badge');
+                    return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('plus');
                 }), 
           
         ];    

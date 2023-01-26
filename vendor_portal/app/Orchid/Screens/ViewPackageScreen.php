@@ -2,9 +2,11 @@
 
 namespace App\Orchid\Screens;
 
+use App\Orchid\Layouts\ViewPackageLayout;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
+use Illuminate\Support\Facades\Auth;
 
 class ViewPackageScreen extends Screen
 {
@@ -15,7 +17,9 @@ class ViewPackageScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'packages' => Auth::user()->packages
+        ];
     }
 
     /**
@@ -59,6 +63,12 @@ class ViewPackageScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ViewPackageLayout::class
+        ];
+    }
+
+    public function redirect($package_id){
+        return redirect()->route('platform.package.edit', $package_id);
     }
 }
