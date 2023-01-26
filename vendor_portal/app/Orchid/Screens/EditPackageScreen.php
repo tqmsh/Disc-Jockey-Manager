@@ -2,10 +2,10 @@
 
 namespace App\Orchid\Screens;
 
-use Orchid\Screen\Screen;
-use App\Models\VendorPackage;
 use Exception;
+use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
+use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
@@ -13,6 +13,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 
 class EditPackageScreen extends Screen
 {
@@ -108,14 +109,22 @@ class EditPackageScreen extends Screen
     public function update(VendorPackage $package, Request $request){
 
         try{
+            
+            if($this->validPackage($request, $package->id)){
 
-            $package->fill($request->all())->save();
-    
-            Toast::success('Package updated successfully.');
-    
-            return redirect()->route('platform.package.list');
+                $package = $package->fill($request->all())->save();
 
-        }catch(Exception $e){
+                if($package){
+                    Toast::success('Package updated successfully!');
+                    return redirect()->route('platform.package.list');
+                }else{
+                    Alert::error('Error: Package not updated for an unknown reason.');
+                }
+            }else{
+                Toast::error('Package name already exists.');
+            }
+
+        } catch (Exception $e) {
             Alert::error('Error: ' . $e->getMessage());
         }
     }
@@ -134,5 +143,10 @@ class EditPackageScreen extends Screen
 
             Alert::error('There was an error deleting this package. Error Code: ' . $e);
         }
+    }
+
+    private function validPackage(Request $request, $current_package_id){
+
+        return count(VendorPackage::where('user_id', Auth::user()->id)->where('package_name', $request->package_name)->whereNot('id', $current_package_id)->get()) == 0;
     }
 }
