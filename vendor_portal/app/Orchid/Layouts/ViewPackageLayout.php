@@ -6,7 +6,9 @@ use Orchid\Screen\TD;
 use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Support\Color;
 
 class ViewPackageLayout extends Table
 {
@@ -41,7 +43,7 @@ class ViewPackageLayout extends Table
                         ->route('platform.package.edit', $package);
                 }),
             TD::make('description', 'Package Description')
-                ->width('450')
+                ->width('350')
                 ->render(function (VendorPackage $package) {
                     return "<a href=packages/{$package->id}/edit>{$package->description}</a>";
                 }),
@@ -55,6 +57,13 @@ class ViewPackageLayout extends Table
                     return Link::make($package->url)
                         ->href($package->url == null ? '#' : $package->url);
                 }),
+            
+            TD::make()
+                ->width('80')
+                ->align(TD::ALIGN_RIGHT)
+                ->render(function(VendorPackage $package){
+                    return Button::make('Edit')->type(Color::PRIMARY())->method('redirect', ['package_id' => $package->id])->icon('pencil');
+                }), 
         ];
     }
 }

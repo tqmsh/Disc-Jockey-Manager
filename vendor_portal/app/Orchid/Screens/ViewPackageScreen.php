@@ -67,4 +67,8 @@ class ViewPackageScreen extends Screen
             ViewPackageLayout::class
         ];
     }
+
+    public function redirect($package_id){
+        return redirect()->route('platform.package.edit', $package_id);
+    }
 }
