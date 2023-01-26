@@ -58,7 +58,7 @@ class CreateBidScreen extends Screen
     {
         return [
 
-            Button::make('Create Bid')
+            Button::make('Send Bid')
                 ->icon('plus')
                 ->method('createBid'),
 
