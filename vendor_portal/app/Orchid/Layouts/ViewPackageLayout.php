@@ -53,7 +53,7 @@ class ViewPackageLayout extends Table
             TD::make('url', 'Package Site')
                 ->render(function (VendorPackage $package) {
                     return Link::make($package->url)
-                        ->href($package->url);
+                        ->href($package->url == null ? '#' : $package->url);
                 }),
         ];
     }

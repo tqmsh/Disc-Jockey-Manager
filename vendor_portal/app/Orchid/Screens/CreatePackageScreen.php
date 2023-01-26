@@ -98,18 +98,32 @@ class CreatePackageScreen extends Screen
     public function createPackage(Request $request){
 
         try{
-            $input = $request->all();
-            $input['user_id'] = Auth::user()->id;
-            $package = VendorPackage::create($input);
+            
+            if($this->validPackage($request)){
 
-            if($package){
-                Toast::success('Package Created!');
-                return redirect()->route('platform.package.list');
+                $input = $request->all();
+    
+                $input['user_id'] = Auth::user()->id;
+
+                $package = VendorPackage::create($input);
+
+                if($package){
+                    Toast::success('Package Created!');
+                    return redirect()->route('platform.package.list');
+                }else{
+                    Alert::error('Error: Package not created for an unkown reason.');
+                }
             }else{
-                Alert::error('Error: Package not created for an unkown reason.');
+                Toast::error('Package name already exists.');
             }
+
         } catch (Exception $e) {
             Alert::error('Error: ' . $e->getMessage());
         }
+    }
+
+    private function validPackage(Request $request){
+
+        return count(VendorPackage::where('user_id', Auth::user()->id)->where('package_name', $request->package_name)->get()) == 0;
     }
 }
