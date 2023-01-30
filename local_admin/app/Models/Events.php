@@ -55,4 +55,9 @@ class Events extends Model
         $school = School::find($this->attributes['school_id']);
         return $this->attributes['event_name'] . ' (' . $this->attributes['school'] . ' | ' . $school->county . ') ';
     }
+
+    //create relationship with vendor bids
+    public function vendorBids(){
+        return $this->hasMany(VendorBids::class, 'event_id');
+    }
 }
