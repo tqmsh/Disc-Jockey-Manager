@@ -122,6 +122,7 @@ class CreateEventScreen extends Screen
             $formFields['event_creator'] = auth()->id();
             $formFields['school_id'] = $school->id;
             $formFields['school'] = $school->school_name;
+            $formFields['region_id'] = $school->region_id;
 
             Events::create($formFields);
 
