@@ -49,6 +49,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('dollar')
                 ->route('platform.event.list'),
 
+                Menu::make('Bid History')
+                ->icon('clock')
+                ->route('platform.bidhistory.list'),
+
                 Menu::make('Your Packages ')
                 ->icon('present')
                 ->route('platform.package.list'),
