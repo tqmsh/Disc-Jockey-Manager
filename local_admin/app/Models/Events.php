@@ -15,7 +15,7 @@ class Events extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['event_name', 'venue_id', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'school', 'event_zip_postal', 'event_rules'];
+    protected $fillable = ['event_name', 'venue_id', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'region_id', 'school', 'event_zip_postal', 'event_rules'];
 
 
     public function scopeFilter($query, array $filters){
@@ -54,5 +54,10 @@ class Events extends Model
     {
         $school = School::find($this->attributes['school_id']);
         return $this->attributes['event_name'] . ' (' . $this->attributes['school'] . ' | ' . $school->county . ') ';
+    }
+
+    //create relationship with vendor bids
+    public function vendorBids(){
+        return $this->hasMany(VendorBids::class, 'event_id');
     }
 }
