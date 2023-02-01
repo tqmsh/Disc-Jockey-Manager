@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2023 at 10:56 PM
+-- Generation Time: Jan 31, 2023 at 09:54 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -157,11 +157,11 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `event_creator`, `school_id`, `region_id`, `venue_id`, `event_name`, `event_start_time`, `event_finish_time`, `school`, `event_address`, `event_zip_postal`, `event_info`, `event_rules`, `created_at`, `updated_at`) VALUES
-(6, 108, 32, 2, 9, 'Cool Kidz Party', '2022-11-11 15:05:41', '2022-11-18 15:05:41', 'Cool School', '789 Cool Street', 'ILK OL8', 'Cool dresses ', 'ONLY COOL KIDS ALLOWED', '2022-11-04 19:05:41', '2022-11-15 01:34:49'),
-(13, 13, 53, 2, NULL, 'Colonel By\'s Main Event', '2022-11-21 12:00:00', '2022-11-22 12:00:00', 'Colonel By Secondary School', '2381 Ogilvie Rd', 'K1J 7N4', 'Formal Attire', 'No Violence', '2022-11-20 11:16:51', '2022-11-20 11:16:51'),
-(14, 13, 51, 2, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
-(15, 151, 51, 2, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', '2022-12-02 01:03:59', '2022-12-02 01:03:59'),
-(17, 151, 51, 2, 9, 'Test with venue', '2023-01-10 12:00:00', '2023-01-20 12:00:00', 'Digitera School of Digital Marketing & Software', NULL, NULL, 'Test with venue', 'Test with venue', '2023-01-17 01:14:07', '2023-01-17 01:14:07');
+(6, 108, 32, 12, 9, 'Cool Kidz Party', '2022-11-11 15:05:41', '2022-11-18 15:05:41', 'Cool School', '789 Cool Street', 'ILK OL8', 'Cool dresses ', 'ONLY COOL KIDS ALLOWED', '2022-11-04 19:05:41', '2022-11-15 01:34:49'),
+(13, 13, 53, 1, NULL, 'Colonel By\'s Main Event', '2022-11-21 12:00:00', '2022-11-22 12:00:00', 'Colonel By Secondary School', '2381 Ogilvie Rd', 'K1J 7N4', 'Formal Attire', 'No Violence', '2022-11-20 11:16:51', '2022-11-20 11:16:51'),
+(14, 13, 51, 1, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
+(15, 151, 51, 1, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', '2022-12-02 01:03:59', '2022-12-02 01:03:59'),
+(17, 151, 51, 1, 9, 'Test with venue', '2023-01-10 12:00:00', '2023-01-20 12:00:00', 'Digitera School of Digital Marketing & Software', NULL, NULL, 'Test with venue', 'Test with venue', '2023-01-17 01:14:07', '2023-01-17 01:14:07');
 
 -- --------------------------------------------------------
 
@@ -747,7 +747,6 @@ CREATE TABLE `vendor_bids` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `package_id` bigint(20) UNSIGNED NOT NULL,
-  `event_venue_id` bigint(20) UNSIGNED NOT NULL,
   `category_id` bigint(20) UNSIGNED NOT NULL,
   `event_date` datetime NOT NULL,
   `school_name` varchar(255) NOT NULL,
@@ -764,8 +763,9 @@ CREATE TABLE `vendor_bids` (
 -- Dumping data for table `vendor_bids`
 --
 
-INSERT INTO `vendor_bids` (`id`, `user_id`, `event_id`, `package_id`, `event_venue_id`, `category_id`, `event_date`, `school_name`, `notes`, `contact_instructions`, `company_name`, `url`, `status`, `created_at`, `updated_at`) VALUES
-(1, 197, 6, 1, 9, 11, '2022-11-11 15:05:41', 'Cool School', 'Some Notes', 'Some contact info', 'Money Jockeys', 'https://promplanner.app/', 'pending', '2023-01-25 01:12:39', '2023-01-25 01:12:39');
+INSERT INTO `vendor_bids` (`id`, `user_id`, `event_id`, `package_id`, `category_id`, `event_date`, `school_name`, `notes`, `contact_instructions`, `company_name`, `url`, `status`, `created_at`, `updated_at`) VALUES
+(2, 197, 14, 3, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'Just buy this license please', 'Email: info@digitera.agency', 'Money Jockeys', 'https://promplanner.app/', 'pending', '2023-02-01 00:53:31', '2023-02-01 00:53:31'),
+(3, 197, 13, 1, 11, '2022-11-21 12:00:00', 'Colonel By Secondary School', 'This will be the best venue trust me bro', 'Phone: 654-785-1289', 'Money Jockeys', 'https://promplanner.app/', 'pending', '2023-02-01 00:56:23', '2023-02-01 00:56:23');
 
 -- --------------------------------------------------------
 
@@ -806,6 +806,13 @@ CREATE TABLE `vendor_paid_regions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `vendor_paid_regions`
+--
+
+INSERT INTO `vendor_paid_regions` (`id`, `user_id`, `region_id`, `created_at`, `updated_at`) VALUES
+(1, 197, 1, '2023-01-31 05:00:00', NULL);
 
 --
 -- Indexes for dumped tables
@@ -1022,7 +1029,8 @@ ALTER TABLE `vendor_packages`
 --
 ALTER TABLE `vendor_paid_regions`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `region_id` (`region_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -1158,7 +1166,7 @@ ALTER TABLE `vendors`
 -- AUTO_INCREMENT for table `vendor_bids`
 --
 ALTER TABLE `vendor_bids`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vendor_packages`
@@ -1170,7 +1178,7 @@ ALTER TABLE `vendor_packages`
 -- AUTO_INCREMENT for table `vendor_paid_regions`
 --
 ALTER TABLE `vendor_paid_regions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -1202,6 +1210,12 @@ ALTER TABLE `events`
   ADD CONSTRAINT `events_event_creator_foreign` FOREIGN KEY (`event_creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `events_school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `venue_id` FOREIGN KEY (`venue_id`) REFERENCES `vendors` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `event_attendees`
+--
+ALTER TABLE `event_attendees`
+  ADD CONSTRAINT `event_attendees_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `food`
@@ -1289,6 +1303,13 @@ ALTER TABLE `vendor_bids`
 --
 ALTER TABLE `vendor_packages`
   ADD CONSTRAINT `vendor_packages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `vendor_paid_regions`
+--
+ALTER TABLE `vendor_paid_regions`
+  ADD CONSTRAINT `vendor_paid_regions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `vendor_paid_regions_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

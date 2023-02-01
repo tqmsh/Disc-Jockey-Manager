@@ -9,9 +9,7 @@ use App\Models\VendorBids;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use Exception;
-use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
@@ -144,7 +142,8 @@ class CreateBidScreen extends Screen
 
         $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
-        try{            
+        try{   
+
             VendorBids::create([
                 'user_id' => $vendor->user_id,
                 'event_id' => $event->id,
@@ -155,7 +154,6 @@ class CreateBidScreen extends Screen
                 'school_name' => $event->school,
                 'company_name' => $vendor->company_name,
                 'url' => $vendor->website,
-                'event_venue_id' => $event->venue_id,
                 'contact_instructions' => request('contact_instructions'),
                 'status' => 'pending'
             ]);

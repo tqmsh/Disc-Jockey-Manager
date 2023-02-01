@@ -6,16 +6,18 @@ use Exception;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\Localadmin;
-use App\Models\Vendors;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
+use App\Models\VendorPaidRegions;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
@@ -31,9 +33,15 @@ class ViewEventScreen extends Screen
      */
     public function query(): iterable
     {
-        //!MAKE IT SO VENDORS ONLY SEE EVENTS IN THEIR REGION
+        //convert all the users paid regions to a array
+        $array = Auth::user()->paidRegions->toArray();
+
+        //get all the region_ids of the array
+        $paidRegionIds =  Arr::pluck($array, ['region_id']);
+
+        //get all events with the region_id matching an id in the array
         return [
-            'events' => Events::all()
+            'events' => Events::whereIn('region_id', $paidRegionIds)->paginate(10)
         ];
     }
 
@@ -76,7 +84,6 @@ class ViewEventScreen extends Screen
                     Select::make('school')
                         ->title('School')
                         ->empty('No selection')
-                        ->help('**For Devs** FYI these are all the events in the database, not the ones this vendor paid for. This text will be deleted')
                         ->fromModel(Events::class, 'school', 'school'),
 
                     Select::make('country')
