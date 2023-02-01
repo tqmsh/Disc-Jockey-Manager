@@ -89,4 +89,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(VendorPackage::class, 'user_id');
     }
+
+    //relationshp with paid regions
+    public function paidRegions()
+    {
+        return $this->hasMany(VendorPaidRegions::class, 'user_id');
+    }
 }
