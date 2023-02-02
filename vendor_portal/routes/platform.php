@@ -5,32 +5,25 @@ declare(strict_types=1);
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
+use App\Orchid\Screens\EditBidScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
 use App\Orchid\Screens\CreateBidScreen;
-use App\Orchid\Screens\PlatformScreen;
-use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
-use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditPackageScreen;
-use App\Orchid\Screens\EditStudentScreen;
-use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewPackageScreen;
-use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\CreatePackageScreen;
-use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\ViewBidHistoryScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
-use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewBidHistoryScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +58,8 @@ Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.ed
 Route::screen('/bid/{event}/create', CreateBidScreen::class)->name('platform.bid.create');
 
 Route::screen('/bids/history', ViewBidHistoryScreen::class)->name('platform.bidhistory.list');
+
+Route::screen('/bid/{bid}/edit', EditBidScreen::class)->name('platform.bid.edit');
 
 
 // Platform > Profile

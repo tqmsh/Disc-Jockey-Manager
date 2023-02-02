@@ -52,4 +52,8 @@ class ViewBidHistoryScreen extends Screen
             EventBidLayout::class,
         ];
     }
+
+    public function editBid($bidId){
+        return redirect()->route('platform.bid.edit', $bidId);
+    }
 }
