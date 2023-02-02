@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Orchid\Screen\Screen;
+use Illuminate\Support\Facades\Auth;
 
 class ViewBidHistoryScreen extends Screen
 {
@@ -13,7 +14,10 @@ class ViewBidHistoryScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'eventBids' => Auth::user()->eventBids,
+            'studentBids' => Auth::user()->studentBids
+        ];
     }
 
     /**
