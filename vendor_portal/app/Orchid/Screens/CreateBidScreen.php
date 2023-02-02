@@ -5,7 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Events;
 use App\Models\Vendors;
 use Orchid\Screen\Sight;
-use App\Models\VendorBids;
+use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use Exception;
@@ -144,7 +144,7 @@ class CreateBidScreen extends Screen
 
         try{   
 
-            VendorBids::create([
+            EventBids::create([
                 'user_id' => $vendor->user_id,
                 'event_id' => $event->id,
                 'package_id' => request('package_id'),

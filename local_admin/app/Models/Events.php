@@ -57,7 +57,7 @@ class Events extends Model
     }
 
     //create relationship with vendor bids
-    public function vendorBids(){
+    public function EventBids(){
         return $this->hasMany(VendorBids::class, 'event_id');
     }
 }
