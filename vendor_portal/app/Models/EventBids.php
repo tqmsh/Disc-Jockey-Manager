@@ -19,6 +19,7 @@ class EventBids extends Model
         'event_date',
         'school_name',
         'notes',
+        'region_id',
         'status',
         'contact_instructions',
         'category_id',

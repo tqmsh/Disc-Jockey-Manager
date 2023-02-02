@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Orchid\Layouts\EventBidLayout;
 use Orchid\Screen\Screen;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,7 @@ class ViewBidHistoryScreen extends Screen
     public function query(): iterable
     {
         return [
-            'eventBids' => Auth::user()->eventBids,
+            'eventBids' => Auth::user()->eventBids->sortBy('status'),
             'studentBids' => Auth::user()->studentBids
         ];
     }
@@ -47,6 +48,8 @@ class ViewBidHistoryScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            EventBidLayout::class,
+        ];
     }
 }

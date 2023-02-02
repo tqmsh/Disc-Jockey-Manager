@@ -45,7 +45,7 @@ class ViewEventLayout extends Table
 
             TD::make('region_id', 'Region')
                 ->render(function($event){
-                    return e(Region::where('id', School::where('id', $event->school_id)->first()->region_id)->first()->name);
+                    return e(Region::find($event->region_id)->name);
                 }), 
 
             TD::make('event_info', 'Event Info')

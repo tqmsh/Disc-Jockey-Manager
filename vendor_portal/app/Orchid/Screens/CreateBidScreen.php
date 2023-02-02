@@ -152,10 +152,11 @@ class CreateBidScreen extends Screen
                 'category_id' => $vendor->category_id,
                 'event_date' => $event->event_start_time,
                 'school_name' => $event->school,
+                'region_id' => $event->region_id,
                 'company_name' => $vendor->company_name,
                 'url' => $vendor->website,
                 'contact_instructions' => request('contact_instructions'),
-                'status' => 'pending'
+                'status' => 0
             ]);
     
             Toast::success('Bid created succesfully');
