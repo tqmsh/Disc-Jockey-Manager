@@ -42,4 +42,9 @@ class Student extends Model
         }
 
     }
+
+    //create relationship with student bids
+    public function bids(){
+        return $this->hasMany(StudentBids::class, 'student_id');
+    }
 }
