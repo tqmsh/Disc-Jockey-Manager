@@ -83,4 +83,9 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    //create relationship with student bids
+    public function bids(){
+        return $this->hasMany(StudentBids::class, 'student_id');
+    }
 }

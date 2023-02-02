@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 
-class VendorBids extends Model
+class EventBids extends Model
 {
     use HasFactory;
     use AsSource;
@@ -27,4 +27,10 @@ class VendorBids extends Model
         'created_at',
         'updated_at',
     ];
+
+    //relationship to user
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

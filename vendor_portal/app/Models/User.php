@@ -95,4 +95,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(VendorPaidRegions::class, 'user_id');
     }
+
+    //relationship with event bids
+    public function eventBids()
+    {
+        return $this->hasMany(EventBids::class, 'user_id');
+    }
+
+    //relationship with student bids
+    public function studentBids()
+    {
+        return $this->hasMany(StudentBids::class, 'user_id');
+    }
 }

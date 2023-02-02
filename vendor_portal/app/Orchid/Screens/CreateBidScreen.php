@@ -2,21 +2,22 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Events;
 use App\Models\Vendors;
 use Orchid\Screen\Sight;
-use App\Models\VendorBids;
+use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
-use Exception;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
-use Orchid\Support\Facades\Alert;
 
 class CreateBidScreen extends Screen
 {
@@ -142,28 +143,44 @@ class CreateBidScreen extends Screen
 
         $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
-        try{   
+            try{   
 
-            VendorBids::create([
-                'user_id' => $vendor->user_id,
-                'event_id' => $event->id,
-                'package_id' => request('package_id'),
-                'notes' => request('notes'),
-                'category_id' => $vendor->category_id,
-                'event_date' => $event->event_start_time,
-                'school_name' => $event->school,
-                'company_name' => $vendor->company_name,
-                'url' => $vendor->website,
-                'contact_instructions' => request('contact_instructions'),
-                'status' => 'pending'
-            ]);
-    
-            Toast::success('Bid created succesfully');
-    
-            return redirect()->route('platform.event.list');
+                if($this->validBid($event)){
 
-        }catch(Exception $e){
-            Alert::error('Error: ' . $e);
-        }
+                    
+                    EventBids::create([
+                        'user_id' => $vendor->user_id,
+                        'event_id' => $event->id,
+                        'package_id' => request('package_id'),
+                        'notes' => request('notes'),
+                        'category_id' => $vendor->category_id,
+                        'event_date' => $event->event_start_time,
+                        'school_name' => $event->school,
+                        'region_id' => $event->region_id,
+                        'company_name' => $vendor->company_name,
+                        'url' => $vendor->website,
+                        'contact_instructions' => request('contact_instructions'),
+                        'status' => 0
+                    ]);
+                        
+                    Toast::success('Bid created succesfully');
+                        
+                    return redirect()->route('platform.event.list');
+                }else{
+                    Toast::error('Bid already exists');
+                }
+    
+            }catch(Exception $e){
+                Alert::error('Error: ' . $e->getMessage());
+            }
+    }
+
+    private function validBid(Events $event){
+
+        return count(EventBids::where('user_id', Auth::user()->id)
+                             ->where('event_id', $event->id)
+                             ->where('package_id', request('package_id'))
+                             ->where('status', 0)
+                             ->get()) == 0;
     }
 }

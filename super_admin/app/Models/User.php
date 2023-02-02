@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use Orchid\Platform\Models\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'account_status',
+        'permissions',
         'password',
         'updated_at',
         'created_at',
@@ -85,4 +83,28 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    //relationsip with packages
+    public function packages()
+    {
+        return $this->hasMany(VendorPackage::class, 'user_id');
+    }
+
+    //relationshp with paid regions
+    public function paidRegions()
+    {
+        return $this->hasMany(VendorPaidRegions::class, 'user_id');
+    }
+
+    //relationship with event bids
+    public function eventBids()
+    {
+        return $this->hasMany(EventBids::class, 'user_id');
+    }
+
+    //relationship with student bids
+    public function studentBids()
+    {
+        return $this->hasMany(StudentBids::class, 'user_id');
+    }
 }
