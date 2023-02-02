@@ -23,7 +23,7 @@ class ViewBidHistoryScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewBidHistoryScreen';
+        return 'Bid History';
     }
 
     /**
