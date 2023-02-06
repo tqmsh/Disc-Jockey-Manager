@@ -5,16 +5,17 @@ declare(strict_types=1);
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
-use App\Orchid\Screens\EditBidScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
 use App\Orchid\Screens\CreateBidScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\ViewPackageScreen;
+use App\Orchid\Screens\EditEventBidScreen;
 use App\Orchid\Screens\CreatePackageScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\EditStudentBidScreen;
 use App\Orchid\Screens\ViewBidHistoryScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -59,7 +60,9 @@ Route::screen('/bid/{event}/create', CreateBidScreen::class)->name('platform.bid
 
 Route::screen('/bids/history', ViewBidHistoryScreen::class)->name('platform.bidhistory.list');
 
-Route::screen('/bid/{bid}/edit', EditBidScreen::class)->name('platform.bid.edit');
+Route::screen('/eventbid/{eventBid}/edit', EditEventBidScreen::class)->name('platform.eventBid.edit');
+
+Route::screen('/studentbid/{studentBid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
 
 
 // Platform > Profile

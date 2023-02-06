@@ -7,6 +7,7 @@ use App\Models\StudentBids;
 use Orchid\Screen\Screen;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\EventBidLayout;
+use App\Orchid\Layouts\StudentBidLayout;
 
 class ViewBidHistoryScreen extends Screen
 {
@@ -52,10 +53,15 @@ class ViewBidHistoryScreen extends Screen
     {
         return [
             EventBidLayout::class,
+            StudentBidLayout::class
         ];
     }
 
-    public function editBid($bidId){
-        return redirect()->route('platform.bid.edit', $bidId);
+    public function editBid($bidId, $type){
+        if($type == 'event'){
+            return redirect()->route('platform.eventBid.edit', $bidId);
+        } else {
+            return redirect()->route('platform.studentBid.edit', $bidId);
+        }
     }
 }
