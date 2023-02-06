@@ -144,4 +144,8 @@ class ViewEventScreen extends Screen
             Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
         }
     }
+
+    public function redirect($event_id){
+        return redirect()->route('platform.eventBid.list', $event_id);
+    }
 }
