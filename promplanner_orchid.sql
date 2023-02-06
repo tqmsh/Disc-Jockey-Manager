@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2023 at 10:57 PM
+-- Generation Time: Feb 07, 2023 at 12:52 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -210,7 +210,8 @@ INSERT INTO `event_bids` (`id`, `user_id`, `event_id`, `region_id`, `package_id`
 (2, 197, 14, 1, 3, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'Just buy this license please', 'Email: info@digitera.agency', 'Money Jockeys', 'https://promplanner.app/', 2, '2023-02-01 00:53:31', '2023-02-01 00:53:31'),
 (3, 197, 13, 1, 1, 11, '2022-11-21 12:00:00', 'Colonel By Secondary School', 'This will be the best venue trust me bro', 'Phone: 654-785-1289', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-01 00:56:23', '2023-02-01 00:56:23'),
 (4, 197, 14, 1, 2, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'Notes', 'Contact Instructions', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-02 23:39:42', '2023-02-03 02:47:53'),
-(7, 197, 14, 1, 1, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', NULL, NULL, 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-03 02:43:50', '2023-02-03 02:43:50');
+(7, 197, 14, 1, 1, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', NULL, NULL, 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-03 02:43:50', '2023-02-03 02:43:50'),
+(8, 197, 13, 1, 3, 11, '2022-11-21 12:00:00', 'Colonel By Secondary School', 'notes', 'contact info', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-07 04:26:43', '2023-02-07 04:26:43');
 
 -- --------------------------------------------------------
 
@@ -686,7 +687,7 @@ CREATE TABLE `student_bids` (
   `contact_instructions` longtext DEFAULT NULL,
   `company_name` varchar(255) NOT NULL,
   `url` longtext DEFAULT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'pending',
+  `status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -696,7 +697,7 @@ CREATE TABLE `student_bids` (
 --
 
 INSERT INTO `student_bids` (`id`, `user_id`, `student_id`, `region_id`, `package_id`, `category_id`, `school_name`, `notes`, `contact_instructions`, `company_name`, `url`, `status`, `created_at`, `updated_at`) VALUES
-(1, 197, 110, NULL, 6, 11, 'Digitera School of Digital Marketing & Software', 'Notes', 'Contact Instructions', 'Money Jockeys', 'https://promplanner.app/', 'pending', '2023-02-02 19:14:07', '2023-02-02 19:14:07');
+(1, 197, 110, 1, 6, 11, 'Digitera School of Digital Marketing & Software', 'Notes', 'Contact Instructions', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-02 19:14:07', '2023-02-02 19:14:07');
 
 -- --------------------------------------------------------
 
@@ -763,7 +764,7 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'XH56CobxbeOcAjzqTrlxrjP0CxlXX6Nu8FaDVxAMvwErRExUCEQFJbVCo6VB', '2023-01-21 02:41:46', '2023-01-21 02:42:36');
+(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'AdvFkhb53ED86kEmiHu96lMPJuqgDX2yMlOVjnTrwDE2zAOwqQHIy9tshFFK', '2023-01-21 02:41:46', '2023-01-21 02:42:36');
 
 -- --------------------------------------------------------
 
@@ -1128,7 +1129,7 @@ ALTER TABLE `event_attendees`
 -- AUTO_INCREMENT for table `event_bids`
 --
 ALTER TABLE `event_bids`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`

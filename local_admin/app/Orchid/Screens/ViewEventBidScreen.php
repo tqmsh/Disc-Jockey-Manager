@@ -23,7 +23,7 @@ class ViewEventBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewEventBidScreen';
+        return 'Bids on: ';
     }
 
     /**
