@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 use Tabuna\Breadcrumbs\Trail;
-use Illuminate\Support\Facades\Route;
-use App\Orchid\Screens\PlatformScreen;
+use Illuminate\Support\Facades\Route;;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\CreateEventScreen;
@@ -12,8 +11,6 @@ use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\CreateStudentScreen;
-use App\Orchid\Screens\Role\RoleEditScreen;
-use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
@@ -23,6 +20,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewEventBidScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +63,9 @@ Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platfor
 
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
+
+Route::screen('/events/{event_id}/bids', ViewEventBidScreen::class)->name('platform.eventBid.list');
+
 
 
 // Platform > Profile

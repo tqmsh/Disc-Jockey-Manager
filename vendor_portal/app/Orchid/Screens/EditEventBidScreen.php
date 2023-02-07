@@ -15,7 +15,7 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 
-class EditBidScreen extends Screen
+class EditEventBidScreen extends Screen
 {
     public $eventBid;
     /**
@@ -37,7 +37,7 @@ class EditBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Bid';
+        return 'Edit Event Bid';
     }
 
     /**

@@ -2,11 +2,15 @@
 
 namespace App\Orchid\Screens;
 
-use App\Orchid\Layouts\ViewPackageLayout;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
+use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\Auth;
+use App\Orchid\Layouts\ViewPackageLayout;
+use Exception;
 
 class ViewPackageScreen extends Screen
 {
@@ -70,5 +74,30 @@ class ViewPackageScreen extends Screen
 
     public function redirect($package_id){
         return redirect()->route('platform.package.edit', $package_id);
+    }
+
+    public function deleteRegions(Request $request)
+    {   
+        //get all packages from post request
+        $packages = $request->get('regions');
+        
+        try{
+            //if the array is not empty
+            if(!empty($packages)){
+
+                //loop through the packages and delete them from db
+                foreach($packages as $package){
+                    VendorPackage::where('id', $package)->delete();
+                }
+
+                Toast::success('Selected packages deleted succesfully');
+
+            }else{
+                Toast::warning('Please select packages in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected packages. Error Message: ' . $e->getMessage());
+        }
     }
 }
