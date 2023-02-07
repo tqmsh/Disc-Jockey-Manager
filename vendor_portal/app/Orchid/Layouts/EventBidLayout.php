@@ -5,7 +5,6 @@ namespace App\Orchid\Layouts;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Region;
-use App\Models\School;
 use App\Models\VendorPackage;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
@@ -22,6 +21,11 @@ class EventBidLayout extends Table
      * @var string
      */
     protected $target = 'eventBids';
+    /**
+     * Display header name.
+     *
+     * @return string|null
+     */
 
     /**
      * Get the table cells to be displayed.
@@ -32,11 +36,11 @@ class EventBidLayout extends Table
     {
         return [
 
-            TD::make()
+            TD::make('edit_button', 'EVENT BIDS')
                 ->align(TD::ALIGN_LEFT)
                 ->render(function($eventBid){
                     return 
-                    ($eventBid->status == 0) ? Button::make('Edit Bid')->type(Color::PRIMARY())->method('editBid', ['bidId' => $eventBid->id])->icon('pencil') 
+                    ($eventBid->status == 0) ? Button::make('Edit Bid')->type(Color::PRIMARY())->method('editBid', ['bidId' => $eventBid->id, 'type' => 'event'])->icon('pencil') 
                     : '';
                 }), 
 
@@ -72,6 +76,11 @@ class EventBidLayout extends Table
             TD::make('notes', 'Notes')
                 ->render(function($eventBid){
                     return e($eventBid->notes);
+                }), 
+
+            TD::make('contact_instructions', 'Contact Info')
+                ->render(function($studentBid){
+                    return e($studentBid->contact_instructions);
                 }), 
 
             TD::make('created_at', 'Created At')
