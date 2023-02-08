@@ -6,7 +6,6 @@ use App\Models\Events;
 use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Input;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventBidsLayout;
 use App\Orchid\Layouts\ViewPendingEventBidsLayout;

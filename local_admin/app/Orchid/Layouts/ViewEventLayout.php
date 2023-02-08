@@ -40,12 +40,12 @@ class ViewEventLayout extends Table
 
             TD::make()
                 ->render(function($event){
-                    return Button::make('Students')->method('redirect', ['event_id' => $event->id, 'type' => 'student'])->icon('plus')->type(Color::DARK());
+                    return Button::make('Students')->method('redirect', ['event_id' => $event->id, 'type' => 'student'])->icon('people')->type(Color::DARK());
                 }), 
 
             TD::make()
                 ->render(function($event){
-                    return Button::make('Bids')->method('redirect', ['event_id' => $event->id, 'type' => 'event'])->icon('plus')->type(Color::PRIMARY());
+                    return Button::make('Bids')->method('redirect', ['event_id' => $event->id, 'type' => 'event'])->icon('dollar')->type(Color::PRIMARY());
                 }), 
 
 
