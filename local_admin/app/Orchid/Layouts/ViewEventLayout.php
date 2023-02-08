@@ -4,8 +4,10 @@ namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
 use App\Models\Events;
+use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;
 
 class ViewEventLayout extends Table
@@ -35,6 +37,17 @@ class ViewEventLayout extends Table
                         ->value($event->id)
                         ->checked(false);
                 }),
+
+            TD::make()
+                ->render(function($event){
+                    return Button::make('Students')->method('redirect', ['event_id' => $event->id, 'type' => 'student'])->icon('plus')->type(Color::DARK());
+                }), 
+
+            TD::make()
+                ->render(function($event){
+                    return Button::make('Bids')->method('redirect', ['event_id' => $event->id, 'type' => 'event'])->icon('plus')->type(Color::PRIMARY());
+                }), 
+
 
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
