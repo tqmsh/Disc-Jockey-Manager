@@ -71,11 +71,11 @@ class ViewEventBidScreen extends Screen
         ];
     }
 
-    public function updateBid()
+    public function updateBid(Events $event)
     {
         $bid = EventBids::find(request('bid_id'));
         $bid->status = request('choice');
         $bid->save();
-        return redirect()->route('platform.eventBids.list', $this->event);
+        return redirect()->route('platform.eventBids.list', $event);
     }
 }

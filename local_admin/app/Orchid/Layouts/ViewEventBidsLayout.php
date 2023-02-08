@@ -35,7 +35,7 @@ class ViewEventBidsLayout extends Table
 
             TD::make()
                 ->align(TD::ALIGN_LEFT)
-                ->width('100px')
+                ->width('125px')
                 ->render(function(EventBids $bid){
                     return 
                         (($bid->status == 1) ? '<i class="text-success">●</i> Accepted' 
@@ -76,10 +76,10 @@ class ViewEventBidsLayout extends Table
                     return e($bid->notes);
                 }),
 
-          TD::make('contact_information', 'Contact Info')
+          TD::make('contact_instructions', 'Contact Info')
                 ->width('300')
                 ->render(function($bid){
-                       return e($bid->contact_information);
+                       return e($bid->contact_instructions);
 
                 }),
         ];    

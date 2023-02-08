@@ -38,7 +38,6 @@ class ViewPendingEventBidsLayout extends Table
                 ->width('100px')
                 ->render(function(EventBids $bid){
                     return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
-   
                     }), 
 
             TD::make()
@@ -82,10 +81,10 @@ class ViewPendingEventBidsLayout extends Table
                     return e($bid->notes);
                 }),
 
-          TD::make('contact_information', 'Contact Info')
+          TD::make('contact_instructions', 'Contact Info')
                 ->width('300')
                 ->render(function($bid){
-                       return e($bid->contact_information);
+                       return e($bid->contact_instructions);
 
                 }),
         ];    
