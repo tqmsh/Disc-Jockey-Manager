@@ -60,6 +60,8 @@ class ViewEventBidsLayout extends Table
                 }),
 
             TD::make('package_id', 'Price - $USD')
+                ->width('110')
+                ->align(TD::ALIGN_CENTER)
                 ->render(function($bid){
                     return e('$' . number_format(VendorPackage::find($bid->package_id)->price));
                 }),
