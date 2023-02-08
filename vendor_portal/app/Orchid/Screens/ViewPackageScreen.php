@@ -79,7 +79,7 @@ class ViewPackageScreen extends Screen
     public function deleteRegions(Request $request)
     {   
         //get all packages from post request
-        $packages = $request->get('regions');
+        $packages = $request->get('vendorPackages');
         
         try{
             //if the array is not empty
