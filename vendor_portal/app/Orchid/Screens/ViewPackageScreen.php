@@ -76,7 +76,7 @@ class ViewPackageScreen extends Screen
         return redirect()->route('platform.package.edit', $package_id);
     }
 
-    public function deleteRegions(Request $request)
+    public function deletePackages(Request $request)
     {   
         //get all packages from post request
         $packages = $request->get('vendorPackages');
