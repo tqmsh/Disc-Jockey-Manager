@@ -48,7 +48,7 @@ class EventBidLayout extends Table
                 ->render(function($eventBid){
                     return 
                         ($eventBid->status == 0) ? '<i class="text-warning">●</i> Pending' 
-                        : (($eventBid->status == 1) ? '<i class="text-success">●</i> Approved' 
+                        : (($eventBid->status == 1) ? '<i class="text-success">●</i> Accepted' 
                         : '<i class="text-danger">●</i> Rejected');
                 }),
 

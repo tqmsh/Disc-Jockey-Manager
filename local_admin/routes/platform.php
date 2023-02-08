@@ -10,9 +10,11 @@ use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
+use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -20,7 +22,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewEventBidScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +65,9 @@ Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platfor
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
 
-Route::screen('/events/{event_id}/bids', ViewEventBidScreen::class)->name('platform.eventBid.list');
+Route::screen('/events/{event_id}/bids', ViewEventBidScreen::class)->name('platform.eventBids.list');
+
+Route::screen('/events/{event_id}/students', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
 
 
