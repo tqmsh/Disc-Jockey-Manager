@@ -180,7 +180,6 @@ class CreateBidScreen extends Screen
         return count(EventBids::where('user_id', Auth::user()->id)
                              ->where('event_id', $event->id)
                              ->where('package_id', request('package_id'))
-                             ->where('status', 0)
                              ->get()) == 0;
     }
 }

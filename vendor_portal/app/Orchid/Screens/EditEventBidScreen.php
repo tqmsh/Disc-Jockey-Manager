@@ -153,7 +153,6 @@ class EditEventBidScreen extends Screen
 
         return count(EventBids::where('user_id', Auth::user()->id)
                              ->where('event_id', $eventBid->event_id)
-                             ->where('status', 0)
                              ->where('package_id', $request->package_id)
                              ->whereNot('id', $current_eventBid_id)
                              ->get()) == 0;
