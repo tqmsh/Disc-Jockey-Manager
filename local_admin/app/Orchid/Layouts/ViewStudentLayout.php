@@ -68,11 +68,7 @@ class ViewStudentLayout extends Table
                     return Link::make($student->grade)
                         ->route('platform.student.edit', $student);
                 }),
-            TD::make('event_id', 'Event')
-                ->render(function (Student $student) {
-                    return Link::make(Events::where('id', $student->event_id)->get('event_name')->value('event_name'))
-                        ->route('platform.student.edit', $student);
-                }),
+
             TD::make('ticketstatus', 'Ticket Status')
                 ->render(function (Student $student) {
                     return Link::make($student->ticketstatus)
