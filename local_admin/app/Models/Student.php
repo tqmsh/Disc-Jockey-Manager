@@ -27,10 +27,7 @@ class Student extends Model
         'grade',
         'phonenumber',
         'email',
-        'ticketstatus',
-        'table_id',
         'school',
-        'event_id',
         'allergies',
     ];
     
