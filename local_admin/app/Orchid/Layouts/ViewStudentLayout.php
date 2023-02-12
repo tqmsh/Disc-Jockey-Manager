@@ -46,7 +46,7 @@ class ViewStudentLayout extends Table
                     return Link::make($student->lastname)
                         ->route('platform.student.edit', $student);
                 }),
-            TD::make('email', 'Email')
+            TD::make('email', 'Email')->width('105')
                 ->render(function (Student $student) {
                     return Link::make($student->email)
                         ->route('platform.student.edit', $student);
@@ -57,12 +57,7 @@ class ViewStudentLayout extends Table
                     return Link::make($student->phonenumber)
                         ->route('platform.student.edit', $student);
                 }),
-
-            TD::make('school', 'School')
-                ->render(function (Student $student) {
-                    return Link::make($student->school)
-                        ->route('platform.student.edit', $student);
-                }),
+                
             TD::make('grade', 'Grade')
                 ->render(function (Student $student) {
                     return Link::make($student->grade)
