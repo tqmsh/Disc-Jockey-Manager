@@ -2,11 +2,13 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Events;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use App\Models\EventAttendees;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -14,7 +16,6 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
 use App\Orchid\Layouts\ViewStudentLayout;
 use App\Orchid\Layouts\ViewUnattendingStudentLayout;
-use Exception;
 
 class ViewEventStudentScreen extends Screen
 {
@@ -41,7 +42,7 @@ class ViewEventStudentScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Students in: ' . $this->event->event_name;
+        return 'Students: ' . $this->event->event_name;
     }
 
     /**
@@ -66,6 +67,9 @@ class ViewEventStudentScreen extends Screen
                         ->confirm('Are you sure you want to remove the selected students from: ' . $this->event->event_name)
                         ->icon('trash'),
                 ]),
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.event.list')
         ];
     }
 
