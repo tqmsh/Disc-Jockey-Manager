@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Locale;
 use Exception;
 use App\Models\Events;
 use App\Models\Student;
@@ -14,11 +15,11 @@ use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewStudentLayout;
-use Locale;
 
 class ViewStudentScreen extends Screen
 {
@@ -136,13 +137,13 @@ class ViewStudentScreen extends Screen
 
                 //loop through the students and delete them from db
                 foreach($students as $student){
-                    Student::where('id', $student)->delete();
+                    Student::where('user_id', $student)->delete();
                 }
 
-                Alert::success('Selected students deleted succesfully');
+                Toast::success('Selected students deleted succesfully');
 
             }else{
-                Alert::warning('Please select students in order to delete them');
+                Toast::warning('Please select students in order to delete them');
             }
 
         }catch(Exception $e){

@@ -3,13 +3,12 @@
 namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
-use App\Models\Events;
 use App\Models\Student;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
 
-class ViewStudentLayout extends Table
+class ViewUnattendingStudentLayout extends Table
 {
     /**
      * Data source.
@@ -19,7 +18,7 @@ class ViewStudentLayout extends Table
      *
      * @var string
      */
-    protected $target = 'students';
+    protected $target = 'unattending_students';
 
     /**
      * Get the table cells to be displayed.
@@ -31,7 +30,7 @@ class ViewStudentLayout extends Table
         return [
             TD::make()
                 ->render(function (Student $student){
-                    return CheckBox::make('students[]')
+                    return CheckBox::make('unattendingStudents[]')
                         ->value($student->user_id)
                         ->checked(false);
                 }),
@@ -74,6 +73,5 @@ class ViewStudentLayout extends Table
                     return Link::make($student->allergies)
                         ->route('platform.student.edit', $student);
                 }),
-        ];
-    }
+        ];    }
 }

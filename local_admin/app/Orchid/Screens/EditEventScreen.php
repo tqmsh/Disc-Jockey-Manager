@@ -111,28 +111,24 @@ class EditEventScreen extends Screen
                 Input::make('event_address')
                     ->title('Event Address')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->value($this->event->event_address),
                     
                 Input::make('event_zip_postal')
                     ->title('Event Zip/Postal')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->value($this->event->event_zip_postal),
 
                 Input::make('event_info')
                     ->title('Event Info')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->value($this->event->event_info),
 
                 Input::make('event_rules')
                     ->title('Event Rules')
                     ->type('text')
-                    ->required()
                     ->horizontal()
                     ->value($this->event->event_rules),
 
