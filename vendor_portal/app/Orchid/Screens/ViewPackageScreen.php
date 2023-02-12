@@ -2,15 +2,16 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewPackageLayout;
-use Exception;
 
 class ViewPackageScreen extends Screen
 {
@@ -97,7 +98,7 @@ class ViewPackageScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected packages. Error Message: ' . $e->getMessage());
+            Alert::error('There was a error trying to deleted the selected packages. Error Message: ' . $e->getMessage());
         }
     }
 }
