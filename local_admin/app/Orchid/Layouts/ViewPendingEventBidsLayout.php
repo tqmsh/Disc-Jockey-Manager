@@ -52,6 +52,11 @@ class ViewPendingEventBidsLayout extends Table
                     return Link::make($bid->company_name)
                         ->href($bid->url);
                 }),
+                
+            TD::make('category_id', 'Category')
+                ->render(function($bid){
+                    return e(Categories::find($bid->category_id)->name);
+                }),
 
             TD::make('package_id', 'Package')
                 ->render(function($bid){

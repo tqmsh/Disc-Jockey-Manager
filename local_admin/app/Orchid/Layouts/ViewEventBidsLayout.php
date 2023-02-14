@@ -48,6 +48,11 @@ class ViewEventBidsLayout extends Table
                         ->href($bid->url);
                 }),
 
+            TD::make('category_id', 'Category')
+                ->render(function($bid){
+                    return e(Categories::find($bid->category_id)->name);
+                }),
+
             TD::make('package_id', 'Package')
                 ->render(function($bid){
                     return e(VendorPackage::find($bid->package_id)->package_name);

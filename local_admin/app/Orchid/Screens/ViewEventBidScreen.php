@@ -5,7 +5,13 @@ namespace App\Orchid\Screens;
 use App\Models\Events;
 use App\Models\EventBids;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
+use App\Models\Categories;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventBidsLayout;
 use App\Orchid\Layouts\ViewPendingEventBidsLayout;
@@ -22,8 +28,8 @@ class ViewEventBidScreen extends Screen
     {
         return [
             'event' => $event,
-            'pendingBids' => EventBids::where('event_id', $event->id)->where('status', 0)->paginate(10),
-            'previousBids' => EventBids::where('event_id', $event->id)->whereNot('status', 0)->orderBy('status')->paginate(10)
+            'pendingBids' => EventBids::where('event_id', $event->id)->where('status', 0)->filter(request(['category_id']))->paginate(10),
+            'previousBids' => EventBids::where('event_id', $event->id)->whereNot('status', 0)->orderBy('status')->filter(request(['category_id']))->paginate(10)
         ];
     }
 
@@ -59,6 +65,22 @@ class ViewEventBidScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::rows([
+                Group::make([
+                    
+                    Select::make('category_id')
+                        ->help('Type in box to search')
+                        ->empty('Filter Category')
+                        ->fromModel(Categories::query(), 'name'),
+
+                    Button::make('Filter')
+                        ->icon('filter')
+                        ->method('filter')
+                        ->type(Color::DEFAULT()),
+                ]),
+                
+            ]),
+            
             Layout::tabs([
                 'Pending Bids' => [
                     ViewPendingEventBidsLayout::class
@@ -68,6 +90,11 @@ class ViewEventBidScreen extends Screen
                 ],
             ]),
         ];
+    }
+
+    public function filter(Request $request){
+        return redirect('/admin/events/{event_id}/bids?' 
+            .'category_id=' . $request->get('category_id'));
     }
 
     public function updateBid(Events $event)
