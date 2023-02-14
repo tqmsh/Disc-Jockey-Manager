@@ -16,7 +16,21 @@ class Student extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['user_id', 'school_id', 'account_status', 'created_at', 'updated_at', 'firstname', 'lastname', 'grade', 'phonenumber', 'email', 'ticketstatus', 'table_id', 'school', 'event_id', 'allergies'];
+    // This is the array of fields that can be mass assigned.
+    protected $fillable = [
+        'user_id',
+        'school_id',
+        'account_status',
+        'created_at',
+        'updated_at',
+        'firstname',
+        'lastname',
+        'grade',
+        'phonenumber',
+        'email',
+        'school',
+        'allergies'
+    ];
     
     public function scopeFilter($query, array $filters){
         

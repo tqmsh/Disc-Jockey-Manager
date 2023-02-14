@@ -191,22 +191,6 @@ class CreateStudentScreen extends Screen
                         '12' => 12,
                     ]),
 
-                Relation::make('event_id')
-                    ->title('Event')
-                    ->horizontal()
-                    ->displayAppend('full')
-                    ->empty('Start typing to search...')
-                    ->fromModel(Events::class, 'id'),
-
-                Select::make('ticketstatus')
-                    ->title('Ticket Status')
-                    ->required()
-                    ->horizontal()
-                    ->options([
-                        'Unpaid' => 'Unpaid',
-                        'Paid'   => 'Paid',
-                    ]),
-
                 Input::make('allergies')
                     ->title('Allergies')
                     ->type('text')
@@ -216,53 +200,52 @@ class CreateStudentScreen extends Screen
         ];
     }
 
+    public function createStudent(Request $request){
 
- public function createStudent(Request $request){
+        try{
 
-    try{
+            //get the student table fields
+            $studentTableFields = $this->getStudentFields($request);
 
-        //get the student table fields
-        $studentTableFields = $this->getStudentFields($request);
+            //get the user table fields
+            $userTableFields = $this->getUserFields($request);
 
-        //get the user table fields
-        $userTableFields = $this->getUserFields($request);
+            //check for duplicate email
+            if($this->validEmail($request->input('email'))){
+                
+                //no duplicates found
+                //create the user
+                $user = User::create($userTableFields);
 
-        //check for duplicate email
-        if($this->validEmail($request->input('email'))){
+                //add the user id to the student table fields
+                $studentTableFields['user_id'] = $user->id;
+                
+                //create the student
+                Student::create($studentTableFields);
+
+                //create a role user entry for the student
+                RoleUsers::create([
+                    'user_id' => $user->id,
+                    'role_id' => 3,
+                ]);
+
+                //show a success toast
+                Toast::success('Student Added Succesfully');
+
+                //redirect to the student index
+                return redirect()->route('platform.student.list');
             
-            //no duplicates found
-            //create the user
-            $user = User::create($userTableFields);
+            }else{
+                //duplicate email found
+                //show an error toast
+                Toast::error('Email already exists.');
+            }
 
-            //add the user id to the student table fields
-            $studentTableFields['user_id'] = $user->id;
-            
-            //create the student
-            Student::create($studentTableFields);
+        }catch(Exception $e){
 
-            //create a role user entry for the student
-            RoleUsers::create([
-                'user_id' => $user->id,
-                'role_id' => 3,
-            ]);
-
-            //show a success toast
-            Toast::success('Student Added Succesfully');
-
-            //redirect to the student index
-            return redirect()->route('platform.student.list');
-        
-        }else{
-            //duplicate email found
             //show an error toast
-            Toast::error('Email already exists.');
+            Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
-
-    }catch(Exception $e){
-
-        //show an error toast
-        Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
-    }
 }
     
     //this method will mass import schools from a csv file

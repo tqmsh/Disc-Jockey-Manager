@@ -150,25 +150,6 @@ class EditStudentScreen extends Screen
                     ->placeholder('Ex. (613) 859-5863')
                     ->value($this->student->phonenumber),
 
-                Relation::make('event_id')
-                    ->title('Event')
-                    ->horizontal()
-                    ->displayAppend('full')
-                    ->empty('No Selection')
-                    ->fromModel(Events::class, 'id')
-                    ->value($this->student->event_id),
-
-                Select::make('ticketstatus')
-                    ->title('Ticket Status')
-                    ->required()
-                    ->horizontal()
-                    ->empty('Start typing to Search...')
-                    ->value($this->student->ticketstatus)
-                    ->options([
-                        'Paid'   => 'Paid',
-                        'Unpaid' => 'Unpaid',
-                    ]),
-
                 Input::make('allergies')
                     ->title('Allergies')
                     ->type('text')
@@ -249,9 +230,7 @@ class EditStudentScreen extends Screen
             'email' => $request->input('email'),
             'grade' => $request->input('grade'),
             'phonenumber' => $request->input('phonenumber'),
-            'ticketstatus' => $request->input('ticketstatus'),
             'school' => $request->input('school'),
-            'event_id' => $request->input('event_id'),
             'school_id' =>$school_id,
             'allergies' => $request->input('allergies'),
         ];
