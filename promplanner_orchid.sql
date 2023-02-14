@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2023 at 11:10 PM
+-- Generation Time: Feb 14, 2023 at 09:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -185,9 +185,11 @@ CREATE TABLE `event_attendees` (
 
 INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `table_id`, `ticketstatus`, `created_at`, `updated_at`) VALUES
 (1, 146, 14, NULL, 'Unpaid', '2023-02-12 19:55:58', NULL),
-(2, 152, 14, NULL, 'Unpaid', '2023-02-12 19:56:39', NULL),
-(7, 169, 14, NULL, 'Unpaid', '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
-(8, 170, 14, NULL, 'Unpaid', '2023-02-13 01:57:06', '2023-02-13 01:57:06');
+(2, 152, 14, NULL, 'Paid', '2023-02-12 19:56:39', NULL),
+(7, 169, 14, NULL, 'Paid', '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
+(8, 170, 14, NULL, 'Unpaid', '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
+(9, 155, 14, NULL, 'Paid', '2023-02-14 19:52:46', NULL),
+(10, 155, 15, NULL, 'Unpaid', '2023-02-14 19:53:07', NULL);
 
 -- --------------------------------------------------------
 
@@ -223,7 +225,11 @@ INSERT INTO `event_bids` (`id`, `user_id`, `event_id`, `region_id`, `package_id`
 (4, 197, 14, 1, 2, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'Notes', 'Contact Instructions', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-02 23:39:42', '2023-02-09 01:15:50'),
 (7, 197, 14, 1, 1, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', NULL, NULL, 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-03 02:43:50', '2023-02-09 01:18:44'),
 (8, 197, 13, 1, 3, 11, '2022-11-21 12:00:00', 'Colonel By Secondary School', 'notes', 'contact info', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-07 04:26:43', '2023-02-07 04:26:43'),
-(9, 197, 14, 1, 6, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'HERE ARE SOME NOTES', 'HERE IS SOME CONTACT INFO', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-09 01:23:21', '2023-02-09 01:23:21');
+(9, 197, 14, 1, 6, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'HERE ARE SOME NOTES', 'HERE IS SOME CONTACT INFO', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-09 01:23:21', '2023-02-09 01:23:21'),
+(10, 197, 15, 1, 1, 11, '2022-12-02 12:00:00', 'Digitera School of Digital Marketing & Software', 'fgdfg', 'dfgdfg', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-15 01:04:19', '2023-02-15 01:05:56'),
+(11, 197, 15, 1, 3, 11, '2022-12-02 12:00:00', 'Digitera School of Digital Marketing & Software', 'dfgdfg', 'fdgdfg', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-15 01:04:37', '2023-02-15 01:04:37'),
+(12, 197, 17, 1, 3, 11, '2023-01-10 12:00:00', 'Digitera School of Digital Marketing & Software', 'dsfdsfsd', 'fsdfsdf', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-15 01:04:50', '2023-02-15 01:04:50'),
+(13, 197, 17, 1, 2, 11, '2023-01-10 12:00:00', 'Digitera School of Digital Marketing & Software', 'dfsdf', 'sdfsdf', 'Money Jockeys', 'https://promplanner.app/', 2, '2023-02-15 01:05:02', '2023-02-15 01:06:06');
 
 -- --------------------------------------------------------
 
@@ -521,7 +527,8 @@ INSERT INTO `role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALU
 (194, 2, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 2, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (196, 4, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(197, 4, '2023-01-21 02:42:36', '2023-01-21 02:42:36');
+(197, 4, '2023-01-21 02:42:36', '2023-01-21 02:42:36'),
+(198, 3, '2023-02-14 23:43:02', '2023-02-14 23:43:02');
 
 -- --------------------------------------------------------
 
@@ -648,11 +655,8 @@ CREATE TABLE `students` (
   `grade` varchar(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phonenumber` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ticketstatus` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'Unpaid',
   `account_status` int(1) DEFAULT 0,
-  `table_id` bigint(20) UNSIGNED DEFAULT NULL,
   `school` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `event_id` bigint(20) UNSIGNED DEFAULT NULL,
   `allergies` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -662,14 +666,15 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `user_id`, `school_id`, `firstname`, `lastname`, `grade`, `phonenumber`, `email`, `ticketstatus`, `account_status`, `table_id`, `school`, `event_id`, `allergies`, `created_at`, `updated_at`) VALUES
-(105, 145, 53, 'John', 'Smith', '12', '(465) 987-9797', 'johnsmith@gmail.com', 'Paid', 1, NULL, 'Colonel By Secondary School', 13, NULL, '2022-11-20 11:14:59', '2022-11-22 19:30:57'),
-(106, 146, 51, 'Jane', 'Doe', '10', '(456) 879-4564', 'janedoe@gmail.com', 'Paid', 1, NULL, 'Digitera School of Digital Marketing & Software', 14, 'Peanuts', '2022-11-20 11:23:42', '2022-11-26 22:17:01'),
-(107, 152, 51, 'Hey', 'Man', '12', '(546) 465-6464', 'heyman@heyman.com', 'Unpaid', 1, NULL, 'Digitera School of Digital Marketing & Software', 14, 'Hey Man', '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
-(109, 154, 51, 'retert', 'ert', '9', '(546) 464-6465', 'loca65+ladmin001@promplanner.com', 'Unpaid', 1, NULL, 'Digitera School of Digital Marketing & Software', 15, NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(110, 155, 51, 'Student 1', 'Student 1', '12', '(546) 897-8921', 'student001@promplanner.com', 'Unpaid', 1, NULL, 'Digitera School of Digital Marketing & Software', 14, 'Peanuts', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
-(121, 169, 51, 'Import 1', 'efwefwef', '9', '12345678910', 'import1@gmail.com', 'Unpaid', 1, NULL, 'Digitera School of Digital Marketing & Software', NULL, 'Nuts', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
-(122, 170, 51, 'Import 2', 'wefwef', '10', '9632587459', 'import2@gmail.com', 'Unpaid', 1, NULL, 'Digitera School of Digital Marketing & Software', NULL, 'Nutseeee', '2022-12-10 22:23:29', '2022-12-10 22:23:29');
+INSERT INTO `students` (`id`, `user_id`, `school_id`, `firstname`, `lastname`, `grade`, `phonenumber`, `email`, `account_status`, `school`, `allergies`, `created_at`, `updated_at`) VALUES
+(105, 145, 53, 'John', 'Smith', '12', '(465) 987-9797', 'johnsmith@gmail.com', 1, 'Colonel By Secondary School', NULL, '2022-11-20 11:14:59', '2022-11-22 19:30:57'),
+(106, 146, 51, 'Jane', 'Doe', '10', '(456) 879-4564', 'janedoe@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-11-20 11:23:42', '2022-11-26 22:17:01'),
+(107, 152, 51, 'Hey', 'Man', '12', '(546) 465-6464', 'heyman@heyman.com', 1, 'Digitera School of Digital Marketing & Software', 'Hey Man', '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
+(109, 154, 51, 'retert', 'ert', '9', '(546) 464-6465', 'loca65+ladmin001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
+(110, 155, 51, 'Student 1', 'Student 1', '12', '(546) 897-8921', 'student001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
+(121, 169, 51, 'Import 1', 'efwefwef', '9', '12345678910', 'import1@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nuts', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
+(122, 170, 51, 'Import 2', 'wefwef', '10', '9632587459', 'import2@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nutseeee', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
+(124, 198, 51, 'Zg man', 'Big man tings', '10', '(612) 354-8954', 'bigman@tings.com', 1, NULL, 'Bad Grades', '2023-02-14 23:43:02', '2023-02-15 01:25:38');
 
 --
 -- Triggers `students`
@@ -738,7 +743,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'eOwMFKeh8REF4oFSnybIF9lFGvaoGJJoLmeCujdeZCPWkrjFD02VHbMRJnul', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
+(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'IQ8a1WUJwqzQgp5jZtJIimwLXULjh8vmyr14dKf5XbMI5auwzbubL9D9TP5u', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
 (52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
 (67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
 (68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
@@ -758,7 +763,7 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
 (149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
 (150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'uKecYIR5rmTeCJs2ZrehK437po5q0iglxB9rp1O93sBTem9G4smpCouYqi6C', '2022-12-02 00:58:48', '2022-12-10 22:26:44'),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', '5nt7M4WfuKlM2JN9eZ2Cr4lyNJbSfkrbPeZ2gLfg7wLyhV499PN9RDfTxlrx', '2022-12-02 00:58:48', '2022-12-10 22:26:44'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
 (155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', '1FjMSKCZ0D0PgElUurhxQq3HwdG8cixHuXMn79vBwB6yvjrFUZZSuh581plR', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
@@ -773,7 +778,8 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'yVpGAg3KkLgVqQ155PZ5v1m9rMhH3MCFho7UrHXGF5QSoWHgkoo6RvDDUKQX', '2023-01-21 02:41:46', '2023-01-21 02:42:36');
+(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'KRNXXIQvIapRGB3taj9zCcVW6eEpYFe5ZvYcghMAm65FoCUCcoHDqdUJEwYb', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
+(198, 'bigman101', 'Zg man', 'Big man tings', 'bigman@tings.com', '(612) 354-8954', 3, 'Canada', NULL, 1, NULL, '$2y$10$B10Kj5SYsPn6EKwkyQRbPO7UmY/YqPWkzzzyiU0dZ3DWx.xLRnJpy', NULL, '2023-02-14 23:43:02', '2023-02-15 01:25:38');
 
 -- --------------------------------------------------------
 
@@ -1043,10 +1049,8 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `students_table_id_foreign` (`table_id`),
   ADD KEY `students_user_id_foreign` (`user_id`),
-  ADD KEY `school` (`school`,`event_id`),
-  ADD KEY `event_id` (`event_id`),
+  ADD KEY `school` (`school`),
   ADD KEY `school_id` (`school_id`);
 
 --
@@ -1134,13 +1138,13 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `event_attendees`
 --
 ALTER TABLE `event_attendees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `event_bids`
 --
 ALTER TABLE `event_bids`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1212,7 +1216,7 @@ ALTER TABLE `sessions`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT for table `student_bids`
@@ -1224,7 +1228,7 @@ ALTER TABLE `student_bids`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=199;
 
 --
 -- AUTO_INCREMENT for table `vendors`
@@ -1350,7 +1354,6 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `students`
   ADD CONSTRAINT `students_ibfk_3` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `students_table_id_foreign` FOREIGN KEY (`table_id`) REFERENCES `seating` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `students_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
