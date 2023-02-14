@@ -22,23 +22,8 @@ class Events extends Model
 
         try{
 
-            $query->join('schools', 'schools.id', '=', 'school_id');
-
-
-            if(isset($filters['school'])){
-                $query ->where('school', 'like', '%' . request('school') . '%');
-            }
-
-            if(isset($filters['country'])){
-                $query->where('country', 'like', '%' . request('country') . '%');
-            }
-
-            if(isset($filters['school_board'])){
-                $query->where('school_board', 'like', '%' . request('school_board') . '%');
-            }
-
-            if(isset($filters['state_province'])){
-                $query->where('state_province', 'like', '%' . request('state_province') . '%');
+            if(isset($filters['region_id'])){
+                $query ->where('region_id', $filters['region_id']);
             }
 
             $query->select('events.*');
