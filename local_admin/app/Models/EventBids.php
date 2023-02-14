@@ -38,7 +38,7 @@ class EventBids extends Model
                 $query ->where('category_id', $filters['category_id']);
             }
 
-            $query->select('event_bids.*');
+            $query->select('*');
 
         }catch(Exception $e){
 

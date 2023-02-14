@@ -65,7 +65,7 @@ Route::screen('/events/{event}/addTable', EditEventScreen::class)->name('platfor
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
 
-Route::screen('/events/{event_id}/bids', ViewEventBidScreen::class)->name('platform.eventBids.list');
+Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 
 Route::screen('/events/{event_id}/students', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 

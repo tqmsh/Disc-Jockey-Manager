@@ -28,8 +28,8 @@ class ViewEventBidScreen extends Screen
     {
         return [
             'event' => $event,
-            'pendingBids' => EventBids::where('event_id', $event->id)->where('status', 0)->filter(request(['category_id']))->paginate(10),
-            'previousBids' => EventBids::where('event_id', $event->id)->whereNot('status', 0)->orderBy('status')->filter(request(['category_id']))->paginate(10)
+            'pendingBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->where('status', 0)->latest()->paginate(10),
+            'previousBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
         ];
     }
 
@@ -80,7 +80,7 @@ class ViewEventBidScreen extends Screen
                 ]),
                 
             ]),
-            
+
             Layout::tabs([
                 'Pending Bids' => [
                     ViewPendingEventBidsLayout::class
@@ -91,10 +91,10 @@ class ViewEventBidScreen extends Screen
             ]),
         ];
     }
-
-    public function filter(Request $request){
-        return redirect('/admin/events/{event_id}/bids?' 
-            .'category_id=' . $request->get('category_id'));
+    
+    public function filter(Request $request, Events $event)
+    {
+        return redirect('/admin/events/bids/' . $event->id . '?category_id=' . $request->category_id);
     }
 
     public function updateBid(Events $event)
