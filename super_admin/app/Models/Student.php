@@ -26,7 +26,6 @@ class Student extends Model
         'grade',
         'phonenumber',
         'email',
-        'ticketstatus',
         'school',
         'allergies'
     ];

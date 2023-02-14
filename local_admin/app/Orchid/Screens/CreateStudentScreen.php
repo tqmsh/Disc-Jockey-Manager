@@ -158,22 +158,6 @@ class CreateStudentScreen extends Screen
                         '12' => 12,
                     ]),
 
-                Relation::make('event_id')
-                    ->title('Event')
-                    ->horizontal()
-                    ->displayAppend('full')
-                    ->empty('No Selection')
-                    ->fromModel(Events::class, 'id'),
-
-                Select::make('ticketstatus')
-                    ->title('Ticket Status')
-                    ->required()
-                    ->horizontal()
-                    ->options([
-                        'Unpaid' => 'Unpaid',
-                        'Paid'   => 'Paid',
-                    ]),
-
                 Input::make('allergies')
                     ->title('Allergies')
                     ->type('text')
