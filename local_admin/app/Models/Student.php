@@ -32,26 +32,30 @@ class Student extends Model
     ];
     
     public function scopeFilter($query, array $filters){
-        
         try{
 
+            $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id');
+
+
             if(isset($filters['sort_option'])){
-                $query->orderBy($filters['sort_option'], 'asc');
+                $query->orderByRaw($filters['sort_option']);
             }
 
-            if(isset($filters['event_name'])){
-                $query->where('event_id', $filters['event_name']);
+            if(isset($filters['event_id'])){
+                $query->where('event_attendees.event_id', $filters['event_id']);
             }
 
             if(isset($filters['ticketstatus'])){
-                $query->where('ticketstatus', $filters['ticketstatus']);
+                
+                $query->where('event_attendees.ticketstatus', $filters['ticketstatus']);
             }
 
-            $query->select('students.*');
+
+            $query->get('students.*');
 
         }catch(Exception $e){
 
-            Alert::error('There was an error processing the scope filter. Error Message: ' . $e);
+            Alert::error('There was an error processing the scope filter. Error Message: ' . $e->getMessage());
         }
 
     }

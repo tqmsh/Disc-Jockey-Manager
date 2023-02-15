@@ -31,9 +31,9 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::latest('students.created_at')->filter(request(['sort_option','event_name', 'ticketstatus']))
+            'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))->latest('students.created_at')
                         ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))
-                        ->where('students.account_status', 1)->paginate(10)
+                        ->where('students.account_status', 1)->paginate(20)
         ];
     }
 
@@ -93,10 +93,10 @@ class ViewStudentScreen extends Screen
                             'grade' => 'Grade'
                         ]),
 
-                    Select::make('event_name')
+                    Select::make('event_id')
                         ->title('Event:')
                         ->empty('No selection')
-                        ->fromQuery(Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name'),
+                        ->fromQuery(Events::query()->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name'),
 
                     Select::make('ticketstatus')
                         ->title('Ticket Status')
@@ -121,7 +121,7 @@ class ViewStudentScreen extends Screen
         return redirect('/admin/students?'
                     .'&sort_option=' . $request->get('sort_option')
                     .'&ticketstatus=' . $request->get('ticketstatus') 
-                    .'&event_name=' . $request->get('event_name') 
+                    .'&event_id=' . $request->get('event_id') 
                 );
     }
 

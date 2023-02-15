@@ -11,6 +11,7 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\Localadmin;
+use App\Models\Region;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -26,6 +27,7 @@ use App\Orchid\Layouts\ViewEventLayout;
 
 class ViewEventScreen extends Screen
 {
+    public $paidRegionIds;
     /**
      * Query data.
      *
@@ -37,11 +39,11 @@ class ViewEventScreen extends Screen
         $array = Auth::user()->paidRegions->toArray();
 
         //get all the region_ids of the array
-        $paidRegionIds =  Arr::pluck($array, ['region_id']);
+         $this->paidRegionIds =  Arr::pluck($array, ['region_id']);
 
         //get all events with the region_id matching an id in the array
         return [
-            'events' => Events::whereIn('region_id', $paidRegionIds)->paginate(10)
+            'events' => Events::filter(request(['region_id']))->whereIn('region_id', $this->paidRegionIds)->paginate(10)
         ];
     }
 
@@ -81,31 +83,16 @@ class ViewEventScreen extends Screen
 
                 Group::make([
                     
-                    Select::make('school')
-                        ->title('School')
-                        ->empty('No selection')
-                        ->fromModel(Events::class, 'school', 'school'),
+                    Select::make('region_id')
+                        ->empty('Filter by region')
+                        ->fromModel(Region::query()->whereIn('id', $this->paidRegionIds), 'name'),
 
-                    Select::make('country')
-                        ->title('Country')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'country', 'country'),
-
-                    Select::make('school_board')
-                        ->title('School Board')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'school_board', 'school_board'),
-
-                    Select::make('state_province')
-                        ->title('State/Province')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'state_province', 'state_province'),
+                    Button::make('Filter')
+                        ->icon('filter')
+                        ->method('filter')
+                        ->type(Color::DEFAULT()),
                 ]),
                 
-                Button::make('Filter')
-                    ->icon('filter')
-                    ->method('filter')
-                    ->type(Color::DEFAULT()),
             ]),
 
             ViewEventLayout::class,
@@ -126,11 +113,8 @@ class ViewEventScreen extends Screen
     }
 
     public function filter(Request $request){
-        return redirect('/admin/events?' 
-                    .'&school=' . $request->get('school')
-                    .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
-                    .'&state_province=' . $request->get('state_province'));
+        return redirect('/admin/bidopportunities?' 
+                    .'&region_id=' . $request->get('region_id'));
     }
 
     //this method will create the category
