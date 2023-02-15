@@ -108,7 +108,7 @@ class CreateEventScreen extends Screen
                     ->title('Venue')
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->horizontal(),
-            ]),
+            ])->title('Make your dream event'),
         ];
     }
 
