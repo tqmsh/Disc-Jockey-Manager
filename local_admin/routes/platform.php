@@ -68,7 +68,7 @@ Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platfo
 
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 
-Route::screen('/events/{event_id}/students', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
+Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
 Route::screen('/events/suggestVendor', SuggestVendorScreen::class)->name('platform.suggestVendor.create');
 

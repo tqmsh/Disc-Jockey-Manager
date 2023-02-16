@@ -6,9 +6,12 @@ use Exception;
 use App\Models\Events;
 use App\Models\Student;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -30,7 +33,7 @@ class ViewEventStudentScreen extends Screen
     {
         return [
             'event' => $event,
-            'students' => Student::whereIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
+            'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
             'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20)
         ];
     }
@@ -81,6 +84,26 @@ class ViewEventStudentScreen extends Screen
     public function layout(): iterable
     {
         return [
+
+            Layout::rows([
+
+                Group::make([
+
+                    Select::make('ticketstatus')
+                        ->empty('Ticket Status')
+                        ->options([
+                            'Paid' => 'Paid',
+                            'Unpaid' => 'Unpaid'
+                        ]),
+
+                    Button::make('Filter')
+                        ->icon('filter')
+                        ->method('filter')
+                        ->type(Color::DEFAULT()),
+                ]),
+                    
+            ]),
+
             Layout::tabs([
                 'Attending Students' => [
                     ViewStudentLayout::class
@@ -147,5 +170,12 @@ class ViewEventStudentScreen extends Screen
         }catch(Exception $e){
             Alert::error('There was a error trying to add the selected students. Error Message: ' . $e->getMessage());
         }
+    }
+
+    public function filter(Request $request, Events $event){
+        return redirect('/admin/events/students/' . $event->id . 
+            '?ticketstatus=' . $request->ticketstatus .
+            '&event_id=' . $event->id
+        );
     }
 }
