@@ -22,6 +22,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\SuggestVendorScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,8 @@ Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platfo
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 
 Route::screen('/events/{event_id}/students', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
+
+Route::screen('/events/suggestVendor', SuggestVendorScreen::class)->name('platform.suggestVendor.create');
 
 
 

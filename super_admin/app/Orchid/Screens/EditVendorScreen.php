@@ -15,6 +15,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\Password;
 use Orchid\Support\Facades\Layout;
 
 class EditVendorScreen extends Screen
@@ -127,6 +128,13 @@ class EditVendorScreen extends Screen
                     ->horizontal()
                     ->placeholder('Ex. johndoe@gmail.com')
                     ->value($this->vendor->email),
+
+                Password::make('password')
+                    ->title('Password')
+                    ->type('password')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->user->password),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')

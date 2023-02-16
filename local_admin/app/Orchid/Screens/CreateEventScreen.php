@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Vendors;
@@ -19,7 +20,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
-use Orchid\Screen\Layouts\Selection;
+use Orchid\Support\Color;
 
 class CreateEventScreen extends Screen
 {
@@ -107,6 +108,7 @@ class CreateEventScreen extends Screen
                 Select::make('venue_id')
                     ->title('Venue')
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
+                    ->empty('Start typing to Search...')
                     ->horizontal(),
             ])->title('Make your dream event'),
         ];
