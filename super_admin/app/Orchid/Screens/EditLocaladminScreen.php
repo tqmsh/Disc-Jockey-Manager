@@ -179,7 +179,6 @@ class EditLocaladminScreen extends Screen
     {
         try{
 
-            $localadmin->delete();
             User::where('id', $localadmin->user_id)->delete();
 
             Toast::info('You have successfully deleted the Local Admin.');

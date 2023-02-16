@@ -71,7 +71,7 @@ class ViewVendorLayout extends Table
             TD::make('website', 'Website')
                 ->render(function (Vendors $vendor) {
                     return Link::make($vendor->website)
-                        ->href($vendor->website);
+                        ->href(($vendor->website) == null ? '#' : $vendor->website);
                 }),
                 
 

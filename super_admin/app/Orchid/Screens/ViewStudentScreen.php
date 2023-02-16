@@ -147,7 +147,7 @@ class ViewStudentScreen extends Screen
 
                 //loop through the students and delete them from db
                 foreach($students as $student){
-                    Student::where('id', $student)->delete();
+                    User::where('id', $student)->delete();
                 }
 
                 Alert::success('Selected students deleted succesfully');
