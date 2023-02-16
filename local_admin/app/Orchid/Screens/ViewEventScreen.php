@@ -54,6 +54,10 @@ class ViewEventScreen extends Screen
                 ->icon('plus')
                 ->route('platform.event.create'),
 
+            Link::make('Suggest a Vendor')
+                ->icon('plus')
+                ->route('platform.suggestVendor.create'),
+
             Button::make('Delete Selected Events')
                 ->icon('trash')
                 ->method('deleteEvents')

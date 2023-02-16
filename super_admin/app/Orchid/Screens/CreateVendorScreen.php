@@ -141,7 +141,7 @@ class CreateVendorScreen extends Screen
                     ->horizontal()
                     ->placeholder('Disco Rockerz'),
                 
-                Input::make('company_website')
+                Input::make('website')
                     ->title('Company Website')
                     ->type('url')
                     ->required()
@@ -440,7 +440,7 @@ class CreateVendorScreen extends Screen
                 'state_province' => $request->input('state_province'),
                 'zip_postal' => $request->input('zip_postal'),
                 'city' => $request->input('city'),
-                'website' => $request->input('company_website'),
+                'website' => $request->input('website'),
                 'phonenumber' => $request->input('phonenumber'),
                 'account_status' => 1,
             ];
