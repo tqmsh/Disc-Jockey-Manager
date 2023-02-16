@@ -56,7 +56,7 @@ class Student extends Model
 
 
             if(isset($filters['event_id']) || isset($filters['ticketstatus'])){
-                $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id')->join('users', 'students.user_id', '=', 'users.id');
+                $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id');
                 (isset($filters['event_id'])) ? $query->where('event_attendees.event_id', $filters['event_id']) : null;
                 (isset($filters['ticketstatus'])) ? $query->where('event_attendees.ticketstatus', $filters['ticketstatus']) : null;
             }
