@@ -34,8 +34,6 @@ class Student extends Model
     public function scopeFilter($query, array $filters){
         try{
 
-            
-            
             if(isset($filters['sort_option'])){
                 $query->orderByRaw($filters['sort_option']);
             }
