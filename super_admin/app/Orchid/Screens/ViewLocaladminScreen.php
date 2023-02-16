@@ -5,7 +5,6 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\User;
 use App\Models\School;
-use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
@@ -133,8 +132,7 @@ class ViewLocaladminScreen extends Screen
 
                 //loop through the localadmins and delete them from db
                 foreach($localadmins as $localadmin_id){
-
-                    $this->delete($localadmin_id);
+                    Localadmin::where('id', $localadmin_id)->delete();
                 }
 
                 Toast::success('Selected local admins deleted succesfully');
@@ -144,24 +142,7 @@ class ViewLocaladminScreen extends Screen
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e->getMessage());
-        }
-    }
-
-    public function delete($localadmin_id){
-
-        try {
-            // delete vendor from the vendors table
-            Localadmin::where('user_id', $localadmin_id)->delete();
-            
-            // delete vendor from the users table
-            User::where('id', $localadmin_id)->delete();
-            
-            RoleUsers::where('user_id', $localadmin_id)->delete();
-            
-        }catch(Exception $e){
-            //handle exception
-            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e->getMessage());
+            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
         }
     }
 }

@@ -161,7 +161,7 @@ class ViewPendingLocaladminScreen extends Screen
 
                 //loop through the localadmins and delete them from db
                 foreach($localadmins as $localadmin_id){
-                    $this->delete($localadmin_id);
+                    Localadmin::where('user_id', $localadmin_id)->delete();
                 }
 
                 Toast::success('Selected local admins deleted succesfully');
@@ -172,21 +172,6 @@ class ViewPendingLocaladminScreen extends Screen
 
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
-        }
-    }
-
-    public function delete($localadmin_id){
-
-        try {
-            // delete vendor from the vendors table
-            Localadmin::where('user_id', $localadmin_id)->delete();
-            
-            // delete vendor from the users table
-            User::where('id', $localadmin_id)->delete();
-                        
-        }catch(Exception $e){
-            //handle exception
-            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e->getMessage());
         }
     }
 }

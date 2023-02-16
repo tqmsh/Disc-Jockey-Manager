@@ -32,7 +32,7 @@ class ViewStudentLayout extends Table
             TD::make()
                 ->render(function (Student $student){
                     return CheckBox::make('students[]')
-                        ->value($student->user_id)
+                        ->value($student->id)
                         ->checked(false);
                 }),
 

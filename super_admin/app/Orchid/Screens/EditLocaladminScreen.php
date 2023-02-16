@@ -5,7 +5,6 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\User;
 use App\Models\School;
-use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
@@ -181,10 +180,7 @@ class EditLocaladminScreen extends Screen
         try{
 
             $localadmin->delete();
-
             User::where('id', $localadmin->user_id)->delete();
-
-            RoleUsers::where('user_id', $localadmin->user_id)->delete();
 
             Toast::info('You have successfully deleted the Local Admin.');
 

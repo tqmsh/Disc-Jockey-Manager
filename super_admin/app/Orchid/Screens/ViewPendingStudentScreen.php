@@ -161,31 +161,17 @@ class ViewPendingStudentScreen extends Screen
 
                 //loop through the students and delete them from db
                 foreach($students as $student_id){
-                    $this->delete($student_id);
+                    Student::where('user_id', $student_id)->delete();
                 }
 
-                Toast::success('Selected students deleted succesfully');
+                Toast::success('Selected local admins deleted succesfully');
 
             }else{
-                Toast::warning('Please select students in order to delete them');
+                Toast::warning('Please select local admins in order to delete them');
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected students. Error Message: ' . $e);
-        }
-    }
-
-    public function delete($student_id){
-
-        try{
-            // delete vendor from the student table
-            Student::where('user_id', $student_id)->delete();
-            
-            // delete vendor from the users table
-            User::where('id', $student_id)->delete();
-
-        }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the student. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
         }
     }
 }
