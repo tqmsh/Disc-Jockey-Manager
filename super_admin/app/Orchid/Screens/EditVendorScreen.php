@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Models\School;
 use App\Models\Vendors;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use Illuminate\Http\Request;
@@ -217,8 +218,10 @@ class EditVendorScreen extends Screen
         try{
 
             $vendor->delete();
+
             User::where('id', $vendor->user_id)->delete();
 
+            RoleUsers::where('user_id', $vendor->user_id)->delete();
 
             Toast::info('You have successfully deleted the vendor.');
 

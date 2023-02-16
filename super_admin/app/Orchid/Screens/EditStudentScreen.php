@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use App\Notifications\LoggedIn;
@@ -193,8 +194,12 @@ class EditStudentScreen extends Screen
     public function delete(Student $student)
     {
         try{
+
             $student->delete();
+
             User::where('id', $student->user_id)->delete();
+
+            RoleUsers::where('user_id', $student->user_id)->delete();
 
             Toast::info('You have successfully deleted the student.');
 

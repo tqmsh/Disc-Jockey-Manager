@@ -192,5 +192,4 @@ class SuggestVendorScreen extends Screen
     private function validEmail($email){
         return count(User::where('email', $email)->get()) == 0;
     }
-
 }

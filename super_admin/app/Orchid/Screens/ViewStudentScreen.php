@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Illuminate\Http\Request;
@@ -147,7 +148,7 @@ class ViewStudentScreen extends Screen
 
                 //loop through the students and delete them from db
                 foreach($students as $student){
-                    Student::where('id', $student)->delete();
+                    $this->delete($student);
                 }
 
                 Alert::success('Selected students deleted succesfully');
@@ -158,6 +159,22 @@ class ViewStudentScreen extends Screen
 
         }catch(Exception $e){
             Alert::error('There was a error trying to deleted the selected students. Error Message: ' . $e);
+        }
+    }
+
+    public function delete($student_id){
+
+        try{
+            // delete vendor from the student table
+            Student::where('user_id', $student_id)->delete();
+            
+            // delete vendor from the users table
+            User::where('id', $student_id)->delete();
+
+            RoleUsers::where('user_id', $student_id)->delete();
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the student. Error Message: ' . $e);
         }
     }
 }

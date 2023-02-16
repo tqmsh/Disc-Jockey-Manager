@@ -17,6 +17,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewVendorLayout;
+use Orchid\Support\Facades\Alert;
 
 class ViewVendorScreen extends Screen
 {
@@ -127,7 +128,7 @@ class ViewVendorScreen extends Screen
 
                 //loop through the vendors and delete them from db
                 foreach($vendor_ids as $vendor_id){
-                    $this->deleteVendor($vendor_id);
+                    $this->delete($vendor_id);
                 }
 
                 Toast::success('Selected vendors deleted succesfully');
@@ -141,12 +142,19 @@ class ViewVendorScreen extends Screen
         }
     }
 
-    public function deleteVendor($vendor_id){
+    public function delete($vendor_id){
 
-        // delete vendor from the vendors table
-        Vendors::where('user_id', $vendor_id)->delete();
-        
-        // delete vendor from the users table
-        User::where('id', $vendor_id)->delete();
+        try{
+            // delete vendor from the vendors table
+            Vendors::where('user_id', $vendor_id)->delete();
+            
+            // delete vendor from the users table
+            User::where('id', $vendor_id)->delete();
+
+            RoleUsers::where('user_id', $vendor_id)->delete();
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the vendor. Error Message: ' . $e);
+        }
     }
 }
