@@ -34,24 +34,19 @@ class Student extends Model
     public function scopeFilter($query, array $filters){
         try{
 
-            $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id');
-
-
+            
+            
             if(isset($filters['sort_option'])){
                 $query->orderByRaw($filters['sort_option']);
             }
-
-            if(isset($filters['event_id'])){
-                $query->where('event_attendees.event_id', $filters['event_id']);
+            
+            if(isset($filters['event_id']) || isset($filters['ticketstatus'])){
+                $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id')->join('users', 'students.user_id', '=', 'users.id');
+                (isset($filters['event_id'])) ? $query->where('event_attendees.event_id', $filters['event_id']) : null;
+                (isset($filters['ticketstatus'])) ? $query->where('event_attendees.ticketstatus', $filters['ticketstatus']) : null;
             }
 
-            if(isset($filters['ticketstatus'])){
-                
-                $query->where('event_attendees.ticketstatus', $filters['ticketstatus']);
-            }
-
-
-            $query->get('students.*');
+            $query->select('students.*')->get();
 
         }catch(Exception $e){
 
