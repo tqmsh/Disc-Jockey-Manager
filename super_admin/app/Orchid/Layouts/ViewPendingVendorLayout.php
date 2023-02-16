@@ -40,6 +40,18 @@ class ViewPendingVendorLayout extends Table
                         ->value($vendor->user_id)
                         ->checked(false);
                 }),
+
+            TD::make('company_name', 'Company Name')
+                ->render(function (Vendors $vendor) {
+                    return Link::make($vendor->company_name)
+                        ->route('platform.vendor.edit', $vendor);
+                }),
+
+            TD::make('category_id', 'Category')
+                ->render(function (Vendors $vendor) {
+                    return Link::make(Categories::find($vendor->category_id)->name)
+                        ->route('platform.vendor.edit', $vendor);
+                }),
                 
                 
             TD::make('firstname', 'First Name')
@@ -66,17 +78,12 @@ class ViewPendingVendorLayout extends Table
                         ->route('platform.vendor.edit', $vendor);
                 }),
 
-            TD::make('website', 'Website')
+           TD::make('website', 'Website')
                 ->render(function (Vendors $vendor) {
                     return Link::make($vendor->website)
-                        ->href($vendor->website);
+                        ->href(($vendor->website) == null ? '#' : $vendor->website);
                 }),
                 
-            TD::make('category_id', 'Category')
-                ->render(function (Vendors $vendor) {
-                    return Link::make(Categories::find($vendor->category_id)->name)
-                        ->route('platform.vendor.edit', $vendor);
-                }),
 
             TD::make('country', 'Country')
                 ->render(function (Vendors $vendor) {

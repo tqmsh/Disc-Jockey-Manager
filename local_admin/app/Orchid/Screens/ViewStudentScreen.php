@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Locale;
 use Exception;
+use App\Models\User;
 use App\Models\Events;
 use App\Models\Student;
 use Orchid\Screen\Screen;
@@ -32,7 +33,7 @@ class ViewStudentScreen extends Screen
     {
         return [
             'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))->latest('students.created_at')
-                        ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))
+                        ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->pluck('school_id'))
                         ->where('students.account_status', 1)->paginate(20)
         ];
     }
@@ -137,7 +138,7 @@ class ViewStudentScreen extends Screen
 
                 //loop through the students and delete them from db
                 foreach($students as $student){
-                    Student::where('user_id', $student)->delete();
+                    User::where('id', $student)->delete();
                 }
 
                 Toast::success('Selected students deleted succesfully');

@@ -132,7 +132,7 @@ class ViewLocaladminScreen extends Screen
 
                 //loop through the localadmins and delete them from db
                 foreach($localadmins as $localadmin_id){
-                    Localadmin::where('id', $localadmin_id)->delete();
+                    User::where('id', $localadmin_id)->delete();
                 }
 
                 Toast::success('Selected local admins deleted succesfully');

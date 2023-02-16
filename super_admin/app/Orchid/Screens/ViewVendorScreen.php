@@ -127,7 +127,7 @@ class ViewVendorScreen extends Screen
 
                 //loop through the vendors and delete them from db
                 foreach($vendor_ids as $vendor_id){
-                    $this->deleteVendor($vendor_id);
+                    User::where('id', $vendor_id)->delete();
                 }
 
                 Toast::success('Selected vendors deleted succesfully');
@@ -139,14 +139,5 @@ class ViewVendorScreen extends Screen
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected vendors. Error Message: ' . $e);
         }
-    }
-
-    public function deleteVendor($vendor_id){
-
-        // delete vendor from the vendors table
-        Vendors::where('user_id', $vendor_id)->delete();
-        
-        // delete vendor from the users table
-        User::where('id', $vendor_id)->delete();
     }
 }

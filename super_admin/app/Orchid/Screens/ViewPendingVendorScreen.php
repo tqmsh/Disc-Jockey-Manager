@@ -160,7 +160,7 @@ class ViewPendingVendorScreen extends Screen
 
                 //loop through the vendors and delete them from db
                 foreach($vendor_ids as $vendor_id){
-                    $this->deleteVendor($vendor_id);
+                    User::where('id', $vendor_id)->delete();
                 }
 
                 Toast::success('Selected vendors deleted succesfully');

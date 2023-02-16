@@ -161,7 +161,7 @@ class ViewPendingStudentScreen extends Screen
 
                 //loop through the students and delete them from db
                 foreach($students as $student_id){
-                    Student::where('user_id', $student_id)->delete();
+                    User::where('id', $student_id)->delete();
                 }
 
                 Toast::success('Selected local admins deleted succesfully');

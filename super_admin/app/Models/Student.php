@@ -35,8 +35,7 @@ class Student extends Model
         try{
             
             $query  ->join('users', 'users.id', '=', 'students.user_id')
-                    ->join('schools', 'schools.id', '=', 'students.school_id')
-                    ->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id');
+                    ->join('schools', 'schools.id', '=', 'students.school_id');
                     
 
             if(isset($filters['school'])){
@@ -56,15 +55,11 @@ class Student extends Model
             }
 
 
-            if(isset($filters['event_id'])){
-                $query->where('event_attendees.event_id', $filters['event_id']);
+            if(isset($filters['event_id']) || isset($filters['ticketstatus'])){
+                $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id')->join('users', 'students.user_id', '=', 'users.id');
+                (isset($filters['event_id'])) ? $query->where('event_attendees.event_id', $filters['event_id']) : null;
+                (isset($filters['ticketstatus'])) ? $query->where('event_attendees.ticketstatus', $filters['ticketstatus']) : null;
             }
-
-            if(isset($filters['ticketstatus'])){
-                
-                $query->where('event_attendees.ticketstatus', $filters['ticketstatus']);
-            }
-
 
             $query->select('students.*');
 
