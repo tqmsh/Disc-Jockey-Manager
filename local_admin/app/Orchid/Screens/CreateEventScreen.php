@@ -109,6 +109,98 @@ class CreateEventScreen extends Screen
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->horizontal(),
             ])->title('Make your dream event'),
+
+            Layout::rows([
+                Input::make('firstname')
+                    ->title('First Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. John'),
+
+                Input::make('lastname')
+                    ->title('Last Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. Doe'),
+
+                Input::make('name')
+                    ->title('Username')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. KingKhan435'),
+
+                Input::make('company_name')
+                    ->title('Company Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Disco Rockerz'),
+                
+                Input::make('company_website')
+                    ->title('Company Website')
+                    ->type('url')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. www.disco.com'),
+                
+                Select::make('category_id')
+                    ->title('Category')
+                    ->empty('Start typing to Search')
+                    ->required()
+                    ->horizontal()
+                    ->fromQuery(Categories::query()->where('status', 1), 'name'),
+                    
+                Input::make('email')
+                    ->title('Company Email')
+                    ->type('email')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. johndoe@gmail.com'),
+
+                Input::make('phonenumber')
+                    ->title('Phone Number')
+                    ->type('text')
+                    ->mask('(999) 999-9999')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. (613) 859-5863'),
+
+                Input::make('address')
+                    ->title('Address')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. 1234 Main St.'),
+
+                Select::make('country')
+                    ->title('Country')
+                    ->empty('Start typing to Search...')
+                    ->required()
+                    ->horizontal()
+                    ->fromModel(School::class, 'country', 'country'),
+
+                Select::make('state_province')
+                    ->title('State/Province')
+                    ->horizontal()
+                    ->empty('Start typing to Search...')
+                    ->fromModel(School::class, 'state_province', 'state_province'),
+
+                Input::make('zip_postal')
+                    ->title('Zip/Postal Code')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. K1A 0B1'),
+
+                Input::make('city')
+                    ->title('City')
+                    ->required()
+                    ->horizontal()
+                    ->placeholder('Ex. Ottawa'),
+
+
+            ])->title('Suggest a Vendor'),
         ];
     }
 
