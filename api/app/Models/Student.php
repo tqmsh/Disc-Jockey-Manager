@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Exception;
 use App\Models\User;
-use Orchid\Screen\AsSource;
-use Orchid\Support\Facades\Alert;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Student extends Model
 {
     use HasFactory;
-    use AsSource;
 
     protected $fillable = ['user_id', 'school_id', 'account_status', 'created_at', 'updated_at', 'firstname', 'lastname', 'grade', 'phonenumber', 'email', 'ticketstatus', 'table_id', 'school', 'event_id', 'allergies'];
     
