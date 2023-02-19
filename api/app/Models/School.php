@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use Exception;
-use Orchid\Screen\AsSource;
-use Orchid\Support\Facades\Alert;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class School extends Model
 {
     use HasFactory;
-    use AsSource;
 
     protected $fillable = ['school_name', 'region_id', 'county', 'country', 'state_province', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'metropolitan_region', 'city_municipality', 'total_students', 'school_data', 'website', 'teacher_id', 'nces_id', 'created_at'];
 
