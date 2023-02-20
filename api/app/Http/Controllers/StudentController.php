@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -47,7 +48,24 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Update the student profile
+        $user = $request->user();
+        $student = student::find($id);
+        if($student == null){
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+        else if($user->role == 3 && $user->id == $student->user_id){
+            $student->update($request->all());
+            return $student; 
+        }
+        else if($user->role == 2 || $user->role == 1){
+            $student->update($request->all());
+            return $student; 
+        }
+        else{
+            return response()->json(['message' => 'You are not authorized to update this student'], 401);
+        }
+
     }
 
     /**
