@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,15 +19,20 @@ use App\Http\Controllers\AuthController;
 */
 
 // Public Routes
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
 
+// Login Route
+Route::post('/login', [AuthController::class, 'login']);
+
+// Register Route
+Route::post('/register', [AuthController::class, 'register']);
 
 
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
-    Route::get('/test', function(){
-        return User::all();
-    });
-    Route::post('/logout', [AuthController::class, 'logoutSSsss']);
+
+    // Logout Route
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Student Routes
+    Route::resource('/students', StudentController::class);
 });
