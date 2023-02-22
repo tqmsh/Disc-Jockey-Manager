@@ -10,4 +10,12 @@ class Seating extends Model
 {
     use HasFactory;
     use AsSource;
+
+    protected $fillable = [
+        'event_id',
+        'tablename',
+        'created_at',
+        'updated_at'
+
+    ];
 }
