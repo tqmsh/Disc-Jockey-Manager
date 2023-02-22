@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\LocalAdmin;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illumuniate\Http\Response;
@@ -19,6 +20,7 @@ class AuthController extends Controller
             'role' => 'required|numeric'
         ]);
 
+        // Student Registration
         if ($fields['role'] == '3'){
             $fields = $request->validate([
                 'name' => 'required|string',
@@ -38,6 +40,37 @@ class AuthController extends Controller
             ]);
 
             $student = Student::create([
+                'name' => $fields['name'],
+                'user_id' => $user->id,
+                'email' => $fields['email'],
+                'password' => bcrypt($fields['password']),
+                'role' => $fields['role'],
+                'school_id' => $fields['school_id'],
+                'school' => $fields['school'],
+                'phonenumber' => $fields['phonenumber']
+            ]);
+        }
+
+        // Local Admin Registration
+        else if($fields['role'] == '2'){
+            $fields = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|string|unique:users,email',
+                'password' => 'required|string|confirmed', 
+                'role' => 'required|numeric',
+                'school_id' => 'required|numeric',
+                'school' => 'required|string', 
+                'phonenumber' => 'required|string',
+            ]);
+
+            $user = User::create([
+                'name' => $fields['name'],
+                'email' => $fields['email'],
+                'role' => $fields['role'],
+                'password' => bcrypt($fields['password'])
+            ]);
+
+            $student = LocalAdmin::create([
                 'name' => $fields['name'],
                 'user_id' => $user->id,
                 'email' => $fields['email'],
@@ -74,6 +107,12 @@ class AuthController extends Controller
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
                 'message' => 'Bad credentials'
+            ], 401);
+
+        // check if user is authenticated by admin
+        }else if($user->account_status == '0'){
+            return response([
+                'message' => 'Account is not active'
             ], 401);
         }
 

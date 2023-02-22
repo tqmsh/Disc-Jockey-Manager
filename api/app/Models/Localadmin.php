@@ -3,15 +3,12 @@
 namespace App\Models;
 
 use Exception;
-use Orchid\Screen\AsSource;
-use Orchid\Support\Facades\Alert;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Localadmin extends Model
 {
     use HasFactory;
-    use AsSource;
 
     protected $fillable = ['user_id', 'account_status', 'school_id', 'firstname', 'created_at', 'updated_at', 'lastname', 'phonenumber', 'email', 'school'];
 
