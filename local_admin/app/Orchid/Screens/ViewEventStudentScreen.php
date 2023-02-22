@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
@@ -41,10 +42,10 @@ class ViewEventStudentScreen extends Screen
             'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
             'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
             'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNotNull('table_id')->get(['user_id']))
-                                ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
+                                ->filter(request(['ticketstatus', 'event_id', 'tablename']))->paginate(20),
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
-            'tables' => Seating::where('event_id', $event->id),
+            'tables' => Seating::where('event_id', $event->id)->paginate(10),
         ];
     }
 
@@ -114,6 +115,24 @@ class ViewEventStudentScreen extends Screen
             ->applyButton('Update Seating')
             ->withoutCloseButton(),
 
+            Layout::modal('editTable',[
+
+                Layout::rows([
+
+                    Group::make([
+
+                        Input::make('tablename')
+                            ->title('Updated Table Name')
+                            ->placeholder('Table Name')
+                            ->help('Enter the new name of the current table you wish to update.')
+                            ->required(),
+                    ]),
+                ]),
+            ])
+            ->title('Edit table')            
+            ->applyButton('Update Table')
+            ->withoutCloseButton(),
+
             Layout::rows([
 
                 Group::make([
@@ -153,7 +172,13 @@ class ViewEventStudentScreen extends Screen
                                         ->modal('addStudentToTable')
                                         ->method('addStudentToTable', ['user_id' => $student->user_id])
                                         ->icon('pencil');
-                            })->width('300px'),
+                            }),
+
+                        //table name
+                        TD::make('Assigned Table')
+                            ->render(function (Student $student) {
+                                return e(Seating::where('id', EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->get(['tablename'])->value('tablename'));
+                            }),
 
                         TD::make('Student Name')
                             ->render(function (Student $student) {
@@ -165,14 +190,14 @@ class ViewEventStudentScreen extends Screen
                                 return $student->email;
                             }),
 
-                        //table name
-                        TD::make('Assigned Table')
+                        TD::make('Phone Number')
                             ->render(function (Student $student) {
-                                return e(Seating::where('id', EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->get(['tablename'])->value('tablename'));
+                                return $student->phonenumber;
                             }),
 
                     ])
                 ],
+
 
                 'Add Students to Tables' => [
                     Layout::table('unseatedStudents', [
@@ -194,8 +219,68 @@ class ViewEventStudentScreen extends Screen
                             ->render(function (Student $student) {
                                 return $student->email;
                             }),
+                        
+                        TD::make('Phone Number')
+                            ->render(function (Student $student) {
+                                return $student->phonenumber;
+                            }),
                     ])                
-                ],   
+                ],
+                
+                'Tables' => [
+
+                    Layout::table('tables', [
+
+                        TD::make('Table Name')
+                            ->render(function (Seating $table) {
+                                return e($table->tablename);
+                            })->width('300px'),
+
+                        TD::make('Created At')
+                            ->render(function (Seating $table) {
+                                return e($table->created_at);
+                            }),
+
+                        TD::make('Updated At')
+                            ->render(function (Seating $table) {
+                                return e($table->updated_at);
+                            }),
+
+                        TD::make('Edit Table')
+                            ->render(function (Seating $table) {
+                                return ModalToggle::make('Edit Table')
+                                        ->modal('editTable')
+                                        ->method('editTable', ['table_id' => $table->id])
+                                        ->icon('pencil');
+                            }),
+
+                        TD::make('Delete Table')
+                            ->render(function (Seating $table) {
+                                return Button::make('Delete')
+                                    ->icon('trash')
+                                    ->type(Color::DANGER())
+                                    ->method('deleteTable', ['id' => $table->id])
+                                    ->confirm('Are you sure you want to delete this table?');
+                                    
+                            }),
+                        ]),
+
+                    Layout::rows([
+                        Group::make([
+                            Input::make('tablename')
+                                ->title('Table Name')
+                                ->placeholder('Table Name')
+                                ->help('Enter the name of the table you would like to add.')
+                        ]),
+                        Group::make([
+                            Button::make('Add Table')
+                                ->icon('plus')
+                                ->method('addTable')
+                                ->type(Color::DEFAULT()),
+                        ]),
+                    ])
+
+                ],
             ]),
         ];
 
@@ -290,6 +375,88 @@ class ViewEventStudentScreen extends Screen
 
         }catch(Exception $e){
             Alert::error('There was a error trying to add/update the student to the table. Error Message: ' . $e->getMessage());
+        }
+    }
+
+    public function addTable(Request $request, Events $event)
+    {
+        //get the table name from the post request
+        $tablename = $request->get('tablename');
+
+        try{
+
+            //if the table name is not empty
+            if(!empty($tablename)){
+
+                //add the table to the db
+                Seating::create([
+                    'tablename' => $tablename,
+                    'event_id' => $event->id,
+                ]);
+
+                Toast::success('Table added succesfully');
+
+            }else{
+                Toast::warning('Please enter a table name in order to add the table');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to add the table. Error Message: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteTable(Request $request, Events $event)
+    {
+        //get the table id from the post request
+        $id = $request->get('id');
+
+        try{
+
+            //if the table id is not empty
+            if(!empty($id)){
+
+                //delete the table from the db
+                Seating::where('id', $id)->delete();
+
+                Toast::success('Table deleted succesfully');
+
+            }else{
+                Toast::warning('Please select a table in order to delete it');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to delete the table. Error Message: ' . $e->getMessage());
+        }
+    }
+
+    public function editTable(Request $request)
+    {
+        //get the table id from the post request
+        $table_id = $request->get('table_id');
+
+        try{
+
+            //if the table id is not empty
+            if(!empty($table_id)){
+
+                //get the table from the db
+                $table = Seating::where('id', $table_id)->first();
+
+                //update the tablename
+                $table->tablename = $request->get('tablename');
+
+                //save the table
+                $table->save();
+
+                Toast::success('Table updated succesfully');
+
+
+            }else{
+                Toast::warning('Please select a table in order to edit it');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to edit the table. Error Message: ' . $e->getMessage());
         }
     }
 }
