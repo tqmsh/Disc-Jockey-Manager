@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2023 at 10:33 PM
+-- Generation Time: Feb 22, 2023 at 09:35 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -184,9 +184,9 @@ CREATE TABLE `event_attendees` (
 --
 
 INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `table_id`, `ticketstatus`, `created_at`, `updated_at`) VALUES
-(1, 146, 14, NULL, 'Unpaid', '2023-02-12 19:55:58', NULL),
-(2, 152, 14, NULL, 'Paid', '2023-02-12 19:56:39', NULL),
-(7, 169, 14, NULL, 'Paid', '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
+(1, 146, 14, 1, 'Unpaid', '2023-02-12 19:55:58', NULL),
+(2, 152, 14, 2, 'Paid', '2023-02-12 19:56:39', '2023-02-23 00:39:01'),
+(7, 169, 14, NULL, 'Paid', '2023-02-13 01:57:06', '2023-02-23 01:29:29'),
 (8, 170, 14, NULL, 'Unpaid', '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
 (9, 155, 14, NULL, 'Paid', '2023-02-14 19:52:46', NULL),
 (10, 155, 15, NULL, 'Unpaid', '2023-02-14 19:53:07', NULL);
@@ -614,16 +614,26 @@ INSERT INTO `schools` (`id`, `nces_id`, `teacher_id`, `region_id`, `school_name`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `seating`
+-- Table structure for table `seatings`
 --
 
-CREATE TABLE `seating` (
+CREATE TABLE `seatings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `tablename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `seatings`
+--
+
+INSERT INTO `seatings` (`id`, `event_id`, `tablename`, `created_at`, `updated_at`) VALUES
+(1, 14, 'The DJ\'s Table', '2023-02-22 18:22:32', NULL),
+(2, 14, 'Cool Kidz Table', '2023-02-22 19:38:37', NULL),
+(3, 14, 'Testing adding table from local admin', '2023-02-23 00:58:53', '2023-02-23 00:58:53'),
+(4, 14, 'This is a edited table', '2023-02-23 01:09:46', '2023-02-23 01:28:07');
 
 -- --------------------------------------------------------
 
@@ -652,7 +662,7 @@ CREATE TABLE `students` (
   `school_id` bigint(20) UNSIGNED DEFAULT NULL,
   `firstname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lastname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `grade` varchar(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `grade` smallint(2) DEFAULT NULL,
   `phonenumber` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `account_status` int(1) DEFAULT 0,
@@ -667,14 +677,14 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `user_id`, `school_id`, `firstname`, `lastname`, `grade`, `phonenumber`, `email`, `account_status`, `school`, `allergies`, `created_at`, `updated_at`) VALUES
-(105, 145, 53, 'John', 'Smith', '12', '(465) 987-9797', 'johnsmith@gmail.com', 1, 'Colonel By Secondary School', NULL, '2022-11-20 11:14:59', '2022-11-22 19:30:57'),
-(106, 146, 51, 'Jane', 'Doe', '10', '(456) 879-4564', 'janedoe@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-11-20 11:23:42', '2022-11-26 22:17:01'),
-(107, 152, 51, 'Hey', 'Man', '12', '(546) 465-6464', 'heyman@heyman.com', 1, 'Digitera School of Digital Marketing & Software', 'Hey Man', '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
-(109, 154, 51, 'retert', 'ert', '9', '(546) 464-6465', 'loca65+ladmin001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', '55', '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(110, 155, 51, 'Student 1', 'Student 1', '12', '(546) 897-8921', 'student001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
-(121, 169, 51, 'Import 1', 'efwefwef', '9', '12345678910', 'import1@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nuts', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
-(122, 170, 51, 'Import 2', 'wefwef', '10', '9632587459', 'import2@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nutseeee', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
-(124, 198, 51, 'Zg man', 'Big man tings', '10', '(612) 354-8954', 'bigman@tings.com', 1, NULL, 'Bad Grades', '2023-02-14 23:43:02', '2023-02-15 01:25:38');
+(105, 145, 53, 'John', 'Smith', 12, '(465) 987-9797', 'johnsmith@gmail.com', 1, 'Colonel By Secondary School', NULL, '2022-11-20 11:14:59', '2022-11-22 19:30:57'),
+(106, 146, 51, 'Jane', 'Doe', 10, '(456) 879-4564', 'janedoe@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-11-20 11:23:42', '2022-11-26 22:17:01'),
+(107, 152, 51, 'Hey', 'Man', 12, '(546) 465-6464', 'heyman@heyman.com', 1, 'Digitera School of Digital Marketing & Software', 'Hey Man', '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
+(109, 154, 51, 'retert', 'ert', 9, '(546) 464-6465', 'loca65+ladmin001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', '55', '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
+(110, 155, 51, 'Student 1', 'Student 1', 12, '(546) 897-8921', 'student001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
+(121, 169, 51, 'Import 1', 'efwefwef', 9, '12345678910', 'import1@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nuts', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
+(122, 170, 51, 'Import 2', 'wefwef', 10, '9632587459', 'import2@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nutseeee', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
+(124, 198, 51, 'Zg man', 'Big man tings', 10, '(612) 354-8954', 'bigman@tings.com', 1, NULL, 'Bad Grades', '2023-02-14 23:43:02', '2023-02-15 01:25:38');
 
 --
 -- Triggers `students`
@@ -928,7 +938,7 @@ ALTER TABLE `event_attendees`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `event_id` (`event_id`,`table_id`),
-  ADD KEY `table_id` (`table_id`);
+  ADD KEY `event_attendees_ibfk_3` (`table_id`);
 
 --
 -- Indexes for table `event_bids`
@@ -1036,9 +1046,9 @@ ALTER TABLE `schools`
   ADD KEY `region_index` (`region_id`);
 
 --
--- Indexes for table `seating`
+-- Indexes for table `seatings`
 --
-ALTER TABLE `seating`
+ALTER TABLE `seatings`
   ADD PRIMARY KEY (`id`),
   ADD KEY `event_id` (`event_id`);
 
@@ -1206,10 +1216,10 @@ ALTER TABLE `schools`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
--- AUTO_INCREMENT for table `seating`
+-- AUTO_INCREMENT for table `seatings`
 --
-ALTER TABLE `seating`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `seatings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `sessions`
@@ -1290,7 +1300,7 @@ ALTER TABLE `events`
 ALTER TABLE `event_attendees`
   ADD CONSTRAINT `event_attendees_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `event_attendees_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `event_attendees_ibfk_3` FOREIGN KEY (`table_id`) REFERENCES `seating` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `event_attendees_ibfk_3` FOREIGN KEY (`table_id`) REFERENCES `seatings` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `event_bids`
@@ -1343,10 +1353,10 @@ ALTER TABLE `schools`
   ADD CONSTRAINT `schools_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
--- Constraints for table `seating`
+-- Constraints for table `seatings`
 --
-ALTER TABLE `seating`
-  ADD CONSTRAINT `seating_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `seatings`
+  ADD CONSTRAINT `seatings_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sessions`
