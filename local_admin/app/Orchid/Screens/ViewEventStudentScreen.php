@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
@@ -22,7 +21,6 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
-use App\Orchid\Layouts\ViewSeatedStudentLayout;
 use App\Orchid\Layouts\ViewUnattendingStudentLayout;
 
 class ViewEventStudentScreen extends Screen
@@ -105,17 +103,15 @@ class ViewEventStudentScreen extends Screen
                         Select::make('table_id')
                             ->empty('Select Table')
                             ->options(function () {
-                                return $this->tables->pluck('tablename', 'id');
+                                $tables = $this->tables->pluck('tablename', 'id');
+                                $tables['remove'] = 'Remove From Current Table';
+                                return $tables;
                             }),
-
-                        Button::make('Add Student to Table')
-                            ->icon('plus')
-                            ->method('addStudentToTable')
-                            ->type(Color::DEFAULT()),
                     ]),
                 ]),
             ])
-            ->title('Edit Seating')
+            ->title('Edit Seating')            
+            ->applyButton('Update Seating')
             ->withoutCloseButton(),
 
             Layout::rows([
@@ -155,7 +151,7 @@ class ViewEventStudentScreen extends Screen
                             ->render(function (Student $student) {
                                 return ModalToggle::make('Edit Seating')
                                         ->modal('addStudentToTable')
-                                        ->method('addStudentToTable')
+                                        ->method('addStudentToTable', ['user_id' => $student->user_id])
                                         ->icon('pencil');
                             })->width('300px'),
 
@@ -185,7 +181,7 @@ class ViewEventStudentScreen extends Screen
                             ->render(function (Student $student) {
                                 return ModalToggle::make('Add to Table')
                                         ->modal('addStudentToTable')
-                                        ->method('addStudentToTable')
+                                        ->method('addStudentToTable', ['user_id' => $student->user_id])
                                         ->icon('plus');
                             })->width('300px'),
 
@@ -211,7 +207,6 @@ class ViewEventStudentScreen extends Screen
         $students = $request->get('students');
         
         try{
-
             
             //if the array is not empty
             if(!empty($students)){
@@ -266,5 +261,35 @@ class ViewEventStudentScreen extends Screen
             '?ticketstatus=' . $request->ticketstatus .
             '&event_id=' . $event->id
         );
+    }
+
+    //add the studen to the table from modal
+    public function addStudentToTable(Request $request, Events $event)
+    {
+        //get the table id from the post request
+        $table_id = $request->get('table_id');
+
+        //get the student id from the post request
+        $user_id = $request->get('user_id');
+
+        try{
+
+            //if the table id is not empty
+            if(!empty($table_id)){
+
+                //update the table id in the event attendees table
+                EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->update([
+                    'table_id' => ($table_id == 'remove') ? null : $table_id,
+                ]);
+
+                Toast::success('Student seating updated succesfully');
+
+            }else{
+                Toast::warning('Please select a table in order to add/update the student seating');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to add/update the student to the table. Error Message: ' . $e->getMessage());
+        }
     }
 }
