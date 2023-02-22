@@ -35,7 +35,7 @@ class Student extends Model
         try{
 
             if(isset($filters['sort_option'])){
-                $query->orderByRaw($filters['sort_option']);
+                $query->orderByRaw($filters['sort_option'] . ' ASC');
             }
             
             if(isset($filters['event_id']) || isset($filters['ticketstatus'])){
