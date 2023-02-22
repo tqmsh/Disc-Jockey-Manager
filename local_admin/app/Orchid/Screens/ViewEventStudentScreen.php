@@ -3,7 +3,9 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use Orchid\Screen\TD;
 use App\Models\Events;
+use App\Models\Seating;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -11,19 +13,24 @@ use Illuminate\Http\Request;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
+use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
+use App\Orchid\Layouts\ViewSeatedStudentLayout;
 use App\Orchid\Layouts\ViewUnattendingStudentLayout;
 
 class ViewEventStudentScreen extends Screen
 {
     public $event;
     public $students;
+    public $seatedStudents;
+    public $tables;
     /**
      * Query data.
      *
@@ -34,7 +41,12 @@ class ViewEventStudentScreen extends Screen
         return [
             'event' => $event,
             'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20)
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
+            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNotNull('table_id')->get(['user_id']))
+                                ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
+            'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
+                                ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
+            'tables' => Seating::where('event_id', $event->id),
         ];
     }
 
@@ -84,6 +96,27 @@ class ViewEventStudentScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('addStudentToTable',[
+
+                Layout::rows([
+
+                    Group::make([
+
+                        Select::make('table_id')
+                            ->empty('Select Table')
+                            ->options(function () {
+                                return $this->tables->pluck('tablename', 'id');
+                            }),
+
+                        Button::make('Add Student to Table')
+                            ->icon('plus')
+                            ->method('addStudentToTable')
+                            ->type(Color::DEFAULT()),
+                    ]),
+                ]),
+            ])
+            ->title('Edit Seating')
+            ->withoutCloseButton(),
 
             Layout::rows([
 
@@ -113,7 +146,63 @@ class ViewEventStudentScreen extends Screen
                     ViewUnattendingStudentLayout::class
                 ],
             ]),
+            
+            Layout::tabs([
+                'Seated Students' => [
+                    Layout::table('seatedStudents', [
+
+                        TD::make('Edit Seating')
+                            ->render(function (Student $student) {
+                                return ModalToggle::make('Edit Seating')
+                                        ->modal('addStudentToTable')
+                                        ->method('addStudentToTable')
+                                        ->icon('pencil');
+                            })->width('300px'),
+
+                        TD::make('Student Name')
+                            ->render(function (Student $student) {
+                                return $student->firstname . ' ' . $student->lastname;
+                            }),
+
+                        TD::make('Student Email')
+                            ->render(function (Student $student) {
+                                return $student->email;
+                            }),
+
+                        //table name
+                        TD::make('Assigned Table')
+                            ->render(function (Student $student) {
+                                return e(Seating::where('id', EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->get(['tablename'])->value('tablename'));
+                            }),
+
+                    ])
+                ],
+
+                'Add Students to Tables' => [
+                    Layout::table('unseatedStudents', [
+
+                        TD::make('Add to Table')
+                            ->render(function (Student $student) {
+                                return ModalToggle::make('Add to Table')
+                                        ->modal('addStudentToTable')
+                                        ->method('addStudentToTable')
+                                        ->icon('plus');
+                            })->width('300px'),
+
+                        TD::make('Student Name')
+                            ->render(function (Student $student) {
+                                return $student->firstname . ' ' . $student->lastname;
+                            }),
+
+                        TD::make('Student Email')
+                            ->render(function (Student $student) {
+                                return $student->email;
+                            }),
+                    ])                
+                ],   
+            ]),
         ];
+
     }
 
     public function deleteStudents(Request $request, Events $event)
