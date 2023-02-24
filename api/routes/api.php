@@ -2,10 +2,12 @@
 
 use App\Models\School;
 use App\Models\User;
+use App\Models\Events;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     // Student Routes
     Route::resource('/students', StudentController::class);
+
+    // Events Routes
+    Route::resource('/events', EventsController::class);
 });
