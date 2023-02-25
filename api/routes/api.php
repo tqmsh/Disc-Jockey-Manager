@@ -42,7 +42,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/getEvents', [EventController::class, 'getEvents']);
 
     // Events Routes
-    Route::resource('/events', EventController::class);
+    // Route::resource('/events', EventController::class);
 
+    // Additional StudentBid Methods
+    Route::get('/getStudentBids', [StudentBidsController::class, 'getStudentBids']);
 
 });
