@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\LocalAdmin;
+use App\Models\Localadmin;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illumuniate\Http\Response;
@@ -70,7 +70,7 @@ class AuthController extends Controller
                 'password' => bcrypt($fields['password'])
             ]);
 
-            $student = LocalAdmin::create([
+            $student = Localadmin::create([
                 'name' => $fields['name'],
                 'user_id' => $user->id,
                 'email' => $fields['email'],
