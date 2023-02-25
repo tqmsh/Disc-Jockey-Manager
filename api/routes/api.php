@@ -3,11 +3,13 @@
 use App\Models\School;
 use App\Models\User;
 use App\Models\Events;
+use App\Models\StudentBids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\StudentBidsController;
 
 /*
 |--------------------------------------------------------------------------
