@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
+use App\Models\StudentBids;
 use Illuminate\Http\Request;
 
 class StudentBidsController extends Controller
@@ -80,5 +82,16 @@ class StudentBidsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getStudentBids(Request $request)
+    {
+        $user = $request->user();
+
+        if($user->role == 3){
+            $student = Student::where('user_id', $user->id)->first();
+            $studentBids = StudentBids::where('student_id', $student->id)->get();
+            return $studentBids;
+        }
     }
 }
