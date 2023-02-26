@@ -92,6 +92,8 @@ class StudentBidsController extends Controller
             $student = Student::where('user_id', $user->id)->first();
             $studentBids = StudentBids::where('student_id', $student->id)->get();
             return $studentBids;
+        }else{
+            return response()->json(['message' => "You're not a student"], 401);
         }
     }
 }
