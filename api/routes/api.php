@@ -10,7 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\StudentBidsController;
-
+use App\Http\Controllers\LocaladminController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,8 +28,7 @@ use App\Http\Controllers\StudentBidsController;
 Route::post('/login', [AuthController::class, 'login']);
 
 // Register Route
-Route::post('/register', [AuthController::class, 'register']);
-
+Route::post('/students/register', [StudentController::class, 'register']);
 
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
