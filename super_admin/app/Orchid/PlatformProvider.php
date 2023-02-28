@@ -52,7 +52,7 @@ class PlatformProvider extends OrchidServiceProvider
 
                 //vendors bid option
                 Menu::make('Bids')
-                ->icon('list')
+                ->icon('money')
                 ->route('platform.bid.list'),
                 
                 //pending vendor nav option
