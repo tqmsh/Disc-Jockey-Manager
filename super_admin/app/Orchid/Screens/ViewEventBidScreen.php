@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Categories;
 use Exception;
 use App\Models\Events;
 use App\Models\Region;
@@ -29,8 +30,8 @@ class ViewEventBidScreen extends Screen
     public function query(): iterable
     {
         return [
-            'activeBids' => EventBids::latest()->where('status', 0)->filter(request(['region_id']))->paginate(10),
-            'pastBids' => EventBids::latest()->whereNot('status', 0)->filter(request(['region_id']))->paginate(10),
+            'activeBids' => EventBids::latest()->where('status', 0)->filter(request(['region_id', 'category_id']))->paginate(10),
+            'pastBids' => EventBids::latest()->whereNot('status', 0)->filter(request(['region_id', 'category_id']))->paginate(10),
         ];
     }
 
@@ -52,10 +53,6 @@ class ViewEventBidScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            
-            Link::make('Create a Event Bid')
-                ->icon('plus')
-                ->route('platform.bid.create'),
 
             Button::make('Delete Selected Bids')
                 ->icon('trash')
@@ -84,7 +81,13 @@ class ViewEventBidScreen extends Screen
                     Select::make('region_id')
                         ->title('Region')
                         ->empty('No Selection')
-                        ->fromModel(Region::query(), 'name')
+                        ->help('Start typing in boxes to search')
+                        ->fromModel(Region::query(), 'name'),
+                    
+                    Select::make('category_id')
+                        ->title('Category')
+                        ->empty('No Selection')
+                        ->fromModel(Categories::query(), 'name'),
                 ]),
                 
                 Button::make('Filter')
@@ -125,7 +128,8 @@ class ViewEventBidScreen extends Screen
 
     public function filter(Request $request){
         return redirect('/admin/bids?' 
-                    .'&region_id=' . $request->get('region_id'));
+                    .'&region_id=' . $request->get('region_id')
+                    .'&category_id=' . $request->get('category_id'));
     }
     
     public function updateBid()

@@ -35,6 +35,10 @@ class EventBids extends Model
             $query->where('region_id', $filters['region_id']);
         }
 
+        if(isset($filters['category_id'])){
+            $query->where('category_id', $filters['category_id']);
+        }
+
         $query->get();
     }
 
