@@ -4,15 +4,12 @@ namespace App\Models;
 
 use Exception;
 use App\Models\School;
-use Orchid\Screen\AsSource;
-use Orchid\Support\Facades\Alert;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Events extends Model
 {
     use HasFactory;
-    use AsSource;
 
     protected $fillable = ['event_name', 'venue_id', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'school', 'event_zip_postal', 'event_rules'];
 
