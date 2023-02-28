@@ -134,10 +134,6 @@ Route::screen('/bids', ViewEventBidScreen::class)->name('platform.bid.list');
 //edit bid screen
 Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid.edit');
 
-//create bid screen
-Route::screen('/bids/create', CreateEventBidScreen::class)->name('platform.bid.create');
-
-
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
