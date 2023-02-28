@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
+use App\Orchid\Screens\EditRegionScreen;
 use App\Orchid\Screens\EditSchoolScreen;
 use App\Orchid\Screens\EditVendorScreen;
+use App\Orchid\Screens\ViewRegionScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\ViewVendorScreen;
 use App\Orchid\Screens\CreateEventScreen;
@@ -18,14 +20,16 @@ use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\CreateSchoolScreen;
 use App\Orchid\Screens\CreateVendorScreen;
 use App\Orchid\Screens\EditCategoryScreen;
+use App\Orchid\Screens\EditEventBidScreen;
 use App\Orchid\Screens\ViewCategoryScreen;
+use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\CreateEventBidScreen;
 use App\Orchid\Screens\EditLocaladminScreen;
 use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
-use App\Orchid\Screens\EditRegionScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
@@ -37,8 +41,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewEventBidScreen;
-use App\Orchid\Screens\ViewRegionScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,7 +129,13 @@ Route::screen('/regions', ViewRegionScreen::class)->name('platform.region.list')
 //show edit region screen
 Route::screen('/regions/{regions}/edit', EditRegionScreen::class)->name('platform.region.edit');
 
-Route::screen('/bids', ViewEventBidScreen::class)->name('platform.region.list');
+Route::screen('/bids', ViewEventBidScreen::class)->name('platform.bid.list');
+
+//edit bid screen
+Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid.edit');
+
+//create bid screen
+Route::screen('/bids/create', CreateEventBidScreen::class)->name('platform.bid.create');
 
 
 // Platform > Profile
