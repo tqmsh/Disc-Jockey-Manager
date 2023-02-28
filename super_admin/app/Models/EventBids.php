@@ -28,6 +28,20 @@ class EventBids extends Model
         'updated_at',
     ];
 
+    //scope filter for region id
+    public function scopeFilter($query, array $filters)
+    {
+        if(isset($filters['region_id'])){
+            $query->where('region_id', $filters['region_id']);
+        }
+
+        if(isset($filters['category_id'])){
+            $query->where('category_id', $filters['category_id']);
+        }
+
+        $query->get();
+    }
+
     //relationship to user
     public function user()
     {
