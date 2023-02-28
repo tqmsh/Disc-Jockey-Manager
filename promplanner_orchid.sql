@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2023 at 09:35 PM
+-- Generation Time: Feb 28, 2023 at 10:02 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -225,10 +225,9 @@ INSERT INTO `event_bids` (`id`, `user_id`, `event_id`, `region_id`, `package_id`
 (4, 197, 14, 1, 2, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'Notes', 'Contact Instructions', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-02 23:39:42', '2023-02-09 01:15:50'),
 (7, 197, 14, 1, 1, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', NULL, NULL, 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-03 02:43:50', '2023-02-09 01:18:44'),
 (8, 197, 13, 1, 3, 11, '2022-11-21 12:00:00', 'Colonel By Secondary School', 'notes', 'contact info', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-07 04:26:43', '2023-02-07 04:26:43'),
-(9, 197, 14, 1, 6, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'HERE ARE SOME NOTES', 'HERE IS SOME CONTACT INFO', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-09 01:23:21', '2023-02-09 01:23:21'),
+(9, 197, 14, 1, 6, 11, '2022-11-20 12:00:00', 'Digitera School of Digital Marketing & Software', 'Edited by super admin', 'HERE IS SOME CONTACT INFO', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-09 01:23:21', '2023-03-01 01:42:39'),
 (10, 197, 15, 1, 1, 11, '2022-12-02 12:00:00', 'Digitera School of Digital Marketing & Software', 'fgdfg', 'dfgdfg', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-15 01:04:19', '2023-02-15 01:05:56'),
-(11, 197, 15, 1, 3, 11, '2022-12-02 12:00:00', 'Digitera School of Digital Marketing & Software', 'dfgdfg', 'fdgdfg', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-15 01:04:37', '2023-02-15 01:04:37'),
-(12, 197, 17, 1, 3, 11, '2023-01-10 12:00:00', 'Digitera School of Digital Marketing & Software', 'dsfdsfsd', 'fsdfsdf', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-02-15 01:04:50', '2023-02-15 01:04:50'),
+(12, 197, 17, 1, 3, 11, '2023-01-10 12:00:00', 'Digitera School of Digital Marketing & Software', 'dsfdsfsd', 'fsdfsdf', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-02-15 01:04:50', '2023-03-01 01:29:01'),
 (13, 197, 17, 1, 2, 11, '2023-01-10 12:00:00', 'Digitera School of Digital Marketing & Software', 'dfsdf', 'sdfsdf', 'Money Jockeys', 'https://promplanner.app/', 2, '2023-02-15 01:05:02', '2023-02-15 01:06:06');
 
 -- --------------------------------------------------------
