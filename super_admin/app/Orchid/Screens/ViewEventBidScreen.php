@@ -136,4 +136,9 @@ class ViewEventBidScreen extends Screen
         Toast::success("Bid " . ($bid->status == 1) ? 'Accepted' : 'Rejected');
         return redirect()->route('platform.bid.list');
     }
+
+    public function redirect(){
+        $bid_id = request('bid_id');
+        return redirect()->route('platform.bid.edit', $bid_id);
+    }
 }

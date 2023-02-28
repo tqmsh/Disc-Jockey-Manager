@@ -43,6 +43,13 @@ class ViewActiveEventBidLayout extends Table
 
             TD::make()
                 ->align(TD::ALIGN_LEFT)
+                ->width('50px')
+                ->render(function(EventBids $bid){
+                    return Button::make('Edit')->method('redirect', ['bid_id' => $bid->id])->icon('pencil')->type(Color::PRIMARY()); 
+                    }), 
+
+            TD::make()
+                ->align(TD::ALIGN_LEFT)
                 ->width('100px')
                 ->render(function(EventBids $bid){
                     return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
