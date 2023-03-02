@@ -341,12 +341,10 @@ class ViewEventStudentScreen extends Screen
         }
     }
 
-    public function filter(Request $request, Events $event){
-        return redirect('/admin/events/students/' . $event->id . 
-            '?ticketstatus=' . $request->ticketstatus .
-            '&event_id=' . $event->id
-        );
+    public function filter(Events $event){
+        return redirect()->route('platform.eventStudents.list', [$event->id, 'ticketstatus' => request('ticketstatus')]);
     }
+
 
     //add the studen to the table from modal
     public function addStudentToTable(Request $request, Events $event)

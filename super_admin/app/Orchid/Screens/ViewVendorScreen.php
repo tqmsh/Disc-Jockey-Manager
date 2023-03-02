@@ -17,6 +17,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewVendorLayout;
+use Illuminate\Support\Facades\Redirect;
 
 class ViewVendorScreen extends Screen
 {
@@ -107,12 +108,9 @@ class ViewVendorScreen extends Screen
         ];
     }
 
-    public function filter(Request $request){
+    public function filter(){
 
-        return redirect('/admin/vendors?' 
-                    .'&country=' . $request->get('country')
-                    .'&category_id=' . $request->get('category_id')
-                    .'&state_province=' . $request->get('state_province'));
+        return redirect()->route('platform.vendor.list', request(['country', 'category_id', 'state_province']));
     }
 
     public function deleteVendors(Request $request){  

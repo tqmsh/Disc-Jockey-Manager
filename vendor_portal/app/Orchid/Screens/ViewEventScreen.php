@@ -112,9 +112,8 @@ class ViewEventScreen extends Screen
         ];
     }
 
-    public function filter(Request $request){
-        return redirect('/admin/bidopportunities?' 
-                    .'&region_id=' . $request->get('region_id'));
+    public function filter(){
+        return redirect()->route('platform.event.list', request(['region_id']));
     }
 
     //this method will create the category
