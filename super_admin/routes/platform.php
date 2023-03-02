@@ -32,6 +32,7 @@ use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
@@ -133,6 +134,10 @@ Route::screen('/bids', ViewEventBidScreen::class)->name('platform.bid.list');
 
 //edit bid screen
 Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid.edit');
+
+Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
+
+Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

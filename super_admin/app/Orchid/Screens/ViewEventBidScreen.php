@@ -2,36 +2,34 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Categories;
-use Exception;
 use App\Models\Events;
-use App\Models\Region;
 use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Alert;
-use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewPastEventBidLayout;
-use App\Orchid\Layouts\ViewActiveEventBidLayout;
+use App\Orchid\Layouts\ViewEventBidsLayout;
+use App\Orchid\Layouts\ViewPendingEventBidsLayout;
 
 class ViewEventBidScreen extends Screen
 {
+    public $event;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event): iterable
     {
         return [
-            'activeBids' => EventBids::latest()->where('status', 0)->filter(request(['region_id', 'category_id']))->paginate(10),
-            'pastBids' => EventBids::latest()->whereNot('status', 0)->filter(request(['region_id', 'category_id']))->paginate(10),
+            'event' => $event,
+            'pendingBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->where('status', 0)->latest()->paginate(10),
+            'previousBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
         ];
     }
 
@@ -42,7 +40,7 @@ class ViewEventBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'View Vendor Event Bids';
+        return 'Bids on: ' . $this->event->event_name;
     }
 
     /**
@@ -53,15 +51,9 @@ class ViewEventBidScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-
-            Button::make('Delete Selected Bids')
-                ->icon('trash')
-                ->method('deleteBids')
-                ->confirm(__('Are you sure you want to delete the selected bids?')),
-
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.bid.list')
+                ->route('platform.event.list')
         ];
     }
 
@@ -73,76 +65,43 @@ class ViewEventBidScreen extends Screen
     public function layout(): iterable
     {
         return [
-
             Layout::rows([
-
                 Group::make([
-
-                    Select::make('region_id')
-                        ->title('Region')
-                        ->empty('No Selection')
-                        ->help('Start typing in boxes to search')
-                        ->fromModel(Region::query(), 'name'),
                     
                     Select::make('category_id')
-                        ->title('Category')
-                        ->empty('No Selection')
+                        ->help('Type in box to search')
+                        ->empty('Filter Category')
                         ->fromModel(Categories::query(), 'name'),
+
+                    Button::make('Filter')
+                        ->icon('filter')
+                        ->method('filter')
+                        ->type(Color::DEFAULT()),
                 ]),
                 
-                Button::make('Filter')
-                    ->icon('filter')
-                    ->method('filter')
-                    ->type(Color::DEFAULT()),
             ]),
 
             Layout::tabs([
-                'Active Bids' => [
-                    ViewActiveEventBidLayout::class
+                'Pending Bids' => [
+                    ViewPendingEventBidsLayout::class
                 ],
                 'Previous Bids' => [
-                    ViewPastEventBidLayout::class
+                    ViewEventBidsLayout::class
                 ],
             ]),
-
         ];
     }
-
-    public function deleteBids()
-    {
-        try{
-            $bids = request()->input('bids');
-            if (count($bids) > 0) {
-                foreach ($bids as $bid) {
-                    EventBids::find($bid)->delete();
-                }
-
-                Toast::success('Selected bids deleted successfully.');
-            }else{
-                Toast::error('Please select at least one bid to delete.');
-            } 
-        } catch(Exception $e) {
-            Alert::error('There was an error deleting the selected bids' . $e->getMessage());
-        }
-    }
-
-    public function filter(Request $request){
-        return redirect('/admin/bids?' 
-                    .'&region_id=' . $request->get('region_id')
-                    .'&category_id=' . $request->get('category_id'));
-    }
     
-    public function updateBid()
+    public function filter(Request $request, Events $event)
+    {
+        return redirect('/admin/events/bids/' . $event->id . '?category_id=' . $request->category_id);
+    }
+
+    public function updateBid(Events $event)
     {
         $bid = EventBids::find(request('bid_id'));
         $bid->status = request('choice');
         $bid->save();
-        Toast::success("Bid " . ($bid->status == 1) ? 'Accepted' : 'Rejected');
-        return redirect()->route('platform.bid.list');
-    }
-
-    public function redirect(){
-        $bid_id = request('bid_id');
-        return redirect()->route('platform.bid.edit', $bid_id);
+        return redirect()->route('platform.eventBids.list', $event);
     }
 }
