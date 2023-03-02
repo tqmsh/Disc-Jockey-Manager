@@ -92,9 +92,9 @@ class ViewEventBidScreen extends Screen
         ];
     }
     
-    public function filter(Request $request, Events $event)
+    public function filter(Events $event)
     {
-        return redirect('/admin/events/bids/' . $event->id . '?category_id=' . $request->category_id);
+        return redirect()->route('platform.eventBids.list', [$event->id, 'category_id' => request('category_id')]);
     }
 
     public function updateBid(Events $event)

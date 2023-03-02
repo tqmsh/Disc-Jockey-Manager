@@ -108,11 +108,9 @@ class ViewPendingVendorScreen extends Screen
         ];
     }
 
-    public function filter(Request $request){
-        return redirect('/admin/pendingvendors?' 
-                    .'&country=' . $request->get('country')
-                    .'&category_id=' . $request->get('category_id')
-                    .'&state_province=' . $request->get('state_province'));
+    public function filter(){
+        return redirect()->route('platform.pendingvendor.list', request(['country', 'category_id', 'state_province']));
+
     }
 
     public function acceptVendors(Request $request){

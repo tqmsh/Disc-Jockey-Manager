@@ -32,7 +32,7 @@ class StudentBidLayout extends Table
     protected function columns(): iterable
     {
         return [
-        TD::make('edit_button', 'STUDENT BIDS')
+        TD::make()
                 ->align(TD::ALIGN_LEFT)
                 ->render(function($studentBid){
                     return 

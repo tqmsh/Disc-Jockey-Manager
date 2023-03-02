@@ -113,12 +113,8 @@ class ViewPendingStudentScreen extends Screen
         ];
     }
 
-    public function filter(Request $request){
-        return redirect('/admin/pendingstudents?'
-                    .'&sort_option=' . $request->get('sort_option')
-                    .'&ticketstatus=' . $request->get('ticketstatus') 
-                    .'&event_name=' . $request->get('event_name') 
-                );
+    public function filter(){
+        return redirect()->route('platform.pendingstudent.list', request(['ticketstatus', 'school', 'country', 'school_board', 'event_id', 'state_province']));
     }
 
     public function acceptStudents(Request $request){

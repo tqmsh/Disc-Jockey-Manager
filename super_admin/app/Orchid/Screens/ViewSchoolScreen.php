@@ -119,13 +119,9 @@ class ViewSchoolScreen extends Screen
         ];
     }
     
-    public function filter(Request $request){
-        return redirect('/admin/schools?' 
-                    .'&school=' . $request->get('school')
-                    .'&county=' . $request->get('county')
-                    .'&region_id=' . $request->get('region_id')
-                    .'&country=' . $request->get('country')
-                    .'&state_province=' . $request->get('state_province'));
+    public function filter(){
+
+        return redirect()->route('platform.school.list', request(['region_id', 'school', 'country', 'county', 'state_province']));
     }
 
     public function deleteSchools(Request $request)

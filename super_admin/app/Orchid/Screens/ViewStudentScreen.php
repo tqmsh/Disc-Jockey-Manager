@@ -125,14 +125,9 @@ class ViewStudentScreen extends Screen
         ];
     }
 
-    public function filter(Request $request){
-        return redirect('/admin/students?'
-                    .'&ticketstatus=' . $request->get('ticketstatus') 
-                    .'&school=' . $request->get('school')
-                    .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
-                    .'&event_id=' . $request->get('event_id')
-                    .'&state_province=' . $request->get('state_province'));
+    public function filter(){
+
+        return redirect()->route('platform.student.list', request(['ticketstatus', 'school', 'country', 'school_board', 'event_id', 'state_province']));
     }
 
     public function deleteStudents(Request $request)
