@@ -63,11 +63,6 @@ class ViewUnattendingStudentLayout extends Table
                         ->route('platform.student.edit', $student);
                 }),
 
-            TD::make('ticketstatus', 'Ticket Status')
-                ->render(function (Student $student) {
-                    return Link::make($student->ticketstatus)
-                        ->route('platform.student.edit', $student);
-                }),
             TD::make('allergies', 'Allergies')
                 ->render(function (Student $student) {
                     return Link::make($student->allergies)
