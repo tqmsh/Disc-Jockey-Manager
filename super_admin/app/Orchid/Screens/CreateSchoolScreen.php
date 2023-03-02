@@ -24,7 +24,7 @@ use Orchid\Screen\Actions\ModalToggle;
 class CreateSchoolScreen extends Screen
 {
     public $requiredFields = ['nces_id', 'country', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data'];
-    
+
     /**
      * Query data.
      *
@@ -53,7 +53,7 @@ class CreateSchoolScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            
+
             Button::make('Add')
                 ->icon('plus')
                 ->method('createSchool'),
@@ -210,7 +210,7 @@ class CreateSchoolScreen extends Screen
                     ->title('School Data')
                     ->type('text')
                     ->horizontal()
-                    ->placeholder('Ex. Ex. www.colonelby.com?Search=1&InstName=newton&State=25&SchoolType=1'),
+                    ->placeholder('Ex. www.colonelby.com?Search=1&InstName=newton&State=25&SchoolType=1'),
 
                 Input::make('firstname')
                     ->title('Teacher First Name')
@@ -240,7 +240,7 @@ class CreateSchoolScreen extends Screen
                     ->required()
                     ->mask('(999) 999-9999')
                     ->horizontal()
-                    ->placeholder('Ex. (613) 852-4563'),  
+                    ->placeholder('Ex. (613) 852-4563'),
 
                 Input::make('total_students')
                     ->title('Total Students')
@@ -266,13 +266,13 @@ class CreateSchoolScreen extends Screen
                 $user = User::create($userTableFields);
 
                 $schoolTableFields['teacher_id'] = $user->id;
-                
+
                 School::create($schoolTableFields);
 
                 Toast::success('You have successfully created ' . $request->input('school_name') . '.');
 
                 return redirect()->route('platform.school.list');
-            
+
             }else{
 
                 //duplicate school found
@@ -336,7 +336,7 @@ class CreateSchoolScreen extends Screen
             return redirect()->route('platform.school.list');
 
         }catch(Exception $e){
-            
+
             Alert::error('There was an error mass importing the schools. Error Code: ' . $e);
         }
     }
@@ -362,7 +362,7 @@ class CreateSchoolScreen extends Screen
                 }
 
             } else{
-                
+
                 Toast::error('An error has occured.'); return;
             }
 
@@ -374,7 +374,7 @@ class CreateSchoolScreen extends Screen
 
     //this function will convert the csv file to an array
     private function csvToArray($filename = '', $delimiter = ','){
-        
+
         if (!file_exists($filename) || !is_readable($filename)){
             Alert::error('There has been an error finding this file.');
             return;
@@ -402,7 +402,7 @@ class CreateSchoolScreen extends Screen
     private function getSchoolFields($request){
 
         $schoolTableFields = $request->except(['firstname', 'lastname', 'teacher_email', 'teacher_cell']);
-        
+
         return $schoolTableFields;
     }
 
@@ -417,7 +417,7 @@ class CreateSchoolScreen extends Screen
             'role' => 5,
             'country' => $request->input('country'),
         ];
-        
+
         return $userTableFields;
     }
 
