@@ -36,7 +36,7 @@ class EventBidLayout extends Table
     {
         return [
 
-            TD::make('edit_button', 'EVENT BIDS')
+            TD::make()
                 ->align(TD::ALIGN_LEFT)
                 ->render(function($eventBid){
                     return 

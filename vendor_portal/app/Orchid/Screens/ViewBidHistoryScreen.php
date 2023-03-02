@@ -3,8 +3,9 @@
 namespace App\Orchid\Screens;
 
 use App\Models\EventBids;
-use App\Models\StudentBids;
 use Orchid\Screen\Screen;
+use App\Models\StudentBids;
+use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\EventBidLayout;
 use App\Orchid\Layouts\StudentBidLayout;
@@ -52,8 +53,11 @@ class ViewBidHistoryScreen extends Screen
     public function layout(): iterable
     {
         return [
-            EventBidLayout::class,
-            StudentBidLayout::class
+
+            Layout::tabs([
+                'Event Bids' => EventBidLayout::class,
+                'Student Bids' => StudentBidLayout::class,
+            ]),
         ];
     }
 
