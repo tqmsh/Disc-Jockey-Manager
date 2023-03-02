@@ -2,9 +2,15 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Region;
 use App\Models\EventBids;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use App\Models\StudentBids;
+use Illuminate\Support\Arr;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\EventBidLayout;
@@ -12,6 +18,8 @@ use App\Orchid\Layouts\StudentBidLayout;
 
 class ViewBidHistoryScreen extends Screen
 {
+    public $paidRegionIds;
+
     /**
      * Query data.
      *
@@ -19,8 +27,14 @@ class ViewBidHistoryScreen extends Screen
      */
     public function query(): iterable
     {
+        //convert all the users paid regions to a array
+        $array = Auth::user()->paidRegions->toArray();
+
+        //get all the region_ids of the array
+        $this->paidRegionIds =  Arr::pluck($array, ['region_id']);
+         
         return [
-            'eventBids' => EventBids::where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
+            'eventBids' => EventBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
             'studentBids' => StudentBids::where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
         ];
     }
@@ -54,6 +68,22 @@ class ViewBidHistoryScreen extends Screen
     {
         return [
 
+            Layout::rows([
+
+                Group::make([
+                    
+                    Select::make('region_id')
+                        ->empty('Filter by region')
+                        ->fromModel(Region::query()->whereIn('id', $this->paidRegionIds), 'name'),
+
+                    Button::make('Filter')
+                        ->icon('filter')
+                        ->method('filter')
+                        ->type(Color::DEFAULT()),
+                ]),
+                
+            ]),
+
             Layout::tabs([
                 'Event Bids' => EventBidLayout::class,
                 'Student Bids' => StudentBidLayout::class,
@@ -67,5 +97,9 @@ class ViewBidHistoryScreen extends Screen
         } else {
             return redirect()->route('platform.studentBid.edit', $bidId);
         }
+    }
+
+    public function filter(){
+        return redirect()->route('platform.bidhistory.list', request(['region_id']));
     }
 }
