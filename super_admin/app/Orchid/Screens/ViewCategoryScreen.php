@@ -80,10 +80,11 @@ class ViewCategoryScreen extends Screen
                 ->type(Color::DEFAULT())
                 ->method('createCategory'),
             ]),
-            
-            ViewCategoryLayout::class,
 
-            ViewPendingCategoryLayout::class,
+            Layout::tabs([
+                'Active Categories' => ViewCategoryLayout::class,
+                'Pending Categories' => ViewPendingCategoryLayout::class,
+            ]),
         ];
     }
 
