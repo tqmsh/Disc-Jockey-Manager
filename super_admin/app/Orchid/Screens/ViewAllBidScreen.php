@@ -7,30 +7,32 @@ use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
-use Illuminate\Http\Request;
+use App\Models\StudentBids;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventBidsLayout;
 use App\Orchid\Layouts\ViewPendingEventBidsLayout;
+use App\Orchid\Layouts\ViewPendingStudentBidsLayout;
+use App\Orchid\Layouts\ViewStudentBidsLayout;
+use Orchid\Support\Facades\Toast;
 
-class ViewEventBidScreen extends Screen
+class ViewAllBidScreen extends Screen
 {
-    public $event;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Events $event): iterable
+    public function query(): iterable
     {
         return [
-            'event' => $event,
-            'pendingBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->where('status', 0)->latest()->paginate(10),
-            'previousBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
+            'pendingBids' => EventBids::filter(request(['category_id']))->where('status', 0)->latest()->paginate(10),
+            'previousBids' => EventBids::filter(request(['category_id']))->whereNot('status', 0)->orderBy('status')->latest()->paginate(10),
+            'pendingStudentBids' => StudentBids::filter(request(['category_id']))->where('status', 0)->latest()->paginate(10),
+            'previousStudentBids' => StudentBids::filter(request(['category_id']))->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
         ];
     }
 
@@ -41,7 +43,7 @@ class ViewEventBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Bids on: ' . $this->event->event_name;
+        return 'All Bids'; 
     }
 
     /**
@@ -54,7 +56,7 @@ class ViewEventBidScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.bid.list')
         ];
     }
 
@@ -86,8 +88,15 @@ class ViewEventBidScreen extends Screen
                 'Pending Event Bids' => [
                     ViewPendingEventBidsLayout::class
                 ],
+                
+                'Pending Student Bids' => [
+                    ViewPendingStudentBidsLayout::class
+                ],
                 'Previous Event Bids' => [
                     ViewEventBidsLayout::class
+                ],
+                'Previous Student Bids' => [
+                    ViewStudentBidsLayout::class
                 ],
             ]),
         ];
@@ -98,12 +107,14 @@ class ViewEventBidScreen extends Screen
         return redirect()->route('platform.eventBids.list', [$event->id, 'category_id' => request('category_id')]);
     }
 
-    public function updateBid(Events $event)
+    public function updateBid()
     {
-        $bid = EventBids::find(request('bid_id'));
+        $bid = StudentBids::find(request('bid_id'));
         $bid->status = request('choice');
         $bid->save();
+
         Toast::success('Bid updated successfully!');
-        return redirect()->route('platform.eventBids.list', $event);
+
+        return redirect()->route('platform.bid.list');
     }
 }

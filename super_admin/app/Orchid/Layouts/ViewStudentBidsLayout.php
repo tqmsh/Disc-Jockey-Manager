@@ -3,12 +3,13 @@
 namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
-use App\Models\EventBids;
+use App\Models\StudentBids;
 use App\Models\Categories;
 use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
-class ViewEventBidsLayout extends Table
+
+class ViewStudentBidsLayout extends Table
 {
     /**
      * Data source.
@@ -18,8 +19,7 @@ class ViewEventBidsLayout extends Table
      *
      * @var string
      */
-    protected $target = 'previousBids';
-
+    protected $target = 'previousStudentBids';
 
     /**
      * Get the table cells to be displayed.
@@ -33,7 +33,7 @@ class ViewEventBidsLayout extends Table
             TD::make()
                 ->align(TD::ALIGN_LEFT)
                 ->width('125px')
-                ->render(function(EventBids $bid){
+                ->render(function(StudentBids $bid){
                     return 
                         (($bid->status == 1) ? '<i class="text-success">●</i> Accepted' 
                         : '<i class="text-danger">●</i> Rejected');
@@ -84,7 +84,6 @@ class ViewEventBidsLayout extends Table
                 ->width('300')
                 ->render(function($bid){
                        return e($bid->contact_instructions);
-
                 }),
         ];    
     }

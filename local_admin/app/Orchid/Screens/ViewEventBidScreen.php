@@ -12,6 +12,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventBidsLayout;
 use App\Orchid\Layouts\ViewPendingEventBidsLayout;
@@ -102,6 +103,7 @@ class ViewEventBidScreen extends Screen
         $bid = EventBids::find(request('bid_id'));
         $bid->status = request('choice');
         $bid->save();
+        Toast::success('Bid updated successfully!');
         return redirect()->route('platform.eventBids.list', $event);
     }
 }
