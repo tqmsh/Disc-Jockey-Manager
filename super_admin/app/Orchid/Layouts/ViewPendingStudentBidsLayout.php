@@ -3,12 +3,15 @@
 namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
-use App\Models\EventBids;
+use App\Models\StudentBids;
+use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
-class ViewEventBidsLayout extends Table
+use Orchid\Screen\Actions\Button;
+
+class ViewPendingStudentBidsLayout extends Table
 {
     /**
      * Data source.
@@ -18,8 +21,7 @@ class ViewEventBidsLayout extends Table
      *
      * @var string
      */
-    protected $target = 'previousBids';
-
+    protected $target = 'pendingStudentBids';
 
     /**
      * Get the table cells to be displayed.
@@ -32,19 +34,24 @@ class ViewEventBidsLayout extends Table
 
             TD::make()
                 ->align(TD::ALIGN_LEFT)
-                ->width('125px')
-                ->render(function(EventBids $bid){
-                    return 
-                        (($bid->status == 1) ? '<i class="text-success">●</i> Accepted' 
-                        : '<i class="text-danger">●</i> Rejected');
-                    }),  
+                ->width('100px')
+                ->render(function(StudentBids $bid){
+                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                    }), 
+
+            TD::make()
+                ->align(TD::ALIGN_LEFT)
+                ->width('100px')
+                ->render(function(StudentBids $bid){
+                    return Button::make('Reject')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                    }), 
 
             TD::make('company_name', 'Company')
                 ->render(function($bid){
                     return Link::make($bid->company_name)
                         ->href($bid->url);
                 }),
-
+                
             TD::make('category_id', 'Category')
                 ->render(function($bid){
                     return e(Categories::find($bid->category_id)->name);
@@ -84,8 +91,8 @@ class ViewEventBidsLayout extends Table
                 ->width('300')
                 ->render(function($bid){
                        return e($bid->contact_instructions);
-
                 }),
-        ];    
+        ];     
     }
 }
+

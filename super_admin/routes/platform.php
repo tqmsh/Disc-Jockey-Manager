@@ -42,6 +42,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewAllBidScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,7 +131,7 @@ Route::screen('/regions', ViewRegionScreen::class)->name('platform.region.list')
 //show edit region screen
 Route::screen('/regions/{regions}/edit', EditRegionScreen::class)->name('platform.region.edit');
 
-Route::screen('/bids', ViewEventBidScreen::class)->name('platform.bid.list');
+Route::screen('/bids', ViewAllBidScreen::class)->name('platform.bid.list');
 
 //edit bid screen
 Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid.edit');
