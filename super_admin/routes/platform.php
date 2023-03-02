@@ -32,6 +32,7 @@ use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
