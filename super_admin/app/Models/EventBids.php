@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use Orchid\Screen\AsSource;
+use Orchid\Support\Facades\Alert;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EventBids extends Model
 {
@@ -28,18 +30,20 @@ class EventBids extends Model
         'updated_at',
     ];
 
-    //scope filter for region id
-    public function scopeFilter($query, array $filters)
-    {
-        if(isset($filters['region_id'])){
-            $query->where('region_id', $filters['region_id']);
-        }
+       public function scopeFilter($query, array $filters){
 
-        if(isset($filters['category_id'])){
-            $query->where('category_id', $filters['category_id']);
-        }
+        try{
 
-        $query->get();
+            if(isset($filters['category_id'])){
+                $query ->where('category_id', $filters['category_id']);
+            }
+
+            $query->get();
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error processing the filter. Error Message: ' . $e);
+        }
     }
 
     //relationship to user
