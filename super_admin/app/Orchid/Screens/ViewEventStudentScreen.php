@@ -345,7 +345,6 @@ class ViewEventStudentScreen extends Screen
         return redirect()->route('platform.eventStudents.list', [$event->id, 'ticketstatus' => request('ticketstatus')]);
     }
 
-
     //add the studen to the table from modal
     public function addStudentToTable(Request $request, Events $event)
     {

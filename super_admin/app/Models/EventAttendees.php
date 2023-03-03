@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 
-class Seating extends Model
+class EventAttendees extends Model
 {
     use HasFactory;
     use AsSource;
 
     protected $fillable = [
+        'user_id',
         'event_id',
-        'tablename',
+        'table_id',
+        'ticketstatus',
         'created_at',
-        'updated_at'
-
+        'updated_at',
     ];
 }

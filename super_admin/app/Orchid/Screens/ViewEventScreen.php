@@ -108,12 +108,8 @@ class ViewEventScreen extends Screen
         ];
     }
 
-    public function filter(Request $request){
-        return redirect('/admin/events?' 
-                    .'&school=' . $request->get('school')
-                    .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
-                    .'&state_province=' . $request->get('state_province'));
+    public function filter(){
+        return redirect()->route('platform.event.list', request(['school', 'country', 'school_board', 'state_province']));
     }
 
     public function deleteEvents(Request $request)
@@ -140,5 +136,13 @@ class ViewEventScreen extends Screen
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
         }
+    }
+
+    public function redirect($event_id, $type){
+        if($type == 'event'){
+            return redirect()->route('platform.eventBids.list', $event_id);
+        } else {
+            return redirect()->route('platform.eventStudents.list', $event_id);
+        }    
     }
 }
