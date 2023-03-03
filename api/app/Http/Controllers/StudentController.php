@@ -110,14 +110,17 @@ class StudentController extends Controller
     public function register(Request $request){
         $fields = $request->validate([
             'name' => 'required|string',
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed', 
-            'role' => 'required|numeric',
             'phonenumber' => 'required|string',
             'school_name' => 'required|string',
             'country' => 'required|string',
             'state_province' => 'required|string',
             'county' => 'required|string',
+            'grade' => 'required|string',
+            'allergies' => 'required|string',
         ]);
 
         $match = ['school_name' => $fields['school_name'], 'country' => $fields['country'], 'state_province' => $fields['state_province'], 'county' => $fields['county']];
@@ -133,19 +136,25 @@ class StudentController extends Controller
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
-            'role' => $fields['role'],
-            'password' => bcrypt($fields['password'])
+            'firstname' => $fields['firstname'],
+            'lastname' => $fields['lastname'],
+            'role' => '3',
+            'phonenumber' => $fields['phonenumber'],
+            'password' => bcrypt($fields['password']),
+            'country' => $fields['country'],
         ]);
 
         $student = Student::create([
-            'name' => $fields['name'],
+            'firstname' => $fields['firstname'],
+            'lastname' => $fields['lastname'],
+            'grade' => $fields['grade'],
             'user_id' => $user->id,
             'email' => $fields['email'],
             'password' => bcrypt($fields['password']),
-            'role' => $fields['role'],
             'school_id' => $fields['school_id'],
             'school' => $fields['school_name'],
-            'phonenumber' => $fields['phonenumber']
+            'phonenumber' => $fields['phonenumber'],
+            'allergies' => $fields['allergies']
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
