@@ -30,7 +30,6 @@ class LocaladminController extends Controller
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed', 
-            'role' => 'required|numeric',
             'school_id' => 'required|numeric',
             'school' => 'required|string', 
             'phonenumber' => 'required|string',
@@ -39,11 +38,11 @@ class LocaladminController extends Controller
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
-            'role' => $fields['role'],
+            'role' => '2',
             'password' => bcrypt($fields['password'])
         ]);
 
-        $student = Localadmin::create([
+        $localadmin = Localadmin::create([
             'name' => $fields['name'],
             'user_id' => $user->id,
             'email' => $fields['email'],
