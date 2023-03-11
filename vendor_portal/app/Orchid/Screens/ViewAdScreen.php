@@ -2,9 +2,12 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Campaign;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 
 class ViewAdScreen extends Screen
 {
@@ -15,7 +18,14 @@ class ViewAdScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+
+            'metrics' => [
+                'activeAds'    => ['value' => number_format(count(Campaign::where('user_id', Auth::user()->id)->where('active', 1)->get()))],
+                'inactiveAds' => ['value' =>  number_format(count(Campaign::where('user_id', Auth::user()->id)->where('active', 2)->get()))],
+                'total'    =>  number_format(count(Campaign::where('user_id', Auth::user()->id)->get())),
+            ],
+        ];
     }
 
     /**
@@ -58,6 +68,12 @@ class ViewAdScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::metrics([
+                'Active Campaigns'    => 'metrics.activeAds',
+                'Inactive Campaigns' => 'metrics.inactiveAds',
+                'Total Campaigns' => 'metrics.total',
+            ]),
+        ];
     }
 }

@@ -36,6 +36,13 @@ class ViewBidHistoryScreen extends Screen
         return [
             'eventBids' => EventBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
             'studentBids' => StudentBids::where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
+
+            'metrics' => [
+                'bidsAccepted'    => ['value' => number_format(count(EventBids::where('user_id', Auth::user()->id)->where('status', 1)->get()))],
+                'bidsRejected' => ['value' =>  number_format(count(EventBids::where('user_id', Auth::user()->id)->where('status', 2)->get()))],
+                'bidsPending' => ['value' => number_format(count(EventBids::where('user_id', Auth::user()->id)->where('status', 0)->get()))],
+                'total'    =>  number_format(count(EventBids::where('user_id', Auth::user()->id)->get())),
+            ],
         ];
     }
 
@@ -67,6 +74,13 @@ class ViewBidHistoryScreen extends Screen
     public function layout(): iterable
     {
         return [
+
+            Layout::metrics([
+                'Total Bids' => 'metrics.total',
+                'Pending Bids' => 'metrics.bidsPending',
+                'Total Bids Accepted'    => 'metrics.bidsAccepted',
+                'Total Bids Rejected' => 'metrics.bidsRejected',
+            ]),
 
             Layout::rows([
 
