@@ -13,6 +13,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewEventTableScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,8 @@ Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
 
 //show event registration screen
 Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platform.event.register');
+
+Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('platform.event.tables');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

@@ -4,20 +4,15 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Events;
-use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
-use App\Models\Localadmin;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
+use App\Orchid\Layouts\ViewRegisteredEventLayout;
 
 class ViewEventScreen extends Screen
 {
@@ -28,8 +23,13 @@ class ViewEventScreen extends Screen
      */
     public function query(): iterable
     {
+        $registered_event_ids = EventAttendees::where('user_id', Auth::user()->id)->get('event_id')->toArray();
+
+        $registered_event_ids = Arr::pluck($registered_event_ids, ['event_id']);
+
         return [
-            'events' => Events::where('school_id', Student::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(10)
+            'events' => Events::where('school_id', Student::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->paginate(10),
+            'registered_events' => Events::whereIn('id', $registered_event_ids)->latest('events.created_at')->paginate(10)
         ];
     }
 
@@ -65,72 +65,26 @@ class ViewEventScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::rows([
 
-                Group::make([
-                    
-                    Select::make('school')
-                        ->title('School')
-                        ->empty('No selection')
-                        ->fromModel(Events::class, 'school', 'school'),
-
-                    Select::make('country')
-                        ->title('Country')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'country', 'country'),
-
-                    Select::make('school_board')
-                        ->title('School Board')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'school_board', 'school_board'),
-
-                    Select::make('state_province')
-                        ->title('State/Province')
-                        ->empty('No selection')
-                        ->fromModel(School::class, 'state_province', 'state_province'),
-                ]),
-                
-                Button::make('Filter')
-                    ->icon('filter')
-                    ->method('filter')
-                    ->type(Color::DEFAULT()),
+          Layout::tabs([
+                'All Events' => [
+                    ViewEventLayout::class
+                ],
+                'Your Registered Events' => [
+                    ViewRegisteredEventLayout::class
+                ],
             ]),
 
-            ViewEventLayout::class
         ];
     }
 
-    public function filter(Request $request){
-        return redirect('/admin/events?' 
-                    .'&school=' . $request->get('school')
-                    .'&country=' . $request->get('country')
-                    .'&school_board=' . $request->get('school_board')
-                    .'&state_province=' . $request->get('state_province'));
-    }
 
-    public function deleteEvents(Request $request)
-    {   
-        //get all localadmins from post request
-        $events = $request->get('events');
-        
-        try{
+    public function redirect($event_id, $type){
 
-            //if the array is not empty
-            if(!empty($events)){
-
-                //loop through the events and delete them from db
-                foreach($events as $event){
-                    Events::where('id', $event)->delete();
-                }
-
-                Toast::success('Selected events deleted succesfully');
-
-            }else{
-                Toast::warning('Please select events in order to delete them');
-            }
-
-        }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        if($type == 'table'){
+            return redirect()->route('platform.event.tables', $event_id);
         }
+
+        return redirect()->route('platform.event.register', $event_id);   
     }
 }

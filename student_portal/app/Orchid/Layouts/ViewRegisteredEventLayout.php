@@ -8,7 +8,7 @@ use Orchid\Support\Color;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
 
-class ViewEventLayout extends Table
+class ViewRegisteredEventLayout extends Table
 {
     /**
      * Data source.
@@ -18,7 +18,7 @@ class ViewEventLayout extends Table
      *
      * @var string
      */
-    protected $target = 'events';
+    protected $target = 'registered_events';
 
 
     /**
@@ -33,7 +33,14 @@ class ViewEventLayout extends Table
                 ->width('100px')
                 ->align(TD::ALIGN_RIGHT)
                 ->render(function($event){
-                    return Button::make('Register')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('plus');
+                    return Button::make('Tables')->type(Color::DARK())->method('redirect', ['event_id' => $event->id, 'type' => 'table'])->icon('table');
+                }), 
+
+            TD::make()
+                ->width('100px')
+                ->align(TD::ALIGN_RIGHT)
+                ->render(function($event){
+                    return Button::make('Unregister')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('close');
                 }), 
 
             TD::make('event_name', 'Event Name')
