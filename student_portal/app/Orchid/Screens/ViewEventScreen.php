@@ -4,12 +4,10 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Events;
-use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
-use App\Models\Localadmin;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
@@ -18,6 +16,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
+use App\Orchid\Layouts\ViewRegisteredEventLayout;
 
 class ViewEventScreen extends Screen
 {
@@ -28,8 +27,13 @@ class ViewEventScreen extends Screen
      */
     public function query(): iterable
     {
+        $registered_event_ids = EventAttendees::where('user_id', Auth::user()->id)->get('event_id')->toArray();
+        
+        $registered_event_ids = Arr::pluck($registered_event_ids, ['event_id']);
+
         return [
-            'events' => Events::where('school_id', Student::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->paginate(10)
+            'events' => Events::where('school_id', Student::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->paginate(10),
+            'registered_events' => Events::whereIn('id', $registered_event_ids)->latest('events.created_at')->paginate(10)
         ];
     }
 
@@ -71,6 +75,7 @@ class ViewEventScreen extends Screen
                     ViewEventLayout::class
                 ],
                 'Your Registered Events' => [
+                    ViewRegisteredEventLayout::class
                 ],
             ]),
 
