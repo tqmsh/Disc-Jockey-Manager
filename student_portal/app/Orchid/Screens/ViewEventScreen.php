@@ -9,10 +9,6 @@ use Orchid\Screen\Screen;
 use Illuminate\Support\Arr;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
@@ -28,7 +24,7 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         $registered_event_ids = EventAttendees::where('user_id', Auth::user()->id)->get('event_id')->toArray();
-        
+
         $registered_event_ids = Arr::pluck($registered_event_ids, ['event_id']);
 
         return [
@@ -82,7 +78,13 @@ class ViewEventScreen extends Screen
         ];
     }
 
-    public function redirect($event_id){
-        return redirect()->route('platform.event.register', $event_id);
+
+    public function redirect($event_id, $type){
+
+        if($type == 'table'){
+            return redirect()->route('platform.event.tables', $event_id);
+        }
+
+        return redirect()->route('platform.event.register', $event_id);   
     }
 }
