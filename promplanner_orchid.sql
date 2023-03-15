@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 13, 2023 at 10:44 PM
+-- Generation Time: Mar 15, 2023 at 10:06 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -174,6 +174,7 @@ CREATE TABLE `event_attendees` (
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `table_id` bigint(20) UNSIGNED DEFAULT NULL,
   `ticketstatus` varchar(255) NOT NULL DEFAULT 'Unpaid',
+  `approved` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -182,15 +183,16 @@ CREATE TABLE `event_attendees` (
 -- Dumping data for table `event_attendees`
 --
 
-INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `table_id`, `ticketstatus`, `created_at`, `updated_at`) VALUES
-(1, 146, 14, 1, 'Unpaid', '2023-02-12 19:55:58', NULL),
-(2, 152, 14, 2, 'Paid', '2023-02-12 19:56:39', '2023-02-23 00:39:01'),
-(7, 169, 14, 1, 'Paid', '2023-02-13 01:57:06', '2023-02-23 01:29:29'),
-(8, 170, 14, NULL, 'Unpaid', '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
-(9, 155, 14, 2, 'Paid', '2023-02-14 19:52:46', NULL),
-(11, 146, 15, NULL, 'Unpaid', '2023-03-03 00:51:41', '2023-03-03 01:12:19'),
-(12, 154, 15, NULL, 'Unpaid', '2023-03-03 00:57:10', '2023-03-03 00:57:10'),
-(13, 198, 15, 6, 'Unpaid', '2023-03-03 01:12:05', '2023-03-03 01:12:13');
+INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `table_id`, `ticketstatus`, `approved`, `created_at`, `updated_at`) VALUES
+(1, 146, 14, 1, 'Unpaid', 1, '2023-02-12 19:55:58', NULL),
+(2, 152, 14, 2, 'Paid', 1, '2023-02-12 19:56:39', '2023-02-23 00:39:01'),
+(7, 169, 14, 1, 'Paid', 1, '2023-02-13 01:57:06', '2023-02-23 01:29:29'),
+(8, 170, 14, NULL, 'Unpaid', 1, '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
+(9, 155, 14, 2, 'Paid', 1, '2023-02-14 19:52:46', NULL),
+(11, 146, 15, NULL, 'Unpaid', 1, '2023-03-03 00:51:41', '2023-03-03 01:12:19'),
+(12, 154, 15, NULL, 'Unpaid', 1, '2023-03-03 00:57:10', '2023-03-03 00:57:10'),
+(13, 198, 15, 6, 'Unpaid', 1, '2023-03-03 01:12:05', '2023-03-03 01:12:13'),
+(14, 155, 14, 1, 'Unpaid', 0, '2023-03-16 00:57:13', '2023-03-16 00:57:13');
 
 -- --------------------------------------------------------
 
@@ -621,6 +623,7 @@ CREATE TABLE `seatings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `tablename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `capacity` smallint(6) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -629,12 +632,12 @@ CREATE TABLE `seatings` (
 -- Dumping data for table `seatings`
 --
 
-INSERT INTO `seatings` (`id`, `event_id`, `tablename`, `created_at`, `updated_at`) VALUES
-(1, 14, 'The DJ\'s Table', '2023-02-22 18:22:32', NULL),
-(2, 14, 'Cool Kidz Table', '2023-02-22 19:38:37', NULL),
-(3, 14, 'Testing adding table from local admin', '2023-02-23 00:58:53', '2023-02-23 00:58:53'),
-(4, 14, 'This is a edited table', '2023-02-23 01:09:46', '2023-02-23 01:28:07'),
-(6, 15, 'yoyo Table', '2023-03-03 00:52:42', '2023-03-03 00:52:42');
+INSERT INTO `seatings` (`id`, `event_id`, `tablename`, `capacity`, `created_at`, `updated_at`) VALUES
+(1, 14, 'The DJ\'s Table', 15, '2023-02-22 18:22:32', NULL),
+(2, 14, 'Cool Kidz Table', 15, '2023-02-22 19:38:37', NULL),
+(3, 14, 'Testing adding table from local admin', 15, '2023-02-23 00:58:53', '2023-02-23 00:58:53'),
+(4, 14, 'This is a edited table', 15, '2023-02-23 01:09:46', '2023-02-23 01:28:07'),
+(6, 15, 'yoyo Table', 15, '2023-03-03 00:52:42', '2023-03-03 00:52:42');
 
 -- --------------------------------------------------------
 
@@ -1155,7 +1158,7 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `event_attendees`
 --
 ALTER TABLE `event_attendees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `event_bids`
