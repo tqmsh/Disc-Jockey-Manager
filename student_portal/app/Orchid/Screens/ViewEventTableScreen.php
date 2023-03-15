@@ -33,7 +33,7 @@ class ViewEventTableScreen extends Screen
         return [
             'event' => $event,
             'tables' => Seating::where('event_id', $event->id)->paginate(10),
-            'student_table' => Seating::find(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->pluck('table_id')->first()) ?? null,
+            'student_table' => Seating::find(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('approved', 1)->pluck('table_id')->first()) ?? null,
         ];
     }
 
