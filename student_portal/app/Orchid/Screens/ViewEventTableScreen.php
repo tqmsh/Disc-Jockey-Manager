@@ -115,7 +115,7 @@ class ViewEventTableScreen extends Screen
     //used for getting the names of the students at a table
     private function getNames($tableId)
     {
-        $students = User::whereIn('id', EventAttendees::where('table_id', $tableId)->pluck('user_id'))->get();
+        $students = User::whereIn('id', EventAttendees::where('table_id', $tableId)->where('approved', 1)->pluck('user_id'))->get();
         $names = [];
 
         foreach ($students as $student) {
