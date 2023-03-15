@@ -131,31 +131,39 @@ class ViewEventTableScreen extends Screen
         try{
             
             $table = Seating::find(request('requested_table_id'));
+            
+            //check if the student has requested to be seated at another table
+            if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('approved', 0)->exists()){
+                Toast::info('You have already requested to be seated at another table. Please wait for a admin to approve your request.');
+                return redirect()->route('platform.event.tables', $event);
+            }
 
             //check if the table is full
             if($table->capacity == 0){
                 Toast::error('This table is full.');
-                return redirect()->route('platform.event.tables');
+                return redirect()->route('platform.event.tables', $event);
             }
 
             //check if the student has already requested to be seated at this table
             if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('table_id', $table->id)->where('approved', 0)->exists()){
                 Toast::info('You have already requested to be seated at this table. Please wait for a admin to approve your request.');
-                return redirect()->route('platform.event.tables');
+                return redirect()->route('platform.event.tables', $event);
             }
+
 
             //insert the request into the database approved defaults to 0
             EventAttendees::create([
                 'user_id' => Auth::user()->id,
                 'event_id' => $event->id,
                 'table_id' => $table->id,
+                'ticketstatus' => EventAttendees::where('event_id', $event->id)->where('user_id', Auth::user()->id)->whereNot('table_id', $table->id)->get('ticketstatus')->value('ticketstatus'),
             ]);
 
             Toast::success('Your request to be seated at this table has been sent to the admin. Please wait till they approve or reject your request.');
 
         }catch(Exception $e){
             Alert::error('There was a problem requesting to be seated at this table. ' . $e->getMessage());
-            return redirect()->route('platform.event.list');
+            return redirect()->route('platform.event.tables', $event);
         }
 
     }
