@@ -238,9 +238,9 @@ class ViewEventStudentScreen extends Screen
                                 return e($table->tablename);
                             })->width('300px'),
 
-                        TD::make('Created At')
+                        TD::make('Capacity')
                             ->render(function (Seating $table) {
-                                return e($table->created_at);
+                                return e($table->capacity);
                             }),
 
                         TD::make('Updated At')
