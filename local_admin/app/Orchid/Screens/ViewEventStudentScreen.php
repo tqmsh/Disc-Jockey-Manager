@@ -19,6 +19,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Log;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
@@ -177,7 +178,8 @@ class ViewEventStudentScreen extends Screen
                         //table name
                         TD::make('Assigned Table')
                             ->render(function (Student $student) {
-                                return e(Seating::where('id', EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->get(['tablename'])->value('tablename'));
+                                $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->value('tablename');
+                                return e($table);
                             }),
 
                         TD::make('Student Name')
