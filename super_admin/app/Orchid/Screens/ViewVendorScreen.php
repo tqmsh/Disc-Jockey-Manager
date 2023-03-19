@@ -113,6 +113,10 @@ class ViewVendorScreen extends Screen
         return redirect()->route('platform.vendor.list', request(['country', 'category_id', 'state_province']));
     }
 
+    public function redirect($vendor){
+        return redirect()-> route('platform.vendor.edit', $vendor);
+    }
+
     public function deleteVendors(Request $request){  
 
         //get all vendors from post request

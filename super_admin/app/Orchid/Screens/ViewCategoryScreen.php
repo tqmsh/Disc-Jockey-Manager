@@ -143,6 +143,11 @@ class ViewCategoryScreen extends Screen
             }
     }
 
+    
+    public function redirect($category){
+        return redirect()-> route('platform.category.edit', $category);
+    }
+
     public function deleteCats(Request $request)
     {   
         //get all categories from post request

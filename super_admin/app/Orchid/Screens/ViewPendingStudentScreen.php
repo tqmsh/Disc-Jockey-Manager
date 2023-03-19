@@ -112,6 +112,7 @@ class ViewPendingStudentScreen extends Screen
         return redirect()->route('platform.pendingstudent.list', request(['ticketstatus', 'school', 'country', 'school_board', 'event_id', 'state_province']));
     }
 
+
     public function acceptStudents(Request $request){
 
         //get all students from post request

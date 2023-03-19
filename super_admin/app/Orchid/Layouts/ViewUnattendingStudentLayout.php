@@ -7,6 +7,8 @@ use App\Models\Student;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewUnattendingStudentLayout extends Table
 {

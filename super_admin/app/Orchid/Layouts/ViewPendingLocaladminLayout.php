@@ -8,6 +8,8 @@ use App\Models\Localadmin;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewPendingLocaladminLayout extends Table
 {
@@ -85,6 +87,7 @@ class ViewPendingLocaladminLayout extends Table
                     return Link::make(School::find($Localadmin->school_id)->county)
                         ->route('platform.localadmin.edit', $Localadmin);
                 }),
+
         ];
     }
 }
