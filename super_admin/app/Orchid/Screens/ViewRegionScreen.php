@@ -191,6 +191,10 @@ class ViewRegionScreen extends Screen
         }
     }
 
+    public function redirect($region){
+        return redirect()-> route('platform.region.edit', $region);
+    }
+
     public function deleteRegions(Request $request)
     {   
         //get all regions from post request

@@ -7,6 +7,8 @@ use App\Models\Categories;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewPendingCategoryLayout extends Table
 {
@@ -52,6 +54,7 @@ class ViewPendingCategoryLayout extends Table
                     return Link::make($category->updated_at)
                         ->route('platform.category.edit', $category);
                 }),
+
         ];
     }
 }

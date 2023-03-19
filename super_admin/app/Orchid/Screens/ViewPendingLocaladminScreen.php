@@ -16,6 +16,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+
 use App\Orchid\Layouts\ViewPendingLocaladminLayout;
 
 class ViewPendingLocaladminScreen extends Screen
@@ -145,6 +146,9 @@ class ViewPendingLocaladminScreen extends Screen
             Alert::error('There was a error trying to accept the selected local admins. Error Message: ' . $e->getMessage());
         }
     }
+
+
+
 
     public function deleteLocaladmins(Request $request){  
 

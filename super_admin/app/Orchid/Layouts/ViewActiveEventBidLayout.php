@@ -121,6 +121,9 @@ class ViewActiveEventBidLayout extends Table
                        return e($bid->contact_instructions);
 
                 }),
+
+    
+                
         ];
     }
 }

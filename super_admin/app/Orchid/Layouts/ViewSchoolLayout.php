@@ -8,6 +8,8 @@ use App\Models\School;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewSchoolLayout extends Table
 {
@@ -77,6 +79,11 @@ class ViewSchoolLayout extends Table
                 ->render(function (School $school) {
                     return Link::make($school->total_students)
                         ->route('platform.school.edit', $school);
+                }),
+
+            TD::make()
+                ->render(function (School $school) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['school'=> $school-> id]) ->icon('pencil');
                 }),
         ];
     }

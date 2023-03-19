@@ -98,6 +98,10 @@ class ViewEventBidScreen extends Screen
         return redirect()->route('platform.eventBids.list', [$event->id, 'category_id' => request('category_id')]);
     }
 
+    public function redirect($bid){
+        return redirect()-> route('platform.eventBids.edit', $bid);
+    }
+
     public function updateBid(Events $event)
     {
         $bid = EventBids::find(request('bid_id'));

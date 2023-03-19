@@ -64,6 +64,9 @@ class ViewEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('plus');
                 }), 
+            
+
+            
         ];    
     }
 }
