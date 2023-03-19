@@ -47,6 +47,7 @@ class ViewEventStudentScreen extends Screen
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
             'tables' => Seating::where('event_id', $event->id)->paginate(10),
+            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('approved', 0)->paginate(20),
         ];
     }
 
@@ -238,9 +239,9 @@ class ViewEventStudentScreen extends Screen
                                 return e($table->tablename);
                             })->width('300px'),
 
-                        TD::make('Created At')
+                        TD::make('Capacity')
                             ->render(function (Seating $table) {
-                                return e($table->created_at);
+                                return e($table->capacity);
                             }),
 
                         TD::make('Updated At')
@@ -263,7 +264,6 @@ class ViewEventStudentScreen extends Screen
                                     ->type(Color::DANGER())
                                     ->method('deleteTable', ['id' => $table->id])
                                     ->confirm('Are you sure you want to delete this table?');
-                                    
                             }),
                         ]),
 
@@ -283,6 +283,28 @@ class ViewEventStudentScreen extends Screen
                     ])
 
                 ],
+
+                'Table Change Requests' => [
+                    Layout::table('table_proposals', [
+
+                        TD::make('Requested Table')
+                            ->render(function (EventAttendees $proposal) {
+                                return e(Seating::find($proposal->table_id)->tablename);
+                            })->width('300px'),
+
+                        TD::make('Requested Table Capacity')
+                            ->render(function (EventAttendees $proposal) {
+                                return e(Seating::find($proposal->table_id)->capacity);;
+                            })->width('300px'),
+
+                        TD::make('Requester')
+                            ->render(function (EventAttendees $proposal) {
+                                $student = Student::where('user_id',$proposal->user_id)->get(['firstname','lastname']);
+                                return e($student[0]->firstname . ' ' . $student[0]->lastname);
+                            })->width('300px'),
+
+                    ])
+                ]  
             ]),
         ];
 
