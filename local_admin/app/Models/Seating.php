@@ -14,6 +14,8 @@ class Seating extends Model
     protected $fillable = [
         'event_id',
         'tablename',
+        'capacity',
+        'approved',
         'created_at',
         'updated_at'
 
