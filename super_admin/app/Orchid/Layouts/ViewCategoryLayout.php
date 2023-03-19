@@ -7,6 +7,8 @@ use App\Models\Categories;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewCategoryLayout extends Table
 {
@@ -51,6 +53,11 @@ class ViewCategoryLayout extends Table
                 ->render(function (Categories $category) {
                     return Link::make($category->updated_at)
                         ->route('platform.category.edit', $category);
+                }),
+
+            TD::make()
+                ->render(function (Categories $category) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['category'=> $category->id]) ->icon('pencil');
                 }),
         ];
     }

@@ -7,6 +7,8 @@ use App\Models\Localadmin;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewLocaladminLayout extends Table
 {
@@ -38,27 +40,32 @@ class ViewLocaladminLayout extends Table
             TD::make('firstname', 'First Name')
                 ->render(function (Localadmin $Localadmin) {
                     return Link::make($Localadmin->firstname)
-                        ->route('platform.localadmin.edit', $Localadmin);
+                        ->route('platform.localadmin.edit', $Localadmin->id);
                 }),
             TD::make('lastname', 'Last Name')
                 ->render(function (Localadmin $Localadmin) {
                     return Link::make($Localadmin->lastname)
-                        ->route('platform.localadmin.edit', $Localadmin);
+                        ->route('platform.localadmin.edit', $Localadmin->id);
                 }),
             TD::make('phonenumber', 'Phone Number')
                 ->render(function (Localadmin $Localadmin) {
                     return Link::make($Localadmin->phonenumber)
-                        ->route('platform.localadmin.edit', $Localadmin);
+                        ->route('platform.localadmin.edit', $Localadmin->id);
                 }),
             TD::make('email', 'Email')
                 ->render(function (Localadmin $Localadmin) {
                     return Link::make($Localadmin->email)
-                        ->route('platform.localadmin.edit', $Localadmin);
+                        ->route('platform.localadmin.edit', $Localadmin->id);
                 }),
             TD::make('school', 'School')
                 ->render(function (Localadmin $Localadmin) {
                     return Link::make($Localadmin->school)
-                        ->route('platform.localadmin.edit', $Localadmin);
+                        ->route('platform.localadmin.edit', $Localadmin->id);
+                }),
+
+            TD::make()
+                ->render(function (Localadmin $Localadmin) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['Localadmin'=> $Localadmin->id]) ->icon('pencil');
                 }),
         ];
     }

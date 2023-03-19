@@ -8,7 +8,13 @@ use App\Models\Categories;
 use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
+use App\Models\Events;
+use Orchid\Support\Color;
+use Orchid\Screen\Actions\Button;
+
+
 class ViewEventBidsLayout extends Table
+
 {
     /**
      * Data source.
@@ -85,6 +91,11 @@ class ViewEventBidsLayout extends Table
                 ->render(function($bid){
                        return e($bid->contact_instructions);
 
+                }),
+
+            TD::make()
+                ->render(function ($bid) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['bid'=>$bid->id]) ->icon('pencil');
                 }),
         ];    
     }
