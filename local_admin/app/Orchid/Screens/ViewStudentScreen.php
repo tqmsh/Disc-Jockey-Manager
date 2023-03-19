@@ -122,6 +122,11 @@ class ViewStudentScreen extends Screen
         return redirect()->route('platform.student.list', request(['ticketstatus', 'school', 'country', 'school_board', 'event_id', 'state_province']));
     }
 
+        
+    public function redirect($student){
+        return redirect()-> route('platform.student.edit', $student);
+    }
+
     public function deleteStudents(Request $request)
     {   
         //get all students from post request
@@ -148,4 +153,3 @@ class ViewStudentScreen extends Screen
         }
     }
 }
-

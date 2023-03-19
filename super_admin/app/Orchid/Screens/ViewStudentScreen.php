@@ -17,6 +17,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewStudentLayout;
+use Orchid\Support\Facades\Toast;
 
 class ViewStudentScreen extends Screen
 {
@@ -129,6 +130,12 @@ class ViewStudentScreen extends Screen
 
         return redirect()->route('platform.student.list', request(['ticketstatus', 'school', 'country', 'school_board', 'event_id', 'state_province']));
     }
+
+
+    public function redirect($student){
+        return redirect()-> route('platform.student.edit', $student);
+    }
+
 
     public function deleteStudents(Request $request)
     {   

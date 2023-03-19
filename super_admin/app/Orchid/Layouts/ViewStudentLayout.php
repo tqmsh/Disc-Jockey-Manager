@@ -8,6 +8,8 @@ use App\Models\Student;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewStudentLayout extends Table
 {
@@ -75,6 +77,12 @@ class ViewStudentLayout extends Table
                 ->render(function (Student $student) {
                     return Link::make($student->allergies)
                         ->route('platform.student.edit', $student);
+                }),
+
+                
+            TD::make()
+                ->render(function (Student $student) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['student'=> $student-> id]) ->icon('pencil');
                 }),
         ];
     }

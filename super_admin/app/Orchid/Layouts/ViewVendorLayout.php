@@ -9,6 +9,8 @@ use App\Models\Categories;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewVendorLayout extends Table
 {
@@ -91,6 +93,11 @@ class ViewVendorLayout extends Table
                 ->render(function (Vendors $vendor) {
                     return Link::make($vendor->city)
                         ->route('platform.vendor.edit', $vendor);
+                }),
+
+            TD::make()
+                ->render(function (Vendors $vendor) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['vendor'=>$vendor->id]) ->icon('pencil');
                 }),
         ];
     }

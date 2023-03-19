@@ -8,6 +8,8 @@ use App\Models\Student;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewPendingStudentLayout extends Table
 {
@@ -96,6 +98,8 @@ class ViewPendingStudentLayout extends Table
                     return Link::make(School::find($student->school_id)->county)
                         ->route('platform.student.edit', $student);
                 }),
+
+
         ];
     }
 }

@@ -7,6 +7,8 @@ use App\Models\Region;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
 
 class ViewRegionLayout extends Table
 {
@@ -52,6 +54,12 @@ class ViewRegionLayout extends Table
                     return Link::make($region->updated_at)
                         ->route('platform.region.edit', $region);
                 }),
+            TD::make()
+                ->render(function (Region $region) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['region'=>$region->id]) ->icon('pencil');
+                }),
+
+                
         ];
     }
 }

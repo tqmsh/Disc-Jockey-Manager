@@ -138,11 +138,16 @@ class ViewEventScreen extends Screen
         }
     }
 
-    public function redirect($event_id, $type){
+
+    public function redirect($event, $type){
         if($type == 'event'){
-            return redirect()->route('platform.eventBids.list', $event_id);
-        } else {
-            return redirect()->route('platform.eventStudents.list', $event_id);
+            return redirect()->route('platform.eventBids.list', $event);
+        } 
+        else if($type == 'edit'){
+            return redirect() -> route('platform.event.edit', $event);
+        }
+        else {
+            return redirect()->route('platform.eventStudents.list', $event);
         }    
     }
 }

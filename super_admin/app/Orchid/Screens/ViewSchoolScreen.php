@@ -123,9 +123,13 @@ class ViewSchoolScreen extends Screen
 
         return redirect()->route('platform.school.list', request(['region_id', 'school', 'country', 'county', 'state_province']));
     }
+    
+    public function redirect($school){
+        return redirect()-> route('platform.school.edit', $school);
+    }
 
     public function deleteSchools(Request $request)
-    {   
+    {       
         //get all schools from post request
         $schools = $request->get('schools');
         
