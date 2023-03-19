@@ -16,6 +16,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+
 use App\Orchid\Layouts\ViewLocaladminLayout;
 
 class ViewLocaladminScreen extends Screen
@@ -115,6 +116,10 @@ class ViewLocaladminScreen extends Screen
     public function filter(){
         return redirect()->route('platform.localadmin.list', request(['school', 'country', 'school_board', 'state_province']));
 
+    }
+
+    public function redirect($Localadmin){
+        return redirect()-> route('platform.localadmin.edit', $Localadmin);
     }
 
     public function deleteLocaladmins(Request $request)
