@@ -32,9 +32,9 @@ class ViewStudentScreen extends Screen
     public function query(): iterable
     {
         return [
-            'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))->latest('students.created_at')
+            'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))->latest('students.created_at')->where('account_status', 1)
                         ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->pluck('school_id'))
-                        ->where('students.account_status', 1)->paginate(20)
+                        ->paginate(20)
         ];
     }
 
@@ -124,7 +124,7 @@ class ViewStudentScreen extends Screen
 
         
     public function redirect($student){
-        return redirect()-> route('platform.student.edit', $student);
+        return redirect()->route('platform.student.edit', $student);
     }
 
     public function deleteStudents(Request $request)

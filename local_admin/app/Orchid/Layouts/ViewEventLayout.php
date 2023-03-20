@@ -87,7 +87,7 @@ class ViewEventLayout extends Table
                 }),
             TD::make()
                 ->render(function (Events $event) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['event'=>$event->id, 'type'=>"edit"]) ->icon('pencil');
+                    return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', ['event_id'=>$event->id, 'type'=>"edit"])->icon('pencil');
                 }),
 
 

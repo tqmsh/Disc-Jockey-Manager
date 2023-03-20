@@ -40,12 +40,13 @@ class ViewEventStudentScreen extends Screen
         return [
             'event' => $event,
             'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
-            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNotNull('table_id')->get(['user_id']))
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->where('school_id', $event->school_id)->paginate(20),
+            'seatedStudents' =>  Student::whereIn('user_id', EventAttendees::where('event_id', $event->id)->where('approved', 1)->whereNotNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id', 'tablename']))->paginate(20),
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
             'tables' => Seating::where('event_id', $event->id)->paginate(10),
+            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('approved', 0)->paginate(20),
         ];
     }
 
@@ -177,7 +178,8 @@ class ViewEventStudentScreen extends Screen
                         //table name
                         TD::make('Assigned Table')
                             ->render(function (Student $student) {
-                                return e(Seating::where('id', EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->get(['tablename'])->value('tablename'));
+                                $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->value('tablename');
+                                return e($table);
                             }),
 
                         TD::make('Student Name')
@@ -236,9 +238,9 @@ class ViewEventStudentScreen extends Screen
                                 return e($table->tablename);
                             })->width('300px'),
 
-                        TD::make('Created At')
+                        TD::make('Capacity')
                             ->render(function (Seating $table) {
-                                return e($table->created_at);
+                                return e($table->capacity);
                             }),
 
                         TD::make('Updated At')
@@ -281,9 +283,63 @@ class ViewEventStudentScreen extends Screen
                     ])
 
                 ],
+                'Table Change Requests' => [
+                    Layout::table('table_proposals', [
+
+                        TD::make('Requested Table')
+                            ->render(function (EventAttendees $proposal) {
+                                return e(Seating::find($proposal->table_id)->tablename);
+                            })->width('300px'),
+
+                        TD::make('Requested Table Capacity')
+                            ->render(function (EventAttendees $proposal) {
+                                return e(Seating::find($proposal->table_id)->capacity);;
+                            }),
+
+                        TD::make('Requester')
+                            ->render(function (EventAttendees $proposal) {
+                                $student = Student::where('user_id',$proposal->user_id)->get(['firstname','lastname']);
+                                return e($student[0]->firstname . ' ' . $student[0]->lastname);
+                            })->width('300px'),
+                            
+                        TD::make('Accept')
+                            ->render(function (EventAttendees $proposal) {
+                                return Button::make('Accept')
+                                    ->icon('plus')
+                                    ->method('handleTableChange', ['user_id' => $proposal->user_id, 'requested_table_id' => $proposal->table_id, 'status' => 'accepted'])
+                                    ->type(Color::SUCCESS());
+                            }),
+
+                        TD::make('Decline')
+                            ->render(function (EventAttendees $proposal) {
+                                return Button::make('Decline')
+                                    ->icon('close')
+                                    ->method('handleTableChange', ['user_id' => $proposal->user_id, 'requested_table_id' => $proposal->table_id, 'status' => 'declined'])
+                                    ->type(Color::DANGER());
+                            }),
+
+
+                    ])
+                ] 
             ]),
         ];
 
+    }
+
+    public function handleTableChange(Request $request, Events $event)
+    {
+        $user_id = $request->get('user_id');
+        $requested_table_id = $request->get('requested_table_id');
+        $status = $request->get('status');
+
+        if($status == 'accepted'){
+            EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->whereNot('table_id', $requested_table_id)->delete();
+            EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update(['approved' => 1]);
+            Toast::success('Table change request accepted');
+        }else{
+            EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->delete();
+            Toast::success('Table change request declined');
+        }
     }
 
     public function deleteStudents(Request $request, Events $event)
