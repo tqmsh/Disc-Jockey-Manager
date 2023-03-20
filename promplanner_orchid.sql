@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 15, 2023 at 10:06 PM
+-- Generation Time: Mar 20, 2023 at 05:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -90,14 +90,16 @@ CREATE TABLE `attachments` (
 CREATE TABLE `campaigns` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `catagory_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `region_id` bigint(20) UNSIGNED DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `clicks` bigint(20) UNSIGNED NOT NULL,
   `impressions` bigint(20) UNSIGNED NOT NULL,
-  `active` int(11) NOT NULL DEFAULT 0
+  `active` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -188,11 +190,10 @@ INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `table_id`, `tickets
 (2, 152, 14, 2, 'Paid', 1, '2023-02-12 19:56:39', '2023-02-23 00:39:01'),
 (7, 169, 14, 1, 'Paid', 1, '2023-02-13 01:57:06', '2023-02-23 01:29:29'),
 (8, 170, 14, NULL, 'Unpaid', 1, '2023-02-13 01:57:06', '2023-02-13 01:57:06'),
-(9, 155, 14, 2, 'Paid', 1, '2023-02-14 19:52:46', NULL),
 (11, 146, 15, NULL, 'Unpaid', 1, '2023-03-03 00:51:41', '2023-03-03 01:12:19'),
 (12, 154, 15, NULL, 'Unpaid', 1, '2023-03-03 00:57:10', '2023-03-03 00:57:10'),
 (13, 198, 15, 6, 'Unpaid', 1, '2023-03-03 01:12:05', '2023-03-03 01:12:13'),
-(14, 155, 14, 1, 'Unpaid', 0, '2023-03-16 00:57:13', '2023-03-16 00:57:13');
+(21, 155, 14, 4, 'Paid', 1, '2023-03-16 01:32:18', '2023-03-20 03:38:48');
 
 -- --------------------------------------------------------
 
@@ -758,7 +759,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'sLlcuzKx5UkTWZHkdPOSzMR5E1OddGZVu0H3b5s7w74ets1wy9dyeYSMsOrO', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
+(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'oLTmlGOJ2PkpK1xD5iMR1hOKT2SE8ub2INJeTRWJCwStXS4bGSDg2FEKvE85', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
 (52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
 (67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
 (68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
@@ -777,10 +778,10 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
 (149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
 (150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'fZOnZNWFBkYYfg6ZnuD2yhe6TBaq2mVuKYgVabmmQ94RlWpAaq43oLSkZ5Nv', '2022-12-02 00:58:48', '2022-12-10 22:26:44'),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'UGtUmagSdHzFKUZHB27uGXoPCK14zCnHtrciWN4uljO6LEW0yM6UhYvLWww3', '2022-12-02 00:58:48', '2022-12-10 22:26:44'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'AEKjNwnaPMy5VcUwRlhmmCbdJ5guJd0Gl6pBWIVfOD6MsKH6bQ2f62WwXbnR', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
+(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'Q1PnB8X8gmzd93js5U6oAwumLuhcVxhjdJQwmM869KNOCif7LTjKu2qo7i4v', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
 (169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
@@ -792,7 +793,7 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'LslXaKTTPXukVYPidV7YY8aiNDC6VB3AAEgmUd2BG09LGxVPAzM9ggry0Hv3', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
+(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'CTym7ZRpCA0ap8fgUZMBsDJbGZ1ILdJ1oEFVNbwpdzfsu30SM61VIP9EagAo', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
 (198, 'bigman101', 'Zg man', 'Big man tings', 'bigman@tings.com', '(612) 354-8954', 3, 'Canada', NULL, 1, NULL, '$2y$10$B10Kj5SYsPn6EKwkyQRbPO7UmY/YqPWkzzzyiU0dZ3DWx.xLRnJpy', NULL, '2023-02-14 23:43:02', '2023-02-15 01:25:38'),
 (199, NULL, 'Imran', 'Khan', 'imranbadrun@hotmail.com', '(613) 404-6926', NULL, 'Canada', NULL, 0, NULL, NULL, NULL, '2023-02-16 23:41:34', '2023-02-16 23:41:34'),
 (200, NULL, 'Imran', 'Khan', 'imranbaterrtedrun@hotmail.com', '(613) 404-6926', NULL, 'Canada', NULL, 1, NULL, NULL, NULL, '2023-02-16 23:44:11', '2023-02-16 23:50:12'),
@@ -914,7 +915,7 @@ ALTER TABLE `attachments`
 --
 ALTER TABLE `campaigns`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `category_index` (`catagory_id`),
+  ADD KEY `category_index` (`category_id`),
   ADD KEY `region_index` (`region_id`);
 
 --
@@ -1158,7 +1159,7 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `event_attendees`
 --
 ALTER TABLE `event_attendees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `event_bids`
@@ -1288,7 +1289,7 @@ ALTER TABLE `attachmentable`
 -- Constraints for table `campaigns`
 --
 ALTER TABLE `campaigns`
-  ADD CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`catagory_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `campaigns_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE SET NULL;
 
 --
