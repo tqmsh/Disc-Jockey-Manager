@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2023 at 07:15 PM
+-- Generation Time: Mar 21, 2023 at 07:42 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -713,6 +713,20 @@ CREATE TABLE `songs` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `songs`
+--
+
+INSERT INTO `songs` (`id`, `title`, `artist`, `created_at`, `updated_at`) VALUES
+(1, 'Baby Shark', 'Pinkfong', '2023-03-21 18:35:57', NULL),
+(2, 'Stronger', 'Kanye West', '2023-03-21 18:36:24', NULL),
+(3, 'Baby Love', 'Baby Love', '2023-03-21 18:36:24', NULL),
+(4, 'Truth Hurts', 'Lizzo', '2023-03-21 18:41:23', NULL),
+(5, 'Without You', 'Harry Nilsson', '2023-03-21 18:41:32', NULL),
+(6, 'Harry Nilsson', 'Harry Nilsson', '2023-03-21 18:41:38', NULL),
+(7, 'So What', 'Miles Davis', '2023-03-21 18:41:38', NULL),
+(8, 'Old Town Road', 'Lil Nas X', '2023-03-21 18:42:38', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1370,7 +1384,7 @@ ALTER TABLE `sessions`
 -- AUTO_INCREMENT for table `songs`
 --
 ALTER TABLE `songs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `song_requests`
