@@ -3,11 +3,19 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Campaign;
+use App\Models\VendorPackage;
+use App\Orchid\Layouts\ViewAdLayoutActive;
+use App\Orchid\Layouts\ViewAdLayoutInactive;
+use App\Orchid\Layouts\ViewAdLayoutPending;
+use Exception;
+use Illuminate\Http\Request;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Support\Facades\Toast;
 
 class ViewAdScreen extends Screen
 {
@@ -19,6 +27,9 @@ class ViewAdScreen extends Screen
     public function query(): iterable
     {
         return [
+            "campaignsActive"=>Campaign::where('user_id', Auth::user()->id)->where("active", 1)->paginate(10),
+            "campaignsInactive"=>Campaign::where('user_id', Auth::user()->id)->where("active", 2)->paginate(10),
+            "campaignsPending"=>Campaign::where('user_id', Auth::user()->id)->where("active", 0)->paginate(10),
 
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('user_id', Auth::user()->id)->where('active', 1)->get()))],
@@ -54,7 +65,7 @@ class ViewAdScreen extends Screen
                 ->icon('trash')
                 ->method('deleteAds')
                 ->confirm(__('Are you sure you want to delete the selected campaigns?')),
-                
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.ad.list')
@@ -74,6 +85,36 @@ class ViewAdScreen extends Screen
                 'Inactive Campaigns' => 'metrics.inactiveAds',
                 'Total Campaigns' => 'metrics.total',
             ]),
+            Layout::tabs([
+                "Active Campaigns" => [ViewAdLayoutActive::class],
+                "Inactive Campaigns" => [ViewAdLayoutInactive::class],
+                "Pending Campaigns" => [ViewAdLayoutPending::class],
+            ])
         ];
+    }
+
+    public function deleteAds(Request $request)
+    {
+        //get all campaigns from post request
+        $campaigns = $request->get('campaignsSelected');
+
+        try{
+            //if the array is not empty
+            if(!empty($campaigns)){
+
+                //loop through the campaigns and delete them from db
+                foreach($campaigns as $package){
+                    VendorPackage::where('id', $package)->delete();
+                }
+
+                Toast::success('Selected campaigns deleted successfully');
+
+            }else{
+                Toast::warning('Please select campaigns in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the selected campaigns. Error Message: ' . $e->getMessage());
+        }
     }
 }
