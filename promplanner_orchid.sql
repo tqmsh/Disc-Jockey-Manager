@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2023 at 08:21 PM
+-- Generation Time: Mar 23, 2023 at 07:40 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -467,7 +467,9 @@ CREATE TABLE `personal_access_tokens` (
 CREATE TABLE `positions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `position_name` varchar(255) NOT NULL,
-  `election_id` bigint(20) UNSIGNED NOT NULL
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
