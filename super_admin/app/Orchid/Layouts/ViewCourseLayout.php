@@ -71,11 +71,11 @@ class ViewCourseLayout extends Table
 
             TD::make()
                 ->render(function (Course $course) {
-                    return Button::make('Sections')-> type(Color::SUCCESS())->  method('redirect', ['course'=> $course->id]) ->icon('pencil');
+                    return Button::make('Sections')-> type(Color::SUCCESS())->  method('redirect', ['course'=> $course->id, 'type' => 'section']) ->icon('pencil');
                 }),
             TD::make()
                 ->render(function (Course $course) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['course'=> $course->id]) ->icon('pencil');
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['course'=> $course->id, 'type' => 'edit']) ->icon('pencil');
                 }),
         ];
     }
