@@ -12,7 +12,7 @@ class Course extends Model
     protected $fillable = [
         'course_name',
         'ordering',
-        'type',
+        'category',
         'updated_at',
         'created_at'
     ];
