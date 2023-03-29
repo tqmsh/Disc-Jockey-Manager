@@ -30,10 +30,6 @@ class CreateAdScreen extends Screen
      */
     public function query(): iterable
     {
-        $array = Auth::user()->paidRegions->toArray();
-
-        //get all the region_ids of the array
-        $this->paidRegionNAmes =  Arr::pluck($array, ['name']);
         return [];
     }
 
@@ -107,7 +103,7 @@ Choice of Paid Region (which will come from a dropdown of all the regions the ve
                 Input::make('campaign_link')
                     ->title('Campaign URL')
                     ->type("url")
-                    ->placeholder('www.placeholder.com')
+                    ->placeholder('https://placeholder.com')
                     ->required()
                     ->help('Enter the link to forward to.')
                     ->horizontal(),
@@ -116,7 +112,7 @@ Choice of Paid Region (which will come from a dropdown of all the regions the ve
                     ->empty('Start typing to search...')
                     ->required()
                     ->help('Enter the region for your campaign.')
-                    ->fromModel(VendorPaidRegions::class, "region_id")
+                    ->fromModel(VendorPaidRegions::class, "region_id") // TODO Display names, return ids
                     ->horizontal(),
                 ]),
         ];
