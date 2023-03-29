@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2023 at 08:21 PM
+-- Generation Time: Mar 23, 2023 at 08:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -430,6 +430,18 @@ CREATE TABLE `notifications` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `no_play_songs`
+--
+
+CREATE TABLE `no_play_songs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `song_id` bigint(20) UNSIGNED NOT NULL,
+  `event_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_resets`
 --
 
@@ -467,7 +479,9 @@ CREATE TABLE `personal_access_tokens` (
 CREATE TABLE `positions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `position_name` varchar(255) NOT NULL,
-  `election_id` bigint(20) UNSIGNED NOT NULL
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -1116,6 +1130,14 @@ ALTER TABLE `notifications`
   ADD KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`);
 
 --
+-- Indexes for table `no_play_songs`
+--
+ALTER TABLE `no_play_songs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `song_id` (`song_id`,`event_id`),
+  ADD KEY `no-play-song-event` (`event_id`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -1345,6 +1367,12 @@ ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
+-- AUTO_INCREMENT for table `no_play_songs`
+--
+ALTER TABLE `no_play_songs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
@@ -1521,6 +1549,13 @@ ALTER TABLE `invitation`
 ALTER TABLE `localadmins`
   ADD CONSTRAINT `localadmin_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `localadmins_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `no_play_songs`
+--
+ALTER TABLE `no_play_songs`
+  ADD CONSTRAINT `no-play-saong-id` FOREIGN KEY (`song_id`) REFERENCES `songs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `no-play-song-event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `positions`
