@@ -103,8 +103,8 @@ class ViewAdScreen extends Screen
             if(!empty($campaigns)){
 
                 //loop through the campaigns and delete them from db
-                foreach($campaigns as $package){
-                    VendorPackage::where('id', $package)->delete();
+                foreach($campaigns as $campaign){
+                    Campaign::where('id', $campaign)->delete();
                 }
 
                 Toast::success('Selected campaigns deleted successfully');
