@@ -84,7 +84,7 @@ class ViewCourseScreen extends Screen
                 ->icon('plus')
                 ->type(Color::DEFAULT())
                 ->method('createCourse'),
-            ])->title('Add Course'),
+            ])->title('Add a Course'),
         ];
     }
 
