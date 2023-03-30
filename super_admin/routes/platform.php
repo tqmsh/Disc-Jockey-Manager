@@ -39,6 +39,7 @@ use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\EditCourseSectionScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
+use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
@@ -155,6 +156,9 @@ Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->nam
 
 //edit course section screen route
 Route::screen('/courses/{course}/sections/{section}/edit', EditCourseSectionScreen::class)->name('platform.courseSection.edit');
+
+//view lessons in a course section screen route
+Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
 
 
