@@ -16,4 +16,9 @@ class Course extends Model
         'updated_at',
         'created_at'
     ];
+
+    public function sections()
+    {
+        return $this->hasMany(Section::class, 'course_id', 'id');
+    }
 }
