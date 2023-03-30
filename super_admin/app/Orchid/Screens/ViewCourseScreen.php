@@ -13,8 +13,6 @@ use App\Orchid\Layouts\ViewCourseLayout;
 use Exception;
 use Orchid\Support\Facades\Toast;
 
-use function PHPSTORM_META\type;
-
 class ViewCourseScreen extends Screen
 {
     /**
@@ -121,13 +119,13 @@ class ViewCourseScreen extends Screen
         }
     }
     
-    public function redirect( $course_name, $type){
+    public function redirect( $course, $type){
 
         if($type == "edit"){
-            return redirect()-> route('platform.course.edit',  $course_name);
+            return redirect()->route('platform.course.edit',  $course);
         }
         else if($type == "section"){
-            return redirect()-> route('platform.courseSection.list',  $course_name);
+            return redirect()->route('platform.courseSection.list',  $course);
         }
     }
 

@@ -2,18 +2,26 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Course;
 use Orchid\Screen\Screen;
+use App\Orchid\Layouts\ViewCourseSectionLayout;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 
 class ViewCourseSectionScreen extends Screen
 {
+    public $course;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Course $course): iterable
     {
-        return [];
+        return [
+            'course' => $course,
+            'sections' => $course->sections()->orderBy('ordering', 'asc')->paginate(10),
+        ];
     }
 
     /**
@@ -23,7 +31,7 @@ class ViewCourseSectionScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewSectionScreen';
+        return 'Section for Course: ' . $this->course->course_name;
     }
 
     /**
@@ -33,7 +41,17 @@ class ViewCourseSectionScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+
+            Button::make('Delete Selected Sections')
+                ->icon('trash')
+                ->method('delete')
+                ->confirm('Are you sure you want to delete the selected sections?'),
+            
+            Link::make('Back to Course List')
+                ->route('platform.course.list')
+                ->icon('arrow-left')
+        ];
     }
 
     /**
@@ -43,6 +61,21 @@ class ViewCourseSectionScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ViewCourseSectionLayout::class,
+        ];
+        
     }
+
+    public function redirect($section, $type){
+
+        if($type == "edit"){
+            return redirect()->route('platform.courseSection.edit',  $section);
+        }
+        else if($type == "lesson"){
+            return redirect()->route('platform.sectionLesson.list',  [$this->course, $section]);
+        }
+
+    }
+
 }
