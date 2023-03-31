@@ -117,4 +117,7 @@ class ViewAdScreen extends Screen
             Alert::error('There was a error trying to deleted the selected campaigns. Error Message: ' . $e->getMessage());
         }
     }
+    public function redirect($campaign_id){
+        return redirect()->route('platform.ad.edit', $campaign_id);
+    }
 }

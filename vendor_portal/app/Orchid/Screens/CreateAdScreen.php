@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use App\Models\Campaign;
 use App\Models\Categories;
+use App\Models\Region;
 use App\Models\VendorPaidRegions;
 use Exception;
 use Illuminate\Http\Request;
@@ -30,7 +31,16 @@ class CreateAdScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        $tempPaidRegionNames = [];
+        foreach (VendorPaidRegions::where("user_id", Auth::user()->id) as $paidRegionId){
+
+            $tempPaidRegionNames[$paidRegionId->get("id")] = Region::where("id", $paidRegionId->get("id"));
+        }
+        // dd($tempPaidRegionNames);
+        $this->paidRegionNames = $tempPaidRegionNames;
+        return [
+            "paidRegionNames"=>$tempPaidRegionNames
+        ];
     }
 
     /**
@@ -58,7 +68,7 @@ class CreateAdScreen extends Screen
 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.ad.list')
         ];
     }
 
@@ -69,13 +79,6 @@ class CreateAdScreen extends Screen
      */
     public function layout(): iterable
     {
-        /*
-Campaign Title
-Category
-Image upload, force it to be a 600x600 square
-URL link to their preferred funnel destination
-Choice of Paid Region (which will come from a dropdown of all the regions the vendor paid for),
-         */
         return [
 
             Layout::rows([
@@ -112,7 +115,7 @@ Choice of Paid Region (which will come from a dropdown of all the regions the ve
                     ->empty('Start typing to search...')
                     ->required()
                     ->help('Enter the region for your campaign.')
-                    ->fromModel(VendorPaidRegions::class, "region_id") // TODO Display names, return ids
+                    ->options($this->paidRegionNames) // TODO Display names, return ids
                     ->horizontal(),
                 ]),
         ];
