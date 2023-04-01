@@ -22,7 +22,6 @@ use Orchid\Support\Facades\Toast;
 
 class CreateAdScreen extends Screen
 {
-    public $paidRegionNames;
 
     /**
      * Query data.
@@ -31,16 +30,11 @@ class CreateAdScreen extends Screen
      */
     public function query(): iterable
     {
-        $tempPaidRegionNames = [];
-        foreach (VendorPaidRegions::where("user_id", Auth::user()->id) as $paidRegionId){
+        $array = Auth::user()->paidRegions->toArray();
 
-            $tempPaidRegionNames[$paidRegionId->get("id")] = Region::where("id", $paidRegionId->get("id"));
-        }
-        // dd($tempPaidRegionNames);
-        $this->paidRegionNames = $tempPaidRegionNames;
-        return [
-            "paidRegionNames"=>$tempPaidRegionNames
-        ];
+        //get all the region_ids of the array
+        $this->paidRegionIds =  Arr::pluck($array, ['region_id']);
+        return [];
     }
 
     /**
@@ -115,7 +109,7 @@ class CreateAdScreen extends Screen
                     ->empty('Start typing to search...')
                     ->required()
                     ->help('Enter the region for your campaign.')
-                    ->options($this->paidRegionNames) // TODO Display names, return ids
+                    ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal(),
                 ]),
         ];

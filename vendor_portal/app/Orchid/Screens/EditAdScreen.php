@@ -5,9 +5,9 @@ namespace App\Orchid\Screens;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Region;
-use App\Models\VendorPaidRegions;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
@@ -29,6 +29,10 @@ class EditAdScreen extends Screen
      */
     public function query(Campaign $campaign): iterable
     {
+        $array = Auth::user()->paidRegions->toArray();
+
+        //get all the region_ids of the array
+        $this->paidRegionIds =  Arr::pluck($array, ['region_id']);
         return [
             'campaign' => $campaign
         ];
@@ -114,7 +118,7 @@ class EditAdScreen extends Screen
                     ->empty('Start typing to search...')
                     ->required()
                     ->help('Enter the region for your campaign.')
-                    ->fromModel(VendorPaidRegions::class, "region_id") // TODO Display names, return ids
+                    ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal()
                     ->value($this->campaign->region_id),
             ]),
