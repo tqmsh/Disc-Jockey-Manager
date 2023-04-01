@@ -36,12 +36,14 @@ use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewEventStudentScreen;
+use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\EditCourseSectionScreen;
 use App\Orchid\Screens\EditSectionLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
+use App\Orchid\Screens\CreateSectionLessonScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -163,6 +165,12 @@ Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonS
 
 //edit lesson in a course section screen route
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/edit', EditSectionLessonScreen::class)->name('platform.sectionLesson.edit');
+
+//view a single section lesson screen route
+Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+
+//create a section lesson screen route
+Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
 
 
 

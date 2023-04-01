@@ -18,12 +18,13 @@ class Section extends Model
 
     ];
 
+    public function lessons(){
+        return $this->hasMany(Lesson::class, 'section_id', 'id');
+    }
+    
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id', 'id');
     }
 
-    public function lessons(){
-        return $this->hasMany(Lesson::class, 'section_id', 'id');
-    }
 }

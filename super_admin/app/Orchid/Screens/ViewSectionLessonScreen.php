@@ -4,12 +4,16 @@ namespace App\Orchid\Screens;
 
 use App\Models\Course;
 use App\Models\Section;
+use App\Orchid\Layouts\ViewSectionLessonLayout;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
 
 class ViewSectionLessonScreen extends Screen
 {
     public $course;
     public $section;
+    public $lessons;
     /**
      * Query data.
      *
@@ -20,6 +24,7 @@ class ViewSectionLessonScreen extends Screen
         return [
             'course' => $course,
             'section' => $section,
+            'lessons' => $section->lessons()->orderBy('ordering', 'asc')->paginate(10),
         ];
     }
 
@@ -35,7 +40,7 @@ class ViewSectionLessonScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Course: ' . $this->course->course_name;
+        return 'Course: ' . $this->course->course_name . ' | Section: ' . $this->section->section_name;
     }
 
     /**
@@ -45,7 +50,21 @@ class ViewSectionLessonScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+
+            Link::make('Add New Lesson')
+                ->icon('plus')
+                ->route('platform.sectionLesson.create', ['course' => $this->course, 'section' => $this->section]),
+
+            Button::make('Delete Selected Lessons')
+                ->icon('trash')
+                ->method('delete')
+                ->confirm('Are you sure you want to delete the selected lessons?'),
+            
+            Link::make('Back to Section List')
+                ->route('platform.courseSection.list', ['course' => $this->course])
+                ->icon('arrow-left')
+        ];
     }
 
     /**
@@ -55,6 +74,18 @@ class ViewSectionLessonScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ViewSectionLessonLayout::class,
+        ];
     }
+
+    public function redirect(Course $course, Section $section){
+        if(request('type') == "view"){
+            return redirect()->route('platform.singleLesson.list',  ['course' => $course, 'section' => $section, 'lesson' => request('lesson_id')]);
+        }
+        else if(request('type') == "edit"){
+            return redirect()->route('platform.sectionLesson.edit',  ['course' => $course, 'section' => $section, 'lesson' => request('lesson_id')]);
+        }
+    }
+    
 }

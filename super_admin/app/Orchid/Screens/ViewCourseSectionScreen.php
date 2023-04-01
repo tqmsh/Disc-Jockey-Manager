@@ -78,7 +78,7 @@ class ViewCourseSectionScreen extends Screen
 
                 Input::make('ordering')
                 ->title('Ordering')
-                ->placeholder('Enter the ordering of the course'),
+                ->placeholder('Enter the ordering of the section'),
 
                 Button::make('Add')
                 ->icon('plus')
@@ -90,7 +90,7 @@ class ViewCourseSectionScreen extends Screen
         
     }
 
-    public function redirect(Course $course, $section, $type){
+    public function redirect(Course $course){
         if(request('type') == "lesson"){
             return redirect()->route('platform.sectionLesson.list',  ['course' => $course, 'section' => request('section_id')]);
         }
