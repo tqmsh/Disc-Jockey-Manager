@@ -2,18 +2,29 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Course;
+use App\Models\Lesson;
+use App\Models\Section;
 use Orchid\Screen\Screen;
 
 class EditSectionLessonScreen extends Screen
 {
+    public $course;
+    public $lesson;
+    public $section;
+
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Course $course, Section $section, Lesson $lesson): iterable
     {
-        return [];
+        return [
+            'course' => $course,
+            'section' => $section,
+            'lesson' => $lesson,
+        ];
     }
 
     /**
@@ -23,7 +34,12 @@ class EditSectionLessonScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'EditSectionLessonScreen';
+        return 'Edit Lesson: ' . $this->lesson->lesson_name;
+    }
+
+    public function description(): ?string
+    {
+        return 'Course: ' . $this->course->course_name . ' | Section: ' . $this->section->section_name;
     }
 
     /**
