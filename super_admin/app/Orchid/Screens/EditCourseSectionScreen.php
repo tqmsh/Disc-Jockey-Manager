@@ -2,18 +2,31 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Course;
+use App\Models\Section;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class EditCourseSectionScreen extends Screen
 {
+    public $course;
+    public $section;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Course $course, Section $section): iterable
     {
-        return [];
+        return [
+            'course' => $course,
+            'section' => $section,
+        ];
     }
 
     /**
@@ -23,7 +36,12 @@ class EditCourseSectionScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'EditCourseSectionScreen';
+        return 'Edit Section: ' . $this->section->section_name;
+    }
+
+    public function description(): ?string
+    {
+        return 'Course: ' . $this->course->course_name;
     }
 
     /**
@@ -33,7 +51,21 @@ class EditCourseSectionScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+
+            Button::make('Update')
+                ->icon('check')
+                ->method('update'),
+
+            Button::make('Delete Section')
+                ->icon('trash')
+                ->method('delete')
+                ->confirm('Are you sure you want to delete this section?'),
+            
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.courseSection.list', ['course' => $this->course]),
+        ];
     }
 
     /**
@@ -43,6 +75,65 @@ class EditCourseSectionScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::rows([
+                Input::make('ordering')
+                    ->title('Ordering')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->section->ordering),
+                    
+                Input::make('section_name')
+                    ->title('Section Name')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->section->section_name),
+            ])
+        ];
+    }
+
+    public function update(Course $course, Section $section)
+    {
+        try {
+
+            if(Section::where('ordering', request('ordering'))->where('course_id', $course->id)->where('id', '!=', $section->id)->exists()) {
+
+                Toast::error('Ordering already exists');
+                return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+
+            } else if(Section::where('section_name', request('section_name'))->where('course_id', $course->id)->where('id', '!=', $section->id)->exists()) {
+
+                Toast::error('Section name already exists');
+                return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+            }
+
+            $section->update([
+                'ordering' => request('ordering'),
+                'section_name' => request('section_name'),
+            ]);
+        } catch (\Exception $e) {
+            Toast::error('Something went wrong');
+            return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+        }
+
+        Toast::success('Section updated successfully.');
+
+        return redirect()->route('platform.courseSection.list', ['course' => $course]);
+    }
+
+    public function delete(Course $course, Section $section)
+    {
+        try {
+            $section->delete();
+        } catch (\Exception $e) {
+            Toast::error('Something went wrong');
+            return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+        }
+
+        Toast::success('Section deleted successfully.');
+
+        return redirect()->route('platform.courseSection.list', ['course' => $course]);
     }
 }
