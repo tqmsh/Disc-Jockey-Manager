@@ -104,7 +104,7 @@ class EditCourseSectionScreen extends Screen
                 return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
 
             } else if(Section::where('section_name', request('section_name'))->where('course_id', $course->id)->where('id', '!=', $section->id)->exists()) {
-                
+
                 Toast::error('Section name already exists');
                 return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
             }
@@ -119,6 +119,20 @@ class EditCourseSectionScreen extends Screen
         }
 
         Toast::success('Section updated successfully.');
+
+        return redirect()->route('platform.courseSection.list', ['course' => $course]);
+    }
+
+    public function delete(Course $course, Section $section)
+    {
+        try {
+            $section->delete();
+        } catch (\Exception $e) {
+            Toast::error('Something went wrong');
+            return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+        }
+
+        Toast::success('Section deleted successfully.');
 
         return redirect()->route('platform.courseSection.list', ['course' => $course]);
     }
