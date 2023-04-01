@@ -55,7 +55,7 @@ class ViewAdLayoutActive extends Table
 
             TD::make('campaign_image', 'Campaign Image')
                 ->render(function(Campaign $campaign){
-                    return "<img src='$campaign->image'>";
+                    return "<img src='$campaign->image' width='250'>";
                 }),
 
             TD::make('campaign_url', 'Campaign URL')
