@@ -37,7 +37,7 @@ class ViewCourseSectionScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Section for Course: ' . $this->course->course_name;
+        return 'Sections for Course: ' . $this->course->course_name;
     }
 
     /**
@@ -90,15 +90,13 @@ class ViewCourseSectionScreen extends Screen
         
     }
 
-    public function redirect($section, $type){
-
-        if($type == "edit"){
-            return redirect()->route('platform.courseSection.edit',  $section);
+    public function redirect(Course $course, $section, $type){
+        if(request('type') == "lesson"){
+            return redirect()->route('platform.sectionLesson.list',  ['course' => $course, 'section' => request('section_id')]);
         }
-        else if($type == "lesson"){
-            return redirect()->route('platform.sectionLesson.list',  [$this->course, $section]);
+        else if(request('type') == "edit"){
+            return redirect()->route('platform.courseSection.edit',  ['course' => $course, 'section' => request('section_id')]);
         }
-
     }
 
     public function createSection(Course $course){
