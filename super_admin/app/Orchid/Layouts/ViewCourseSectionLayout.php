@@ -40,7 +40,7 @@ class ViewCourseSectionLayout extends Table
                 ->render(function (Section $section) {
                     return e($section->ordering);
                 }),
-            TD::make('Section_name', 'Section Name')
+            TD::make('section_name', 'Section Name')
                 ->render(function (Section $section) {
                     return e($section->section_name);
                 }),
@@ -57,7 +57,7 @@ class ViewCourseSectionLayout extends Table
 
             TD::make()
                 ->render(function (Section $section) {
-                    return Button::make('Lessons')-> type(Color::SUCCESS())->method('redirect', ['section_id'=> $section->id, 'type' => 'section'])->icon('pencil');
+                    return Button::make('Lessons')-> type(Color::SUCCESS())->method('redirect', ['section_id'=> $section->id, 'type' => 'lesson'])->icon('pencil');
                 })->width('100px'),
             TD::make()
                 ->render(function (Section $section) {
