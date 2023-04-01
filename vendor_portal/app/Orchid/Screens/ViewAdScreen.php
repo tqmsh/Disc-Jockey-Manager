@@ -103,8 +103,8 @@ class ViewAdScreen extends Screen
             if(!empty($campaigns)){
 
                 //loop through the campaigns and delete them from db
-                foreach($campaigns as $package){
-                    VendorPackage::where('id', $package)->delete();
+                foreach($campaigns as $campaign){
+                    Campaign::where('id', $campaign)->delete();
                 }
 
                 Toast::success('Selected campaigns deleted successfully');
@@ -116,5 +116,8 @@ class ViewAdScreen extends Screen
         }catch(Exception $e){
             Alert::error('There was a error trying to deleted the selected campaigns. Error Message: ' . $e->getMessage());
         }
+    }
+    public function redirect($campaign_id){
+        return redirect()->route('platform.ad.edit', $campaign_id);
     }
 }
