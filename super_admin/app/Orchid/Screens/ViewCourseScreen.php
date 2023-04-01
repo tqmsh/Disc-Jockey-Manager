@@ -10,9 +10,8 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewCourseLayout;
+use Exception;
 use Orchid\Support\Facades\Toast;
-
-use function PHPSTORM_META\type;
 
 class ViewCourseScreen extends Screen
 {
@@ -24,7 +23,7 @@ class ViewCourseScreen extends Screen
     public function query(): iterable
     {
         return [
-            'courses' => Course::all()
+            'courses' => Course::orderBy('ordering', 'asc')->paginate(10),
         ];
     }
 
@@ -45,7 +44,12 @@ class ViewCourseScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Delete Selected Courses')
+                ->icon('trash')
+                ->method('delete')
+                ->confirm('Are you sure you want to delete the selected courses?'),
+        ];
     }
 
     /**
@@ -80,44 +84,74 @@ class ViewCourseScreen extends Screen
                 ->icon('plus')
                 ->type(Color::DEFAULT())
                 ->method('createCourse'),
-            ])->title('Add Course'),
+            ])->title('Add a Course'),
         ];
     }
 
     public function createCourse(){
 
-        $fields = request()->all();
+        try{
+            $fields = request()->all();
 
-        if(is_null($fields['course_name']) || is_null($fields['ordering'])){
-            
-            Toast::error('Course name and ordering cannot be empty');
-
-        }else if(!empty(Course::where('course_name',  $fields['course_name'])->first()) || !empty(Course::where('ordering',  $fields['ordering'])->first())){
-            
-            Toast::error('Course or ordering already exists');
-            
-        }else{
-
-            $check = Course::create($fields);
-
-            if($check){
-
-                Toast::success('Course created successfully');
-
+            if(is_null($fields['course_name']) || is_null($fields['ordering'])){
+                
+                Toast::error('Course name and ordering cannot be empty');
+    
+            }else if(!empty(Course::where('course_name',  $fields['course_name'])->first()) || !empty(Course::where('ordering',  $fields['ordering'])->first())){
+                
+                Toast::error('Course or ordering already exists');
+                
             }else{
-
-                Toast::error('Course could not be created for an unknown reason');
+    
+                $check = Course::create($fields);
+    
+                if($check){
+    
+                    Toast::success('Course created successfully');
+    
+                }else{
+    
+                    Toast::error('Course could not be created for an unknown reason');
+                }
             }
+        }catch(Exception $e){
+            Toast::error('Course could not be created for an unknown reason' . $e->getMessage());
         }
     }
     
-    public function redirect( $course_name, $type){
+    public function redirect( $course, $type){
 
         if($type == "edit"){
-            return redirect()-> route('platform.course.edit',  $course_name);
+            return redirect()->route('platform.course.edit',  $course);
         }
         else if($type == "section"){
-            return redirect()-> route('platform.courseSection.list',  $course_name);
+            return redirect()->route('platform.courseSection.list',  $course);
+        }
+    }
+
+    public function delete(){
+
+        //get all courses from post request
+        $courses = request('courses');
+        
+        try{
+
+            //if the array is not empty
+            if(!empty($courses)){
+
+                //loop through the courses and delete them from db
+                foreach($courses as $course_id){
+                    Course::find($course_id)->delete();
+                }
+
+                Toast::success('Selected courses deleted succesfully');
+
+            }else{
+                Toast::warning('Please select courses in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected courses. Error Message: ' . $e);
         }
     }
 }
