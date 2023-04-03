@@ -5,7 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Region;
-use App\Models\VendorPaidRegions;
+use App\Models\Vendors;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -16,6 +16,7 @@ use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Sight;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -31,6 +32,7 @@ class CreateAdScreen extends Screen
      */
     public function query(): iterable
     {
+        $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
         $array = Auth::user()->paidRegions->toArray();
 
         //get all the region_ids of the array
@@ -75,20 +77,21 @@ class CreateAdScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::legend("category",[
+                Sight::make('category_id', 'Your Category')->render(function(){
+
+                    $catName = Categories::find($this->vendor->category_id)->name;
+
+                    return $catName;
+                }),])->title('Information'),
 
             Layout::rows([
+
                 Input::make('campaign_name')
                     ->title('Campaign Name')
                     ->placeholder('Enter your campaign name')
                     ->required()
                     ->help('Enter the name of your package.')
-                    ->horizontal(),
-                Select::make('campaign_category')
-                    ->title("Category")
-                    ->empty('Start typing to search...')
-                    ->required()
-                    ->help('Enter the category for your campaign.')
-                    ->fromQuery(Categories::query(), 'name')
                     ->horizontal(),
                 Cropper::make("campaign_image")
                     ->storage("public")
@@ -122,7 +125,7 @@ class CreateAdScreen extends Screen
             if($this->validAd($request)){
                 Campaign::create([
                     "user_id"=>Auth::user()->id,
-                    "category_id"=>$request->input("campaign_category"),
+                    "category_id"=>Vendors::where('user_id', Auth::user()->id)->first()->category_id,
                     "region_id"=>$request->input("campaign_region"),
                     "title"=>$request->input("campaign_name"),
                     "image"=>$request->input("campaign_image"),

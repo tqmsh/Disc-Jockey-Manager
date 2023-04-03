@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Region;
+use App\Models\Vendors;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -15,6 +16,7 @@ use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Sight;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -29,6 +31,7 @@ class EditAdScreen extends Screen
      */
     public function query(Campaign $campaign): iterable
     {
+        $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
         $array = Auth::user()->paidRegions->toArray();
 
         //get all the region_ids of the array
@@ -80,6 +83,13 @@ class EditAdScreen extends Screen
     {
 
         return [
+            Layout::legend("category",[
+                Sight::make('category_id', 'Your Category')->render(function(){
+
+                    $catName = Categories::find($this->vendor->category_id)->name;
+
+                    return $catName;
+                }),])->title('Information'),
             Layout::rows([
                 Input::make('campaign_name')
                     ->title('Campaign Name')
@@ -88,14 +98,6 @@ class EditAdScreen extends Screen
                     ->help('Enter the name of your package.')
                     ->horizontal()
                     ->value($this->campaign->title),
-                Select::make('campaign_category')
-                    ->title("Category")
-                    ->empty('Start typing to search...')
-                    ->required()
-                    ->help('Enter the category for your campaign.')
-                    ->fromQuery(Categories::query(), 'name')
-                    ->horizontal()
-                    ->value($this->campaign->category_id),
                 Cropper::make("campaign_image")
                     ->storage("public")
                     ->title("Image")
@@ -130,11 +132,10 @@ class EditAdScreen extends Screen
 
         try{
 
-            if($this->validAd($request)){
+            if($this->validAd($request, $campaign->id)){
 
                 $campaign = $campaign->fill(
                     ["user_id"=>Auth::user()->id,
-                    "category_id"=>$request->input("campaign_category"),
                     "region_id"=>$request->input("campaign_region"),
                     "title"=>$request->input("campaign_name"),
                     "image"=>$request->input("campaign_image"),
@@ -172,13 +173,19 @@ class EditAdScreen extends Screen
         }
     }
 
-    public function validAd(Request $request){
-        return count(Campaign::where("user_id", Auth::user()->id)
-                ->where("category_id", $request->input("campaign_category"))
-                ->where("title", $request->input("campaign_name"))
-                ->where("region_id", $request->input("campaign_region"))
-                ->where("website", $request->input("campaign_link"))->get()
-            ) == 0;
+    public function validAd(Request $request, $id){
+        $temp = Campaign::where("user_id", Auth::user()->id)
+            ->where("category_id", $request->input("campaign_category"))
+            ->where("title", $request->input("campaign_name"))
+            ->where("region_id", $request->input("campaign_region"))
+            ->where("website", $request->input("campaign_link"))->get();
+        if (count($temp)==0){
+            return true;
+        }else if(count($temp) == 1 && count($temp->where("id", $id)) == 1){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }
