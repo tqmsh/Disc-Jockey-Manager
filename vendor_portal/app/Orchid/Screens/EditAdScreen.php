@@ -64,7 +64,7 @@ class EditAdScreen extends Screen
                 ->icon('check')
                 ->method('update'),
 
-            Button::make('Delete Package')
+            Button::make('Delete Campaign')
                 ->icon('trash')
                 ->method('delete'),
 
@@ -134,8 +134,7 @@ class EditAdScreen extends Screen
 
             if($this->validAd($request, $campaign->id)){
 
-                $campaign = $campaign->fill(
-                    ["user_id"=>Auth::user()->id,
+                $campaign = $campaign->fill([
                     "region_id"=>$request->input("campaign_region"),
                     "title"=>$request->input("campaign_name"),
                     "image"=>$request->input("campaign_image"),
@@ -174,7 +173,7 @@ class EditAdScreen extends Screen
     }
 
     public function validAd(Request $request, $id){
-        $temp = Campaign::where("user_id", Auth::user()->id)
+        $temp = Campaign::where("user_id", Campaign::find($id)->user_id)
             ->where("category_id", $request->input("campaign_category"))
             ->where("title", $request->input("campaign_name"))
             ->where("region_id", $request->input("campaign_region"))
