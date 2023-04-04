@@ -71,13 +71,6 @@ class ViewAdLayoutActive extends Table
                 ->render(function(Campaign $campaign){
                     return e($campaign->impressions);
                 }),
-
-            TD::make()
-                ->width('80')
-                ->align(TD::ALIGN_RIGHT)
-                ->render(function(Campaign $campaign){
-                    return Button::make('Edit Campaign')->type(Color::PRIMARY())->method('redirect', ['campaign_id' => $campaign->id])->icon('pencil');
-                }),
         ];
     }
 }
