@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\EditAdScreen;
+use App\Orchid\Screens\ViewAdScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
@@ -74,7 +76,7 @@ Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
 
 //show create student screen
-Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');        
+Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
 
 //show edit students screen
 Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
@@ -83,7 +85,7 @@ Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platf
 Route::screen('/vendors', ViewVendorScreen::class)->name('platform.vendor.list');
 
 //show create vendors screen
-Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');        
+Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');
 
 //show edit vendors screen
 Route::screen('/vendors/{vendor}/edit', EditVendorScreen::class)->name('platform.vendor.edit');
@@ -172,7 +174,8 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 //create a section lesson screen route
 Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
 
-
+Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
+Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
 
 // Platform > Profile
