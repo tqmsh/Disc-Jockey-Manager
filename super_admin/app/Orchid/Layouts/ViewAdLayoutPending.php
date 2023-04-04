@@ -7,12 +7,11 @@ use App\Models\Categories;
 use App\Models\Region;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
 
-class ViewAdLayoutActive extends Table
+class ViewAdLayoutPending extends Table
 {
     /**
      * Data source.
@@ -22,7 +21,7 @@ class ViewAdLayoutActive extends Table
      *
      * @var string
      */
-    protected $target = 'campaignsActive';
+    protected $target = 'campaignsPending';
 
     /**
      * Get the table cells to be displayed.
@@ -33,10 +32,22 @@ class ViewAdLayoutActive extends Table
     {
         return [
             TD::make()
-                ->render(function (Campaign $campaign){
-                    return CheckBox::make('campaignsSelected[]')
-                        ->value($campaign->id)
-                        ->checked(false);
+                ->align(TD::ALIGN_LEFT)
+                ->width('100px')
+                ->render(function(Campaign $campaign){
+                    return Button::make('Accept')->method('updateCampaign', ['campaign_id' => $campaign->id, 'active' => 1])->icon('check')->type(Color::SUCCESS());
+                }),
+            TD::make()
+                ->align(TD::ALIGN_LEFT)
+                ->width('100px')
+                ->render(function(Campaign $campaign){
+                    return Button::make('Reject')->method('updateCampaign', ['campaign_id' => $campaign->id, 'active' => 2])->icon('close')->type(Color::DANGER());
+                }),
+            TD::make()
+                ->width('80')
+                ->align(TD::ALIGN_LEFT)
+                ->render(function(Campaign $campaign){
+                    return Button::make('Edit')->type(Color::PRIMARY())->method('redirect', ['campaign_id' => $campaign->id])->icon('pencil');
                 }),
             TD::make('event_name', 'Campaign Name')
                 ->render(function(Campaign $campaign){
@@ -63,14 +74,9 @@ class ViewAdLayoutActive extends Table
                     return Link::make($campaign->website)
                         ->href($campaign->website == null ? '#' : $campaign->website);
                 }),
-            TD::make('clicks', 'Clicks')
-                ->render(function(Campaign $campaign){
-                    return e($campaign->clicks);
-                }),
-            TD::make('impressions', 'Impressions')
-                ->render(function(Campaign $campaign){
-                    return e($campaign->impressions);
-                }),
         ];
     }
+
+
 }
+

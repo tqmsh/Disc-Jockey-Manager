@@ -7,12 +7,11 @@ use App\Models\Categories;
 use App\Models\Region;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
 
-class ViewAdLayoutActive extends Table
+class ViewAdLayoutInactive extends Table
 {
     /**
      * Data source.
@@ -22,7 +21,7 @@ class ViewAdLayoutActive extends Table
      *
      * @var string
      */
-    protected $target = 'campaignsActive';
+    protected $target = 'campaignsInactive';
 
     /**
      * Get the table cells to be displayed.
@@ -33,10 +32,10 @@ class ViewAdLayoutActive extends Table
     {
         return [
             TD::make()
-                ->render(function (Campaign $campaign){
-                    return CheckBox::make('campaignsSelected[]')
-                        ->value($campaign->id)
-                        ->checked(false);
+                ->width('80')
+                ->align(TD::ALIGN_LEFT)
+                ->render(function(Campaign $campaign){
+                    return Button::make('Edit')->type(Color::PRIMARY())->method('redirect', ['campaign_id' => $campaign->id])->icon('pencil');
                 }),
             TD::make('event_name', 'Campaign Name')
                 ->render(function(Campaign $campaign){

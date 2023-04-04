@@ -76,7 +76,7 @@ class ViewAdLayoutPending extends Table
                 ->width('80')
                 ->align(TD::ALIGN_RIGHT)
                 ->render(function(Campaign $campaign){
-                    return Button::make('Edit Campaign')->type(Color::PRIMARY())->method('redirect', ['campaign_id' => $campaign->id])->icon('pencil');
+                    return Button::make('Edit')->type(Color::PRIMARY())->method('redirect', ['campaign_id' => $campaign->id])->icon('pencil');
                 }),
         ];
     }
