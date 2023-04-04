@@ -3,7 +3,6 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Campaign;
-use App\Models\VendorPackage;
 use App\Orchid\Layouts\ViewAdLayoutActive;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Orchid\Layouts\ViewAdLayoutPending;
