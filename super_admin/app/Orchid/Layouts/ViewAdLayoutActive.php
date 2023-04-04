@@ -7,7 +7,6 @@ use App\Models\Categories;
 use App\Models\Region;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
@@ -33,10 +32,16 @@ class ViewAdLayoutActive extends Table
     {
         return [
             TD::make()
-                ->render(function (Campaign $campaign){
-                    return CheckBox::make('campaignsSelected[]')
-                        ->value($campaign->id)
-                        ->checked(false);
+                ->align(TD::ALIGN_LEFT)
+                ->width('100px')
+                ->render(function(Campaign $campaign){
+                    return Button::make('Deactivate')->method('updateCampaign', ['campaign_id' => $campaign->id, 'active' => 2])->icon('close')->type(Color::DANGER());
+                }),
+            TD::make()
+                ->width('80')
+                ->align(TD::ALIGN_LEFT)
+                ->render(function(Campaign $campaign){
+                    return Button::make('Edit')->type(Color::PRIMARY())->method('redirect', ['campaign_id' => $campaign->id])->icon('pencil');
                 }),
             TD::make('event_name', 'Campaign Name')
                 ->render(function(Campaign $campaign){

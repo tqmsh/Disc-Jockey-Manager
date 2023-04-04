@@ -31,7 +31,7 @@ class EditAdScreen extends Screen
      */
     public function query(Campaign $campaign): iterable
     {
-        $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
+        $this->vendor = Vendors::where('user_id', $campaign->user_id)->first();
         $array = Auth::user()->paidRegions->toArray();
 
         //get all the region_ids of the array
@@ -63,7 +63,6 @@ class EditAdScreen extends Screen
             Button::make('Update')
                 ->icon('check')
                 ->method('update'),
-
             Button::make('Delete Campaign')
                 ->icon('trash')
                 ->method('delete'),
@@ -81,10 +80,10 @@ class EditAdScreen extends Screen
      */
     public function layout(): iterable
     {
-        abort_if($this->vendor->id != $this->campaign->user_id, 403);
+        abort_if(Auth::user()->role != 1, 403);
         return [
             Layout::legend("category",[
-                Sight::make('category_id', 'Your Category')->render(function(){
+                Sight::make('category_id', 'Category')->render(function(){
 
                     $catName = Categories::find($this->vendor->category_id)->name;
 
