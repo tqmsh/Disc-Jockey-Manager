@@ -16,7 +16,7 @@ use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\PromvoteLayout;
 use App\Orchid\Layouts\ViewEventLayout;
 
-class ViewEventPromvoteScreen extends Screen
+class ViewElectionScreen extends Screen
 {
     public $event;
     /**
@@ -67,27 +67,6 @@ class ViewEventPromvoteScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::rows([
-                Group::make([
-                    Select::make('category_id')
-                        ->help('Type in box to search')
-                        ->empty('Filter Category')
-                        ->fromModel(Categories::query(), 'name'),
-
-                    Button::make('Filter')
-                        ->icon('filter')
-                        ->method('filter')
-                        ->type(Color::DEFAULT()),
-                ]),
-            ]),
-
-            // ViewEventLayout::class
-
-            // Layout::table('elections',[
-            //     TD::make('name'),
-            // ])
-
-            // PromvoteLayout::class
         ];
     }
 }

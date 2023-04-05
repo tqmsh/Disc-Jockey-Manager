@@ -7,7 +7,7 @@ use App\Models\Events;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 
-class ViewEventPromvoteLayout extends Table
+class ViewElectionLayout extends Table
 {
     /**
      * Data source.
