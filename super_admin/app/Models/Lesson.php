@@ -15,6 +15,7 @@ class Lesson extends Model
         'ordering',
         'section_id',
         'lesson_description',
+        'lesson_content',
         'updated_at',
         'created_at'
     ];
