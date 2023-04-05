@@ -51,17 +51,17 @@ class ViewSectionLessonLayout extends Table
             TD::make('lesson_description', 'Lesson Description')
                 ->render(function (Lesson $lesson) {
                     return e($lesson->lesson_description);
-                }),
+                })->width('20%'),
 
             TD::make('created_at', 'Created At')
                 ->render(function (Lesson $lesson) {
                     return e($lesson->created_at);
-                }),
+                })->width('10%'),
 
             TD::make('updated_at', 'Updated At')
                 ->render(function (Lesson $lesson) {
                     return e($lesson->updated_at);
-                }),
+                })->width('10%'),
                 
             TD::make()
                 ->render(function (Lesson $lesson) {
