@@ -97,7 +97,7 @@ class CreateSectionLessonScreen extends Screen
     public function createLesson(Course $course, Section $section)
     {
         $fields = request()->validate([
-            'ordering' => 'required',
+            'ordering' => 'required|numeric',
             'lesson_name' => 'required',
             'lesson_description' => 'required',
             'lesson_content' => 'required',
@@ -106,17 +106,20 @@ class CreateSectionLessonScreen extends Screen
         $fields['section_id'] = $section->id;
         $fields['course_id'] = $course->id;
 
-        if($section->lessons()->where('ordering', $fields['ordering'])->exists()) {
-            throw new Exception('Ordering already exists');
-        } else if($section->lessons()->where('lesson_name', $fields['lesson_name'])->exists()) {
-                throw new Exception('Section name already exists');
-        } else {
-            $section->lessons()->create($fields);
+        try {
+            if($section->lessons()->where('ordering', $fields['ordering'])->exists()) {
+                throw new Exception('Ordering already exists');
+            } else if($section->lessons()->where('lesson_name', $fields['lesson_name'])->exists()) {
+                    throw new Exception('Section name already exists');
+            } else {
+                $section->lessons()->create($fields);
 
-            Toast::success('Lesson added successfully');
+                Toast::success('Lesson added successfully');
+                return redirect()->route('platform.sectionLesson.list',  ['course' => $course, 'section' => $section]);
+            }
+        } catch(Exception $e) {
+            Toast::error($e->getMessage());
         }
-
-        return redirect()->route('platform.sectionLesson.list',  ['course' => $course, 'section' => $section]);
 
     }
 }
