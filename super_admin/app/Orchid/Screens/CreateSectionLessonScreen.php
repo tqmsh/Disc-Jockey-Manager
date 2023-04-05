@@ -97,7 +97,7 @@ class CreateSectionLessonScreen extends Screen
     public function createLesson(Course $course, Section $section)
     {
         $fields = request()->validate([
-            'ordering' => 'required',
+            'ordering' => 'required|numeric',
             'lesson_name' => 'required',
             'lesson_description' => 'required',
             'lesson_content' => 'required',

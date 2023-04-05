@@ -105,7 +105,7 @@ class ViewCourseSectionScreen extends Screen
             
             $fields = request()->validate([
                 'section_name' => 'required',
-                'ordering' => 'required',
+                'ordering' => 'required|numeric',
             ]);
 
             if($course->sections()->where('ordering', $fields['ordering'])->exists()){
