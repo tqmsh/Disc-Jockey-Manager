@@ -4,10 +4,11 @@ namespace App\Orchid\Screens;
 
 use App\Models\Course;
 use App\Models\Section;
-use App\Orchid\Layouts\ViewSectionLessonLayout;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Toast;
+use App\Orchid\Layouts\ViewSectionLessonLayout;
 
 class ViewSectionLessonScreen extends Screen
 {
@@ -87,5 +88,19 @@ class ViewSectionLessonScreen extends Screen
             return redirect()->route('platform.sectionLesson.edit',  ['course' => $course, 'section' => $section, 'lesson' => request('lesson_id')]);
         }
     }
-    
+
+    public function delete(Course $course, Section $section){
+        $lessons = request('lessons');
+        if($lessons){
+            foreach($lessons as $lesson){
+                $lesson = $section->lessons()->where('id', $lesson)->first();
+                $lesson->delete();
+            }
+            Toast::success('Lessons deleted successfully');
+        }
+        else{
+            Toast::info('No lessons selected');
+        }
+        return redirect()->route('platform.sectionLesson.list', ['course' => $course, 'section' => $section]);
+    }
 }
