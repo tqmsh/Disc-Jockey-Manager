@@ -31,6 +31,7 @@ class ViewEventLayout extends Table
     protected function columns(): iterable
     {
         return [
+            
             TD::make()
                 ->render(function (Events $event){
                     return CheckBox::make('events[]')

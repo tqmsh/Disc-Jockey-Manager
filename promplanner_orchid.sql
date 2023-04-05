@@ -398,6 +398,22 @@ CREATE TABLE `notifications` (
 -- --------------------------------------------------------
 
 --
+<<<<<<< Updated upstream
+=======
+-- Table structure for table `no_play_songs`
+--
+
+CREATE TABLE `no_play_songs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+   `title` varchar(255) NOT NULL,
+  `artist` varchar(255) NOT NULL,
+  `event_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+>>>>>>> Stashed changes
 -- Table structure for table `password_resets`
 --
 
@@ -658,6 +674,54 @@ CREATE TABLE `sessions` (
 -- --------------------------------------------------------
 
 --
+<<<<<<< Updated upstream
+=======
+-- Table structure for table `songs`
+--
+
+CREATE TABLE `songs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `artist` varchar(255) NOT NULL,
+  `num_votes` smallint(6) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `songs`
+--
+
+INSERT INTO `songs` (`id`, `title`, `artist`, `num_votes`, `created_at`, `updated_at`) VALUES
+(1, 'Baby Shark', 'Pinkfong', 0, '2023-03-21 18:35:57', NULL),
+(2, 'Stronger', 'Kanye West', 0, '2023-03-21 18:36:24', NULL),
+(3, 'Baby Love', 'Baby Love', 0, '2023-03-21 18:36:24', NULL),
+(4, 'Truth Hurts', 'Lizzo', 0, '2023-03-21 18:41:23', NULL),
+(5, 'Without You', 'Harry Nilsson', 0, '2023-03-21 18:41:32', NULL),
+(6, 'Harry Nilsson', 'Harry Nilsson', 0, '2023-03-21 18:41:38', NULL),
+(7, 'So What', 'Miles Davis', 0, '2023-03-21 18:41:38', NULL),
+(8, 'Old Town Road', 'Lil Nas X', 0, '2023-03-21 18:42:38', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `song_requests`
+--
+
+CREATE TABLE `song_requests` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `artist` varchar(255) NOT NULL,
+  `event_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `requester_user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+>>>>>>> Stashed changes
 -- Table structure for table `students`
 --
 
@@ -1009,6 +1073,16 @@ ALTER TABLE `notifications`
   ADD KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`);
 
 --
+<<<<<<< Updated upstream
+=======
+-- Indexes for table `no_play_songs`
+--
+ALTER TABLE `no_play_songs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `no-play-song-event` (`event_id`);
+
+--
+>>>>>>> Stashed changes
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -1066,6 +1140,23 @@ ALTER TABLE `sessions`
   ADD KEY `sessions_user_id_foreign` (`user_id`);
 
 --
+<<<<<<< Updated upstream
+=======
+-- Indexes for table `songs`
+--
+ALTER TABLE `songs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `song_requests`
+--
+ALTER TABLE `song_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `requester_user_id` (`requester_user_id`);
+
+--
+>>>>>>> Stashed changes
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
@@ -1341,8 +1432,19 @@ ALTER TABLE `localadmins`
 --
 -- Constraints for table `music`
 --
+<<<<<<< Updated upstream
 ALTER TABLE `music`
   ADD CONSTRAINT `music_requester_foreign` FOREIGN KEY (`requester`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+=======
+ALTER TABLE `no_play_songs`
+  ADD CONSTRAINT `no-play-song-event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `positions`
+--
+ALTER TABLE `positions`
+  ADD CONSTRAINT `positions_ibfk_1` FOREIGN KEY (`election_id`) REFERENCES `elections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+>>>>>>> Stashed changes
 
 --
 -- Constraints for table `role_users`
@@ -1371,6 +1473,16 @@ ALTER TABLE `sessions`
   ADD CONSTRAINT `sessions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+<<<<<<< Updated upstream
+=======
+-- Constraints for table `song_requests`
+--
+ALTER TABLE `song_requests`
+  ADD CONSTRAINT `song_requests_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `song_requests_ibfk_3` FOREIGN KEY (`requester_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+>>>>>>> Stashed changes
 -- Constraints for table `students`
 --
 ALTER TABLE `students`

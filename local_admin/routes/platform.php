@@ -15,6 +15,8 @@ use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewEventStudentScreen;
+use App\Orchid\Screens\ViewSongsScreen;
+use App\Orchid\Screens\EditSongRequestScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -69,6 +71,9 @@ Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->nam
 
 Route::screen('/events/suggestVendor', SuggestVendorScreen::class)->name('platform.suggestVendor.create');
 
+
+Route::screen('/songs', ViewSongsScreen::class)->name('platform.songs.list');
+Route::screen('/songs/{song}/edit', EditSongRequestScreen::class)->name('platform.songs.edit');
 
 
 // Platform > Profile
