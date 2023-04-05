@@ -98,20 +98,25 @@ class EditCourseSectionScreen extends Screen
     {
         try {
 
-            if(Section::where('ordering', request('ordering'))->where('course_id', $course->id)->where('id', '!=', $section->id)->exists()) {
+            $fields = request()->validate([
+                'ordering' => 'required|numeric',
+                'section_name' => 'required',
+            ]);
+
+            if(Section::where('ordering',$fields['ordering'])->where('course_id', $course->id)->whereNot('id',$section->id)->exists()) {
 
                 Toast::error('Ordering already exists');
                 return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
 
-            } else if(Section::where('section_name', request('section_name'))->where('course_id', $course->id)->where('id', '!=', $section->id)->exists()) {
+            } else if(Section::where('section_name', $fields['section_name'])->where('course_id', $course->id)->whereNot('id',$section->id)->exists()) {
 
                 Toast::error('Section name already exists');
                 return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
             }
 
             $section->update([
-                'ordering' => request('ordering'),
-                'section_name' => request('section_name'),
+                'ordering' =>$fields['ordering'],
+                'section_name' => $fields['section_name'],
             ]);
         } catch (\Exception $e) {
             Toast::error('Something went wrong');
