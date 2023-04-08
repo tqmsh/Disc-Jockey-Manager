@@ -7,7 +7,7 @@ use App\Models\Events;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 
-class ViewElectionLayout extends Table
+class ViewPositionLayout extends Table
 {
     /**
      * Data source.
@@ -17,7 +17,7 @@ class ViewElectionLayout extends Table
      *
      * @var string
      */
-    protected $target = 'elections';
+    protected $target = 'position';
 
     /**
      * Get the table cells to be displayed.
@@ -26,6 +26,8 @@ class ViewElectionLayout extends Table
      */
     protected function columns(): iterable
     {
-        return [];
+        return [
+            TD::make('position_name', 'Position Name')
+        ];
     }
 }
