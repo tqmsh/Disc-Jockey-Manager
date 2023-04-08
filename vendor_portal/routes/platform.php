@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
 use App\Orchid\Screens\CreateBidScreen;
 use App\Orchid\Screens\ViewEventScreen;
+use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\ViewPackageScreen;
 use App\Orchid\Screens\EditEventBidScreen;
@@ -19,6 +20,9 @@ use App\Orchid\Screens\EditStudentBidScreen;
 use App\Orchid\Screens\ViewBidHistoryScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewSingleLessonScreen;
+use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
@@ -64,6 +68,13 @@ Route::screen('/eventbid/{eventBid}/edit', EditEventBidScreen::class)->name('pla
 
 Route::screen('/studentbid/{studentBid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
 
+Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+
+Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+
+Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+
+Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
