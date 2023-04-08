@@ -4,6 +4,8 @@ namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
 use App\Models\Events;
+use App\Models\Election;
+use App\Models\Position;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 
@@ -28,6 +30,10 @@ class ViewPositionLayout extends Table
     {
         return [
             TD::make('position_name', 'Position Name')
+            ->render(function (Position $position) {
+                return Link::make($position->position_name)
+                    ->route('platform.event.edit', $position);
+            }),
         ];
     }
 }
