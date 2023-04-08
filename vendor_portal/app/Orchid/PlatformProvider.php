@@ -61,7 +61,10 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Campaigns')
             ->icon('picture')
             ->route('platform.ad.list'),
-
+    
+            Menu::make('PromGuide')
+                ->icon('book-open')
+                ->route('platform.course.list'),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')

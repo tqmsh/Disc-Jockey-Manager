@@ -5,15 +5,19 @@ declare(strict_types=1);
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
+use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewSingleLessonScreen;
+use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewEventTableScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +41,14 @@ Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
 Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platform.event.register');
 
 Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('platform.event.tables');
+
+Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+
+Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+
+Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+
+Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
