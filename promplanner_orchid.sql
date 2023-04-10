@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2023 at 08:09 PM
+-- Generation Time: Apr 10, 2023 at 09:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -81,6 +81,17 @@ CREATE TABLE `attachments` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `attachments`
+--
+
+INSERT INTO `attachments` (`id`, `name`, `original_name`, `mime`, `extension`, `size`, `sort`, `path`, `description`, `alt`, `hash`, `disk`, `user_id`, `group`, `created_at`, `updated_at`) VALUES
+(1, 'a4b29c00710298646405c7ca5535dda6ab65f242', 'blob', 'image/png', 'png', 74718, 0, '2023/04/01/', NULL, NULL, '6850fa9058d6e985ca87b4685def5399a0d04b3f', 'public', 197, NULL, '2023-04-02 01:54:16', '2023-04-02 01:54:16'),
+(2, '70cd04ef5f2b392b3915d88b25e1b5d97bf3c8f2', 'blob', 'image/png', 'png', 72181, 0, '2023/04/01/', NULL, NULL, 'ecd6a53f960de0ead42a91b5426a822857ba1042', 'public', 197, NULL, '2023-04-02 01:54:42', '2023-04-02 01:54:42'),
+(3, 'cbb4e0a60e7ceda65a8e4eed3e3b40de4619e701', 'blob', 'image/png', 'png', 501165, 0, '2023/04/01/', NULL, NULL, 'ccb91a47ecaa1c4807e96b848c656921a871f985', 'public', 197, NULL, '2023-04-02 02:06:05', '2023-04-02 02:06:05'),
+(4, '7f2d7fcd7d30d3f1532c9b9a35561b53674a4c10', 'blob', 'image/png', 'png', 176700, 0, '2023/04/01/', NULL, NULL, '578f95740c2211bf4955b8edd879771f3b7e697c', 'public', 197, NULL, '2023-04-02 02:19:59', '2023-04-02 02:19:59'),
+(5, 'c3d747174c6eea3d559272a19839a0451e2ce209', 'blob', 'image/png', 'png', 174821, 0, '2023/04/01/', NULL, NULL, 'fc25fbe0d7467c7b20cc7eceafcd9cce1720568c', 'public', 197, NULL, '2023-04-02 02:23:03', '2023-04-02 02:23:03');
+
 -- --------------------------------------------------------
 
 --
@@ -92,15 +103,23 @@ CREATE TABLE `campaigns` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `region_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `website` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `clicks` bigint(20) UNSIGNED NOT NULL,
   `impressions` bigint(20) UNSIGNED NOT NULL,
   `active` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `campaigns`
+--
+
+INSERT INTO `campaigns` (`id`, `user_id`, `category_id`, `region_id`, `title`, `image`, `website`, `clicks`, `impressions`, `active`, `created_at`, `updated_at`) VALUES
+(3, 197, 10, 1, 'Best campaign ever', 'http://127.0.0.1:8000/storage/2023/04/01/7f2d7fcd7d30d3f1532c9b9a35561b53674a4c10.png', 'https://orchid.software/en/docs/table/', 0, 0, 0, '2023-04-02 02:20:03', '2023-04-02 02:20:03'),
+(4, 197, 9, 1, 'retert', 'http://127.0.0.1:8000/storage/2023/04/01/c3d747174c6eea3d559272a19839a0451e2ce209.png', 'https://orchid.software/en/docs/table/', 0, 0, 0, '2023-04-02 02:23:11', '2023-04-02 02:23:11');
 
 -- --------------------------------------------------------
 
@@ -111,11 +130,11 @@ CREATE TABLE `campaigns` (
 CREATE TABLE `candidates` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `candidate_name` varchar(255) NOT NULL,
-  `candidate_bio` text DEFAULT NULL,
+  `candidate_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `candidate_bio` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `election_id` bigint(20) UNSIGNED NOT NULL,
   `position_id` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -125,11 +144,11 @@ CREATE TABLE `candidates` (
 
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` int(1) DEFAULT 0,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `categories`
@@ -148,19 +167,45 @@ INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VA
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `courses`
+--
+
+CREATE TABLE `courses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `ordering` double DEFAULT NULL,
+  `course_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` tinyint(3) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `courses`
+--
+
+INSERT INTO `courses` (`id`, `ordering`, `course_name`, `category`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Legalities of Prom', 2, '2023-03-27 20:09:17', '2023-03-30 04:42:17'),
+(2, 1.2, 'How to Choose the Best Music for Prom', 2, '2023-03-28 01:07:57', '2023-03-28 01:07:57'),
+(4, 1.1, 'How to Choose the Best Food for Prom', 2, '2023-03-30 04:30:50', '2023-03-30 04:30:50'),
+(8, 1.3, 'Course for the students', 3, '2023-04-08 04:30:27', '2023-04-08 04:30:27'),
+(9, 1.4, 'Course for the vendors', 4, '2023-04-08 04:30:42', '2023-04-08 04:30:42');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `elections`
 --
 
 CREATE TABLE `elections` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `election_name` varchar(255) NOT NULL,
+  `election_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `school_id` bigint(20) UNSIGNED NOT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -176,7 +221,7 @@ CREATE TABLE `election_votes` (
   `voter_user_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -223,11 +268,11 @@ CREATE TABLE `event_attendees` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `table_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `ticketstatus` varchar(255) NOT NULL DEFAULT 'Unpaid',
+  `ticketstatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Unpaid',
   `approved` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `event_attendees`
@@ -257,15 +302,15 @@ CREATE TABLE `event_bids` (
   `package_id` bigint(20) UNSIGNED NOT NULL,
   `category_id` bigint(20) UNSIGNED NOT NULL,
   `event_date` datetime NOT NULL,
-  `school_name` varchar(255) NOT NULL,
-  `notes` longtext DEFAULT NULL,
-  `contact_instructions` longtext DEFAULT NULL,
-  `company_name` varchar(255) NOT NULL,
-  `url` longtext DEFAULT NULL,
+  `school_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_instructions` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `event_bids`
@@ -333,6 +378,33 @@ CREATE TABLE `invitation` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `lessons`
+--
+
+CREATE TABLE `lessons` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `ordering` double DEFAULT NULL,
+  `lesson_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lesson_description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lesson_content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `section_id` bigint(20) UNSIGNED NOT NULL,
+  `course_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lessons`
+--
+
+INSERT INTO `lessons` (`id`, `ordering`, `lesson_name`, `lesson_description`, `lesson_content`, `section_id`, `course_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 'How to not hire stupid vendors', 'Here is a description, JUST DONT DO IT', '', 1, 1, '2023-03-30 01:35:07', NULL),
+(2, 1, 'Get Student Surveys', 'This is the best description to ever exist', '', 3, 2, '2023-03-30 01:37:50', NULL),
+(4, 1, 'Best lesssososos', 'Best descriptojsjkjsk', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quisque id diam vel quam elementum pulvinar etiam non quam. In nibh mauris cursus mattis molestie a iaculis. Eget nullam non nisi est sit. Sed libero enim sed faucibus turpis. Aliquet nibh praesent tristique magna sit amet purus gravida. Donec ultrices tincidunt arcu non sodales neque sodales. Nibh sit amet commodo nulla facilisi. Pretium lectus quam id leo in vitae turpis. Est sit amet facilisis magna etiam. Justo eget magna fermentum iaculis. Diam ut venenatis tellus in metus vulputate eu scelerisque. Neque volutpat ac tincidunt vitae semper quis. Malesuada fames ac turpis egestas maecenas pharetra. Vel pharetra vel turpis nunc eget. Blandit cursus risus at ultrices mi tempus imperdiet nulla.\r\n\r\nEuismod lacinia at quis risus. Egestas sed sed risus pretium. Lectus urna duis convallis convallis. Quam vulputate dignissim suspendisse in est ante in. Nisl tincidunt eget nullam non. Sollicitudin aliquam ultrices sagittis orci a scelerisque purus. Tempor commodo ullamcorper a lacus vestibulum sed arcu. Egestas egestas fringilla phasellus faucibus. Elit eget gravida cum sociis natoque penatibus et. Nulla at volutpat diam ut venenatis. Morbi tempus iaculis urna id volutpat lacus. Elit at imperdiet dui accumsan sit amet.\r\n\r\nCras pulvinar mattis nunc sed blandit libero volutpat. Cursus sit amet dictum sit amet justo donec enim diam. Erat pellentesque adipiscing commodo elit at imperdiet. Scelerisque eu ultrices vitae auctor eu augue. Id diam maecenas ultricies mi eget mauris pharetra et. Cras adipiscing enim eu turpis egestas pretium aenean. Vitae congue mauris rhoncus aenean vel elit scelerisque. Turpis egestas sed tempus urna et pharetra pharetra massa. Enim nec dui nunc mattis enim. Ullamcorper a lacus vestibulum sed. Non curabitur gravida arcu ac. Aenean et tortor at risus viverra adipiscing. At volutpat diam ut venenatis tellus. Proin libero nunc consequat interdum varius sit amet mattis. Quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit. Odio morbi quis commodo odio aenean sed adipiscing. Posuere ac ut consequat semper viverra nam.\r\n\r\nArcu felis bibendum ut tristique et egestas quis. Pulvinar proin gravida hendrerit lectus. Suspendisse sed nisi lacus sed. Ut pharetra sit amet aliquam id diam maecenas. Id porta nibh venenatis cras sed. Sit amet cursus sit amet dictum sit. Leo integer malesuada nunc vel risus commodo viverra maecenas. Facilisi etiam dignissim diam quis enim. Purus sit amet volutpat consequat mauris nunc congue nisi. In fermentum et sollicitudin ac. Ullamcorper a lacus vestibulum sed arcu non. Id aliquet risus feugiat in ante metus dictum at tempor. Enim sit amet venenatis urna cursus.\r\n\r\nTristique senectus et netus et. Nunc aliquet bibendum enim facilisis gravida neque convallis. Id diam vel quam elementum pulvinar etiam. Viverra nibh cras pulvinar mattis nunc sed blandit libero. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada. Quis ipsum suspendisse ultrices gravida dictum. Auctor elit sed vulputate mi sit amet. Duis ultricies lacus sed turpis tincidunt id. Neque vitae tempus quam pellentesque nec nam aliquam. Sed turpis tincidunt id aliquet risus feugiat in ante. Tincidunt tortor aliquam nulla facilisi cras fermentum. Purus faucibus ornare suspendisse sed nisi. Id velit ut tortor pretium viverra. Massa sapien faucibus et molestie ac feugiat sed lectus vestibulum. Suspendisse sed nisi lacus sed viverra. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis. Vel facilisis volutpat est velit egestas dui id. Sed odio morbi quis commodo odio aenean sed adipiscing. Lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci. Enim blandit volutpat maecenas volutpat blandit aliquam.', 2, 1, '2023-04-05 22:49:43', '2023-04-05 22:49:43');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `localadmins`
 --
 
@@ -340,7 +412,7 @@ CREATE TABLE `localadmins` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `school_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `account_status` int(1) DEFAULT 0,
+  `account_status` int(11) DEFAULT 0,
   `firstname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lastname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phonenumber` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -437,7 +509,7 @@ CREATE TABLE `no_play_songs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `song_id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -470,6 +542,16 @@ CREATE TABLE `personal_access_tokens` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `personal_access_tokens`
+--
+
+INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
+(1, 'App\\Models\\User', 205, 'myapptoken', '4b7efea4c0cc4a346ab9f248e2e328a96622d334c9ccfdf4f11771e7a95392c6', '[\"*\"]', NULL, NULL, '2023-03-27 00:12:32', '2023-03-27 00:12:32'),
+(2, 'App\\Models\\User', 205, 'myapptoken', '92ccaee44e20abc7e97f6614df419be5d12c2fec9039f90889fef6e3897841cd', '[\"*\"]', NULL, NULL, '2023-03-27 01:00:15', '2023-03-27 01:00:15'),
+(3, 'App\\Models\\User', 205, 'myapptoken', 'ecc18c18bc10519193071f6c2948ee9be3037061bc429a9c57f13e815d7aeda1', '[\"*\"]', NULL, NULL, '2023-03-27 14:45:02', '2023-03-27 14:45:02'),
+(4, 'App\\Models\\User', 205, 'myapptoken', '47495b9907931fdddd422460c5b233cc6944e06194bd4855223037e01010574a', '[\"*\"]', NULL, NULL, '2023-03-27 14:45:52', '2023-03-27 14:45:52');
+
 -- --------------------------------------------------------
 
 --
@@ -478,11 +560,11 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `positions` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `position_name` varchar(255) NOT NULL,
+  `position_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `election_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -492,10 +574,10 @@ CREATE TABLE `positions` (
 
 CREATE TABLE `regions` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `regions`
@@ -521,7 +603,7 @@ CREATE TABLE `roles` (
   `id` int(10) UNSIGNED NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `permissions` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `permissions` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -532,10 +614,10 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`id`, `slug`, `name`, `permissions`, `created_at`, `updated_at`) VALUES
 (1, 'Super Admin', 'Super Admin', '{\"platform.systems.roles\":true,\"platform.systems.users\":true,\"platform.systems.attachment\":true,\"platform.index\":true}', '2023-01-08 23:26:22', '2023-01-08 23:26:22'),
-(2, 'Local Admin', 'Local Admin', '{\"platform.index\":true}', '2023-01-08 23:26:22', '2023-01-08 23:26:22'),
-(3, 'Student', 'Student', '{\"platform.index\":true}', '2023-01-08 23:26:22', '2023-01-08 23:26:22'),
-(4, 'Vendor', 'Vendor', '{\"platform.index\":true}', '2023-01-08 23:26:22', '2023-01-08 23:26:22'),
-(5, 'Teacher', 'Teacher', '{\"platform.index\":true}', '2023-01-08 23:26:22', '2023-01-08 23:26:22');
+(2, 'Local Admin', 'Local Admin', '{\"platform.systems.attachment\":\"1\",\"platform.systems.roles\":\"0\",\"platform.systems.users\":\"0\",\"platform.index\":\"1\"}', '2023-01-08 23:26:22', '2023-03-27 23:49:48'),
+(3, 'Student', 'Student', '{\"platform.systems.attachment\":\"1\",\"platform.systems.roles\":\"0\",\"platform.systems.users\":\"0\",\"platform.index\":\"1\"}', '2023-01-08 23:26:22', '2023-03-27 23:49:53'),
+(4, 'Vendor', 'Vendor', '{\"platform.systems.attachment\":\"1\",\"platform.systems.roles\":\"0\",\"platform.systems.users\":\"0\",\"platform.index\":\"1\"}', '2023-01-08 23:26:22', '2023-03-27 23:46:51'),
+(5, 'Teacher', 'Teacher', '{\"platform.systems.attachment\":\"1\",\"platform.systems.roles\":\"0\",\"platform.systems.users\":\"0\",\"platform.index\":\"1\"}', '2023-01-08 23:26:22', '2023-03-27 23:49:59');
 
 -- --------------------------------------------------------
 
@@ -588,8 +670,7 @@ INSERT INTO `role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALU
 (196, 4, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
 (197, 4, '2023-01-21 02:42:36', '2023-01-21 02:42:36'),
 (198, 3, '2023-02-14 23:43:02', '2023-02-14 23:43:02'),
-(200, 4, '2023-02-16 23:50:12', '2023-02-16 23:50:12'),
-(201, 4, '2023-02-16 23:50:12', '2023-02-16 23:50:12');
+(205, 3, '2023-03-27 00:13:31', '2023-03-27 00:13:31');
 
 -- --------------------------------------------------------
 
@@ -701,6 +782,31 @@ INSERT INTO `seatings` (`id`, `event_id`, `tablename`, `capacity`, `created_at`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sections`
+--
+
+CREATE TABLE `sections` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `ordering` double DEFAULT NULL,
+  `course_id` bigint(20) UNSIGNED NOT NULL,
+  `section_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sections`
+--
+
+INSERT INTO `sections` (`id`, `ordering`, `course_id`, `section_name`, `created_at`, `updated_at`) VALUES
+(1, 1.3, 1, 'Hiring Procedures', '2023-03-30 00:56:36', '2023-04-01 23:42:59'),
+(2, 1.1, 1, 'Venue Legalities', '2023-03-30 00:57:09', '2023-04-01 23:42:33'),
+(3, 1, 2, 'Students Taste', '2023-03-30 00:57:37', NULL),
+(5, 1.2, 1, 'Test', '2023-03-30 05:58:32', '2023-03-30 05:58:32');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sessions`
 --
 
@@ -721,11 +827,11 @@ CREATE TABLE `sessions` (
 
 CREATE TABLE `songs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `artist` varchar(255) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `artist` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `songs`
@@ -754,7 +860,7 @@ CREATE TABLE `song_requests` (
   `requester_user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -768,10 +874,10 @@ CREATE TABLE `students` (
   `school_id` bigint(20) UNSIGNED DEFAULT NULL,
   `firstname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lastname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `grade` smallint(2) DEFAULT NULL,
+  `grade` smallint(6) DEFAULT NULL,
   `phonenumber` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `account_status` int(1) DEFAULT 0,
+  `account_status` int(11) DEFAULT 0,
   `school` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `allergies` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -790,7 +896,8 @@ INSERT INTO `students` (`id`, `user_id`, `school_id`, `firstname`, `lastname`, `
 (110, 155, 51, 'Student 1', 'Student 1', 12, '(546) 897-8921', 'student001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
 (121, 169, 51, 'Import 1', 'efwefwef', 9, '12345678910', 'import1@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nuts', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (122, 170, 51, 'Import 2', 'wefwef', 10, '9632587459', 'import2@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nutseeee', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
-(124, 198, 51, 'Zg man', 'Big man tings', 10, '(612) 354-8954', 'bigman@tings.com', 1, NULL, 'Bad Grades', '2023-02-14 23:43:02', '2023-02-15 01:25:38');
+(124, 198, 51, 'Zg man', 'Big man tings', 10, '(612) 354-8954', 'bigman@tings.com', 1, NULL, 'Bad Grades', '2023-02-14 23:43:02', '2023-02-15 01:25:38'),
+(126, 205, 3, 'Ethan', 'Guan', 12, '613-287-1612', 'guanethan123@gmail.com', 1, 'Torphy-Cole', 'none', '2023-03-27 00:12:32', '2023-03-27 00:13:31');
 
 --
 -- Triggers `students`
@@ -813,15 +920,15 @@ CREATE TABLE `student_bids` (
   `region_id` bigint(20) UNSIGNED DEFAULT NULL,
   `package_id` bigint(20) UNSIGNED NOT NULL,
   `category_id` bigint(20) UNSIGNED NOT NULL,
-  `school_name` varchar(255) NOT NULL,
-  `notes` longtext DEFAULT NULL,
-  `contact_instructions` longtext DEFAULT NULL,
-  `company_name` varchar(255) NOT NULL,
-  `url` longtext DEFAULT NULL,
+  `school_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_instructions` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `student_bids`
@@ -847,7 +954,7 @@ CREATE TABLE `users` (
   `role` int(10) UNSIGNED DEFAULT NULL,
   `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `currentPlan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `account_status` int(1) DEFAULT 0,
+  `account_status` int(11) DEFAULT 0,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -860,7 +967,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'oLTmlGOJ2PkpK1xD5iMR1hOKT2SE8ub2INJeTRWJCwStXS4bGSDg2FEKvE85', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
+(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'hqhyRO1lQES8J4sXqJ0GemNQZzJTq6nNB8Rx8CmoRQPA7h5BzCDLzFusbsUS', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
 (52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
 (67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
 (68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
@@ -879,10 +986,10 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
 (149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
 (150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'UGtUmagSdHzFKUZHB27uGXoPCK14zCnHtrciWN4uljO6LEW0yM6UhYvLWww3', '2022-12-02 00:58:48', '2022-12-10 22:26:44'),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'b1hh73f4mZ6KnesdsMlBf2BGMJPYlibtnVsj5jOepN19xuL8uVxXdBcX0arL', '2022-12-02 00:58:48', '2022-12-10 22:26:44'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'Q1PnB8X8gmzd93js5U6oAwumLuhcVxhjdJQwmM869KNOCif7LTjKu2qo7i4v', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
+(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'M5QLsTbg0D1nPsclJjrv8lKaSoY05F6VBzel3O6HLz2MLpzSlMRAHHQ023CX', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
 (169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
@@ -894,11 +1001,9 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'CTym7ZRpCA0ap8fgUZMBsDJbGZ1ILdJ1oEFVNbwpdzfsu30SM61VIP9EagAo', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
+(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', '4zCYkaPFqiFNlQkCcIKarkJCZFYDeOWfG6y4qYREpddHzQQti8oE60KZFxjD', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
 (198, 'bigman101', 'Zg man', 'Big man tings', 'bigman@tings.com', '(612) 354-8954', 3, 'Canada', NULL, 1, NULL, '$2y$10$B10Kj5SYsPn6EKwkyQRbPO7UmY/YqPWkzzzyiU0dZ3DWx.xLRnJpy', NULL, '2023-02-14 23:43:02', '2023-02-15 01:25:38'),
-(199, NULL, 'Imran', 'Khan', 'imranbadrun@hotmail.com', '(613) 404-6926', NULL, 'Canada', NULL, 0, NULL, NULL, NULL, '2023-02-16 23:41:34', '2023-02-16 23:41:34'),
-(200, NULL, 'Imran', 'Khan', 'imranbaterrtedrun@hotmail.com', '(613) 404-6926', NULL, 'Canada', NULL, 1, NULL, NULL, NULL, '2023-02-16 23:44:11', '2023-02-16 23:50:12'),
-(201, NULL, 'Imran', 'Khan', 'imranbaterrtasdedrun@hotmail.com', '(613) 404-6926', NULL, 'Canada', NULL, 1, NULL, NULL, NULL, '2023-02-16 23:44:37', '2023-02-16 23:50:12');
+(205, 'etanguan', 'Ethan', 'Guan', 'guanethan123@gmail.com', '613-287-1612', 3, 'Philippines', NULL, 1, NULL, '$2y$10$NQk4fTkCwz5R4dvcSILnW.36rqdQkMgOvl6ewaZNJc7Auabs5.Kbq', NULL, '2023-03-27 00:12:32', '2023-03-27 00:13:31');
 
 -- --------------------------------------------------------
 
@@ -910,7 +1015,7 @@ CREATE TABLE `vendors` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `account_status` int(1) NOT NULL DEFAULT 0,
+  `account_status` int(11) NOT NULL DEFAULT 0,
   `company_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -933,9 +1038,7 @@ INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `account_status`, `compan
 (6, 188, 9, 1, 'Bidenn Corporatione', '4735 lol street', 'nah', 'nah', 'USA', '2353', 'dssdddsddss', 'https://www.youtube.com/', 'bidenjoe@isuck.com', '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
 (8, 190, 10, 1, 'Trump Party', '87 Dolla Dolla Bills', 'Money Land', 'fsdfs', 'USA', 'sdfsdf', 'dssdddsddss', 'https://www.youtube.com/', 'trumpman@maga.com', '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
 (9, 196, 9, 1, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', '(454) 546-4566', 'https://www.donaldjtrump.com/', 'donaldtrump@trump.com', '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(10, 197, 11, 1, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
-(11, 200, 9, 1, 'NEXGRILL', '580 Brunel Street', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', '(613) 404-6926', 'https://www.ciena.com/', 'imranbaterrtedrun@hotmail.com', '2023-02-16 23:44:11', '2023-02-16 23:50:12'),
-(12, 201, 10, 1, 'sdadasd', '580 Brunel Street', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', '(613) 404-6926', 'https://amazon.com', 'imranbaterrtasdedrun@hotmail.com', '2023-02-16 23:44:37', '2023-02-16 23:50:12');
+(10, 197, 11, 1, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', '2023-01-21 02:41:46', '2023-01-21 02:42:36');
 
 -- --------------------------------------------------------
 
@@ -946,13 +1049,13 @@ INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `account_status`, `compan
 CREATE TABLE `vendor_packages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `package_name` varchar(255) NOT NULL,
-  `description` longtext DEFAULT NULL,
+  `package_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(10,0) UNSIGNED NOT NULL,
-  `url` longtext DEFAULT NULL,
+  `url` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vendor_packages`
@@ -976,7 +1079,7 @@ CREATE TABLE `vendor_paid_regions` (
   `region_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vendor_paid_regions`
@@ -1032,6 +1135,12 @@ ALTER TABLE `candidates`
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `courses`
+--
+ALTER TABLE `courses`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1106,6 +1215,14 @@ ALTER TABLE `invitation`
   ADD KEY `invitation_recipient_foreign` (`recipient`),
   ADD KEY `invitation_inviter_foreign` (`inviter`),
   ADD KEY `invitation_event_foreign` (`event`);
+
+--
+-- Indexes for table `lessons`
+--
+ALTER TABLE `lessons`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `section_id_lesson` (`section_id`),
+  ADD KEY `course_id_lesson` (`course_id`);
 
 --
 -- Indexes for table `localadmins`
@@ -1193,6 +1310,13 @@ ALTER TABLE `schools`
 ALTER TABLE `seatings`
   ADD PRIMARY KEY (`id`),
   ADD KEY `event_id` (`event_id`);
+
+--
+-- Indexes for table `sections`
+--
+ALTER TABLE `sections`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `course_id_section` (`course_id`);
 
 --
 -- Indexes for table `sessions`
@@ -1286,13 +1410,13 @@ ALTER TABLE `attachmentable`
 -- AUTO_INCREMENT for table `attachments`
 --
 ALTER TABLE `attachments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `campaigns`
 --
 ALTER TABLE `campaigns`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `candidates`
@@ -1305,6 +1429,12 @@ ALTER TABLE `candidates`
 --
 ALTER TABLE `categories`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `courses`
+--
+ALTER TABLE `courses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `elections`
@@ -1355,6 +1485,12 @@ ALTER TABLE `invitation`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `lessons`
+--
+ALTER TABLE `lessons`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `localadmins`
 --
 ALTER TABLE `localadmins`
@@ -1376,7 +1512,7 @@ ALTER TABLE `no_play_songs`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `positions`
@@ -1403,6 +1539,12 @@ ALTER TABLE `seatings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `sections`
+--
+ALTER TABLE `sections`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
@@ -1424,7 +1566,7 @@ ALTER TABLE `song_requests`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `student_bids`
@@ -1436,7 +1578,7 @@ ALTER TABLE `student_bids`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 
 --
 -- AUTO_INCREMENT for table `vendors`
@@ -1544,6 +1686,13 @@ ALTER TABLE `invitation`
   ADD CONSTRAINT `invitation_recipient_foreign` FOREIGN KEY (`recipient`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `lessons`
+--
+ALTER TABLE `lessons`
+  ADD CONSTRAINT `course_id_lesson` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `section_id_lesson` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `localadmins`
 --
 ALTER TABLE `localadmins`
@@ -1582,6 +1731,12 @@ ALTER TABLE `schools`
 --
 ALTER TABLE `seatings`
   ADD CONSTRAINT `seatings_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sections`
+--
+ALTER TABLE `sections`
+  ADD CONSTRAINT `course_id_section` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sessions`
