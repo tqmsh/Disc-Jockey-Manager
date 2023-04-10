@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Seating extends Model
+class ElectionVotes extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'id', 
-        'event_id', 
-        'tablename', 
-        'creaeted_at',
-        'updated_at'
+        'election_id',
+        'voter_user_id',
+        'candidate_id',
+        'position_id',
+        'created_by',
+        'updated_by',
     ];
 }

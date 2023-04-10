@@ -12,6 +12,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\StudentBidsController;
 use App\Http\Controllers\LocaladminController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\EventAttendeesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +51,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     // Additional StudentBid Methods
     Route::get('/getStudentBids', [StudentBidsController::class, 'getStudentBids']);
 
-});
+    Route::get('/getTable', [EventAttendeesController::class, 'getTable']);
+
+});                                                 

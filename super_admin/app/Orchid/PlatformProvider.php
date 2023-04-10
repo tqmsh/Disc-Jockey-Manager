@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Student;
 use Orchid\Support\Color;
@@ -39,7 +40,7 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('home')
             ->title('CORE')
             ->route('platform.example'),
-            
+
             //MONEYYY MAKER
             Menu::make('Vendors')
             ->icon('dollar')
@@ -54,7 +55,7 @@ class PlatformProvider extends OrchidServiceProvider
                 Menu::make('Bids')
                 ->icon('money')
                 ->route('platform.bid.list'),
-                
+
                 //pending vendor nav option
                 Menu::make('Pending Vendors')
                 ->icon('user-follow')
@@ -70,6 +71,14 @@ class PlatformProvider extends OrchidServiceProvider
                     return count(Categories::where('status', 0)->get());
                 })
                 ->route('platform.category.list'),
+
+                // Campaign list option
+                Menu::make('Ad Campaigns')
+                ->icon("picture")
+                ->badge(function () {
+                    return count(Campaign::where('active', 0)->get());
+                })
+                ->route('platform.ad.list')
             ]),
 
             Menu::make('Schools')
@@ -114,7 +123,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('List')
                         ->icon('list')
                         ->route('platform.student.list'),
-                        
+
                     //pending student nav option
                     Menu::make('Pending Students')
                         ->icon('user-follow')
@@ -130,11 +139,15 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('diamond')
                 ->route('platform.event.list'),
 
+            Menu::make('PromGuide')
+                ->icon('book-open')
+                ->route('platform.course.list'),
+
             Menu::make(__('Roles'))
                 ->icon('lock')
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles'),
-                
+
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
                 ->icon('arrow-down')

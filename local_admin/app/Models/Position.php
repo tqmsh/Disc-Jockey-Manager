@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Seating extends Model
+class Position extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'id', 
-        'event_id', 
-        'tablename', 
-        'creaeted_at',
-        'updated_at'
+        'position_name',
+        'election_id',
+        'created_by',
+        'updated_by',
     ];
 }

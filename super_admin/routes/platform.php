@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\EditAdScreen;
+use App\Orchid\Screens\ViewAdScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
+use App\Orchid\Screens\EditCourseScreen;
 use App\Orchid\Screens\EditRegionScreen;
 use App\Orchid\Screens\EditSchoolScreen;
 use App\Orchid\Screens\EditVendorScreen;
+use App\Orchid\Screens\ViewAllBidScreen;
+use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewRegionScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\ViewVendorScreen;
@@ -33,8 +38,14 @@ use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewEventStudentScreen;
+use App\Orchid\Screens\ViewSingleLessonScreen;
+use App\Orchid\Screens\EditCourseSectionScreen;
+use App\Orchid\Screens\EditSectionLessonScreen;
+use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
+use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
+use App\Orchid\Screens\CreateSectionLessonScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -42,7 +53,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewAllBidScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +76,7 @@ Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
 
 //show create student screen
-Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');        
+Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
 
 //show edit students screen
 Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
@@ -75,7 +85,7 @@ Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platf
 Route::screen('/vendors', ViewVendorScreen::class)->name('platform.vendor.list');
 
 //show create vendors screen
-Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');        
+Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');
 
 //show edit vendors screen
 Route::screen('/vendors/{vendor}/edit', EditVendorScreen::class)->name('platform.vendor.edit');
@@ -139,6 +149,34 @@ Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
+
+//view courses screen route
+Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+
+//edit course screen route
+Route::screen('/courses/{course}/edit', EditCourseScreen::class)->name('platform.course.edit');
+
+//view course section screen route
+Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+
+//edit course section screen route
+Route::screen('/courses/{course}/sections/{section}/edit', EditCourseSectionScreen::class)->name('platform.courseSection.edit');
+
+//view lessons in a course section screen route
+Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+
+//edit lesson in a course section screen route
+Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/edit', EditSectionLessonScreen::class)->name('platform.sectionLesson.edit');
+
+//view a single section lesson screen route
+Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+
+//create a section lesson screen route
+Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
+
+Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
+Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

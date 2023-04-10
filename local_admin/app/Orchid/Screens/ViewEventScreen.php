@@ -149,6 +149,9 @@ class ViewEventScreen extends Screen
         if($type == 'event'){
             return redirect()->route('platform.eventBids.list', $event);
         } 
+        else if($type == 'promvote'){
+            return redirect() -> route('platform.eventPromvote.list', $event);
+        }
         else if($type == 'edit'){
             return redirect() -> route('platform.event.edit', $event);
         }

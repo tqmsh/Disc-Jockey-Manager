@@ -42,6 +42,10 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Events')
             ->icon('diamond')
             ->route('platform.event.list'),
+
+            Menu::make('PromGuide')
+                ->icon('book-open')
+                ->route('platform.course.list'),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
