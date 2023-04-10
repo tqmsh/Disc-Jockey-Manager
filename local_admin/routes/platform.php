@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\CreateElectionScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;;
 use App\Orchid\Screens\EditEventScreen;
@@ -61,6 +62,8 @@ Route::screen('/events/{event}/edit', EditEventScreen::class)->name('platform.ev
 
 //show create event screen
 Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.create');
+
+Route::screen('/events/promvote/{event_id}/create', CreateElectionScreen::class)->name('platform.eventPromvote.create');
 
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');

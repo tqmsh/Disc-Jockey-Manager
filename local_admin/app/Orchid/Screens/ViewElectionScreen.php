@@ -9,6 +9,7 @@ use App\Models\Position;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Orchid\Layouts\ViewPositionLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
@@ -28,12 +29,12 @@ class ViewElectionScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $election = Election::where('event_id', $event->id)->paginate();
-        $positions = Position::where('election_id', $election->id)->paginate();
+        $election = Election::where('event_id', $event->id)->get();
+        $position = Position::where('election_id', $election->pluck('id'))->get();
         return [
             'event' => $event,
             'election' => $election,
-            'position' => $positions
+            'position' => $position
         ];
     }
 
@@ -57,7 +58,7 @@ class ViewElectionScreen extends Screen
         return [
             Link::make('Create Election')
                 ->icon('plus')
-                ->route('platform.event.list'),
+                ->redirect() -> route('platform.eventPromvote.create', $this->event->id),
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -73,11 +74,7 @@ class ViewElectionScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::tabs([
-                'Position 1' => [],
-
-                'Position 2' => [],
-            ]),
+            ViewPositionLayout::class
         ];
     }
 }

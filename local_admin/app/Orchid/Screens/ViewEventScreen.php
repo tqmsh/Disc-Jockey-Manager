@@ -150,7 +150,11 @@ class ViewEventScreen extends Screen
             return redirect()->route('platform.eventBids.list', $event);
         } 
         else if($type == 'promvote'){
-            return redirect() -> route('platform.eventPromvote.list', $event);
+            //check if election is already created
+            // if not created, go to create
+            return redirect() -> route('platform.eventPromvote.create', $event);
+            // if created, go to page to view position
+            // return redirect() -> route('platform.eventPromvote.list', $event);
         }
         else if($type == 'edit'){
             return redirect() -> route('platform.event.edit', $event);
