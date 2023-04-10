@@ -58,7 +58,7 @@ class ViewElectionScreen extends Screen
         return [
             Link::make('Create Election')
                 ->icon('plus')
-                ->route('platform.event.list'),
+                ->redirect() -> route('platform.eventPromvote.create', $this->event->id),
 
             Link::make('Back')
                 ->icon('arrow-left')
