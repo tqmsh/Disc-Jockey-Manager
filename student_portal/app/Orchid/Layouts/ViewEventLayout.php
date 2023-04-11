@@ -7,9 +7,6 @@ use App\Models\Events;
 use Orchid\Support\Color;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Support\Facades\Toast;
-use Orchid\Support\Facades\Layout;
 
 class ViewEventLayout extends Table
 {
@@ -31,8 +28,6 @@ class ViewEventLayout extends Table
      */
     protected function columns(): iterable
     {
-        return [
-         
-        ];    
+        return [];    
     }
 }

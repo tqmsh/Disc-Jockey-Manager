@@ -93,6 +93,21 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->enableTime(),
 
+
+                Input::make('event_address')
+                ->title('Event Address')
+                ->type('text')
+                ->horizontal()
+                ->value($this->event->event_address),
+                
+                Input::make('event_zip_postal')
+                ->title('Event Zip/Postal')
+                ->type('text')
+                ->horizontal()
+                ->value($this->event->event_zip_postal),
+
+
+
                 Input::make('event_info')
                     ->title('Event Info')
                     ->type('text')

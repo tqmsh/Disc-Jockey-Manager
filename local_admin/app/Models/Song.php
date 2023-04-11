@@ -11,8 +11,7 @@ class Song extends Model
 
     protected $fillable = [
         'title',
-        'artist',
-        'num_votes'
+        'artist'
     ];
 
     public function getFullAttribute(): string{

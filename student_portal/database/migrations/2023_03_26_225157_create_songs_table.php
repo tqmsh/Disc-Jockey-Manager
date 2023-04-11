@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('artist');
-            $table->tinyInteger('num_votes');
             $table->timestamps();
         });
     }

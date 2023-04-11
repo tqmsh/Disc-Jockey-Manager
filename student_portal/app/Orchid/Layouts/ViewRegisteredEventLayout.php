@@ -28,50 +28,6 @@ class ViewRegisteredEventLayout extends Table
      */
     protected function columns(): iterable
     {
-        return [
-            TD::make()
-                ->width('100px')
-                ->align(TD::ALIGN_RIGHT)
-                ->render(function($event){
-                    return Button::make('Tables')->type(Color::DARK())->method('redirect', ['event_id' => $event->id, 'type' => 'table'])->icon('table');
-                }), 
-
-            TD::make()
-                ->width('100px')
-                ->align(TD::ALIGN_RIGHT)
-                ->render(function($event){
-                    return Button::make('Unregister')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('close');
-                }), 
-
-            TD::make('event_name', 'Event Name')
-                ->render(function (Events $event) {
-                    return e($event->event_name);
-                }),
-            TD::make('event_start_time', 'Event Start Date')
-                ->render(function (Events $event) {
-                    return e($event->event_start_time);
-                }),
-            TD::make('school', 'School')
-                ->render(function (Events $event) {
-                    return e($event->school);
-                }),
-            TD::make('event_address', 'Event Address')
-                ->render(function (Events $event) {
-                    return e($event->event_address);
-                }),
-            TD::make('event_zip_postal', 'Event Zip/Postal')
-                ->render(function (Events $event) {
-                    return e($event->event_zip_postal);
-                }),
-            TD::make('event_info', 'Event Info')
-                ->render(function (Events $event) {
-                    return e($event->event_info);
-                }),
-
-            TD::make('event_rules', 'Event Rules')
-                ->render(function (Events $event) {
-                    return e($event->event_rules);
-                }),
-        ];    
+        return [       ];    
     }
 }

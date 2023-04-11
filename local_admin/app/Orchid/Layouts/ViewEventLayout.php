@@ -31,7 +31,6 @@ class ViewEventLayout extends Table
     protected function columns(): iterable
     {
         return [
-            
             TD::make()
                 ->render(function (Events $event){
                     return CheckBox::make('events[]')
@@ -93,6 +92,11 @@ class ViewEventLayout extends Table
             TD::make()
                 ->render(function (Events $event) {
                     return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', ['event_id'=>$event->id, 'type'=>"edit"])->icon('pencil');
+                }),
+
+            TD::make()
+                ->render(function (Events $event) {
+                    return Button::make('View Song Requests')-> type(Color::PRIMARY())-> method('redirect', ['event_id'=>$event->id, 'type'=>"viewSongReq"])->icon('microphone');
                 }),
 
 

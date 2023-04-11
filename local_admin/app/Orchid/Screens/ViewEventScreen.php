@@ -159,6 +159,9 @@ class ViewEventScreen extends Screen
         else if($type == 'edit'){
             return redirect() -> route('platform.event.edit', $event);
         }
+        else if($type == 'viewSongReq'){
+            return redirect() -> route('platform.songreq.list', $event);
+        }
         else {
             return redirect()->route('platform.eventStudents.list', $event);
         }    
