@@ -7,8 +7,6 @@ use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
-use App\Orchid\Screens\CreateBidScreen;
-use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\ViewPackageScreen;
@@ -16,13 +14,16 @@ use App\Orchid\Screens\EditEventBidScreen;
 use App\Orchid\Screens\CreatePackageScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\CreateEventBidScreen;
 use App\Orchid\Screens\EditStudentBidScreen;
 use App\Orchid\Screens\ViewBidHistoryScreen;
+use App\Orchid\Screens\CreateStudentBidScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
+use App\Orchid\Screens\ViewBidOpportunitiesScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
@@ -46,7 +47,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show events screen
-Route::screen('/bidopportunities', ViewEventScreen::class)->name('platform.event.list');
+Route::screen('/bidopportunities', ViewBidOpportunitiesScreen::class)->name('platform.bidopportunities.list');
 
 Route::screen('/packages', ViewPackageScreen::class)->name('platform.package.list');
 
@@ -60,7 +61,9 @@ Route::screen('/campaigns/create', CreateAdScreen::class)->name('platform.ad.cre
 
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
-Route::screen('/bid/{event}/create', CreateBidScreen::class)->name('platform.bid.create');
+Route::screen('/eventbid/{event}/create', CreateEventBidScreen::class)->name('platform.bid.create');
+
+Route::screen('/studentbid/{student}/create', CreateStudentBidScreen::class)->name('platform.studentBid.create');
 
 Route::screen('/bids/history', ViewBidHistoryScreen::class)->name('platform.bidhistory.list');
 
