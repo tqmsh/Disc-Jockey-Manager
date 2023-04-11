@@ -19,7 +19,7 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 
-class CreateBidScreen extends Screen
+class CreateEventBidScreen extends Screen
 {
     public $event;
     public $vendor; 
