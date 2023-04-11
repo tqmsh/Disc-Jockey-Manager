@@ -25,7 +25,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
 
-class ViewEventScreen extends Screen
+class ViewBidOpportunitiesScreen extends Screen
 {
     public $paidRegionIds;
     /**

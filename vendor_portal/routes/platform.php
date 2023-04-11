@@ -8,7 +8,6 @@ use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
 use App\Orchid\Screens\CreateBidScreen;
-use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\ViewPackageScreen;
@@ -23,6 +22,7 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
+use App\Orchid\Screens\ViewBidOpportunitiesScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
@@ -46,7 +46,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show events screen
-Route::screen('/bidopportunities', ViewEventScreen::class)->name('platform.event.list');
+Route::screen('/bidopportunities', ViewBidOpportunitiesScreen::class)->name('platform.event.list');
 
 Route::screen('/packages', ViewPackageScreen::class)->name('platform.package.list');
 
