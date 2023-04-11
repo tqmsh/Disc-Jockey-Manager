@@ -31,7 +31,7 @@ class CreateEventBidScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
+        $this->vendor = Vendors::find('user_id', Auth::user()->id)->first();
         
         return [
             'event' => $event
@@ -63,7 +63,7 @@ class CreateEventBidScreen extends Screen
 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.bidopportunities.list')
         ];
     }
 

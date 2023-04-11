@@ -47,7 +47,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show events screen
-Route::screen('/bidopportunities', ViewBidOpportunitiesScreen::class)->name('platform.event.list');
+Route::screen('/bidopportunities', ViewBidOpportunitiesScreen::class)->name('platform.bidopportunities.list');
 
 Route::screen('/packages', ViewPackageScreen::class)->name('platform.package.list');
 

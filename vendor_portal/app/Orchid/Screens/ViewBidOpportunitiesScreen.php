@@ -69,7 +69,7 @@ class ViewBidOpportunitiesScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.bidopportunities.list')
         ];
     }
 
@@ -119,7 +119,7 @@ class ViewBidOpportunitiesScreen extends Screen
     }
 
     public function filter(){
-        return redirect()->route('platform.event.list', request(['region_id']));
+        return redirect()->route('platform.bidopportunities.list', request(['region_id']));
     }
 
     //this method will create the category
