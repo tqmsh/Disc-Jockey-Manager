@@ -29,8 +29,8 @@ class ViewElectionScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $election = Election::where('event_id', $event->id)->get();
-        $position = Position::where('election_id', $election->pluck('id'))->get();
+        $election = Election::where('event_id', $event->id)->first();
+        $position = Position::where('election_id', $election->id)->paginate(10);
         return [
             'event' => $event,
             'election' => $election,
