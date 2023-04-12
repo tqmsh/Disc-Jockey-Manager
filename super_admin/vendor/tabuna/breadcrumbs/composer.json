@@ -1,0 +1,57 @@
+{
+    "name": "tabuna/breadcrumbs",
+    "description": "An easy way to add breadcrumbs to your Laravel app.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexandr Chernyaev",
+            "email": "bliz48rus@gmail.com"
+        },
+        {
+            "name": "Dwight Watson",
+            "email": "dwight@studentservices.com.au"
+        },
+        {
+            "name": "Dave James Miller",
+            "email": "dave@davejamesmiller.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "laravel/framework": "^9.0",
+        "laravel/serializable-closure": "^1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.0",
+        "phpunit/php-code-coverage": "^9.2",
+        "phpunit/phpunit": "^9.5.10"
+    },
+    "conflict": {
+        "mockery/mockery": "<1.4.2",
+        "symfony/http-foundation": "<5.1.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tabuna\\Breadcrumbs\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tabuna\\Breadcrumbs\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tabuna\\Breadcrumbs\\BreadcrumbsServiceProvider"
+            ],
+            "aliases": {
+                "Breadcrumbs": "Tabuna\\Breadcrumbs\\Breadcrumbs"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
