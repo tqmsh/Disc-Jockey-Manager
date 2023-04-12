@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Events;
+use App\Models\Region;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Vendors;
@@ -11,7 +12,6 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\Localadmin;
-use App\Models\Region;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -24,8 +24,9 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
+use App\Orchid\Layouts\ViewStudentBidLayout;
 
-class ViewEventScreen extends Screen
+class ViewBidOpportunitiesScreen extends Screen
 {
     public $paidRegionIds;
     /**
@@ -43,7 +44,8 @@ class ViewEventScreen extends Screen
 
         //get all events with the region_id matching an id in the array
         return [
-            'events' => Events::filter(request(['region_id']))->whereIn('region_id', $this->paidRegionIds)->paginate(10)
+            'events' => Events::filter(request(['region_id']))->whereIn('region_id', $this->paidRegionIds)->paginate(10),
+            'students' => Student::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10),
         ];
     }
 
@@ -67,7 +69,7 @@ class ViewEventScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.bidopportunities.list')
         ];
     }
 
@@ -95,7 +97,11 @@ class ViewEventScreen extends Screen
                 
             ]),
 
-            ViewEventLayout::class,
+            Layout::tabs([
+                'Events' => ViewEventLayout::class,
+                'Students' => ViewStudentBidLayout::class,
+            ]),
+
 
             Layout::rows([
 
@@ -113,7 +119,7 @@ class ViewEventScreen extends Screen
     }
 
     public function filter(){
-        return redirect()->route('platform.event.list', request(['region_id']));
+        return redirect()->route('platform.bidopportunities.list', request(['region_id']));
     }
 
     //this method will create the category
@@ -148,7 +154,15 @@ class ViewEventScreen extends Screen
 
     
 
-    public function redirect($event_id){
-        return redirect()->route('platform.bid.create', $event_id);
+    public function redirect(){
+
+        if(request('type') == 'event'){
+
+            return redirect()->route('platform.bid.create', request('event_id'));
+
+        } else if(request('type') == 'student'){
+
+            return redirect()->route('platform.studentBid.create', request('student_id'));
+        }
     }
 }
