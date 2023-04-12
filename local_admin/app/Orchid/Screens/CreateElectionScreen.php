@@ -58,7 +58,7 @@ class CreateElectionScreen extends Screen
         return [
             Button::make('Add')
                 ->icon('plus')
-                ->method('createElection'),
+                ->method('createElection',[$this->event]),
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -101,19 +101,19 @@ class CreateElectionScreen extends Screen
         ];
     }
 
-    public function createElection(Request $request){
+    public function createElection(Request $request, Events $event){
 
         try{
 
-            $formFields = $request->all();
-            $formFields['event_id'] = $this->event->id;
-            $formFields['school_id'] = $this->event->school_id;
+            $electionField = $request->all();
+            $electionField['event_id'] = $event->id;
+            $electionField['school_id'] = $event->school_id;
 
-            Election::create($formFields);
+            Election::create($electionField);
 
             Toast::success('Election Added Succesfully');
             
-            return redirect()->route('platform.eventPromvote.list',$this->event->id);
+            return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
             
