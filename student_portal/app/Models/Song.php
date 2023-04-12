@@ -11,10 +11,11 @@ class Song extends Model
 
     protected $fillable = [
         'title',
-        'artist'
+        'artist',
+        'test'
     ];
 
     public function getFullAttribute(): string{
-        return $this->attributes['title'] . ' - d' . $this->attributes['artist'];
+        return $this->attributes['title'] . ' - ' . $this->attributes['artist'];
     }
 }
