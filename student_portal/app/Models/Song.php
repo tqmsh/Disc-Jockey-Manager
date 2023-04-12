@@ -15,6 +15,6 @@ class Song extends Model
     ];
 
     public function getFullAttribute(): string{
-        return $this->attributes['title'] . ' - ' . $this->attributes['artist'];
+        return $this->attributes['title'] . ' - d' . $this->attributes['artist'];
     }
 }
