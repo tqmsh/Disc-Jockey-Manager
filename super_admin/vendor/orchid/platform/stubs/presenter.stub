@@ -1,9 +1,0 @@
-<?php
-
-namespace DummyNamespace;
-
-use Orchid\Support\Presenter;
-
-class DummyClass extends Presenter
-{
-}
