@@ -12,6 +12,5 @@ class NoPlaySong extends Model
     protected $fillable = [
         'title',
         'artist',
-        'event_id'
     ];
 }

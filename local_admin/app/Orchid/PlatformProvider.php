@@ -66,6 +66,11 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('PromGuide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
+
+
+            Menu::make('No Play Songs')
+                ->icon('ban')
+                ->route('platform.noplaysongs.list'),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')

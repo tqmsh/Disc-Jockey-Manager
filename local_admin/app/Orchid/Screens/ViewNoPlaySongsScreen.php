@@ -20,9 +20,10 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewSongRequestsLayout;
+use App\Models\NoPlaySong;
+use App\Orchid\Layouts\ViewNoPlaySongsLayout;
 
-class ViewSongRequestsScreen extends Screen
+class ViewNoPlaySongsScreen extends Screen
 {
 
     /**
@@ -30,10 +31,10 @@ class ViewSongRequestsScreen extends Screen
      *
      * @return array
      */
-    public function query(Events $event): iterable
+    public function query(): iterable
     {
         return [
-            'songRequests' => SongRequest::where('event_id', $event-> id)->paginate(20),
+            'noPlaySongs' => NoPlaySong::latest()->paginate(10)
         ];
     }
 
@@ -44,7 +45,7 @@ class ViewSongRequestsScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Song Requests';
+        return 'View No Play Songs';
     }
 
     /**
@@ -55,10 +56,18 @@ class ViewSongRequestsScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Add New Event')
+                ->icon('plus')
+                ->route('platform.noplaysong.create'),
 
-            Button::make('Delete Song Request')
-            ->icon('trash')
-            ->method('delete'),
+            Button::make('Delete Selected Songs')
+                ->icon('trash')
+                ->method('delete')
+                ->confirm(__('Are you sure you want to delete the selected songs?')),
+                
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.noplaysong.list')
         ];
     }
     /**
@@ -69,32 +78,30 @@ class ViewSongRequestsScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewSongRequestsLayout::class,
+            ViewNoPlaySongsLayout::class,
         ];
     }
 
-    public function redirect($event){
-        return redirect() -> route('platform.songreq.edit', $event);
-    }
 
     public function delete(Request $request)
     {   
-        $songReqs = $request->get('songRequests');
+        $noPlaySongs = $request->get('noPlaySongs');
         
         try{
-            if(!empty($songReqs)){
-                foreach($songReqs as $songReq){
-                    SongRequest::where('id', $songReq)->delete();
+            if(!empty($noPlaySongs)){
+                foreach($noPlaySongs as $noPlaySong){
+                    NoPlaySong::where('id', $noPlaySong)->delete();
                 }
-                Toast::success('Selected Song Request (s) deleted succesfully');
+                Toast::success('Selected song deleted succesfully');
 
-            return redirect()->route('platform.event.list');
+            return redirect()->route('platform.noplaysong.list');
+
             }else{
-                Toast::warning('Please select Song Requests in order to delete them');
+                Toast::warning('Please select songs in order to delete them');
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected Song Requests. Error Message: ' . $e);
+            Alert::error('There was a error trying to deleted the selected songs. Error Message: ' . $e);
         }
     }
 }

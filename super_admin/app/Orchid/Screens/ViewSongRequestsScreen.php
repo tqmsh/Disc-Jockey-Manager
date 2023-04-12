@@ -44,7 +44,7 @@ class ViewSongRequestsScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Song Requests';
+        return 'View Song Requests';
     }
 
     /**
@@ -54,12 +54,7 @@ class ViewSongRequestsScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-
-            Button::make('Delete Song Request')
-            ->icon('trash')
-            ->method('delete'),
-        ];
+        return [ ];
     }
     /**
      * Views.
@@ -77,24 +72,4 @@ class ViewSongRequestsScreen extends Screen
         return redirect() -> route('platform.songreq.edit', $event);
     }
 
-    public function delete(Request $request)
-    {   
-        $songReqs = $request->get('songRequests');
-        
-        try{
-            if(!empty($songReqs)){
-                foreach($songReqs as $songReq){
-                    SongRequest::where('id', $songReq)->delete();
-                }
-                Toast::success('Selected Song Request (s) deleted succesfully');
-
-            return redirect()->route('platform.event.list');
-            }else{
-                Toast::warning('Please select Song Requests in order to delete them');
-            }
-
-        }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected Song Requests. Error Message: ' . $e);
-        }
-    }
 }

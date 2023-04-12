@@ -106,8 +106,6 @@ class CreateEventScreen extends Screen
                 ->horizontal()
                 ->value($this->event->event_zip_postal),
 
-
-
                 Input::make('event_info')
                     ->title('Event Info')
                     ->type('text')

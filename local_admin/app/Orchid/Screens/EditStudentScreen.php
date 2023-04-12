@@ -132,9 +132,8 @@ class EditStudentScreen extends Screen
     }
 
     public function update(Student $student, Request $request)
-    {
-        try{
-
+    {       
+        try{    
             $studentTableFields = $this->getStudentFields($request);
 
             $userTableFields = $this->getUserFields($request);

@@ -29,7 +29,7 @@ class ViewEventBidScreen extends Screen
     {
         return [
             'event' => $event,
-            'pendingBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->where('status', 0)->latest()->paginate(10),
+            'pendingBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->where('status', 0)->paginate(10)->latest(),
             'previousBids' => EventBids::filter(request(['category_id']))->where('event_id', $event->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
         ];
     }
