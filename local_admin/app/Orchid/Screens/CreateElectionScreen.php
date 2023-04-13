@@ -113,7 +113,7 @@ class CreateElectionScreen extends Screen
 
             Toast::success('Election Added Succesfully');
             
-            return redirect()->route('platform.event.list');
+            return redirect()->route('platform.eventPromvote.list',$event->id);
 
         }catch(Exception $e){
             

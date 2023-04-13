@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
+use App\Models\Election;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Localadmin;
@@ -151,10 +152,15 @@ class ViewEventScreen extends Screen
         } 
         else if($type == 'promvote'){
             //check if election is already created
-            // if not created, go to create
-            return redirect() -> route('platform.eventPromvote.create', $event);
             // if created, go to page to view position
-            // return redirect() -> route('platform.eventPromvote.list', $event);
+            $election = Election::where('event_id', $event)->first();
+            if($election != null){
+                return redirect() -> route('platform.eventPromvote.list', $event);
+            }
+            // if not created, go to create
+            else{
+                return redirect() -> route('platform.eventPromvote.create', $event);
+            }
         }
         else if($type == 'edit'){
             return redirect() -> route('platform.event.edit', $event);
