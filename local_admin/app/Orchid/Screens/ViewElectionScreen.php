@@ -91,7 +91,7 @@ class ViewElectionScreen extends Screen
         $position = Position::where('election_id', $election->first()->id);
         try{
             foreach($position as $pos){
-                $position->delete();
+                $pos->delete();
             }
             $election->delete();
 
