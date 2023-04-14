@@ -20,7 +20,7 @@ use Orchid\Support\Facades\Layout;
 class ViewElectionScreen extends Screen
 {
     public $event;
-    public $elections;
+    public $election;
     public $position;
     /**
      * Query data.
@@ -58,7 +58,7 @@ class ViewElectionScreen extends Screen
         return [
             Link::make('Create Position')
                 ->icon('plus')
-                ->redirect() -> route('platform.event.create'),
+                ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
 
             Link::make('Back')
                 ->icon('arrow-left')
