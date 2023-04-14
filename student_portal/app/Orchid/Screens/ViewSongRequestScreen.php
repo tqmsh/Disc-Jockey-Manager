@@ -22,6 +22,7 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Select;
 use Orchid\Support\Facades\Alert;
+use App\Models\User;
 use App\Models\Song;
 use App\Models\SongRequest;
 use App\Models\NoPlaySong;
@@ -29,6 +30,9 @@ use Orchid\Screen\TD;
 
 class ViewSongRequestScreen extends Screen
 {
+
+    public $event;
+
     /**
      * Query data.
      *
@@ -36,7 +40,8 @@ class ViewSongRequestScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event-> id)-> latest('events.created_at') ->paginate(10),];
+        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
+                'event' => $event];
     }
 
     /**
@@ -76,9 +81,14 @@ class ViewSongRequestScreen extends Screen
 
 
           Layout::rows([
-            Select::make('song.title')
-            ->fromModel(Song::class, 'title')
-            ->displayAppend('full')
+            Select::make('song.id')
+            ->options(function(){
+                $arr= array();
+                foreach(Song::all() as $song){
+                    $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                }
+                return $arr;
+            })
             -> empty('Choose a song'),  
 
             Button::make('Submit')
@@ -86,7 +96,6 @@ class ViewSongRequestScreen extends Screen
             ->method('chooseSong')
             ->icon('plus')
             
-
             ])
         ];
     }
@@ -109,13 +118,15 @@ class ViewSongRequestScreen extends Screen
          }
     }
 
-    public function chooseSong(Request $request){
-        $request->validate(['song.title' => 'required|max:255']);
-        $song = Song::where($request->input('song.title'));
+    public function chooseSong(Request $request, Events $event){
 
-        Alert::info($song -> id);
-     //   $songRequest= new SongRequest();
-       // $songRequest ->song_id= $song ->id; 
+        $request->validate(['song.id' => 'required|max:255']);
+        $song = Song::find($request->input('song.id'));
+ 
+        $songRequest= new SongRequest();
+
+        $songRequest ->song_id= $song ->id;  $songRequest ->event_id= $event -> id;  $songRequest -> $requester_user_id= $request->user()-> id;
+        $songRequest -> save();
 
     }
 

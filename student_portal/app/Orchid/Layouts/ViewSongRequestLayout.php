@@ -7,6 +7,7 @@ use App\Models\Song;
 use Orchid\Support\Color;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
+use App\Models\SongRequest;
 
 class ViewSongRequestLayout extends Table
 {
@@ -31,17 +32,17 @@ class ViewSongRequestLayout extends Table
         return [                    
             TD::make('event_name', 'Request Title')
                 ->render(function (SongRequest $songRequest) {
-                    return e(Song::where($songRequest -> song_id) -> title);
+                    return e(Song::find($songRequest -> song_id) -> title);
                 }),
 
             TD::make('event_name', 'Request Artist')
                 ->render(function (SongRequest $songRequest) {
-                    return e(Song::where($songRequest -> song_id) -> artist);
+                    return e(Song::find($songRequest -> song_id) -> artist);
                 }),
 
              TD::make('event_name', 'Requester ID')
                 ->render(function (SongRequest $songRequest) {
-                    return e($songRequest -> requester_id);
+                    return e($songRequest -> requester_user_id);
                 }),
             
         ];    
