@@ -149,7 +149,7 @@ class CreateStudentBidScreen extends Screen
                     
                     StudentBids::create([
                         'user_id' => $vendor->user_id,
-                        'student_id' => $student->id,
+                        'student_user_id' => $student->user_id,
                         'package_id' => request('package_id'),
                         'notes' => request('notes'),
                         'category_id' => $vendor->category_id,
@@ -176,7 +176,7 @@ class CreateStudentBidScreen extends Screen
     private function validBid(Student $student){
 
         return count(StudentBids::where('user_id', Auth::user()->id)
-                             ->where('student_id', $student->id)
+                             ->where('student_user_id', $student->user_id)
                              ->where('package_id', request('package_id'))
                              ->get()) == 0;
     }
