@@ -9,6 +9,7 @@ use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\CreateEventScreen;
+use App\Orchid\Screens\CreatePositionScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
@@ -70,6 +71,8 @@ Route::screen('/events/{event}/edit', EditEventScreen::class)->name('platform.ev
 Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.create');
 
 Route::screen('/events/promvote/{event_id}/create', CreateElectionScreen::class)->name('platform.eventPromvote.create');
+
+Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen::class)->name('platform.eventPromvotePosition.create');
 
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');

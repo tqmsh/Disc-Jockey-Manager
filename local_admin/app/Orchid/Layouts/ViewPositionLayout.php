@@ -31,8 +31,8 @@ class ViewPositionLayout extends Table
         return [
             TD::make('position_name', 'Position Name')
             ->render(function (Position $position) {
-                return Link::make($position->position_name)
-                    ->route('platform.event.edit', $position);
+                return Link::make($position->position_name);
+                    // ->route('platform.event.edit', $position);
             }),
         ];
     }
