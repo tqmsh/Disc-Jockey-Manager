@@ -19,7 +19,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-
+use App\Orchid\Screens\ViewSongRequestScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -42,6 +42,8 @@ Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
 Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platform.event.register');
 
 Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('platform.event.tables');
+
+Route::screen('/events/{event}/songs', ViewSongRequestScreen::class)->name('platform.songs.list');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 
