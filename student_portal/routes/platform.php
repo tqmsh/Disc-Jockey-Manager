@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
+use App\Orchid\Screens\ViewStudentBidScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
@@ -49,6 +50,9 @@ Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->nam
 Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+
+//view student bid screen
+Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
