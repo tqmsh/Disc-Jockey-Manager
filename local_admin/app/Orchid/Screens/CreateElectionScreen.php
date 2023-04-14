@@ -56,7 +56,7 @@ class CreateElectionScreen extends Screen
 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.eventPromvote.list', $this->event->id)
+                ->route('platform.event.list')
         ];
     }
 
