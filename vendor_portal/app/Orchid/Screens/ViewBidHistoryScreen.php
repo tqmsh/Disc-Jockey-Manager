@@ -35,7 +35,7 @@ class ViewBidHistoryScreen extends Screen
          
         return [
             'eventBids' => EventBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
-            'studentBids' => StudentBids::where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
+            'studentBids' => StudentBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
 
             'metrics' => [
                 'bidsAccepted'    => ['value' => number_format(count(EventBids::where('user_id', Auth::user()->id)->where('status', 1)->get()))],
