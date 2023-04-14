@@ -56,9 +56,9 @@ class ViewElectionScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create Election')
+            Link::make('Create Position')
                 ->icon('plus')
-                ->redirect() -> route('platform.eventPromvote.create', $this->event->id),
+                ->redirect() -> route('platform.event.create'),
 
             Link::make('Back')
                 ->icon('arrow-left')
