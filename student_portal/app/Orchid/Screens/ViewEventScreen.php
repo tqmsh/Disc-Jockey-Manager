@@ -94,7 +94,7 @@ class ViewEventScreen extends Screen
         if($type == 'table'){
             return redirect()->route('platform.event.tables', $event_id);
         }   
-        if($type == 'songs'){
+        else if($type == 'songs'){
             return redirect()->route('platform.songs.list', $event_id);
         }
 

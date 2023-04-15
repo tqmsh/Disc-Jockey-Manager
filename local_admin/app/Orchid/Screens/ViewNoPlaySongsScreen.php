@@ -31,10 +31,10 @@ class ViewNoPlaySongsScreen extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event): iterable
     {
         return [
-            'noPlaySongs' => NoPlaySong::latest()->paginate(10)
+            'noPlaySongs' => NoPlaySong::where('event_id', $event -> id)->paginate(10)
         ];
     }
 
@@ -56,7 +56,7 @@ class ViewNoPlaySongsScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New Event')
+            Link::make('Add New Song')
                 ->icon('plus')
                 ->route('platform.noplaysong.create'),
 

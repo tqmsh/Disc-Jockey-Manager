@@ -9,11 +9,6 @@ class Song extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'artist'
-    ];
-
     public function getFullAttribute(): string{
         return $this->attributes['title'] . ' - d' . $this->attributes['artist'];
     }

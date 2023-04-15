@@ -40,7 +40,7 @@ class ViewSongRequestScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
+        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(20),
                 'event' => $event];
     }
 
@@ -79,24 +79,50 @@ class ViewSongRequestScreen extends Screen
         return [
           ViewSongRequestLayout::class,
 
-
           Layout::rows([
             Select::make('song.id')
             ->options(function(){
                 $arr= array();
                 foreach(Song::all() as $song){
-                    $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                    if(!NoPlaySong::where(['song_id'=> $song -> id])->exists()){
+                        $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                    }
                 }
                 return $arr;
             })
-            -> empty('Choose a song'),  
+            -> empty('Choose a song'), 
 
             Button::make('Submit')
             ->type(Color::PRIMARY())
             ->method('chooseSong')
             ->icon('plus')
-            
-            ])
+            ]),
+
+        /** 
+            Layout::table('songs', [
+                TD::make('song_requests', 'Request a Song')
+                ->render(ModalToggle::make('Request')   
+                        ->icon('microphone')       
+                        ->modal('requestSong')
+                        ->modalTitle('Songs')
+                        ->method('requestSong')
+                        ->type(Color::PRIMARY())),
+            ]),
+
+            Layout::modal('requestSong', Layout::rows([
+                Input::make('song.title')
+                    ->title('Title')
+                    ->placeholder('Song Title'),
+
+                Input::make('song.artist')
+                    ->title('Artist')
+                    ->placeholder('Song Artist'),
+
+            ]))
+            ->title('Request Song')
+            ->applyButton('Submit Song Request'),
+            */
+
         ];
     }
 
@@ -122,12 +148,13 @@ class ViewSongRequestScreen extends Screen
 
         $request->validate(['song.id' => 'required|max:255']);
         $song = Song::find($request->input('song.id'));
+
+        $formFields = $request->all();
+        $formFields['requester_user_id'] = auth()->id();
+        $formFields['song_id'] = $song->id;
+        $formFields['event_id'] = $event -> id;
+        SongRequest::create($formFields);
  
-        $songRequest= new SongRequest();
-
-        $songRequest ->song_id= $song ->id;  $songRequest ->event_id= $event -> id;  $songRequest -> $requester_user_id= $request->user()-> id;
-        $songRequest -> save();
-
     }
 
 

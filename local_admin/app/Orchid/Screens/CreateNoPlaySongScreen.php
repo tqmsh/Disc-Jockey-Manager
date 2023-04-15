@@ -87,6 +87,8 @@ class CreateNoPlaySongScreen extends Screen
                 ->horizontal()
                 ->value($this->noPlaySong->artist),
 
+                //These should not be input fields, they should be a Select class that queries all the songs from the songs table excluding songs that are already in the no_play_songs table.
+
             ])
         ];
     }
