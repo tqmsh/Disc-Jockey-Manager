@@ -64,7 +64,6 @@ class ViewEventScreen extends Screen
                 ->method('deleteEvents')
                 ->confirm(__('Are you sure you want to delete the selected events?')),
 
-                
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')
