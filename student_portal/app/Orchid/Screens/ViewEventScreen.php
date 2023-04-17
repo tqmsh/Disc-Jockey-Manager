@@ -13,6 +13,18 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
+use App\Orchid\Layouts\ViewSongRequestLayout;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Select;
+use App\Models\Song;
+use App\Models\SongRequest;
+use App\Models\NoPlaySong;
+use Orchid\Screen\TD;   
 
 class ViewEventScreen extends Screen
 {
@@ -57,7 +69,8 @@ class ViewEventScreen extends Screen
         ];
     }
 
-    /**
+
+        /**
      * Views.
      *
      * @return \Orchid\Screen\Layout[]|string[]
@@ -65,7 +78,6 @@ class ViewEventScreen extends Screen
     public function layout(): iterable
     {
         return [
-
           Layout::tabs([
                 'All Events' => [
                     ViewEventLayout::class
@@ -74,15 +86,16 @@ class ViewEventScreen extends Screen
                     ViewRegisteredEventLayout::class
                 ],
             ]),
-
         ];
     }
-
 
     public function redirect($event_id, $type){
 
         if($type == 'table'){
             return redirect()->route('platform.event.tables', $event_id);
+        }   
+        else if($type == 'songs'){
+            return redirect()->route('platform.songs.list', $event_id);
         }
 
         return redirect()->route('platform.event.register', $event_id);   

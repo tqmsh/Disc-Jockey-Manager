@@ -72,6 +72,15 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function (Events $event) {
                     return e($event->event_rules);
                 }),
+
+            TD::make('songs', 'Song Requests')
+            ->render(function (Events $event) {
+                return Button::make('Song Requests')
+                    ->icon('music-tone-alt')         
+                    ->method('redirect', ['event_id' => $event->id, 'type' => 'songs'])
+                    ->type(Color::PRIMARY());
+            }),
+    
         ];    
     }
 }

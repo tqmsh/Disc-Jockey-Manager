@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Orchid\Layouts;
+
+use Orchid\Screen\TD;
+use App\Models\Events;
+use App\Models\SongRequest;
+use App\Models\Student;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Layouts\Table;
+use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
+use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Actions\ModalToggle;
+
+class ViewSongRequestsLayout extends Table
+{
+    /**
+     * Data source.
+     *
+     * The name of the key to fetch it from the query.
+     * The results of which will be elements of the table.
+     *
+     * @var string
+     */
+    protected $target = 'songRequests';
+
+    
+    /**
+     * Get the table cells to be displayed.
+     *
+     * @return TD[]
+     */
+    protected function columns(): iterable
+    {
+
+        return [
+            TD::make()
+                ->render(function (SongRequest $songRequest){
+                    return CheckBox::make('songRequests[]')
+                        ->value($songRequest -> id)
+                        ->checked(false);
+                }),
+
+            TD::make('title', 'Song Title')
+                ->render(function (SongRequest $songRequest) {
+                    return Link::make($songRequest->title)
+                        ->route('platform.songreq.edit', $songRequest);
+                }),
+            TD::make('artist', 'Song Artist')
+                ->render(function (SongRequest $songRequest) {
+                    return Link::make($songRequest->artist)
+                        ->route('platform.songreq.edit', $songRequest);
+                }),
+
+            TD::make()
+                ->render(function (SongRequest $songRequest) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', 'songReq_id'->$songRequest->id)->icon('pencil');
+                }),
+        ];
+    }
+
+
+}
