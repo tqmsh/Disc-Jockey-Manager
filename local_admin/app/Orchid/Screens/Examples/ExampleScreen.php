@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Examples;
 
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
+use App\View\Components\AdDisplay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Orchid\Screen\Actions\Button;
@@ -34,6 +35,7 @@ class ExampleScreen extends Screen
     public function query(): iterable
     {
         return [
+            "id" => 6,
             'charts'  => [
                 [
                     'name'   => 'Some Data',
@@ -152,12 +154,6 @@ class ExampleScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
-            ]),
 
             Layout::columns([
                 ChartLineExample::make('charts', 'Line Chart')
@@ -165,6 +161,9 @@ class ExampleScreen extends Screen
 
                 ChartBarExample::make('charts', 'Bar Chart')
                     ->description('It is simple Bar Charts with different colors.'),
+
+                Layout::component(AdDisplay::class)
+                ,
             ]),
 
             Layout::table('table', [
