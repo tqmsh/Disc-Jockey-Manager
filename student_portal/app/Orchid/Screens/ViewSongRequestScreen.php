@@ -40,10 +40,9 @@ class ViewSongRequestScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(20),
+        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
                 'event' => $event];
     }
-
     /**
      * Display header name.
      *
@@ -67,9 +66,7 @@ class ViewSongRequestScreen extends Screen
                 ->route('platform.event.list')
         ];
     }
-
-
-        /**
+    /**
      * Views.
      *
      * @return \Orchid\Screen\Layout[]|string[]
@@ -143,7 +140,6 @@ class ViewSongRequestScreen extends Screen
             $songRequest-> save();
          }
     }
-
     public function chooseSong(Request $request, Events $event){
 
         $request->validate(['song.id' => 'required|max:255']);

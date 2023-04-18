@@ -5,6 +5,9 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\SongRequest;
 use App\Models\School;
+use App\Models\Events;
+use App\Models\Song;
+use App\Models\NoPlaySong;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
@@ -23,16 +26,18 @@ use Illuminate\Support\Facades\Auth;
 class EditSongRequestsScreen extends Screen
 {
     public $songRequest;
+    public $event;
 
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(SongRequest $songRequest): iterable
+    public function query(SongRequest $songRequest, Events $event): iterable
     {
         return [
-            'songRequest' => $songRequest
+            'songRequest' => $songRequest,
+            'event' => $event
         ];
     }
 
@@ -64,7 +69,7 @@ class EditSongRequestsScreen extends Screen
 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.songreq.list')
+                ->route('platform.event.list')
         ];
     }
 
@@ -79,37 +84,35 @@ class EditSongRequestsScreen extends Screen
             Layout::rows([
 
                 
-                Input::make('song.title')
-                    ->title('Song Request Title')
-                    ->type('text')
-                    ->required()
-                    ->horizontal()
-                    ->value($this->songRequest->title),
-
-                Input::make('song.artist')
-                    ->title('Song Request Artist')
-                    ->type('text')
-                    ->horizontal()
-                    ->value($this->songRequest->artist),
+                Select::make('song.id')
+                ->options(function(){
+                    $arr= array();
+                    foreach(Song::all() as $song){
+                        if(!NoPlaySong::where(['song_id'=> $song -> id])->exists()){
+                            $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                        }
+                    }
+                    return $arr;
+                })
+                -> empty('Choose a song'), 
 
 
                 //Again, should not be Input classes, should be Select classes.
-            ]),
-        ];
+            
+        ])
+            ];
     }
 
     public function update(SongRequest $songRequest, Request $request)
     {
         try{
+            $request->validate(['song.id' => 'required|max:255']);
+            $song = Song::find($request->input('song.id'));
+            $songRequest->song_id= $song->id; $songRequest->event_id= $artist; 
 
-            $title= $request->input('song.title'); $artist= $request->input('song.artist');
-
-            $songRequest->title= $title; $songRequest->artist= $artist; 
-
-            return redirect()->route('platform.songreq.list');
+            return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
-
             Alert::error('There was an error editing this Request. Error Code: ' . $e->getMessage());
         }
     }
@@ -121,7 +124,7 @@ class EditSongRequestsScreen extends Screen
 
             Toast::success('You have successfully deleted the song request.');
 
-            return redirect()->route('platform.songreq.list');
+            return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
 

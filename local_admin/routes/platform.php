@@ -33,7 +33,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\EditSongRequestsScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\ViewNoPlaySongsScreen;
-use App\Orchid\Screens\CreateNoPlaySongsScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -94,12 +93,11 @@ Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonS
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 
-Route::screen('/songReq/{event}/view', ViewSongRequestsScreen::class)->name('platform.songreq.list');
-Route::screen('/songReq/{event}/edit', EditSongRequestsScreen::class)->name('platform.songreq.edit');
+Route::screen('/events/{event}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
+Route::screen('/events/{event}/songRequests/{songReq}/edit', EditSongRequestsScreen::class)->name('platform.songreq.edit');
 
 
 Route::screen('/noPlaySong/view', ViewNoPlaySongsScreen::class)->name('platform.noplaysong.list');
-Route::screen('/noPlaySong/create', CreateNoPlaySongsScreen::class)->name('platform.noplaysong.create');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

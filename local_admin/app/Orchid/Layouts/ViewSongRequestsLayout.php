@@ -6,6 +6,7 @@ use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\SongRequest;
 use App\Models\Student;
+use App\Models\Song;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
@@ -44,20 +45,24 @@ class ViewSongRequestsLayout extends Table
                         ->checked(false);
                 }),
 
-            TD::make('title', 'Song Title')
+            TD::make('event_name', 'Request Title')
                 ->render(function (SongRequest $songRequest) {
-                    return Link::make($songRequest->title)
-                        ->route('platform.songreq.edit', $songRequest);
+                    return e(Song::find($songRequest -> song_id) -> title);
                 }),
-            TD::make('artist', 'Song Artist')
+
+            TD::make('event_name', 'Request Artist')
                 ->render(function (SongRequest $songRequest) {
-                    return Link::make($songRequest->artist)
-                        ->route('platform.songreq.edit', $songRequest);
+                    return e(Song::find($songRequest -> song_id) -> artist);
+                }),
+
+             TD::make('event_name', 'Requester ID')
+                ->render(function (SongRequest $songRequest) {
+                    return e($songRequest -> requester_user_id);
                 }),
 
             TD::make()
                 ->render(function (SongRequest $songRequest) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', 'songReq_id'->$songRequest->id)->icon('pencil');
+                    return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', ['songReq' => $songRequest])->icon('pencil');
                 }),
         ];
     }
