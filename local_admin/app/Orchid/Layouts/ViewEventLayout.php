@@ -21,8 +21,7 @@ class ViewEventLayout extends Table
      * @var string
      */
     protected $target = 'events';
-
-
+    
     /**
      * Get the table cells to be displayed.
      *

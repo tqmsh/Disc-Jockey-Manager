@@ -7,6 +7,7 @@ use App\Models\Events;
 use App\Models\SongRequest;
 use App\Models\Student;
 use App\Models\Song;
+use App\Models\NoPlaySong;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
@@ -15,6 +16,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Select;
 
 class ViewSongRequestsLayout extends Table
 {
@@ -36,7 +38,6 @@ class ViewSongRequestsLayout extends Table
      */
     protected function columns(): iterable
     {
-
         return [
             TD::make()
                 ->render(function (SongRequest $songRequest){
@@ -63,6 +64,16 @@ class ViewSongRequestsLayout extends Table
             TD::make()
                 ->render(function (SongRequest $songRequest) {
                     return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', ['songReq' => $songRequest])->icon('pencil');
+                }),
+
+            TD::make('song_submissions', 'Choose a Song')
+                ->render(function (SongRequest $songRequest) {
+                    return ModalToggle::make('Choose')
+                        ->icon('music-tone-alt')         
+                        ->modal('chooseSong')
+                        ->modalTitle('Songs')
+                        ->type(Color::PRIMARY())
+                        ->method("update", ['songReq' => $songRequest -> id]);
                 }),
         ];
     }

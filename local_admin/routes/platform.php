@@ -93,7 +93,7 @@ Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonS
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 
-Route::screen('/events/{event}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
+Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
 Route::screen('/events/{event}/songRequests/{songReq}/edit', EditSongRequestsScreen::class)->name('platform.songreq.edit');
 
 

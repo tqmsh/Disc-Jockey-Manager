@@ -22,6 +22,7 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Select;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use App\Models\User;
 use App\Models\Song;
 use App\Models\SongRequest;
@@ -32,7 +33,6 @@ class ViewSongRequestsScreen extends Screen
 {
 
     public $event;
-
     /**
      * Query data.
      *
@@ -78,26 +78,35 @@ class ViewSongRequestsScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('chooseSong', Layout::rows([
+                Select::make('song.id')
+                ->options(function(){
+                    $arr= array();
+                    foreach(Song::all() as $song){
+                        if(!NoPlaySong::where(['song_id'=> $song -> id])->exists()){
+                            $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                        }
+                    }
+                    return $arr;
+                })
+                -> empty('Choose a song'),  
+            ]))
+            ->title('Create Task')
+            ->applyButton('Add Task'),
+
           ViewSongRequestsLayout::class,
         ];
-    }
-
-    public function redirect($songReq){
-        return redirect() -> route('platform.songreq.edit', ['songReq' => $songReq, 'event' => $event]);
     }
 
     public function delete(Request $request)
     {   
         $songReqs = $request->get('songRequests');
-        
         try{
             if(!empty($songReqs)){
                 foreach($songReqs as $songReq){
                     SongRequest::where('id', $songReq)->delete();
                 }
-                Toast::success('Selected Song Request (s) deleted succesfully');
-
-            return redirect()->route('platform.event.list');
+                Toast::success('Selected Song Request(s) deleted succesfully');
             }else{
                 Toast::warning('Please select Song Requests in order to delete them');
             }
@@ -107,5 +116,19 @@ class ViewSongRequestsScreen extends Screen
         }
     }
 
+    public function update(Request $request)
+    {
+        try{
+            $request->validate(['song.id' => 'required|max:255']);
+            $songRequest= songRequest::find($request->get('songReq'));
+            $song = Song::find($request->input('song.id'));
+            $songRequest->song_id= $song->id; 
+            $songRequest -> save();
 
-}
+        }catch(Exception $e){
+            Alert::error('There was an error editing this Request. Error Code: ' . $e->getMessage());
+        }
+    }
+
+
+}   
