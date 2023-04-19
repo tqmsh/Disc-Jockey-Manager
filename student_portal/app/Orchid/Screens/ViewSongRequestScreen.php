@@ -124,7 +124,7 @@ class ViewSongRequestScreen extends Screen
     }
 
     public function requestSong(Request $request){
-        // Validate form data, save song to database, etc.
+
         $title= $request->input('song.title'); $artist= $request->input('song.artist');
 
         if (NoPlaySong::where(['title'=> $title, 'artist' => $artist])->exists()) {

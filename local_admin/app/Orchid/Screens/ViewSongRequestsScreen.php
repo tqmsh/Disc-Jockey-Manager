@@ -83,7 +83,7 @@ class ViewSongRequestsScreen extends Screen
                 ->options(function(){
                     $arr= array();
                     foreach(Song::all() as $song){
-                        if(!NoPlaySong::where(['song_id'=> $song -> id])->exists()){
+                        if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $event -> id) -> exists()){
                             $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
                         }
                     }
