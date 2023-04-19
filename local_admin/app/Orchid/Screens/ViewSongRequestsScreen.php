@@ -91,8 +91,7 @@ class ViewSongRequestsScreen extends Screen
                 })
                 -> empty('Choose a song'),  
             ]))
-            ->title('Create Task')
-            ->applyButton('Add Task'),
+            ->applyButton('Save Request') ->type(Color::PRIMARY()),
 
           ViewSongRequestsLayout::class,
         ];
