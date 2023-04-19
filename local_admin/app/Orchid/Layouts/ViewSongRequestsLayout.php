@@ -57,7 +57,7 @@ class ViewSongRequestsLayout extends Table
                     return e(Song::find($songRequest -> song_id) -> artist);
                 }),
 
-             TD::make('requester_id', 'Requester ID')
+             TD::make('requester_id', 'Requester')
                 ->render(function (SongRequest $songRequest) {
                     return e(User::find($songRequest -> requester_user_id)-> name);
                 }),
@@ -65,7 +65,7 @@ class ViewSongRequestsLayout extends Table
             TD::make()
                 ->render(function (SongRequest $songRequest) {
                     return ModalToggle::make('Edit')
-                        ->icon('music-tone-alt')         
+                        ->icon('microphone')         
                         ->modal('editSong')
                         ->modalTitle('Songs')
                         ->type(Color::PRIMARY())
