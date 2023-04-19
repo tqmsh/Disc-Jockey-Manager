@@ -7,6 +7,7 @@ use App\Models\Events;
 use App\Models\SongRequest;
 use App\Models\Student;
 use App\Models\Song;
+use App\Models\User;
 use App\Models\NoPlaySong;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -46,37 +47,30 @@ class ViewSongRequestsLayout extends Table
                         ->checked(false);
                 }),
 
-            TD::make('event_name', 'Request Title')
+            TD::make('request_title', 'Request Title')
                 ->render(function (SongRequest $songRequest) {
                     return e(Song::find($songRequest -> song_id) -> title);
                 }),
 
-            TD::make('event_name', 'Request Artist')
+            TD::make('request_artist', 'Request Artist')
                 ->render(function (SongRequest $songRequest) {
                     return e(Song::find($songRequest -> song_id) -> artist);
                 }),
 
-             TD::make('event_name', 'Requester ID')
+             TD::make('requester_id', 'Requester ID')
                 ->render(function (SongRequest $songRequest) {
-                    return e($songRequest -> requester_user_id);
+                    return e(User::find($songRequest -> requester_user_id)-> name);
                 }),
 
             TD::make()
                 ->render(function (SongRequest $songRequest) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', ['songReq' => $songRequest])->icon('pencil');
-                }),
-
-            TD::make('song_submissions', 'Choose a Song')
-                ->render(function (SongRequest $songRequest) {
-                    return ModalToggle::make('Choose')
+                    return ModalToggle::make('Edit')
                         ->icon('music-tone-alt')         
-                        ->modal('chooseSong')
+                        ->modal('editSong')
                         ->modalTitle('Songs')
                         ->type(Color::PRIMARY())
                         ->method("update", ['songReq' => $songRequest -> id]);
                 }),
         ];
     }
-
-
 }

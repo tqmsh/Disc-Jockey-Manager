@@ -30,7 +30,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\EditSongRequestsScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\ViewNoPlaySongsScreen;
 /*
@@ -94,7 +93,6 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 
 
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
-Route::screen('/events/{event}/songRequests/{songReq}/edit', EditSongRequestsScreen::class)->name('platform.songreq.edit');
 
 
 Route::screen('/noPlaySong/view', ViewNoPlaySongsScreen::class)->name('platform.noplaysong.list');

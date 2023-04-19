@@ -78,7 +78,7 @@ class ViewSongRequestsScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::modal('chooseSong', Layout::rows([
+            Layout::modal('editSong', Layout::rows([
                 Select::make('song.id')
                 ->options(function(){
                     $arr= array();
@@ -119,7 +119,6 @@ class ViewSongRequestsScreen extends Screen
     public function update(Request $request)
     {
         try{
-            $request->validate(['song.id' => 'required|max:255']);
             $songRequest= songRequest::find($request->get('songReq'));
             $song = Song::find($request->input('song.id'));
             $songRequest->song_id= $song->id; 

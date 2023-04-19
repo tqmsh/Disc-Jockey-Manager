@@ -125,7 +125,6 @@ class ViewSongRequestScreen extends Screen
 
     public function requestSong(Request $request){
         // Validate form data, save song to database, etc.
-        $request->validate(['song.title' => 'required|max:255',]);
         $title= $request->input('song.title'); $artist= $request->input('song.artist');
 
         if (NoPlaySong::where(['title'=> $title, 'artist' => $artist])->exists()) {
@@ -142,9 +141,7 @@ class ViewSongRequestScreen extends Screen
     }
     public function chooseSong(Request $request, Events $event){
 
-        $request->validate(['song.id' => 'required|max:255']);
         $song = Song::find($request->input('song.id'));
-
         $formFields = $request->all();
         $formFields['requester_user_id'] = auth()->id();
         $formFields['song_id'] = $song->id;
