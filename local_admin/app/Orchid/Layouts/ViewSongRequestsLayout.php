@@ -6,6 +6,9 @@ use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\SongRequest;
 use App\Models\Student;
+use App\Models\Song;
+use App\Models\User;
+use App\Models\NoPlaySong;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
@@ -14,6 +17,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Select;
 
 class ViewSongRequestsLayout extends Table
 {
@@ -35,7 +39,6 @@ class ViewSongRequestsLayout extends Table
      */
     protected function columns(): iterable
     {
-
         return [
             TD::make()
                 ->render(function (SongRequest $songRequest){
@@ -44,23 +47,30 @@ class ViewSongRequestsLayout extends Table
                         ->checked(false);
                 }),
 
-            TD::make('title', 'Song Title')
+            TD::make('request_title', 'Request Title')
                 ->render(function (SongRequest $songRequest) {
-                    return Link::make($songRequest->title)
-                        ->route('platform.songreq.edit', $songRequest);
+                    return e(Song::find($songRequest -> song_id) -> title);
                 }),
-            TD::make('artist', 'Song Artist')
+
+            TD::make('request_artist', 'Request Artist')
                 ->render(function (SongRequest $songRequest) {
-                    return Link::make($songRequest->artist)
-                        ->route('platform.songreq.edit', $songRequest);
+                    return e(Song::find($songRequest -> song_id) -> artist);
+                }),
+
+             TD::make('requester_id', 'Requester')
+                ->render(function (SongRequest $songRequest) {
+                    return e(User::find($songRequest -> requester_user_id)-> name);
                 }),
 
             TD::make()
                 ->render(function (SongRequest $songRequest) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', 'songReq_id'->$songRequest->id)->icon('pencil');
+                    return ModalToggle::make('Edit')
+                        ->icon('microphone')         
+                        ->modal('editSong')
+                        ->modalTitle('Songs')
+                        ->type(Color::PRIMARY())
+                        ->method("update", ['songReq' => $songRequest -> id]);
                 }),
         ];
     }
-
-
 }

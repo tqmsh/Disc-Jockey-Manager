@@ -40,10 +40,9 @@ class ViewSongRequestScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(20),
+        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
                 'event' => $event];
     }
-
     /**
      * Display header name.
      *
@@ -67,9 +66,7 @@ class ViewSongRequestScreen extends Screen
                 ->route('platform.event.list')
         ];
     }
-
-
-        /**
+    /**
      * Views.
      *
      * @return \Orchid\Screen\Layout[]|string[]
@@ -84,7 +81,7 @@ class ViewSongRequestScreen extends Screen
             ->options(function(){
                 $arr= array();
                 foreach(Song::all() as $song){
-                    if(!NoPlaySong::where(['song_id'=> $song -> id])->exists()){
+                    if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
                         $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
                     }
                 }
@@ -98,57 +95,11 @@ class ViewSongRequestScreen extends Screen
             ->icon('plus')
             ]),
 
-        /** 
-            Layout::table('songs', [
-                TD::make('song_requests', 'Request a Song')
-                ->render(ModalToggle::make('Request')   
-                        ->icon('microphone')       
-                        ->modal('requestSong')
-                        ->modalTitle('Songs')
-                        ->method('requestSong')
-                        ->type(Color::PRIMARY())),
-            ]),
-
-            Layout::modal('requestSong', Layout::rows([
-                Input::make('song.title')
-                    ->title('Title')
-                    ->placeholder('Song Title'),
-
-                Input::make('song.artist')
-                    ->title('Artist')
-                    ->placeholder('Song Artist'),
-
-            ]))
-            ->title('Request Song')
-            ->applyButton('Submit Song Request'),
-            */
-
         ];
     }
-
-    public function requestSong(Request $request){
-        // Validate form data, save song to database, etc.
-        $request->validate(['song.title' => 'required|max:255',]);
-        $title= $request->input('song.title'); $artist= $request->input('song.artist');
-
-        if (NoPlaySong::where(['title'=> $title, 'artist' => $artist])->exists()) {
-            return Alert::error('Please Try Again.');
-         }
-         else{
-            $songRequest= new SongRequest();
-            $songRequest->title = $request->input('song.title');
-            $songRequest->artist = $request->input('song.artist');
-            $songRequest->event_id= $request->get("event_id");
-            $songRequest->requester_user_id= $request->user()-> id;
-            $songRequest-> save();
-         }
-    }
-
     public function chooseSong(Request $request, Events $event){
 
-        $request->validate(['song.id' => 'required|max:255']);
         $song = Song::find($request->input('song.id'));
-
         $formFields = $request->all();
         $formFields['requester_user_id'] = auth()->id();
         $formFields['song_id'] = $song->id;

@@ -4,27 +4,35 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Events;
-use App\Models\School;
-use App\Models\Vendors;
-use App\Models\SongRequest;
+use App\Models\Student;
 use Orchid\Screen\Screen;
-use App\Models\Categories;
-use App\Models\Localadmin;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
+use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
+use App\Orchid\Layouts\ViewEventLayout;
+use App\Orchid\Layouts\ViewRegisteredEventLayout;
+use App\Orchid\Layouts\ViewSongRequestsLayout;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Color;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Select;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
-use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Fields\DateTimer;
-use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewSongRequestsLayout;
+use App\Models\User;
+use App\Models\Song;
+use App\Models\SongRequest;
+use App\Models\NoPlaySong;
+use Orchid\Screen\TD;   
 
 class ViewSongRequestsScreen extends Screen
 {
 
+    public $event;
     /**
      * Query data.
      *
@@ -32,11 +40,9 @@ class ViewSongRequestsScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return [
-            'songRequests' => SongRequest::where('event_id', $event-> id)->paginate(20),
-        ];
+        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
+                'event' => $event];
     }
-
     /**
      * Display header name.
      *
@@ -44,7 +50,7 @@ class ViewSongRequestsScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Song Requests';
+        return 'Song Requests';
     }
 
     /**
@@ -55,10 +61,13 @@ class ViewSongRequestsScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.event.list'),
 
             Button::make('Delete Song Request')
-            ->icon('trash')
-            ->method('delete'),
+                ->icon('trash')
+                ->method('delete'),
         ];
     }
     /**
@@ -69,26 +78,34 @@ class ViewSongRequestsScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewSongRequestsLayout::class,
-        ];
-    }
+            Layout::modal('editSong', Layout::rows([
+                Select::make('song.id')
+                ->options(function(){
+                    $arr= array();
+                    foreach(Song::all() as $song){
+                        if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id) -> exists()){
+                            $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                        }
+                    }
+                    return $arr;
+                })
+                -> empty('Choose a song'),  
+            ]))
+            ->applyButton('Save Request') ->type(Color::PRIMARY()),
 
-    public function redirect($event){
-        return redirect() -> route('platform.songreq.edit', $event);
+          ViewSongRequestsLayout::class,
+        ];
     }
 
     public function delete(Request $request)
     {   
         $songReqs = $request->get('songRequests');
-        
         try{
             if(!empty($songReqs)){
                 foreach($songReqs as $songReq){
                     SongRequest::where('id', $songReq)->delete();
                 }
-                Toast::success('Selected Song Request (s) deleted succesfully');
-
-            return redirect()->route('platform.event.list');
+                Toast::success('Selected Song Request(s) deleted succesfully');
             }else{
                 Toast::warning('Please select Song Requests in order to delete them');
             }
@@ -97,4 +114,19 @@ class ViewSongRequestsScreen extends Screen
             Alert::error('There was a error trying to deleted the selected Song Requests. Error Message: ' . $e);
         }
     }
-}
+
+    public function update(Request $request)
+    {
+        try{
+            $songRequest= songRequest::find($request->get('songReq'));
+            $song = Song::find($request->input('song.id'));
+            $songRequest->song_id= $song->id; 
+            $songRequest -> save();
+
+        }catch(Exception $e){
+            Alert::error('There was an error editing this Request. Error Code: ' . $e->getMessage());
+        }
+    }
+
+
+}   
