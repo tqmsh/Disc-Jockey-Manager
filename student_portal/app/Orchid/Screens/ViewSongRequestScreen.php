@@ -95,49 +95,7 @@ class ViewSongRequestScreen extends Screen
             ->icon('plus')
             ]),
 
-        /** 
-            Layout::table('songs', [
-                TD::make('song_requests', 'Request a Song')
-                ->render(ModalToggle::make('Request')   
-                        ->icon('microphone')       
-                        ->modal('requestSong')
-                        ->modalTitle('Songs')
-                        ->method('requestSong')
-                        ->type(Color::PRIMARY())),
-            ]),
-
-            Layout::modal('requestSong', Layout::rows([
-                Input::make('song.title')
-                    ->title('Title')
-                    ->placeholder('Song Title'),
-
-                Input::make('song.artist')
-                    ->title('Artist')
-                    ->placeholder('Song Artist'),
-
-            ]))
-            ->title('Request Song')
-            ->applyButton('Submit Song Request'),
-            */
-
         ];
-    }
-
-    public function requestSong(Request $request){
-
-        $title= $request->input('song.title'); $artist= $request->input('song.artist');
-
-        if (NoPlaySong::where(['title'=> $title, 'artist' => $artist])->exists()) {
-            return Alert::error('Please Try Again.');
-         }
-         else{
-            $songRequest= new SongRequest();
-            $songRequest->title = $request->input('song.title');
-
-            $songRequest->event_id= $request->get("event_id");
-            $songRequest->requester_user_id= $request->user()-> id;
-            $songRequest-> save();
-         }
     }
     public function chooseSong(Request $request, Events $event){
 
