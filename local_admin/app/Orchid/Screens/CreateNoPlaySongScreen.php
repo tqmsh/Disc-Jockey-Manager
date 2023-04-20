@@ -26,14 +26,15 @@ use Orchid\Support\Color;
 
 class CreateNoPlaySongScreen extends Screen
 {
+    public $event;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event): iterable
     {
-        return [];
+        return ['event' => $event];
     }
 
     /**
@@ -73,33 +74,33 @@ class CreateNoPlaySongScreen extends Screen
     {
         return [
             Layout::rows([
+                Select::make('song.id')
+                ->options(function(){
+                    $arr= array();
+                    foreach(Song::all() as $song){
+                        if(!NoPlaySong::where(['song_id'=> $song -> id])->exists()){
+                            $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                        }
+                    }
+                    return $arr;
+                })
+                -> empty('Choose a song'), 
 
-                Input::make('song.title')
-                ->title('Song Title')
-                ->type('text')
-                ->required()
-                ->horizontal()
-                ->value($this->noPlaySong->title),
-
-                Input::make('song.artist')
-                ->title('Song Artist')
-                ->type('text')
-                ->horizontal()
-                ->value($this->noPlaySong->artist),
-
-                //These should not be input fields, they should be a Select class that queries all the songs from the songs table excluding songs that are already in the no_play_songs table.
-
+                Button::make('Submit')
+                ->type(Color::PRIMARY())
+                ->method('create')
+                ->icon('plus')
             ])
         ];
     }
 
-    public function create(Request $request){
-
-        $noPlaySong= new NoPlaySong();
-        $noPlaySong -> title= $request->input('song.title'); $noPlaySong -> artist= $request->input('song.artist');
-        $noPlaySong -> save();
-
-        Alert::info('You have successfully created a No Play Song.');
-
+    public function create(Request $request, Events $event){
+        $request->validate(['song.id' => 'required|max:255']);
+        $song = Song::find($request->input('song.id'));
+        $formFields = $request->all();
+        $formFields['song_id'] = $song->id;
+        $formFields['event_id'] = $event -> id;
+        NoPlaySong::create($formFields);
+ 
     }
 }
