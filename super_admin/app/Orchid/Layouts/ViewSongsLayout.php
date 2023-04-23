@@ -4,9 +4,8 @@ namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
 use App\Models\Events;
-use App\Models\SongRequest;
-use App\Models\Student;
 use App\Models\Song;
+use App\Models\Student;
 use App\Models\User;
 use App\Models\NoPlaySong;
 use Orchid\Screen\Actions\Link;
@@ -19,7 +18,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Select;
 
-class ViewSongRequestsLayout extends Table
+class ViewSongsLayout extends Table
 {
     /**
      * Data source.
@@ -29,7 +28,7 @@ class ViewSongRequestsLayout extends Table
      *
      * @var string
      */
-    protected $target = 'songRequests';
+    protected $target = 'songs';
 
     
     /**
@@ -41,35 +40,30 @@ class ViewSongRequestsLayout extends Table
     {
         return [
             TD::make()
-                ->render(function (SongRequest $songRequest){
-                    return CheckBox::make('songRequests[]')
-                        ->value($songRequest -> id)
+                ->render(function (Song $song){
+                    return CheckBox::make('songs[]')
+                        ->value($song -> id)
                         ->checked(false);
                 }),
 
-            TD::make('request_title', 'Request Title')
-                ->render(function (SongRequest $songRequest) {
-                    return e(Song::find($songRequest -> song_id) -> title);
+            TD::make('song_title', 'Song Title')
+                ->render(function (Song $song) {
+                    return  $song-> title;
                 }),
 
-            TD::make('request_artist', 'Request Artist')
-                ->render(function (SongRequest $songRequest) {
-                    return e(Song::find($songRequest -> song_id) -> artist);
-                }),
-
-             TD::make('requester_id', 'Requester')
-                ->render(function (SongRequest $songRequest) {
-                    return e(User::find($songRequest -> requester_user_id)-> name);
+            TD::make('song_artist', 'Song Artist')
+                ->render(function (Song $song) {
+                    return $song -> artist;
                 }),
 
             TD::make()
-                ->render(function (SongRequest $songRequest) {
+                ->render(function (Song $song) {
                     return ModalToggle::make('Edit')
                         ->icon('microphone')         
-                        ->modal('editSong')
+                        ->modal('editSongModal')
                         ->modalTitle('Songs')
                         ->type(Color::PRIMARY())
-                        ->method("update", ['songReq' => $songRequest -> id]);
+                        ->method("edit", ['song_id' => $song -> id]);
                 }),
         ];
     }

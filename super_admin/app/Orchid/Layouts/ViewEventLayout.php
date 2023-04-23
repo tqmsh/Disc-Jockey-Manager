@@ -90,6 +90,14 @@ class ViewEventLayout extends Table
                 ->render(function (Events $event) {
                     return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['event'=>$event->id, 'type'=>"edit"]) ->icon('pencil');
                 }),
+
+            TD::make()
+                ->render(function (Events $event) {
+                    return Button::make('Song Requests')
+                        ->icon('music-tone-alt')         
+                        ->method('redirect', ['event_id' => $event->id, 'type' => 'songReq'])
+                        ->type(Color::PRIMARY());
+                }),
         ];    
     }
 }

@@ -115,6 +115,10 @@ class PlatformProvider extends OrchidServiceProvider
                         ->route('platform.pendinglocaladmin.list'),
                 ]),
 
+            Menu::make('Songs')
+            ->icon('music-tone-alt')
+            ->route('platform.songs.list'),
+
             Menu::make('Students')
                 ->icon('graduation')
                 ->size()
