@@ -9,15 +9,17 @@ class AdDisplay extends Component
 {
     public $url;
     public $id;
+    public $campaign;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $id)
+    public function __construct($id)
     {
         $this->id = $id;
-        $this->url = Campaign::find($id)->image;
+        $this->campaign = Campaign::find($id);
+        $this->url = ($this->campaign != null && $this->campaign->image != null) ? $this->campaign->image : 'https://via.placeholder.com/600x600';
     }
 
     /**
