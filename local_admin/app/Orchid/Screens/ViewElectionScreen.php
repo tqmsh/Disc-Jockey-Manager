@@ -61,6 +61,10 @@ class ViewElectionScreen extends Screen
             Link::make('Create Position')
                 ->icon('plus')
                 ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
+
+            Link::make('Edit Election')
+                ->icon('pencil')
+                ->redirect() -> route('platform.eventPromvote.edit',$this->election->id),
             
             Button::make('End Election')
                 ->icon('trash')
