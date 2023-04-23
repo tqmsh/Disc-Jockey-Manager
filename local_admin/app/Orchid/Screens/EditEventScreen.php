@@ -7,7 +7,6 @@ use App\Models\Events;
 use App\Models\School;
 use App\Models\Vendors;
 use App\Models\Song;
-use App\Models\NoPlaySong;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use App\Models\Localadmin;
@@ -22,7 +21,6 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewNoPlaySongsLayout;
 
 class EditEventScreen extends Screen
 {
@@ -37,7 +35,6 @@ class EditEventScreen extends Screen
     public function query(Events $event): iterable
     {
         return [
-            'noPlaySongs'=> NoPlaySong::where('event_id', $event-> id) ->paginate(10),
             'event' => $event
         ];
     }
@@ -85,7 +82,6 @@ class EditEventScreen extends Screen
         
         abort_if($this->event->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'), 403);
 
-        
         return [
             
             Layout::rows([
@@ -142,62 +138,8 @@ class EditEventScreen extends Screen
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->horizontal()
                     ->value($this->event->venue_id),
-            ]),
-            
-            Layout::tabs([
-                "No Play Song List"=>[ViewNoPlaySongsLayout::class, 
-                Layout::rows([
-                    Button::make('Delete Song')
-                    ->icon('trash')
-                    ->method('deleteSong'),
-                ])],
-                "Add No Play Song" =>[
-                    Layout::rows([
-                    Select::make('song.id')
-                    ->options(function(){
-                        $arr= array();
-                        foreach(Song::all() as $song){
-                            if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
-                                $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
-                            }
-                        }
-                        return $arr;
-                    })
-                    -> empty('Choose a song'), 
-        
-                    Button::make('Submit')
-                    ->type(Color::PRIMARY())
-                    ->method('chooseSong')
-                    ->icon('plus')
-                    ])], 
-                ]),            
+            ]),            
         ];
-    }
-    
-    public function chooseSong(Request $request, Events $event){
-        $song = Song::find($request->input('song.id'));
-        $formFields = $request->all();
-        $formFields['song_id'] = $song->id;
-        $formFields['event_id'] = $event -> id;
-        NoPlaySong::create($formFields);
-    }
-
-    public function deleteSong(Request $request)
-    {   
-        $noPlaySongs = $request->get('noPlaySongs');
-        try{
-            if(!empty($noPlaySongs)){
-                foreach($noPlaySongs as $noPlaySong){
-                    noPlaySong::where('id', $noPlaySong)->delete();
-                }
-                Toast::success('Selected No Play Song (s) deleted succesfully');
-            }else{
-                Toast::warning('Please select No Play Songs in order to delete them');
-            }
-
-        }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected No Play Songs. Error Message: ' . $e);
-        }
     }
 
     public function update(Events $event, Request $request)
