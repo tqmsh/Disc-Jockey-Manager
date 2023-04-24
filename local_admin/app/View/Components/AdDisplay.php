@@ -11,6 +11,7 @@ class AdDisplay extends Component
 {
     public $url;
     public $id;
+    public $forward_url;
     public $campaign;
 
     /**
