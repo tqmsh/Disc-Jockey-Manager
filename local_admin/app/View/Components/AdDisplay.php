@@ -3,6 +3,8 @@
 namespace App\View\Components;
 
 use App\Models\Campaign;
+use Closure;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class AdDisplay extends Component
@@ -10,6 +12,7 @@ class AdDisplay extends Component
     public $url;
     public $id;
     public $campaign;
+
     /**
      * Create a new component instance.
      *
@@ -20,12 +23,13 @@ class AdDisplay extends Component
         $this->id = $id;
         $this->campaign = Campaign::find($id);
         $this->url = ($this->campaign != null && $this->campaign->image != null) ? $this->campaign->image : 'https://via.placeholder.com/600x600';
+        $this->forward_url = ($this->campaign != null && $this->campaign->website != null) ? $this->campaign->website : '';
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View|Closure|string
      */
     public function render()
     {
@@ -35,25 +39,10 @@ class AdDisplay extends Component
 var triggered = false;
 function sendInternalRequestWithIdParam(id) {
     if (!triggered){
-          // create a new XMLHttpRequest object
-          var xhr = new XMLHttpRequest();
-
           // prepare the request URL with ID parameter
-          var url = '/your-page-url?id=' + encodeURIComponent(id);  <!-- TODO Change link -->
+          var url = '/campaign_view/' + encodeURIComponent(id);
 
-          // open a new request with a GET method
-          xhr.open('GET', url, true);
-
-          // set a callback function for when the request is complete
-          xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-              // request is complete and successful, do something with the response
-              console.log(xhr.responseText);
-            }
-          };
-
-          // send the request
-          xhr.send();
+          $.post(url, "", (data, status) => { console.log(data);})
           triggered = true;
     }
 
@@ -71,19 +60,24 @@ function checkIfImageIsVisible(image, callback) {
 function handleVisibleImage(image) {
     if(!triggered){
       console.log('Image is now visible:', image.id);
-      sendInternalRequestWithIdParam({{ $id }});
+      sendInternalRequestWithIdParam({{ $id }})
   }
 }
 window.addEventListener('scroll', function() {
   checkIfImageIsVisible(image, handleVisibleImage);
 });
 window.addEventListener("load", function(){
-    image = document.getElementById({{ $id }});
+    image = document.getElementById({{ $id }})
     console.log(image == null);
     checkIfImageIsVisible(image, handleVisibleImage);
 })
+document.getElementById({{  $id  }}).addEventListener("click", function(){
+    var url = '/campaign_click/' + encodeURIComponent(id);
+
+    $.post(url, "", (data, status) => { console.log(data);})
+})
 </script>
-<a href=""> <!-- TODO Add link -->
+<a href=" {{ $forward_url }}">
 <img id={{$id}} src="{{$url}}" alt="AnImage" width="600" height="600">
 </a>
 </div>
