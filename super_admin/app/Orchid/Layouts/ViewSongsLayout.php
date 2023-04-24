@@ -61,8 +61,8 @@ class ViewSongsLayout extends Table
                     return ModalToggle::make('Edit')
                         ->icon('microphone')         
                         ->modal('editSongModal')
-                        ->modalTitle('Songs')
-                        ->type(Color::PRIMARY())
+                        ->modalTitle('Edit Song')
+                        ->type(Color::DARK())
                         ->method("edit", ['song_id' => $song -> id]);
                 }),
         ];

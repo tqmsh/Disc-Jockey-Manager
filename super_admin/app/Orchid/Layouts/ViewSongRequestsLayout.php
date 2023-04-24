@@ -64,10 +64,10 @@ class ViewSongRequestsLayout extends Table
 
             TD::make()
                 ->render(function (SongRequest $songRequest) {
-                    return ModalToggle::make('Edit')
+                    return ModalToggle::make('Change')
                         ->icon('microphone')         
                         ->modal('editSong')
-                        ->modalTitle('Songs')
+                        ->modalTitle('Change Song')
                         ->type(Color::PRIMARY())
                         ->method("update", ['songReq' => $songRequest -> id]);
                 }),

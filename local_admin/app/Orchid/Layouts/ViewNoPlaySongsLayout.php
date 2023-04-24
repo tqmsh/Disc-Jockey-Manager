@@ -54,6 +54,7 @@ class ViewNoPlaySongsLayout extends Table
                 ->render(function (NoPlaySong $noPlaySong) {
                     return (Song::find($noPlaySong-> song_id) -> artist);
                 }),
+                
 
 
         ];

@@ -60,7 +60,7 @@ class ViewSongsScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.songs.list'),
+                ->route('platform.main'),
 
             ModalToggle::make('Add New Song')
                 ->modal('createSongModal')
@@ -145,7 +145,7 @@ class ViewSongsScreen extends Screen
     public function edit(Request $request)
     {
         $song = Song::find($request->get("song_id"));
-        $song -> title = $request->input('song.title');
+        $song ->title = $request->input('song.title');
         $song-> artist = $request->input('song.artist');
         $song->save();
 

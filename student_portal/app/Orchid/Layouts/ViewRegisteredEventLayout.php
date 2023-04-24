@@ -42,6 +42,14 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Unregister')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('close');
                 }), 
+                
+            TD::make()
+                ->render(function (Events $event) {
+                    return Button::make('Song Requests')
+                        ->icon('music-tone-alt')         
+                        ->method('redirect', ['event_id' => $event->id, 'type' => 'songs'])
+                        ->type(Color::INFO());
+                }),
 
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
@@ -72,14 +80,6 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function (Events $event) {
                     return e($event->event_rules);
                 }),
-
-            TD::make()
-            ->render(function (Events $event) {
-                return Button::make('Song Requests')
-                    ->icon('music-tone-alt')         
-                    ->method('redirect', ['event_id' => $event->id, 'type' => 'songs'])
-                    ->type(Color::PRIMARY());
-            }),
     
         ];    
     }

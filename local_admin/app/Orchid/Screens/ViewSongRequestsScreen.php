@@ -53,7 +53,7 @@ class ViewSongRequestsScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Song Requests';
+        return 'Song Requests & Banned Songs';
     }
 
     /**
@@ -100,13 +100,15 @@ class ViewSongRequestsScreen extends Screen
 
                       
           Layout::tabs([
-            "No Play Song List"=>[ViewNoPlaySongsLayout::class, 
+            "Banned Song List"=>[ViewNoPlaySongsLayout::class, 
             Layout::rows([
-                Button::make('Delete Song')
-                ->icon('trash')
+                Button::make('Remove Banned Song')
+                ->type(Color::LINK())
+                ->icon('like')
                 ->method('deleteSong'),
-            ])],
-            "Add No Play Song" =>[
+            ])
+        ],
+            "Add Banned Song" =>[
                 Layout::rows([
                 Select::make('song.id')
                 ->options(function(){
