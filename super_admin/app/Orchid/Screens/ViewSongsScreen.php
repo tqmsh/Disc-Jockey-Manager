@@ -60,7 +60,7 @@ class ViewSongsScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.main'),
+                ->route('platform.songs.list'),
 
             ModalToggle::make('Add New Song')
                 ->modal('createSongModal')
