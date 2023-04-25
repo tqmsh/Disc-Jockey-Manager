@@ -12,6 +12,6 @@ class SongRequest extends Model
     protected $fillable = [
         'song_id',
         'event_id',
-        'requester_user_id'
+        'requester_user_id',
     ];
 }

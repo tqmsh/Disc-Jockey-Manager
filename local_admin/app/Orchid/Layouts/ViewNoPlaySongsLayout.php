@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\NoPlaySong;
+use App\Models\Song;
 use App\Models\Student;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -25,6 +26,7 @@ class ViewNoPlaySongsLayout extends Table
      *
      * @var string
      */
+
     protected $target = 'noPlaySongs';
 
     
@@ -39,19 +41,21 @@ class ViewNoPlaySongsLayout extends Table
         return [
             TD::make()
                 ->render(function (NoPlaySong $noPlaySong){
-                    return CheckBox::make('songRequests[]')
+                    return CheckBox::make('noPlaySongs[]')
                         ->value($noPlaySong -> id)
                         ->checked(false);
                 }),
 
             TD::make('title', 'Song Title')
                 ->render(function (NoPlaySong $noPlaySong) {
-                    return $noPlaySong->title;
+                    return (Song::find($noPlaySong-> song_id) -> title);
                 }),
             TD::make('artist', 'Song Artist')
                 ->render(function (NoPlaySong $noPlaySong) {
-                    return $noPlaySong->artist;
+                    return (Song::find($noPlaySong-> song_id) -> artist);
                 }),
+                
+
 
         ];
     }

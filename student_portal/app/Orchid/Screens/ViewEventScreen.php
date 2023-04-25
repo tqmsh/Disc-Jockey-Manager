@@ -70,7 +70,7 @@ class ViewEventScreen extends Screen
     }
 
 
-        /**
+    /**
      * Views.
      *
      * @return \Orchid\Screen\Layout[]|string[]
