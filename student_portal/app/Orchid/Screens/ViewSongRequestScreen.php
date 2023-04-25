@@ -74,26 +74,28 @@ class ViewSongRequestScreen extends Screen
     public function layout(): iterable
     {
         return [
-          ViewSongRequestLayout::class,
-
-          Layout::rows([
-            Select::make('song.id')
-            ->options(function(){
-                $arr= array();
-                foreach(Song::all() as $song){
-                    if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
-                        $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
-                    }
-                }
-                return $arr;
-            })
-            -> empty('Choose a song'), 
-
-            Button::make('Submit')
-            ->type(Color::PRIMARY())
-            ->method('chooseSong')
-            ->icon('plus')
-            ]),
+            Layout::tabs([
+                "Song Request List"=> ViewSongRequestLayout::class,
+                "Create Song Request" =>[
+                    Layout::rows([
+                        Select::make('song.id')
+                        ->options(function(){
+                            $arr= array();
+                            foreach(Song::all() as $song){
+                                if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
+                                    $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                                }
+                            }
+                            return $arr;
+                        })
+                        -> empty('Choose a song'), 
+            
+                        Button::make('Submit')
+                        ->type(Color::PRIMARY())
+                        ->method('chooseSong')
+                        ->icon('plus')
+                        ])], 
+                ]),
 
         ];
     }

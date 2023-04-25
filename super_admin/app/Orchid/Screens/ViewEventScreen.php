@@ -138,13 +138,27 @@ class ViewEventScreen extends Screen
         }
     }
 
-
     public function redirect($event, $type){
         if($type == 'event'){
             return redirect()->route('platform.eventBids.list', $event);
         } 
+        else if($type == 'promvote'){
+            //check if election is already created
+            // if created, go to page to view position
+            $election = Election::where('event_id', $event)->first();
+            if($election != null){
+                return redirect() -> route('platform.eventPromvote.list', $event);
+            }
+            // if not created, go to create
+            else{
+                return redirect() -> route('platform.eventPromvote.create', $event);
+            }
+        }
         else if($type == 'edit'){
             return redirect() -> route('platform.event.edit', $event);
+        }
+        else if($type == 'songReq'){
+            return redirect()->route('platform.songreq.list', $event);
         }
         else {
             return redirect()->route('platform.eventStudents.list', $event);

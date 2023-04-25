@@ -9,4 +9,9 @@ class NoPlaySong extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'song_id',
+        'event_id',
+    ];
+
 }

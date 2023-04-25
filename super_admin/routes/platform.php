@@ -27,6 +27,7 @@ use App\Orchid\Screens\CreateVendorScreen;
 use App\Orchid\Screens\EditCategoryScreen;
 use App\Orchid\Screens\EditEventBidScreen;
 use App\Orchid\Screens\ViewCategoryScreen;
+use App\Orchid\Screens\ViewSongsScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -39,6 +40,7 @@ use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
+use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\EditCourseSectionScreen;
 use App\Orchid\Screens\EditSectionLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
@@ -138,6 +140,8 @@ Route::screen('/categories/{category}/edit', EditCategoryScreen::class)->name('p
 //show view region screen
 Route::screen('/regions', ViewRegionScreen::class)->name('platform.region.list');
 
+Route::screen('/songs', ViewSongsScreen::class)->name('platform.songs.list');
+
 //show edit region screen
 Route::screen('/regions/{regions}/edit', EditRegionScreen::class)->name('platform.region.edit');
 
@@ -149,6 +153,9 @@ Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
+
+Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
+
 
 //view courses screen route
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');

@@ -13,4 +13,5 @@ class NoPlaySong extends Model
         'song_id',
         'event_id',
     ];
+
 }
