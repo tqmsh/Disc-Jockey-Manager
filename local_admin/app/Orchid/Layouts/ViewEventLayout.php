@@ -52,6 +52,14 @@ class ViewEventLayout extends Table
                     return Button::make('Promvote')->method('redirect', ['event_id' => $event->id, 'type' => 'promvote'])->icon('dollar')->type(Color::LIGHT());
                 }), 
 
+            TD::make()
+                ->render(function (Events $event) {
+                    return Button::make('Song Requests & Banned Songs')
+                        ->icon('music-tone-alt')         
+                        ->method('redirect', ['event_id' => $event->id, 'type' => 'songReq'])
+                        ->type(Color::INFO());
+                }),
+
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
                     return Link::make($event->event_name)
@@ -92,14 +100,6 @@ class ViewEventLayout extends Table
             TD::make()
                 ->render(function (Events $event) {
                     return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', ['event_id'=>$event->id, 'type'=>"edit"])->icon('pencil');
-                }),
-
-            TD::make()
-                ->render(function (Events $event) {
-                    return Button::make('Song Requests')
-                        ->icon('music-tone-alt')         
-                        ->method('redirect', ['event_id' => $event->id, 'type' => 'songReq'])
-                        ->type(Color::PRIMARY());
                 }),
 
         ];    
