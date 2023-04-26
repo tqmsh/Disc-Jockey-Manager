@@ -97,9 +97,6 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
 
-
-Route::screen('/noPlaySong/view', ViewNoPlaySongsScreen::class)->name('platform.noplaysong.list');
-
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
