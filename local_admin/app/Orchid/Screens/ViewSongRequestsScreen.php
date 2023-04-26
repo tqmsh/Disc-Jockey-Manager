@@ -41,8 +41,8 @@ class ViewSongRequestsScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
-                'noPlaySongs'=> NoPlaySong::where('event_id', $event-> id) ->paginate(10),
+        return ['songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
+                'noPlaySongs'=> NoPlaySong::where('event_id', $event->id)->paginate(10),
                 'event' => $event];
     }
     
@@ -86,8 +86,8 @@ class ViewSongRequestsScreen extends Screen
                 ->options(function(){
                     $arr= array();
                     foreach(Song::all() as $song){
-                        if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id) -> exists()){
-                            $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                        if(!NoPlaySong::where('song_id', $song->id)->where('event_id', $this->event->id) -> exists()){
+                            $arr[$song -> id]= $song->title . ' - ' . $song->artist;
                         }
                     }
                     return $arr;
