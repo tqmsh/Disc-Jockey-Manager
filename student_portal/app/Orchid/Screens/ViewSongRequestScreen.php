@@ -4,25 +4,15 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Events;
-use App\Models\Student;
 use Orchid\Screen\Screen;
-use Illuminate\Support\Arr;
-use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;
-use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewEventLayout;
-use App\Orchid\Layouts\ViewRegisteredEventLayout;
+
 use App\Orchid\Layouts\ViewSongRequestLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Color;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\TextArea;
-use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Select;
-use Orchid\Support\Facades\Alert;
-use App\Models\User;
 use App\Models\Song;
 use App\Models\SongRequest;
 use App\Models\NoPlaySong;
@@ -40,7 +30,7 @@ class ViewSongRequestScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
+        return ['songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
                 'event' => $event];
     }
     /**
@@ -74,26 +64,29 @@ class ViewSongRequestScreen extends Screen
     public function layout(): iterable
     {
         return [
-          ViewSongRequestLayout::class,
+            Layout::tabs([
+                "Song Request List"=> ViewSongRequestLayout::class,
 
-          Layout::rows([
-            Select::make('song.id')
-            ->options(function(){
-                $arr= array();
-                foreach(Song::all() as $song){
-                    if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
-                        $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
-                    }
-                }
-                return $arr;
-            })
-            -> empty('Choose a song'), 
-
-            Button::make('Submit')
-            ->type(Color::PRIMARY())
-            ->method('chooseSong')
-            ->icon('plus')
-            ]),
+                "Create Song Request" =>[
+                    Layout::rows([
+                        Select::make('song.id')
+                        ->options(function(){
+                            $arr= array();
+                            foreach(Song::all() as $song){
+                                if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
+                                    $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                                }
+                            }
+                            return $arr;
+                        })
+                        -> empty('Choose a song'), 
+            
+                        Button::make('Submit')
+                        ->type(Color::PRIMARY())
+                        ->method('chooseSong')
+                        ->icon('plus')
+                        ])], 
+                ]),
 
         ];
     }
@@ -107,6 +100,4 @@ class ViewSongRequestScreen extends Screen
         SongRequest::create($formFields);
  
     }
-
-
 }

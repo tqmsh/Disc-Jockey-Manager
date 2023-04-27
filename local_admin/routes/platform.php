@@ -16,6 +16,7 @@ use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
+use App\Orchid\Screens\EditElectionScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -70,6 +71,8 @@ Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.
 
 Route::screen('/events/promvote/{event_id}/create', CreateElectionScreen::class)->name('platform.eventPromvote.create');
 
+Route::screen('/events/promvote/{event_id}/edit', EditElectionScreen::class)->name('platform.eventPromvote.edit');
+
 Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen::class)->name('platform.eventPromvotePosition.create');
 
 //show pending student screen
@@ -93,9 +96,6 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 
 
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
-
-
-Route::screen('/noPlaySong/view', ViewNoPlaySongsScreen::class)->name('platform.noplaysong.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

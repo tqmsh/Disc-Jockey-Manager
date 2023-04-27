@@ -6,9 +6,11 @@ use Exception;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Vendors;
+use App\Models\Song;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use App\Models\Localadmin;
+use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -80,7 +82,6 @@ class EditEventScreen extends Screen
         
         abort_if($this->event->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'), 403);
 
-        
         return [
             
             Layout::rows([
@@ -137,7 +138,7 @@ class EditEventScreen extends Screen
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->horizontal()
                     ->value($this->event->venue_id),
-            ]),
+            ]),            
         ];
     }
 
