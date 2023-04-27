@@ -5,7 +5,7 @@
         function sendInternalRequestWithIdParam(id) {
             if (!triggered) {
                 // prepare the request URL with ID parameter
-                var url = '/campaign_view/' + encodeURIComponent(id);
+                var url = 'https://api.promplanner.app/campaign_view/' + encodeURIComponent(id);
 
                 $.post(url, "", (data, status) => {
                     console.log(data);
@@ -41,7 +41,7 @@
             checkIfImageIsVisible(image, handleVisibleImage);
         })
         document.getElementById({{  $id  }}).addEventListener("click", function () {
-            var url = '/campaign_click/' + encodeURIComponent(id);
+            var url = 'https://api.promplanner.app/campaign_click/' + encodeURIComponent(id);
 
             $.post(url, "", (data, status) => {
                 console.log(data);

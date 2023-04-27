@@ -18,6 +18,3 @@ use App\Models\Campaign;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::post("campaign_view/{id}", "AdController@impression");
-Route::post("campaign_click/{id}", "AdController@click");
