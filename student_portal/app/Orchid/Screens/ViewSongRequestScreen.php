@@ -17,6 +17,7 @@ use App\Models\Song;
 use App\Models\SongRequest;
 use App\Models\NoPlaySong;
 use Orchid\Screen\TD;   
+use Orchid\Support\Facades\Toast;
 
 class ViewSongRequestScreen extends Screen
 {
@@ -67,13 +68,14 @@ class ViewSongRequestScreen extends Screen
             Layout::tabs([
                 "Song Request List"=> ViewSongRequestLayout::class,
 
-                "Create Song Request" =>[
+                "Request a Song" =>[
                     Layout::rows([
                         Select::make('song.id')
                         ->options(function(){
                             $arr= array();
                             foreach(Song::all() as $song){
-                                if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
+                                if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists() && 
+                                !SongRequest::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
                                     $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
                                 }
                             }
@@ -91,13 +93,18 @@ class ViewSongRequestScreen extends Screen
         ];
     }
     public function chooseSong(Request $request, Events $event){
-
-        $song = Song::find($request->input('song.id'));
-        $formFields = $request->all();
-        $formFields['requester_user_id'] = auth()->id();
-        $formFields['song_id'] = $song->id;
-        $formFields['event_id'] = $event -> id;
-        SongRequest::create($formFields);
+        try{
+            $song = Song::find($request->input('song.id'));
+            $formFields = $request->all();
+            $formFields['requester_user_id'] = auth()->id();
+            $formFields['song_id'] = $song->id;
+            $formFields['event_id'] = $event -> id;
+            SongRequest::create($formFields);
+            Toast::success('Song Request created successfully');
+        }
+        catch(Exception $e){
+            Toast::error('There was a error trying to create the Song Request. Error Message: ' . $e);
+        }
  
     }
 }

@@ -47,12 +47,12 @@ class ViewSongRequestsLayout extends Table
                         ->checked(false);
                 }),
 
-            TD::make('request_title', 'Request Title')
+            TD::make('request_title', 'Title')
                 ->render(function (SongRequest $songRequest) {
                     return e(Song::find($songRequest -> song_id) -> title);
                 }),
 
-            TD::make('request_artist', 'Request Artist')
+            TD::make('request_artist', 'Artist')
                 ->render(function (SongRequest $songRequest) {
                     return e(Song::find($songRequest -> song_id) -> artist);
                 }),

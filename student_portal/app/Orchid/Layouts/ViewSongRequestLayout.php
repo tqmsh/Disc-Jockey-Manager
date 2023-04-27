@@ -31,20 +31,15 @@ class ViewSongRequestLayout extends Table
     protected function columns(): iterable
     {
         return [                    
-            TD::make('request_title', 'Request Title')
+            TD::make('request_title', 'Title')
                 ->render(function (SongRequest $songRequest) {
                     return e(Song::find($songRequest -> song_id) -> title);
                 }),
 
-            TD::make('request_artist', 'Request Artist')
+            TD::make('request_artist', 'Artist')
                 ->render(function (SongRequest $songRequest) {
                     return e(Song::find($songRequest -> song_id) -> artist);
                 }),
-
-         //    TD::make('requester_id', 'Requester ID')
-         //       ->render(function (SongRequest $songRequest) {
-           //         return e(User::find($songRequest -> requester_user_id)-> name);
-          //      }),
             
         ];    
     }
