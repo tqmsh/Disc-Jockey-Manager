@@ -68,6 +68,7 @@ class ViewElectionScreen extends Screen
             
             Button::make('End Election')
                 ->icon('trash')
+                // ->method('redirect',[$this->position,"edit"])
                 ->method('endElection',[$this->event,$this->position])
                 ->confirm(__('Are you sure you want to end election?')),
 
@@ -106,5 +107,15 @@ class ViewElectionScreen extends Screen
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
         }
+    }
+
+    public function redirect($position, $type){
+        dd($position,$type); // cannot pass the right parameters into the method, keeps giving the same parameters
+        if($type == 'edit'){
+            return redirect() -> route('platform.eventPromvotePosition.edit', $position);
+        }
+        else {
+            return redirect()->route('platform.event.list');
+        }    
     }
 }
