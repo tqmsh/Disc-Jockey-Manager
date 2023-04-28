@@ -41,7 +41,7 @@ class ViewPositionLayout extends Table
                     // dd($event->id);
                     //continuously passing in wrong parameters into redirect method
                     return Button::make('Edit')->icon('pencil')->type(Color::DARK())
-                        ->method('redirect',['position' =>$position, 'type'=> "edit"]);
+                        ->method('redirect',['position' =>$position->id, 'type'=> "edit"]);
                 }), 
         ];
     }

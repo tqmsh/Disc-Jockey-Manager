@@ -68,7 +68,6 @@ class ViewElectionScreen extends Screen
             
             Button::make('End Election')
                 ->icon('trash')
-                // ->method('redirect',[$this->position,"edit"])
                 ->method('endElection',[$this->event,$this->position])
                 ->confirm(__('Are you sure you want to end election?')),
 
@@ -110,9 +109,10 @@ class ViewElectionScreen extends Screen
     }
 
     public function redirect($position, $type){
-        dd($position,$type); // cannot pass the right parameters into the method, keeps giving the same parameters
+        $type = request('type');
+        $position = Position::find(request('position'));
         if($type == 'edit'){
-            return redirect() -> route('platform.eventPromvotePosition.edit', $position);
+            return redirect() -> route('platform.eventPromvotePosition.edit', $position->id);
         }
         else {
             return redirect()->route('platform.event.list');
