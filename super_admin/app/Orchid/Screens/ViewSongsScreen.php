@@ -87,7 +87,7 @@ class ViewSongsScreen extends Screen
 
             Input::make('song.title')
                 ->title('Title')
-                ->placeholder('Song Title'),
+                ->placeholder('title'),
 
             Input::make('song.artist')
                 ->title('Artist')
@@ -98,11 +98,12 @@ class ViewSongsScreen extends Screen
         ->applyButton('Add Song'),
 
 
-        Layout::modal('editSongModal', Layout::rows([
+        Layout::modal('editSongModal',  Layout::rows([
 
             Input::make('song.title')
                 ->title('Title')
                 ->placeholder('Song Title'),
+                
 
             Input::make('song.artist')
                 ->title('Artist')

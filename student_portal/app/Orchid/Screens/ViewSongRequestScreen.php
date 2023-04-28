@@ -7,7 +7,7 @@ use App\Models\Events;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;
-
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewSongRequestLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
@@ -15,6 +15,7 @@ use Orchid\Support\Color;
 use Orchid\Screen\Fields\Select;
 use App\Models\Song;
 use App\Models\SongRequest;
+use App\Models\EventAttendees;
 use App\Models\NoPlaySong;
 use Orchid\Screen\TD;   
 use Orchid\Support\Facades\Toast;
@@ -64,6 +65,9 @@ class ViewSongRequestScreen extends Screen
      */
     public function layout(): iterable
     {
+        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id) -> first();
+        abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
+
         return [
             Layout::tabs([
                 "Song Request List"=> ViewSongRequestLayout::class,
