@@ -98,7 +98,7 @@ class EditAdScreen extends Screen
                     ->horizontal()
                     ->value($this->campaign->title),
                 Cropper::make("campaign_image")
-                    ->storage("public")
+                    ->storage("s3")
                     ->title("Image")
                     ->width(600)
                     ->height(600)

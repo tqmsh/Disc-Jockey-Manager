@@ -94,7 +94,7 @@ class CreateAdScreen extends Screen
                     ->help('Enter the name of your package.')
                     ->horizontal(),
                 Cropper::make("campaign_image")
-                    ->storage("public")
+                    ->storage("s3")
                     ->title("Image")
                     ->width(600)
                     ->height(600)
