@@ -53,4 +53,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get('/getTable', [EventAttendeesController::class, 'getTable']);
 
-});                                                 
+    // Impression counter
+    Route::post("campaign_view/{id}", "AdController@impression");
+    // Click counter
+    Route::post("campaign_click/{id}", "AdController@click");
+
+});
