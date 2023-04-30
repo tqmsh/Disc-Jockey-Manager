@@ -6,10 +6,11 @@ use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
+use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Color;
+use Orchid\Screen\Fields\CheckBox;
 
 class ViewPositionLayout extends Table
 {
@@ -31,6 +32,17 @@ class ViewPositionLayout extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make()
+                ->render(function (Position $position){
+                    return CheckBox::make('positions[]')
+                        ->value($position->id)
+                        ->checked(false);
+            }),
+            TD::make()
+                ->render(function($position){
+                    return Button::make('Candidate')->icon('people')->type(Color::DARK())
+                        ->method('redirect',['position' =>$position->id, 'type'=> "candidate"]);
+            }), 
             TD::make('position_name', 'Position Name')
                 ->render(function (Position $position) {
                     return Link::make($position->position_name)
@@ -41,12 +53,6 @@ class ViewPositionLayout extends Table
                     return Button::make('Edit')->icon('pencil')->type(Color::PRIMARY())
                         ->method('redirect',['position' =>$position->id, 'type'=> "edit"]);
             }), 
-            TD::make()
-                ->render(function($position){
-                    return Button::make('Delete')->icon('trash')->type(Color::DARK())
-                        ->method('deletePosition',['position' =>$position->id])
-                        ->confirm(__('Are you sure you want to delete position?'));
-            }),
         ];
     }
 }
