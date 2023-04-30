@@ -68,7 +68,7 @@ class ViewElectionScreen extends Screen
             
             Button::make('End Election')
                 ->icon('trash')
-                ->method('endElection',[$this->event,$this->position])
+                ->method('endElection',[$this->event])
                 ->confirm(__('Are you sure you want to end election?')),
 
             Link::make('Back')
@@ -102,6 +102,23 @@ class ViewElectionScreen extends Screen
             Toast::success('Election ended succesfully');
 
             return redirect()->route('platform.event.list');
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
+    }
+
+    public function deletePosition($position)
+    {
+        $position = request('position');
+        $position = Position::where('id', $position)->first();
+        $election = Election::where('id', $position->election_id)->first();
+        try{
+            $position->delete();
+
+            Toast::success('Position deleted succesfully');
+
+            return redirect()->route('platform.eventPromvote.list',$election->event_id);
 
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);

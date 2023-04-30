@@ -38,11 +38,15 @@ class ViewPositionLayout extends Table
             }),
             TD::make()
                 ->render(function($position){
-                    // dd($event->id);
-                    //continuously passing in wrong parameters into redirect method
-                    return Button::make('Edit')->icon('pencil')->type(Color::DARK())
+                    return Button::make('Edit')->icon('pencil')->type(Color::PRIMARY())
                         ->method('redirect',['position' =>$position->id, 'type'=> "edit"]);
-                }), 
+            }), 
+            TD::make()
+                ->render(function($position){
+                    return Button::make('Delete')->icon('trash')->type(Color::DARK())
+                        ->method('deletePosition',['position' =>$position->id])
+                        ->confirm(__('Are you sure you want to delete position?'));
+            }),
         ];
     }
 }
