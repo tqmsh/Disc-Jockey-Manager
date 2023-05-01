@@ -24,6 +24,7 @@ use Orchid\Support\Facades\Toast;
 class CreateAdScreen extends Screen
 {
     public $paidRegionIds = [];
+    public $vendor;
 
     /**
      * Query data.
