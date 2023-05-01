@@ -120,14 +120,19 @@ class ViewSongsScreen extends Screen
     {
         try{
         $title= $request->input('song.title'); $artist = $request->input('song.artist');
-            if(!Song::where(['title'=> $title, 'artist'=> $artist]) -> exists()){
-                $song = new Song();
-                $song -> title = $title;
-                $song-> artist = $artist;
-                $song->save();
+            if($title== null || $artist== null){
+                Toast::error('Please fill all required fields.');  
             }
             else{
-                Toast::warning('This song has been created previously');
+                if(!Song::where(['title'=> $title, 'artist'=> $artist]) -> exists()){
+                    Song::create([
+                        'title' => $title,
+                        'artist' => $artist,
+                    ]);
+                }
+                else{
+                    Toast::warning('This song has been created previously');
+                }    
             }
         }
         catch(Exception $e){
@@ -155,16 +160,12 @@ class ViewSongsScreen extends Screen
 
     public function edit(Request $request)
     {
-
         try{
             $song = Song::find($request->get("song_id"));
             $title= $request->input('song.title'); $artist = $request->input('song.artist');
-            if($title != null){
-                $song ->title = $title;
-            }
-            if($artist != null){
-                $song -> artist= $artist;
-            }
+
+            $song ->title = ($title == null) ? $song ->title: $title;
+            $song ->artist= ($artist == null) ? $song ->artist: $artist;
             $song->save();
         }
         catch(Exception $e){
