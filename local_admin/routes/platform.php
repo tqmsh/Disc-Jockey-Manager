@@ -17,6 +17,7 @@ use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\EditElectionScreen;
+use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -74,6 +75,8 @@ Route::screen('/events/promvote/{event_id}/create', CreateElectionScreen::class)
 Route::screen('/events/promvote/{event_id}/edit', EditElectionScreen::class)->name('platform.eventPromvote.edit');
 
 Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen::class)->name('platform.eventPromvotePosition.create');
+
+Route::screen('/events/promvote/{position_id}/editPosition', EditPositionScreen::class)->name('platform.eventPromvotePosition.edit');
 
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
