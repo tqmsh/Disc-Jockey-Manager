@@ -62,13 +62,18 @@ class ViewElectionScreen extends Screen
                 ->icon('plus')
                 ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
 
+            Button::make('Delete Selected Position')
+                ->icon('trash')
+                ->method('deletePosition')
+                ->confirm(__('Are you sure you want to delete selected positions?')),
+
             Link::make('Edit Election')
                 ->icon('pencil')
                 ->redirect() -> route('platform.eventPromvote.edit',$this->election->id),
             
             Button::make('End Election')
                 ->icon('trash')
-                ->method('endElection',[$this->event,$this->position])
+                ->method('endElection',[$this->event])
                 ->confirm(__('Are you sure you want to end election?')),
 
             Link::make('Back')
@@ -106,5 +111,40 @@ class ViewElectionScreen extends Screen
         }catch(Exception $e){
             Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
         }
+    }
+
+    public function deletePosition(Request $request)
+    {   
+        //get all localadmins from post request
+        $positions = $request->get('positions');
+        
+        try{
+            //if the array is not empty
+            if(!empty($positions)){
+
+                foreach($positions as $position){
+                    Position::where('id', $position)->delete();
+                }
+
+                Toast::success('Selected positions deleted succesfully');
+
+            }else{
+                Toast::warning('Please select positions in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
+    }
+
+    public function redirect($position, $type){
+        $type = request('type');
+        $position = Position::find(request('position'));
+        if($type == 'edit'){
+            return redirect() -> route('platform.eventPromvotePosition.edit', $position->id);
+        }
+        else {
+            return redirect()->route('platform.event.list');
+        }    
     }
 }

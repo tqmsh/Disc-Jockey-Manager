@@ -7,9 +7,12 @@
                 // prepare the request URL with ID parameter
                 var url = 'https://api.promplanner.app/campaign_view/' + encodeURIComponent(id);
 
-                $.post(url, "", (data, status) => {
-                    console.log(data);
-                })
+                axios.post(url)
+                    .then((response) => {
+                    console.log(response);
+                }, (error) => {
+                    console.log(error);
+                });
                 triggered = true;
             }
 
@@ -43,9 +46,13 @@
         document.getElementById({{  $id  }}).addEventListener("click", function () {
             var url = 'https://api.promplanner.app/campaign_click/' + encodeURIComponent(id);
 
-            $.post(url, "", (data, status) => {
-                console.log(data);
-            })
+            axios.post(url)
+                .then((response) => {
+                    console.log(response);
+                }, (error) => {
+                    console.log(error);
+                });
+            triggered = true;
         })
     </script>
     <a href="{{ $forward_url }}">
