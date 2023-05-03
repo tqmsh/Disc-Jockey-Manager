@@ -115,9 +115,6 @@ class PlatformProvider extends OrchidServiceProvider
                         ->route('platform.pendinglocaladmin.list'),
                 ]),
 
-            Menu::make('Songs')
-            ->icon('music-tone-alt')
-            ->route('platform.songs.list'),
 
             Menu::make('Students')
                 ->icon('graduation')
@@ -141,7 +138,15 @@ class PlatformProvider extends OrchidServiceProvider
             //event nav option
             Menu::make('Events')
                 ->icon('diamond')
-                ->route('platform.event.list'),
+                ->list([
+                    Menu::make('List')
+                    ->icon('list')
+                    ->route('platform.event.list'),
+
+                    Menu::make('Songs')
+                    ->icon('music-tone-alt')
+                    ->route('platform.songs.list')
+                ]),
 
             Menu::make('PromGuide')
                 ->icon('book-open')

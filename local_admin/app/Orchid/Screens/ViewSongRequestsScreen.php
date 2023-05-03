@@ -53,7 +53,7 @@ class ViewSongRequestsScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Song Requests & Banned Songs';
+        return 'Song Requests';
     }
 
     /**
@@ -103,8 +103,8 @@ class ViewSongRequestsScreen extends Screen
             "Banned Song List"=>[ViewNoPlaySongsLayout::class, 
             Layout::rows([
                 Button::make('Remove Banned Song')
-                ->type(Color::LINK())
-                ->icon('like')
+                ->type(Color::SECONDARY())
+                ->icon('trash')
                 ->method('deleteSong'),
             ])
         ],
@@ -133,11 +133,16 @@ class ViewSongRequestsScreen extends Screen
     }
     
     public function chooseSong(Request $request, Events $event){
-        $song = Song::find($request->input('song.id'));
-        $formFields = $request->all();
-        $formFields['song_id'] = $song->id;
-        $formFields['event_id'] = $event -> id;
-        NoPlaySong::create($formFields);
+        try{
+            $song = Song::find($request->input('song.id'));
+            $formFields = $request->all();
+            $formFields['song_id'] = $song->id;
+            $formFields['event_id'] = $event -> id;
+            NoPlaySong::create($formFields);
+            Toast::success('Banned Song created succesfully');
+        }catch(Exception $e){
+            Toast::error('There was a error trying to create the Banned Song. Error Message: ' . $e);
+        }
     }
 
     public function deleteSong(Request $request)
@@ -161,6 +166,7 @@ class ViewSongRequestsScreen extends Screen
     public function delete(Request $request)
     {   
         $songReqs = $request->get('songRequests');
+        
         try{
             if(!empty($songReqs)){
                 foreach($songReqs as $songReq){
