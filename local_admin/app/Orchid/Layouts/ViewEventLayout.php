@@ -54,7 +54,7 @@ class ViewEventLayout extends Table
 
             TD::make()
                 ->render(function (Events $event) {
-                    return Button::make('Song Requests & Banned Songs')
+                    return Button::make('Song Requests')
                         ->icon('music-tone-alt')         
                         ->method('redirect', ['event_id' => $event->id, 'type' => 'songReq'])
                         ->type(Color::INFO());
