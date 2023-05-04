@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\StudentBidsController;
+use App\Http\Controllers\AdController;
 use App\Http\Controllers\LocaladminController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\EventAttendeesController;
@@ -34,9 +35,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register/student', [RegisterController::class, 'register']);
 
 // Impression counter
-Route::put("campaign_view/{id}", "AdController@impression");
+Route::put("campaign_view/{id}", [AdController::class, "impression"]);
 // Click counter
-Route::put("campaign_click/{id}", "AdController@click");
+Route::put("campaign_click/{id}", [AdController::class, "click"]);
 
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
