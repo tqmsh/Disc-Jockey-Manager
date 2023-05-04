@@ -5,9 +5,9 @@
         function sendInternalRequestWithIdParam(id) {
             if (!triggered) {
                 // prepare the request URL with ID parameter
-                var url = 'https://api.promplanner.app/campaign_view/' + encodeURIComponent(id);
+                var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
 
-                axios.post(url)
+                axios.put(url)
                     .then((response) => {
                     console.log(response);
                 }, (error) => {
@@ -44,9 +44,9 @@
             checkIfImageIsVisible(image, handleVisibleImage);
         })
         document.getElementById({{  $id  }}).addEventListener("click", function () {
-            var url = 'https://api.promplanner.app/campaign_click/' + encodeURIComponent(id);
+            var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent(id);
 
-            axios.post(url)
+            axios.put(url)
                 .then((response) => {
                     console.log(response);
                 }, (error) => {
