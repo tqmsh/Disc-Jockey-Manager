@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Election;
 use App\Models\Position;
 use Orchid\Screen\Screen;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -13,6 +14,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 
 class EditPositionScreen extends Screen
 {
@@ -26,6 +28,7 @@ class EditPositionScreen extends Screen
     public function query(Position $position): iterable
     {
         $election = Election::where('id', $position->election_id)->first();
+        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');
         return [
             'position' => $position,
             'election' => $election

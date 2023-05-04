@@ -34,6 +34,7 @@ class EditEventScreen extends Screen
      */
     public function query(Events $event): iterable
     {
+        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $event->school_id, 403, 'You are not authorized to view this page.');
         return [
             'event' => $event
         ];
