@@ -10,6 +10,7 @@ use App\Models\Position;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -18,6 +19,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewPositionLayout;
+use Illuminate\Support\Facades\Auth;
 
 class ViewElectionScreen extends Screen
 {
@@ -31,6 +33,7 @@ class ViewElectionScreen extends Screen
      */
     public function query(Events $event): iterable
     {
+        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $event->school_id, 403, 'You are not authorized to view this page');
         $election = Election::where('event_id', $event->id)->first();
         $position = Position::where('election_id', $election->id)->paginate(10);
         return [

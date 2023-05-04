@@ -26,6 +26,7 @@ class EditPackageScreen extends Screen
      */
     public function query(VendorPackage $package): iterable
     {
+        abort_if($package->user_id != Auth::user()->id, 403, 'You are not authorized to view this page.');
         return [
             'package' => $package
         ];

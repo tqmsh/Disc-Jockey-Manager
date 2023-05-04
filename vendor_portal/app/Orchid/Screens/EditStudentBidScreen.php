@@ -25,6 +25,7 @@ class EditStudentBidScreen extends Screen
      */
     public function query(StudentBids $studentBid): iterable
     {
+        abort_if($studentBid->user_id != Auth::user()->id, 403, 'You are not authorized to view this page.');
         return [
             'studentBid' => $studentBid
         ];

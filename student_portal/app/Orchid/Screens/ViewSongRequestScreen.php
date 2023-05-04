@@ -32,8 +32,12 @@ class ViewSongRequestScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
-                'event' => $event];
+        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $this->event->id)->first();
+        abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
+        return [
+            'songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
+            'event' => $event
+        ];
     }
     /**
      * Display header name.
@@ -65,9 +69,6 @@ class ViewSongRequestScreen extends Screen
      */
     public function layout(): iterable
     {
-        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $this->event->id) -> first();
-        abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
-
         return [
             Layout::tabs([
                 "Song Request List"=> ViewSongRequestLayout::class,

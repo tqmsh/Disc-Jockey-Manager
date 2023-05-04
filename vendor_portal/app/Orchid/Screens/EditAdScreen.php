@@ -24,6 +24,8 @@ use Orchid\Support\Facades\Toast;
 class EditAdScreen extends Screen
 {
     public $campaign;
+    public $vendor;
+    public $paidRegionIds;
     /**
      * Query data.
      *
@@ -32,6 +34,7 @@ class EditAdScreen extends Screen
     public function query(Campaign $campaign): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
+        abort_if($this->vendor->user_id != $campaign->user_id, 403);
         $array = Auth::user()->paidRegions->toArray();
 
         //get all the region_ids of the array
@@ -81,7 +84,6 @@ class EditAdScreen extends Screen
      */
     public function layout(): iterable
     {
-        abort_if($this->vendor->user_id != $this->campaign->user_id, 403);
         return [
             Layout::legend("category",[
                 Sight::make('category_id', 'Your Category')->render(function(){
