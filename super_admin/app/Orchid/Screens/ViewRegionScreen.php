@@ -28,7 +28,7 @@ class ViewRegionScreen extends Screen
     public function query(): iterable
     {
         return [
-            'regions' => Region::latest()->paginate(8),
+            'regions' => Region::latest()->paginate(10),
         ];
     }
 
@@ -173,7 +173,7 @@ class ViewRegionScreen extends Screen
 
         }else if(!empty(Region::where('name', $region)->first())){
             
-            Toast::error('Category already exists');
+            Toast::error('Region already exists');
             
         }else{
 
