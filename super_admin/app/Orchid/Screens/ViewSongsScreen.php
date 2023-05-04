@@ -31,7 +31,6 @@ use Orchid\Screen\TD;
 
 class ViewSongsScreen extends Screen
 {
-
     /**
      * Query data.
      *
@@ -83,8 +82,8 @@ class ViewSongsScreen extends Screen
 
           ViewSongsLayout::class,
 
-          Layout::modal('createSongModal', Layout::rows([
-
+        Layout::modal('createSongModal', Layout::rows([
+            
             Input::make('song.title')
                 ->title('Title')
                 ->placeholder('Song Title'),
@@ -97,12 +96,12 @@ class ViewSongsScreen extends Screen
         ->title('Create Song')
         ->applyButton('Add Song'),
 
-
-        Layout::modal('editSongModal', Layout::rows([
-
+        Layout::modal('editSongModal',  Layout::rows([
+            
             Input::make('song.title')
                 ->title('Title')
                 ->placeholder('Song Title'),
+                
 
             Input::make('song.artist')
                 ->title('Artist')
@@ -112,16 +111,33 @@ class ViewSongsScreen extends Screen
         ->title('Edit Song')
         ->applyButton('Update Song'),
 
+
         ];
     }
 
     
     public function create(Request $request)
     {
-        $song = new Song();
-        $song -> title = $request->input('song.title');
-        $song-> artist = $request->input('song.artist');
-        $song->save();
+        try{
+        $title= $request->input('song.title'); $artist = $request->input('song.artist');
+            if($title== null || $artist== null){
+                Toast::error('Please fill all required fields.');  
+            }
+            else{
+                if(!Song::where(['title'=> $title, 'artist'=> $artist]) -> exists()){
+                    Song::create([
+                        'title' => $title,
+                        'artist' => $artist,
+                    ]);
+                }
+                else{
+                    Toast::warning('This song has been created previously');
+                }    
+            }
+        }
+        catch(Exception $e){
+            Toast::error('There was a error trying to create this Song. Error Message: ' . $e);
+        }
     }
 
     public function delete(Request $request)
@@ -144,10 +160,17 @@ class ViewSongsScreen extends Screen
 
     public function edit(Request $request)
     {
-        $song = Song::find($request->get("song_id"));
-        $song ->title = $request->input('song.title');
-        $song-> artist = $request->input('song.artist');
-        $song->save();
+        try{
+            $song = Song::find($request->get("song_id"));
+            $title= $request->input('song.title'); $artist = $request->input('song.artist');
+
+            $song ->title = ($title == null) ? $song ->title: $title;
+            $song ->artist= ($artist == null) ? $song ->artist: $artist;
+            $song->save();
+        }
+        catch(Exception $e){
+            Toast::error('There was a error trying to update this Song. Error Message: ' . $e);
+        }
 
     }
 

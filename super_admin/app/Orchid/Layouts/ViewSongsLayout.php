@@ -59,7 +59,7 @@ class ViewSongsLayout extends Table
             TD::make()
                 ->render(function (Song $song) {
                     return ModalToggle::make('Edit')
-                        ->icon('microphone')         
+                        ->icon('pencil')         
                         ->modal('editSongModal')
                         ->modalTitle('Edit Song')
                         ->type(Color::DARK())
