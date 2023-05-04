@@ -25,6 +25,7 @@ class EditEventBidScreen extends Screen
      */
     public function query(EventBids $eventBid): iterable
     {
+        abort_if($eventBid->user_id != Auth::user()->id, 403, 'You are not authorized to view this page.');
         return [
             'eventBid' => $eventBid
         ];
