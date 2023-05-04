@@ -33,6 +33,11 @@ Route::post('/login', [AuthController::class, 'login']);
 // Register Route
 Route::post('/register/student', [RegisterController::class, 'register']);
 
+// Impression counter
+Route::post("campaign_view/{id}", "AdController@impression");
+// Click counter
+Route::post("campaign_click/{id}", "AdController@click");
+
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
@@ -52,10 +57,5 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/getStudentBids', [StudentBidsController::class, 'getStudentBids']);
 
     Route::get('/getTable', [EventAttendeesController::class, 'getTable']);
-
-    // Impression counter
-    Route::post("campaign_view/{id}", "AdController@impression");
-    // Click counter
-    Route::post("campaign_click/{id}", "AdController@click");
 
 });
