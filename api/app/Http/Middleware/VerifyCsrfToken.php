@@ -12,6 +12,8 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
+        "https://api.promplanner.app/api/campaign_view/",
+        "https://api.promplanner.app/api/campaign_click/"
         //
     ];
 }
