@@ -34,9 +34,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register/student', [RegisterController::class, 'register']);
 
 // Impression counter
-Route::post("campaign_view/{id}", "AdController@impression");
+Route::put("campaign_view/{id}", "AdController@impression");
 // Click counter
-Route::post("campaign_click/{id}", "AdController@click");
+Route::put("campaign_click/{id}", "AdController@click");
 
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
