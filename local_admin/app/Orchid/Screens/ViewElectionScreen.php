@@ -146,6 +146,9 @@ class ViewElectionScreen extends Screen
         if($type == 'edit'){
             return redirect() -> route('platform.eventPromvotePosition.edit', $position->id);
         }
+        else if($type == 'candidate'){
+            return redirect() -> route('platform.eventPromvotePositionCandidate.list', $position->id);
+        }
         else {
             return redirect()->route('platform.event.list');
         }    
