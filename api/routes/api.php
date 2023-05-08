@@ -61,4 +61,5 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get('/getTable', [EventAttendeesController::class, 'getTable']);
 
+    Route::get('/tokenIsValid', [AuthController::class, 'tokenIsValid']);
 });
