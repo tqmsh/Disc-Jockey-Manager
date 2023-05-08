@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     // Additional Event Methods
     Route::get('/getEvents', [EventController::class, 'getEvents']);
 
+    Route::get('/getTables', [EventController::class, 'getTables']);
+
     // Events Routes
     // Route::resource('/events', EventController::class);
 
