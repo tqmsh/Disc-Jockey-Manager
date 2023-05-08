@@ -90,7 +90,7 @@ class StudentBidsController extends Controller
 
         if($user->role == 3){
             $student = Student::where('user_id', $user->id)->first();
-            $studentBids = StudentBids::where('student_user_id', $student->id)->get();
+            $studentBids = StudentBids::where('student_user_id', $student->user_id)->get();
             return $studentBids;
         }else{
             return response()->json(['message' => "You're not a student"], 401);
