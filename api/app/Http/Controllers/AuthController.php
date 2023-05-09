@@ -56,6 +56,6 @@ class AuthController extends Controller
 
     //token is valid function
     public function tokenIsValid(Request $request){
-        return response()->json(['message' => 'Token is valid'], 200);
+        return response()->json(['message' => 'Authenticated'], 200);
     }
 }
