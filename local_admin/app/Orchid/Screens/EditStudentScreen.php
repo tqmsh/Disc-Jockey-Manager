@@ -32,6 +32,7 @@ class EditStudentScreen extends Screen
      */
     public function query(Student $student): iterable
     {
+        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $student->school_id, 403, 'You are not authorized to view this page.');
         return [
             'student' => $student
         ];
@@ -77,10 +78,7 @@ class EditStudentScreen extends Screen
      */
     public function layout(): iterable
     {
-        $this->school = School::find($this->student->school_id);
-
-        abort_if($this->student->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'), 403);
-        
+   
         return [
 
             Layout::rows([

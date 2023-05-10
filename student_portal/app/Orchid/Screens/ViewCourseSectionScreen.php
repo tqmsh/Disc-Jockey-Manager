@@ -24,6 +24,7 @@ class ViewCourseSectionScreen extends Screen
      */
     public function query(Course $course): iterable
     {
+        abort_if($course->category != 3, 403, 'You are not authorized to view this page.');
         return [
             'course' => $course,
             'sections' => $course->sections()->orderBy('ordering', 'asc')->paginate(20),

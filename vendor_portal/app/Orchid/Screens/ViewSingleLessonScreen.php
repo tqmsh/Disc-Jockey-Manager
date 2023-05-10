@@ -22,6 +22,7 @@ class ViewSingleLessonScreen extends Screen
      */
     public function query(Course $course, Section $section, Lesson $lesson): iterable
     {
+        abort_if($course->category != 4, 403, 'You are not authorized to view this page.');
         return [
             'course' => $course,
             'section' => $section,
