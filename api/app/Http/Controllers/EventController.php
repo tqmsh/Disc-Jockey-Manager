@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\Localadmin;
 use App\Models\Events;
+use App\Models\EventAttendees;
+use App\Models\Seating;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -91,6 +93,29 @@ class EventController extends Controller
             }
         }else{
             return response()->json(['message' => 'You are not authorized to view events'], 404);
+        }
+    }
+
+    public function getTables(Request $request){
+        $user = $request->user();
+        //make sure there is an event id in the request
+        if(!$request->event_id){
+            return response()->json(['message' => 'Event ID not found'], 404);
+        }
+        if($user->role == 3){
+            // check if there exists an eventattendee that has bost the event_id and the user_id of the user
+            $eventattendee = EventAttendees::where('event_id', $request->event_id)->where('user_id', $user->id)->first();
+            if(!$eventattendee){
+                return response()->json(['message' => 'You are not a part of this event'], 404);
+            }else{
+                $tables = Seating::where('event_id', $request->event_id)->get();
+                return $tables;
+            }
+        }else if($user->role == 1){
+            $tables = SeatingLLwhere('event_id', $request->event_id)->get();
+            return $tables;
+        }else{
+            return response()->json(['message' => 'You are not authorized to view tables'], 404);
         }
     }
 }
