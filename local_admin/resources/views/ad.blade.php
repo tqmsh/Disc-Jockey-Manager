@@ -1,4 +1,7 @@
 <div>
+    <a href="{{ $forward_url }}" target="_blank">
+        <img id={{  $id  }} src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
+    </a>
     <script>
         var triggered = false;
 
@@ -34,15 +37,14 @@
                 sendInternalRequestWithIdParam({{  $id  }})
             }
         }
-
-        window.addEventListener('scroll', function () {
-            checkIfImageIsVisible(image, handleVisibleImage);
-        });
         window.addEventListener("load", function () {
             image = document.getElementById({{  $id  }})
             console.log(image == null);
             checkIfImageIsVisible(image, handleVisibleImage);
-        })
+        });
+        window.addEventListener('scroll', function () {
+            checkIfImageIsVisible(image, handleVisibleImage);
+        });
         document.getElementById({{  $id  }}).addEventListener("click", function () {
             var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent(id);
 
@@ -55,7 +57,4 @@
             triggered = true;
         })
     </script>
-    <a href="{{ $forward_url }}" target="_blank">
-        <img id={{  $id  }} src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
-    </a>
 </div>
