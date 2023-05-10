@@ -1,8 +1,19 @@
-<div>
-    <a href="{{ $forward_url }}" target="_blank">
-        <img id={{  $id  }} src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
-    </a>
-    <script>
+<div class="card">
+    <div id = {{  $id  }} class="card__body">
+        <a href="{{ $forward_url }}" target="_blank">
+            <img src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
+        </a>
+        <strong>{{  $title  }}</strong>
+    </div>
+    <span>
+        {{  $title  }}
+        <br>
+        From: {{  $company  }}
+    </span>
+</div>
+
+
+<script>
         var triggered = false;
 
         function sendInternalRequestWithIdParam(id) {
@@ -57,4 +68,3 @@
             triggered = true;
         })
     </script>
-</div>
