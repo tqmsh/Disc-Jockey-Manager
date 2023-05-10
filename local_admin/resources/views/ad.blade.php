@@ -55,7 +55,7 @@
             triggered = true;
         })
     </script>
-    <a href="{{ $forward_url }}">
+    <a href="{{ $forward_url }}" target="_blank">
         <img id={{  $id  }} src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
     </a>
 </div>
