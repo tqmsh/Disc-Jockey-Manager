@@ -14,7 +14,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\LocaladminController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\EventAttendeesController;
-
+use App\Http\Controllers\SeatingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,6 +56,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     // Events Routes
     // Route::resource('/events', EventController::class);
 
+    // Request Seating
+    Route::post('/requestTable', [SeatingController::class, 'requestSeat']);
+    
     // Additional StudentBid Methods
     Route::get('/getStudentBids', [StudentBidsController::class, 'getStudentBids']);
 
