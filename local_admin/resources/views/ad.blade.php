@@ -1,8 +1,7 @@
-<div class="card">
-    <div id = {{  $id  }} class="card__body">
-        <a href="{{ $forward_url }}" target="_blank">
+<a href="{{ $forward_url }}" target="_blank">
+<div class="card" id = {{  $id  }}>
+    <div class="card__body">
             <img src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
-        </a>
         <strong>{{  $title  }}</strong>
     </div>
     <span>
@@ -11,7 +10,7 @@
         From: {{  $company  }}
     </span>
 </div>
-
+</a>
 
 <script>
         var triggered = false;
@@ -58,13 +57,12 @@
         });
         document.getElementById({{  $id  }}).addEventListener("click", function () {
             var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent(id);
-
+            console.log("Clicked ", id);
             axios.put(url)
                 .then((response) => {
                     console.log(response);
                 }, (error) => {
                     console.log(error);
                 });
-            triggered = true;
         })
     </script>
