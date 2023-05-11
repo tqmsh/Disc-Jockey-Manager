@@ -56,7 +56,7 @@
             checkIfImageIsVisible(image, handleVisibleImage);
         });
         document.getElementById({{  $id  }}).addEventListener("click", function () {
-            var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent(id);
+            var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent({{  $id  }});
             console.log("Clicked ", {{  $id  }});
             axios.put(url)
                 .then((response) => {
