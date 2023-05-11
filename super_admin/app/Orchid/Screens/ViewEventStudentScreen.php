@@ -178,7 +178,7 @@ class ViewEventStudentScreen extends Screen
                         //table name
                         TD::make('Assigned Table')
                             ->render(function (Student $student) {
-                                $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->pluck('table_id'))->value('tablename');
+                                $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('approved', '1')->pluck('table_id'))->value('tablename');
                                 return e($table);
                             }),
 
