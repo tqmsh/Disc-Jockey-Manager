@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\Examples;
 use App\Models\Campaign;
 use App\Models\Localadmin;
 use App\Models\School;
+use App\Models\Vendors;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
@@ -161,7 +162,9 @@ class ExampleScreen extends Screen
     {
         $arr_ads = array();
         foreach ($this->campaigns as $campaign){
-            $temp = Layout::view("ad", ["id"=>$campaign->id, "forward_url"=>$campaign->website, "image_url"=>$campaign->image]);
+            $temp = Layout::view("ad", ["id"=>$campaign->id, "forward_url"=>$campaign->website,
+                "image_url"=>$campaign->image, "title"=>$campaign->title,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name]);
             $arr_ads[] = $temp;
         }
         $arr_btns = [
@@ -172,6 +175,7 @@ class ExampleScreen extends Screen
                 ->description('It is simple Bar Charts with different colors.'),
         ];
         return [
+            Layout::view("card_style"),
 
             Layout::columns(array_merge($arr_btns, $arr_ads)),
 
