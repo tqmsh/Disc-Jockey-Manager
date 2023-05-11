@@ -47,7 +47,7 @@
         color: var(--hover-text);
         border-radius: 3px;
         font-weight: bold;
-        top: 200%;
+        top: 10000%;
         transition: all .3s cubic-bezier(.6,.4,0,1);
     }
 

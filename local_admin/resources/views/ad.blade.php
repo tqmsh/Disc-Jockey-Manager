@@ -1,8 +1,7 @@
+<a href="{{ $forward_url }}" target="_blank">
 <div class="card">
     <div id = {{  $id  }} class="card__body">
-        <a href="{{ $forward_url }}" target="_blank">
             <img src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
-        </a>
         <strong>{{  $title  }}</strong>
     </div>
     <span>
@@ -11,7 +10,7 @@
         From: {{  $company  }}
     </span>
 </div>
-
+</a>
 
 <script>
         var triggered = false;
