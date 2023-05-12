@@ -97,15 +97,6 @@ class EditAdScreen extends Screen
                     ->help('Enter the name of your package.')
                     ->horizontal()
                     ->value($this->campaign->title),
-                Cropper::make("campaign_image")
-                    ->storage("s3")
-                    ->title("Image")
-                    ->width(600)
-                    ->height(600)
-                    ->required()
-                    ->help("Image to display")
-                    ->horizontal()
-                    ->value($this->campaign->image),
                 Input::make('campaign_link')
                     ->title('Campaign URL')
                     ->type("url")
@@ -122,6 +113,15 @@ class EditAdScreen extends Screen
                     ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal()
                     ->value($this->campaign->region_id),
+                Cropper::make("campaign_image")
+                    ->storage("s3")
+                    ->title("Image")
+                    ->width(600)
+                    ->height(600)
+                    ->required()
+                    ->help("Image to display")
+                    ->horizontal()
+                    ->value($this->campaign->image),
             ]),
         ];
     }
