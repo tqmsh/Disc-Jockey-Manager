@@ -81,9 +81,7 @@ class CreateAdScreen extends Screen
             Layout::legend("category",[
                 Sight::make('category_id', 'Your Category')->render(function(){
 
-                    $catName = Categories::find($this->vendor->category_id)->name;
-
-                    return $catName;
+                    return Categories::find($this->vendor->category_id)->name;
                 }),])->title('Information'),
 
             Layout::rows([
@@ -93,14 +91,6 @@ class CreateAdScreen extends Screen
                     ->placeholder('Enter your campaign name')
                     ->required()
                     ->help('Enter the name of your package.')
-                    ->horizontal(),
-                Cropper::make("campaign_image")
-                    ->storage("s3")
-                    ->title("Image")
-                    ->width(600)
-                    ->height(600)
-                    ->required()
-                    ->help("Image to display")
                     ->horizontal(),
                 Input::make('campaign_link')
                     ->title('Campaign URL')
@@ -116,6 +106,14 @@ class CreateAdScreen extends Screen
                     ->help('Enter the region for your campaign.')
                     ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal(),
+                Cropper::make("campaign_image")
+                    ->storage("s3")
+                    ->title("Image")
+                    ->width(600)
+                    ->height(600)
+                    ->required()
+                    ->help("Image to display")
+                    ->horizontal()
                 ]),
         ];
     }
