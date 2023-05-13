@@ -59,17 +59,6 @@ class StudentController extends Controller
         if($student == null){
             return response()->json(['message' => 'Student not found'], 404);
         }
-
-        // If student is not the same as the user
-        else if($user->role == 3){
-            if($user->student_id != $student->id){
-                return response()->json(['message' => 'You are not authorized to update another student'], 401);
-            }else{
-                $student->update($request->all());
-                return $student; 
-            }
-        }
-
         // If user is a local admin and the student is in the same school
         else if($user->role == 2){
 
@@ -78,7 +67,8 @@ class StudentController extends Controller
             if($localadmin->school_id != $student->school_id){
                 return response()->json(['message' => 'You are not authorized to update this student'], 401);
             }else{
-                $student->update($request->all());
+                // Update only allergies, firstname and lastname
+                $student->update($request->only('allergies', 'first_name', 'last_name'));
             return $student;
             }
         }
@@ -105,6 +95,22 @@ class StudentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateStudent(Request $request){
+        
+        $user = $request->user();
+
+        // Find if user is a student
+        $student = Student::where('user_id', $user->id)->first();
+        if(!$student){
+            return response()->json(['message' => 'You are not a student'], 401);
+        }
+
+        $student->update($request->only('firstname', 'lastname', 'allergies'));
+
+        //Successfully updated student
+        return $student;
     }
 }
     

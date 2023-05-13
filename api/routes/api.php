@@ -46,8 +46,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Student Routes
-    Route::resource('/students', StudentController::class);
-
+    Route::patch('/updateStudent', [StudentController::class, 'updateStudent']);
+    
     // Additional Event Methods
     Route::get('/getEvents', [EventController::class, 'getEvents']);
 
