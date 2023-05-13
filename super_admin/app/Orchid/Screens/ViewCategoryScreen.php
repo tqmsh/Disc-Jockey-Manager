@@ -70,11 +70,11 @@ class ViewCategoryScreen extends Screen
         return [
 
             Layout::rows([
-                
+
                 Input::make('category_name')
                 ->title('Category Name')
                 ->placeholder('Enter the name of the category'),
-                
+
                 Button::make('Add')
                 ->icon('plus')
                 ->type(Color::DEFAULT())
@@ -95,17 +95,17 @@ class ViewCategoryScreen extends Screen
         $category = request('category_name');
 
         if(is_null($category)){
-            
+
             Toast::error('Category name cannot be empty');
 
         }else if(!empty(Categories::where('name', $category)->first())){
-            
+
             Toast::error('Category already exists');
-            
+
         }else{
 
-            //update the category if it already exists or create it if it doesnt
-            $check = Categories::create(['name' => $category]);
+            // Create category and auto approve it
+            $check = Categories::create(['name' => $category, "status" => 1]);
 
             if($check){
 
@@ -119,40 +119,40 @@ class ViewCategoryScreen extends Screen
     }
 
     public function approveCats(){
-            
+
             //get all categories from post request
             $categories = request('pending_categories');
-    
+
             try{
                 //if the array is not empty
                 if(!empty($categories)){
-    
+
                     //loop through the categories and update them
                     foreach($categories as $category){
                         Categories::where('id', $category)->update(['status' => 1]);
                     }
-    
+
                     Toast::success('Selected categories approved succesfully');
-    
+
                 }else{
                     Toast::warning('Please select categories in order to approve them');
                 }
-    
+
             }catch(Exception $e){
                 Toast::error('There was a error trying to approve the selected categories. Error Message: ' . $e->getMessage());
             }
     }
 
-    
+
     public function redirect($category){
         return redirect()-> route('platform.category.edit', $category);
     }
 
     public function deleteCats(Request $request)
-    {   
+    {
         //get all categories from post request
         $categories = $request->get('categories');
-        
+
         try{
             //if the array is not empty
             if(!empty($categories)){

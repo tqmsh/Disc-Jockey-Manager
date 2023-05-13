@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Region;
+use App\Models\User;
 use App\Models\Vendors;
 use Exception;
 use Illuminate\Http\Request;
@@ -32,7 +33,8 @@ class EditAdScreen extends Screen
     public function query(Campaign $campaign): iterable
     {
         $this->vendor = Vendors::where('user_id', $campaign->user_id)->first();
-        $array = Auth::user()->paidRegions->toArray();
+        $this->vendor_user = User::where("id", $this->vendor->user_id)->first();
+        $array = $this->vendor_user->paidRegions->toArray();
 
         //get all the region_ids of the array
         $this->paidRegionIds =  Arr::pluck($array, ['region_id']);
@@ -63,6 +65,7 @@ class EditAdScreen extends Screen
             Button::make('Update')
                 ->icon('check')
                 ->method('update'),
+
             Button::make('Delete Campaign')
                 ->icon('trash')
                 ->method('delete'),
@@ -97,15 +100,6 @@ class EditAdScreen extends Screen
                     ->help('Enter the name of your package.')
                     ->horizontal()
                     ->value($this->campaign->title),
-                Cropper::make("campaign_image")
-                    ->storage("s3")
-                    ->title("Image")
-                    ->width(600)
-                    ->height(600)
-                    ->required()
-                    ->help("Image to display")
-                    ->horizontal()
-                    ->value($this->campaign->image),
                 Input::make('campaign_link')
                     ->title('Campaign URL')
                     ->type("url")
@@ -122,6 +116,15 @@ class EditAdScreen extends Screen
                     ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal()
                     ->value($this->campaign->region_id),
+                Cropper::make("campaign_image")
+                    ->storage("s3")
+                    ->title("Image")
+                    ->width(600)
+                    ->height(600)
+                    ->required()
+                    ->help("Image to display")
+                    ->horizontal()
+                    ->value($this->campaign->image),
             ]),
         ];
     }
