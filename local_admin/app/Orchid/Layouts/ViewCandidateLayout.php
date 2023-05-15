@@ -53,6 +53,11 @@ class ViewCandidateLayout extends Table
             //         // $allVotes = totalVotes($candidate->id);
             //         return Link::make($candidate->candidate_bio);
             // }),
+            TD::make()
+                ->render(function($candidate){
+                    return Button::make('Edit')->icon('pencil')->type(Color::PRIMARY())
+                        ->method('redirect',['candidate' =>$candidate->id, 'type'=> "edit"]);
+            }), 
         ];
     }
 }

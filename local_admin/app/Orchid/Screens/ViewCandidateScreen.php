@@ -2,16 +2,19 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Election;
 use App\Models\Position;
 use App\Models\Candidate;
 use Orchid\Screen\Screen;
 use App\Models\ElectionVotes;
+use Orchid\Screen\Actions\Link;
 use App\Orchid\Layouts\ViewCandidateLayout;
 
 class ViewCandidateScreen extends Screen
 {
     public $position;
     public $candidate;
+    public $election;
     /**
      * Query data.
      *
@@ -20,9 +23,11 @@ class ViewCandidateScreen extends Screen
     public function query(Position $position): iterable
     {
         $candidate = Candidate::where('position_id', $position->id)->paginate(10);
+        $election = Election::where('id', $position->election_id)->first();
         return [
             'position' => $position,
-            'candidate' => $candidate
+            'candidate' => $candidate,
+            'election' => $election
         ];
     }
 
@@ -43,7 +48,15 @@ class ViewCandidateScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Add Candidate')
+                ->icon('plus')
+                ->redirect() -> route('platform.eventPromvotePositionCandidate.create',$this->position->id),
+                
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.eventPromvote.list', $this->election->event_id)
+        ];
     }
 
     /**
@@ -56,6 +69,18 @@ class ViewCandidateScreen extends Screen
         return [
             ViewCandidateLayout::class
         ];
+    }
+
+    public function redirect($candidate, $type){
+        $type = request('type');
+        $candidate = Candidate::find(request('candidate'));
+        if($type == 'edit'){
+            // dd($candidate);
+            return redirect() -> route('platform.eventPromvotePositionCandidate.edit', $candidate->id);
+        }
+        else {
+            return redirect()->route('platform.event.list');
+        }    
     }
 
     public function totalVotes($candidate_id)

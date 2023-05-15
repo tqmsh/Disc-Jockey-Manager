@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\CreateCandidateScreen;
 use App\Orchid\Screens\CreateElectionScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;;
@@ -16,6 +17,7 @@ use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
+use App\Orchid\Screens\EditCandidateScreen;
 use App\Orchid\Screens\EditElectionScreen;
 use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
@@ -102,6 +104,11 @@ Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen
 Route::screen('/events/promvote/{position_id}/editPosition', EditPositionScreen::class)->name('platform.eventPromvotePosition.edit');
 
 Route::screen('/events/promvote/{position_id}/candidate', ViewCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.list');
+
+Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.create');
+
+Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
+
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
