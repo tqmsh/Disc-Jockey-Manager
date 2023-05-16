@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2023 at 11:47 PM
+-- Generation Time: May 17, 2023 at 01:26 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -90,7 +90,35 @@ INSERT INTO `attachments` (`id`, `name`, `original_name`, `mime`, `extension`, `
 (2, '70cd04ef5f2b392b3915d88b25e1b5d97bf3c8f2', 'blob', 'image/png', 'png', 72181, 0, '2023/04/01/', NULL, NULL, 'ecd6a53f960de0ead42a91b5426a822857ba1042', 'public', 197, NULL, '2023-04-02 01:54:42', '2023-04-02 01:54:42'),
 (3, 'cbb4e0a60e7ceda65a8e4eed3e3b40de4619e701', 'blob', 'image/png', 'png', 501165, 0, '2023/04/01/', NULL, NULL, 'ccb91a47ecaa1c4807e96b848c656921a871f985', 'public', 197, NULL, '2023-04-02 02:06:05', '2023-04-02 02:06:05'),
 (4, '7f2d7fcd7d30d3f1532c9b9a35561b53674a4c10', 'blob', 'image/png', 'png', 176700, 0, '2023/04/01/', NULL, NULL, '578f95740c2211bf4955b8edd879771f3b7e697c', 'public', 197, NULL, '2023-04-02 02:19:59', '2023-04-02 02:19:59'),
-(5, 'c3d747174c6eea3d559272a19839a0451e2ce209', 'blob', 'image/png', 'png', 174821, 0, '2023/04/01/', NULL, NULL, 'fc25fbe0d7467c7b20cc7eceafcd9cce1720568c', 'public', 197, NULL, '2023-04-02 02:23:03', '2023-04-02 02:23:03');
+(5, 'c3d747174c6eea3d559272a19839a0451e2ce209', 'blob', 'image/png', 'png', 174821, 0, '2023/04/01/', NULL, NULL, 'fc25fbe0d7467c7b20cc7eceafcd9cce1720568c', 'public', 197, NULL, '2023-04-02 02:23:03', '2023-04-02 02:23:03'),
+(6, 'f5e1a9911a4c30c23bb99710cfc14598541da310', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 'public', 197, NULL, '2023-04-30 00:33:48', '2023-04-30 00:33:48'),
+(7, 'f5e1a9911a4c30c23bb99710cfc14598541da310', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 'public', 197, NULL, '2023-04-30 00:42:34', '2023-04-30 00:42:34'),
+(8, '879e8b0af0f1924afda678d457d0e44ebde571be', 'blob', 'image/png', 'png', 496287, 0, '2023/04/29/', NULL, NULL, 'db5f628b8d4498f2d0fb8a5cedb31413593f652a', 's3', 197, NULL, '2023-04-30 01:19:30', '2023-04-30 01:19:30'),
+(9, 'b5aef958984fc23ff742e0f9322195ea519c4947', 'blob', 'image/png', 'png', 499819, 0, '2023/04/29/', NULL, NULL, '7faa25b77ec6909328ce7f2a9bc410dfc2626de8', 's3', 197, NULL, '2023-04-30 01:23:27', '2023-04-30 01:23:27'),
+(10, 'b5aef958984fc23ff742e0f9322195ea519c4947', 'blob', 'image/png', 'png', 499819, 0, '2023/04/29/', NULL, NULL, '7faa25b77ec6909328ce7f2a9bc410dfc2626de8', 's3', 197, NULL, '2023-04-30 01:24:08', '2023-04-30 01:24:08'),
+(11, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-04-30 01:29:08', '2023-04-30 01:29:08'),
+(12, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-04-30 01:33:58', '2023-04-30 01:33:58'),
+(13, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-05-02 05:09:20', '2023-05-02 05:09:20'),
+(14, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-05-02 05:09:37', '2023-05-02 05:09:37'),
+(15, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-05-02 05:13:28', '2023-05-02 05:13:28'),
+(16, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-05-06 02:36:40', '2023-05-06 02:36:40'),
+(17, '88f015fe7a6a21fad9fadb1a5f3df8cd1d997297', 'blob', 'image/png', 'png', 174821, 0, '2023/05/05/', NULL, NULL, 'fc25fbe0d7467c7b20cc7eceafcd9cce1720568c', 's3', 197, NULL, '2023-05-06 02:37:08', '2023-05-06 02:37:08'),
+(18, '88f015fe7a6a21fad9fadb1a5f3df8cd1d997297', 'blob', 'image/png', 'png', 174821, 0, '2023/05/05/', NULL, NULL, 'fc25fbe0d7467c7b20cc7eceafcd9cce1720568c', 's3', 197, NULL, '2023-05-06 02:37:23', '2023-05-06 02:37:23'),
+(19, 'f5e1a9911a4c30c23bb99710cfc14598541da310', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 'public', 197, NULL, '2023-05-06 02:40:59', '2023-05-06 02:40:59'),
+(20, '8a23a60868e0718f900643cd986b6bf8d1f49cab', 'blob', 'image/png', 'png', 66684, 0, '2023/05/05/', NULL, NULL, '0ae7e00c7bad99c91749cf01da436fcb6931da2f', 's3', 197, NULL, '2023-05-06 02:47:35', '2023-05-06 02:47:35'),
+(21, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-05-06 02:58:22', '2023-05-06 02:58:22'),
+(22, 'd5f278d0bdf077f92f71a43f59925ee23d8020a8', 'blob', 'image/png', 'png', 510241, 0, '2023/04/29/', NULL, NULL, '12e491e184d5c077a9effc4b40738916ea72c3e4', 's3', 197, NULL, '2023-05-06 03:11:09', '2023-05-06 03:11:09'),
+(23, '88f015fe7a6a21fad9fadb1a5f3df8cd1d997297', 'blob', 'image/png', 'png', 174821, 0, '2023/05/05/', NULL, NULL, 'fc25fbe0d7467c7b20cc7eceafcd9cce1720568c', 's3', 197, NULL, '2023-05-06 03:13:46', '2023-05-06 03:13:46'),
+(24, '88f015fe7a6a21fad9fadb1a5f3df8cd1d997297', 'blob', 'image/png', 'png', 174821, 0, '2023/05/05/', NULL, NULL, 'fc25fbe0d7467c7b20cc7eceafcd9cce1720568c', 's3', 197, NULL, '2023-05-10 05:48:18', '2023-05-10 05:48:18'),
+(25, '0dea34232d3627e5b0696b6981ece68f0a04180a', 'blob', 'image/png', 'png', 181603, 0, '2023/05/10/', NULL, NULL, '4975c7ab2b33e226198492b8b658aab51b94177a', 's3', 197, NULL, '2023-05-10 05:49:40', '2023-05-10 05:49:40'),
+(26, '0dea34232d3627e5b0696b6981ece68f0a04180a', 'blob', 'image/png', 'png', 181603, 0, '2023/05/10/', NULL, NULL, '4975c7ab2b33e226198492b8b658aab51b94177a', 's3', 197, NULL, '2023-05-10 05:52:03', '2023-05-10 05:52:03'),
+(27, '0dea34232d3627e5b0696b6981ece68f0a04180a', 'blob', 'image/png', 'png', 181603, 0, '2023/05/10/', NULL, NULL, '4975c7ab2b33e226198492b8b658aab51b94177a', 's3', 197, NULL, '2023-05-10 05:52:15', '2023-05-10 05:52:15'),
+(28, '156117b9cf81bb92cb7f570d8e37b924a53081a5', 'blob', 'image/png', 'png', 6787, 0, '2023/05/16/', NULL, NULL, '37d6341f27b6400b21b205a3691ad29e2e1ac986', 's3', 151, NULL, '2023-05-17 02:57:28', '2023-05-17 02:57:28'),
+(29, '46e76235fc90dac205ececa672511b29415e500a', 'blob', 'image/png', 'png', 6465, 0, '2023/05/16/', NULL, NULL, '5ec44a0b19c5a1ceac409ea81c671fc3b163745b', 's3', 151, NULL, '2023-05-17 02:57:49', '2023-05-17 02:57:49'),
+(30, 'bf86e0e2cf74cf56d92347c8be9ab2016d9389b3', 'blob', 'image/png', 'png', 21664, 0, '2023/05/16/', NULL, NULL, 'fa202d6b2db6c56b038e8bff40008058e1401e52', 's3', 151, NULL, '2023-05-17 02:59:11', '2023-05-17 02:59:11'),
+(31, '0a38e1ace233f2262a8ba707d988217e0608b4d7', 'blob', 'image/png', 'png', 21770, 0, '2023/05/16/', NULL, NULL, 'd82befd581de7058a5d5a415037b920e782dba39', 's3', 151, NULL, '2023-05-17 03:01:12', '2023-05-17 03:01:12'),
+(32, '2b614f23e9221f3d26e9a9bef0f7d7b520d0f875', 'blob', 'image/png', 'png', 156528, 0, '2023/05/16/', NULL, NULL, '9ceb5ebd2dfd63248649f5ade433b198efcc1767', 's3', 151, NULL, '2023-05-17 03:20:04', '2023-05-17 03:20:04'),
+(33, 'ce5f9e9244120560da60f0e21be141f6755d5a9a', 'blob', 'image/png', 'png', 156937, 0, '2023/05/16/', NULL, NULL, '71f54a1faaaf9fb1b9fe9e70756502c9092da50b', 's3', 151, NULL, '2023-05-17 03:20:47', '2023-05-17 03:20:47');
 
 -- --------------------------------------------------------
 
@@ -118,8 +146,7 @@ CREATE TABLE `campaigns` (
 --
 
 INSERT INTO `campaigns` (`id`, `user_id`, `category_id`, `region_id`, `title`, `image`, `website`, `clicks`, `impressions`, `active`, `created_at`, `updated_at`) VALUES
-(3, 197, 10, 1, 'Best campaign ever', 'http://127.0.0.1:8000/storage/2023/04/01/7f2d7fcd7d30d3f1532c9b9a35561b53674a4c10.png', 'https://orchid.software/en/docs/table/', 0, 0, 1, '2023-04-02 02:20:03', '2023-04-21 22:35:33'),
-(4, 197, 9, 1, 'retert', 'http://127.0.0.1:8000/storage/2023/04/01/c3d747174c6eea3d559272a19839a0451e2ce209.png', 'https://orchid.software/en/docs/table/', 0, 0, 1, '2023-04-02 02:23:11', '2023-04-21 22:35:35');
+(8, 197, 11, 1, 'Best campaign ever', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/10/0dea34232d3627e5b0696b6981ece68f0a04180a.png', 'https://orchid.software/en/docs/table/', 0, 0, 1, '2023-05-10 05:49:50', '2023-05-10 05:49:50');
 
 -- --------------------------------------------------------
 
@@ -208,6 +235,14 @@ CREATE TABLE `elections` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `elections`
+--
+
+INSERT INTO `elections` (`id`, `election_name`, `event_id`, `school_id`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 'Test', 15, 51, '2023-04-27 12:00:00', '2023-04-28 12:00:00', '2023-04-27 02:49:15', '2023-04-27 02:49:15'),
+(2, 'Big Man', 13, 53, '2023-05-05 00:41:38', '2023-05-05 00:41:38', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -570,6 +605,14 @@ CREATE TABLE `positions` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `positions`
+--
+
+INSERT INTO `positions` (`id`, `position_name`, `election_id`, `created_at`, `updated_at`) VALUES
+(1, 'Test', 1, '2023-04-27 02:49:40', '2023-04-27 02:49:40'),
+(2, 'Test', 1, '2023-04-27 02:49:51', '2023-04-27 02:49:51');
+
 -- --------------------------------------------------------
 
 --
@@ -862,9 +905,17 @@ CREATE TABLE `song_requests` (
   `song_id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED DEFAULT NULL,
   `requester_user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `requester_user_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`requester_user_ids`)),
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `song_requests`
+--
+
+INSERT INTO `song_requests` (`id`, `song_id`, `event_id`, `requester_user_id`, `requester_user_ids`, `created_at`, `updated_at`) VALUES
+(1, 3, 14, 155, NULL, '2023-04-27 02:15:22', '2023-04-27 02:36:24');
 
 -- --------------------------------------------------------
 
@@ -961,6 +1012,7 @@ CREATE TABLE `users` (
   `account_status` int(11) DEFAULT 0,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pfp` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -970,44 +1022,44 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'hqhyRO1lQES8J4sXqJ0GemNQZzJTq6nNB8Rx8CmoRQPA7h5BzCDLzFusbsUS', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
-(52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
-(67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
-(68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
-(72, 'Alfonzo Conn', 'Kyra', 'Schneider', 'ndietrich@example.org', NULL, 3, 'Canada', NULL, 0, '2022-10-17 20:40:39', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'sZVhTrQr0D', '2022-10-17 20:40:39', '2022-11-15 00:34:27'),
-(73, 'Mrs. Lauren Rau', 'Anais', 'Waelchi', 'claire39@example.com', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:40:39', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'LwRVkEPdFT', '2022-10-17 20:40:39', '2022-11-02 21:38:59'),
-(108, 'Kade Abbott', 'Camille', 'Williams', 'camillewilliams@gmail.com', '+1-872-648-9121', 2, 'Canada', NULL, 1, '2022-10-19 21:08:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'C5iVHaFVKr', '2022-10-19 21:08:55', '2022-11-19 04:25:53'),
-(114, 'Maxie Boyer', 'Sigrid', 'Lindgren', 'manuela.williamson@example.com', '951.460.6134', 2, 'Pakistan', NULL, 1, '2022-10-19 21:09:00', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'jxguMsVoxm', '2022-10-19 21:09:00', '2022-11-19 04:25:53'),
-(124, 'coolkid', 'Cool', 'Kid', 'coolkid@coolkid.com', '45689645', 3, 'Comoros', NULL, 0, NULL, '', NULL, '2022-10-26 22:55:10', '2022-11-09 00:22:29'),
-(125, 'New Student', 'Sanjay', 'Patel', 'sanjaypatel@gmail.com', '45678123', 3, 'Canada', NULL, 0, NULL, '', NULL, NULL, '2022-11-09 03:37:18'),
-(132, 'Testing add student', 'John', 'Connors', 'johnconnors@gmail.com', '(564) 645-5646', 3, 'Canada', NULL, 0, NULL, '$2y$10$glFxuDOe8HbDTv41xXlRyOtbOZrtu7EtIEjv/Ul/Pv7M95cDOSJZS', NULL, '2022-11-04 23:28:42', '2022-11-15 00:57:04'),
-(134, NULL, 'Test', 'Test', 'hi@hii.com', '(456) 564-654_', 5, 'Test', NULL, 0, NULL, NULL, NULL, '2022-11-10 23:38:37', '2022-11-10 23:38:37'),
-(140, 'dfgdfggdfgdfg', 'dfgdfg', 'gdfgdfg', 'dfgddgf@jkjhjk.com', '(554) 654-5464', 5, 'ertter', NULL, 0, NULL, NULL, NULL, '2022-11-14 23:12:55', '2022-11-14 23:12:55'),
-(144, 'Permissions', 'Permissions', 'Permissions', 'Permissions@Permissions.com', '(456) 456-4546', 2, 'Canada', NULL, 1, NULL, '$2y$10$/jt9btmMXXBr15i6c0ClKO/73wbbKMzqzB/2pFyQojQ618PM7ZesG', '2HSxoF6o2OGRx8MZjoAIlCoZzGWJzcZ4lh97iNgEMv9FBl3scogjDDzb3kWz', '2022-11-19 04:27:23', '2022-11-19 04:40:43'),
-(145, 'Big Man John', 'John', 'Smith', 'johnsmith@gmail.com', '(465) 987-9797', 3, 'Canada', NULL, 1, NULL, '$2y$10$9ZXaWr1D1gJZ5LUk88KWUuJccYYU9rx9OvjDaVIKtdE/dapiLl0J.', NULL, '2022-11-20 11:14:59', '2022-11-22 19:30:57'),
-(146, 'Jane Doe', 'Jane', 'Doe', 'janedoe@gmail.com', '(456) 879-4564', 3, 'Canada', NULL, 1, NULL, '$2y$10$PwXqJuw5RkpNkuWF38Wuquldp2SwT0kBBogY6QgYKRkDQzeNyxhQG', NULL, '2022-11-20 11:23:42', '2022-11-26 22:17:01'),
-(148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
-(149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
-(150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'bqcFkXXsPwMCjmKbddZ5M4xpStat9tFNQJF2TsJbHlBzFn72SLFYnOTJlqCp', '2022-12-02 00:58:48', '2022-12-10 22:26:44'),
-(152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
-(154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'KVP7agyGaHjwIhaqUcfKX1ChWlBLzFmk3Z423iuQT0hmg0tC3kodkYjbOQP0', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
-(169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
-(170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
-(181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
-(185, 'RoleUser Perms', 'RoleUser Perms', 'RoleUser Perms', 'RoleUserPerms@RoleUserPerms.com', '(556) 466-4645', 2, 'Canada', NULL, 1, NULL, '$2y$10$iKr.VLPa.6bID.dCmNHuVuJZ1YESN0Nl6wKrYahO2nlbXtxoJBoNW', '21lrVpmJjszaOvkwJQGHQuB19ZfXYqe7MN9HKAGg9T91RX4mJRNaWmSu1KBZ', '2023-01-07 23:45:06', '2023-01-07 23:45:06'),
-(188, 'Joe ', 'Joe ', 'Biden', 'bidenjoe@isuck.com', 'dssdddsddss', 4, 'USA', NULL, 1, NULL, '$2y$10$SUrjCNKKrpkznsPR4RPUmOPGPZnHT9uWvFarPqtzxlYKUCDn8n46i', NULL, '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
-(190, 'Donald ', 'Donald ', 'Trump', 'trumpman@maga.com', 'dssdddsddss', 4, 'USA', NULL, 1, NULL, '$2y$10$cqjoswklZ4erE4sZu5eE6OpdlfN7yQSTG9bCRmZtFIcLGw1MwGaOC', NULL, '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
-(192, 'PendingTest', 'PendingTest', 'PendingTest', 'PendingTest@PendingTest.com', '(778) 979-7979', 2, 'Canada', NULL, 1, NULL, '$2y$10$0DWsyZHm9E7ctCLAC2/2J..f6fPNGB1MsZc.D/H2Gz4lP7tR7rmOO', 'xSFMpXUv8nzIK8K5hiccHK9KtSGgRgkDnHC2fSVPIYEiFuCQFzZ957zfxcAi', '2023-01-10 23:54:52', '2023-01-10 23:55:32'),
-(193, 'Local admin Import 1', 'Local admin Import 1', 'efwefwef', 'import111@gmail.com', '12345678910', 2, 'Canada', NULL, 1, NULL, '$2y$10$fBB56NJVIq2jzE5bUG4fPOSFcAEzFgs6WXy23DfxaoZfMuKdcFIIa', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
-(194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
-(195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
-(196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', '3RGMewUQ6kV9oQWWDUTTAPd0BpkDIS7cp69X28IkVwUMZtrxPzBWDhtA7Q6y', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
-(198, 'bigman101', 'Zg man', 'Big man tings', 'bigman@tings.com', '(612) 354-8954', 3, 'Canada', NULL, 1, NULL, '$2y$10$B10Kj5SYsPn6EKwkyQRbPO7UmY/YqPWkzzzyiU0dZ3DWx.xLRnJpy', NULL, '2023-02-14 23:43:02', '2023-02-15 01:25:38'),
-(205, 'etanguan', 'Ethan', 'Guan', 'guanethan123@gmail.com', '613-287-1612', 3, 'Philippines', NULL, 1, NULL, '$2y$10$NQk4fTkCwz5R4dvcSILnW.36rqdQkMgOvl6ewaZNJc7Auabs5.Kbq', NULL, '2023-03-27 00:12:32', '2023-03-27 00:13:31');
+INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `pfp`, `remember_token`, `created_at`, `updated_at`) VALUES
+(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', NULL, 'KpAf6gW7sIs2nQL0bEBFB9KEyFCQzLc3M2CuQYkjHcZEC3abOwx9w2eirU5U', '2022-10-16 21:27:25', '2022-11-21 20:58:32'),
+(52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
+(67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
+(68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
+(72, 'Alfonzo Conn', 'Kyra', 'Schneider', 'ndietrich@example.org', NULL, 3, 'Canada', NULL, 0, '2022-10-17 20:40:39', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'sZVhTrQr0D', '2022-10-17 20:40:39', '2022-11-15 00:34:27'),
+(73, 'Mrs. Lauren Rau', 'Anais', 'Waelchi', 'claire39@example.com', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:40:39', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'LwRVkEPdFT', '2022-10-17 20:40:39', '2022-11-02 21:38:59'),
+(108, 'Kade Abbott', 'Camille', 'Williams', 'camillewilliams@gmail.com', '+1-872-648-9121', 2, 'Canada', NULL, 1, '2022-10-19 21:08:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'C5iVHaFVKr', '2022-10-19 21:08:55', '2022-11-19 04:25:53'),
+(114, 'Maxie Boyer', 'Sigrid', 'Lindgren', 'manuela.williamson@example.com', '951.460.6134', 2, 'Pakistan', NULL, 1, '2022-10-19 21:09:00', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'jxguMsVoxm', '2022-10-19 21:09:00', '2022-11-19 04:25:53'),
+(124, 'coolkid', 'Cool', 'Kid', 'coolkid@coolkid.com', '45689645', 3, 'Comoros', NULL, 0, NULL, '', NULL, NULL, '2022-10-26 22:55:10', '2022-11-09 00:22:29'),
+(125, 'New Student', 'Sanjay', 'Patel', 'sanjaypatel@gmail.com', '45678123', 3, 'Canada', NULL, 0, NULL, '', NULL, NULL, NULL, '2022-11-09 03:37:18'),
+(132, 'Testing add student', 'John', 'Connors', 'johnconnors@gmail.com', '(564) 645-5646', 3, 'Canada', NULL, 0, NULL, '$2y$10$glFxuDOe8HbDTv41xXlRyOtbOZrtu7EtIEjv/Ul/Pv7M95cDOSJZS', NULL, NULL, '2022-11-04 23:28:42', '2022-11-15 00:57:04'),
+(134, NULL, 'Test', 'Test', 'hi@hii.com', '(456) 564-654_', 5, 'Test', NULL, 0, NULL, NULL, NULL, NULL, '2022-11-10 23:38:37', '2022-11-10 23:38:37'),
+(140, 'dfgdfggdfgdfg', 'dfgdfg', 'gdfgdfg', 'dfgddgf@jkjhjk.com', '(554) 654-5464', 5, 'ertter', NULL, 0, NULL, NULL, NULL, NULL, '2022-11-14 23:12:55', '2022-11-14 23:12:55'),
+(144, 'Permissions', 'Permissions', 'Permissions', 'Permissions@Permissions.com', '(456) 456-4546', 2, 'Canada', NULL, 1, NULL, '$2y$10$/jt9btmMXXBr15i6c0ClKO/73wbbKMzqzB/2pFyQojQ618PM7ZesG', NULL, '2HSxoF6o2OGRx8MZjoAIlCoZzGWJzcZ4lh97iNgEMv9FBl3scogjDDzb3kWz', '2022-11-19 04:27:23', '2022-11-19 04:40:43'),
+(145, 'Big Man John', 'John', 'Smith', 'johnsmith@gmail.com', '(465) 987-9797', 3, 'Canada', NULL, 1, NULL, '$2y$10$9ZXaWr1D1gJZ5LUk88KWUuJccYYU9rx9OvjDaVIKtdE/dapiLl0J.', NULL, NULL, '2022-11-20 11:14:59', '2022-11-22 19:30:57'),
+(146, 'Jane Doe', 'Jane', 'Doe', 'janedoe@gmail.com', '(456) 879-4564', 3, 'Canada', NULL, 1, NULL, '$2y$10$PwXqJuw5RkpNkuWF38Wuquldp2SwT0kBBogY6QgYKRkDQzeNyxhQG', NULL, NULL, '2022-11-20 11:23:42', '2022-11-26 22:17:01'),
+(148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', NULL, 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
+(149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', NULL, 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
+(150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', NULL, 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/16/ce5f9e9244120560da60f0e21be141f6755d5a9a.png', '8Am0DdtjYxMlTcnceWiQlTlMgFu6vqMjJlvknukCefeEXqfE6WJX2VsEDskn', '2022-12-02 00:58:48', '2023-05-17 03:20:49'),
+(152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
+(154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
+(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', NULL, 'dKoYX2JYBa0k33rtgpFIZTb0yHf7bP0liZg67hcwVAWgU22sXVIFuhlWBY7u', '2022-12-05 18:58:15', '2022-12-05 19:00:01'),
+(169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
+(170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
+(181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
+(185, 'RoleUser Perms', 'RoleUser Perms', 'RoleUser Perms', 'RoleUserPerms@RoleUserPerms.com', '(556) 466-4645', 2, 'Canada', NULL, 1, NULL, '$2y$10$iKr.VLPa.6bID.dCmNHuVuJZ1YESN0Nl6wKrYahO2nlbXtxoJBoNW', NULL, '21lrVpmJjszaOvkwJQGHQuB19ZfXYqe7MN9HKAGg9T91RX4mJRNaWmSu1KBZ', '2023-01-07 23:45:06', '2023-01-07 23:45:06'),
+(188, 'Joe ', 'Joe ', 'Biden', 'bidenjoe@isuck.com', 'dssdddsddss', 4, 'USA', NULL, 1, NULL, '$2y$10$SUrjCNKKrpkznsPR4RPUmOPGPZnHT9uWvFarPqtzxlYKUCDn8n46i', NULL, NULL, '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
+(190, 'Donald ', 'Donald ', 'Trump', 'trumpman@maga.com', 'dssdddsddss', 4, 'USA', NULL, 1, NULL, '$2y$10$cqjoswklZ4erE4sZu5eE6OpdlfN7yQSTG9bCRmZtFIcLGw1MwGaOC', NULL, NULL, '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
+(192, 'PendingTest', 'PendingTest', 'PendingTest', 'PendingTest@PendingTest.com', '(778) 979-7979', 2, 'Canada', NULL, 1, NULL, '$2y$10$0DWsyZHm9E7ctCLAC2/2J..f6fPNGB1MsZc.D/H2Gz4lP7tR7rmOO', NULL, 'xSFMpXUv8nzIK8K5hiccHK9KtSGgRgkDnHC2fSVPIYEiFuCQFzZ957zfxcAi', '2023-01-10 23:54:52', '2023-01-10 23:55:32'),
+(193, 'Local admin Import 1', 'Local admin Import 1', 'efwefwef', 'import111@gmail.com', '12345678910', 2, 'Canada', NULL, 1, NULL, '$2y$10$fBB56NJVIq2jzE5bUG4fPOSFcAEzFgs6WXy23DfxaoZfMuKdcFIIa', NULL, NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
+(194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
+(195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
+(196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
+(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', NULL, 'ywr0QXG0SiBzSaviTjTuiGKZvs0AybPzkox2D4DkVXeC7Vy6zYJ2CqSOI8kJ', '2023-01-21 02:41:46', '2023-01-21 02:42:36'),
+(198, 'bigman101', 'Zg man', 'Big man tings', 'bigman@tings.com', '(612) 354-8954', 3, 'Canada', NULL, 1, NULL, '$2y$10$B10Kj5SYsPn6EKwkyQRbPO7UmY/YqPWkzzzyiU0dZ3DWx.xLRnJpy', NULL, NULL, '2023-02-14 23:43:02', '2023-02-15 01:25:38'),
+(205, 'etanguan', 'Ethan', 'Guan', 'guanethan123@gmail.com', '613-287-1612', 3, 'Philippines', NULL, 1, NULL, '$2y$10$NQk4fTkCwz5R4dvcSILnW.36rqdQkMgOvl6ewaZNJc7Auabs5.Kbq', NULL, NULL, '2023-03-27 00:12:32', '2023-03-27 00:13:31');
 
 -- --------------------------------------------------------
 
@@ -1413,13 +1465,13 @@ ALTER TABLE `attachmentable`
 -- AUTO_INCREMENT for table `attachments`
 --
 ALTER TABLE `attachments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `campaigns`
 --
 ALTER TABLE `campaigns`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `candidates`
@@ -1443,7 +1495,7 @@ ALTER TABLE `courses`
 -- AUTO_INCREMENT for table `elections`
 --
 ALTER TABLE `elections`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `election_votes`
@@ -1509,7 +1561,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `no_play_songs`
 --
 ALTER TABLE `no_play_songs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1521,7 +1573,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `regions`
@@ -1557,13 +1609,13 @@ ALTER TABLE `sessions`
 -- AUTO_INCREMENT for table `songs`
 --
 ALTER TABLE `songs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `song_requests`
 --
 ALTER TABLE `song_requests`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `students`

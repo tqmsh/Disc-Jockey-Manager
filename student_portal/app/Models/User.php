@@ -79,6 +79,7 @@ class User extends Authenticatable
         'role',
         'phonenumber',
         'name',
+        'pfp',
         'email',
         'updated_at',
         'created_at',
