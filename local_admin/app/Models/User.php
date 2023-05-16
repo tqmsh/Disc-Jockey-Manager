@@ -23,6 +23,7 @@ class User extends Authenticatable
         'account_status',
         'permissions',
         'password',
+        'pfp',
         'updated_at',
         'created_at',
     ];

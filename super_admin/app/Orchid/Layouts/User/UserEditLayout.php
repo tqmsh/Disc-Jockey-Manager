@@ -7,6 +7,7 @@ namespace App\Orchid\Layouts\User;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Rows;
+use Orchid\Screen\Fields\Cropper;
 
 class UserEditLayout extends Rows
 {
@@ -30,6 +31,15 @@ class UserEditLayout extends Rows
                 ->required()
                 ->title(__('Email'))
                 ->placeholder(__('Email')),
+                
+            Cropper::make("user.pfp")
+                ->storage("s3")
+                ->title("Image")
+                ->width(300)
+                ->height(300)
+                ->help("Profile Picture")
+                ->horizontal()
+                ->value(auth()->user()->pfp) 
         ];
     }
 }
