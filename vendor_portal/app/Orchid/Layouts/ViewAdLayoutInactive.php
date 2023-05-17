@@ -38,7 +38,7 @@ class ViewAdLayoutInactive extends Table
                         ->value($campaign->id)
                         ->checked(false);
                 }),
-            TD::make('event_name', 'Campaign Name')
+            TD::make('campaign_name', 'Campaign Name')
                 ->render(function(Campaign $campaign){
                     return e($campaign->title);
                 }),
