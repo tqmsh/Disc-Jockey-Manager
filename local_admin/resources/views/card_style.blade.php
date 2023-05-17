@@ -1,6 +1,6 @@
 <style>
     .card {
-        --bg: #c7a0e5;
+        --bg: #e2e2e3;
         --hover-bg: #8b21d7;
         --hover-text: #ffffff;
         text-align: center;
