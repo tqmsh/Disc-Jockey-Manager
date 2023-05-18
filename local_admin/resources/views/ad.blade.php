@@ -21,11 +21,6 @@
                 var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
 
                 axios.put(url)
-                    .then((response) => {
-                    console.log(response);
-                }, (error) => {
-                    console.log(error);
-                });
                 triggered = true;
             }
 
@@ -43,13 +38,11 @@
 
         function handleVisibleImage(image) {
             if (!triggered) {
-                console.log('Image is now visible:', image.id);
                 sendInternalRequestWithIdParam({{  $id  }})
             }
         }
         window.addEventListener("load", function () {
             image = document.getElementById({{  $id  }})
-            console.log(image == null);
             checkIfImageIsVisible(image, handleVisibleImage);
         });
         window.addEventListener('scroll', function () {
@@ -57,12 +50,6 @@
         });
         document.getElementById({{  $id  }}).addEventListener("click", function () {
             var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent({{  $id  }});
-            console.log("Clicked ", {{  $id  }});
             axios.put(url)
-                .then((response) => {
-                    console.log(response);
-                }, (error) => {
-                    console.log(error);
-                });
         })
     </script>
