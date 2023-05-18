@@ -2,9 +2,14 @@
 
 namespace App\Orchid\Screens\Examples;
 
+use App\Models\Campaign;
+use App\Models\School;
+use App\Models\Student;
+use App\Models\Vendors;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
@@ -26,6 +31,8 @@ class ExampleScreen extends Screen
     semper mattis viverra malesuada quam metus vulputate torquent magna, lobortis nec nostra nibh sollicitudin
     erat in luctus.';
 
+    public $campaigns;
+
     /**
      * Query data.
      *
@@ -33,7 +40,9 @@ class ExampleScreen extends Screen
      */
     public function query(): iterable
     {
+        $this->campaigns = Campaign::where("region_id", School::find(Student::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
         return [
+            "ad_ids" =>"",
             'charts'  => [
                 [
                     'name'   => 'Some Data',
@@ -151,21 +160,25 @@ class ExampleScreen extends Screen
      */
     public function layout(): iterable
     {
+        $arr_ads = array();
+        foreach ($this->campaigns as $campaign){
+            $temp = Layout::view("ad", ["id"=>$campaign->id, "forward_url"=>$campaign->website,
+                "image_url"=>$campaign->image, "title"=>$campaign->title,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name]);
+            $arr_ads[] = $temp;
+        }
+        $arr_btns = [
+            ChartLineExample::make('charts', 'Line Chart')
+                ->description('It is simple Line Charts with different colors.'),
+
+            ChartBarExample::make('charts', 'Bar Chart')
+                ->description('It is simple Bar Charts with different colors.'),
+        ];
         return [
-            Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
-            ]),
 
-            Layout::columns([
-                ChartLineExample::make('charts', 'Line Chart')
-                    ->description('It is simple Line Charts with different colors.'),
+            Layout::view("card_style"),
 
-                ChartBarExample::make('charts', 'Bar Chart')
-                    ->description('It is simple Bar Charts with different colors.'),
-            ]),
+            Layout::columns(array_merge($arr_btns, $arr_ads)),
 
             Layout::table('table', [
                 TD::make('id', 'ID')

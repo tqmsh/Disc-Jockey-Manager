@@ -7,6 +7,7 @@ use App\Models\Categories;
 use App\Models\Region;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
@@ -31,6 +32,12 @@ class ViewAdLayoutPending extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make()
+                ->render(function (Campaign $campaign){
+                    return CheckBox::make('campaignsSelected[]')
+                        ->value($campaign->id)
+                        ->checked(false);
+                }),
             TD::make()
                 ->align(TD::ALIGN_LEFT)
                 ->width('100px')
