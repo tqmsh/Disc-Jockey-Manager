@@ -6,8 +6,11 @@ use App\Models\Campaign;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Orchid\Layouts\ViewAdLayoutPending;
 use App\Orchid\Layouts\ViewAdLayoutActive;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
@@ -50,6 +53,11 @@ class ViewAdScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Button::make('Delete Selected Campaigns')
+                ->icon('trash')
+                ->method('deleteAds')
+                ->confirm(__('Are you sure you want to delete the selected campaigns?')),
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.ad.list')
@@ -75,6 +83,31 @@ class ViewAdScreen extends Screen
                 "Inactive Campaigns" => [ViewAdLayoutInactive::class],
             ])
         ];
+    }
+
+    public function deleteAds(Request $request)
+    {
+        //get all campaigns from post request
+        $campaigns = $request->get('campaignsSelected');
+
+        try{
+            //if the array is not empty
+            if(!empty($campaigns)){
+
+                //loop through the campaigns and delete them from db
+                foreach($campaigns as $campaign){
+                    Campaign::where('id', $campaign)->delete();
+                }
+
+                Toast::success('Selected campaigns deleted successfully');
+
+            }else{
+                Toast::warning('Please select campaigns in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the selected campaigns. Error Message: ' . $e->getMessage());
+        }
     }
 
     public function updateCampaign()

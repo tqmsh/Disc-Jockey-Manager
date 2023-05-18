@@ -5,12 +5,10 @@ namespace App\Orchid\Layouts;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Region;
-use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
-use Orchid\Support\Color;
 
 class ViewAdLayoutActive extends Table
 {
@@ -38,7 +36,7 @@ class ViewAdLayoutActive extends Table
                         ->value($campaign->id)
                         ->checked(false);
                 }),
-            TD::make('event_name', 'Campaign Name')
+            TD::make('campaign_name', 'Campaign Name')
                 ->render(function(Campaign $campaign){
                     return e($campaign->title);
                 }),
