@@ -3,17 +3,22 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\Student;
 use App\Models\Position;
 use App\Models\Candidate;
 use Orchid\Screen\Screen;
+use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Actions\DropDown;
+use Illuminate\Support\Facades\Auth;
 
 class CreateCandidateScreen extends Screen
 {
@@ -67,22 +72,31 @@ class CreateCandidateScreen extends Screen
         return [
             Layout::rows([
 
-                Input::make('candidate_name')
-                    ->title('Candidate Name')
-                    ->type('text')
-                    ->required()
-                    ->placeholder('New Candidate') 
-                    ->horizontal(),
+                // unclear for this
+                Select::make('candidate.id')
+                ->options(function(){
+                    $arr= array();
+                    $students = Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->pluck('school_id'))->paginate(20);
+                    foreach($students as $student){
+                        // if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
+                            $arr[$student -> id]= $student -> firstname .' '. $student -> lastname;
+                        // }
+                    }
+                    return $arr;
+                })
+                ->title('Candidate Name')
+                ->required()
+                ->empty('Choose a Candidate')
+                ->horizontal(), 
 
                 TextArea::make('candidate_bio')
                     ->title('Candidate Bio')
                     ->type('text')
-                    ->required()
                     ->placeholder('Something about yourself')
                     ->rows(5)
                     ->horizontal()
 
-            ])->title('Make a Position'),
+            ])->title('Make a Candidate'),
         ];
     }
 
@@ -90,15 +104,25 @@ class CreateCandidateScreen extends Screen
 
         try{
 
-            $candidateField = $request->all();
-            $candidateField['position_id'] = $position->id;
-            $candidateField['election_id'] = $position->election_id;
+            $student = Student::find($request->input('candidate.id'));
+            $candidate = Candidate::where('user_id',$student->user_id)->first();
+            if($candidate == null){
+                $candidateField['candidate_bio'] = $request->input('candidate_bio');
+                $candidateField['user_id'] = $student->user_id;
+                $candidateField['candidate_name'] = $student->firstname.' '. $student->lastname;
+                $candidateField['position_id'] = $position->id;
+                $candidateField['election_id'] = $position->election_id;
 
-            Candidate::create($candidateField);
+                Candidate::create($candidateField);
 
-            Toast::success('Position Added Succesfully');
-            
-            return redirect()->route('platform.event.list');
+                Toast::success('Candidate Added Succesfully');
+                
+                return redirect()->route('platform.eventPromvotePositionCandidate.list', $position->id);
+            }
+
+            else{
+                Alert::error('This candidate already exists');
+            }
 
         }catch(Exception $e){
             

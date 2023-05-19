@@ -7,10 +7,12 @@ use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
+use App\Models\Candidate;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\Localadmin;
+use App\Orchid\Layouts\ViewCandidateLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -18,8 +20,8 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewPositionLayout;
 use Illuminate\Support\Facades\Auth;
+use App\Orchid\Layouts\ViewPositionLayout;
 
 class ViewElectionScreen extends Screen
 {
@@ -36,10 +38,12 @@ class ViewElectionScreen extends Screen
         abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $event->school_id, 403, 'You are not authorized to view this page');
         $election = Election::where('event_id', $event->id)->first();
         $position = Position::where('election_id', $election->id)->paginate(10);
+        $candidate = Candidate::where('election_id',$election->id)->paginate(10);
         return [
             'event' => $event,
             'election' => $election,
-            'position' => $position
+            'position' => $position,
+            'candidate' =>$candidate
         ];
     }
 
@@ -93,7 +97,12 @@ class ViewElectionScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewPositionLayout::class
+                Layout::tabs([
+                    "Positions"=>
+                        ViewPositionLayout::class,
+                    "All Candidates" =>
+                        ViewCandidateLayout::class
+                ])
         ];
     }
 
