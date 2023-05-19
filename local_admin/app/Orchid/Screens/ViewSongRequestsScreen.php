@@ -102,7 +102,7 @@ class ViewSongRequestsScreen extends Screen
           Layout::tabs([
             "Banned Song List"=>[ViewNoPlaySongsLayout::class, 
             Layout::rows([
-                Button::make('Remove Banned Song')
+                Button::make('Remove Selected Banned Song')
                 ->type(Color::SECONDARY())
                 ->icon('trash')
                 ->method('deleteSong'),
