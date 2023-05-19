@@ -36,7 +36,10 @@ class Student extends Model
             
             $query  ->join('users', 'users.id', '=', 'students.user_id')
                     ->join('schools', 'schools.id', '=', 'students.school_id');
-                    
+
+            if(isset($filters['sort_option'])){
+                $query->orderByRaw($filters['sort_option'] . ' ASC');
+            }       
 
             if(isset($filters['school'])){
                 $query ->where('school', 'like', '%' . request('school') . '%');
