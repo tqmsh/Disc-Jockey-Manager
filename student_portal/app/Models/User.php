@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'account_status',
+        'php',
         'permissions',
         'password',
         'updated_at',
