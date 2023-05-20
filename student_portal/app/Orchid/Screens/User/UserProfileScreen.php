@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
-use App\Orchid\Layouts\User\ProfilePasswordLayout;
-use App\Orchid\Layouts\User\UserEditLayout;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Orchid\Platform\Models\User;
+use App\Models\Student;
 use Orchid\Screen\Action;
-use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use Orchid\Support\Facades\Layout;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Orchid\Platform\Models\User;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
+use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Hash;
+use App\Orchid\Layouts\User\UserEditLayout;
+use App\Orchid\Layouts\User\ProfilePasswordLayout;
 
 class UserProfileScreen extends Screen
 {
@@ -107,6 +108,14 @@ class UserProfileScreen extends Screen
         $request->user()
             ->fill($request->get('user'))
             ->save();
+        
+        Student::where('user_id', $request->user()->id)
+            ->update([
+                'firstname' => $request->get('user')['firstname'],
+                'lastname' => $request->get('user')['lastname'],
+                'email' => $request->get('user')['email'],
+            ]);
+
 
         Toast::info(__('Profile updated.'));
     }

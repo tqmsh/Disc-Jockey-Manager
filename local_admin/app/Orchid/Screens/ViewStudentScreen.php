@@ -119,7 +119,7 @@ class ViewStudentScreen extends Screen
     }
 
     public function filter(){
-        return redirect()->route('platform.student.list', request(['ticketstatus', 'school', 'country', 'school_board', 'event_id', 'state_province']));
+        return redirect()->route('platform.student.list', request(['sort_option', 'ticketstatus', 'event_id']));
     }
 
         

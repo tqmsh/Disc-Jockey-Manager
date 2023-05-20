@@ -19,25 +19,40 @@ class UserEditLayout extends Rows
     public function fields(): array
     {
         return [
+            Input::make('user.firstname')
+                ->type('text')
+                ->max(255)
+                ->required()
+                ->title(__('First Name'))
+
+                ->placeholder(__('User Name')),
+
+            Input::make('user.lastname')
+                ->type('text')
+                ->max(255)
+                ->required()
+                ->title(__('Last Name'))
+                ->placeholder(__('User Name')),
+
             Input::make('user.name')
                 ->type('text')
                 ->max(255)
                 ->required()
-                ->title(__('Name'))
-                ->placeholder(__('Name')),
+                ->title(__('User Name'))
+                ->placeholder(__('User Name')),
 
             Input::make('user.email')
                 ->type('email')
                 ->required()
                 ->title(__('Email'))
                 ->placeholder(__('Email')),
-            
+                
             Cropper::make("user.pfp")
                 ->storage("s3")
-                ->title("Image")
+                ->title("Profile Picture")
                 ->width(300)
                 ->height(300)
-                ->help("Profile Picture")
+                ->help("This image will be displayed on your profile.")
                 ->horizontal()
                 ->value(auth()->user()->pfp)       
         ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Models\Localadmin;
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use Illuminate\Http\Request;
@@ -107,6 +108,13 @@ class UserProfileScreen extends Screen
         $request->user()
             ->fill($request->get('user'))
             ->save();
+
+        Localadmin::where('user_id', $request->user()->id)
+            ->update([
+                'firstname' => $request->get('user')['firstname'],
+                'lastname' => $request->get('user')['lastname'],
+                'email' => $request->get('user')['email'],
+            ]);
 
         Toast::info(__('Profile updated.'));
     }
