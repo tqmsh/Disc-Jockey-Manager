@@ -101,31 +101,31 @@ class ViewSongRequestsScreen extends Screen
                       
           Layout::tabs([
             "Banned Song List"=>[ViewNoPlaySongsLayout::class, 
-            Layout::rows([
-                Button::make('Remove Banned Song')
-                ->type(Color::SECONDARY())
-                ->icon('trash')
-                ->method('deleteSong'),
-            ])
-        ],
+                Layout::rows([
+                    Button::make('Remove Selected Banned Song')
+                    ->type(Color::SECONDARY())
+                    ->icon('trash')
+                    ->method('deleteSong'),
+                ])
+            ],
             "Add Banned Song" =>[
                 Layout::rows([
-                Select::make('song.id')
-                ->options(function(){
-                    $arr= array();
-                    foreach(Song::all() as $song){
-                        if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
-                            $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                    Select::make('song.id')
+                    ->options(function(){
+                        $arr= array();
+                        foreach(Song::all() as $song){
+                            if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
+                                $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                            }
                         }
-                    }
-                    return $arr;
-                })
-                -> empty('Choose a song'), 
-    
-                Button::make('Submit')
-                ->type(Color::PRIMARY())
-                ->method('chooseSong')
-                ->icon('plus')
+                        return $arr;
+                    })
+                    -> empty('Choose a song'), 
+        
+                    Button::make('Submit')
+                    ->type(Color::PRIMARY())
+                    ->method('chooseSong')
+                    ->icon('plus')
                 ])], 
             ]),
 

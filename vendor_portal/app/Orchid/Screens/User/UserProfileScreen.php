@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Models\Vendors;
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use Illuminate\Http\Request;
@@ -107,6 +108,11 @@ class UserProfileScreen extends Screen
         $request->user()
             ->fill($request->get('user'))
             ->save();
+
+        Vendors::where('user_id', $request->user()->id)
+            ->update([
+                'email' => $request->get('user')['email'],
+            ]);
 
         Toast::info(__('Profile updated.'));
     }
