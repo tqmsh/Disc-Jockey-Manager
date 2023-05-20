@@ -19,6 +19,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Log;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
@@ -40,8 +41,8 @@ class ViewEventStudentScreen extends Screen
         return [
             'event' => $event,
             'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->where('school_id', $event->school_id)->paginate(20),
-            'seatedStudents' =>  Student::whereIn('user_id', EventAttendees::where('event_id', $event->id)->where('approved', 1)->whereNotNull('table_id')->get(['user_id']))
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
+            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('approved', 1)->whereNotNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id', 'tablename']))->paginate(20),
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
@@ -105,7 +106,7 @@ class ViewEventStudentScreen extends Screen
                         Select::make('table_id')
                             ->empty('Select Table')
                             ->options(function () {
-                                $tables = $this->tables->pluck('tablename', 'id');
+                                $tables = $this->tables->where('capacity', '>', 0)->pluck('tablename', 'id');
                                 $tables['remove'] = 'Remove From Current Table';
                                 return $tables;
                             }),
@@ -175,23 +176,24 @@ class ViewEventStudentScreen extends Screen
                                         ->icon('pencil');
                             }),
 
-                        //table name
-                        TD::make('Assigned Table')
-                            ->render(function (Student $student) {
-                                $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('approved', '1')->pluck('table_id'))->value('tablename');
-                                return e($table);
-                            }),
-
-                        TD::make('Student Name')
+                            
+                            TD::make('Student Name')
                             ->render(function (Student $student) {
                                 return $student->firstname . ' ' . $student->lastname;
                             }),
-
-                        TD::make('Student Email')
+                            
+                            TD::make('Student Email')
                             ->render(function (Student $student) {
                                 return $student->email;
                             }),
 
+                            //table name
+                            TD::make('Assigned Table')
+                                ->render(function (Student $student) {
+                                    $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('approved', '1')->pluck('table_id'))->value('tablename');
+                                    return e($table);
+                                }),
+                            
                         TD::make('Phone Number')
                             ->render(function (Student $student) {
                                 return $student->phonenumber;
@@ -263,7 +265,6 @@ class ViewEventStudentScreen extends Screen
                                     ->type(Color::DANGER())
                                     ->method('deleteTable', ['id' => $table->id])
                                     ->confirm('Are you sure you want to delete this table?');
-                                    
                             }),
                         ]),
 
@@ -272,7 +273,13 @@ class ViewEventStudentScreen extends Screen
                             Input::make('tablename')
                                 ->title('Table Name')
                                 ->placeholder('Table Name')
-                                ->help('Enter the name of the table you would like to add.')
+                                ->help('Enter the name of the table you would like to add.'),
+
+                            Input::make('capacity')
+                                ->title('Table Capacity')
+                                ->type('number')
+                                ->placeholder('Table Capacity')
+                                ->help('Enter the capacity of the table you would like to add.')
                         ]),
                         Group::make([
                             Button::make('Add Table')
@@ -283,6 +290,7 @@ class ViewEventStudentScreen extends Screen
                     ])
 
                 ],
+
                 'Table Change Requests' => [
                     Layout::table('table_proposals', [
 
@@ -320,7 +328,7 @@ class ViewEventStudentScreen extends Screen
 
 
                     ])
-                ] 
+                ]  
             ]),
         ];
 
@@ -401,6 +409,7 @@ class ViewEventStudentScreen extends Screen
         return redirect()->route('platform.eventStudents.list', [$event->id, 'ticketstatus' => request('ticketstatus')]);
     }
 
+
     //add the studen to the table from modal
     public function addStudentToTable(Request $request, Events $event)
     {
@@ -415,12 +424,29 @@ class ViewEventStudentScreen extends Screen
             //if the table id is not empty
             if(!empty($table_id)){
 
-                //update the table id in the event attendees table
-                EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->update([
-                    'table_id' => ($table_id == 'remove') ? null : $table_id,
-                ]);
+                if($table_id == 'remove'){
+                    
+                    $attendee = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->get();
+                    $table = Seating::find($attendee[0]->table_id);
+                    $table->capacity = $table->capacity + 1;
+                    $table->save();
 
-                Toast::success('Student seating updated succesfully');
+                    $attendee[0]->table_id = null;
+                    $attendee[0]->save();
+
+                    Toast::success('Student seating removed succesfully');
+                } else{        
+
+                    EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->update([
+                        'table_id' => $table_id,
+                    ]);
+
+                    $table = Seating::find($table_id);
+                    $table->capacity = $table->capacity - 1;
+                    $table->save();
+
+                    Toast::success('Student seating updated succesfully');
+                }
 
             }else{
                 Toast::warning('Please select a table in order to add/update the student seating');
@@ -435,22 +461,24 @@ class ViewEventStudentScreen extends Screen
     {
         //get the table name from the post request
         $tablename = $request->get('tablename');
+        $capacity = $request->get('capacity');
 
         try{
 
             //if the table name is not empty
-            if(!empty($tablename)){
+            if(!empty($tablename) && $capacity > 0){
 
                 //add the table to the db
                 Seating::create([
                     'tablename' => $tablename,
+                    'capacity' => $capacity,
                     'event_id' => $event->id,
                 ]);
 
                 Toast::success('Table added succesfully');
 
             }else{
-                Toast::warning('Please enter a table name in order to add the table');
+                Toast::warning('Please enter a table name and seat capacity in order to add the table');
             }
 
         }catch(Exception $e){
@@ -469,7 +497,7 @@ class ViewEventStudentScreen extends Screen
             if(!empty($id)){
 
                 //delete the table from the db
-                Seating::where('id', $id)->delete();
+                Seating::find($id)->delete();
 
                 Toast::success('Table deleted succesfully');
 
