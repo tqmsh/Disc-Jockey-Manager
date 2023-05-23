@@ -8,6 +8,8 @@
         {{  $title  }}
         <br>
         From: {{  $company  }}
+        <br>
+        Category: {{  $category  }}
     </span>
 </div>
 </a>
