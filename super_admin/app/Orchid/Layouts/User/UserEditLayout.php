@@ -34,10 +34,10 @@ class UserEditLayout extends Rows
                 
             Cropper::make("user.pfp")
                 ->storage("s3")
-                ->title("Image")
+                ->title("Profile Picture")
                 ->width(300)
                 ->height(300)
-                ->help("Profile Picture")
+                ->help("This image will be displayed on your profile.")
                 ->horizontal()
                 ->value(auth()->user()->pfp) 
         ];

@@ -32,7 +32,7 @@ class ViewSongRequestScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $this->event->id)->first();
+        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
         abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
         return [
             'songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
