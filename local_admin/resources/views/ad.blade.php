@@ -1,4 +1,4 @@
-<a href="{{ $forward_url }}" target="_blank">
+{{--<a href="{{ $forward_url }}" target="_blank">--}}
 <div class="card" id = {{  $id  }}>
     <div class="card__body">
             <img src="{{  $image_url  }}" alt="AnImage" width="600" height="600">
@@ -8,6 +8,8 @@
         {{  $title  }}
         <br>
         From: {{  $company  }}
+        <br>
+        Category: {{  $category  }}
     </span>
 </div>
 </a>

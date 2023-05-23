@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens\Examples;
 
 use App\Models\Campaign;
+use App\Models\Categories;
 use App\Models\Localadmin;
 use App\Models\School;
 use App\Models\Vendors;
@@ -164,6 +165,7 @@ class ExampleScreen extends Screen
         foreach ($this->campaigns as $campaign){
             $temp = Layout::view("ad", ["id"=>$campaign->id, "forward_url"=>$campaign->website,
                 "image_url"=>$campaign->image, "title"=>$campaign->title,
+                "category"=>Categories::find(Vendors::where("user_id", $campaign->user_id)->first()->category_id)->name,
                 "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name]);
             $arr_ads[] = $temp;
         }
