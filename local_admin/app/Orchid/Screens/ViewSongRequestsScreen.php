@@ -43,7 +43,7 @@ class ViewSongRequestsScreen extends Screen
     {
         return ['songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
                 'noPlaySongs'=> NoPlaySong::where('event_id', $event->id)->paginate(10),
-                'event' => $event];
+                'event' => $event];     
     }
     
     /**
@@ -130,6 +130,10 @@ class ViewSongRequestsScreen extends Screen
             ]),
 
         ];
+    }
+
+    public function redirect($songRequest_id, array $requesters){
+        return redirect()-> route('platform.requesters.list', ['songRequest_id'=> $songRequest_id, 'requesters'=> $requesters]);
     }
     
     public function chooseSong(Request $request, Events $event){

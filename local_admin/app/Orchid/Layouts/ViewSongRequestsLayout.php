@@ -18,6 +18,7 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Select;
+use Orchid\Support\Facades\Toast;
 
 class ViewSongRequestsLayout extends Table
 {
@@ -57,19 +58,15 @@ class ViewSongRequestsLayout extends Table
                     return e(Song::find($songRequest -> song_id) -> artist);
                 }),
 
-             TD::make('requester_id', 'Requester')
+            TD::make('num_requesters', 'Number of Requesters')
                 ->render(function (SongRequest $songRequest) {
-                    return e(User::find($songRequest -> requester_user_id)-> name);
+                    return e(count(json_decode($songRequest-> requester_user_ids)));
                 }),
 
             TD::make()
-                ->render(function (SongRequest $songRequest) {
-                    return ModalToggle::make('Edit')
-                        ->icon('microphone')         
-                        ->modal('editSong')
-                        ->modalTitle('Songs')
-                        ->type(Color::PRIMARY())
-                        ->method("update", ['songReq' => $songRequest -> id]);
+                ->render(function (songRequest $songRequest) {
+                    return Button::make('View Requesters')-> type(Color::PRIMARY())->method('redirect', ['songRequest_id'=> $songRequest->id, 'requesters' => json_decode($songRequest-> requester_user_ids)])->icon('pencil');
+                    
                 }),
         ];
     }

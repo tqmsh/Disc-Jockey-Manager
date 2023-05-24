@@ -34,6 +34,7 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\ViewNoPlaySongsScreen;
+use App\Orchid\Screens\ViewRequestersScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -99,6 +100,9 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 
 
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
+
+Route::screen('/events/{songRequest_id}/requesters', ViewRequestersScreen::class)->name('platform.requesters.list');
+
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
