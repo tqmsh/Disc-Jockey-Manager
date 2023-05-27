@@ -108,9 +108,11 @@ class StudentController extends Controller
         }
 
         $student->update($request->only('firstname', 'lastname', 'allergies'));
-
+        $user->update($request->only('firstname', 'lastname'));
         //Successfully updated student
-        return $student;
+
+        // return student and user
+        return response()->json(['student' => $student, 'user' => $user], 200);
     }
 }
     
