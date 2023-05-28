@@ -4,11 +4,13 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Student;
+use App\Models\Election;
 use App\Models\Position;
 use App\Models\Candidate;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -23,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 class CreateCandidateScreen extends Screen
 {
     public $position;
+    public $election;
     /**
      * Query data.
      *
@@ -30,8 +33,11 @@ class CreateCandidateScreen extends Screen
      */
     public function query(Position $position): iterable
     {
+        $election = Election::where('id',$position->election_id)->first();
+        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');
         return [
-            'position' => $position
+            'position' => $position,
+            'election' => $election
         ];
     }
 
@@ -71,16 +77,14 @@ class CreateCandidateScreen extends Screen
     {
         return [
             Layout::rows([
-
-                // unclear for this
+                // choose candidate that is in the event AND is a student
                 Select::make('candidate.id')
                 ->options(function(){
                     $arr= array();
-                    $students = Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->pluck('school_id'))->paginate(20);
-                    foreach($students as $student){
-                        // if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
+                    $event_attendees = EventAttendees::where('event_id', $this->election->event_id) ->paginate(20);
+                    foreach($event_attendees as $attendee){
+                        $student = Student::where('user_id', $attendee->user_id)->first();
                             $arr[$student -> id]= $student -> firstname .' '. $student -> lastname;
-                        // }
                     }
                     return $arr;
                 })
@@ -103,10 +107,10 @@ class CreateCandidateScreen extends Screen
     public function createCandidate(Request $request, Position $position){
 
         try{
-
             $student = Student::find($request->input('candidate.id'));
+            $election = Election::where('id',$position->election_id)->first();
             $candidate = Candidate::where('user_id',$student->user_id)->first();
-            if($candidate == null){
+            if($candidate == null || $candidate->election_id != $election->id){
                 $candidateField['candidate_bio'] = $request->input('candidate_bio');
                 $candidateField['user_id'] = $student->user_id;
                 $candidateField['candidate_name'] = $student->firstname.' '. $student->lastname;
