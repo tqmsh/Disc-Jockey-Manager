@@ -112,10 +112,11 @@ class EventController extends Controller
                 $tables = Seating::where('event_id', $request->event_id)->get();
                 //add a field to $tables that incluhdes all the students that are seated at that table 
                 foreach($tables as $table){
+                    $students = [];
                     // get all event attendees where event id is event id and table id is table id and only their firstname and lastname
-                    $eventattendee = EventAttendees::where('event_id', $request->event_id)->where('table_id', $table->id)->get(['user_id']);
-                    foreach($eventattendee as $eventattendee){
-                        $user = User::where('id', $eventattendee->user_id)->get(['firstname', 'lastname']);
+                    $tableAttendee = EventAttendees::where('event_id', $request->event_id)->where('table_id', $table->id)->where('approved', '1')->get(['user_id']);
+                    foreach($tableAttendee as $attendee){
+                        $user = User::where('id', $attendee->user_id)->get(['firstname', 'lastname']);
                         $students[] = $user;
                     }
                     $table["seated"] = $students;
