@@ -8,6 +8,7 @@ use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\CheckBox;
 
 class ViewCandidateLayout extends Table
 {
@@ -30,14 +31,19 @@ class ViewCandidateLayout extends Table
     {
         return [
             TD::make()
-                ->render(function($candidate){
-                    return Button::make('Votes')->icon('people')->type(Color::DARK());
-                        // ->method('redirect',['position' =>$position->id, 'type'=> "candidate"]);
-            }), 
+                ->render(function (Candidate $candidate){
+                    return CheckBox::make('candidates[]')
+                        ->value($candidate->id)
+                        ->checked(false);
+            }),
+            // TD::make()
+            //     ->render(function($candidate){
+            //         return Button::make('Votes')->icon('people')->type(Color::DARK());
+            //             // ->method('redirect',['position' =>$position->id, 'type'=> "candidate"]);
+            // }), 
             TD::make('user_id', 'User ID')
                 ->render(function (Candidate $candidate) {
                     return Link::make($candidate->user_id);
-                        // ->route('platform.eventPromvotePosition.edit',$position);
             }),
             TD::make('candidate_name', 'Candidate Name')
                 ->render(function (Candidate $candidate) {

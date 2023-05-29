@@ -69,10 +69,15 @@ class ViewElectionScreen extends Screen
                 ->icon('plus')
                 ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
 
-            Button::make('Delete Selected Position')
+            Button::make('Delete Positions')
                 ->icon('trash')
                 ->method('deletePosition')
                 ->confirm(__('Are you sure you want to delete selected positions?')),
+
+            Button::make('Delete Candidates')
+                ->icon('trash')
+                ->method('deleteCandidates')
+                ->confirm(__('Are you sure you want to delete selected candidates?')),
 
             Link::make('Edit Election')
                 ->icon('pencil')
@@ -142,6 +147,29 @@ class ViewElectionScreen extends Screen
 
             }else{
                 Toast::warning('Please select positions in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
+    }
+
+    public function deleteCandidates(Request $request)
+    {   
+        //get all localadmins from post request
+        $candidates = $request->get('candidates');
+        try{
+            //if the array is not empty
+            if(!empty($candidates)){
+
+                foreach($candidates as $candidate){
+                    Candidate::where('id', $candidate)->delete();
+                }
+
+                Toast::success('Selected candidates deleted succesfully');
+
+            }else{
+                Toast::warning('Please select candidates in order to delete them');
             }
 
         }catch(Exception $e){

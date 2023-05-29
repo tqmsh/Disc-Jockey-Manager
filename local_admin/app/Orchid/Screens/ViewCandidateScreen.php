@@ -9,6 +9,20 @@ use Orchid\Screen\Screen;
 use App\Models\ElectionVotes;
 use Orchid\Screen\Actions\Link;
 use App\Orchid\Layouts\ViewCandidateLayout;
+use Illuminate\Http\Request;
+use Exception;
+use App\Models\Student;
+use App\Models\Localadmin;
+use App\Models\EventAttendees;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Actions\DropDown;
+use Illuminate\Support\Facades\Auth;
 
 class ViewCandidateScreen extends Screen
 {
@@ -52,6 +66,11 @@ class ViewCandidateScreen extends Screen
             Link::make('Add Candidate')
                 ->icon('plus')
                 ->redirect() -> route('platform.eventPromvotePositionCandidate.create',$this->position->id),
+
+            Button::make('Delete Selected Candidates')
+                ->icon('trash')
+                ->method('deleteCandidates')
+                ->confirm(__('Are you sure you want to delete selected candidates?')),
                 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -71,6 +90,29 @@ class ViewCandidateScreen extends Screen
         ];
     }
 
+    public function deleteCandidates(Request $request)
+    {   
+        //get all localadmins from post request
+        $candidates = $request->get('candidates');
+        try{
+            //if the array is not empty
+            if(!empty($candidates)){
+
+                foreach($candidates as $candidate){
+                    Candidate::where('id', $candidate)->delete();
+                }
+
+                Toast::success('Selected candidates deleted succesfully');
+
+            }else{
+                Toast::warning('Please select candidates in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
+    }
+
     public function redirect($candidate, $type){
         $type = request('type');
         $candidate = Candidate::find(request('candidate'));
@@ -82,6 +124,8 @@ class ViewCandidateScreen extends Screen
             return redirect()->route('platform.event.list');
         }    
     }
+
+    
 
     public function totalVotes($candidate_id)
     {   
