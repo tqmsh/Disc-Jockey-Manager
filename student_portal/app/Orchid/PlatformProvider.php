@@ -47,7 +47,7 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('dollar')
             ->route('platform.studentBids.list'),
 
-            Menu::make('PromGuide')
+            Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
                 
