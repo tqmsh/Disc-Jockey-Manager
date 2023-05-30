@@ -152,41 +152,7 @@ class ExampleScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
-            ]),
 
-            Layout::columns([
-                ChartLineExample::make('charts', 'Line Chart')
-                    ->description('It is simple Line Charts with different colors.'),
-
-                ChartBarExample::make('charts', 'Bar Chart')
-                    ->description('It is simple Bar Charts with different colors.'),
-            ]),
-
-            Layout::table('table', [
-                TD::make('id', 'ID')
-                    ->width('150')
-                    ->render(function (Repository $model) {
-                        // Please use view('path')
-                        return "<img src='https://loremflickr.com/500/300?random={$model->get('id')}'
-                              alt='sample'
-                              class='mw-100 d-block img-fluid rounded-1 w-100'>
-                            <span class='small text-muted mt-1 mb-0'># {$model->get('id')}</span>";
-                    }),
-
-                TD::make('name', 'Name')
-                    ->width('450')
-                    ->render(fn (Repository $model) => Str::limit($model->get('name'), 200)),
-
-                TD::make('price', 'Price')
-                    ->render(fn (Repository $model) => '$ ' . number_format($model->get('price'), 2)),
-
-                TD::make('created_at', 'Created'),
-            ]),
 
             Layout::modal('exampleModal', Layout::rows([
                 Input::make('toast')
@@ -230,3 +196,39 @@ class ExampleScreen extends Screen
         }, 'File-name.csv');
     }
 }
+
+            // Layout::metrics([
+            //     'Sales Today'    => 'metrics.sales',
+            //     'Visitors Today' => 'metrics.visitors',
+            //     'Pending Orders' => 'metrics.orders',
+            //     'Total Earnings' => 'metrics.total',
+            // ]),
+
+            // Layout::columns([
+            //     ChartLineExample::make('charts', 'Line Chart')
+            //         ->description('It is simple Line Charts with different colors.'),
+
+            //     ChartBarExample::make('charts', 'Bar Chart')
+            //         ->description('It is simple Bar Charts with different colors.'),
+            // ]),
+
+            // Layout::table('table', [
+            //     TD::make('id', 'ID')
+            //         ->width('150')
+            //         ->render(function (Repository $model) {
+            //             // Please use view('path')
+            //             return "<img src='https://loremflickr.com/500/300?random={$model->get('id')}'
+            //                   alt='sample'
+            //                   class='mw-100 d-block img-fluid rounded-1 w-100'>
+            //                 <span class='small text-muted mt-1 mb-0'># {$model->get('id')}</span>";
+            //         }),
+
+            //     TD::make('name', 'Name')
+            //         ->width('450')
+            //         ->render(fn (Repository $model) => Str::limit($model->get('name'), 200)),
+
+            //     TD::make('price', 'Price')
+            //         ->render(fn (Repository $model) => '$ ' . number_format($model->get('price'), 2)),
+
+            //     TD::make('created_at', 'Created'),
+            // ]),
