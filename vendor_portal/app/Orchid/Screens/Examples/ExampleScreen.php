@@ -2,6 +2,9 @@
 
 namespace App\Orchid\Screens\Examples;
 
+use App\Models\Campaign;
+use App\Models\Categories;
+use App\Models\Vendors;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
@@ -26,6 +29,8 @@ class ExampleScreen extends Screen
     semper mattis viverra malesuada quam metus vulputate torquent magna, lobortis nec nostra nibh sollicitudin
     erat in luctus.';
 
+    public $campaigns;
+
     /**
      * Query data.
      *
@@ -33,8 +38,10 @@ class ExampleScreen extends Screen
      */
     public function query(): iterable
     {
+        $this->campaigns = Campaign::where("active", 1)->get();
         return [
             'charts'  => [
+                "ad_ids" =>"",
                 [
                     'name'   => 'Some Data',
                     'values' => [25, 40, 30, 35, 8, 52, 17],
@@ -151,7 +158,19 @@ class ExampleScreen extends Screen
      */
     public function layout(): iterable
     {
+        $arr_ads = array();
+        foreach ($this->campaigns as $campaign){
+            $temp = Layout::view("ad", ["id"=>$campaign->id, "forward_url"=>$campaign->website,
+                "image_url"=>$campaign->image, "title"=>$campaign->title,
+                "category"=>Categories::find(Vendors::where("user_id", $campaign->user_id)->first()->category_id)->name,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name]);
+            $arr_ads[] = $temp;
+        }
         return [
+
+            Layout::view("card_style"),
+
+            Layout::columns($arr_ads),
 
             Layout::modal('exampleModal', Layout::rows([
                 Input::make('toast')
