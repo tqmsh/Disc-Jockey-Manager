@@ -66,20 +66,20 @@
     }
     @media screen and (max-width: 991px){
         img{
-            width: min(calc(100% - 20px), 600px);
-            height: min(calc(100% - 20px), 600px);
+            width: min(calc(100% - 20px), 300px);
+            height: min(calc(100% - 20px), 300px);
         }
     }
     @media screen and (max-width: 767px){
         img{
-            width: min(calc(100% - 20px), 600px);
-            height: min(calc(100% - 20px), 600px);
+            width: min(calc(100% - 20px), 300px);
+            height: min(calc(100% - 20px), 300px);
         }
     }
     @media screen and (max-width: 479px){
         img{
-            width: calc(100% - 20px);
-            height: calc(100% - 20px);
+            width: min(calc(100% - 20px), 300px);
+            height: min(calc(100% - 20px), 300px);
         }
     }
 
