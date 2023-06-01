@@ -16,7 +16,7 @@
         align-items: center;
         gap: 1em;
         padding: 1.2em 1.2em 0.3em;
-        max-width: calc(600px + 2.4em);
+        max-width: calc(300px + 2.4em);
     }
 
     .card__body {
@@ -64,5 +64,24 @@
     .card:hover>div,.card:hover>strong {
         opacity: 0;
     }
+    @media screen and (max-width: 991px){
+        img{
+            width: min(calc(100% - 20px), 300px);
+            height: min(calc(100% - 20px), 300px);
+        }
+    }
+    @media screen and (max-width: 767px){
+        img{
+            width: min(calc(100% - 20px), 300px);
+            height: min(calc(100% - 20px), 300px);
+        }
+    }
+    @media screen and (max-width: 479px){
+        img{
+            width: min(calc(100% - 20px), 300px);
+            height: min(calc(100% - 20px), 300px);
+        }
+    }
+
 
 </style>
