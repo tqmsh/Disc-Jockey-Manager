@@ -2,6 +2,7 @@
 <div class="card" id = {{  $id  }}>
     <div class="card__body">
             <img src="{{  $image_url  }}" alt="AnImage" width="300" height="300">
+        <br>
         <strong>{{  $title  }}</strong>
     </div>
     <span>

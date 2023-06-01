@@ -16,7 +16,7 @@
         align-items: center;
         gap: 1em;
         padding: 1.2em 1.2em 0.3em;
-        max-width: calc(600px + 2.4em);
+        max-width: calc(300px + 2.4em);
     }
 
     .card__body {
