@@ -64,5 +64,24 @@
     .card:hover>div,.card:hover>strong {
         opacity: 0;
     }
+    @media screen and (max-width: 991px){
+        img{
+            width: min(calc(100% - 20px), 600px);
+            height: min(calc(100% - 20px), 600px);
+        }
+    }
+    @media screen and (max-width: 767px){
+        img{
+            width: min(calc(100% - 20px), 600px);
+            height: min(calc(100% - 20px), 600px);
+        }
+    }
+    @media screen and (max-width: 479px){
+        img{
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+        }
+    }
+
 
 </style>
