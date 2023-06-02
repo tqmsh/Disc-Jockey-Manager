@@ -158,6 +158,7 @@ class ExampleScreen extends Screen
      */
     public function layout(): iterable
     {
+    
         $arr_ads = array();
         foreach ($this->campaigns as $campaign){
             $temp = Layout::view("ad", ["id"=>$campaign->id, "forward_url"=>$campaign->website,
@@ -167,6 +168,24 @@ class ExampleScreen extends Screen
             $arr_ads[] = $temp;
         }
         return [
+            Layout::metrics([
+                'Sales Today'    => 'metrics.sales',
+                'Visitors Today' => 'metrics.visitors',
+                'Pending Orders' => 'metrics.orders',
+                'Total Earnings' => 'metrics.total',
+            ]),
+            Layout::metrics([
+                'Sales Today'    => 'metrics.sales',
+                'Visitors Today' => 'metrics.visitors',
+                'Pending Orders' => 'metrics.orders',
+                'Total Earnings' => 'metrics.total',
+            ]),
+            Layout::metrics([
+                'Sales Today'    => 'metrics.sales',
+                'Visitors Today' => 'metrics.visitors',
+                'Pending Orders' => 'metrics.orders',
+                'Total Earnings' => 'metrics.total',
+            ]),
 
             Layout::view("card_style"),
 
@@ -215,12 +234,7 @@ class ExampleScreen extends Screen
     }
 }
 
-            // Layout::metrics([
-            //     'Sales Today'    => 'metrics.sales',
-            //     'Visitors Today' => 'metrics.visitors',
-            //     'Pending Orders' => 'metrics.orders',
-            //     'Total Earnings' => 'metrics.total',
-            // ]),
+
 
             // Layout::columns([
             //     ChartLineExample::make('charts', 'Line Chart')
