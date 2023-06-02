@@ -167,7 +167,18 @@ class ExampleScreen extends Screen
             $arr_ads[] = $temp;
         }
         return [
-
+            Layout::metrics([
+                'Sales Today'    => 'metrics.sales',
+                'Visitors Today' => 'metrics.visitors',
+                'Pending Orders' => 'metrics.orders',
+                'Total Earnings' => 'metrics.total',
+            ]),
+            Layout::metrics([
+                'Sales Today'    => 'metrics.sales',
+                'Visitors Today' => 'metrics.visitors',
+                'Pending Orders' => 'metrics.orders',
+                'Total Earnings' => 'metrics.total',
+            ]),
             Layout::view("card_style"),
 
             Layout::columns($arr_ads),
