@@ -22,6 +22,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewPositionLayout;
+use Orchid\Screen\Actions\DropDown;
 
 class ViewElectionScreen extends Screen
 {
@@ -65,28 +66,43 @@ class ViewElectionScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create Position')
-                ->icon('plus')
-                ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
+            DropDown::make('Election Options')
+            ->icon('options-vertical')
+            ->list([
 
-            Button::make('Delete Positions')
-                ->icon('trash')
-                ->method('deletePosition')
-                ->confirm(__('Are you sure you want to delete selected positions?')),
+                Link::make('Edit Election')
+                    ->icon('pencil')
+                    ->route('platform.eventPromvote.edit',$this->election->id),
 
-            Button::make('Delete Candidates')
-                ->icon('trash')
-                ->method('deleteCandidates')
-                ->confirm(__('Are you sure you want to delete selected candidates?')),
+                Button::make('End Election')
+                    ->icon('trash')
+                    ->method('endElection',[$this->event])
+                    ->confirm(__('Are you sure you want to end election?')),
+            ]),
 
-            Link::make('Edit Election')
-                ->icon('pencil')
-                ->redirect() -> route('platform.eventPromvote.edit',$this->election->id),
-            
-            Button::make('End Election')
-                ->icon('trash')
-                ->method('endElection',[$this->event])
-                ->confirm(__('Are you sure you want to end election?')),
+            DropDown::make('Position Options')
+            ->icon('options-vertical')
+            ->list([
+
+                Link::make('Create Position')
+                    ->icon('plus')
+                    ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
+
+                Button::make('Delete Selected Positions')
+                    ->icon('trash')
+                    ->method('deletePosition')
+                    ->confirm(__('Are you sure you want to delete selected positions?')),
+            ]),
+
+            DropDown::make('Candidate Options')
+            ->icon('options-vertical')
+            ->list([
+
+                Button::make('Delete Selected Candidates')
+                    ->icon('trash')
+                    ->method('deleteCandidates')
+                    ->confirm(__('Are you sure you want to delete selected candidates?')),
+            ]),
 
             Link::make('Back')
                 ->icon('arrow-left')
