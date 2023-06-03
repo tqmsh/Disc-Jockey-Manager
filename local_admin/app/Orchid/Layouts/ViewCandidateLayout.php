@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
 use App\Models\Candidate;
+use App\Models\Position;
 use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -41,17 +42,20 @@ class ViewCandidateLayout extends Table
             //         return Button::make('Votes')->icon('people')->type(Color::DARK());
             //             // ->method('redirect',['position' =>$position->id, 'type'=> "candidate"]);
             // }), 
-            TD::make('user_id', 'User ID')
+            
+            TD::make('position', 'Position')
                 ->render(function (Candidate $candidate) {
-                    return Link::make($candidate->user_id);
+                    return e(Position::find($candidate->position_id)->position_name);
             }),
+            
+
             TD::make('candidate_name', 'Candidate Name')
                 ->render(function (Candidate $candidate) {
-                    return Link::make($candidate->candidate_name);
+                    return e($candidate->candidate_name);
             }),
             TD::make('candidate_bio', 'Candidate Bio')
                 ->render(function (Candidate $candidate) {
-                    return Link::make($candidate->candidate_bio);
+                    return e($candidate->candidate_bio);
             }),
             //Total Votes
             // TD::make('Candidate Bio')
