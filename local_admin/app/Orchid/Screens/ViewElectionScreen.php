@@ -7,10 +7,12 @@ use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
+use App\Models\Candidate;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\Localadmin;
+use App\Orchid\Layouts\ViewCandidateLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -18,8 +20,8 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewPositionLayout;
 use Illuminate\Support\Facades\Auth;
+use App\Orchid\Layouts\ViewPositionLayout;
 
 class ViewElectionScreen extends Screen
 {
@@ -36,10 +38,12 @@ class ViewElectionScreen extends Screen
         abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $event->school_id, 403, 'You are not authorized to view this page');
         $election = Election::where('event_id', $event->id)->first();
         $position = Position::where('election_id', $election->id)->paginate(10);
+        $candidate = Candidate::where('election_id',$election->id)->paginate(10);
         return [
             'event' => $event,
             'election' => $election,
-            'position' => $position
+            'position' => $position,
+            'candidate' =>$candidate
         ];
     }
 
@@ -65,10 +69,15 @@ class ViewElectionScreen extends Screen
                 ->icon('plus')
                 ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
 
-            Button::make('Delete Selected Position')
+            Button::make('Delete Positions')
                 ->icon('trash')
                 ->method('deletePosition')
                 ->confirm(__('Are you sure you want to delete selected positions?')),
+
+            Button::make('Delete Candidates')
+                ->icon('trash')
+                ->method('deleteCandidates')
+                ->confirm(__('Are you sure you want to delete selected candidates?')),
 
             Link::make('Edit Election')
                 ->icon('pencil')
@@ -93,7 +102,12 @@ class ViewElectionScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewPositionLayout::class
+                Layout::tabs([
+                    "Positions"=>
+                        ViewPositionLayout::class,
+                    "All Candidates" =>
+                        ViewCandidateLayout::class
+                ])
         ];
     }
 
@@ -140,11 +154,37 @@ class ViewElectionScreen extends Screen
         }
     }
 
+    public function deleteCandidates(Request $request)
+    {   
+        //get all localadmins from post request
+        $candidates = $request->get('candidates');
+        try{
+            //if the array is not empty
+            if(!empty($candidates)){
+
+                foreach($candidates as $candidate){
+                    Candidate::where('id', $candidate)->delete();
+                }
+
+                Toast::success('Selected candidates deleted succesfully');
+
+            }else{
+                Toast::warning('Please select candidates in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+        }
+    }
+
     public function redirect($position, $type){
         $type = request('type');
         $position = Position::find(request('position'));
         if($type == 'edit'){
             return redirect() -> route('platform.eventPromvotePosition.edit', $position->id);
+        }
+        else if($type == 'candidate'){
+            return redirect() -> route('platform.eventPromvotePositionCandidate.list', $position->id);
         }
         else {
             return redirect()->route('platform.event.list');

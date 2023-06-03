@@ -40,7 +40,7 @@ class ViewPositionLayout extends Table
             }),
             TD::make()
                 ->render(function($position){
-                    return Button::make('Candidate')->icon('people')->type(Color::DARK())
+                    return Button::make('Candidates')->icon('people')->type(Color::DARK())
                         ->method('redirect',['position' =>$position->id, 'type'=> "candidate"]);
             }), 
             TD::make('position_name', 'Position Name')
