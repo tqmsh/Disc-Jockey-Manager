@@ -21,11 +21,7 @@ class AuthController extends Controller
 
         // check email
         $user = User::where('email', $fields['email'])->first();
-        if(!$user){
-            return response([
-                'message' => 'Email not found'
-            ], 401);
-        }
+        
 
         // check password
         if(!$user || !Hash::check($fields['password'], $user->password)){
