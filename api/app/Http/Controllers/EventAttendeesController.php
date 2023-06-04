@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\EventAttendees;
 use App\Models\Seating;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class EventAttendeesController extends Controller
 {
@@ -24,10 +25,17 @@ class EventAttendeesController extends Controller
             $table_id = $table_id[0]->table_id;
             $tablename = Seating::where('id', $table_id)->get("tablename");
             $tablename = $tablename[0]->tablename;
-            
+
+            $tableAttendee = EventAttendees::where('event_id', $request->event_id)->where('table_id', $table_id)->where('approved', '1')->get(['user_id']);
+            foreach($tableAttendee as $attendee){
+                $user = User::where('id', $attendee->user_id)->get(['firstname', 'lastname']);
+                $students[] = $user;
+            }
+
             $response = [
                 'table' => $tablename,
-                'table_id' => $table_id
+                'table_id' => $table_id,
+                'seated' => $students,
             ];
         
             return $response;
