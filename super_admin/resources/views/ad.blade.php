@@ -1,7 +1,7 @@
 <a href="{{ $forward_url }}" target="_blank">
 <div class="card" id = {{  $id  }}>
     <div class="card__body">
-            <img src="{{  $image_url  }}" alt="AnImage" width="300" height="300">
+            <img src="{{  $image_url  }}" alt="AnImage" width="{{  env("AD_SIZE")  }}" height="{{  env("AD_SIZE")  }}">
         <br>
         <strong>{{  $title  }}</strong>
     </div>

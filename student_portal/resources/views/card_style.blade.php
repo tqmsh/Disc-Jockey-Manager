@@ -16,7 +16,7 @@
         align-items: center;
         gap: 1em;
         padding: 1.2em 1.2em 0.3em;
-        max-width: calc(300px + 2.4em);
+        max-width: calc({{  env("AD_SIZE")  }}px + 2.4em);
     }
 
     .card__body {
@@ -66,22 +66,20 @@
     }
     @media screen and (max-width: 991px){
         img{
-            width: min(calc(100% - 20px), 300px);
-            height: min(calc(100% - 20px), 300px);
+            width: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
+            height: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
         }
     }
     @media screen and (max-width: 767px){
         img{
-            width: min(calc(100% - 20px), 300px);
-            height: min(calc(100% - 20px), 300px);
+            width: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
+            height: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
         }
     }
     @media screen and (max-width: 479px){
         img{
-            width: min(calc(100% - 20px), 300px);
-            height: min(calc(100% - 20px), 300px);
+            width: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
+            height: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
         }
     }
-
-
 </style>
