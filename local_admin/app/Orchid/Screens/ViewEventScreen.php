@@ -150,13 +150,10 @@ class ViewEventScreen extends Screen
             return redirect()->route('platform.eventBids.list', $event);
         } 
         else if($type == 'promvote'){
-            //check if election is already created
-            // if created, go to page to view position
             $election = Election::where('event_id', $event)->first();
             if($election != null){
                 return redirect() -> route('platform.eventPromvote.list', $event);
             }
-            // if not created, go to create
             else{
                 return redirect() -> route('platform.eventPromvote.create', $event);
             }

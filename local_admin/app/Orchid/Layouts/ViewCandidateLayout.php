@@ -37,18 +37,11 @@ class ViewCandidateLayout extends Table
                         ->value($candidate->id)
                         ->checked(false);
             }),
-            // TD::make()
-            //     ->render(function($candidate){
-            //         return Button::make('Votes')->icon('people')->type(Color::DARK());
-            //             // ->method('redirect',['position' =>$position->id, 'type'=> "candidate"]);
-            // }), 
             
             TD::make('position', 'Position')
                 ->render(function (Candidate $candidate) {
                     return e(Position::find($candidate->position_id)->position_name);
             }),
-            
-
             TD::make('candidate_name', 'Candidate Name')
                 ->render(function (Candidate $candidate) {
                     return e($candidate->candidate_name);
@@ -57,12 +50,6 @@ class ViewCandidateLayout extends Table
                 ->render(function (Candidate $candidate) {
                     return e($candidate->candidate_bio);
             }),
-            //Total Votes
-            // TD::make('Candidate Bio')
-            //     ->render(function ($candidate) {
-            //         // $allVotes = totalVotes($candidate->id);
-            //         return Link::make($candidate->candidate_bio);
-            // }),
             TD::make()
                 ->render(function($candidate){
                     return Button::make('Edit')->icon('pencil')->type(Color::PRIMARY())
