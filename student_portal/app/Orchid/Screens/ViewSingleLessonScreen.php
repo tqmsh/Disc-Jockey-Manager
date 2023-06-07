@@ -79,7 +79,7 @@ class ViewSingleLessonScreen extends Screen
                     return date_format($this->lesson->created_at, 'd/m/Y H:i:s');
                 }),
                 Sight::make('updated_at', 'Updated At')->render(function(){
-                    return date_format($this->lesson->updated_at, 'd/m/Y H:i:s');
+                    return ($this->lesson->updated_at == null) ? '' : date_format($this->lesson->updated_at, 'd/m/Y H:i:s');
                 }),
             ])->title('Lesson Information'),
         ];
