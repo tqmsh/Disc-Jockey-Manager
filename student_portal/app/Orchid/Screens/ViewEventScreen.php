@@ -3,28 +3,30 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\Song;
 use App\Models\Events;
 use App\Models\Student;
+use App\Models\Election;
+use Orchid\Screen\TD;   
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
+use App\Models\NoPlaySong;
+use App\Models\SongRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewEventLayout;
-use App\Orchid\Layouts\ViewRegisteredEventLayout;
-use App\Orchid\Layouts\ViewSongRequestLayout;
-use Illuminate\Http\Request;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Color;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\Select;
-use App\Models\Song;
-use App\Models\SongRequest;
-use App\Models\NoPlaySong;
-use Orchid\Screen\TD;   
+use App\Orchid\Layouts\ViewEventLayout;
+use App\Orchid\Layouts\ViewSongRequestLayout;
+use App\Orchid\Layouts\ViewRegisteredEventLayout;
 
 class ViewEventScreen extends Screen
 {
@@ -90,12 +92,21 @@ class ViewEventScreen extends Screen
     }
 
     public function redirect($event_id, $type){
-
+        $type = request('type');
         if($type == 'table'){
             return redirect()->route('platform.event.tables', $event_id);
         }   
         else if($type == 'songs'){
             return redirect()->route('platform.songs.list', $event_id);
+        }
+        else if($type == 'election'){
+            $election = Election::where('event_id',$event_id)->first();
+            if ($election != null){
+                return redirect()->route('platform.election.list', $event_id);
+            }
+            else{
+                Toast::warning('An election is not yet created, speak to supervisor to open an election');
+            }
         }
 
         return redirect()->route('platform.event.register', $event_id);   

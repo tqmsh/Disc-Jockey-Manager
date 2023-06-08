@@ -19,6 +19,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\ViewSongRequestScreen;
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,8 @@ Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platfor
 Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('platform.event.tables');
 
 Route::screen('/events/{event}/songs', ViewSongRequestScreen::class)->name('platform.songs.list');
+
+Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('platform.election.list');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 

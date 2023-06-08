@@ -49,7 +49,7 @@ class ViewEventLayout extends Table
 
             TD::make()
                 ->render(function($event){
-                    return Button::make('Promvote')->method('redirect', ['event_id' => $event->id, 'type' => 'promvote'])->icon('dollar')->type(Color::LIGHT());
+                    return Button::make('Promvote')->method('redirect', ['event_id' => $event->id, 'type' => 'promvote'])->icon('people')->type(Color::LIGHT());
                 }), 
 
             TD::make()
