@@ -21,17 +21,18 @@ class AuthController extends Controller
 
         // check email
         $user = User::where('email', $fields['email'])->first();
+        
 
         // check password
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
-                'message' => 'Bad credentials'
+                'message' => 'Incorrect Password or Email'
             ], 401);
 
         // check if user is authenticated by admin
         }else if($user->account_status == '0'){
             return response([
-                'message' => 'Account is not active'
+                'message' => 'Account is not active, please wait for an administrator to activate your account'
             ], 401);
         }
 

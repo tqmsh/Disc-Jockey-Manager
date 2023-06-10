@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\CreateCandidateScreen;
 use App\Orchid\Screens\CreateElectionScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;;
@@ -16,6 +17,7 @@ use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
+use App\Orchid\Screens\EditCandidateScreen;
 use App\Orchid\Screens\EditElectionScreen;
 use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
@@ -32,6 +34,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewCandidateScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\ViewNoPlaySongsScreen;
 use App\Orchid\Screens\ViewRequestersScreen;
@@ -71,20 +74,10 @@ Route::screen('/events/{event}/edit', EditEventScreen::class)->name('platform.ev
 //show create event screen
 Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.create');
 
-Route::screen('/events/promvote/{event_id}/create', CreateElectionScreen::class)->name('platform.eventPromvote.create');
-
-Route::screen('/events/promvote/{event_id}/edit', EditElectionScreen::class)->name('platform.eventPromvote.edit');
-
-Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen::class)->name('platform.eventPromvotePosition.create');
-
-Route::screen('/events/promvote/{position_id}/editPosition', EditPositionScreen::class)->name('platform.eventPromvotePosition.edit');
-
 //show pending student screen
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
 
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
-
-Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');
 
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
@@ -98,10 +91,26 @@ Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonS
 
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
-
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
 
 Route::screen('/events/{songRequest_id}/requesters', ViewRequestersScreen::class)->name('platform.requesters.list');
+
+//Election
+Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');
+
+Route::screen('/events/promvote/{event_id}/create', CreateElectionScreen::class)->name('platform.eventPromvote.create');
+
+Route::screen('/events/promvote/{event_id}/edit', EditElectionScreen::class)->name('platform.eventPromvote.edit');
+
+Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen::class)->name('platform.eventPromvotePosition.create');
+
+Route::screen('/events/promvote/{position_id}/editPosition', EditPositionScreen::class)->name('platform.eventPromvotePosition.edit');
+
+Route::screen('/events/promvote/{position_id}/candidate', ViewCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.list');
+
+Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.create');
+
+Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
 
 
 // Platform > Profile
