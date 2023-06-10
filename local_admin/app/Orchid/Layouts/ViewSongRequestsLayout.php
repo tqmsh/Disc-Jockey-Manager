@@ -30,44 +30,45 @@ class ViewSongRequestsLayout extends Table
      *
      * @var string
      */
-    protected $target = 'songRequests';
+            protected $target = 'songRequests';
 
-    
-    /**
-     * Get the table cells to be displayed.
-     *
-     * @return TD[]
-     */
-    protected function columns(): iterable
-    {
-        return [
+
+            /**
+             * Get the table cells to be displayed.
+             *
+             * @return TD[]
+             */
+            protected function columns(): iterable
+            {
+            return [
             TD::make()
                 ->render(function (SongRequest $songRequest){
-                    return CheckBox::make('songRequests[]')
-                        ->value($songRequest -> id)
-                        ->checked(false);
-                }),
+                return CheckBox::make('songRequests[]')
+                ->value($songRequest -> id)
+                ->checked(false);
+            }),
 
             TD::make('request_title', 'Title')
                 ->render(function (SongRequest $songRequest) {
-                    return e(Song::find($songRequest -> song_id) -> title);
-                }),
+                return e(Song::find($songRequest -> song_id) -> title);
+            }),
 
             TD::make('request_artist', 'Artist')
                 ->render(function (SongRequest $songRequest) {
-                    return e(Song::find($songRequest -> song_id) -> artist);
-                }),
+                return e(Song::find($songRequest -> song_id) -> artist);
+            }),
 
             TD::make('num_requesters', 'Number of Requesters')
                 ->render(function (SongRequest $songRequest) {
-                    return e(count(json_decode($songRequest-> requester_user_ids)));
-                }),
+                return e(count(json_decode($songRequest-> requester_user_ids, TRUE)));
+            }),
 
             TD::make()
-                ->render(function (songRequest $songRequest) {
-                    return Button::make('View Requesters')-> type(Color::PRIMARY())->method('redirect', ['songRequest_id'=> $songRequest->id, 'requesters' => json_decode($songRequest-> requester_user_ids)])->icon('pencil');
-                    
+                ->render(function (SongRequest $songRequest) {
+                    return Button::make('View Requesters')-> type(Color::PRIMARY())-> method('redirect', ["songReq_id" => $songRequest -> id])->icon('people');
                 }),
-        ];
+
+            ];
+            
     }
 }

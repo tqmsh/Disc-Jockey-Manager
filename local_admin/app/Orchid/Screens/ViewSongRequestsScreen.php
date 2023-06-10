@@ -80,6 +80,7 @@ class ViewSongRequestsScreen extends Screen
      */
     public function layout(): iterable
     {
+
         return [
             Layout::modal('editSong', Layout::rows([
                 Select::make('song.id')
@@ -97,8 +98,7 @@ class ViewSongRequestsScreen extends Screen
             ->applyButton('Save Request') ->type(Color::PRIMARY()),
 
           ViewSongRequestsLayout::class,
-
-                      
+               
           Layout::tabs([
             "Banned Song List"=>[ViewNoPlaySongsLayout::class, 
                 Layout::rows([
@@ -110,7 +110,7 @@ class ViewSongRequestsScreen extends Screen
             ],
             "Add Banned Song" =>[
                 Layout::rows([
-                    Select::make('song.id')
+                    Select::make('song.id') 
                     ->options(function(){
                         $arr= array();
                         foreach(Song::all() as $song){
@@ -128,14 +128,13 @@ class ViewSongRequestsScreen extends Screen
                     ->icon('plus')
                 ])], 
             ]),
-
         ];
     }
-
-    public function redirect($songRequest_id, array $requesters){
-        return redirect()-> route('platform.requesters.list', ['songRequest_id'=> $songRequest_id, 'requesters'=> $requesters]);
-    }
     
+    public function redirect(Events $event){
+       return redirect()->route('platform.requesters.list', ['songReq_id' => request('songReq_id'), 'event_id' => $event]);
+    }
+
     public function chooseSong(Request $request, Events $event){
         try{
             $song = Song::find($request->input('song.id'));

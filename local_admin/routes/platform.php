@@ -112,7 +112,9 @@ Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidate
 
 Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
 
+Route::screen('/events/{songReq_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.requesters.list');
 
+ 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')

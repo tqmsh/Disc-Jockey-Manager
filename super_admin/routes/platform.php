@@ -55,7 +55,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-
+use App\Orchid\Screens\ViewRequestersScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -155,7 +155,7 @@ Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platf
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
-
+Route::screen('/events/{songReq_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.requesters.list');
 
 //view courses screen route
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
