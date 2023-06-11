@@ -3,7 +3,6 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\User;
 use App\Models\Events;
 use App\Models\Election;
 use Orchid\Screen\Screen;
@@ -15,7 +14,6 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
-use Illuminate\Support\Facades\Auth;
 
 class CreateElectionScreen extends Screen
 {

@@ -2,23 +2,18 @@
 
 namespace App\Orchid\Screens;
 
-use Exception;
 use App\Models\Events;
 use App\Models\Region;
 use App\Models\School;
 use App\Models\Student;
-use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
-use App\Models\Localadmin;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
-use App\Models\VendorPaidRegions;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;

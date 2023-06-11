@@ -2,7 +2,6 @@
 
 namespace App\Orchid\Screens;
 
-use DateTime;
 use Exception;
 use App\Models\User;
 use App\Models\School;
@@ -10,7 +9,6 @@ use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use App\Models\RoleUsers;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -18,10 +16,8 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
-use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Fields\Password;
 use Orchid\Support\Facades\Layout;
-use Orchid\Support\Facades\Dashboard;
 use Orchid\Screen\Actions\ModalToggle;
 
 class CreateVendorScreen extends Screen

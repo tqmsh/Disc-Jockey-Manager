@@ -4,7 +4,6 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Course;
-use App\Models\Lesson;
 use App\Models\Section;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;

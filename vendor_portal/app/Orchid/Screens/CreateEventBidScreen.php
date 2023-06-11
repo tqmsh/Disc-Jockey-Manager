@@ -9,7 +9,6 @@ use Orchid\Screen\Sight;
 use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
-use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;

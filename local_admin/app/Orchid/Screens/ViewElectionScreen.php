@@ -3,20 +3,15 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
 use App\Models\Candidate;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
-use App\Models\Categories;
 use App\Models\Localadmin;
 use App\Orchid\Layouts\ViewCandidateLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
