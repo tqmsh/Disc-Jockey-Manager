@@ -5,9 +5,11 @@ declare(strict_types=1);
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
+use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
+use App\Orchid\Screens\ViewSongRequestScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
@@ -19,7 +21,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewSongRequestScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -55,6 +56,9 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 
 //view student bid screen
 Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.list');
+
+//student specs
+Route::screen('/my-specs', ViewSpecsScreen::class)->name('platform.studentSpecs.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
