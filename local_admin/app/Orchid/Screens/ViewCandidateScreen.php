@@ -11,18 +11,9 @@ use Orchid\Screen\Actions\Link;
 use App\Orchid\Layouts\ViewCandidateLayout;
 use Illuminate\Http\Request;
 use Exception;
-use App\Models\Student;
-use App\Models\Localadmin;
-use App\Models\EventAttendees;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
-use Orchid\Screen\Fields\TextArea;
-use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Actions\DropDown;
-use Illuminate\Support\Facades\Auth;
+
 
 class ViewCandidateScreen extends Screen
 {

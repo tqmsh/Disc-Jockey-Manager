@@ -4,14 +4,7 @@ namespace App\Orchid\Screens;
 
 use App\Models\Course;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewCourseLayout;
-use Exception;
-use Orchid\Support\Facades\Toast;
 
 class ViewCourseScreen extends Screen
 {

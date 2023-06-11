@@ -14,7 +14,6 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
-use Illuminate\Support\Facades\Auth;
 
 class EditEventBidScreen extends Screen
 {

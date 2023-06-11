@@ -7,7 +7,6 @@ use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
-use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
