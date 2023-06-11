@@ -2,16 +2,9 @@
 
 namespace App\Orchid\Screens;
 
-use Exception;
 use App\Models\Course;
-use App\Models\Section;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Toast;
-use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewCourseSectionLayout;
 
 class ViewCourseSectionScreen extends Screen

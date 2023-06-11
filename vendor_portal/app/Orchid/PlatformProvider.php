@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
-use App\Models\Student;
-use App\Models\Vendors;
 use Orchid\Support\Color;
-use App\Models\Categories;
-use App\Models\Localadmin;
 use Orchid\Platform\Dashboard;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Platform\ItemPermission;
-use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\OrchidServiceProvider;
 
 class PlatformProvider extends OrchidServiceProvider

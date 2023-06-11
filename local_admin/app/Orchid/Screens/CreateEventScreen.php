@@ -3,7 +3,6 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\User;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Vendors;
@@ -20,7 +19,6 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
-use Orchid\Support\Color;
 
 class CreateEventScreen extends Screen
 {

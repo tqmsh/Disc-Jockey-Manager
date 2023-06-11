@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\School;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;

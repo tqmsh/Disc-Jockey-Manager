@@ -6,20 +6,15 @@ use Exception;
 use App\Models\User;
 use App\Models\Region;
 use App\Models\School;
-use App\Models\Student;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
-use Illuminate\Http\JsonResponse;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewSchoolLayout;
 
 class ViewSchoolScreen extends Screen
