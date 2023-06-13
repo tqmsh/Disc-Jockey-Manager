@@ -90,12 +90,11 @@ class ViewRequestersScreen extends Screen {
         return [
             Layout::modal('reqModal', [
                 Layout::rows([
-                    
                     Select::make('student.id')
                     ->options(function(){
                         $requesters= json_decode(SongRequest::where('id', $this ->songRequest_id) -> first() -> requester_user_ids, true);
                         $arr= array();
-                        foreach(Student::all() as $student){
+                        foreach(Student::where('school_id', $this ->event->school_id)-> get() as $student){
                             if(EventAttendees::where('user_id', $student -> user_id)->where('event_id', $this ->event->id)->exists() && !in_array($student -> user_id, $requesters)){
                                 $arr[$student -> user_id]= 'ID: ' . $student -> user_id . ' , Name: ' . $student -> firstname . ' ' . $student-> lastname;
                             }

@@ -132,7 +132,7 @@ class ViewSongRequestsScreen extends Screen
     }
     
     public function redirect(Events $event){
-       return redirect()->route('platform.requesters.list', ['songReq_id' => request('songReq_id'), 'event_id' => $event]);
+       return redirect()->route('platform.songRequesters.list', ['songReq_id' => request('songReq_id'), 'event_id' => $event]);
     }
 
     public function chooseSong(Request $request, Events $event){
