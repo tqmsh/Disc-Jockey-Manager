@@ -97,24 +97,13 @@
         let triggered_ = image.dataset.triggered
         if (triggered_ !== "true") {
             // prepare the request URL with ID parameter
-            var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
-
-            //make axios call fixing any CORS issues
-            axios.put(url, {}, {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-                withCredentials: false
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
+            var url = `https://api.promplanner.app/api/campaign_view/${encodeURIComponent(id)}` ;
+            axios.put(url).then((result) => {
+                console.log(result.data);
+                console.log("Impression "+url)
+            }).catch((err) => {
+                console.log(err);
+            });
             image.dataset.triggered = "true";
         }
     }
