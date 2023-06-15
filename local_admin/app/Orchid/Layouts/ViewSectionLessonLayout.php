@@ -65,7 +65,7 @@ class ViewSectionLessonLayout extends Table
                 
             TD::make()
                 ->render(function (Lesson $lesson) {
-                    return Button::make('View')-> type(Color::SUCCESS())->method('redirect', ['lesson_id'=> $lesson->id, 'type' => 'view'])->icon('pencil');
+                    return Button::make('View')-> type(Color::SUCCESS())->method('redirect', ['lesson_id'=> $lesson->id, 'type' => 'view'])->icon('eye');
                 })->width('100px'),
         ];
     }

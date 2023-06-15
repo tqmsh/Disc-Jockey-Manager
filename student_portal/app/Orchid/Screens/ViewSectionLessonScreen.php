@@ -6,8 +6,6 @@ use App\Models\Course;
 use App\Models\Section;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Toast;
 use App\Orchid\Layouts\ViewSectionLessonLayout;
 
 class ViewSectionLessonScreen extends Screen

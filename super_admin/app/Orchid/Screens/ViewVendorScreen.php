@@ -8,7 +8,6 @@ use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
-use App\Models\RoleUsers;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -17,7 +16,6 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewVendorLayout;
-use Illuminate\Support\Facades\Redirect;
 
 class ViewVendorScreen extends Screen
 {
