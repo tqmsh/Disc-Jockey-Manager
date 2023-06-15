@@ -13,5 +13,6 @@ class SongRequest extends Model
         'song_id',
         'event_id',
         'requester_user_id',
+        'requester_user_ids'
     ];
 }

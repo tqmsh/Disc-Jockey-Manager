@@ -413,6 +413,7 @@ class ViewEventStudentScreen extends Screen
                     EventAttendees::create([
                         'user_id' => $student,
                         'event_id' => $event->id,
+                        'approved' => 1,
                     ]);
                 }
 
