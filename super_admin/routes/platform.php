@@ -70,7 +70,7 @@ use App\Orchid\Screens\ViewRequestersScreen;
 
 
 // Orchid main menu
-Route::middleware('cors')->screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
