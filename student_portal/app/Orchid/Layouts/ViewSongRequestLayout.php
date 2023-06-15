@@ -40,7 +40,11 @@ class ViewSongRequestLayout extends Table
                 ->render(function (SongRequest $songRequest) {
                     return e(Song::find($songRequest -> song_id) -> artist);
                 }),
-            
+
+            TD::make('num_requesters', 'Number of Requesters')
+                ->render(function (SongRequest $songRequest) {
+                    return e(((json_decode($songRequest-> requester_user_ids, TRUE)) == null) ? 0 : count(json_decode($songRequest-> requester_user_ids, TRUE)));
+                }),
         ];    
     }
 }
