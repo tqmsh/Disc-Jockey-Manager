@@ -5,7 +5,6 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\User;
 use App\Models\Events;
-use App\Models\School;
 use App\Models\Student;
 use App\Models\RoleUsers;
 use Orchid\Screen\Screen;

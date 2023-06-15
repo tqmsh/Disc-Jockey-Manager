@@ -17,7 +17,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Support\Facades\Alert;
-use Termwind\Components\Dd;
+
 
 class ViewEventTableScreen extends Screen
 {

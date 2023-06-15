@@ -3,8 +3,6 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\User;
-use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
 use Orchid\Screen\Screen;

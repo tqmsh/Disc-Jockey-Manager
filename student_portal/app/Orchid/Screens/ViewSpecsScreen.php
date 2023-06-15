@@ -2,12 +2,9 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Course;
 use Orchid\Screen\Screen;
-use App\Orchid\Layouts\ViewCourseLayout;
 
-
-class ViewCourseScreen extends Screen
+class ViewSpecsScreen extends Screen
 {
     /**
      * Query data.
@@ -16,9 +13,7 @@ class ViewCourseScreen extends Screen
      */
     public function query(): iterable
     {
-        return [
-            'courses' => Course::orderBy('ordering', 'asc')->where('category', 4)->paginate(20),
-        ];
+        return [];
     }
 
     /**
@@ -28,7 +23,7 @@ class ViewCourseScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Courses';
+        return 'My Specs';
     }
 
     /**
@@ -38,9 +33,7 @@ class ViewCourseScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-
-        ];
+        return [];
     }
 
     /**
@@ -50,15 +43,6 @@ class ViewCourseScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [
-            ViewCourseLayout::class,
-        ];
-    }
-    
-    public function redirect( $course, $type){
-
-        if($type == "section"){
-            return redirect()->route('platform.courseSection.list',  $course);
-        }
+        return [];
     }
 }
