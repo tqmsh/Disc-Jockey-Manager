@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['../routes/platform.php', 'sanctum/csrf-cookie'],
+    'paths' => ['*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
