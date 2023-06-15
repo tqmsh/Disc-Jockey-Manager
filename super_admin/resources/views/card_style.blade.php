@@ -93,19 +93,19 @@
 
 <script>
     function sendInternalRequestWithIdParam(image) {
+        axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
         id = image.id
         let triggered_ = image.dataset.triggered
         if (triggered_ !== "true") {
             // prepare the request URL with ID parameter
             var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
-            // axios.put(url)
-            image.dataset.triggered = "true";
-            console.log("Impression "+url)
-            axios({
-                method: 'put',
-                url: url,
-                withCredentials: false,
+            axios.put(url).then((result) => {
+                console.log(result.data);
+                console.log("Impression "+url)
+            }).catch((err) => {
+                console.log(err);
             });
+            image.dataset.triggered = "true";
         }
     }
 
