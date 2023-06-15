@@ -93,7 +93,8 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
 
-Route::screen('/events/{songRequest_id}/requesters', ViewRequestersScreen::class)->name('platform.requesters.list');
+Route::screen('/events/{songReq_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
+
 
 //Election
 Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');
@@ -112,7 +113,6 @@ Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidate
 
 Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
 
-Route::screen('/events/{songReq_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
  
 // Platform > Profile

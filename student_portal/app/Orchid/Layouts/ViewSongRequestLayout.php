@@ -43,9 +43,8 @@ class ViewSongRequestLayout extends Table
 
             TD::make('num_requesters', 'Number of Requesters')
                 ->render(function (SongRequest $songRequest) {
-                    return e(count(json_decode($songRequest-> requester_user_ids, true)));
+                    return e(((json_decode($songRequest-> requester_user_ids, TRUE)) == null) ? 0 : count(json_decode($songRequest-> requester_user_ids, TRUE)));
                 }),
-            
         ];    
     }
 }

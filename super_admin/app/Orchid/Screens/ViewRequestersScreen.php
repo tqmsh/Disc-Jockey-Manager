@@ -2,33 +2,28 @@
 
 namespace App\Orchid\Screens;
 
-use Locale;
 use Exception;
-use App\Models\User;
+use App\Models\Song;
 use App\Models\Events;
 use App\Models\Student;
-use App\Models\EventAttendees;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
-use App\Models\Localadmin;
+use App\Models\SongRequest;
 use Illuminate\Http\Request;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
-use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
-use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewRequestersLayout;
-use App\Models\SongRequest;
 use Orchid\Screen\Actions\ModalToggle;  
+use App\Orchid\Layouts\ViewRequestersLayout;
 
 class ViewRequestersScreen extends Screen {
 
     public $event;
     public $songRequest_id;
+    public $songRequest;
     /**
      * Query data.
      *
@@ -36,13 +31,14 @@ class ViewRequestersScreen extends Screen {
      */
     public function query($songReq_id, Events $event): iterable
     {
-        $songRequest= SongRequest::where('id',$songReq_id);
-        $requesters= json_decode($songRequest -> first() -> requester_user_ids, true);
+        $songRequest= SongRequest::find($songReq_id);
+        $requesters= json_decode($songRequest->requester_user_ids, true);
 
         return [
             'event' => $event,
             'requesters' =>  $requesters,
             'songRequest_id' => $songReq_id,
+            'songRequest' => $songRequest,
         ];
     }
 
@@ -53,7 +49,7 @@ class ViewRequestersScreen extends Screen {
      */
     public function name(): ?string
     {
-        return 'Requesters';
+        return 'Requesters for: ' . Song::find($this->songRequest->song_id)->title . ' by ' . Song::find($this->songRequest->song_id)->artist;
     }
 
     /**
@@ -69,13 +65,13 @@ class ViewRequestersScreen extends Screen {
                 ->method('add')
                 ->icon('plus'),
 
-            Button::make('Delete Requester')
+            Button::make('Delete Selected Requester')
                 ->icon('trash')
                 ->method('delete'),
 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.songreq.list', $this->event->id),
         ];
     }
 
@@ -90,13 +86,14 @@ class ViewRequestersScreen extends Screen {
         return [
             Layout::modal('reqModal', [
                 Layout::rows([
+                    
                     Select::make('student.id')
                     ->options(function(){
-                        $requesters= json_decode(SongRequest::where('id', $this ->songRequest_id) -> first() -> requester_user_ids, true);
+                        $requesters= json_decode(SongRequest::where('id', $this->songRequest_id)->first()-> requester_user_ids, true);
                         $arr= array();
-                        foreach(Student::where('school_id', $this ->event->school_id)-> get() as $student){
-                            if(EventAttendees::where('user_id', $student -> user_id)->where('event_id', $this ->event->id)->exists() && !in_array($student -> user_id, $requesters)){
-                                $arr[$student -> user_id]= 'ID: ' . $student -> user_id . ' , Name: ' . $student -> firstname . ' ' . $student-> lastname;
+                        foreach(Student::where('school_id', $this->event->school_id)->get() as $student){
+                            if(EventAttendees::where('user_id', $student -> user_id)->where('event_id', $this ->event->id)->exists() && !in_array($student->user_id, $requesters)){
+                                $arr[$student->user_id]= 'ID: ' . $student->user_id . ' , Name: ' . $student->firstname . ' ' . $student->lastname;
                             }
                         }
                         return $arr;
@@ -113,17 +110,27 @@ class ViewRequestersScreen extends Screen {
         ];
     }
 
-    public function delete($songRequest_id, Request $request)
+    public function delete($songRequest_id, Request $request, Events $event)
     {
-        $reqList= $request -> get('requesterList');
-        $requesters= json_decode(SongRequest::where('id',$songRequest_id) -> first() -> requester_user_ids, true);
+        $reqList= $request->get('requesterList');
+        $requesters= json_decode(SongRequest::find($songRequest_id)->requester_user_ids, true);
+        $songRequest= SongRequest::where('id',$songRequest_id)->first();
 
         try{
             if(!empty($reqList)){
                 $requesters= array_diff($requesters, $reqList);
-                $songRequest= SongRequest::where('id',$songRequest_id) -> first();
-                $songRequest -> requester_user_ids= json_encode($requesters)    ;
-                $songRequest -> save();
+
+                if(empty($requesters)){
+                    $songRequest->delete();
+                    Toast::success('Requesters deleted successfully');
+                } else {
+                    $songRequest->requester_user_ids= json_encode($requesters);
+                    $songRequest->save();
+                    Toast::success('Requesters deleted successfully');
+                    return redirect()->route('platform.songRequesters.list', ['songReq_id' => request('songReq_id'), 'event_id' => $event]);
+                }
+
+                return redirect()->route('platform.songreq.list', $event);
 
   
             }else{
@@ -146,7 +153,7 @@ class ViewRequestersScreen extends Screen {
             $songRequest -> save();
 
         }catch(Exception $e){
-           Alert::error('There was a error trying to deleted the selected Requesters. Error Message: ' . $e);
+           Alert::error('There was a error trying to add the selected Requesters. Error Message: ' . $e);
         } 
     }
 
