@@ -9,6 +9,7 @@ use Orchid\Screen\Screen;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Illuminate\Support\Facades\Auth;
+use App\Orchid\Layouts\ViewPositionLayout;
 
 class ViewElectionScreen extends Screen
 {
@@ -63,7 +64,18 @@ class ViewElectionScreen extends Screen
     public function layout(): iterable
     {
         return [
-            
+            ViewPositionLayout::class,
         ];
+    }
+
+    public function redirect($position, $type){
+        $type = request('type');
+        $position = Position::find(request('position'));
+        if($type == 'vote'){
+            return redirect() -> route('platform.election.vote', $position->id);
+        }
+        else {
+            return redirect()->route('platform.event.list');
+        }    
     }
 }

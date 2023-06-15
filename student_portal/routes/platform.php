@@ -22,6 +22,8 @@ use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewElectionScreen;
+use App\Orchid\Screens\ViewVotingScreen;
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -48,6 +50,8 @@ Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('plat
 Route::screen('/events/{event}/songs', ViewSongRequestScreen::class)->name('platform.songs.list');
 
 Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('platform.election.list');
+
+Route::screen('/events/election/vote/{position}', ViewVotingScreen::class)->name('platform.election.vote');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 
