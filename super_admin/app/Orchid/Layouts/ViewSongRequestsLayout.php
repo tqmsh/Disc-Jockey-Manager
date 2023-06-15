@@ -46,20 +46,24 @@ class ViewSongRequestsLayout extends Table
                         ->value($songRequest -> id)
                         ->checked(false);
                 }),
-
             TD::make('request_title', 'Title')
                 ->render(function (SongRequest $songRequest) {
-                    return e(Song::find($songRequest -> song_id) -> title);
-                }),
+                return e(Song::find($songRequest -> song_id) -> title);
+            }),
 
             TD::make('request_artist', 'Artist')
                 ->render(function (SongRequest $songRequest) {
-                    return e(Song::find($songRequest -> song_id) -> artist);
-                }),
+                return e(Song::find($songRequest -> song_id) -> artist);
+            }),
 
-             TD::make('requester_id', 'Requester')
+            TD::make('num_requesters', 'Number of Requesters')
                 ->render(function (SongRequest $songRequest) {
-                    return e(User::find($songRequest -> requester_user_id)-> name);
+                return e(count(json_decode($songRequest-> requester_user_ids, TRUE)));
+            }),
+
+            TD::make()
+                ->render(function (SongRequest $songRequest) {
+                    return Button::make('View Requesters')-> type(Color::PRIMARY())-> method('redirect', ["songReq_id" => $songRequest -> id])->icon('people');
                 }),
 
             TD::make()
