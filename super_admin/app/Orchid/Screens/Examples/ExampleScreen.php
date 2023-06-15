@@ -31,6 +31,24 @@ class ExampleScreen extends Screen
 
     public $campaigns;
 
+    function customSort($a, $b): int
+    {
+        // Compare order_num values
+        if ($a['order'] === $b['order']) {
+            return 0;
+        }
+
+        // Place 0 values at the end
+        if ($a['order'] === 0) {
+            return 1;
+        } elseif ($b['order'] === 0) {
+            return -1;
+        }
+
+        // Sort by order_num in ascending order
+        return ($a['order'] < $b['order']) ? -1 : 1;
+    }
+
     /**
      * Query data.
      *
@@ -158,15 +176,18 @@ class ExampleScreen extends Screen
      */
     public function layout(): iterable
     {
-    
-        $arr_ads = array();
+        $arr_ads = [];
         foreach ($this->campaigns as $campaign){
-            $temp = Layout::view("ad", ["id"=>$campaign->id, "forward_url"=>$campaign->website,
-                "image_url"=>$campaign->image, "title"=>$campaign->title,
-                "category"=>Categories::find(Vendors::where("user_id", $campaign->user_id)->first()->category_id)->name,
-                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name]);
-            $arr_ads[] = $temp;
+            $arr_ads[] = ["id"=>$campaign->id,
+                "forward_url"=>$campaign->website,
+                "image_url"=>$campaign->image,
+                "title"=>$campaign->title,
+                "category"=>Categories::where("id", $campaign->category_id)->first()->name,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name,
+                "order"=>Categories::where("id", $campaign->category_id)->first()->order_num
+            ];
         }
+        usort($arr_ads, [$this, 'customSort']);
         return [
             Layout::metrics([
                 'Sales Today'    => 'metrics.sales',
@@ -189,7 +210,7 @@ class ExampleScreen extends Screen
 
             Layout::view("card_style"),
 
-            Layout::columns($arr_ads),
+            Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
 
             Layout::modal('exampleModal', Layout::rows([
                 Input::make('toast')

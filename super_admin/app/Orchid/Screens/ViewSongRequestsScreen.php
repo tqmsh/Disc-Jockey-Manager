@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewSongRequestsLayout;
+use App\Orchid\Layouts\ViewNoPlaySongsLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Color;
@@ -40,9 +41,11 @@ class ViewSongRequestsScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        return ['songRequests' => SongRequest::where('event_id', $event-> id) ->paginate(10),
-                'event' => $event];
+        return ['songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
+                'noPlaySongs'=> NoPlaySong::where('event_id', $event->id)->paginate(10),
+                'event' => $event];     
     }
+    
     /**
      * Display header name.
      *
@@ -77,14 +80,15 @@ class ViewSongRequestsScreen extends Screen
      */
     public function layout(): iterable
     {
+
         return [
             Layout::modal('editSong', Layout::rows([
                 Select::make('song.id')
                 ->options(function(){
                     $arr= array();
                     foreach(Song::all() as $song){
-                        if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id) -> exists()){
-                            $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                        if(!NoPlaySong::where('song_id', $song->id)->where('event_id', $this->event->id) -> exists()){
+                            $arr[$song -> id]= $song->title . ' - ' . $song->artist;
                         }
                     }
                     return $arr;
@@ -94,12 +98,78 @@ class ViewSongRequestsScreen extends Screen
             ->applyButton('Save Request') ->type(Color::PRIMARY()),
 
           ViewSongRequestsLayout::class,
+               
+          Layout::tabs([
+            "Banned Song List"=>[ViewNoPlaySongsLayout::class, 
+                Layout::rows([
+                    Button::make('Remove Selected Banned Song')
+                    ->type(Color::SECONDARY())
+                    ->icon('trash')
+                    ->method('deleteSong'),
+                ])
+            ],
+            "Add Banned Song" =>[
+                Layout::rows([
+                    Select::make('song.id') 
+                    ->options(function(){
+                        $arr= array();
+                        foreach(Song::all() as $song){
+                            if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this -> event -> id)->exists()){
+                                $arr[$song -> id]= $song -> title . '- ' . $song-> artist;
+                            }
+                        }
+                        return $arr;
+                    })
+                    -> empty('Choose a song'), 
+        
+                    Button::make('Submit')
+                    ->type(Color::PRIMARY())
+                    ->method('chooseSong')
+                    ->icon('plus')
+                ])], 
+            ]),
         ];
+    }
+    
+    public function redirect(Events $event){
+       return redirect()->route('platform.songRequesters.list', ['songReq_id' => request('songReq_id'), 'event_id' => $event]);
+    }
+
+    public function chooseSong(Request $request, Events $event){
+        try{
+            $song = Song::find($request->input('song.id'));
+            $formFields = $request->all();
+            $formFields['song_id'] = $song->id;
+            $formFields['event_id'] = $event -> id;
+            NoPlaySong::create($formFields);
+            Toast::success('Banned Song created succesfully');
+        }catch(Exception $e){
+            Toast::error('There was a error trying to create the Banned Song. Error Message: ' . $e);
+        }
+    }
+
+    public function deleteSong(Request $request)
+    {   
+        $noPlaySongs = $request->get('noPlaySongs');
+        try{
+            if(!empty($noPlaySongs)){
+                foreach($noPlaySongs as $noPlaySong){
+                    noPlaySong::where('id', $noPlaySong)->delete();
+                }
+                Toast::success('Selected No Play Song (s) deleted succesfully');
+            }else{
+                Toast::warning('Please select No Play Songs in order to delete them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to deleted the selected No Play Songs. Error Message: ' . $e);
+        }
     }
 
     public function delete(Request $request)
     {   
         $songReqs = $request->get('songRequests');
+        
         try{
             if(!empty($songReqs)){
                 foreach($songReqs as $songReq){
