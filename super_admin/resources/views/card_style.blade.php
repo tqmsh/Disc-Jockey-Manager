@@ -103,7 +103,7 @@
             console.log("Impression "+url)
             axios({
                 method: 'put',
-                url: {url},
+                url: url,
                 withCredentials: false,
             });
         }
