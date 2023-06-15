@@ -23,6 +23,7 @@ class ViewRequestersScreen extends Screen {
 
     public $event;
     public $songRequest_id;
+    public $songRequest;
     /**
      * Query data.
      *
@@ -37,6 +38,7 @@ class ViewRequestersScreen extends Screen {
             'event' => $event,
             'requesters' =>  $requesters,
             'songRequest_id' => $songReq_id,
+            'songRequest' => $songRequest,
         ];
     }
 
