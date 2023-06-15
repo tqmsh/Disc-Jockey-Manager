@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Orchid\Screens\EditAdScreen;
+use App\Orchid\Screens\OrderCategoryScreen;
 use App\Orchid\Screens\ViewAdScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
@@ -133,6 +134,9 @@ Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platfo
 
 //show view category screen
 Route::screen('/categories', ViewCategoryScreen::class)->name('platform.category.list');
+
+//Show order category screen
+Route::screen("/categories/order", OrderCategoryScreen::class)->name("platform.category.order");
 
 //show edit category screen
 Route::screen('/categories/{category}/edit', EditCategoryScreen::class)->name('platform.category.edit');
