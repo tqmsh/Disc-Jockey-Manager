@@ -18,6 +18,13 @@
         padding: 1.2em 1.2em 0.3em;
         max-width: calc({{  env("AD_SIZE")  }}px + 2.4em);
     }
+    .card__url{
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        max-width: calc({{  env("AD_SIZE")  }}px + 2.4em);
+    }
 
     .card__body {
         color: #3d3d3d;
@@ -83,3 +90,42 @@
         }
     }
 </style>
+
+<script>
+    function sendInternalRequestWithIdParam(image) {
+        id = image.id
+        let triggered_ = image.dataset.triggered
+        if (triggered_ !== "true") {
+            // prepare the request URL with ID parameter
+            var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
+
+            axios.put(url)
+            image.dataset.triggered = "true";
+        }
+    }
+
+    function checkIfImageIsVisible(image, callback) {
+        if (image != null) {
+            var rect = image.getBoundingClientRect();
+            var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+            if (rect.bottom >= 0 && rect.top < viewHeight) {
+                callback(image);
+            }
+        }
+    }
+
+    window.addEventListener("load", function () {
+        for (let card_ of document.getElementsByClassName("card"))
+        {
+            image = card_.getElementsByTagName("img")[0]
+            checkIfImageIsVisible(image, sendInternalRequestWithIdParam);
+        }
+    });
+
+    window.addEventListener('scroll', function () {
+        for (let card_ of document.getElementsByClassName("card")) {
+            image = card_.getElementsByTagName("img")[0]
+            checkIfImageIsVisible(image, sendInternalRequestWithIdParam);
+        }
+    });
+</script>
