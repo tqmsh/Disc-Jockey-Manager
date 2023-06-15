@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
@@ -47,6 +48,10 @@ class ViewCategoryScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+
+            Link::make("Re-order Categories")
+                ->icon('pencil')
+                ->route("platform.category.order"),
 
             Button::make('Approve Selected Pending Categories')
                 ->icon('check')
@@ -105,7 +110,9 @@ class ViewCategoryScreen extends Screen
         }else{
 
             // Create category and auto approve it
-            $check = Categories::create(['name' => $category, "status" => 1]);
+            // order_num counts from 1, with 0 reserved for invalid order value
+            $num_categories = count(Categories::where('status', 1)->get()->toArray());
+            $check = Categories::create(['name' => $category, "status" => 1, "order_num"=>$num_categories+1]);
 
             if($check){
 
@@ -129,7 +136,8 @@ class ViewCategoryScreen extends Screen
 
                     //loop through the categories and update them
                     foreach($categories as $category){
-                        Categories::where('id', $category)->update(['status' => 1]);
+                        $num_categories = count(Categories::where('status', 1)->get()->toArray());
+                        Categories::where('id', $category)->update(['status' => 1, "order_num"=>$num_categories+1]);
                     }
 
                     Toast::success('Selected categories approved succesfully');
@@ -152,6 +160,10 @@ class ViewCategoryScreen extends Screen
     {
         //get all categories from post request
         $categories = $request->get('categories');
+        $pending_categories = $request->get("pending_categories");
+        if(is_null($categories)){
+            $categories = $pending_categories;
+        }
 
         try{
             //if the array is not empty
