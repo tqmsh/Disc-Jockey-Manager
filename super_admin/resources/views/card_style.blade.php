@@ -18,6 +18,13 @@
         padding: 1.2em 1.2em 0.3em;
         max-width: calc({{  env("AD_SIZE")  }}px + 2.4em);
     }
+    .card__url{
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        max-width: calc({{  env("AD_SIZE")  }}px + 2.4em);
+    }
 
     .card__body {
         color: #3d3d3d;
