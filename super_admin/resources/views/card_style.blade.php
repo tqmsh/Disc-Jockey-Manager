@@ -100,7 +100,7 @@
             var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
 
             //make axios call fixing any CORS issues
-            axios.put(url, {
+            axios.put(url, {}, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
