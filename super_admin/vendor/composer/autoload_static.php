@@ -523,6 +523,7 @@ class ComposerStaticInite52ea34a20856a462345923bb2b524a6
         'Fruitcake\\Cors\\' => 
         array (
             0 => __DIR__ . '/..' . '/fruitcake/php-cors/src',
+            1 => __DIR__ . '/..' . '/fruitcake/laravel-cors/src',
         ),
         'Faker\\' => 
         array (
@@ -694,6 +695,7 @@ class ComposerStaticInite52ea34a20856a462345923bb2b524a6
         'App\\Orchid\\Layouts\\ViewEventBidsLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewEventBidsLayout.php',
         'App\\Orchid\\Layouts\\ViewEventLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewEventLayout.php',
         'App\\Orchid\\Layouts\\ViewLocaladminLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewLocaladminLayout.php',
+        'App\\Orchid\\Layouts\\ViewNoPlaySongsLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewNoPlaySongsLayout.php',
         'App\\Orchid\\Layouts\\ViewPastEventBidLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewPastEventBidLayout.php',
         'App\\Orchid\\Layouts\\ViewPendingCategoryLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewPendingCategoryLayout.php',
         'App\\Orchid\\Layouts\\ViewPendingEventBidsLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewPendingEventBidsLayout.php',
@@ -702,6 +704,7 @@ class ComposerStaticInite52ea34a20856a462345923bb2b524a6
         'App\\Orchid\\Layouts\\ViewPendingStudentLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewPendingStudentLayout.php',
         'App\\Orchid\\Layouts\\ViewPendingVendorLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewPendingVendorLayout.php',
         'App\\Orchid\\Layouts\\ViewRegionLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewRegionLayout.php',
+        'App\\Orchid\\Layouts\\ViewRequestersLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewRequestersLayout.php',
         'App\\Orchid\\Layouts\\ViewSchoolLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewSchoolLayout.php',
         'App\\Orchid\\Layouts\\ViewSectionLessonLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewSectionLessonLayout.php',
         'App\\Orchid\\Layouts\\ViewSongRequestsLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ViewSongRequestsLayout.php',
@@ -739,6 +742,7 @@ class ComposerStaticInite52ea34a20856a462345923bb2b524a6
         'App\\Orchid\\Screens\\Examples\\ExampleLayoutsScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Examples/ExampleLayoutsScreen.php',
         'App\\Orchid\\Screens\\Examples\\ExampleScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Examples/ExampleScreen.php',
         'App\\Orchid\\Screens\\Examples\\ExampleTextEditorsScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Examples/ExampleTextEditorsScreen.php',
+        'App\\Orchid\\Screens\\OrderCategoryScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/OrderCategoryScreen.php',
         'App\\Orchid\\Screens\\PlatformScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/PlatformScreen.php',
         'App\\Orchid\\Screens\\Role\\RoleEditScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Role/RoleEditScreen.php',
         'App\\Orchid\\Screens\\Role\\RoleListScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Role/RoleListScreen.php',
@@ -758,6 +762,7 @@ class ComposerStaticInite52ea34a20856a462345923bb2b524a6
         'App\\Orchid\\Screens\\ViewPendingStudentScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/ViewPendingStudentScreen.php',
         'App\\Orchid\\Screens\\ViewPendingVendorScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/ViewPendingVendorScreen.php',
         'App\\Orchid\\Screens\\ViewRegionScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/ViewRegionScreen.php',
+        'App\\Orchid\\Screens\\ViewRequestersScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/ViewRequestersScreen.php',
         'App\\Orchid\\Screens\\ViewSchoolScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/ViewSchoolScreen.php',
         'App\\Orchid\\Screens\\ViewSectionLessonScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/ViewSectionLessonScreen.php',
         'App\\Orchid\\Screens\\ViewSingleLessonScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/ViewSingleLessonScreen.php',
@@ -2566,7 +2571,9 @@ class ComposerStaticInite52ea34a20856a462345923bb2b524a6
         'Faker\\UniqueGenerator' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/UniqueGenerator.php',
         'Faker\\ValidGenerator' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/ValidGenerator.php',
         'Fruitcake\\Cors\\CorsService' => __DIR__ . '/..' . '/fruitcake/php-cors/src/CorsService.php',
+        'Fruitcake\\Cors\\CorsServiceProvider' => __DIR__ . '/..' . '/fruitcake/laravel-cors/src/CorsServiceProvider.php',
         'Fruitcake\\Cors\\Exceptions\\InvalidOptionException' => __DIR__ . '/..' . '/fruitcake/php-cors/src/Exceptions/InvalidOptionException.php',
+        'Fruitcake\\Cors\\HandleCors' => __DIR__ . '/..' . '/fruitcake/laravel-cors/src/HandleCors.php',
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
