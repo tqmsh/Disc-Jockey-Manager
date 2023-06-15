@@ -12,7 +12,7 @@ use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 
 // Index and default...
-Route::get('/', [IndexController::class, 'index'])
+Route::middleware('cors')->get('/', [IndexController::class, 'index'])
     ->name('index')
     ->breadcrumbs(function (Trail $trail) {
         return $trail->push(__('Home'), route('platform.index'));
