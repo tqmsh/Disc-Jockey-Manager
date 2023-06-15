@@ -14,6 +14,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Color;
 use Orchid\Screen\Fields\Select;
 use App\Models\Song;
+use App\Models\Student;
 use App\Models\SongRequest;
 use App\Models\EventAttendees;
 use App\Models\NoPlaySong;
@@ -100,16 +101,26 @@ class ViewSongRequestScreen extends Screen
     public function chooseSong(Request $request, Events $event){
         try{
             $song = Song::find($request->input('song.id'));
-            $formFields = $request->all();
-            $formFields['requester_user_id'] = auth()->id();
-            $formFields['song_id'] = $song->id;
-            $formFields['event_id'] = $event -> id;
-            SongRequest::create($formFields);
+
+            if(SongRequest::where('song_id', $song -> id)->exists()){
+                $songRequest= SongRequest::where('song_id', $song -> id) -> first();
+                $requesters= json_decode($songRequest -> requester_user_ids);  
+                array_push($requesters, auth()-> id());  
+                $songRequest -> requester_user_ids= json_encode($requesters); 
+                $songRequest -> save();     
+            }
+            else{
+                $formFields = $request->all();      
+                $formFields['requester_user_ids'] = json_encode([auth()->id()]);
+                $formFields['song_id'] = $song->id;
+                $formFields['event_id'] = $event -> id;
+                SongRequest::create($formFields);
+            }
             Toast::success('Song Request created successfully');
         }
         catch(Exception $e){
             Toast::error('There was a error trying to create the Song Request. Error Message: ' . $e);
-        }
+       }
  
     }
 }
