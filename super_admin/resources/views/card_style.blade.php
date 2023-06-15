@@ -106,6 +106,7 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
+                withCredentials: false
             })
                 .then(function (response) {
                     console.log(response);
