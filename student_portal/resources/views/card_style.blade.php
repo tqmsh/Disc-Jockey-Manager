@@ -98,9 +98,9 @@
         if (triggered_ !== "true") {
             // prepare the request URL with ID parameter
             var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
-
             axios.put(url)
             image.dataset.triggered = "true";
+            console.log("Impression "+url)
         }
     }
 
