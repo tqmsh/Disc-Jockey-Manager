@@ -11,6 +11,7 @@ use App\Models\ElectionVotes;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewCandidateLayout;
 
 class ViewVotingScreen extends Screen
@@ -70,22 +71,29 @@ class ViewVotingScreen extends Screen
         ];
     }
 
-    public function voting($position){
-
+    public function voting($position, $candidate){
+        $position = request('position');
+        $candidate = request('candidate');
+        $positionFunction = Position::where('id',$position)->first();
+        $election = Election::where('id',$positionFunction->election_id)->first();
+        
         try{
-            $voters = ElectionVotes::where('position_id', $position->id)->get();
-            $user_id = 0; // using as a placeholder
+            $voters = ElectionVotes::where('position_id', $position)->get();
+            $user_id = Auth::user()->id;
             $voted = false;
-            // check if they have voted yet through finding their user id through this position in election vote
             foreach($voters as $voter){
                 if($voter->voter_user_id == $user_id){
                     Toast::warning('You have already voted for this position');
                     $voted = true;
                 }
             }
-            // if not, and add their information on election_votes database
             if(!$voted){
-
+                $field['election_id'] = $election->id;
+                $field['position_id'] = $position;
+                $field['candidate_id'] = $candidate;
+                $field['voter_user_id'] = $user_id;
+                ElectionVotes::create($field);
+                Toast::success('Voted Successfully');
             }
         }catch(Exception $e){
                 

@@ -44,8 +44,8 @@ class ViewCandidateLayout extends Table
             TD::make()
                 ->render(function($candidate){
                     return Button::make('Vote')->icon('people')->type(Color::DARK())
-                        ->confirm(__('Are you sure you want to vote for this candidate?'));
-                        // ->method('redirect',['candidate' =>$candidate->id, 'type'=> "edit"]);
+                        ->confirm(__('Are you sure you want to vote for this candidate?'))
+                        ->method('voting',['position' =>$candidate->position_id, 'candidate'=> $candidate->id]);
             }), 
         ];
     }
