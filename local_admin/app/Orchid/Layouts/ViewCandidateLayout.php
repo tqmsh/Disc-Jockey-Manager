@@ -50,6 +50,11 @@ class ViewCandidateLayout extends Table
                 ->render(function (Candidate $candidate) {
                     return e($candidate->candidate_bio);
             }),
+            TD::make('candidate_votes', 'Candidate Votes')
+                ->render(function (Candidate $candidate) {
+                    $totalVotes = $candidate->totalVotes($candidate->id);
+                    return e($totalVotes);
+            }),
             TD::make()
                 ->render(function($candidate){
                     return Button::make('Edit')->icon('pencil')->type(Color::PRIMARY())
