@@ -76,13 +76,17 @@ class ViewVotingScreen extends Screen
         $candidate = request('candidate');
         $positionFunction = Position::where('id',$position)->first();
         $election = Election::where('id',$positionFunction->election_id)->first();
-        
+        $now = now();
         try{
             $voters = ElectionVotes::where('position_id', $position)->get();
             $user_id = Auth::user()->id;
             $voted = false;
             foreach($voters as $voter){
-                if($voter->voter_user_id == $user_id){
+                if($now > $election->end_date){
+                    Toast::warning('You have past the election date');
+                    $voted = true;
+                }
+                else if($voter->voter_user_id == $user_id){
                     Toast::warning('You have already voted for this position');
                     $voted = true;
                 }
