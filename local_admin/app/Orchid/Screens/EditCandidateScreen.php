@@ -29,8 +29,6 @@ class EditCandidateScreen extends Screen
     {
         $position = Position::where('id',$candidate->position_id)->first();
         $positions = Position::where('election_id',$candidate->election_id)->paginate(20);
-        // $election = Election::where('id', $candidate->election_id)->first();
-        // abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');
         return [
             'candidate' => $candidate,
             'position' => $position,
@@ -77,7 +75,6 @@ class EditCandidateScreen extends Screen
                 TextArea::make('candidate_bio')
                     ->title('Candidate Bio')
                     ->type('text')
-                    // ->placeholder('Something about yourself')
                     ->rows(5)
                     ->horizontal()
                     ->value($this->candidate->candidate_bio),

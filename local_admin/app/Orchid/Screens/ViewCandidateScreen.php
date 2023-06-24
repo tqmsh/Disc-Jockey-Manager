@@ -115,24 +115,4 @@ class ViewCandidateScreen extends Screen
             return redirect()->route('platform.event.list');
         }    
     }
-
-    
-
-    public function totalVotes($candidate_id)
-    {   
-        $candidate_id = request('candidate_id');
-        $totalVotes = 0;
-        $allVoters = ElectionVotes::where('candidate_id',$candidate_id)->get();
-
-        if(!empty($allVoters)){
-
-            foreach($allVoters as $voter){
-                $totalVotes+=1;
-            }
-
-        }
-
-        return $totalVotes;
-
-    }
 }
