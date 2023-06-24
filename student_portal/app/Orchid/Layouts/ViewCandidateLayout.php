@@ -3,13 +3,11 @@
 namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
-use App\Models\Candidate;
 use App\Models\Position;
+use App\Models\Candidate;
 use Orchid\Support\Color;
-use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Fields\CheckBox;
 
 class ViewCandidateLayout extends Table
 {
@@ -31,13 +29,6 @@ class ViewCandidateLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
-                ->render(function (Candidate $candidate){
-                    return CheckBox::make('candidates[]')
-                        ->value($candidate->id)
-                        ->checked(false);
-            }),
-            
             TD::make('position', 'Position')
                 ->render(function (Candidate $candidate) {
                     return e(Position::find($candidate->position_id)->position_name);
@@ -50,15 +41,11 @@ class ViewCandidateLayout extends Table
                 ->render(function (Candidate $candidate) {
                     return e($candidate->candidate_bio);
             }),
-            TD::make('candidate_votes', 'Candidate Votes')
-                ->render(function (Candidate $candidate) {
-                    $totalVotes = $candidate->totalVotes($candidate->id);
-                    return e($totalVotes);
-            }),
             TD::make()
                 ->render(function($candidate){
-                    return Button::make('Edit')->icon('pencil')->type(Color::PRIMARY())
-                        ->method('redirect',['candidate' =>$candidate->id, 'type'=> "edit"]);
+                    return Button::make('Vote')->icon('people')->type(Color::DARK())
+                        ->confirm(__('Are you sure you want to vote for this candidate?'))
+                        ->method('voting',['position' =>$candidate->position_id, 'candidate'=> $candidate->id]);
             }), 
         ];
     }
