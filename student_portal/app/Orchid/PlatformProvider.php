@@ -47,6 +47,14 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('dollar')
             ->route('platform.studentBids.list'),
 
+            Menu::make("Groups")
+            ->icon('organization')
+            ->list([
+                Menu::make('Limo Groups')
+                ->icon('fa.car')
+                ->route('platform.limoGroups.list'),
+            ]),
+
             Menu::make('My Specs')
             ->icon('brush')
             ->route('platform.studentSpecs.list'),
