@@ -85,10 +85,12 @@ class ViewVotingScreen extends Screen
                 if($now > $election->end_date){
                     Toast::warning('You have past the election date');
                     $voted = true;
+                    return;
                 }
                 else if($voter->voter_user_id == $user_id){
                     Toast::warning('You have already voted for this position');
                     $voted = true;
+                    return;
                 }
             }
             if(!$voted){
