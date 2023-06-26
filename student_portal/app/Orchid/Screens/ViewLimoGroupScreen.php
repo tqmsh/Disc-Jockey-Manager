@@ -4,8 +4,10 @@ namespace App\Orchid\Screens;
 
 use Orchid\Screen\Screen;
 
+
 class ViewLimoGroupScreen extends Screen
 {
+
     /**
      * Query data.
      *
@@ -23,7 +25,7 @@ class ViewLimoGroupScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewLimoGroupScreen';
+        return 'Limo Groups';
     }
 
     /**
