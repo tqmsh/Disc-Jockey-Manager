@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\CreateLimoGroupScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
@@ -22,6 +23,8 @@ use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewElectionScreen;
+use App\Orchid\Screens\ViewLimoGroupMembersScreen;
+use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewVotingScreen;
 
 /*
@@ -66,6 +69,15 @@ Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.
 
 //student specs
 Route::screen('/my-specs', ViewSpecsScreen::class)->name('platform.studentSpecs.list');
+
+//view limo groups
+Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limoGroups.list');
+
+//create limo groups
+Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platform.limoGroups.create');
+
+//view limo group memebers screen
+Route::screen('/limo-groups/{limoGroup}/members', ViewLimoGroupMembersScreen::class)->name('platform.limoGroupMembers.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
