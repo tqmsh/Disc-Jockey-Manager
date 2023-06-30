@@ -51,6 +51,14 @@ class ViewRegisteredEventLayout extends Table
                         ->type(Color::INFO());
                 }),
 
+            TD::make()
+                ->render(function (Events $event) {
+                    return Button::make('Election')
+                        ->icon('people')         
+                        ->method('redirect', ['event_id' => $event->id, 'type' => 'election'])
+                        ->type(Color::LIGHT());
+                }),
+
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
                     return e($event->event_name);

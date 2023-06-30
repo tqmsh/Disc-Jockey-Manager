@@ -158,6 +158,7 @@ return [
 
     'icons' => [
         'orc' => \Orchid\IconPack\Path::getFolder(),
+        'fa' => resource_path('icons/fontawesome-free-6.4.0-web/fontawesome-free-6.4.0-web')
     ],
 
     /*
