@@ -14,8 +14,10 @@ class LimoGroupMember extends Model
     protected $fillable = [
         'limo_group_id',
         'invitee_user_id',
-        'is_leader',
-        'is_active',
+        'status',
+        'paid',
+        'created_at',
+        'updated_at',
     ];
 
     //associate with LimoGroup

@@ -2,11 +2,16 @@
 
 namespace App\Orchid\Screens;
 
+use Orchid\Screen\Sight;
+use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
-
+use Orchid\Screen\Actions\Link;
+use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 
 class ViewLimoGroupScreen extends Screen
 {
+    public $owned_limo_group;
 
     /**
      * Query data.
@@ -15,7 +20,9 @@ class ViewLimoGroupScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'owned_limo_group' => LimoGroup::where('creator_user_id', Auth::user()->id)->first(),
+        ];
     }
 
     /**
@@ -35,7 +42,11 @@ class ViewLimoGroupScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Create Limo Group')
+                ->icon('plus')
+                ->route('platform.limo-groups.create'),
+        ];
     }
 
     /**
@@ -45,6 +56,27 @@ class ViewLimoGroupScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+          Layout::tabs([
+                'Limo Group Info' => [
+                    // Layout::legend('owned_limo_group', [
+                    //     Sight::make('name', 'Name'),
+                    //     Sight::make('capacity', 'Capacity'),
+                    //     Sight::make('date', 'Date'),
+                    //     Sight::make('pickup_location', 'Pickup Location'),
+                    //     Sight::make('dropoff_location', 'Dropoff Location'),
+                    //     Sight::make('depart_time', 'Depart Time'),
+                    //     Sight::make('dropoff_time', 'Dropoff Time'),
+                    //     Sight::make('notes', 'Notes'),
+                    // ]),
+    
+                ],
+                'Members in Limo Group' => [
+                ],
+                'Limo Group Invitations' => [
+                ],
+
+            ]),
+        ];
     }
 }

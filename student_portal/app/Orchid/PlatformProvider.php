@@ -52,7 +52,7 @@ class PlatformProvider extends OrchidServiceProvider
             ->list([
                 Menu::make('Limo Groups')
                 ->icon('fa.car')
-                ->route('platform.limoGroups.list'),
+                ->route('platform.limo-groups'),
             ]),
 
             Menu::make('My Specs')
