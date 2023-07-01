@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 22, 2023 at 10:49 PM
+-- Generation Time: Jul 02, 2023 at 01:39 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -169,6 +169,13 @@ CREATE TABLE `candidates` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `candidates`
+--
+
+INSERT INTO `candidates` (`id`, `user_id`, `candidate_name`, `candidate_bio`, `election_id`, `position_id`, `created_at`, `updated_at`) VALUES
+(4, 146, 'Jane Doe', 'gdfgdfgdfgdg', 4, 5, '2023-06-26 21:07:20', '2023-06-26 21:07:20');
+
 -- --------------------------------------------------------
 
 --
@@ -265,6 +272,13 @@ CREATE TABLE `election_votes` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `election_votes`
+--
+
+INSERT INTO `election_votes` (`id`, `election_id`, `position_id`, `candidate_id`, `voter_user_id`, `created_at`, `updated_at`) VALUES
+(1, 4, 5, 4, 155, '2023-06-26 21:08:47', '2023-06-26 21:08:47');
 
 -- --------------------------------------------------------
 
@@ -582,6 +596,15 @@ CREATE TABLE `notifications` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
+('53c3fac8-3eb4-4e84-9f67-bd5020415e22', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:45:15.694475Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/platform.event.list\"}', '2023-06-26 22:45:21', '2023-06-26 22:45:15', '2023-06-26 22:45:21'),
+('747fba13-9fb0-4182-b7fa-43c7bb912c57', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:46:06.304498Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/events\"}', '2023-06-26 22:46:12', '2023-06-26 22:46:06', '2023-06-26 22:46:12'),
+('8fc07858-ad95-4ec7-a58a-0acd8d24474a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:45:23.192320Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/platform.event.list\"}', '2023-06-26 22:50:10', '2023-06-26 22:45:23', '2023-06-26 22:50:10');
+
 -- --------------------------------------------------------
 
 --
@@ -665,7 +688,7 @@ CREATE TABLE `positions` (
 INSERT INTO `positions` (`id`, `position_name`, `election_id`, `created_at`, `updated_at`) VALUES
 (1, 'Test', 1, '2023-04-27 02:49:40', '2023-04-27 02:49:40'),
 (2, 'Test', 1, '2023-04-27 02:49:51', '2023-04-27 02:49:51'),
-(5, 'Test', 4, '2023-06-04 19:22:53', '2023-06-04 19:22:53');
+(5, 'King', 4, '2023-06-04 19:22:53', '2023-06-26 21:07:07');
 
 -- --------------------------------------------------------
 
@@ -1100,7 +1123,7 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', NULL, 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
 (149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', NULL, 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
 (150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', NULL, 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'Tx15nfhUHZ9eP0fnbUPZcqSmIexcY2aDcE48BeFtiIhMjvUu5vsTrEjfYA17', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'pXGYXj1Xg7bSIDRabGVhY4pvu2egNka1itiXnHcfsGSn2mmdVkoJKoJLD1gu', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
 (155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/19/122af13d234088648f95f9fa5b74e0382c40d920.png', 'yshVEeeY4aMhDnN6eFsi4Ly31Tp18MBU09f0HvueJG2oTlQC1fRiSccoOFpD', '2022-12-05 18:58:15', '2023-05-20 02:33:37'),
@@ -1552,7 +1575,7 @@ ALTER TABLE `campaigns`
 -- AUTO_INCREMENT for table `candidates`
 --
 ALTER TABLE `candidates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1576,7 +1599,7 @@ ALTER TABLE `elections`
 -- AUTO_INCREMENT for table `election_votes`
 --
 ALTER TABLE `election_votes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -1624,7 +1647,7 @@ ALTER TABLE `lessons`
 -- AUTO_INCREMENT for table `limo_groups`
 --
 ALTER TABLE `limo_groups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `limo_group_members`

@@ -71,10 +71,10 @@ Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.
 Route::screen('/my-specs', ViewSpecsScreen::class)->name('platform.studentSpecs.list');
 
 //view limo groups
-Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limoGroups.list');
+Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');
 
 //create limo groups
-Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platform.limoGroups.create');
+Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platform.limo-groups.create');
 
 //view limo group memebers screen
 Route::screen('/limo-groups/{limoGroup}/members', ViewLimoGroupMembersScreen::class)->name('platform.limoGroupMembers.list');
