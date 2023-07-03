@@ -2,30 +2,31 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\CreateLimoGroupScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewVotingScreen;
+use App\Orchid\Screens\ViewElectionScreen;
+use App\Orchid\Screens\EditLimoGroupScreen;
+use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
+use App\Orchid\Screens\CreateLimoGroupScreen;
 use App\Orchid\Screens\ViewSongRequestScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
+use App\Orchid\Screens\ViewLimoGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewElectionScreen;
-use App\Orchid\Screens\ViewLimoGroupMembersScreen;
-use App\Orchid\Screens\ViewLimoGroupScreen;
-use App\Orchid\Screens\ViewVotingScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,8 +77,9 @@ Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-g
 //create limo groups
 Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platform.limo-groups.create');
 
-//view limo group memebers screen
-Route::screen('/limo-groups/{limoGroup}/members', ViewLimoGroupMembersScreen::class)->name('platform.limoGroupMembers.list');
+//edit limo group
+Route::screen('/limo-groups/{limoGroup}/edit', EditLimoGroupScreen::class)->name('platform.limo-groups.edit');
+
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
