@@ -2,16 +2,13 @@
 
 namespace App\Orchid\Screens;
 
-use DateTime;
 use Exception;
 use App\Models\LimoGroup;
 use App\Models\LimoGroupMember;
-use GrahamCampbell\ResultType\Success;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
@@ -97,6 +94,12 @@ class CreateLimoGroupScreen extends Screen
                     ->enableTime()
                     ->horizontal(),
                 
+                Input::make('capacity')
+                    ->title('Capacity')
+                    ->type('number')
+                    ->placeholder('Enter the capacity for your limo group')
+                    ->horizontal(),
+                
                 TextArea::make('notes')
                     ->title('Notes')
                     ->placeholder('Enter any notes for your limo group')
@@ -113,6 +116,7 @@ class CreateLimoGroupScreen extends Screen
             $fields = $request->validate([
                 'name' => 'required',
                 'date' => 'required',
+                'capacity' => 'nullable',
                 'pickup_location' => 'required',
                 'dropoff_location' => 'required',
                 'depart_time' => 'required',

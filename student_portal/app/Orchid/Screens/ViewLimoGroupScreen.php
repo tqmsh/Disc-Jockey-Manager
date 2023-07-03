@@ -4,11 +4,13 @@ namespace App\Orchid\Screens;
 
 use Orchid\Screen\Sight;
 use App\Models\LimoGroup;
-use App\Models\LimoGroupMember;
 use Orchid\Screen\Screen;
+use App\Models\LimoGroupMember;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Support\Color;
 
 class ViewLimoGroupScreen extends Screen
 {
@@ -21,22 +23,10 @@ class ViewLimoGroupScreen extends Screen
      */
     public function query(): iterable
     {
-        $default = new LimoGroup([
-            'id' => 'N/A',
-            'creator_user_id' => 'N/A',
-            'name' => 'N/A',
-            'capacity' => 'N/A',
-            'date' => 'N/A',
-            'pickup_location' => 'N/A',
-            'dropoff_location' => 'N/A',
-            'depart_time' => 'N/A',
-            'dropoff_time' => 'N/A',
-            'notes' => 'N/A',
-        ]);
         return [
             'owned_limo_group' => LimoGroup::where('creator_user_id', Auth::user()->id)->first(),
             'current_limo_group' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->first(),
-            'default' => $default,
+            'default' => null,
         ];
     }
 
@@ -149,6 +139,16 @@ class ViewLimoGroupScreen extends Screen
                                 return $limoGroup->notes;
                             }
                         }),
+                        Sight::make('', 'Actions')->render(function(LimoGroup $limoGroup = null){
+                            if($limoGroup == null || $limoGroup->owner->user_id != Auth::user()->id){
+                                return 'Only the owner can edit this group.';
+                            }else{
+                                return Button::make('Edit')
+                                    ->icon('pencil')
+                                    ->method('redirect', ['limoGroup_id' => $limoGroup->id])
+                                    ->type(Color::PRIMARY());
+                            }
+                        }),
                     ]),
     
                 ],
@@ -159,5 +159,9 @@ class ViewLimoGroupScreen extends Screen
 
             ]),
         ];
+    }
+
+    public function redirect(){
+        return redirect()->route('platform.limo-groups.edit', request('limoGroup_id'));
     }
 }
