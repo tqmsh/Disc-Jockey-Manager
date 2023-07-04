@@ -203,12 +203,5 @@ class ViewLimoGroupScreen extends Screen
     public function inviteMembers(LimoGroup $limo_group){
         $invitee_user_ids = request('invitee_user_ids');
                 
-        foreach($invitee_user_ids as $invitee_user_id){
-            $limo_group_member = new LimoGroupMember;
-            $limo_group_member->limo_group_id = $limo_group->id;
-            $limo_group_member->invitee_user_id = $invitee_user_id;
-            $limo_group_member->save();
-        }
-
     }
 }
