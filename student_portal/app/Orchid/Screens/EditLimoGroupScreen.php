@@ -160,9 +160,9 @@ class EditLimoGroupScreen extends Screen
         }
     }
 
-    public function deleteLimoGroup(){
+    public function deleteLimoGroup(LimoGroup $limoGroup){
         try{
-            $this->limoGroup->delete();
+            $limoGroup->delete();
             Toast::success('Limo Group Deleted');
             return redirect()->route('platform.limo-groups');
         } catch(Exception $e){
