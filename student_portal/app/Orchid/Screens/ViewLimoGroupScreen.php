@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\User;
+use App\Models\Student;
 use Orchid\Screen\Sight;
 use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
@@ -15,6 +16,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Support\Facades\Toast;
 
 class ViewLimoGroupScreen extends Screen
 {
@@ -28,9 +30,11 @@ class ViewLimoGroupScreen extends Screen
      */
     public function query(): iterable
     {
+        $current_limo_group =  LimoGroup::find(LimoGroupMember::where('invitee_user_id', Auth::user()->id)->pluck('limo_group_id')->value('limo_group_id'));
+
         return [
             'owned_limo_group' => LimoGroup::where('creator_user_id', Auth::user()->id)->first(),
-            'current_limo_group' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->first(),
+            'current_limo_group' => ($current_limo_group != null) ? $current_limo_group->id : null,
             'default' => null,
         ];
     }
@@ -53,7 +57,7 @@ class ViewLimoGroupScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create Limo Group')
+            Link::make('Create a New Limo Group')
                 ->icon('plus')
                 ->route('platform.limo-groups.create'),
             
@@ -89,16 +93,19 @@ class ViewLimoGroupScreen extends Screen
 
           Layout::modal('inviteMembersModal', [
                 Layout::rows([
+
+                    ($this->owned_limo_group != null && $this->owned_limo_group->creator_user_id == Auth::user()->id) ?
+
                     //make a Select class only including users who are not already in the limo group and are students at their school
                     Select::make('invitee_user_ids')
                         ->title('Invite Members')
                         ->placeholder('Select a user')
                         ->help('Select a student to invite to the limo group.')
                         ->required()
-                        ->fromModel(User::class, 'firstname')
+                        ->fromQuery(Student::where('school_id', Auth::user()->student->school_id)->whereNot('user_id', Auth::user()->id)->whereNotIn('user_id', LimoGroupMember::where('limo_group_id', $this->owned_limo_group->id)->get('invitee_user_id')), 'email', 'user_id')
                         ->multiple()
                         ->popover('If you do not see a student you would like to invite, please enter their email and add them.')
-                        ->allowAdd(),
+                        ->allowAdd() : Input::make('unauthorized', 'You are not authorized to invite members to this limo group.'),
                 ]),
           ])->title('Invite Members')
             ->applyButton('Invite'),
@@ -200,8 +207,26 @@ class ViewLimoGroupScreen extends Screen
         return redirect()->route('platform.limo-groups.edit', request('limoGroup_id'));
     }
 
-    public function inviteMembers(LimoGroup $limo_group){
-        $invitee_user_ids = request('invitee_user_ids');
-                
+    public function inviteMembers(){
+        try{
+            $invitee_user_ids = request('invitee_user_ids');
+            $limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
+            
+            foreach($invitee_user_ids as $invitee_user_id){
+
+                    if(is_numeric($invitee_user_id)){
+
+                        $current_limo_group = new LimoGroupMember;
+                        $current_limo_group->limo_group_id = $limo_group->id;
+                        $current_limo_group->invitee_user_id = $invitee_user_id;
+                        $current_limo_group->save();
+                        
+                    } else{
+                        //send email to the email entered by user
+                    }
+                }
+            } catch(\Exception $e){
+                Toast::error('Something went wrong. Error Code:' . $e->getMessage());
+            } 
     }
 }
