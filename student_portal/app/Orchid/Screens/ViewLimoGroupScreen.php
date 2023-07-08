@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\User;
+use Orchid\Screen\TD;
 use App\Models\Student;
 use Orchid\Screen\Sight;
 use App\Models\LimoGroup;
@@ -13,15 +14,17 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Support\Facades\Toast;
 
 class ViewLimoGroupScreen extends Screen
 {
     public $limo_group;
     public $owned_limo_group;
+    public $limo_group_members;
 
     /**
      * Query data.
@@ -31,10 +34,12 @@ class ViewLimoGroupScreen extends Screen
     public function query(): iterable
     {
         $current_limo_group =  LimoGroup::find(LimoGroupMember::where('invitee_user_id', Auth::user()->id)->pluck('limo_group_id')->value('limo_group_id'));
+        $owned_limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
 
         return [
-            'owned_limo_group' => LimoGroup::where('creator_user_id', Auth::user()->id)->first(),
-            'current_limo_group' => ($current_limo_group != null) ? $current_limo_group->id : null,
+            'owned_limo_group' => ($owned_limo_group != null) ? $owned_limo_group : null,
+            'current_limo_group' => ($current_limo_group != null) ? $current_limo_group : null,
+            'current_limo_group_members' => ($current_limo_group != null ? $current_limo_group->members : ($owned_limo_group != null)) ? $owned_limo_group->members : null,
             'default' => null,
         ];
     }
@@ -195,6 +200,47 @@ class ViewLimoGroupScreen extends Screen
     
                 ],
                 'Members in Limo Group' => [
+                    Layout::table('current_limo_group_members', [
+                        TD::make()
+                            ->render(function (LimoGroupMember $student){
+                                return CheckBox::make('students[]')
+                                    ->value($student->invitee_user_id)
+                                    ->checked(false);
+                            })->width('5%'),
+
+                        TD::make('firstname', 'First Name')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->firstname);
+                            })->width('10%'),
+                        TD::make('lastname', 'Last Name')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->lastname);
+                            })->width('10%'),
+                        TD::make('email', 'Email')->width('105')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->email);
+                            })->width('25%%'),
+                            
+                        TD::make('phonenumber', 'Phone Number')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->phonenumber);
+                            }),
+
+                        TD::make('status', 'Invite Status')
+                            ->render(function (LimoGroupMember $student) {
+                                return 
+                                    ($student->status == 0) ? '<i class="text-warning">●</i> Pending' 
+                                    : (($student->status == 1) ? '<i class="text-success">●</i> Approved' 
+                                    : '<i class="text-danger">●</i> Rejected');
+                                        }),
+
+                        TD::make('paid', 'Payment Status')
+                            ->render(function (LimoGroupMember $student) {
+                                return ($student->paid == 0) ? '<i class="text-danger">●</i> Unpaid' : '<i class="text-success">●</i> Paid' ;
+                            }),
+                                                
+
+                    ])
                 ],
                 'Limo Group Invitations' => [
                 ],
