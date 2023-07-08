@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\Song;
+use App\Models\User;
 use App\Models\Events;
 use App\Models\Student;
 use App\Models\Election;
@@ -15,6 +16,7 @@ use App\Models\SongRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\EventAttendees;
+use App\Notifications\LimoGroupInvitation;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -38,8 +40,16 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         $registered_event_ids = EventAttendees::where('user_id', Auth::user()->id)->get('event_id')->toArray();
-
         $registered_event_ids = Arr::pluck($registered_event_ids, ['event_id']);
+
+        // $user = User::find(Auth::user()->id);
+
+        // $user->notify(new LimoGroupInvitation([
+        //     'title' => 'Limo Group Invitation',
+        //     'message' => 'You have been invited to join a limo group',
+        //     'action' => '/admin/limo-groups/'
+        // ]));
+        
 
         return [
             'events' => Events::where('school_id', Student::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->paginate(10),

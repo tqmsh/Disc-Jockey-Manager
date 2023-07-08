@@ -16,6 +16,21 @@ class Student extends Model
     use HasFactory;
     use AsSource;
 
+    protected $allowedFilters = [
+        'user_id',
+        'school_id',
+        'account_status',
+        'created_at',
+        'updated_at',
+        'firstname',
+        'lastname',
+        'grade',
+        'phonenumber',
+        'email',
+        'school',
+        'allergies'
+    ];
+
     protected $fillable = [
         'user_id',
         'school_id',
