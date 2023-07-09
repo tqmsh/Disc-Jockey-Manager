@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2023 at 01:39 AM
+-- Generation Time: Jul 09, 2023 at 10:53 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -483,6 +483,13 @@ CREATE TABLE `limo_groups` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `limo_groups`
+--
+
+INSERT INTO `limo_groups` (`id`, `creator_user_id`, `name`, `capacity`, `date`, `pickup_location`, `dropoff_location`, `depart_time`, `dropoff_time`, `notes`, `created_at`, `updated_at`) VALUES
+(5, 155, 'Best Limo Group', 20, '2023-07-05 00:00:00', 'Colonel By SS', '1234 High Lane', '2023-07-06 12:00:00', '2023-07-06 12:00:00', 'zdasdasfasd', '2023-07-05 03:21:10', '2023-07-05 03:21:10');
+
 -- --------------------------------------------------------
 
 --
@@ -498,6 +505,13 @@ CREATE TABLE `limo_group_members` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `limo_group_members`
+--
+
+INSERT INTO `limo_group_members` (`id`, `limo_group_id`, `invitee_user_id`, `status`, `paid`, `created_at`, `updated_at`) VALUES
+(11, 5, 207, 1, 0, '2023-07-09 01:45:26', '2023-07-09 01:45:26');
 
 -- --------------------------------------------------------
 
@@ -601,9 +615,11 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
+('0e3c9d15-a224-4882-ad39-5bc8044cfff4', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-08T21:41:41.092658Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a limo group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\"}', '2023-07-09 01:41:49', '2023-07-09 01:41:41', '2023-07-09 01:41:49'),
 ('53c3fac8-3eb4-4e84-9f67-bd5020415e22', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:45:15.694475Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/platform.event.list\"}', '2023-06-26 22:45:21', '2023-06-26 22:45:15', '2023-06-26 22:45:21'),
 ('747fba13-9fb0-4182-b7fa-43c7bb912c57', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:46:06.304498Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/events\"}', '2023-06-26 22:46:12', '2023-06-26 22:46:06', '2023-06-26 22:46:12'),
-('8fc07858-ad95-4ec7-a58a-0acd8d24474a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:45:23.192320Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/platform.event.list\"}', '2023-06-26 22:50:10', '2023-06-26 22:45:23', '2023-06-26 22:50:10');
+('8fc07858-ad95-4ec7-a58a-0acd8d24474a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:45:23.192320Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/platform.event.list\"}', '2023-06-26 22:50:10', '2023-06-26 22:45:23', '2023-06-26 22:50:10'),
+('9f9e6dab-1462-45a4-ac6f-83df5580a3dc', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-08T21:45:26.960888Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-09 01:46:15', '2023-07-09 01:45:26', '2023-07-09 01:46:15');
 
 -- --------------------------------------------------------
 
@@ -1126,7 +1142,7 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'pXGYXj1Xg7bSIDRabGVhY4pvu2egNka1itiXnHcfsGSn2mmdVkoJKoJLD1gu', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/19/122af13d234088648f95f9fa5b74e0382c40d920.png', 'yshVEeeY4aMhDnN6eFsi4Ly31Tp18MBU09f0HvueJG2oTlQC1fRiSccoOFpD', '2022-12-05 18:58:15', '2023-05-20 02:33:37'),
+(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/19/122af13d234088648f95f9fa5b74e0382c40d920.png', 'soJjbgol6W1ljUVmuXAJBwuE0LVxdd36YPRmcpcrIhwJKtBli4hrg3W4GqzV', '2022-12-05 18:58:15', '2023-05-20 02:33:37'),
 (169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
@@ -1142,7 +1158,7 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (198, 'bigman101', 'Zg man', 'Big man tings', 'bigman@tings.com', '(612) 354-8954', 3, 'Canada', NULL, 1, NULL, '$2y$10$B10Kj5SYsPn6EKwkyQRbPO7UmY/YqPWkzzzyiU0dZ3DWx.xLRnJpy', NULL, NULL, '2023-02-14 23:43:02', '2023-02-15 01:25:38'),
 (205, 'etanguan', 'Ethan', 'Guan', 'guanethan123@gmail.com', '613-287-1612', 3, 'Philippines', NULL, 1, NULL, '$2y$10$NQk4fTkCwz5R4dvcSILnW.36rqdQkMgOvl6ewaZNJc7Auabs5.Kbq', NULL, NULL, '2023-03-27 00:12:32', '2023-03-27 00:13:31'),
 (206, 'hgjh', 'dfgdfg', 'dfgdfg', 'johnsmith@hotmales.com', '(123) 456-1234', 3, 'Canada', NULL, 0, NULL, '$2y$10$M9d5cT6l4gKVgM2NLkoFCeBYZzDrQjelgu0NmyfIYH1S6UGAaIRPO', NULL, 'CUgw7kb0nu3boyDdLtQfaExJvTin7wKvvP8vcFFFMagnrgOXby2m2vxhk5Rp', '2023-06-15 23:55:18', '2023-06-15 23:55:18'),
-(207, 'Hi', 'Hi', 'Hi', 'Hi@Hi.com', '(554) 654-6546', 3, 'Canada', NULL, 1, NULL, '$2y$10$hOcPNnJ12wXMcAzv9NYj2ulADXHPV28mqCUEaw4xdI6qXkIXR3GK.', NULL, 'iSiRTZu6vtTxAyj8io7lBNjMPrzTjRNTIuKFDJmZNQ5lZ7eNnFlIc6lHN5hL', '2023-06-15 23:59:27', '2023-06-15 23:59:27');
+(207, 'Hi', 'Hi', 'Hi', 'Hi@Hi.com', '(554) 654-6546', 3, 'Canada', NULL, 1, NULL, '$2y$10$hOcPNnJ12wXMcAzv9NYj2ulADXHPV28mqCUEaw4xdI6qXkIXR3GK.', NULL, 'ubpMrX3GYSCYHTD9ez4yp7IysgOnGyC62cim90cCFrKPwJXywuIQlNr2X2KC', '2023-06-15 23:59:27', '2023-06-15 23:59:27');
 
 -- --------------------------------------------------------
 
@@ -1647,13 +1663,13 @@ ALTER TABLE `lessons`
 -- AUTO_INCREMENT for table `limo_groups`
 --
 ALTER TABLE `limo_groups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `limo_group_members`
 --
 ALTER TABLE `limo_group_members`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `localadmins`
