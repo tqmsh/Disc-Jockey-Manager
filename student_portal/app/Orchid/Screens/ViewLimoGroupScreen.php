@@ -3,6 +3,8 @@
 namespace App\Orchid\Screens;
 
 use App\Models\User;
+use Orchid\Screen\TD;
+use App\Models\Student;
 use Orchid\Screen\Sight;
 use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
@@ -12,14 +14,18 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
+use App\Notifications\LimoGroupInvitation;
 
 class ViewLimoGroupScreen extends Screen
 {
     public $limo_group;
     public $owned_limo_group;
+    public $limo_group_members;
 
     /**
      * Query data.
@@ -28,9 +34,16 @@ class ViewLimoGroupScreen extends Screen
      */
     public function query(): iterable
     {
+        $current_limo_group =  LimoGroup::find(LimoGroupMember::where('invitee_user_id', Auth::user()->id)->get('limo_group_id')->value('limo_group_id'));
+        $owned_limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
+
         return [
-            'owned_limo_group' => LimoGroup::where('creator_user_id', Auth::user()->id)->first(),
-            'current_limo_group' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->first(),
+            'owned_limo_group' => ($owned_limo_group != null) ? $owned_limo_group : null,
+            'current_limo_group' => ($current_limo_group != null) ? $current_limo_group : null,
+            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members 
+                                    : (($owned_limo_group != null) ? $owned_limo_group->members
+                                    : []),
+            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->get(),
             'default' => null,
         ];
     }
@@ -53,7 +66,7 @@ class ViewLimoGroupScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create Limo Group')
+            Link::make('Create a New Limo Group')
                 ->icon('plus')
                 ->route('platform.limo-groups.create'),
             
@@ -77,9 +90,9 @@ class ViewLimoGroupScreen extends Screen
      */
     public function layout(): iterable
     {
-        if($this->query('owned_limo_group') != null){
+        if($this->query()['owned_limo_group'] != null){
             $this->limo_group = 'owned_limo_group';
-        }elseif($this->query('current_limo_group') != null){
+        }elseif($this->query()['current_limo_group'] != null){
             $this->limo_group = 'current_limo_group';
         }else{
             $this->limo_group = 'default';
@@ -89,16 +102,19 @@ class ViewLimoGroupScreen extends Screen
 
           Layout::modal('inviteMembersModal', [
                 Layout::rows([
+
+                    ($this->owned_limo_group != null && $this->owned_limo_group->creator_user_id == Auth::user()->id) ?
+
                     //make a Select class only including users who are not already in the limo group and are students at their school
                     Select::make('invitee_user_ids')
                         ->title('Invite Members')
                         ->placeholder('Select a user')
                         ->help('Select a student to invite to the limo group.')
                         ->required()
-                        ->fromModel(User::class, 'firstname')
+                        ->fromQuery(Student::where('school_id', Auth::user()->student->school_id)->whereNot('user_id', Auth::user()->id)->whereNotIn('user_id', LimoGroupMember::where('limo_group_id', $this->owned_limo_group->id)->get('invitee_user_id')), 'email', 'user_id')
                         ->multiple()
                         ->popover('If you do not see a student you would like to invite, please enter their email and add them.')
-                        ->allowAdd(),
+                        ->allowAdd() : Input::make('unauthorized', 'You are not authorized to invite members to this limo group.'),
                 ]),
           ])->title('Invite Members')
             ->applyButton('Invite'),
@@ -188,8 +204,105 @@ class ViewLimoGroupScreen extends Screen
     
                 ],
                 'Members in Limo Group' => [
+                    Layout::table('current_limo_group_members', [
+                        TD::make()
+                            ->render(function (LimoGroupMember $student){
+
+                                return ($student->limoGroup->creator_user_id == Auth::user()->id) ? 
+                                 CheckBox::make('students[]')
+                                    ->value($student->invitee_user_id)
+                                    ->checked(false) : ''; 
+
+
+                            })->width('5%'),
+
+                        TD::make('firstname', 'First Name')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->firstname);
+                            })->width('10%'),
+                        TD::make('lastname', 'Last Name')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->lastname);
+                            })->width('10%'),
+                        TD::make('email', 'Email')->width('105')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->email);
+                            })->width('20%'),
+                            
+                        TD::make('phonenumber', 'Phone Number')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->user->phonenumber);
+                            }),
+
+                        TD::make('status', 'Invite Status')
+                            ->render(function (LimoGroupMember $student) {
+                                return 
+                                    ($student->status == 0) ? '<i class="text-warning">●</i> Pending' 
+                                    : (($student->status == 1) ? '<i class="text-success">●</i> Accepted' 
+                                    : '<i class="text-danger">●</i> Rejected');
+                                        }),
+
+                        TD::make('paid', 'Payment Status')
+                            ->render(function (LimoGroupMember $student) {
+                                return ($student->paid == 0) ? '<i class="text-danger">●</i> Unpaid' : '<i class="text-success">●</i> Paid' ;
+                            }),
+
+                        TD::make('created_at', 'Invited At')
+                            ->render(function (LimoGroupMember $student) {
+                                return e($student->created_at);
+                            }),                        
+
+                    ])
                 ],
                 'Limo Group Invitations' => [
+                    Layout::table('limo_group_invitations', [
+                        TD::make()
+                            ->render(function (LimoGroupMember $student){
+                                return CheckBox::make('students[]')
+                                    ->value($student->invitee_user_id)
+                                    ->checked(false);
+                            }),
+
+                        TD::make('owner', 'Owner')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->owner->firstname . ' ' . LimoGroup::find($student->limo_group_id)->owner->lastname);
+                            }),
+                        
+                        TD::make('capacity', 'Capacity')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->capacity);
+                            }),
+                        
+                        TD::make('date', 'Date')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->date);
+                            }),
+                        
+                        TD::make('pickup_location', 'Pickup Location')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->pickup_location);
+                            }),
+                        
+                        TD::make('dropoff_location', 'Dropoff Location')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->dropoff_location);
+                            }),
+                        
+                        TD::make('depart_time', 'Depart Time')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->depart_time);
+                            }),
+                        
+                        TD::make('dropoff_time', 'Dropoff Time')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->dropoff_time);
+                            }),
+
+                        TD::make('notes', 'Notes')
+                            ->render(function (LimoGroupMember $student) {
+                                return e(LimoGroup::find($student->limo_group_id)->notes);
+                            }),
+                    ])
                 ],
 
             ]),
@@ -200,8 +313,35 @@ class ViewLimoGroupScreen extends Screen
         return redirect()->route('platform.limo-groups.edit', request('limoGroup_id'));
     }
 
-    public function inviteMembers(LimoGroup $limo_group){
-        $invitee_user_ids = request('invitee_user_ids');
+    public function inviteMembers(){
+        try{
+                $invitee_user_ids = request('invitee_user_ids');
+                $limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
                 
+                foreach($invitee_user_ids as $invitee_user_id){
+
+                        if(is_numeric($invitee_user_id)){
+
+                            $user = User::find($invitee_user_id);
+                            $user->notify(new LimoGroupInvitation([
+                                'title' => 'You have been invited to join a limo group!',
+                                'message' => 'You have been invited to join a limo group by ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . '. Please check your limo group invitations page to accept or reject the invitation.',
+                                'action' => '/admin/limo-groups/'
+                            ]));
+
+                            $current_limo_group = new LimoGroupMember;
+                            $current_limo_group->limo_group_id = $limo_group->id;
+                            $current_limo_group->invitee_user_id = $invitee_user_id;
+                            $current_limo_group->save();
+                            
+                        } else{
+                            //send email to the email entered by user
+                        }
+                    }
+
+                Toast::success('You have successfully invited ' . count($invitee_user_ids) . ' member(s) to your limo group!');
+            } catch(\Exception $e){
+                Toast::error('Something went wrong. Error Code:' . $e->getMessage());
+            } 
     }
 }

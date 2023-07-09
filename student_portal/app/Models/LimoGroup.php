@@ -30,4 +30,8 @@ class LimoGroup extends Model
     {
         return $this->belongsTo(Student::class, 'creator_user_id', 'user_id');
     }
+
+    public function members(){
+        return $this->hasMany(LimoGroupMember::class, 'limo_group_id', 'id');
+    }
 }
