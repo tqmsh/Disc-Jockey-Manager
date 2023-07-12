@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\BulkUploadDressScreen;
+use App\Orchid\Screens\EditDressScreen;
+use App\Orchid\Screens\ListDressScreen;
+use App\Orchid\Screens\OpportunitiesScreen;
+use App\Orchid\Screens\RoadmapScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewCourseScreen;
@@ -84,6 +89,41 @@ Route::screen('dashboard', ExampleScreen::class)
     ->breadcrumbs(function (Trail $trail) {
         return $trail
             ->push('Dashboard');
+    });
+
+Route::screen('roadmap', RoadmapScreen::class)
+    ->name('platform.roadmap')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Roadmap');
+    });
+
+Route::screen('opportunities', OpportunitiesScreen::class)
+    ->name('platform.opportunities')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Opportunities');
+    });
+
+Route::screen('dresses', ListDressScreen::class)
+    ->name('platform.dresses')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
+    });
+
+Route::screen('dresses/upload', BulkUploadDressScreen::class)
+    ->name('platform.dresses.upload')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
+    });
+
+Route::screen('dresses/edit/{dress?}', EditDressScreen::class)
+    ->name('platform.dresses.edit')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
     });
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');

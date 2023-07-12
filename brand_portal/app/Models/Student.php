@@ -31,9 +31,9 @@ class Student extends Model
         'school',
         'allergies'
     ];
-    
+
     public function scopeFilter($query, array $filters){
-        
+
         try{
 
             if(isset($filters['sort_option'])){
