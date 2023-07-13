@@ -40,10 +40,10 @@ class ViewLimoGroupScreen extends Screen
         return [
             'owned_limo_group' => ($owned_limo_group != null) ? $owned_limo_group : null,
             'current_limo_group' => ($current_limo_group != null) ? $current_limo_group : null,
-            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members 
-                                    : (($owned_limo_group != null) ? $owned_limo_group->members
+            'current_limo_group_members' => ($current_limo_group != null) ? LimoGroupMember::where('limo_group_id', $current_limo_group->id)->paginate(10) 
+                                    : (($owned_limo_group != null) ? LimoGroupMember::where('limo_group_id', $owned_limo_group->id)->paginate(10)
                                     : []),
-            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->get(),
+            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(10),
             'default' => null,
         ];
     }
@@ -77,6 +77,11 @@ class ViewLimoGroupScreen extends Screen
                     'owned_limo_group' => $this->query()['owned_limo_group'] != null ? $this->query()['owned_limo_group']->id : null]
                 )
                 ->confirm('WARNING: If you are the owner of the limo group, the entire group will be deleted. Are you sure you want to leave this limo group?'),
+            
+            Button::make('Deleted Selected Invitations')
+                    ->icon('trash')
+                    ->method('deletedSelectedInvitations')
+                    ->confirm('Are you sure you want to delete the selected invitations?'),
             
             ($this->owned_limo_group != null && $this->owned_limo_group->creator_user_id == Auth::user()->id) ? 
                 
@@ -331,6 +336,19 @@ class ViewLimoGroupScreen extends Screen
 
             ]),
         ];
+    }
+
+    public function deletedSelectedInvitations(){
+        $invitations = request('invitations');
+
+        if($invitations != null){
+            foreach($invitations as $invitation){
+                LimoGroupMember::find($invitation)->delete();
+            }
+            Toast::success('You have deleted the selected invitations successfully');
+        } else{
+            Toast::error('You have not selected any invitations to delete');
+        }
     }
 
     public function leaveLimoGroup(){
