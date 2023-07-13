@@ -48,7 +48,7 @@ class CreateLimoGroupScreen extends Screen
         return [
             Button::make('Create Limo Group')
                 ->icon('plus')
-                ->confirm('WARNING: Creating a limo group will remove you from your current limo group if you are in one. And, it will delete your previous limo group including all the memebers in it if you have created one. Are you sure you want to create a new limo group?')
+                ->confirm('WARNING: Creating a limo group will remove you from your current limo group if you are in one. And if you own a limo group, it will delete it and all the memebers in it. Are you sure you want to create a new limo group?')
                 ->method('createLimoGroup')
         ];
     }
@@ -130,7 +130,7 @@ class CreateLimoGroupScreen extends Screen
             $owned_limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
 
             //check if user is part of a limo group
-            $user_limo_group = LimoGroupMember::where('invitee_user_id', Auth::user()->id)->first();
+            $user_limo_group = LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 1)->first();
 
             if($owned_limo_group){
                 //delete the old limo group
@@ -142,7 +142,18 @@ class CreateLimoGroupScreen extends Screen
             }
 
             //create the new limo group
-            LimoGroup::create($fields);
+            $limo_group = LimoGroup::create($fields);
+
+            $limo_group->decrement('capacity');
+
+            $limo_group->save();
+
+            //add the user as a limo group member
+            $limo_group_member = LimoGroupMember::create([
+                'limo_group_id' => $limo_group->id,
+                'invitee_user_id' => Auth::user()->id,
+                'status' => 1
+            ]);
 
             Toast::success('Limo group created successfully!');
             return redirect()->route('platform.limo-groups');
