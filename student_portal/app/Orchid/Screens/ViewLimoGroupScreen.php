@@ -138,7 +138,7 @@ class ViewLimoGroupScreen extends Screen
                         Sight::make('creator_user_id', 'Owner')->render(function (LimoGroup $limoGroup = null) {
 
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }elseif($limoGroup->owner->user_id == Auth::user()->id){
                                 return 'You';
                             }else{
@@ -147,63 +147,63 @@ class ViewLimoGroupScreen extends Screen
                         }),
                         Sight::make('name', 'Name')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->name;
                             }
                         }),
                         Sight::make('capacity', 'Capacity')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->capacity;
                             }
                         }),
                         Sight::make('date', 'Date')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->date;
                             }
                         }),
                         Sight::make('pickup_location', 'Pickup Location')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->pickup_location;
                             }
                         }),
                         Sight::make('dropoff_location', 'Dropoff Location')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->dropoff_location;
                             }
                         }),
                         Sight::make('depart_time', 'Depart Time')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->depart_time;
                             }
                         }),
                         Sight::make('dropoff_time', 'Dropoff Time')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->dropoff_time;
                             }
                         }),
                         Sight::make('notes', 'Notes')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->notes;
                             }
                         }),
                         Sight::make('', 'Actions')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null || $limoGroup->owner->user_id != Auth::user()->id){
-                                return 'Only the owner can edit this group.';
+                                return '';
                             }else{
                                 return 
                                     Button::make('Edit')
