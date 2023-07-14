@@ -40,10 +40,10 @@ class ViewLimoGroupScreen extends Screen
         return [
             'owned_limo_group' => ($owned_limo_group != null) ? $owned_limo_group : null,
             'current_limo_group' => ($current_limo_group != null) ? $current_limo_group : null,
-            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members 
-                                    : (($owned_limo_group != null) ? $owned_limo_group->members
+            'current_limo_group_members' => ($current_limo_group != null) ? LimoGroupMember::where('limo_group_id', $current_limo_group->id)->paginate(10) 
+                                    : (($owned_limo_group != null) ? LimoGroupMember::where('limo_group_id', $owned_limo_group->id)->paginate(10)
                                     : []),
-            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->get(),
+            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(10),
             'default' => null,
         ];
     }
@@ -77,6 +77,11 @@ class ViewLimoGroupScreen extends Screen
                     'owned_limo_group' => $this->query()['owned_limo_group'] != null ? $this->query()['owned_limo_group']->id : null]
                 )
                 ->confirm('WARNING: If you are the owner of the limo group, the entire group will be deleted. Are you sure you want to leave this limo group?'),
+            
+            Button::make('Deleted Selected Invitations')
+                    ->icon('trash')
+                    ->method('deletedSelectedInvitations')
+                    ->confirm('Are you sure you want to delete the selected invitations?'),
             
             ($this->owned_limo_group != null && $this->owned_limo_group->creator_user_id == Auth::user()->id) ? 
                 
@@ -133,7 +138,7 @@ class ViewLimoGroupScreen extends Screen
                         Sight::make('creator_user_id', 'Owner')->render(function (LimoGroup $limoGroup = null) {
 
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }elseif($limoGroup->owner->user_id == Auth::user()->id){
                                 return 'You';
                             }else{
@@ -142,63 +147,63 @@ class ViewLimoGroupScreen extends Screen
                         }),
                         Sight::make('name', 'Name')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->name;
                             }
                         }),
                         Sight::make('capacity', 'Capacity')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->capacity;
                             }
                         }),
                         Sight::make('date', 'Date')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->date;
                             }
                         }),
                         Sight::make('pickup_location', 'Pickup Location')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->pickup_location;
                             }
                         }),
                         Sight::make('dropoff_location', 'Dropoff Location')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->dropoff_location;
                             }
                         }),
                         Sight::make('depart_time', 'Depart Time')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->depart_time;
                             }
                         }),
                         Sight::make('dropoff_time', 'Dropoff Time')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->dropoff_time;
                             }
                         }),
                         Sight::make('notes', 'Notes')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->notes;
                             }
                         }),
                         Sight::make('', 'Actions')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null || $limoGroup->owner->user_id != Auth::user()->id){
-                                return 'Only the owner can edit this group.';
+                                return '';
                             }else{
                                 return 
                                     Button::make('Edit')
@@ -331,6 +336,19 @@ class ViewLimoGroupScreen extends Screen
 
             ]),
         ];
+    }
+
+    public function deletedSelectedInvitations(){
+        $invitations = request('invitations');
+
+        if($invitations != null){
+            foreach($invitations as $invitation){
+                LimoGroupMember::find($invitation)->delete();
+            }
+            Toast::success('You have deleted the selected invitations successfully');
+        } else{
+            Toast::error('You have not selected any invitations to delete');
+        }
     }
 
     public function leaveLimoGroup(){

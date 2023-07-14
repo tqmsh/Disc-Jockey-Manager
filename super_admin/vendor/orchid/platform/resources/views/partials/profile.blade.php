@@ -3,7 +3,7 @@
         <a href="#" class="nav-link p-0 d-flex align-items-center" data-bs-toggle="dropdown">
                 <span class="thumb-sm avatar me-3">
                     @if(Auth::user()->pfp == null)
-                        <x-orchid-icon path="diamond" class="icon-big" width="2em" height="2em"/>
+                        <img src={{Auth::user()->presenter()->image()}} alt='Profile Picture'/>
                     @else
                         <img src={{Auth::user()->pfp}} alt='Profile Picture'/>
                     @endif             </span>

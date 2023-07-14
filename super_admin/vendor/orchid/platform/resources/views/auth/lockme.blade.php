@@ -1,6 +1,6 @@
 <div class="mb-3 d-flex align-items-center">
     <span class="thumb-sm avatar me-3">
-        <img src="{{ $lockUser->pfp }}" class="b bg-light" alt="test">
+        <img src="{{ $lockUser->pfp == null ? $lockUser->presenter()->image() :  $lockUser->pfp}}" class="b bg-light" alt="pfp">
     </span>
     <span style="width:125px;" class="small">
         <span class="text-ellipsis">{{ $lockUser->presenter()->title() }}</span>

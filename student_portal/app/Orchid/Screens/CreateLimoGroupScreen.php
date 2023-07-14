@@ -98,6 +98,7 @@ class CreateLimoGroupScreen extends Screen
                     ->title('Capacity')
                     ->type('number')
                     ->placeholder('Enter the capacity for your limo group')
+                    ->help('Including youself')
                     ->horizontal(),
                 
                 TextArea::make('notes')
