@@ -15,6 +15,7 @@ class LimoGroup extends Model
         'id',
         'name',
         'creator_user_id',
+        'school_id',
         'capacity',
         'date',
         'pickup_location',

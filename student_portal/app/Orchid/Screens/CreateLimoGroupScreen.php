@@ -126,6 +126,7 @@ class CreateLimoGroupScreen extends Screen
             ]);
 
             $fields['creator_user_id'] = Auth::user()->id;
+            $fields['school_id'] = Auth::user()->student->school_id;
 
             //check if user already owns a limo group
             $owned_limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
@@ -150,7 +151,7 @@ class CreateLimoGroupScreen extends Screen
             $limo_group->save();
 
             //add the user as a limo group member
-            $limo_group_member = LimoGroupMember::create([
+            LimoGroupMember::create([
                 'limo_group_id' => $limo_group->id,
                 'invitee_user_id' => Auth::user()->id,
                 'status' => 1
