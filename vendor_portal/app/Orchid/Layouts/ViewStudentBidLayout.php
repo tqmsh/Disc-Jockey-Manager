@@ -30,6 +30,13 @@ class ViewStudentBidLayout extends Table
     protected function columns(): iterable
     {
         return [
+
+            TD::make()
+                ->align(TD::ALIGN_RIGHT)
+                ->render(function($event){
+                    return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['student_id' => $event->id, 'type' => 'student'])->icon('plus');
+                }), 
+
             TD::make('firstname', 'First Name')
                 ->render(function (Student $student) {
                     return e($student->firstname);
@@ -58,12 +65,6 @@ class ViewStudentBidLayout extends Table
                 ->render(function (Student $student) {
                     return e($student->allergies);
                 }),
-            TD::make()
-                ->width('100px')
-                ->align(TD::ALIGN_RIGHT)
-                ->render(function($event){
-                    return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['student_id' => $event->id, 'type' => 'student'])->icon('plus');
-                }), 
         ];
     }
 }

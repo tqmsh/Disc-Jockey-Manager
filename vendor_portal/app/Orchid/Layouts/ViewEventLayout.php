@@ -33,6 +33,13 @@ class ViewEventLayout extends Table
     protected function columns(): iterable
     {
         return [
+
+            TD::make()
+                ->align(TD::ALIGN_RIGHT)
+                ->render(function($event){
+                    return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id, 'type' => 'event'])->icon('plus');
+                }), 
+
             TD::make('event_name', 'Event Name')
                 ->render(function($event){
                     return e($event->event_name);
@@ -57,14 +64,6 @@ class ViewEventLayout extends Table
                 ->render(function($event){
                     return e($event->event_rules);
                 }), 
-
-            TD::make()
-                ->width('150px')
-                ->align(TD::ALIGN_RIGHT)
-                ->render(function($event){
-                    return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id, 'type' => 'event'])->icon('plus');
-                }), 
-            
         ];    
     }
 }

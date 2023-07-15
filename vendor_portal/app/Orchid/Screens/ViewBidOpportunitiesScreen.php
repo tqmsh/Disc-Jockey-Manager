@@ -6,6 +6,7 @@ use App\Models\Events;
 use App\Models\Region;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
@@ -20,6 +21,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
 use App\Orchid\Layouts\ViewStudentBidLayout;
+use App\Orchid\Layouts\ViewLimoGroupBidLayout;
 
 class ViewBidOpportunitiesScreen extends Screen
 {
@@ -41,6 +43,7 @@ class ViewBidOpportunitiesScreen extends Screen
         return [
             'events' => Events::filter(request(['region_id']))->whereIn('region_id', $this->paidRegionIds)->paginate(10),
             'students' => Student::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10),
+            'limo_groups' => LimoGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10),
         ];
     }
 
@@ -95,6 +98,7 @@ class ViewBidOpportunitiesScreen extends Screen
             Layout::tabs([
                 'Events' => ViewEventLayout::class,
                 'Students' => ViewStudentBidLayout::class,
+                'Limo Groups' => ViewLimoGroupBidLayout::class,
             ]),
 
 
@@ -158,6 +162,10 @@ class ViewBidOpportunitiesScreen extends Screen
         } else if(request('type') == 'student'){
 
             return redirect()->route('platform.studentBid.create', request('student_id'));
+            
+        } else if (request('type') == 'limo_group'){
+
+            return redirect()->route('platform.limoGroupBid.create', request('limo_group_id'));
         }
     }
 }
