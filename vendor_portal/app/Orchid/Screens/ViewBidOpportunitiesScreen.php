@@ -98,7 +98,7 @@ class ViewBidOpportunitiesScreen extends Screen
             Layout::tabs([
                 'Events' => ViewEventLayout::class,
                 'Students' => ViewStudentBidLayout::class,
-                'Limo Groups' => ViewLimoGroupBidLayout::class,
+                'Limo Groups' => ViewLimoGroupBidLayout::class, //!ONLY LIMO CATEGORIES SHOULD SEE THIS
             ]),
 
 
@@ -162,7 +162,7 @@ class ViewBidOpportunitiesScreen extends Screen
         } else if(request('type') == 'student'){
 
             return redirect()->route('platform.studentBid.create', request('student_id'));
-            
+
         } else if (request('type') == 'limo_group'){
 
             return redirect()->route('platform.limoGroupBid.create', request('limo_group_id'));

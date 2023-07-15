@@ -23,6 +23,7 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
+use App\Orchid\Screens\CreateLimoGroupBidScreen;
 use App\Orchid\Screens\ViewBidOpportunitiesScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -61,15 +62,17 @@ Route::screen('/campaigns/create', CreateAdScreen::class)->name('platform.ad.cre
 
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
-Route::screen('/eventbid/{event}/create', CreateEventBidScreen::class)->name('platform.bid.create');
+Route::screen('/event-bid/{event}/create', CreateEventBidScreen::class)->name('platform.bid.create');
 
-Route::screen('/studentbid/{student}/create', CreateStudentBidScreen::class)->name('platform.studentBid.create');
+Route::screen('/student-bid/{student}/create', CreateStudentBidScreen::class)->name('platform.studentBid.create');
+
+Route::screen('/limo-group-bid/{limoGroup}/create', CreateLimoGroupBidScreen::class)->name('platform.limoGroupBid.create');
 
 Route::screen('/bids/history', ViewBidHistoryScreen::class)->name('platform.bidhistory.list');
 
-Route::screen('/eventbid/{eventBid}/edit', EditEventBidScreen::class)->name('platform.eventBid.edit');
+Route::screen('/event-bid/{eventBid}/edit', EditEventBidScreen::class)->name('platform.eventBid.edit');
 
-Route::screen('/studentbid/{studentBid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
+Route::screen('/studen-tbid/{studentBid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 

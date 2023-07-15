@@ -30,7 +30,7 @@ class CreateEventBidScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $this->vendor = Vendors::find('user_id', Auth::user()->id)->first();
+        $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
         
         return [
             'event' => $event
