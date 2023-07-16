@@ -108,4 +108,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(StudentBids::class, 'user_id');
     }
+
+    //relationship with vendor
+    public function vendor()
+    {
+        return $this->hasOne(Vendors::class, 'user_id');
+    }
 }

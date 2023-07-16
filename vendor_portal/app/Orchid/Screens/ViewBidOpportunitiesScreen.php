@@ -98,7 +98,7 @@ class ViewBidOpportunitiesScreen extends Screen
             Layout::tabs([
                 'Events' => ViewEventLayout::class,
                 'Students' => ViewStudentBidLayout::class,
-                'Limo Groups' => ViewLimoGroupBidLayout::class, //!ONLY LIMO CATEGORIES SHOULD SEE THIS
+                'Limo Groups' => (strtolower(Auth::user()->vendor->category->name) == 'limo') ? ViewLimoGroupBidLayout::class : null, 
             ]),
 
 
