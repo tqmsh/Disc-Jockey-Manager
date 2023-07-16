@@ -21,6 +21,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
 use App\Orchid\Layouts\ViewStudentBidLayout;
+use App\Orchid\Layouts\ViewLimoGroupBidHistoryLayout;
 use App\Orchid\Layouts\ViewLimoGroupBidLayout;
 
 class ViewBidOpportunitiesScreen extends Screen

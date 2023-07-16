@@ -28,4 +28,8 @@ class LimoGroupBid extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function limoGroup(){
+        return $this->belongsTo(LimoGroup::class, 'limo_group_id', 'id');
+    }
 }

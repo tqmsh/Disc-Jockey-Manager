@@ -3,17 +3,15 @@
 namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
-use App\Models\Events;
 use App\Models\Region;
-use App\Models\Student;
 use Orchid\Support\Color;
+use App\Models\LimoGroupBid;
 use App\Models\VendorPackage;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
 
-class StudentBidLayout extends Table
+class ViewLimoGroupBidHistoryLayout extends Table
 {
-    public $studentBid;
     /**
      * Data source.
      *
@@ -22,7 +20,7 @@ class StudentBidLayout extends Table
      *
      * @var string
      */
-    protected $target = 'studentBids';
+    protected $target = 'limoBids';
 
     /**
      * Get the table cells to be displayed.
@@ -34,35 +32,35 @@ class StudentBidLayout extends Table
         return [
             TD::make()
                 ->align(TD::ALIGN_LEFT)
-                ->render(function($studentBid){
+                ->render(function($limoBid){
                     return 
-                    ($studentBid->status == 0) ? Button::make('Edit Bid')->type(Color::PRIMARY())->method('editBid', ['bidId' => $studentBid->id, 'type' => 'student'])->icon('pencil') 
+                    ($limoBid->status == 0) ? Button::make('Edit Bid')->type(Color::PRIMARY())->method('editBid', ['bidId' => $limoBid->id, 'type' => 'limo'])->icon('pencil') 
                     : '';
                 }), 
 
             TD::make('status', 'Status')
-                ->render(function($studentBid){
+                ->render(function($limoBid){
                     return 
-                        ($studentBid->status == 0) ? '<i class="text-warning">●</i> Pending' 
-                        : (($studentBid->status == 1) ? '<i class="text-success">●</i> Approved' 
+                        ($limoBid->status == 0) ? '<i class="text-warning">●</i> Pending' 
+                        : (($limoBid->status == 1) ? '<i class="text-success">●</i> Approved' 
                         : '<i class="text-danger">●</i> Rejected');
-                }),
-
-            TD::make('student_id', 'Student ID')
-                ->render(function($studentBid){
-                    return e($studentBid->student_id === null ? 'Student no longer exists': $studentBid->student_id);
-                }),
-
-            TD::make('school_name', 'School')->width('200px')
-                ->render(function($studentBid){
-                    return e($studentBid->school_name === null ? 'School no longer exists' : $studentBid->school_name);
-                }),
-
-            TD::make('region_id', 'Region')
-                ->render(function($studentBid){
-                    return e(Region::find($studentBid->region_id)->name);
                 }), 
 
+            TD::make('creator_user_id', 'Owner Email')
+                ->render(function (LimoGroupBid $limoBid) {
+                    return e($limoBid->limoGroup->owner->email);
+                }),
+            
+            TD::make('school_id', "School")
+                ->render(function (LimoGroupBid $limoBid) {
+                    return e($limoBid->limoGroup->school->school_name);
+                })->width('175px'),
+
+            TD::make('region_id', 'Region')
+                ->render(function (LimoGroupBid $limoBid) {
+                    return e(Region::find($limoBid->limoGroup->school->region_id)->name);
+                })->width('150px'),
+            
             TD::make('package_id', 'Package')
                 ->render(function($studentBid){
                     return e($studentBid->package_id === null ? 'Package no longer exists': VendorPackage::find($studentBid->package_id)->package_name);

@@ -24,6 +24,7 @@ use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\CreateLimoGroupBidScreen;
+use App\Orchid\Screens\EditLimoBidScreen;
 use App\Orchid\Screens\ViewBidOpportunitiesScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -67,6 +68,8 @@ Route::screen('/event-bid/{event}/create', CreateEventBidScreen::class)->name('p
 Route::screen('/student-bid/{student}/create', CreateStudentBidScreen::class)->name('platform.studentBid.create');
 
 Route::screen('/limo-group-bid/{limoGroup}/create', CreateLimoGroupBidScreen::class)->name('platform.limoGroupBid.create');
+
+Route::screen('/limo-group-bid/{limoGroup}/edit', EditLimoBidScreen::class)->name('platform.limoGroupBid.edit');
 
 Route::screen('/bids/history', ViewBidHistoryScreen::class)->name('platform.bidhistory.list');
 
