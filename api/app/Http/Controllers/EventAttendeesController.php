@@ -86,4 +86,40 @@ class EventAttendeesController extends Controller
             return response()->json(['message' => "You're not a local admin"], 401);
         }
     }
+
+    public function createCode(Request $request){
+        $user = $request->user();
+
+        if($user->role != 2){
+            return response()->json(['message' => 'You are not authorized to use this API']);
+        }
+        $request->validate([
+            'attendee_id' => 'required|string',
+        ]);
+
+        // Parsing event attendee
+        $event_attendee = EventAttendees::where('id', $request->attendee_id)->first();
+
+        // Checking if event attendee exists
+        if(!$event_attendee){
+            return response()->json(['message' => 'Event_attendee does not exist']);
+        }
+
+        // Generate a unique 15 digit code from ticket_code in eventattendees db 
+        $code = rand(100000000000000, 999999999999999);
+        $check = EventAttendees::where('ticket_code', $code)->first();
+        
+        // Make sure code is not duplicated in db, keep regenerating until done (should really optimize this, especially as the db fills up with codes)
+        // Maybe it would not be a bad idea to periodically cleanse the already used codes, and sweep eventAtendees etc. 
+        while($check){
+            $code = rand(100000000000000, 999999999999999);
+            $check = EventAttendees::where('ticket_code', $code)->first();
+        }
+        
+        // Update event_attendee ticket_code in db
+        $event_attendee->ticket_code = $code;
+        $event_attendee->update();
+
+        return response()->json(['message' => 'Code has been generated.']);
+    }
 }
