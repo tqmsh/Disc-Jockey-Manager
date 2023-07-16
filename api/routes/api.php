@@ -67,4 +67,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/validateCode', [EventAttendeesController::class, 'validateCode']);
 
     Route::get('/tokenIsValid', [AuthController::class, 'tokenIsValid']);
+
+    Route::patch('/createCode', [EventAttendeesController::class, 'createCode']);
 });
