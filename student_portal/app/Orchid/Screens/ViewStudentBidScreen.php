@@ -6,7 +6,9 @@ use App\Models\Events;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\LimoGroupBid;
 use App\Models\StudentBids;
+use App\Orchid\Layouts\ViewLimoBidsLayout;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
@@ -28,7 +30,8 @@ class ViewStudentBidScreen extends Screen
     {
         return [
             'pendingBids' => StudentBids::filter(request(['category_id']))->where('student_user_id', Auth::user()->id)->where('status', 0)->latest()->paginate(10),
-            'previousBids' => StudentBids::filter(request(['category_id']))->where('student_user_id', Auth::user()->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
+            'previousBids' => StudentBids::filter(request(['category_id']))->where('student_user_id', Auth::user()->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(10),
+            'previousLimoBids' => LimoGroupBid::filter(request(['category_id']))->where('limo_group_id', Auth::user()->limoGroup ? Auth::user()->limoGroup->id : 0)->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
         ];
     }
 
@@ -85,6 +88,10 @@ class ViewStudentBidScreen extends Screen
                 'Previous Bids' => [
                     ViewStudentBidsLayout::class
                 ],
+                'Previous Limo Group Bids' => [
+                    ViewLimoBidsLayout::class
+                ]
+
             ]),
         ];
     }
