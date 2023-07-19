@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\LimoGroup;
+use App\Orchid\Layouts\ViewLimoGroupLayout;
 use Orchid\Screen\Screen;
 
 class ViewLimoGroupScreen extends Screen
@@ -13,7 +15,9 @@ class ViewLimoGroupScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'limoGroups' => LimoGroup::latest()->paginate(10)
+        ];
     }
 
     /**
@@ -43,6 +47,14 @@ class ViewLimoGroupScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ViewLimoGroupLayout::class
+        ];
+    }
+
+    public function redirect(){
+        if(request('type') == 'edit'){
+            return redirect()->route('platform.limo-groups.edit', request('limo_group_id'));
+        }
     }
 }

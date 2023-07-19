@@ -3,12 +3,15 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
+use App\Models\Student;
 use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use App\Models\LimoGroupMember;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
@@ -26,7 +29,7 @@ class EditLimoGroupScreen extends Screen
      */
     public function query(LimoGroup $limoGroup): iterable
     {
-        abort_if($limoGroup->creator_user_id != Auth::user()->id, 403, 'You are not authorized to view this page.');
+        abort_if(Auth::user()->role != 1, 403, 'You are not authorized to view this page.');
 
         return [
             'limoGroup' => $limoGroup
@@ -76,6 +79,14 @@ class EditLimoGroupScreen extends Screen
     {
         return [
             Layout::rows([
+
+                Select::make('creator_user_id')
+                    ->title('Owner')
+                    ->placeholder('Select the owner of this limo group')
+                    ->options(Student::where('school_id', $this->limoGroup->school_id)->pluck('email', 'user_id'))
+                    ->horizontal()
+                    ->value($this->limoGroup->creator_user_id),
+
                 Input::make('name')
                     ->title('Limo Group Name')
                     ->placeholder('Enter a name for your limo group')
@@ -135,6 +146,7 @@ class EditLimoGroupScreen extends Screen
     public function updateLimoGroup(Request $request, LimoGroup $limoGroup){
 
         $fields = $request->validate([
+            'creator_user_id' => 'required',
             'name' => 'required',
             'date' => 'required',
             'capacity' => 'nullable',
