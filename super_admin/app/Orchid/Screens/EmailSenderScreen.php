@@ -112,7 +112,6 @@ class EmailSenderScreen extends Screen
         ]);
 
         Mail::raw($request->get('content'), function (Message $message) use ($request) {
-            $message->from('team@promplanner.com');
             $message->subject($request->get('subject'));
 
             foreach ($request->get('users') as $email) {
