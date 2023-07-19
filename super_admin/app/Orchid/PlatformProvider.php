@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
-use App\Models\Campaign;
-use App\Models\Categories;
 use App\Models\Student;
-use Orchid\Support\Color;
-use App\Models\Localadmin;
 use App\Models\Vendors;
+use App\Models\Campaign;
+use Orchid\Support\Color;
+use App\Models\Categories;
+use App\Models\Localadmin;
 use Orchid\Platform\Dashboard;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Platform\ItemPermission;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\OrchidServiceProvider;
 
 class PlatformProvider extends OrchidServiceProvider
@@ -32,6 +33,8 @@ class PlatformProvider extends OrchidServiceProvider
      */
     public function registerMainMenu(): array
     {
+        abort_if(Auth::user()->role != 1, 403, 'You are not authorized to view this page.');
+
         //FARHAN & ANDY WAS HERE😉
         return [
 

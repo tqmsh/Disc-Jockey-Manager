@@ -30,8 +30,9 @@ class PlatformProvider extends OrchidServiceProvider
      */
     public function registerMainMenu(): array
     {
-        return [
+        abort_if(Auth::user()->role != 2 || Auth::user()->role != 5, 403, 'You are not authorized to view this page.');
 
+        return [
             //FARHAN AND ANDY WAS HERE 😉
             
             //MONEY MAKER
