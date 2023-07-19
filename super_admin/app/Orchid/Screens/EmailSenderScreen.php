@@ -5,16 +5,17 @@
 namespace App\Orchid\Screens;
 
 use App\Models\User;
+use Orchid\Screen\Screen;
+use App\Mail\AmazonSESMail;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Mail;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
+use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Alert;
+use Illuminate\Support\Facades\Mail;
 
 class EmailSenderScreen extends Screen
 {
@@ -111,7 +112,7 @@ class EmailSenderScreen extends Screen
         ]);
 
         Mail::raw($request->get('content'), function (Message $message) use ($request) {
-            $message->from('sample@email.com');
+            $message->from('team@promplanner.com');
             $message->subject($request->get('subject'));
 
             foreach ($request->get('users') as $email) {
