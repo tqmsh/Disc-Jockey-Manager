@@ -3,11 +3,15 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\School;
+use App\Models\Student;
 use App\Models\LimoGroup;
-use App\Models\LimoGroupMember;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
+use App\Models\LimoGroupMember;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
@@ -24,7 +28,6 @@ class CreateLimoGroupScreen extends Screen
      */
     public function query(): iterable
     {
-        abort_if(Auth::user()->role != 3, 403, 'You are not authorized to view this page.');
         return [];
     }
 
@@ -48,8 +51,12 @@ class CreateLimoGroupScreen extends Screen
         return [
             Button::make('Create Limo Group')
                 ->icon('plus')
-                ->confirm('WARNING: Creating a limo group will remove you from your current limo group if you are in one. And if you own a limo group, it will delete it and all the memebers in it. Are you sure you want to create a new limo group?')
-                ->method('createLimoGroup')
+                ->confirm('WARNING: Creating a limo group will remove the owner from their current limo group if they are in one. And if they own a limo group, it will delete it and all the memebers in it. Are you sure you want to create a new limo group?')
+                ->method('createLimoGroup'),
+
+            Link::make('Back')
+                ->route('platform.limo-groups')
+                ->icon('arrow-left')
         ];
     }
 
@@ -61,7 +68,38 @@ class CreateLimoGroupScreen extends Screen
     public function layout(): iterable
     {
         return [
+            
             Layout::rows([
+
+                Select::make('creator_user_id')
+                    ->title('Owner')
+                    ->placeholder('Select the owner of this limo group')
+                    ->options(Student::pluck('email', 'user_id'))
+                    ->horizontal()
+                    ->empty('Start typing to search...'),
+
+                Select::make('school')
+                    ->title('School')
+                    ->placeholder('Select the school for this limo group')
+                    ->options(School::pluck('school_name', 'school_name'))
+                    ->horizontal()
+                    ->empty('Start typing to search...'),
+
+                Input::make('country')
+                    ->title('Country')
+                    ->placeholder('Enter the country for this limo group')
+                    ->horizontal(),
+
+                Input::make('state_province')
+                    ->title('State/Province')
+                    ->placeholder('Enter the state/province for this limo group')
+                    ->horizontal(),
+
+                Input::make('county')
+                    ->title('County')
+                    ->placeholder('Enter the county for this limo group')
+                    ->horizontal(),
+
                 Input::make('name')
                     ->title('Limo Group Name')
                     ->placeholder('Enter a name for your limo group')
@@ -115,6 +153,11 @@ class CreateLimoGroupScreen extends Screen
 
         try{
             $fields = $request->validate([
+                'creator_user_id' => 'required',
+                'school' => 'required',
+                'country' => 'required',
+                'state_province' => 'required',
+                'county' => 'required',
                 'name' => 'required',
                 'date' => 'required',
                 'capacity' => 'nullable',
@@ -125,14 +168,17 @@ class CreateLimoGroupScreen extends Screen
                 'notes' => 'nullable'
             ]);
 
-            $fields['creator_user_id'] = Auth::user()->id;
-            $fields['school_id'] = Auth::user()->student->school_id;
+            $fields['school_id'] = $this->getSchoolIDByReq($request);
+
+            if(Student::where('user_id', $fields['creator_user_id'])->where('school_id', $fields['school_id'])->doesntExist()){
+                throw New Exception('Selected Owner is not part of the selected school');
+            }
 
             //check if user already owns a limo group
-            $owned_limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
+            $owned_limo_group = LimoGroup::where('creator_user_id', $fields['creator_user_id'])->first();
 
             //check if user is part of a limo group
-            $user_limo_group = LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 1)->first();
+            $user_limo_group = LimoGroupMember::where('invitee_user_id', $fields['creator_user_id'])->where('status', 1)->first();
 
             if($owned_limo_group){
                 //delete the old limo group
@@ -153,7 +199,7 @@ class CreateLimoGroupScreen extends Screen
             //add the user as a limo group member
             LimoGroupMember::create([
                 'limo_group_id' => $limo_group->id,
-                'invitee_user_id' => Auth::user()->id,
+                'invitee_user_id' => $fields['creator_user_id'],
                 'status' => 1
             ]);
 
@@ -165,5 +211,22 @@ class CreateLimoGroupScreen extends Screen
             Toast::error('There was an error creating the limo group. Error code: ' . $e->getMessage());
         }
 
+    }
+
+    private function getSchoolIDByReq($request){
+        $school_id = School::where('school_name', $request->input('school'))
+                            ->where('county', $request->input('county'))
+                            ->where('state_province', $request->input('state_province'))
+                            ->where('country', $request->input('country'))
+                            ->get('id')->value('id');
+
+        if(is_null($school_id)){
+
+            throw New Exception('You are trying to enter a invalid school');
+
+        } else{
+
+            return $school_id;
+        }
     }
 }

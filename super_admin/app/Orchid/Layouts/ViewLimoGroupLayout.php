@@ -70,7 +70,7 @@ class ViewLimoGroupLayout extends Table
             
             TD::make('capacity', 'Capacity')
                 ->render(function (LimoGroup $limoGroup) {
-                    return e($limoGroup->capacity + count($limoGroup->activeMembers));
+                    return e($limoGroup->capacity);
                 }),
             
             TD::make('date', 'Date')
