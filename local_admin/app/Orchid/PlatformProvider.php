@@ -67,6 +67,14 @@ class PlatformProvider extends OrchidServiceProvider
                                 })
                         ->route('platform.pendingstudent.list'),
                 ]),
+
+            Menu::make("Groups")
+                ->icon('organization')
+                ->list([
+                    Menu::make('Limo Groups')
+                    ->icon('fa.car')
+                    ->route('platform.limo-groups'),
+                ]),
         
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')

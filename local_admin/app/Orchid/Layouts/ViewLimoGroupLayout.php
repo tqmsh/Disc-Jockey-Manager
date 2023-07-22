@@ -32,20 +32,8 @@ class ViewLimoGroupLayout extends Table
         return [
 
             TD::make()
-                ->render(function (LimoGroup $limoGroup){
-                    return CheckBox::make('limoGroups[]')
-                        ->value($limoGroup->id)
-                        ->checked(false);
-                }),
-
-            TD::make()
                 ->render(function (LimoGroup $limoGroup) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())->method('redirect', ['limo_group_id'=> $limoGroup->id, 'type' => 'edit'])->icon('pencil');
-                }),
-
-            TD::make()
-                ->render(function (LimoGroup $limoGroup) {
-                    return Button::make('Members')-> type(Color::DARK())->method('redirect', ['limo_group_id'=> $limoGroup->id, 'type' => 'members'])->icon('people-group');
+                    return Button::make('Members')-> type(Color::PRIMARY())->method('redirect', ['limo_group_id'=> $limoGroup->id, 'type' => 'members'])->icon('people-group');
                 }),
 
             TD::make('creator_user_id', 'Owner Email')

@@ -3,8 +3,9 @@
 namespace App\Orchid\Screens;
 
 use App\Models\LimoGroup;
-use App\Orchid\Layouts\ViewLimoGroupLayout;
 use Orchid\Screen\Screen;
+use Illuminate\Support\Facades\Auth;
+use App\Orchid\Layouts\ViewLimoGroupLayout;
 
 class ViewLimoGroupScreen extends Screen
 {
@@ -16,7 +17,7 @@ class ViewLimoGroupScreen extends Screen
     public function query(): iterable
     {
         return [
-            'limoGroups' => LimoGroup::latest()->paginate(10)
+            'limoGroups' => LimoGroup::where('school_id', Auth::user()->localadmin->school_id)->latest()->paginate(10)
         ];
     }
 
@@ -53,11 +54,8 @@ class ViewLimoGroupScreen extends Screen
     }
 
     public function redirect(){
-        if(request('type') == 'edit'){
-            return redirect()->route('platform.limo-groups.edit', request('limo_group_id'));
-        } else if(request('type') == 'members'){
+        if(request('type') == 'members'){
             return redirect()->route('platform.limo-groups.members', request('limo_group_id'));
         }
     }
-
 }

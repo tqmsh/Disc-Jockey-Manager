@@ -3,20 +3,24 @@
 namespace App\Orchid\Screens;
 
 use App\Models\LimoGroup;
-use App\Orchid\Layouts\ViewLimoGroupLayout;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Actions\Link;
+use Illuminate\Support\Facades\Auth;
+use App\Orchid\Layouts\ViewLimoGroupMembersLayout;
 
-class ViewLimoGroupScreen extends Screen
+class ViewLimoGroupMembersScreen extends Screen
 {
+    public $limoGroup;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(LimoGroup $limoGroup): iterable
     {
         return [
-            'limoGroups' => LimoGroup::latest()->paginate(10)
+            'limoGroup' => $limoGroup,
+            'members' => $limoGroup->members()->paginate(10)
         ];
     }
 
@@ -27,7 +31,7 @@ class ViewLimoGroupScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Limo Groups';
+        return 'Members in ' . $this->limoGroup->name . ' Group';
     }
 
     /**
@@ -37,7 +41,11 @@ class ViewLimoGroupScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Back')
+                ->route('platform.limo-groups')
+                ->icon('arrow-left')
+        ];
     }
 
     /**
@@ -48,16 +56,7 @@ class ViewLimoGroupScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewLimoGroupLayout::class
+            ViewLimoGroupMembersLayout::class
         ];
     }
-
-    public function redirect(){
-        if(request('type') == 'edit'){
-            return redirect()->route('platform.limo-groups.edit', request('limo_group_id'));
-        } else if(request('type') == 'members'){
-            return redirect()->route('platform.limo-groups.members', request('limo_group_id'));
-        }
-    }
-
 }

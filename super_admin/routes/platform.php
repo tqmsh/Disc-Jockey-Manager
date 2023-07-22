@@ -52,6 +52,7 @@ use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\CreateSectionLessonScreen;
+use App\Orchid\Screens\ViewLimoGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -192,12 +193,12 @@ Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.ed
 
 //view limo groups
 Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');
-
 //create limo groups
 Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platform.limo-groups.create');
-
 //edit limo group
 Route::screen('/limo-groups/{limoGroup}/edit', EditLimoGroupScreen::class)->name('platform.limo-groups.edit');
+//view limo group members
+Route::screen('/limo-groups/{limoGroup}/members', ViewLimoGroupMembersScreen::class)->name('platform.limo-groups.members');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
