@@ -15,6 +15,7 @@ use Orchid\Platform\OrchidServiceProvider;
 
 class PlatformProvider extends OrchidServiceProvider
 {
+    public $acceptedRoles = [2, 5];
     /**
      * @param Dashboard $dashboard
      */
@@ -30,7 +31,10 @@ class PlatformProvider extends OrchidServiceProvider
      */
     public function registerMainMenu(): array
     {
-        abort_if(Auth::user()->role != 2 || Auth::user()->role != 5, 403, 'You are not authorized to view this page.');
+        if(in_array(Auth::user()->role, $this->acceptedRoles) == false){
+
+            abort(403, 'You are not authorized to view this page.');
+        }
 
         return [
             //FARHAN AND ANDY WAS HERE 😉
