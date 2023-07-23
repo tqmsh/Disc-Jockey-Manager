@@ -8,6 +8,7 @@ use Orchid\Support\Color;
 use Orchid\Platform\Dashboard;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Platform\ItemPermission;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\OrchidServiceProvider;
 
 class PlatformProvider extends OrchidServiceProvider
@@ -26,7 +27,9 @@ class PlatformProvider extends OrchidServiceProvider
      * @return Menu[]
      */
     public function registerMainMenu(): array
-    {  
+    {
+        abort_if(Auth::user()->role != 4, 403, 'You are not authorized to view this page.');
+  
         return [
                 
             //MONEY MAKER

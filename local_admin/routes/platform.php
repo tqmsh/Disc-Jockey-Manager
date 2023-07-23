@@ -2,42 +2,44 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\CreateCandidateScreen;
-use App\Orchid\Screens\CreateElectionScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\CreateEventScreen;
-use App\Orchid\Screens\CreatePositionScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
+use App\Orchid\Screens\EditElectionScreen;
+use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\EditCandidateScreen;
-use App\Orchid\Screens\EditElectionScreen;
-use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
+use App\Orchid\Screens\ViewCandidateScreen;
+use App\Orchid\Screens\ViewLimoGroupScreen;
+use App\Orchid\Screens\CreateElectionScreen;
+use App\Orchid\Screens\CreatePositionScreen;
+use App\Orchid\Screens\ViewRequestersScreen;
+use App\Orchid\Screens\CreateCandidateScreen;
+use App\Orchid\Screens\ViewNoPlaySongsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
+use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
+use App\Orchid\Screens\ViewLimoGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewCandidateScreen;
-use App\Orchid\Screens\ViewSongRequestsScreen;
-use App\Orchid\Screens\ViewNoPlaySongsScreen;
-use App\Orchid\Screens\ViewRequestersScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -112,6 +114,12 @@ Route::screen('/events/promvote/{position_id}/candidate', ViewCandidateScreen::c
 Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.create');
 
 Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
+
+//limo group
+Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');
+
+Route::screen('/limo-groups/{limo_group_id}/members', ViewLimoGroupMembersScreen::class)->name('platform.limo-groups.members');
+
 
 
  

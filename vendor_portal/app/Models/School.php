@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Exception;
+use App\Models\Region;
 use Orchid\Screen\AsSource;
 use Orchid\Support\Facades\Alert;
 use Illuminate\Database\Eloquent\Model;

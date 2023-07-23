@@ -9,6 +9,9 @@ use Orchid\Screen\Sight;
 use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Categories;
+use App\Models\LimoGroupBid;
+use App\Models\VendorPackage;
 use App\Models\LimoGroupMember;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -24,6 +27,7 @@ use App\Notifications\LimoGroupInvitation;
 class ViewLimoGroupScreen extends Screen
 {
     public $limo_group;
+    public $owner = false;
     public $owned_limo_group;
     public $limo_group_member_members;
 
@@ -40,10 +44,11 @@ class ViewLimoGroupScreen extends Screen
         return [
             'owned_limo_group' => ($owned_limo_group != null) ? $owned_limo_group : null,
             'current_limo_group' => ($current_limo_group != null) ? $current_limo_group : null,
-            'current_limo_group_members' => ($current_limo_group != null) ? LimoGroupMember::where('limo_group_id', $current_limo_group->id)->paginate(10) 
-                                    : (($owned_limo_group != null) ? LimoGroupMember::where('limo_group_id', $owned_limo_group->id)->paginate(10)
+            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members()->paginate(10) 
+                                    : (($owned_limo_group != null) ? $owned_limo_group->members()->paginate(10)
                                     : []),
             'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(10),
+            'limoBids' => LimoGroupBid::where('limo_group_id', ($owned_limo_group != null) ? $owned_limo_group->id : 0)->where('status', 0)->paginate(10),
             'default' => null,
         ];
     }
@@ -105,6 +110,7 @@ class ViewLimoGroupScreen extends Screen
     {
         if($this->query()['owned_limo_group'] != null){
             $this->limo_group = 'owned_limo_group';
+            $this->owner = true;
         }elseif($this->query()['current_limo_group'] != null){
             $this->limo_group = 'current_limo_group';
         }else{
@@ -334,8 +340,87 @@ class ViewLimoGroupScreen extends Screen
                     ])
                 ],
 
+                'Pending Bids' => ($this->owner) ?
+                    
+                    Layout::table('limoBids', [
+
+                            TD::make()
+                                ->align(TD::ALIGN_LEFT)
+                                ->width('100px')
+                                ->render(function(LimoGroupBid $bid){
+                                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                                    }), 
+
+                            TD::make()
+                                ->align(TD::ALIGN_LEFT)
+                                ->width('100px')
+                                ->render(function(LimoGroupBid $bid){
+                                    return Button::make('Reject')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                                    }), 
+
+                            TD::make('company_name', 'Company')
+                                ->render(function($bid){
+                                    return Link::make($bid->company_name)
+                                        ->href($bid->url);
+                                }),
+                                
+                            TD::make('category_id', 'Category')
+                                ->render(function($bid){
+                                    return e(Categories::find($bid->category_id)->name);
+                                }),
+
+                            TD::make('package_id', 'Package')
+                                ->render(function($bid){
+                                    return e(VendorPackage::find($bid->package_id)->package_name);
+                                }),
+
+                            TD::make('package_id', 'Description')
+                                ->width('300')
+                                ->render(function($bid){
+                                    return e(VendorPackage::find($bid->package_id)->description);
+                                }),
+
+                            TD::make('package_id', 'Price - $USD')
+                                ->width('110')
+                                ->align(TD::ALIGN_CENTER)
+                                ->render(function($bid){
+                                    return e('$' . number_format(VendorPackage::find($bid->package_id)->price));
+                                }),
+
+                            TD::make('package_id', 'Package URL')
+                                ->width('200')
+                                ->render(function($bid){
+                                    return Link::make(VendorPackage::find($bid->package_id)->url)->href(VendorPackage::find($bid->package_id)->url);
+                                }),
+
+                        TD::make('notes', 'Vendor Notes')
+                                ->width('300')
+                                ->render(function($bid){
+                                    return e($bid->notes);
+                                }),
+
+                        TD::make('contact_instructions', 'Contact Info')
+                                ->width('300')
+                                ->render(function($bid){
+                                    return e($bid->contact_instructions);
+
+                                }),
+
+                    ])
+                
+                : null
+
             ]),
         ];
+    }
+
+    public function updateBid()
+    {
+        $bid = LimoGroupBid::find(request('bid_id'));
+        $bid->status = request('choice');
+        $bid->save();
+        Toast::success('Bid updated successfully!');
+        return redirect()->route('platform.limo-groups');
     }
 
     public function deletedSelectedInvitations(){

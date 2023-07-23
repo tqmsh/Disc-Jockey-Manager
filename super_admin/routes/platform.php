@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\EditAdScreen;
-use App\Orchid\Screens\OrderCategoryScreen;
-use App\Orchid\Screens\ViewAdScreen;
 use Tabuna\Breadcrumbs\Trail;
+use App\Orchid\Screens\EditAdScreen;
+use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
+use App\Orchid\Screens\ViewSongsScreen;
 use App\Orchid\Screens\EditCourseScreen;
 use App\Orchid\Screens\EditRegionScreen;
 use App\Orchid\Screens\EditSchoolScreen;
@@ -28,14 +28,17 @@ use App\Orchid\Screens\CreateVendorScreen;
 use App\Orchid\Screens\EditCategoryScreen;
 use App\Orchid\Screens\EditEventBidScreen;
 use App\Orchid\Screens\ViewCategoryScreen;
-use App\Orchid\Screens\ViewSongsScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
+use App\Orchid\Screens\EditLimoGroupScreen;
+use App\Orchid\Screens\OrderCategoryScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
-use App\Orchid\Screens\CreateEventBidScreen;
+use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\EditLocaladminScreen;
 use App\Orchid\Screens\ViewLocaladminScreen;
+use App\Orchid\Screens\ViewRequestersScreen;
+use App\Orchid\Screens\CreateLimoGroupScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -49,6 +52,7 @@ use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\CreateSectionLessonScreen;
+use App\Orchid\Screens\ViewLimoGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -56,7 +60,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewRequestersScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -188,6 +191,14 @@ Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSecti
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
+//view limo groups
+Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');
+//create limo groups
+Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platform.limo-groups.create');
+//edit limo group
+Route::screen('/limo-groups/{limoGroup}/edit', EditLimoGroupScreen::class)->name('platform.limo-groups.edit');
+//view limo group members
+Route::screen('/limo-groups/{limoGroup}/members', ViewLimoGroupMembersScreen::class)->name('platform.limo-groups.members');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
