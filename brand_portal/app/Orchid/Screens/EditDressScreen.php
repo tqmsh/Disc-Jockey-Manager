@@ -7,10 +7,11 @@ use App\Models\Dress;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use Orchid\Support\Facades\Alert;
 use Illuminate\Http\Request;
+use Orchid\Support\Facades\Toast;
 
 class EditDressScreen extends Screen
 {
@@ -60,9 +61,9 @@ class EditDressScreen extends Screen
     public function commandBar(): array
     {
         $buttons = [
-            Button::make('Back to Dress List')
+            Link::make('Back to Dress List')
                 ->icon('arrow-left')
-                ->method('goBack'),
+                ->route('platform.dresses'),
             Button::make('Save')
                 ->icon('check')
                 ->type(Color::SUCCESS())
@@ -78,6 +79,12 @@ class EditDressScreen extends Screen
                 ])
                 ->type(Color::DANGER())
                 ->icon('trash');
+
+            $buttons[] = Button::make('Preview')
+                ->icon('eye')
+                ->method('gotoPreview', ['dress' => $this->dress])
+                ->confirm('This will erase your current changes. Continue?')
+                ->type(Color::PRIMARY());
         }
 
         return $buttons;
@@ -131,15 +138,15 @@ class EditDressScreen extends Screen
 
         unset($dressData['brand']);
 
-        $dressData['colours'] = Dress::splitAndTrimNonEmpty($dressData['colours'], '\n');
-        $dressData['sizes'] = Dress::splitAndTrimNonEmpty($dressData['sizes'], '\n');
-        $dressData['images'] = Dress::splitAndTrimNonEmpty($dressData['images'], '\n');
+        $dressData['colours'] = Dress::splitAndTrimNonEmpty($dressData['colours'], "\n");
+        $dressData['sizes'] = Dress::splitAndTrimNonEmpty($dressData['sizes'], "\n");
+        $dressData['images'] = Dress::splitAndTrimNonEmpty($dressData['images'], "\n");
 
         $dressData['user_id'] = $userId;
 
         $dress->fill($dressData)->save();
 
-        Alert::info('You have successfully created or updated the dress.');
+        Toast::info('You have successfully created or updated the dress.');
 
         return redirect()->route('platform.dresses');
     }
@@ -148,12 +155,12 @@ class EditDressScreen extends Screen
     {
         $dress = Dress::findOrFail($request->get('id'));
         $dress->delete();
-        Alert::info('You have successfully deleted the dress.');
+        Toast::info('You have successfully deleted the dress.');
         return redirect()->route('platform.dresses');
     }
 
-    public function goBack()
+    public function gotoPreview($dress)
     {
-        return redirect()->route('platform.dresses');
+        return redirect()->route('platform.dresses.detail', ['dress' => $dress]);
     }
 }
