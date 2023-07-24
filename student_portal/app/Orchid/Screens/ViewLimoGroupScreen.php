@@ -9,6 +9,9 @@ use Orchid\Screen\Sight;
 use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use App\Models\Categories;
+use App\Models\LimoGroupBid;
+use App\Models\VendorPackage;
 use App\Models\LimoGroupMember;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -24,8 +27,9 @@ use App\Notifications\LimoGroupInvitation;
 class ViewLimoGroupScreen extends Screen
 {
     public $limo_group;
+    public $owner = false;
     public $owned_limo_group;
-    public $limo_group_members;
+    public $limo_group_member_members;
 
     /**
      * Query data.
@@ -34,16 +38,17 @@ class ViewLimoGroupScreen extends Screen
      */
     public function query(): iterable
     {
-        $current_limo_group =  LimoGroup::find(LimoGroupMember::where('invitee_user_id', Auth::user()->id)->get('limo_group_id')->value('limo_group_id'));
+        $current_limo_group =  LimoGroup::whereNot('creator_user_id', Auth::id())->where('id', LimoGroupMember::where('invitee_user_id', Auth::id())->where('status', 1)->get('limo_group_id')->value('limo_group_id'))->first();
         $owned_limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
 
         return [
             'owned_limo_group' => ($owned_limo_group != null) ? $owned_limo_group : null,
             'current_limo_group' => ($current_limo_group != null) ? $current_limo_group : null,
-            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members 
-                                    : (($owned_limo_group != null) ? $owned_limo_group->members
+            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members()->paginate(10) 
+                                    : (($owned_limo_group != null) ? $owned_limo_group->members()->paginate(10)
                                     : []),
-            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->get(),
+            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(10),
+            'limoBids' => LimoGroupBid::where('limo_group_id', ($owned_limo_group != null) ? $owned_limo_group->id : 0)->where('status', 0)->paginate(10),
             'default' => null,
         ];
     }
@@ -70,6 +75,19 @@ class ViewLimoGroupScreen extends Screen
                 ->icon('plus')
                 ->route('platform.limo-groups.create'),
             
+            Button::make('Leave Limo Group')
+                ->icon('logout')
+                ->method('leaveLimoGroup', 
+                    ['current_limo_group' => ($this->query()['current_limo_group'] != null) ? $this->query()['current_limo_group']->id : null,
+                    'owned_limo_group' => $this->query()['owned_limo_group'] != null ? $this->query()['owned_limo_group']->id : null]
+                )
+                ->confirm('WARNING: If you are the owner of the limo group, the entire group will be deleted. Are you sure you want to leave this limo group?'),
+            
+            Button::make('Deleted Selected Invitations')
+                    ->icon('trash')
+                    ->method('deletedSelectedInvitations')
+                    ->confirm('Are you sure you want to delete the selected invitations?'),
+            
             ($this->owned_limo_group != null && $this->owned_limo_group->creator_user_id == Auth::user()->id) ? 
                 
             ModalToggle::make('Invite Members')
@@ -92,6 +110,7 @@ class ViewLimoGroupScreen extends Screen
     {
         if($this->query()['owned_limo_group'] != null){
             $this->limo_group = 'owned_limo_group';
+            $this->owner = true;
         }elseif($this->query()['current_limo_group'] != null){
             $this->limo_group = 'current_limo_group';
         }else{
@@ -125,7 +144,7 @@ class ViewLimoGroupScreen extends Screen
                         Sight::make('creator_user_id', 'Owner')->render(function (LimoGroup $limoGroup = null) {
 
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }elseif($limoGroup->owner->user_id == Auth::user()->id){
                                 return 'You';
                             }else{
@@ -134,63 +153,63 @@ class ViewLimoGroupScreen extends Screen
                         }),
                         Sight::make('name', 'Name')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->name;
                             }
                         }),
                         Sight::make('capacity', 'Capacity')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->capacity;
                             }
                         }),
                         Sight::make('date', 'Date')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->date;
                             }
                         }),
                         Sight::make('pickup_location', 'Pickup Location')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->pickup_location;
                             }
                         }),
                         Sight::make('dropoff_location', 'Dropoff Location')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->dropoff_location;
                             }
                         }),
                         Sight::make('depart_time', 'Depart Time')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->depart_time;
                             }
                         }),
                         Sight::make('dropoff_time', 'Dropoff Time')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->dropoff_time;
                             }
                         }),
                         Sight::make('notes', 'Notes')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null){
-                                return 'N/A';
+                                return '';
                             }else{
                                 return $limoGroup->notes;
                             }
                         }),
                         Sight::make('', 'Actions')->render(function(LimoGroup $limoGroup = null){
                             if($limoGroup == null || $limoGroup->owner->user_id != Auth::user()->id){
-                                return 'Only the owner can edit this group.';
+                                return '';
                             }else{
                                 return 
                                     Button::make('Edit')
@@ -205,15 +224,13 @@ class ViewLimoGroupScreen extends Screen
                 ],
                 'Members in Limo Group' => [
                     Layout::table('current_limo_group_members', [
+
                         TD::make()
                             ->render(function (LimoGroupMember $student){
-
                                 return ($student->limoGroup->creator_user_id == Auth::user()->id) ? 
-                                 CheckBox::make('students[]')
-                                    ->value($student->invitee_user_id)
+                                 CheckBox::make('members[]')
+                                    ->value($student->id)
                                     ->checked(false) : ''; 
-
-
                             })->width('5%'),
 
                         TD::make('firstname', 'First Name')
@@ -244,7 +261,7 @@ class ViewLimoGroupScreen extends Screen
 
                         TD::make('paid', 'Payment Status')
                             ->render(function (LimoGroupMember $student) {
-                                return ($student->paid == 0) ? '<i class="text-danger">●</i> Unpaid' : '<i class="text-success">●</i> Paid' ;
+                                return (($student->limoGroup->creator_user_id != Auth::id()) ? 'Confidential' : (($student->paid == 0) ? '<i class="text-danger">●</i> Unpaid' : '<i class="text-success">●</i> Paid')) ;
                             }),
 
                         TD::make('created_at', 'Invited At')
@@ -256,12 +273,30 @@ class ViewLimoGroupScreen extends Screen
                 ],
                 'Limo Group Invitations' => [
                     Layout::table('limo_group_invitations', [
-                        TD::make()
+
+                        TD::make('actions', 'Actions')
                             ->render(function (LimoGroupMember $student){
-                                return CheckBox::make('students[]')
-                                    ->value($student->invitee_user_id)
+                                return CheckBox::make('invitations[]')
+                                    ->value($student->id)
                                     ->checked(false);
                             }),
+
+                        TD::make()
+                            ->align(TD::ALIGN_LEFT)
+                            ->width('100px')
+                            ->render(function(LimoGroupMember $student_limo_member){
+                                return Button::make('Accept')
+                                ->confirm('WARNING: Joining a limo group will remove you from your current limo group if you are in one. And if you own a limo group, it will delete it and all the memebers in it. Are you sure you want to join this limo group?')
+                                ->method('updateInvitation', ['limo_group_member_id' => $student_limo_member->id, 'choice' => 1])
+                                ->icon('check')->type(Color::SUCCESS())->class('btn btn-success btn-rounded'); 
+                                }), 
+
+                        TD::make()
+                            ->align(TD::ALIGN_LEFT)
+                            ->width('100px')
+                            ->render(function(LimoGroupMember $student_limo_member){
+                                return Button::make('Reject')->method('updateInvitation', ['limo_group_member_id' => $student_limo_member->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                                }),
 
                         TD::make('owner', 'Owner')
                             ->render(function (LimoGroupMember $student) {
@@ -305,18 +340,168 @@ class ViewLimoGroupScreen extends Screen
                     ])
                 ],
 
+                'Pending Bids' => ($this->owner) ?
+                    
+                    Layout::table('limoBids', [
+
+                            TD::make()
+                                ->align(TD::ALIGN_LEFT)
+                                ->width('100px')
+                                ->render(function(LimoGroupBid $bid){
+                                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                                    }), 
+
+                            TD::make()
+                                ->align(TD::ALIGN_LEFT)
+                                ->width('100px')
+                                ->render(function(LimoGroupBid $bid){
+                                    return Button::make('Reject')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                                    }), 
+
+                            TD::make('company_name', 'Company')
+                                ->render(function($bid){
+                                    return Link::make($bid->company_name)
+                                        ->href($bid->url);
+                                }),
+                                
+                            TD::make('category_id', 'Category')
+                                ->render(function($bid){
+                                    return e(Categories::find($bid->category_id)->name);
+                                }),
+
+                            TD::make('package_id', 'Package')
+                                ->render(function($bid){
+                                    return e(VendorPackage::find($bid->package_id)->package_name);
+                                }),
+
+                            TD::make('package_id', 'Description')
+                                ->width('300')
+                                ->render(function($bid){
+                                    return e(VendorPackage::find($bid->package_id)->description);
+                                }),
+
+                            TD::make('package_id', 'Price - $USD')
+                                ->width('110')
+                                ->align(TD::ALIGN_CENTER)
+                                ->render(function($bid){
+                                    return e('$' . number_format(VendorPackage::find($bid->package_id)->price));
+                                }),
+
+                            TD::make('package_id', 'Package URL')
+                                ->width('200')
+                                ->render(function($bid){
+                                    return Link::make(VendorPackage::find($bid->package_id)->url)->href(VendorPackage::find($bid->package_id)->url);
+                                }),
+
+                        TD::make('notes', 'Vendor Notes')
+                                ->width('300')
+                                ->render(function($bid){
+                                    return e($bid->notes);
+                                }),
+
+                        TD::make('contact_instructions', 'Contact Info')
+                                ->width('300')
+                                ->render(function($bid){
+                                    return e($bid->contact_instructions);
+
+                                }),
+
+                    ])
+                
+                : null
+
             ]),
         ];
+    }
+
+    public function updateBid()
+    {
+        $bid = LimoGroupBid::find(request('bid_id'));
+        $bid->status = request('choice');
+        $bid->save();
+        Toast::success('Bid updated successfully!');
+        return redirect()->route('platform.limo-groups');
+    }
+
+    public function deletedSelectedInvitations(){
+        $invitations = request('invitations');
+
+        if($invitations != null){
+            foreach($invitations as $invitation){
+                LimoGroupMember::find($invitation)->delete();
+            }
+            Toast::success('You have deleted the selected invitations successfully');
+        } else{
+            Toast::error('You have not selected any invitations to delete');
+        }
+    }
+
+    public function leaveLimoGroup(){
+
+        try{
+            if(request('current_limo_group') != null){
+                
+                LimoGroupMember::where('invitee_user_id', Auth::id())->where('status', 1)->where('limo_group_id', request('current_limo_group'))->delete();
+                $current_limo_group = LimoGroup::find(request('current_limo_group'));
+                $current_limo_group->increment('capacity');
+                $current_limo_group->save();
+                Toast::success('You have left the limo group successfully');
+
+            } elseif(request('owned_limo_group') != null){
+
+                $owned_limo_group = LimoGroup::find(request('owned_limo_group'));
+                $owned_limo_group->delete();
+                Toast::success('You have deleted the limo group successfully');
+            } else{
+                Toast::error('You are not in a limo group');
+            }
+
+            return redirect()->route('platform.limo-groups');
+        } catch(\Exception $e){
+
+        }
+
     }
 
     public function redirect(){
         return redirect()->route('platform.limo-groups.edit', request('limoGroup_id'));
     }
 
+    public function updateInvitation(){
+        $limo_group_member = LimoGroupMember::find(request('limo_group_member_id'));
+        $limo_group_member->status = request('choice');
+
+        //check if user already owns a limo group
+        $owned_limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
+
+        //check if user is part of a limo group
+        $user_limo_group = LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 1)->first();
+
+        if($owned_limo_group){
+            //delete the old limo group
+            $owned_limo_group->delete();
+
+        } elseif($user_limo_group){
+            //remove them as a limo group member
+            $user_limo_group->delete();
+        }
+
+        if(request('choice') == 1){
+            //update the limo group capacity
+            $limo_group = LimoGroup::find($limo_group_member->limoGroup->id);
+            $limo_group->decrement('capacity');
+            $limo_group->save();
+        }
+
+        $limo_group_member->save();
+        Toast::success('Invitation updated successfully!');
+        return redirect()->route('platform.limo-groups');
+    }
+
     public function inviteMembers(){
         try{
                 $invitee_user_ids = request('invitee_user_ids');
-                $limo_group = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
+                $limo_group_member = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
                 
                 foreach($invitee_user_ids as $invitee_user_id){
 
@@ -330,7 +515,7 @@ class ViewLimoGroupScreen extends Screen
                             ]));
 
                             $current_limo_group = new LimoGroupMember;
-                            $current_limo_group->limo_group_id = $limo_group->id;
+                            $current_limo_group->limo_group_id = $limo_group_member->id;
                             $current_limo_group->invitee_user_id = $invitee_user_id;
                             $current_limo_group->save();
                             

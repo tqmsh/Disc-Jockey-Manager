@@ -96,4 +96,8 @@ class User extends Authenticatable
     public function student(){
         return $this->hasOne(Student::class, 'user_id');
     }
+
+    public function limoGroup(){
+        return $this->hasOne(LimoGroup::class, 'creator_user_id');
+    }
 }

@@ -15,6 +15,7 @@ use Orchid\Platform\OrchidServiceProvider;
 
 class PlatformProvider extends OrchidServiceProvider
 {
+    public $acceptedRoles = [2, 5];
     /**
      * @param Dashboard $dashboard
      */
@@ -30,8 +31,12 @@ class PlatformProvider extends OrchidServiceProvider
      */
     public function registerMainMenu(): array
     {
-        return [
+        if(in_array(Auth::user()->role, $this->acceptedRoles) == false){
 
+            abort(403, 'You are not authorized to view this page.');
+        }
+
+        return [
             //FARHAN AND ANDY WAS HERE 😉
             
             //MONEY MAKER
@@ -61,6 +66,14 @@ class PlatformProvider extends OrchidServiceProvider
                                     return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
                                 })
                         ->route('platform.pendingstudent.list'),
+                ]),
+
+            Menu::make("Groups")
+                ->icon('organization')
+                ->list([
+                    Menu::make('Limo Groups')
+                    ->icon('fa.car')
+                    ->route('platform.limo-groups'),
                 ]),
         
             Menu::make('Prom Planner Guide')

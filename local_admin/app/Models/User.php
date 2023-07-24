@@ -84,4 +84,8 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    public function localadmin(){
+        return $this->hasOne(Localadmin::class, 'user_id', 'id');
+    }
 }

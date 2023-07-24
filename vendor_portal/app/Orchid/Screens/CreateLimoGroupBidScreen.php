@@ -3,12 +3,13 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\Events;
+use App\Models\Region;
 use App\Models\Vendors;
 use Orchid\Screen\Sight;
-use App\Models\EventBids;
+use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
+use App\Models\LimoGroupBid;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
@@ -18,22 +19,22 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 
-class CreateEventBidScreen extends Screen
+class CreateLimoGroupBidScreen extends Screen
 {
-    public $event;
-    public $vendor; 
+    public $limoGroup;
+    public $vendor;
 
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Events $event): iterable
+    public function query(LimoGroup $limoGroup): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-        
+
         return [
-            'event' => $event
+            'limoGroup' => $limoGroup
         ];
     }
 
@@ -44,7 +45,7 @@ class CreateEventBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Create Bid For: ' . $this->event->event_name;
+        return 'Create Bid For: ' . $this->limoGroup->name;
     }
 
     /**
@@ -54,7 +55,7 @@ class CreateEventBidScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
+        return [ 
 
             Button::make('Send Bid')
                 ->icon('plus')
@@ -64,6 +65,7 @@ class CreateEventBidScreen extends Screen
                 ->icon('arrow-left')
                 ->route('platform.bidopportunities.list')
         ];
+        
     }
 
     /**
@@ -74,14 +76,20 @@ class CreateEventBidScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::legend('event',[
-                Sight::make('event_start_time', 'Event Date'),
-                Sight::make('school', 'School Name'),
-                Sight::make('venue_id', 'Venue')->render(function (){
+            Layout::legend('limoGroup',[
+                Sight::make('creator_user_id', 'Limo Group Owner Email')->render(function(){
 
-                    $venue = Vendors::find($this->event->venue_id);
+                    return $this->limoGroup->owner->email;
+                }),
+                Sight::make('name', 'Limo group Name'),
+                Sight::make('pickup_location', 'Pickup Location'),
+                Sight::make('dropoff_location', 'Dropoff Location'),
+                Sight::make('depart_time', 'Depart Time'),
+                Sight::make('dropoff_time', 'Dropoff Time'),
+                Sight::make('notes', 'Notes'),
+                Sight::make('region', 'Region')->render(function(){
 
-                    return $venue === null ? '<i class="text-danger">●</i> Undecided' : $venue->company_name;
+                    return Region::find($this->limoGroup->school->region_id)->name;
                 }),
 
                 Sight::make('company_name', 'Your Company Name')->render(function(){
@@ -138,24 +146,22 @@ class CreateEventBidScreen extends Screen
         ];
     }
 
-    public function createBid(Events $event){
+    public function createBid(LimoGroup $limoGroup){
 
         $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
             try{   
 
-                if($this->validBid($event)){
-
+                if($this->validBid($limoGroup)){
                     
-                    EventBids::create([
+                    LimoGroupBid::create([
                         'user_id' => $vendor->user_id,
-                        'event_id' => $event->id,
+                        'limo_group_id' => $limoGroup->id,
                         'package_id' => request('package_id'),
                         'notes' => request('notes'),
                         'category_id' => $vendor->category_id,
-                        'event_date' => $event->event_start_time,
-                        'school_name' => $event->school,
-                        'region_id' => $event->region_id,
+                        'school_name' => $limoGroup->school->school_name,
+                        'region_id' => $limoGroup->school->region_id,
                         'company_name' => $vendor->company_name,
                         'url' => $vendor->website,
                         'contact_instructions' => request('contact_instructions'),
@@ -164,7 +170,7 @@ class CreateEventBidScreen extends Screen
                         
                     Toast::success('Bid created succesfully');
                         
-                    return redirect()->route('platform.event.list');
+                    return redirect()->route('platform.bidopportunities.list');
                 }else{
                     Toast::error('Bid already exists');
                 }
@@ -174,10 +180,10 @@ class CreateEventBidScreen extends Screen
             }
     }
 
-    private function validBid(Events $event){
+    private function validBid(LimoGroup $limoGroup){
 
-        return count(EventBids::where('user_id', Auth::user()->id)
-                             ->where('event_id', $event->id)
+        return count(LimoGroupBid::where('user_id', Auth::id())
+                             ->where('limo_group_id', $limoGroup->id)
                              ->where('package_id', request('package_id'))
                              ->get()) == 0;
     }
