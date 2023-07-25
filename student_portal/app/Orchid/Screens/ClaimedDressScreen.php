@@ -29,7 +29,7 @@ class ClaimedDressScreen extends Screen
 
     public function commandBar(): array
     {
-        $claimedDress = SchoolDresses::where('user_id', '=', Auth::user()->id)->first();
+        $claimedDress = SchoolDresses::where('user_id', '=', Auth::id())->first();
 
         return [
             Link::make('Back')
