@@ -20,8 +20,7 @@ class ClaimedDressScreen extends Screen
 
     public function query(Request $request): array
     {
-        $user = Auth::user();
-        $this->claimedDress = SchoolDresses::where('user_id', '=', $user->id)->first();
+        $this->claimedDress = SchoolDresses::where('user_id', '=', Auth::id())->first();
 
         return [
             'claimedDress' => $this->claimedDress,
@@ -47,8 +46,7 @@ class ClaimedDressScreen extends Screen
 
     public function unclaimDress(Request $request)
     {
-        $user = Auth::user();
-        $claimedDress = SchoolDresses::where('user_id', '=', $user->id)->first();
+        $claimedDress = SchoolDresses::where('user_id', '=', Auth::id())->first();
         if ($claimedDress) {
             $claimedDress->delete();
             Toast::info(__('Dress unclaimed successfully.'));

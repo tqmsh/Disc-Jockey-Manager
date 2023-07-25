@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Dress;
 use App\Models\SchoolDresses;
 use App\Models\Wishlist;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
@@ -58,7 +59,7 @@ class ViewDressDetailScreen extends Screen
                 ->icon('dollar-sign');
         }
 
-        $inWishlist = Wishlist::where('user_id', auth()->id())
+        $inWishlist = Wishlist::where('user_id', Auth::id())
             ->where('dress_id', $this->dress->id)
             ->exists();
 
@@ -101,7 +102,7 @@ class ViewDressDetailScreen extends Screen
     {
         $wishlistItem = new Wishlist();
         $wishlistItem->dress_id = $dress->id;
-        $wishlistItem->user_id = auth()->id();
+        $wishlistItem->user_id = Auth::id();
         $wishlistItem->save();
         Toast::success('Dress successfully added to wishlist');
     }
@@ -109,7 +110,7 @@ class ViewDressDetailScreen extends Screen
     public function removeFromWishlist(Dress $dress)
     {
         Wishlist::where('dress_id', $dress->id)
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->delete();
         Toast::success('Dress successfully removed from wishlist');
     }

@@ -83,7 +83,7 @@ class EditDressScreen extends Screen
             $buttons[] = Button::make('Preview')
                 ->icon('eye')
                 ->method('gotoPreview', ['dress' => $this->dress])
-                ->confirm('This will erase your current changes. Continue?')
+                ->confirm('This will discard your current changes. Continue?')
                 ->type(Color::PRIMARY());
         }
 
@@ -102,12 +102,6 @@ class EditDressScreen extends Screen
         ];
     }
 
-    /**
-     * @param Dress $dress
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function save(Dress $dress, Request $request)
     {
         $dressData = $request->get('dress');
@@ -144,11 +138,12 @@ class EditDressScreen extends Screen
 
         $dressData['user_id'] = $userId;
 
+        $exists = $dress->exists;
+
         $dress->fill($dressData)->save();
 
-        Toast::info('You have successfully created or updated the dress.');
-
-        return redirect()->route('platform.dresses');
+        Toast::info($exists ? 'You have successfully updated the dress.' : 'You have successfully created the dress.');
+        return back();
     }
 
     public function remove(Dress $dress, Request $request)

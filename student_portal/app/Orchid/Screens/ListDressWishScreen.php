@@ -18,8 +18,7 @@ class ListDressWishScreen extends Screen
 
     public function query(Request $request): array
     {
-        $user = Auth::user();
-        $wishlistDressesIds = Wishlist::where('user_id', '=', $user->id)
+        $wishlistDressesIds = Wishlist::where('user_id', '=', Auth::id())
             ->get()
             ->pluck('dress_id');
 
