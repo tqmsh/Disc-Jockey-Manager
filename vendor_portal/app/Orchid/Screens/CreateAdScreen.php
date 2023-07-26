@@ -113,6 +113,7 @@ class CreateAdScreen extends Screen
                     ->height(env("AD_SIZE"))
                     ->required()
                     ->help("Image to display")
+                    ->acceptedFiles('.png, .jpg, .jpeg,')
                     ->horizontal()
                 ]),
         ];

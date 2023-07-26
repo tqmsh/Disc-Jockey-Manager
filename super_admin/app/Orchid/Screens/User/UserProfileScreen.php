@@ -98,6 +98,7 @@ class UserProfileScreen extends Screen
     {
         $request->validate([
             'user.name'  => 'required|string',
+            'user.pfp' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'user.email' => [
                 'required',
                 Rule::unique(User::class, 'email')->ignore($request->user()),

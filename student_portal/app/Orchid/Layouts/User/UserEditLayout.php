@@ -54,6 +54,7 @@ class UserEditLayout extends Rows
                 ->height(300)
                 ->help("This image will be displayed on your profile.")
                 ->horizontal()
+                ->acceptedFiles('.png, .jpg, .jpeg,')
                 ->value(auth()->user()->pfp) 
         ];
     }
