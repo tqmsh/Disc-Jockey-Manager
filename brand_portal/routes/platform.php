@@ -7,6 +7,7 @@ use App\Orchid\Screens\EditDressScreen;
 use App\Orchid\Screens\ListDressScreen;
 use App\Orchid\Screens\OpportunitiesScreen;
 use App\Orchid\Screens\RoadmapScreen;
+use App\Orchid\Screens\ViewDressDetailScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewCourseScreen;
@@ -121,6 +122,13 @@ Route::screen('dresses/upload', BulkUploadDressScreen::class)
 
 Route::screen('dresses/edit/{dress?}', EditDressScreen::class)
     ->name('platform.dresses.edit')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
+    });
+
+Route::screen('dresses/view/{dress}', ViewDressDetailScreen::class)
+    ->name('platform.dresses.detail')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
             ->push('Dresses');

@@ -33,7 +33,7 @@ class PlatformProvider extends OrchidServiceProvider
         abort_if(Auth::user()->role != 3, 403, 'You are not authorized to view this page.');
 
         return [
-                
+
             //MONEY MAKER
             Menu::make('Dashboard')
             ->icon('home')
@@ -61,16 +61,20 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('brush')
             ->route('platform.studentSpecs.list'),
 
+            Menu::make('Dresses')
+                ->icon('fa.person-dress')
+                ->route('platform.dresses'),
+
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
-                
+
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
                 ->icon('arrow-down')
                 ->size()
                 ->list([
-                    
+
                         Menu::make('Basic Elements')
                             ->title('Form controls')
                             ->icon('note')
