@@ -48,19 +48,12 @@ class Dress extends Model
         'images' => 'array',
     ];
 
-    public static function splitAndTrimNonEmpty($input, $delimiter): array
-    {
-        $input = str_replace("\r\n", "\n", $input);
-        $input = str_replace("\r", "\n", $input);
-
-        return $input
-            ? array_filter(array_map('trim', explode($delimiter, $input)), 'strlen')
-            : [];
-    }
-
     public function scopeFilter($query, array $filters)
     {
         try {
+            // add leftJoin to vendors table to enable sorting and filtering by company name
+            $query->leftJoin('vendors', 'dresses.user_id', '=', 'vendors.user_id');
+
             // Sort Order
             if (isset($filters['sort'])) {
                 $sortColumn = $filters['sort']; // Get the sort column from the filters
@@ -70,7 +63,11 @@ class Dress extends Model
                 } else {
                     $sortDirection = 'asc';
                 }
-                if (in_array($sortColumn, Schema::getColumnListing('dresses'))) {
+
+                // add ability to sort by vendor's company name
+                if ($sortColumn === 'company_name') {
+                    $query->orderBy('vendors.' . $sortColumn, $sortDirection);
+                } elseif (in_array($sortColumn, Schema::getColumnListing('dresses'))) {
                     $query->orderBy($sortColumn, $sortDirection);
                 }
             }
@@ -82,14 +79,20 @@ class Dress extends Model
                         $query->where($field, 'LIKE', "%{$filters['filter'][$field]}%");
                     }
                 }
+
+                // add ability to filter by vendor's company name
+                if (isset($filters['filter']['vendor_company_name'])) {
+                    $query->where('vendors.company_name', 'LIKE', "%{$filters['filter']['vendor_company_name']}%");
+                }
             }
 
-            $query->select('dresses.*');
+            $query->select('dresses.*', 'vendors.company_name');
 
         } catch (Exception $e) {
             Toast::error('There was an error processing the scope filter. Error Message: ' . $e);
         }
     }
+
 
     /**
      * Get the user that owns the dress.
@@ -103,4 +106,5 @@ class Dress extends Model
     {
         return $this->belongsTo(Vendors::class, 'user_id', 'user_id');
     }
+
 }

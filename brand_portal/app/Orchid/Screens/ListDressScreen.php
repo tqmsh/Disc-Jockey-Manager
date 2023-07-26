@@ -7,7 +7,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\DressListLayout;
 use App\Models\Dress;
@@ -88,10 +88,10 @@ class ListDressScreen extends Screen
         $selected = $request->get('selected');
 
         if (empty($selected)) {
-            Alert::warning('No dresses were selected.');
+            Toast::warning('No dresses were selected.');
         } else {
             Dress::destroy($selected);
-            Alert::success('Selected dresses were deleted.');
+            Toast::success('Selected dresses were deleted.');
         }
     }
 }

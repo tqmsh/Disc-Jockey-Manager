@@ -12,7 +12,7 @@ use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
 class BulkUploadDressScreen extends Screen
@@ -45,9 +45,9 @@ class BulkUploadDressScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Back to Dress List')
+            Link::make('Back to Dress List')
                 ->icon('arrow-left')
-                ->method('goBack'),
+                ->route('platform.dresses'),
             Button::make('Process File')
                 ->type(Color::PRIMARY())
                 ->method('saveDress')
@@ -111,7 +111,7 @@ class BulkUploadDressScreen extends Screen
             ]);
 
             if ($validator->fails()) {
-                Alert::error('The file contains invalid data.');
+                Toast::error('The file contains invalid data.');
                 return;
             }
 
@@ -129,7 +129,7 @@ class BulkUploadDressScreen extends Screen
             // Check if the model number already exists in the CSV file
             if (isset($modelNumbers[$preparedRow['model_number']])) {
                 if (!$ignoreDuplicates) {
-                    Alert::error('The file contains entries with duplicate model numbers.');
+                    Toast::error('The file contains entries with duplicate model numbers.');
                     return;
                 } else {
                     // If ignoreDuplicates is set, skip this iteration and move to the next row
@@ -146,7 +146,7 @@ class BulkUploadDressScreen extends Screen
             if (!$exists) {
                 $validRows[] = $preparedRow;
             } else if (!$ignoreDuplicates) {
-                Alert::warning('Some dresses in the file already exist.');
+                Toast::warning('Some dresses in the file already exist.');
                 return;
             }
         }
@@ -155,11 +155,6 @@ class BulkUploadDressScreen extends Screen
             Dress::create($row);
         }
 
-        Alert::success(str(count($validRows)) . ' dress(es) created.');
-    }
-
-    public function goBack()
-    {
-        return redirect()->route('platform.dresses');
+        Toast::success(str(count($validRows)) . ' dress(es) created.');
     }
 }
