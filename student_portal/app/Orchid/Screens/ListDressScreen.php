@@ -28,7 +28,7 @@ class ListDressScreen extends Screen
 
     public function commandBar(): array
     {
-        $claimedDress = SchoolDresses::where('user_id', '=', Auth::id())->first();
+        $claimedDress = SchoolDresses::where('user_id', Auth::id())->first();
 
         return [
             Link::make('Wishlist')
