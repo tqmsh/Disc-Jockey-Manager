@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\ClaimedDressScreen;
+use App\Orchid\Screens\ListDressWishScreen;
+use App\Orchid\Screens\ViewDressDetailScreen;
+use App\Orchid\Screens\ListDressScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
@@ -96,6 +100,34 @@ Route::screen('dashboard', ExampleScreen::class)
     ->breadcrumbs(function (Trail $trail) {
         return $trail
             ->push('Dashboard');
+    });
+
+Route::screen('dresses', ListDressScreen::class)
+    ->name('platform.dresses')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
+    });
+
+Route::screen('dresses/wishlist', ListDressWishScreen::class)
+    ->name('platform.dresses.wishlist')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
+    });
+
+Route::screen('dresses/claimed', ClaimedDressScreen::class)
+    ->name('platform.dresses.claimed')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
+    });
+
+Route::screen('dresses/id/{dress}', ViewDressDetailScreen::class)
+    ->name('platform.dresses.detail')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Dresses');
     });
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
