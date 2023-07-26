@@ -117,8 +117,6 @@ class UserProfileScreen extends Screen
             
             Vendors::where('user_id', $request->user()->id)
                 ->update([
-                    'firstname' => $request->get('user')['firstname'],
-                    'lastname' => $request->get('user')['lastname'],
                     'email' => $request->get('user')['email'],
                 ]);
 
