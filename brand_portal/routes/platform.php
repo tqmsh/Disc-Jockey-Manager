@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 use App\Orchid\Screens\BulkUploadDressScreen;
 use App\Orchid\Screens\EditDressScreen;
-use App\Orchid\Screens\ListDressScreen;
-use App\Orchid\Screens\OpportunitiesScreen;
-use App\Orchid\Screens\RoadmapScreen;
-use App\Orchid\Screens\ViewDressDetailScreen;
-use Tabuna\Breadcrumbs\Trail;
-use Illuminate\Support\Facades\Route;
-use App\Orchid\Screens\ViewCourseScreen;
-use App\Orchid\Screens\Role\RoleEditScreen;
-use App\Orchid\Screens\Role\RoleListScreen;
-use App\Orchid\Screens\Examples\ExampleScreen;
-use App\Orchid\Screens\User\UserProfileScreen;
-use App\Orchid\Screens\ViewSingleLessonScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
-use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
+use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
-use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\DashboardScreen;
+use App\Orchid\Screens\ListDressScreen;
+use App\Orchid\Screens\OpportunitiesScreen;
+use App\Orchid\Screens\RoadmapScreen;
+use App\Orchid\Screens\Role\RoleEditScreen;
+use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewDressDetailScreen;
+use App\Orchid\Screens\ViewSectionLessonScreen;
+use App\Orchid\Screens\ViewSingleLessonScreen;
+use Illuminate\Support\Facades\Route;
+use Tabuna\Breadcrumbs\Trail;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', DashboardScreen::class)->name('platform.main');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 
@@ -85,7 +85,7 @@ Route::screen('roles', RoleListScreen::class)
     });
 
 // Example...
-Route::screen('dashboard', ExampleScreen::class)
+Route::screen('dashboard', DashboardScreen::class)
     ->name('platform.example')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
