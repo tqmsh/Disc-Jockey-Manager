@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Student;
+use Exception;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Group;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\SchoolDresses;
 use App\Models\Wishlist;
 use App\Models\School;
+use Orchid\Support\Facades\Toast;
 
 class DashboardScreen extends Screen
 {
@@ -39,83 +41,91 @@ class DashboardScreen extends Screen
      */
     public function query(Request $request): array
     {
-        $sort_param = request('sort');
-        $filter_param = request('filter');
+        try {
+            $sort_param = request('sort');
+            $filter_param = request('filter');
 
-        $vendorId = Auth::id();
-        $claimedDresses = SchoolDresses::whereHas('dress', function ($query) use ($vendorId) {
-            $query->where('user_id', $vendorId);
-        })->get();
-        $wishlistedDresses = Wishlist::whereHas('dress', function ($query) use ($vendorId) {
-            $query->where('user_id', $vendorId);
-        })->get();
+            $vendorId = Auth::id();
+            $claimedDresses = SchoolDresses::whereHas('dress', function ($query) use ($vendorId) {
+                $query->where('user_id', $vendorId);
+            })->get();
+            $wishlistedDresses = Wishlist::whereHas('dress', function ($query) use ($vendorId) {
+                $query->where('user_id', $vendorId);
+            })->get();
 
-        if (!empty($filter_param)) {
-            $claimedDresses = $claimedDresses->filter(function ($obj) use ($filter_param) {
-                foreach ($filter_param as $key => $value) {
-                    if ($obj->school[$key] !== $value) {
-                        return false;
+            if (!empty($filter_param)) {
+                $claimedDresses = $claimedDresses->filter(function ($obj) use ($filter_param) {
+                    foreach ($filter_param as $key => $value) {
+                        if ($obj->school[$key] !== $value) {
+                            return false;
+                        }
                     }
+                    return true;
+                });
+                $wishlistedDresses = $wishlistedDresses->filter(function ($obj) use ($filter_param) {
+                    $school = School::where('id', Student::where('user_id', $obj->user->id)->first()->school_id)->first();
+                    foreach ($filter_param as $key => $value) {
+                        if ($school[$key] !== $value) {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+            }
+
+            $location_count = [];
+            foreach ($claimedDresses as $obj) {
+                $key = $obj->school->country . '_' . $obj->school->state_province . '_' . $obj->school->city_municipality;
+                if (!array_key_exists($key, $location_count)) {
+                    $location_count[$key] = new Repository([
+                        'country' => $obj->school->country,
+                        'state_province' => $obj->school->state_province,
+                        'city_municipality' => $obj->school->city_municipality,
+                        'claimed_dresses' => 1,
+                        'wishlisted_dresses' => 0,
+                    ]);
+                } else {
+                    $location_count[$key]['claimed_dresses'] += 1;
                 }
-                return true;
-            });
-            $wishlistedDresses = $wishlistedDresses->filter(function ($obj) use ($filter_param) {
+            }
+            foreach ($wishlistedDresses as $obj) {
                 $school = School::where('id', Student::where('user_id', $obj->user->id)->first()->school_id)->first();
-                foreach ($filter_param as $key => $value) {
-                    if ($school[$key] !== $value) {
-                        return false;
-                    }
+                $key = $school->country . '_' . $school->state_province . '_' . $school->city_municipality;
+                if (!array_key_exists($key, $location_count)) {
+                    $location_count[$key] = new Repository([
+                        'country' => $school->country,
+                        'state_province' => $school->state_province,
+                        'city_municipality' => $school->city_municipality,
+                        'claimed_dresses' => 0,
+                        'wishlisted_dresses' => 1,
+                    ]);
+                } else {
+                    $location_count[$key]['wishlisted_dresses'] += 1;
                 }
-                return true;
-            });
-        }
-
-        $location_count = [];
-        foreach ($claimedDresses as $obj) {
-            $key = $obj->school->country . '_' . $obj->school->state_province . '_' . $obj->school->city_municipality;
-            if (!array_key_exists($key, $location_count)) {
-                $location_count[$key] = new Repository([
-                    'country' => $obj->school->country,
-                    'state_province' => $obj->school->state_province,
-                    'city_municipality' => $obj->school->city_municipality,
-                    'claimed_dresses' => 1,
-                    'wishlisted_dresses' => 0,
-                ]);
-            } else {
-                $location_count[$key]['claimed_dresses'] += 1;
             }
-        }
-        foreach ($wishlistedDresses as $obj) {
-            $school = School::where('id', Student::where('user_id', $obj->user->id)->first()->school_id)->first();
-            $key = $school->country . '_' . $school->state_province . '_' . $school->city_municipality;
-            if (!array_key_exists($key, $location_count)) {
-                $location_count[$key] = new Repository([
-                    'country' => $school->country,
-                    'state_province' => $school->state_province,
-                    'city_municipality' => $school->city_municipality,
-                    'claimed_dresses' => 0,
-                    'wishlisted_dresses' => 1,
-                ]);
-            } else {
-                $location_count[$key]['wishlisted_dresses'] += 1;
+
+            if (!empty($sort_param)) {
+                $order = (strpos($sort_param, '-') === 0) ? 'desc' : 'asc';
+                $sort_param = ltrim($sort_param, '-');
+
+                usort($location_count, function ($a, $b) use ($sort_param, $order) {
+                    return ($order === 'asc')
+                        ? $a[$sort_param] <=> $b[$sort_param]
+                        : $b[$sort_param] <=> $a[$sort_param];
+                });
             }
+            return [
+                'dressesClaimed' => count($claimedDresses),
+                'dressesWishlisted' => count($wishlistedDresses),
+                'locations' => $location_count
+            ];
+        } catch (Exception $e) {
+            Toast::error('There was an error processing the filter. Error Message: ' . $e);
         }
-
-        if (!empty($sort_param)) {
-            $order = (strpos($sort_param, '-') === 0) ? 'desc' : 'asc';
-            $sort_param = ltrim($sort_param, '-');
-
-            usort($location_count, function ($a, $b) use ($sort_param, $order) {
-                return ($order === 'asc')
-                    ? $a[$sort_param] <=> $b[$sort_param]
-                    : $b[$sort_param] <=> $a[$sort_param];
-            });
-        }
-
         return [
-            'dressesClaimed' => count($claimedDresses),
-            'dressesWishlisted' => count($wishlistedDresses),
-            'locations' => $location_count
+            'dressesClaimed' => -1,
+            'dressesWishlisted' => -1,
+            'locations' => []
         ];
     }
 
