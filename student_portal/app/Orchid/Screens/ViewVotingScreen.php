@@ -83,7 +83,7 @@ class ViewVotingScreen extends Screen
             $voted = false;
             foreach($voters as $voter){
                 if($now > $election->end_date){
-                    Toast::warning('You have past the election date');
+                    Toast::warning('You have passed the election date');
                     $voted = true;
                     return;
                 }
