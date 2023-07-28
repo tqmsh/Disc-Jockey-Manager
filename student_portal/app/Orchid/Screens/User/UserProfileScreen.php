@@ -17,6 +17,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Hash;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
+use Orchid\Alert\Toast as AlertToast;
 
 class UserProfileScreen extends Screen
 {
@@ -99,26 +100,33 @@ class UserProfileScreen extends Screen
     {
         $request->validate([
             'user.name'  => 'required|string',
-            'user.pfp' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'user.email' => [
                 'required',
                 Rule::unique(User::class, 'email')->ignore($request->user()),
             ],
         ]);
 
-        $request->user()
-            ->fill($request->get('user'))
-            ->save();
-        
-        Student::where('user_id', $request->user()->id)
-            ->update([
-                'firstname' => $request->get('user')['firstname'],
-                'lastname' => $request->get('user')['lastname'],
-                'email' => $request->get('user')['email'],
-            ]);
+        //use str_ends_with() to check if the user.pfp ends with .png, .jpg, .jpeg, .gif, .svg, or .webp
+        if (!(str_ends_with(request('user.pfp'), ".png") || str_ends_with(request('user.pfp'), ".jpg") || str_ends_with(request('user.pfp'), ".jpeg") || str_ends_with(request('user.pfp'), ".gif") || str_ends_with(request('user.pfp'), ".svg") || str_ends_with(request('user.pfp'), ".webp"))) {
 
+            Toast::error(__('Invalid file type. Accepted file: .png, .jpg, .jpeg, .gif, .svg, .webp'));
 
-        Toast::info(__('Profile updated.'));
+        } else {
+            $request->user()
+                ->fill($request->get('user'))
+                ->save();
+            
+            Student::where('user_id', $request->user()->id)
+                ->update([
+                    'firstname' => $request->get('user')['firstname'],
+                    'lastname' => $request->get('user')['lastname'],
+                    'email' => $request->get('user')['email'],
+                ]);
+
+            Toast::info(__('Profile updated.'));
+            return;
+        }
+
     }
 
     /**
