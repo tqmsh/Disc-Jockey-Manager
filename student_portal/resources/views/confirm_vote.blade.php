@@ -1,0 +1,1 @@
+You have already voted for this position. Change vote to candidate &nbsp<strong>{{ $name }}</strong> ?

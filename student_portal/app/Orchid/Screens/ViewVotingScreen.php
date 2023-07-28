@@ -10,6 +10,7 @@ use Orchid\Screen\Screen;
 use App\Models\ElectionVotes;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewCandidateLayout;
@@ -88,11 +89,13 @@ class ViewVotingScreen extends Screen
                     return;
                 }
 
-                // user tries to vote for the exact same candidate
                 else if($voter->voter_user_id == $user_id){
                     $targetCandidate = Candidate::where('id', $candidate)->first();
-                    // you have already voted for [current]. change vote to [new candidate?]
-                    Toast::warning('You have already voted for this position. Change your vote to ' . $targetCandidate->candidate_name . '?');
+                    
+                    Alert::view('confirm_vote', Color::WARNING(), [
+                        'name' => $targetCandidate->candidate_name
+                    ]);
+                    
                     $voted = true;
                     return;
                 }
