@@ -84,6 +84,15 @@ Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platfo
 //edit limo group
 Route::screen('/limo-groups/{limoGroup}/edit', EditLimoGroupScreen::class)->name('platform.limo-groups.edit');
 
+//view beauty groups
+Route::screen('/beauty-groups', ViewBeautyGroupScreen::class)->name('platform.limo-groups');
+
+//create beauty groups
+Route::screen('/beauty-groups/create', CreateBeautyGroupScreen::class)->name('platform.limo-groups.create');
+
+//edit beauty group
+Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)->name('platform.limo-groups.edit');
+
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
