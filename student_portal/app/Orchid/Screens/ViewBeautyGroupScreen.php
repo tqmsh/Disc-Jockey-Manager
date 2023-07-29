@@ -429,7 +429,7 @@ class ViewBeautyGroupScreen extends Screen
                     $old_vendor = User::find($old_beauty_group_bid->user_id);
                     $old_vendor->notify(new GeneralNotification([
                         'title' => 'Beauty Group Bid Changed',
-                        'message' => 'Your bid for the' . $old_beauty_group_bid->beautyGroup->name . 'beauty group has been chnaged. Please contact the limo group owner for more information.',
+                        'message' => 'Your bid for the ' . $old_beauty_group_bid->beautyGroup->name . ' beauty group has been chnaged. Please contact the limo group owner for more information.',
                         'action' => '/admin/bids/history',
                     ]));
                 }

@@ -431,7 +431,7 @@ class ViewLimoGroupScreen extends Screen
                     $old_vendor = User::find($old_limo_group_bid->user_id);
                     $old_vendor->notify(new GeneralNotification([
                         'title' => 'Limo Group Bid Changed',
-                        'message' => 'Your bid for the' . $old_limo_group_bid->limoGroup->name . 'limo group has been chnaged. Please contact the limo group owner for more information.',
+                        'message' => 'Your bid for the ' . $old_limo_group_bid->limoGroup->name . ' limo group has been chnaged. Please contact the limo group owner for more information.',
                         'action' => '/admin/bids/history',
                     ]));
                 }
