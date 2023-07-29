@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use App\Models\Region;
 use App\Models\Vendors;
 use Orchid\Screen\Sight;
@@ -18,6 +19,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\GeneralNotification;
 
 class CreateLimoGroupBidScreen extends Screen
 {
@@ -167,6 +169,14 @@ class CreateLimoGroupBidScreen extends Screen
                         'contact_instructions' => request('contact_instructions'),
                         'status' => 0
                     ]);
+
+                    $limoGroupOwner = User::find($limoGroup->owner->user_id);
+
+                    $limoGroupOwner->notify(new GeneralNotification([
+                        'title' => 'New Limo Group Bid',
+                        'message' => 'You have a new bid for your limo group: ' . $limoGroup->name,
+                        'action' => '/admin/limo-groups',
+                    ]));
                         
                     Toast::success('Bid created succesfully');
                         
