@@ -8,6 +8,8 @@ use App\Models\Vendors;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\Region;
+use App\Models\VendorPaidRegions;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -102,8 +104,67 @@ class ViewVendorScreen extends Screen
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewVendorLayout::class
+            ViewVendorLayout::class,
+
+            Layout::rows([
+                Select::make('user_ids')
+                    ->title('Vendors')
+                    ->empty('No Selection')
+                    ->fromModel(Vendors::class, 'company_name', 'user_id')
+                    ->multiple()
+                    ->help('Select the vendors you want to add paid regions to')
+                    ->placeholder('Start typing to search...'),
+
+                Select::make('region_ids')
+                    ->title('paid Region')
+                    ->empty('No Selection')
+                    ->fromModel(Region::class, 'name', 'id')
+                    ->multiple()
+                    ->help('Select the paid regions you want to add to the vendors')
+                    ->placeholder('Start typing to search...'),
+
+                Button::make('Add Paid Regions')
+                    ->icon('plus')
+                    ->method('addPaidRegions')
+                    ->type(Color::DEFAULT())
+
+            ])->title('Add Paid Regions to Vendors')
         ];
+    }
+
+    public function addPaidRegions(Request $request){
+
+        //get all vendors from post request
+        $vendor_ids = $request->get('user_ids');
+
+        //get all regions from post request
+        $region_ids = $request->get('region_ids');
+
+        try{
+
+            //if the array is not empty
+            if(!empty($vendor_ids) && !empty($region_ids)){
+
+                //loop through the vendors and add the paid regions to them
+                foreach($vendor_ids as $vendor_id){
+                    foreach($region_ids as $region_id){
+
+                        VendorPaidRegions::firstOrCreate([
+                            'user_id' => $vendor_id,
+                            'region_id' => $region_id
+                        ]);
+                    }
+                }
+
+                Toast::success('Paid regions added to selected vendors succesfully');
+
+            }else{
+                Toast::warning('Please select vendors and paid regions in order to add them');
+            }
+
+        }catch(Exception $e){
+            Toast::error('There was a error trying to add the paid regions to the selected vendors. Error Message: ' . $e);
+        }
     }
 
     public function filter(){
