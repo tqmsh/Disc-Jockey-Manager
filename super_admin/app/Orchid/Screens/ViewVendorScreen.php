@@ -116,7 +116,7 @@ class ViewVendorScreen extends Screen
                     ->placeholder('Start typing to search...'),
 
                 Select::make('region_ids')
-                    ->title('paid Region')
+                    ->title('Paid Region')
                     ->empty('No Selection')
                     ->fromModel(Region::class, 'name', 'id')
                     ->multiple()

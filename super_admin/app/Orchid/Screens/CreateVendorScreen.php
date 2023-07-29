@@ -6,13 +6,14 @@ use Exception;
 use App\Models\User;
 use App\Models\School;
 use App\Models\Vendors;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
-use App\Models\RoleUsers;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
+use App\Models\VendorPaidRegions;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -202,6 +203,14 @@ class CreateVendorScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->placeholder('Ex. Ottawa'),
+
+                Select::make('region_ids')
+                    ->title('Paid Region')
+                    ->empty('No Selection')
+                    ->fromModel(Region::class, 'name', 'id')
+                    ->multiple()
+                    ->help('Select the paid regions you want to add to the vendors')
+                    ->placeholder('Start typing to search...'),
             ]),
         ];
     }
@@ -215,6 +224,8 @@ class CreateVendorScreen extends Screen
 
             //get user fields
             $userTableFields = $this->getUserFields($request);
+
+            $paidRegions = $request->input('region_ids');
 
 
             //check for duplicate email
@@ -235,7 +246,18 @@ class CreateVendorScreen extends Screen
                     'user_id' => $user->id,
                     'role_id' => 4
                 ]);
-                
+
+                if($paidRegions != null){
+
+                    //create the vendor paid regions
+                    foreach($paidRegions as $region){
+                        VendorPaidRegions::firstOrCreate([
+                            'user_id' => $user->id,
+                            'region_id' => $region
+                        ]);
+                    }
+                }
+
                 //toast success message
                 Toast::success('Vendor Added Succesfully');
 
