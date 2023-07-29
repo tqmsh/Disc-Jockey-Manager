@@ -47,6 +47,6 @@ class BeautyGroupBid extends Model
     }
 
     public function beautyGroup(){
-        return $this->belongsTo(BeautyGroup::class, 'limo_group_id', 'id');
+        return $this->belongsTo(BeautyGroup::class, 'beauty_group_id', 'id');
     }
 }

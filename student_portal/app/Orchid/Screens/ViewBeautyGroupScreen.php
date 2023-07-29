@@ -2,9 +2,6 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\BeautyGroup;
-use App\Models\BeautyGroupBid;
-use App\Models\BeautyGroupMember;
 use App\Models\User;
 use Orchid\Screen\TD;
 use App\Models\Student;
@@ -12,17 +9,21 @@ use Orchid\Screen\Sight;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\BeautyGroup;
 use App\Models\VendorPackage;
+use App\Models\BeautyGroupBid;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
+use App\Models\BeautyGroupMember;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
-use Orchid\Screen\Actions\ModalToggle;
 use App\Notifications\GroupInvitation;
+use Orchid\Screen\Actions\ModalToggle;
+use App\Notifications\GeneralNotification;
 
 class ViewBeautyGroupScreen extends Screen
 {
@@ -348,7 +349,7 @@ class ViewBeautyGroupScreen extends Screen
                                 ->align(TD::ALIGN_LEFT)
                                 ->width('100px')
                                 ->render(function(BeautyGroupBid $bid){
-                                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1, 'beauty_group_id' => $bid->beauty_group->id])->icon('check')->type(Color::SUCCESS()); 
                                     }), 
 
                             TD::make()
@@ -416,11 +417,31 @@ class ViewBeautyGroupScreen extends Screen
 
     public function updateBid()
     {
-        $bid = BeautyGroupBid::find(request('bid_id'));
-        $bid->status = request('choice');
-        $bid->save();
-        Toast::success('Bid updated successfully!');
-        return redirect()->route('platform.beauty-groups');
+        try {
+            $bid = BeautyGroupBid::find(request('bid_id'));
+            $bid->status = request('choice');
+
+            if(request('choice') == 1){
+                $old_beauty_group_bid = BeautyGroupBid::where('beauty_group_id', request('beauty_group_id'))->where('status', 1)->first();
+                if($old_beauty_group_bid != null){
+                    $old_beauty_group_bid->status = 0;
+                    $old_beauty_group_bid->save();
+                    $old_vendor = User::find($old_beauty_group_bid->user_id);
+                    $old_vendor->notify(new GeneralNotification([
+                        'title' => 'Beauty Group Bid Changed',
+                        'message' => 'Your bid for the' . $old_beauty_group_bid->beautyGroup->name . 'beauty group has been chnaged. Please contact the limo group owner for more information.',
+                        'action' => '/admin/bids/history',
+                    ]));
+                }
+            }
+
+            $bid->save();
+            Toast::success('Bid updated successfully!');
+            return redirect()->route('platform.beauty-groups');
+        } catch (\Exception $e) {
+            Toast::error($e->getMessage());
+            return redirect()->route('platform.beauty-groups');
+        }
     }
 
     public function deletedSelectedInvitations(){

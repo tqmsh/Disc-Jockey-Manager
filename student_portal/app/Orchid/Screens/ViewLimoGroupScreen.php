@@ -13,6 +13,7 @@ use App\Models\Categories;
 use App\Models\LimoGroupBid;
 use App\Models\VendorPackage;
 use App\Models\LimoGroupMember;
+use App\Notifications\GeneralNotification;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -348,7 +349,9 @@ class ViewLimoGroupScreen extends Screen
                                 ->align(TD::ALIGN_LEFT)
                                 ->width('100px')
                                 ->render(function(LimoGroupBid $bid){
-                                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                                    return Button::make('Accept')                                
+                                    ->confirm('WARNING: Accepting a bid will remove all other bids accepted from the limo group. Are you sure you want to accept this bid?')
+                                    ->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1, 'limo_group_id' => $bid->limo_group_id])->icon('check')->type(Color::SUCCESS()); 
                                     }), 
 
                             TD::make()
@@ -416,11 +419,31 @@ class ViewLimoGroupScreen extends Screen
 
     public function updateBid()
     {
-        $bid = LimoGroupBid::find(request('bid_id'));
-        $bid->status = request('choice');
-        $bid->save();
-        Toast::success('Bid updated successfully!');
-        return redirect()->route('platform.limo-groups');
+        try {
+            $bid = LimoGroupBid::find(request('bid_id'));
+            $bid->status = request('choice');
+
+            if(request('choice') == 1){
+                $old_limo_group_bid = LimoGroupBid::where('limo_group_id', request('limo_group_id'))->where('status', 1)->first();
+                if($old_limo_group_bid != null){
+                    $old_limo_group_bid->status = 0;
+                    $old_limo_group_bid->save();
+                    $old_vendor = User::find($old_limo_group_bid->user_id);
+                    $old_vendor->notify(new GeneralNotification([
+                        'title' => 'Limo Group Bid Changed',
+                        'message' => 'Your bid for the' . $old_limo_group_bid->limoGroup->name . 'limo group has been chnaged. Please contact the limo group owner for more information.',
+                        'action' => '/admin/bids/history',
+                    ]));
+                }
+            }
+
+            $bid->save();
+            Toast::success('Bid updated successfully!');
+            return redirect()->route('platform.limo-groups');
+        } catch (\Exception $e) {
+            Toast::error($e->getMessage());
+            return redirect()->route('platform.limo-groups');
+        }
     }
 
     public function deletedSelectedInvitations(){
