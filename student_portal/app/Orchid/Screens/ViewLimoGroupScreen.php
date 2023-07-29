@@ -22,7 +22,7 @@ use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
-use App\Notifications\LimoGroupInvitation;
+use App\Notifications\GroupInvitation;
 
 class ViewLimoGroupScreen extends Screen
 {
@@ -508,7 +508,7 @@ class ViewLimoGroupScreen extends Screen
                         if(is_numeric($invitee_user_id)){
 
                             $user = User::find($invitee_user_id);
-                            $user->notify(new LimoGroupInvitation([
+                            $user->notify(new GroupInvitation([
                                 'title' => 'You have been invited to join a limo group!',
                                 'message' => 'You have been invited to join a limo group by ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . '. Please check your limo group invitations page to accept or reject the invitation.',
                                 'action' => '/admin/limo-groups/'

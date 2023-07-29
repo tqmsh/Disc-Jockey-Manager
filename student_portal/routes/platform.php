@@ -2,22 +2,23 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\ClaimedDressScreen;
-use App\Orchid\Screens\ListDressWishScreen;
-use App\Orchid\Screens\ViewDressDetailScreen;
-use App\Orchid\Screens\ListDressScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
+use App\Orchid\Screens\ListDressScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewVotingScreen;
+use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
+use App\Orchid\Screens\ListDressWishScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
 use App\Orchid\Screens\CreateLimoGroupScreen;
+use App\Orchid\Screens\ViewBeautyGroupScreen;
+use App\Orchid\Screens\ViewDressDetailScreen;
 use App\Orchid\Screens\ViewSongRequestScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
