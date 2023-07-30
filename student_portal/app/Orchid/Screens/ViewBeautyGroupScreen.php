@@ -129,7 +129,7 @@ class ViewBeautyGroupScreen extends Screen
                     Select::make('invitee_user_ids')
                         ->title('Invite Members')
                         ->placeholder('Select a user')
-                        ->help('Select a student to invite to the limo group.')
+                        ->help('Select a student to invite to the beauty group.')
                         ->required()
                         ->fromQuery(Student::where('school_id', Auth::user()->student->school_id)->whereNot('user_id', Auth::user()->id)->whereNotIn('user_id', BeautyGroupMember::where('beauty_group_id', $this->owned_beauty_group->id)->get('invitee_user_id')), 'email', 'user_id')
                         ->multiple()
@@ -273,7 +273,7 @@ class ViewBeautyGroupScreen extends Screen
                     ])
                 ],
                 'Beauty Group Invitations' => [
-                    Layout::table('limo_group_invitations', [
+                    Layout::table('beauty_group_invitations', [
 
                         TD::make('actions', 'Actions')
                             ->render(function (BeautyGroupMember $student){
@@ -287,8 +287,8 @@ class ViewBeautyGroupScreen extends Screen
                             ->width('100px')
                             ->render(function(BeautyGroupMember $student_beauty_member){
                                 return Button::make('Accept')
-                                ->confirm('WARNING: Joining a limo group will remove you from your current beauty group if you are in one. And if you own a beauty group, it will delete it and all the memebers in it. Are you sure you want to join this beauty group?')
-                                ->method('updateInvitation', ['limo_group_member_id' => $student_beauty_member->id, 'choice' => 1])
+                                ->confirm('WARNING: Joining a beauty group will remove you from your current beauty group if you are in one. And if you own a beauty group, it will delete it and all the memebers in it. Are you sure you want to join this beauty group?')
+                                ->method('updateInvitation', ['beauty_group_member_id' => $student_beauty_member->id, 'choice' => 1])
                                 ->icon('check')->type(Color::SUCCESS())->class('btn btn-success btn-rounded'); 
                                 }), 
 
@@ -296,7 +296,7 @@ class ViewBeautyGroupScreen extends Screen
                             ->align(TD::ALIGN_LEFT)
                             ->width('100px')
                             ->render(function(BeautyGroupMember $student_beauty_member){
-                                return Button::make('Reject')->method('updateInvitation', ['limo_group_member_id' => $student_beauty_member->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                                return Button::make('Reject')->method('updateInvitation', ['beauty_group_member_id' => $student_beauty_member->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
                                 }),
 
                         TD::make('owner', 'Owner')
@@ -429,7 +429,7 @@ class ViewBeautyGroupScreen extends Screen
                     $old_vendor = User::find($old_beauty_group_bid->user_id);
                     $old_vendor->notify(new GeneralNotification([
                         'title' => 'Beauty Group Bid Changed',
-                        'message' => 'Your bid for the ' . $old_beauty_group_bid->beautyGroup->name . ' beauty group has been chnaged. Please contact the limo group owner for more information.',
+                        'message' => 'Your bid for the ' . $old_beauty_group_bid->beautyGroup->name . ' beauty group has been chnaged. Please contact the beauty group owner for more information.',
                         'action' => '/admin/bids/history',
                     ]));
                 }
@@ -493,23 +493,23 @@ class ViewBeautyGroupScreen extends Screen
         $beauty_group_member = BeautyGroupMember::find(request('beauty_group_member_id'));
         $beauty_group_member->status = request('choice');
 
-        //check if user already owns a limo group
+        //check if user already owns a beauty group
         $owned_beauty_group = BeautyGroup::where('creator_user_id', Auth::user()->id)->first();
 
-        //check if user is part of a limo group
+        //check if user is part of a beauty group
         $user_beauty_group = BeautyGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 1)->first();
 
         if($owned_beauty_group){
-            //delete the old limo group
+            //delete the old beauty group
             $owned_beauty_group->delete();
 
         } elseif($user_beauty_group){
-            //remove them as a limo group member
+            //remove them as a beauty group member
             $user_beauty_group->delete();
         }
 
         if(request('choice') == 1){
-            //update the limo group capacity
+            //update the beauty group capacity
             $beauty_group = BeautyGroup::find($beauty_group_member->beautyGroup->id);
             $beauty_group->decrement('capacity');
             $beauty_group->save();
