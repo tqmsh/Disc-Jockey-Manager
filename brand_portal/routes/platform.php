@@ -11,7 +11,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\DashboardScreen;
-use App\Orchid\Screens\ListDressScreen;
+use App\Orchid\Screens\ViewDressListScreen;
 use App\Orchid\Screens\OpportunitiesScreen;
 use App\Orchid\Screens\RoadmapScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -86,7 +86,7 @@ Route::screen('roles', RoleListScreen::class)
 
 // Example...
 Route::screen('dashboard', DashboardScreen::class)
-    ->name('platform.example')
+    ->name('platform.dashboard')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
             ->push('Dashboard');
@@ -106,7 +106,7 @@ Route::screen('opportunities', OpportunitiesScreen::class)
             ->push('Opportunities');
     });
 
-Route::screen('dresses', ListDressScreen::class)
+Route::screen('dresses', ViewDressListScreen::class)
     ->name('platform.dresses')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
@@ -134,11 +134,11 @@ Route::screen('dresses/view/{dress}', ViewDressDetailScreen::class)
             ->push('Dresses');
     });
 
-Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
-Route::screen('example-layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');
-Route::screen('example-charts', ExampleChartsScreen::class)->name('platform.example.charts');
-Route::screen('example-editors', ExampleTextEditorsScreen::class)->name('platform.example.editors');
-Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.example.cards');
-Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
+Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.dashboard.fields');
+Route::screen('example-layouts', ExampleLayoutsScreen::class)->name('platform.dashboard.layouts');
+Route::screen('example-charts', ExampleChartsScreen::class)->name('platform.dashboard.charts');
+Route::screen('example-editors', ExampleTextEditorsScreen::class)->name('platform.dashboard.editors');
+Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.dashboard.cards');
+Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.dashboard.advanced');
 
 //Route::screen('idea', Idea::class, 'platform.screens.idea');

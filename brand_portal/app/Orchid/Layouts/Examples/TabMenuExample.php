@@ -16,7 +16,7 @@ class TabMenuExample extends TabMenu
     {
         return [
             Menu::make('Overview layouts')
-                ->route('platform.example.layouts'),
+                ->route('platform.dashboard.layouts'),
 
             Menu::make('Get Started')
                 ->route('platform.main'),
@@ -26,7 +26,7 @@ class TabMenuExample extends TabMenu
 
             Menu::make('Example screen')
                 ->icon('monitor')
-                ->route('platform.example')
+                ->route('platform.dashboard')
                 ->badge(function () {
                     return 6;
                 }),

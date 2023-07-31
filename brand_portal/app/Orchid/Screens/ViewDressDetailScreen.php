@@ -3,15 +3,16 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Dress;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;
 
 class ViewDressDetailScreen extends Screen
 {
-    public $name = 'Preview Dress';
-    public $description = '';
-    public $dress;
+    public string $name = 'Dress Preview';
+    public ?string $description = 'Provides a replica of the dress view as it would appear to students.';
+    public Dress $dress;
 
     /**
      * Query data.
@@ -20,7 +21,6 @@ class ViewDressDetailScreen extends Screen
      */
     public function query(Dress $dress): array
     {
-        $this->dress = $dress;
         return [
             'dress' => $dress
         ];
@@ -33,11 +33,24 @@ class ViewDressDetailScreen extends Screen
      */
     public function commandBar(): array
     {
-        return [
+        $buttons = [
             Link::make('Back')
-                ->route('platform.dresses.edit', ['dress' => $this->dress])
+                ->route('platform.dresses')
                 ->icon('arrow-left'),
         ];
+        if ($this->dress->url != null) {
+            $buttons[] = Link::make('Buy now')
+                ->href($this->dress->url)
+                ->class('btn btn-success shadow-0')
+                ->icon('dollar-sign');
+        }
+        $buttons[] = Button::make('Add to wishlist')
+            ->icon('heart')
+            ->class('disabled btn btn-danger shadow-0');
+        $buttons[] = Button::make('Claim')
+            ->icon('check')
+            ->class('disabled btn btn-warning shadow-0');
+        return $buttons;
     }
 
     /**

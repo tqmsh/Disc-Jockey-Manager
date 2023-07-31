@@ -20,26 +20,15 @@ use Orchid\Support\Facades\Toast;
 
 class DashboardScreen extends Screen
 {
-    /**
-     * Display header name.
-     *
-     * @var string
-     */
-    public $name = 'Dashboard';
-
-    /**
-     * Display header description.
-     *
-     * @var string|null
-     */
-    public $description = '';
+    public string $name = 'Dashboard';
+    public ?string $description = 'View the number of students that have wishlisted or claimed your dresses by location.';
 
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Request $request): array
+    public function query(): array
     {
         try {
             $sort_param = request('sort');
@@ -153,10 +142,7 @@ class DashboardScreen extends Screen
                         ->title('Country:')
                         ->empty('No selection')
                         ->value(fn() => request('filter.country'))
-                        ->options([
-                            'Canada' => 'Canada',
-                            'USA' => 'USA'
-                        ]),
+                        ->fromModel(School::class, 'country', 'country'),
 
                     Select::make('filter.state_province')
                         ->title('State/Province')
@@ -171,9 +157,15 @@ class DashboardScreen extends Screen
                         ->fromModel(School::class, 'city_municipality', 'city_municipality'),
                 ]),
 
-                Button::make('Filter')
-                    ->icon('filter')
-                    ->method('filter')
+                Group::make([
+                    Button::make('Filter')
+                        ->icon('filter')
+                        ->method('filter'),
+
+                    Button::make('Clear Filters')
+                        ->icon('close')
+                        ->method('clearFilters')
+                ])
             ]),
 
             Layout::metrics([
@@ -198,6 +190,11 @@ class DashboardScreen extends Screen
 
     public function filter()
     {
-        return redirect()->route('platform.example', request(['sort', 'filter']));
+        return redirect()->route('platform.dashboard', request(['sort', 'filter']));
+    }
+
+    public function clearFilters()
+    {
+        return redirect()->route('platform.dashboard');
     }
 }
