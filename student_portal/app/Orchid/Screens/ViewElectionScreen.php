@@ -42,6 +42,11 @@ class ViewElectionScreen extends Screen
         return 'Election: ' .$this->election->election_name;
     }
 
+    public function date(): ?string
+    {
+        return 'Election: ' .$this->election->end_date;
+    }
+
     /**
      * Button commands.
      *

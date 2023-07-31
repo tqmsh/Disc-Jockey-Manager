@@ -68,7 +68,8 @@ class ViewVotingScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewCandidateLayout::class
+            ViewCandidateLayout::class,
+            ViewElectionDatesLayout::class,
         ];
     }
 
