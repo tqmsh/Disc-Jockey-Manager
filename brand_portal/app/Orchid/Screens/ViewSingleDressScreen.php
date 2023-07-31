@@ -8,7 +8,7 @@ use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;
 
-class ViewDressDetailScreen extends Screen
+class ViewSingleDressScreen extends Screen
 {
     public string $name = 'Dress Preview';
     public ?string $description = 'Provides a replica of the dress view as it would appear to students.';

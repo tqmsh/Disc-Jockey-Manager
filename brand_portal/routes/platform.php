@@ -19,7 +19,7 @@ use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
-use App\Orchid\Screens\ViewDressDetailScreen;
+use App\Orchid\Screens\ViewSingleDressScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use Illuminate\Support\Facades\Route;
@@ -127,7 +127,7 @@ Route::screen('dresses/edit/{dress?}', EditDressScreen::class)
             ->push('Dresses');
     });
 
-Route::screen('dresses/view/{dress}', ViewDressDetailScreen::class)
+Route::screen('dresses/view/{dress}', ViewSingleDressScreen::class)
     ->name('platform.dresses.detail')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
