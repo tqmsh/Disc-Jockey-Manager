@@ -12,6 +12,7 @@ class BeautyGroupMember extends Model
     use AsSource;
 
     protected $fillable = [
+        'beauty_group_id',
         'limo_group_id',
         'invitee_user_id',
         'status',
