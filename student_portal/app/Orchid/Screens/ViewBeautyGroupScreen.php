@@ -223,7 +223,7 @@ class ViewBeautyGroupScreen extends Screen
                     ]),
     
                 ],
-                'Members in Beauty Group' => [
+                'Members in Group' => [
                     Layout::table('current_beauty_group_members', [
 
                         TD::make()
@@ -286,10 +286,11 @@ class ViewBeautyGroupScreen extends Screen
                             ->align(TD::ALIGN_LEFT)
                             ->width('100px')
                             ->render(function(BeautyGroupMember $student_beauty_member){
-                                return Button::make('Accept')
-                                ->confirm('WARNING: Joining a beauty group will remove you from your current beauty group if you are in one. And if you own a beauty group, it will delete it and all the memebers in it. Are you sure you want to join this beauty group?')
-                                ->method('updateInvitation', ['beauty_group_member_id' => $student_beauty_member->id, 'choice' => 1])
-                                ->icon('check')->type(Color::SUCCESS())->class('btn btn-success btn-rounded'); 
+                                return 
+                                Button::make('Accept')
+                                    ->confirm('WARNING: Joining a beauty group will remove you from your current beauty group if you are in one. And if you own a beauty group, it will delete it and all the memebers in it. Are you sure you want to join this beauty group?')
+                                    ->method('updateInvitation', ['beauty_group_member_id' => $student_beauty_member->id, 'choice' => 1])
+                                    ->icon('check')->type(Color::SUCCESS())->class('btn btn-success btn-rounded'); 
                                 }), 
 
                         TD::make()
@@ -349,7 +350,7 @@ class ViewBeautyGroupScreen extends Screen
                                 ->align(TD::ALIGN_LEFT)
                                 ->width('100px')
                                 ->render(function(BeautyGroupBid $bid){
-                                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1, 'beauty_group_id' => $bid->beauty_group->id])->icon('check')->type(Color::SUCCESS()); 
+                                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1, 'beauty_group_id' => $bid->beautyGroup->id])->icon('check')->type(Color::SUCCESS()); 
                                     }), 
 
                             TD::make()
@@ -429,7 +430,7 @@ class ViewBeautyGroupScreen extends Screen
                     $old_vendor = User::find($old_beauty_group_bid->user_id);
                     $old_vendor->notify(new GeneralNotification([
                         'title' => 'Beauty Group Bid Changed',
-                        'message' => 'Your bid for the ' . $old_beauty_group_bid->beautyGroup->name . ' beauty group has been chnaged. Please contact the beauty group owner for more information.',
+                        'message' => 'Your bid for the ' . $old_beauty_group_bid->beautyGroup->name . ' beauty group has been changed. Please contact the beauty group owner for more information.',
                         'action' => '/admin/bids/history',
                     ]));
                 }

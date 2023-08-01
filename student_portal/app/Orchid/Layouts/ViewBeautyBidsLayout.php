@@ -10,7 +10,7 @@ use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 
-class ViewLimoBidsLayout extends Table
+class ViewBeautyBidsLayout extends Table
 {
     /**
      * Data source.
