@@ -14,6 +14,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewCandidateLayout;
+use Orchid\Support\Facades\Layout;
 
 class ViewVotingScreen extends Screen
 {
@@ -67,10 +68,41 @@ class ViewVotingScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [
-            ViewCandidateLayout::class,
-            ViewElectionDatesLayout::class,
-        ];
+
+        // IF USER HAS NOT VOTED
+        if ((ViewVotingScreen::hasVoted($this->position->id)) == false)
+        {
+            return [
+                Layout::modal('You didnt vote for this position yet! You have until ' . $this->election->end_date, [
+                    Layout::rows([]),
+                ])->open(),
+                ViewCandidateLayout::class,
+            ];
+        }
+        // IF USER HAS VOTED
+        else
+        {
+            return [
+                ViewCandidateLayout::class,
+            ];
+            
+        }
+    }
+
+    public function hasVoted($position)
+    {
+        try{
+            $voters = ElectionVotes::where('position_id', $position)->get();
+            $user_id = Auth::user()->id;
+            foreach($voters as $voter){
+                if($voter->voter_user_id == $user_id){
+                    return true;
+                }
+            }
+            return false;
+        }catch(Exception $e){
+            Alert::error('There was an error checking the vote status. Error Code: ' . $e->getMessage());
+        }  
     }
 
     public function voting($position, $candidate){
