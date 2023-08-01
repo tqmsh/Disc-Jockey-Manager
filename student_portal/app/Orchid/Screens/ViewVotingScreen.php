@@ -69,13 +69,22 @@ class ViewVotingScreen extends Screen
     public function layout(): iterable
     {
 
+        if ((ViewVotingScreen::isElectionPassed($this->position->id)) == true)
+        {
+            return [
+                Layout::modal('This election has ended. You will no longer be able to vote.', [
+                    Layout::rows([]),
+                ])->withoutApplyButton()->open(),
+                ViewCandidateLayout::class,
+            ];
+        }
         // IF USER HAS NOT VOTED
-        if ((ViewVotingScreen::hasVoted($this->position->id)) == false)
+        else if ((ViewVotingScreen::hasVoted($this->position->id)) == false)
         {
             return [
                 Layout::modal('You didnt vote for this position yet! You have until ' . $this->election->end_date, [
                     Layout::rows([]),
-                ])->open(),
+                ])->withoutApplyButton()->open(),
                 ViewCandidateLayout::class,
             ];
         }
@@ -103,6 +112,21 @@ class ViewVotingScreen extends Screen
         }catch(Exception $e){
             Alert::error('There was an error checking the vote status. Error Code: ' . $e->getMessage());
         }  
+    }
+
+    public function isElectionPassed($position)
+    {
+        $positionFunction = Position::where('id',$position)->first();
+        $voters = ElectionVotes::where('position_id', $position)->get();
+        $election = Election::where('id',$positionFunction->election_id)->first();
+
+        foreach($voters as $voter){
+            if(now() > $election->end_date){
+                Toast::warning('You have passed the election date');
+                return true;
+            }
+        }
+
     }
 
     public function voting($position, $candidate){
