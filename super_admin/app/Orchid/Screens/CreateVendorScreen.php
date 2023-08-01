@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
+use App\Models\Region;
 use App\Models\School;
 use App\Models\Vendors;
 use App\Models\RoleUsers;
@@ -147,7 +148,7 @@ class CreateVendorScreen extends Screen
                 
                 Select::make('category_id')
                     ->title('Category')
-                    ->empty('Start typing to Search')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromQuery(Categories::query()->where('status', 1), 'name'),
@@ -172,6 +173,15 @@ class CreateVendorScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->placeholder('Ex. (613) 859-5863'),
+
+                Select::make('region_ids')
+                    ->title('Paid Regions')
+                    ->empty('No Selection')
+                    ->fromModel(Region::class, 'name', 'id')
+                    ->horizontal()
+                    ->multiple()
+                    ->help('Select the paid regions you want to add to the vendors')
+                    ->placeholder('Start typing to search...'),
 
                 Input::make('address')
                     ->title('Address')
@@ -204,13 +214,6 @@ class CreateVendorScreen extends Screen
                     ->horizontal()
                     ->placeholder('Ex. Ottawa'),
 
-                Select::make('region_ids')
-                    ->title('Paid Region')
-                    ->empty('No Selection')
-                    ->fromModel(Region::class, 'name', 'id')
-                    ->multiple()
-                    ->help('Select the paid regions you want to add to the vendors')
-                    ->placeholder('Start typing to search...'),
             ]),
         ];
     }
