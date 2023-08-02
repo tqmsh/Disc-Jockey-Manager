@@ -116,17 +116,20 @@ class ViewVotingScreen extends Screen
 
     public function isElectionPassed($position)
     {
-        $positionFunction = Position::where('id',$position)->first();
-        $voters = ElectionVotes::where('position_id', $position)->get();
-        $election = Election::where('id',$positionFunction->election_id)->first();
+        try{
+            $positionFunction = Position::where('id',$position)->first();
+            $voters = ElectionVotes::where('position_id', $position)->get();
+            $election = Election::where('id',$positionFunction->election_id)->first();
 
-        foreach($voters as $voter){
-            if(now() > $election->end_date){
-                Toast::warning('You have passed the election date');
-                return true;
+            foreach($voters as $voter){
+                if(now() > $election->end_date){
+                    Toast::warning('You have passed the election date');
+                    return true;
+                }
             }
-        }
-
+        } catch(Exception $e){
+            Alert::error('There was an error checking the election date status. Error Code: ' . $e->getMessage());
+        }    
     }
 
     public function voting($position, $candidate){
