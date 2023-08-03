@@ -170,11 +170,11 @@ class EditBeautyGroupScreen extends Screen
         //check if user is part of a beauty group
         $user_beauty_group = BeautyGroupMember::where('invitee_user_id', $fields['creator_user_id'])->where('status', 1)->first();
 
-        if($owned_beauty_group->id != $beautyGroup->id){
+        if($owned_beauty_group != null && $owned_beauty_group->id != $beautyGroup->id){
             //delete the old beauty group
             $owned_beauty_group->delete();
 
-        } elseif($user_beauty_group->beauty_group_id != $beautyGroup->id){
+        } elseif($user_beauty_group != null && $user_beauty_group->beauty_group_id != $beautyGroup->id){
             //remove them as a beauty group member from old beauty group
             $user_beauty_group->delete();
         }
