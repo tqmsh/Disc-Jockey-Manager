@@ -9,44 +9,43 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\DressListLayout;
+use App\Orchid\Layouts\ViewDressListLayout;
 use App\Models\Dress;
 use Illuminate\Http\Request;
 
-class ListDressScreen extends Screen
+class ViewDressListScreen extends Screen
 {
     /**
      * Display header name.
      *
      * @var string
      */
-    public $name = 'Dresses';
+    public string $name = 'Dresses';
 
     /**
      * Display header description.
      *
      * @var string|null
      */
-    public $description = '';
+    public ?string $description = 'Manage your collection of dresses.';
 
-    private $selected = [];
 
     /**
-     * Query data.
+     * Query data. Filters and sorts the dresses based on the user request.
      *
      * @return array
      */
-    public function query(Request $request): array
+    public function query(): array
     {
         return [
-            'dresses' => Dress::where('user_id', Auth::user()->id)
+            'dresses' => Dress::where('user_id', Auth::id())
                 ->filter(request(['sort', 'filter']))
                 ->latest('dresses.created_at')->paginate()
         ];
     }
 
     /**
-     * Button commands.
+     * Button commands. Defines the actions available to the user.
      *
      * @return Link[]
      */
@@ -67,23 +66,26 @@ class ListDressScreen extends Screen
                 ->type(Color::DANGER())
                 ->icon('trash')
                 ->confirm('Are you sure you want to delete the selected dresses?')
-                ->method('deleteSelected'),
+                ->method('deleteSelectedDresses'),
         ];
     }
 
     /**
-     * Views.
+     * Views. Defines the layouts to be used.
      *
      * @return Layout[]
      */
     public function layout(): array
     {
         return [
-            DressListLayout::class
+            ViewDressListLayout::class
         ];
     }
 
-    public function deleteSelected(Request $request)
+    /**
+     * Delete selected dresses. If no dresses are selected, a warning is issued.
+     */
+    public function deleteSelectedDresses(Request $request)
     {
         $selected = $request->get('selected');
 

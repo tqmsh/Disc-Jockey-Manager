@@ -1,21 +1,21 @@
 Dress Model Name,Dress Model Number,Dress Description,Colours,Sizes,Images,URL
-Evening Elegance,A1B2C3D4,Beautiful long evening dress,"Blue;Yellow","Small;Medium;Large","https://imageurl1.com;https://imageurl2.com",https://dressurl1.com
-Summer Radiance,E5F6G7H8,Stylish short summer dress,"Red;Orange;Yellow","X-Small;Small;Medium;Large;X-Large",,https://dressurl2.com
-Casual Comfort,I9J0K1L2,Casual knee-length dress,,,"https://imageurl3.com",
-Sophisticated Grace,M3N4O5P6,,,"Medium;Large;X-Large","https://imageurl4.com",
-Cocktail Chic,Q7R8S9T0,Charming cocktail dress,"Green;Pink","Small;Medium;Large","https://imageurl5.com",
-Prom Princess,U1V2W3X4,Elegant prom dress,"Red;Black;White","Small;Medium;Large;X-Large",,
-Sunny Delight,Y5Z6A7B8,Flirty sundress,"Pink",,"https://imageurl6.com",
-Skater Sweetheart,C9D0E1F2,,,"Medium;Large;X-Large","https://imageurl7.com;https://imageurl8.com",
-Shift Simplicity,G3H4I5J6,"Blue;White","Small;Medium;Large",,https://dressurl4.com
-Maxi Modesty,K7L8M9N0,Modest maxi dress,"White","Small;Large","https://imageurl9.com",
-Midi Chic,P1Q2R3S4,"Black;White;Red","Small;Medium;Large;X-Large","https://imageurl10.com",
-Ballroom Belle,T5U6V7W8,Luxury ball gown,"Green;Gold","Small;Medium;Large",,
-Polka Dot Dream,Y9Z0A1B2,Cute polka dot dress,"Red;White","Small;Medium;Large","https://imageurl11.com",
-Retro Swing,C3D4E5F6,,,"Small;Medium;Large","https://imageurl12.com",https://dressurl6.com
-Business Beauty,G7H8I9J0,Formal business dress,"Grey;Black","Medium;Large",,
-Boho Bliss,K1L2M3N4,Boho chic dress,"White;Blue;Pink","Small;Medium;Large;X-Large","https://imageurl13.com",
-Ethnic Elegance,O5P6Q7R8,Ethnic style dress,"Red;Gold","Medium;Large;X-Large",,
-Classic LBD,S9T0U1V2,"Black","Small;Medium;Large","https://imageurl14.com",
-Vintage Lace,W3X4Y5Z6,Vintage lace dress,"White;Ivory","Small;Medium;Large",,
-Denim Daydream,Z7A8B9C0,Modern denim dress,"Blue",,"https://imageurl15.com",https://dressurl8.com
+Evening Elegance,A1B2C3D4,Beautiful long evening dress,Blue;Yellow,Small;Medium;Large,https://imageurl1.com;https://imageurl2.com,https://dressurl1.com
+Summer Radiance,E5F6G7H8,Stylish short summer dress,Red;Orange;Yellow,X-Small;Small;Medium;Large;X-Large,,https://dressurl2.com
+Casual Comfort,I9J0K1L2,Casual knee-length dress,,,https://imageurl3.com,
+Sophisticated Grace,M3N4O5P6,,,Medium;Large;X-Large,https://imageurl4.com,
+Cocktail Chic,Q7R8S9T0,Charming cocktail dress,Green;Pink,Small;Medium;Large,https://imageurl5.com,
+Prom Princess,U1V2W3X4,Elegant prom dress,Red;Black;White,Small;Medium;Large;X-Large,,https://dressurl3.com
+Sunny Delight,Y5Z6A7B8,Flirty sundress,Pink,,https://imageurl6.com,
+Skater Sweetheart,C9D0E1F2,,,Medium;Large;X-Large,https://imageurl7.com;https://imageurl8.com,
+Shift Simplicity,G3H4I5J6,Shift Simplicity,Blue;White,Small;Medium;Large,,https://dressurl4.com
+Maxi Modesty,K7L8M9N0,Modest maxi dress,White,Small;Large,https://imageurl9.com,
+Midi Chic,P1Q2R3S4,Midi Chic,Black;White;Red,Small;Medium;Large;X-Large,https://imageurl10.com,https://dressurl5.com
+Ballroom Belle,T5U6V7W8,Luxury ball gown,Green;Gold,Small;Medium;Large,,
+Polka Dot Dream,Y9Z0A1B2,Cute polka dot dress,Red;White,Small;Medium;Large,https://imageurl11.com,
+Retro Swing,C3D4E5F6,Retro Swing,,Small;Medium;Large,https://imageurl12.com,https://dressurl6.com
+Business Beauty,G7H8I9J0,Formal business dress,Grey;Black,Medium;Large,,
+Boho Bliss,K1L2M3N4,Boho chic dress,White;Blue;Pink,Small;Medium;Large;X-Large,https://imageurl13.com,
+Ethnic Elegance,O5P6Q7R8,Ethnic style dress,Red;Gold,Medium;Large;X-Large,,https://dressurl7.com
+Classic LBD,S9T0U1V2,Classic LBD,Black,Small;Medium;Large,https://imageurl14.com,
+Vintage Lace,W3X4Y5Z6,Vintage lace dress,White;Ivory,Small;Medium;Large,,
+Denim Daydream,Z7A8B9C0,Modern denim dress,Blue,,https://imageurl15.com,https://dressurl8.com
