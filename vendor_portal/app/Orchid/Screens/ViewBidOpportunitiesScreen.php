@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\BeautyGroup;
 use App\Models\Events;
 use App\Models\Region;
 use App\Models\School;
@@ -10,6 +11,7 @@ use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Orchid\Layouts\ViewBeautyGroupBidLayout;
 use Illuminate\Support\Arr;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -44,7 +46,8 @@ class ViewBidOpportunitiesScreen extends Screen
         return [
             'events' => Events::filter(request(['region_id']))->whereIn('region_id', $this->paidRegionIds)->paginate(10),
             'students' => Student::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10),
-            'limo_groups' => LimoGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10),
+            'limo_groups' => (stripos(Auth::user()->vendor->category->name, 'limo') !== false) ? LimoGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
+            'beauty_groups' => (stripos(Auth::user()->vendor->category->name, 'salon') !== false) ? BeautyGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
         ];
     }
 
@@ -99,7 +102,8 @@ class ViewBidOpportunitiesScreen extends Screen
             Layout::tabs([
                 'Events' => ViewEventLayout::class,
                 'Students' => ViewStudentBidLayout::class,
-                'Limo Groups' => (strtolower(Auth::user()->vendor->category->name) == 'limo') ? ViewLimoGroupBidLayout::class : null, 
+                'Limo Groups' => (stripos(Auth::user()->vendor->category->name, 'limo') !== false) ? ViewLimoGroupBidLayout::class : null, 
+                'Beauty Groups' => (stripos(Auth::user()->vendor->category->name, 'salon') !== false) ? ViewBeautyGroupBidLayout::class : null, 
             ]),
 
 
@@ -156,17 +160,23 @@ class ViewBidOpportunitiesScreen extends Screen
 
     public function redirect(){
 
-        if(request('type') == 'event'){
+        switch(request('type')){
 
-            return redirect()->route('platform.bid.create', request('event_id'));
+            case 'event':
+                return redirect()->route('platform.bid.create', request('event_id'));
+                break;
 
-        } else if(request('type') == 'student'){
+            case 'student':
+                return redirect()->route('platform.studentBid.create', request('student_id'));
+                break;
 
-            return redirect()->route('platform.studentBid.create', request('student_id'));
+            case 'limo_group':
+                return redirect()->route('platform.limoGroupBid.create', request('limo_group_id'));
+                break;
 
-        } else if (request('type') == 'limo_group'){
-
-            return redirect()->route('platform.limoGroupBid.create', request('limo_group_id'));
+            case 'beauty_group':
+                return redirect()->route('platform.beautyGroupBid.create', request('beauty_group_id'));
+                break;
         }
     }
 }

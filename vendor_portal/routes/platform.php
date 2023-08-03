@@ -8,10 +8,12 @@ use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
 use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\EditLimoBidScreen;
 use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\ViewPackageScreen;
 use App\Orchid\Screens\EditEventBidScreen;
 use App\Orchid\Screens\CreatePackageScreen;
+use App\Orchid\Screens\EditBeautyBidScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\CreateEventBidScreen;
@@ -24,7 +26,7 @@ use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\CreateLimoGroupBidScreen;
-use App\Orchid\Screens\EditLimoBidScreen;
+use App\Orchid\Screens\CreateBeautyGroupBidScreen;
 use App\Orchid\Screens\ViewBidOpportunitiesScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -70,6 +72,10 @@ Route::screen('/student-bid/{student}/create', CreateStudentBidScreen::class)->n
 Route::screen('/limo-group-bid/{limoGroup}/create', CreateLimoGroupBidScreen::class)->name('platform.limoGroupBid.create');
 
 Route::screen('/limo-group-bid/{limoGroup}/edit', EditLimoBidScreen::class)->name('platform.limoGroupBid.edit');
+
+Route::screen('/beauty-group-bid/{beautyGroup}/create', CreateBeautyGroupBidScreen::class)->name('platform.beautyGroupBid.create');
+
+Route::screen('/beauty-group-bid/{beautyGroup}/edit', EditBeautyBidScreen::class)->name('platform.beautyGroupBid.edit');
 
 Route::screen('/bids/history', ViewBidHistoryScreen::class)->name('platform.bidhistory.list');
 

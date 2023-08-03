@@ -24,6 +24,7 @@ use App\Orchid\Screens\CreateElectionScreen;
 use App\Orchid\Screens\CreatePositionScreen;
 use App\Orchid\Screens\ViewRequestersScreen;
 use App\Orchid\Screens\CreateCandidateScreen;
+use App\Orchid\Screens\ViewBeautyGroupScreen;
 use App\Orchid\Screens\ViewNoPlaySongsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -37,6 +38,7 @@ use App\Orchid\Screens\ViewLimoGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
+use App\Orchid\Screens\ViewBeautyGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -117,8 +119,11 @@ Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScr
 
 //limo group
 Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');
-
 Route::screen('/limo-groups/{limo_group_id}/members', ViewLimoGroupMembersScreen::class)->name('platform.limo-groups.members');
+
+//beauty groups
+Route::screen('/beauty-groups', ViewBeautyGroupScreen::class)->name('platform.beauty-groups');
+Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembersScreen::class)->name('platform.beauty-groups.members');
 
 
 
