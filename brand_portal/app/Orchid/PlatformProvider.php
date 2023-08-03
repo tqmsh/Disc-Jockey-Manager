@@ -33,7 +33,7 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Dashboard')
                 ->icon('home')
                 ->title('CORE')
-                ->route('platform.example'),
+                ->route('platform.dashboard'),
 
             Menu::make('Roadmap')
                 ->icon('map')
@@ -60,28 +60,28 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Basic Elements')
                         ->title('Form controls')
                         ->icon('note')
-                        ->route('platform.example.fields'),
+                        ->route('platform.dashboard.fields'),
 
                     Menu::make('Advanced Elements')
                         ->icon('briefcase')
-                        ->route('platform.example.advanced'),
+                        ->route('platform.dashboard.advanced'),
 
                     Menu::make('Text Editors')
                         ->icon('list')
-                        ->route('platform.example.editors'),
+                        ->route('platform.dashboard.editors'),
 
                     Menu::make('Overview layouts')
                         ->title('Layouts')
                         ->icon('layers')
-                        ->route('platform.example.layouts'),
+                        ->route('platform.dashboard.layouts'),
 
                     Menu::make('Chart tools')
                         ->icon('bar-chart')
-                        ->route('platform.example.charts'),
+                        ->route('platform.dashboard.charts'),
 
                     Menu::make('Cards')
                         ->icon('grid')
-                        ->route('platform.example.cards')
+                        ->route('platform.dashboard.cards')
                         ->divider(),
 
                     Menu::make('Documentation')

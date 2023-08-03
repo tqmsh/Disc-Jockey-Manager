@@ -8,20 +8,20 @@
     </div>
 @endif
 <div class="mb-3">
-    
+
     <label class="form-label">
         {{ __('First Name') }}
     </label>
-    
+
     {!! \Orchid\Screen\Fields\Input::make('firstname')->type('text')->required()->tabindex(1)->autofocus()->autocomplete('firstname')->placeholder(__('Enter your first name')) !!}
 </div>
 
 <div class="mb-3">
-    
+
     <label class="form-label">
         {{ __('Last Name') }}
     </label>
-    
+
     {!! \Orchid\Screen\Fields\Input::make('lastname')->type('text')->required()->tabindex(1)->autofocus()->placeholder(__('Enter your last name')) !!}
 </div>
 
@@ -98,7 +98,7 @@
 <div class="mb-3">
 
     <label class="form-label">
-        {{ __('Catagory') }}
+        {{ __('Category') }}
     </label>
 
     {!! \Orchid\Screen\Fields\Select::make('category_id')->fromQuery(App\Models\Categories::query()->where('status', 1), 'name')->autofocus()->empty('Start typing to search...') !!}

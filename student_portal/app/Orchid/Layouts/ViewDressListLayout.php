@@ -4,12 +4,11 @@ namespace App\Orchid\Layouts;
 
 use App\Models\Dress;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
 
-class DressListLayout extends Table
+class ViewDressListLayout extends Table
 {
     /**
      * Data source.
@@ -24,19 +23,17 @@ class DressListLayout extends Table
     protected function columns(): array
     {
         return [
-            TD::make('select', ' ')
-                ->align(TD::ALIGN_CENTER)
-                ->render(function (Dress $dress) {
-                    return CheckBox::make('selected[]')
-                        ->value($dress->id)
-                        ->placeholder(' ')
-                        ->checked(false);
-                }),
-
             TD::make('image', 'Image')
                 ->render(function (Dress $dress) {
                     $images = $dress->images;
                     return empty($images) ? 'No Image' : "<img src='{$images[0]}' width='100px' onerror='this.onerror=null;this.parentNode.innerHTML=\"No Image\";'/>";
+                }),
+
+            TD::make('company_name', 'Brand')
+                ->sort()
+                ->filter()
+                ->render(function (Dress $dress) {
+                    return $dress->vendor->company_name;
                 }),
 
             TD::make('model_number', 'Model Number')
@@ -57,7 +54,7 @@ class DressListLayout extends Table
                 ->sort()
                 ->filter()
                 ->render(function (Dress $dress) {
-                    return "<div style='max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'><a href='".e($dress->url)."' target='_blank' title='".e($dress->url)."'>".e($dress->url)."</a></div>";
+                    return "<div style='max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'><a href='" . e($dress->url) . "' target='_blank' title='" . e($dress->url) . "'>" . e($dress->url) . "</a></div>";
                 }),
 
             TD::make('created_at', 'Created At')
@@ -77,9 +74,9 @@ class DressListLayout extends Table
                 ->width('100px')
                 ->render(function (Dress $dress) {
                     return Link::make('Details')
-                        ->route('platform.dresses.edit', $dress->id)
                         ->type(Color::INFO())
-                        ->icon('eye');
+                        ->icon('eye')
+                        ->route('platform.dresses.detail', ["dress" => $dress->getKey(), "back" => "platform.dresses"]);
                 }),
         ];
     }
