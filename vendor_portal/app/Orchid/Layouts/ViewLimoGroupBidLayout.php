@@ -52,7 +52,7 @@ class ViewLimoGroupBidLayout extends Table
                     return e(Region::find($limoGroup->school->region_id)->name);
                 })->width('150px'),
             
-            TD::make('capacity', 'Capacity')
+            TD::make('capacity', 'Total Capacity')
                 ->render(function (LimoGroup $limoGroup) {
                     return e($limoGroup->capacity + count($limoGroup->activeMembers));
                 }),

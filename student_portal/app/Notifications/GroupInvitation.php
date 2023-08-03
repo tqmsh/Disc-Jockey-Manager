@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Orchid\Platform\Notifications\DashboardChannel;
 use Orchid\Platform\Notifications\DashboardMessage;
 
-class LimoGroupInvitation extends Notification
+class GroupInvitation extends Notification
 {
 
     use Queueable;

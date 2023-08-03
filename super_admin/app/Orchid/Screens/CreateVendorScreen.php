@@ -4,15 +4,17 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
+use App\Models\Region;
 use App\Models\School;
 use App\Models\Vendors;
+use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
-use App\Models\RoleUsers;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
+use App\Models\VendorPaidRegions;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -146,7 +148,7 @@ class CreateVendorScreen extends Screen
                 
                 Select::make('category_id')
                     ->title('Category')
-                    ->empty('Start typing to Search')
+                    ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromQuery(Categories::query()->where('status', 1), 'name'),
@@ -171,6 +173,15 @@ class CreateVendorScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->placeholder('Ex. (613) 859-5863'),
+
+                Select::make('region_ids')
+                    ->title('Paid Regions')
+                    ->empty('No Selection')
+                    ->fromModel(Region::class, 'name', 'id')
+                    ->horizontal()
+                    ->multiple()
+                    ->help('Select the paid regions you want to add to the vendors')
+                    ->placeholder('Start typing to search...'),
 
                 Input::make('address')
                     ->title('Address')
@@ -202,6 +213,7 @@ class CreateVendorScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->placeholder('Ex. Ottawa'),
+
             ]),
         ];
     }
@@ -215,6 +227,8 @@ class CreateVendorScreen extends Screen
 
             //get user fields
             $userTableFields = $this->getUserFields($request);
+
+            $paidRegions = $request->input('region_ids');
 
 
             //check for duplicate email
@@ -235,7 +249,18 @@ class CreateVendorScreen extends Screen
                     'user_id' => $user->id,
                     'role_id' => 4
                 ]);
-                
+
+                if($paidRegions != null){
+
+                    //create the vendor paid regions
+                    foreach($paidRegions as $region){
+                        VendorPaidRegions::firstOrCreate([
+                            'user_id' => $user->id,
+                            'region_id' => $region
+                        ]);
+                    }
+                }
+
                 //toast success message
                 Toast::success('Vendor Added Succesfully');
 

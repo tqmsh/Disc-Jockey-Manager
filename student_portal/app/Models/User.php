@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\BeautyGroup;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Platform\Models\User as Authenticatable;
 
@@ -99,5 +100,9 @@ class User extends Authenticatable
 
     public function limoGroup(){
         return $this->hasOne(LimoGroup::class, 'creator_user_id');
+    }
+
+    public function beautyGroup(){
+        return $this->hasOne(BeautyGroup::class, 'creator_user_id');
     }
 }

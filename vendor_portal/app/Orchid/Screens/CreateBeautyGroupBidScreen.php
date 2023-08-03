@@ -7,10 +7,10 @@ use App\Models\User;
 use App\Models\Region;
 use App\Models\Vendors;
 use Orchid\Screen\Sight;
-use App\Models\LimoGroup;
+use App\Models\BeautyGroup;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
-use App\Models\LimoGroupBid;
+use App\Models\BeautyGroupBid;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
@@ -21,9 +21,9 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\GeneralNotification;
 
-class CreateLimoGroupBidScreen extends Screen
+class CreateBeautyGroupBidScreen extends Screen
 {
-    public $limoGroup;
+    public $beautyGroup;
     public $vendor;
 
     /**
@@ -31,12 +31,12 @@ class CreateLimoGroupBidScreen extends Screen
      *
      * @return array
      */
-    public function query(LimoGroup $limoGroup): iterable
+    public function query(BeautyGroup $beautyGroup): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
         return [
-            'limoGroup' => $limoGroup
+            'beautyGroup' => $beautyGroup
         ];
     }
 
@@ -47,7 +47,7 @@ class CreateLimoGroupBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Create Bid For: ' . $this->limoGroup->name;
+        return 'Create Bid For: ' . $this->beautyGroup->name;
     }
 
     /**
@@ -78,12 +78,12 @@ class CreateLimoGroupBidScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::legend('limoGroup',[
-                Sight::make('creator_user_id', 'Limo Group Owner Email')->render(function(){
+            Layout::legend('beautyGroup',[
+                Sight::make('creator_user_id', 'Beauty Group Owner Email')->render(function(){
 
-                    return $this->limoGroup->owner->email;
+                    return $this->beautyGroup->owner->email;
                 }),
-                Sight::make('name', 'Limo group Name'),
+                Sight::make('name', 'Beauty group Name'),
                 Sight::make('pickup_location', 'Pickup Location'),
                 Sight::make('dropoff_location', 'Dropoff Location'),
                 Sight::make('depart_time', 'Depart Time'),
@@ -91,7 +91,7 @@ class CreateLimoGroupBidScreen extends Screen
                 Sight::make('notes', 'Notes'),
                 Sight::make('region', 'Region')->render(function(){
 
-                    return Region::find($this->limoGroup->school->region_id)->name;
+                    return Region::find($this->beautyGroup->school->region_id)->name;
                 }),
 
                 Sight::make('company_name', 'Your Company Name')->render(function(){
@@ -148,34 +148,34 @@ class CreateLimoGroupBidScreen extends Screen
         ];
     }
 
-    public function createBid(LimoGroup $limoGroup){
+    public function createBid(BeautyGroup $beautyGroup){
 
         $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
             try{   
 
-                if($this->validBid($limoGroup)){
+                if($this->validBid($beautyGroup)){
                     
-                    LimoGroupBid::create([
+                    BeautyGroupBid::create([
                         'user_id' => $vendor->user_id,
-                        'limo_group_id' => $limoGroup->id,
+                        'beauty_group_id' => $beautyGroup->id,
                         'package_id' => request('package_id'),
                         'notes' => request('notes'),
                         'category_id' => $vendor->category_id,
-                        'school_name' => $limoGroup->school->school_name,
-                        'region_id' => $limoGroup->school->region_id,
+                        'school_name' => $beautyGroup->school->school_name,
+                        'region_id' => $beautyGroup->school->region_id,
                         'company_name' => $vendor->company_name,
                         'url' => $vendor->website,
                         'contact_instructions' => request('contact_instructions'),
                         'status' => 0
                     ]);
 
-                    $limoGroupOwner = User::find($limoGroup->owner->user_id);
+                    $beautyGroupOwner = User::find($beautyGroup->owner->user_id);
 
-                    $limoGroupOwner->notify(new GeneralNotification([
-                        'title' => 'New Limo Group Bid',
-                        'message' => 'You have a new bid for your limo group: ' . $limoGroup->name,
-                        'action' => '/admin/limo-groups',
+                    $beautyGroupOwner->notify(new GeneralNotification([
+                        'title' => 'New Beauty Group Bid',
+                        'message' => 'You have a new bid for your beauty group: ' . $beautyGroup->name,
+                        'action' => '/admin/beauty-groups',
                     ]));
                         
                     Toast::success('Bid created succesfully');
@@ -190,10 +190,10 @@ class CreateLimoGroupBidScreen extends Screen
             }
     }
 
-    private function validBid(LimoGroup $limoGroup){
+    private function validBid(BeautyGroup $beautyGroup){
 
-        return count(LimoGroupBid::where('user_id', Auth::id())
-                             ->where('limo_group_id', $limoGroup->id)
+        return count(BeautyGroupBid::where('user_id', Auth::id())
+                             ->where('beauty_group_id', $beautyGroup->id)
                              ->where('package_id', request('package_id'))
                              ->get()) == 0;
     }

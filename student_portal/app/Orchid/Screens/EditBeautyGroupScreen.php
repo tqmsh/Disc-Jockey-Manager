@@ -3,7 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\LimoGroup;
+use App\Models\BeautyGroup;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -15,20 +15,20 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
 
-class EditLimoGroupScreen extends Screen
+class EditBeautyGroupScreen extends Screen
 {
-    public $limoGroup;
+    public $beautyGroup;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(LimoGroup $limoGroup): iterable
+    public function query(BeautyGroup $beautyGroup): iterable
     {
-        abort_if($limoGroup->creator_user_id != Auth::user()->id, 403, 'You are not authorized to view this page.');
+        abort_if($beautyGroup->creator_user_id != Auth::user()->id, 403, 'You are not authorized to view this page.');
 
         return [
-            'limoGroup' => $limoGroup
+            'beautyGroup' => $beautyGroup
         ];
     }
 
@@ -39,7 +39,7 @@ class EditLimoGroupScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit: ' . $this->limoGroup->name ;
+        return 'Edit: ' . $this->beautyGroup->name ;
     }
 
     /**
@@ -50,18 +50,18 @@ class EditLimoGroupScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Update Limo Group')
+            Button::make('Update Beauty Group')
                 ->icon('plus')
-                ->method('updateLimoGroup'),
+                ->method('updateBeautyGroup'),
             
-            Button::make('Delete Limo Group')
+            Button::make('Delete Beauty Group')
                 ->icon('trash')
-                ->confirm('WARNING: Deleting a limo group will remove all the memebers in it. Are you sure you want to delete this limo group?')
-                ->method('deleteLimoGroup'),
+                ->confirm('WARNING: Deleting a beauty group will remove all the memebers in it. Are you sure you want to delete this beauty group?')
+                ->method('deleteBeautyGroup'),
                 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.limo-groups')
+                ->route('platform.beauty-groups')
         ];
         
     }
@@ -76,62 +76,62 @@ class EditLimoGroupScreen extends Screen
         return [
             Layout::rows([
                 Input::make('name')
-                    ->title('Limo Group Name')
-                    ->placeholder('Enter a name for your limo group')
+                    ->title('Beauty Group Name')
+                    ->placeholder('Enter a name for your beauty group')
                     ->horizontal()
-                    ->value($this->limoGroup->name),
+                    ->value($this->beautyGroup->name),
 
                 DateTimer::make('date')
                     ->title('Date')
-                    ->placeholder('Enter the date for your limo group')
+                    ->placeholder('Enter the date for your beauty group')
                     ->horizontal()
-                    ->value($this->limoGroup->date),
+                    ->value($this->beautyGroup->date),
                 
                 Input::make('pickup_location')
                     ->title('Pickup Location')
-                    ->placeholder('Enter the pickup location for your limo group')
+                    ->placeholder('Enter the pickup location for your beauty group')
                     ->horizontal()
-                    ->value($this->limoGroup->pickup_location),
+                    ->value($this->beautyGroup->pickup_location),
                 
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
-                    ->placeholder('Enter the dropoff location for your limo group')
+                    ->placeholder('Enter the dropoff location for your beauty group')
                     ->horizontal()
-                    ->value($this->limoGroup->dropoff_location),
+                    ->value($this->beautyGroup->dropoff_location),
                 
                 DateTimer::make('depart_time')
                     ->title('Depart Time')
-                    ->placeholder('Enter the depart time for your limo group')
+                    ->placeholder('Enter the depart time for your beauty group')
                     ->enableTime()
                     ->horizontal()
-                    ->value($this->limoGroup->depart_time),
+                    ->value($this->beautyGroup->depart_time),
                 
                 Datetimer::make('dropoff_time')
                     ->title('Dropoff Time')
-                    ->placeholder('Enter the dropoff time for your limo group')
+                    ->placeholder('Enter the dropoff time for your beauty group')
                     ->enableTime()
                     ->horizontal()
-                    ->value($this->limoGroup->dropoff_time),
+                    ->value($this->beautyGroup->dropoff_time),
                 
                 Input::make('capacity')
                     ->title('Capacity')
                     ->type('number')
-                    ->placeholder('Enter the capacity for your limo group')
+                    ->placeholder('Enter the capacity for your beauty group')
                     ->horizontal()
-                    ->value($this->limoGroup->capacity),
+                    ->value($this->beautyGroup->capacity),
                 
                 TextArea::make('notes')
                     ->title('Notes')
-                    ->placeholder('Enter any notes for your limo group')
-                    ->help('Notes can be seen by all limo group members')
+                    ->placeholder('Enter any notes for your beauty group')
+                    ->help('Notes can be seen by all beauty group members')
                     ->rows(8)
                     ->horizontal()
-                    ->value($this->limoGroup->notes),                   
+                    ->value($this->beautyGroup->notes),                   
             ])
         ];
     }
 
-    public function updateLimoGroup(Request $request, LimoGroup $limoGroup){
+    public function updateBeautyGroup(Request $request, BeautyGroup $beautyGroup){
 
         $fields = $request->validate([
             'name' => 'required',
@@ -145,27 +145,27 @@ class EditLimoGroupScreen extends Screen
             'notes' => 'nullable',
         ]);
 
-        if($fields['capacity'] < $limoGroup->capacity){
-            Toast::error('Error Updating Limo Group. Capacity cannot be less than the number of members in the limo group.');
+        if($fields['capacity'] < $beautyGroup->capacity){
+            Toast::error('Error Updating Beauty Group. Capacity cannot be less than the number of members in the beauty group.');
             return;
         }
 
         try{
-            $limoGroup->update($fields);
-            Toast::success('Limo Group Updated');
-            return redirect()->route('platform.limo-groups');
+            $beautyGroup->update($fields);
+            Toast::success('Beauty Group Updated');
+            return redirect()->route('platform.beauty-groups');
         } catch(Exception $e){
-            Toast::error('Error Updating Limo Group. Error Code: ' . $e->getMessage());
+            Toast::error('Error Updating Beauty Group. Error Code: ' . $e->getMessage());
         }
     }
 
-    public function deleteLimoGroup(LimoGroup $limoGroup){
+    public function deleteBeautyGroup(BeautyGroup $beautyGroup){
         try{
-            $limoGroup->delete();
-            Toast::success('Limo Group Deleted');
-            return redirect()->route('platform.limo-groups');
+            $beautyGroup->delete();
+            Toast::success('Beauty Group Deleted');
+            return redirect()->route('platform.beauty-groups');
         } catch(Exception $e){
-            Toast::error('Error Deleting Limo Group. Error Code: ' . $e->getMessage());
+            Toast::error('Error Deleting Beauty Group. Error Code: ' . $e->getMessage());
         }
     }
 }
