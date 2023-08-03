@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\User;
 
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Rows;
@@ -19,12 +20,18 @@ class UserEditLayout extends Rows
     public function fields(): array
     {
         return [
+
+            Input::make('category')
+                ->type('text')
+                ->title(__('Category'))
+                ->value(Auth::user()->vendor->category->name)
+                ->readonly(),
+
             Input::make('user.firstname')
                 ->type('text')
                 ->max(255)
                 ->required()
                 ->title(__('First Name'))
-
                 ->placeholder(__('User Name')),
 
             Input::make('user.lastname')

@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use App\Models\Region;
 use App\Models\Student;
 use App\Models\Vendors;
@@ -18,6 +19,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\GeneralNotification;
 
 class CreateStudentBidScreen extends Screen
 {
@@ -145,7 +147,6 @@ class CreateStudentBidScreen extends Screen
             try{   
 
                 if($this->validBid($student)){
-
                     
                     StudentBids::create([
                         'user_id' => $vendor->user_id,
@@ -160,6 +161,14 @@ class CreateStudentBidScreen extends Screen
                         'contact_instructions' => request('contact_instructions'),
                         'status' => 0
                     ]);
+
+                    $user = User::find($student->user_id);
+
+                    $user->notify(new GeneralNotification([
+                        'title' => 'New Bid placed on you!',
+                        'message' => 'You have a new bid placed on you from: ' . $vendor->company_name,
+                        'action' => '/admin/bids',
+                    ]));
                         
                     Toast::success('Bid created succesfully');
                         

@@ -24,7 +24,6 @@ class UserEditLayout extends Rows
                 ->max(255)
                 ->required()
                 ->title(__('First Name'))
-
                 ->placeholder(__('User Name')),
 
             Input::make('user.lastname')
@@ -54,7 +53,7 @@ class UserEditLayout extends Rows
                 ->height(300)
                 ->help("This image will be displayed on your profile.")
                 ->horizontal()
-                ->acceptedFiles('.png, .jpg, .jpeg,')
+                ->acceptedFiles(".png,.jpg,.jpeg,.gif,.svg,.webp")
                 ->value(auth()->user()->pfp) 
         ];
     }

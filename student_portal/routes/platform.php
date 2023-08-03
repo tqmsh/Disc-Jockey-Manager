@@ -1,27 +1,29 @@
 <?php
 
 declare(strict_types=1);
-
-use App\Orchid\Screens\ClaimedDressScreen;
-use App\Orchid\Screens\ViewDressWishlistScreen;
-use App\Orchid\Screens\ViewSingleDressScreen;
-use App\Orchid\Screens\ViewDressListScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
+use App\Orchid\Screens\ListDressScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewVotingScreen;
+use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
+use App\Orchid\Screens\ListDressWishScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
 use App\Orchid\Screens\CreateLimoGroupScreen;
+use App\Orchid\Screens\EditBeautyGroupScreen;
+use App\Orchid\Screens\ViewBeautyGroupScreen;
+use App\Orchid\Screens\ViewDressDetailScreen;
 use App\Orchid\Screens\ViewSongRequestScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
+use App\Orchid\Screens\CreateBeautyGroupScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewLimoGroupMembersScreen;
@@ -31,6 +33,10 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ClaimedDressScreen;
+use App\Orchid\Screens\ViewDressWishlistScreen;
+use App\Orchid\Screens\ViewSingleDressScreen;
+use App\Orchid\Screens\ViewDressListScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +89,15 @@ Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platfo
 
 //edit limo group
 Route::screen('/limo-groups/{limoGroup}/edit', EditLimoGroupScreen::class)->name('platform.limo-groups.edit');
+
+//view beauty groups
+Route::screen('/beauty-groups', ViewBeautyGroupScreen::class)->name('platform.beauty-groups');
+
+//create beauty groups
+Route::screen('/beauty-groups/create', CreateBeautyGroupScreen::class)->name('platform.beauty-groups.create');
+
+//edit beauty group
+Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)->name('platform.beauty-groups.edit');
 
 
 // Platform > Profile
