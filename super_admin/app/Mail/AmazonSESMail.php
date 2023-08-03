@@ -28,7 +28,7 @@ class AmazonSESMail extends Mailable
      */
     public function build()
     {
-        return $this->from('team@promplanner.com')
+        return $this->from('info@promplanner.app')
                     ->view('emails.welcome')
                     ->subject('Welcome to My Laravel App');
     }
