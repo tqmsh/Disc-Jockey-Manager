@@ -14,6 +14,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewCandidateLayout;
+use App\Orchid\Layouts\ViewCandidateLayoutVoted;
 use Orchid\Support\Facades\Layout;
 
 class ViewVotingScreen extends Screen
@@ -21,6 +22,7 @@ class ViewVotingScreen extends Screen
     public $position;
     public $election;
     public $candidate;
+    public $election_vote;
     /**
      * Query data.
      *
@@ -30,10 +32,11 @@ class ViewVotingScreen extends Screen
     {
         $candidate = Candidate::where('position_id', $position->id)->paginate(10);
         $election = Election::where('id', $position->election_id)->first();
+
         return [
             'position' => $position,
             'candidate' => $candidate,
-            'election' => $election
+            'election' => $election,
         ];
     }
 
@@ -67,8 +70,9 @@ class ViewVotingScreen extends Screen
      * @return \Orchid\Screen\Layout[]|string[]
      */
     public function layout(): iterable
-    {
+    {     
 
+        // IF ELECTION ENDED
         if ((ViewVotingScreen::isElectionPassed($this->position->id)) == true)
         {
             return [
@@ -92,7 +96,7 @@ class ViewVotingScreen extends Screen
         else
         {
             return [
-                ViewCandidateLayout::class,
+                ViewCandidateLayoutVoted::class,
             ];
             
         }
@@ -137,6 +141,7 @@ class ViewVotingScreen extends Screen
         $candidate = request('candidate');
         $positionFunction = Position::where('id',$position)->first();
         $election = Election::where('id',$positionFunction->election_id)->first();
+        
         $now = now();
         try{
             $voters = ElectionVotes::where('position_id', $position)->get();
@@ -150,11 +155,11 @@ class ViewVotingScreen extends Screen
                 }
 
                 else if($voter->voter_user_id == $user_id){
-                    $targetCandidate = Candidate::where('id', $candidate)->first();
+                    // $targetCandidate = Candidate::where('id', $candidate)->first();
                     
-                    Alert::view('confirm_vote', Color::WARNING(), [
-                        'name' => $targetCandidate->candidate_name
-                    ]);
+                    // Alert::view('confirm_vote', Color::WARNING(), [
+                    //     'name' => $targetCandidate->candidate_name
+                    // ]);
                     
                     $voted = true;
                     return;
@@ -173,5 +178,50 @@ class ViewVotingScreen extends Screen
             Alert::error('There was an error voting for this candidate. Error Code: ' . $e->getMessage());
         }
         
+    }
+
+    public function change_vote($position, $candidate){
+        $position = request('position');
+        $candidate = request('candidate');
+
+        $positionFunction = Position::where('id',$position)->first();
+        $election = Election::where('id',$positionFunction->election_id)->first();
+
+        $election_vote = ElectionVotes::where([['election_id',$positionFunction->election_id],
+                                                ['position_id', $position],
+                                                ['voter_user_id', Auth::user()->id],])->first();
+
+        $now = now();
+        try{
+            $voters = ElectionVotes::where('position_id', $position)->get();
+            $user_id = Auth::user()->id;
+            $voted = false;
+            foreach($voters as $voter){
+                if($now > $election->end_date){
+                    Toast::warning('You have passed the election date');
+                    $voted = true;
+                    return;
+                }
+            }
+
+            // DELETING OLD VOTE
+            try{
+                $election_vote->delete();
+            } catch(Exception $e){
+                Alert::error('There was an error changing your vote. Error Code: ' . $e->getMessage());
+            }   
+            // MAKING NEW VOTE
+            if(!$voted){
+                $field['election_id'] = $election->id;
+                $field['position_id'] = $position;
+                $field['candidate_id'] = $candidate;
+                $field['voter_user_id'] = $user_id;
+                ElectionVotes::create($field);
+                Toast::success('Changed Vote Successfully');
+            }
+        }catch(Exception $e){
+                
+            Alert::error('There was an error voting for this candidate. Error Code: ' . $e->getMessage());
+        }
     }
 }
