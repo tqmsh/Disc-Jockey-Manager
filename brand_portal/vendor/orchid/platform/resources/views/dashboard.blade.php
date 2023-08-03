@@ -14,7 +14,7 @@
                     <span class="ms-2">@yield('title')</span>
                 </a>
 
-                <a class="header-brand order-last" href="{{route('platform.example')}}">
+                <a class="header-brand order-last" href="{{route('platform.dashboard')}}">
                     @includeFirst([config('platform.template.header'), 'platform::header'])
                 </a>
             </header>

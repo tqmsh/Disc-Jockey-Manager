@@ -33,24 +33,24 @@ class DressEditLayout extends Rows
 
             TextArea::make('dress.description')
                 ->title('Description')
-                ->rows(3)
+                ->rows(5)
                 ->placeholder('Description'),
 
             TextArea::make('dress.colours')
                 ->title('Colours')
-                ->rows(3)
+                ->rows(5)
                 ->help('Input colours as newline-separated values.')
                 ->placeholder('Colours'),
 
             TextArea::make('dress.sizes')
                 ->title('Sizes')
-                ->rows(3)
+                ->rows(5)
                 ->help('Input sizes as newline-separated values.')
                 ->placeholder('Sizes'),
 
             TextArea::make('dress.images')
                 ->title('Images')
-                ->rows(3)
+                ->rows(5)
                 ->help('Input image URLs as newline-separated values.')
                 ->placeholder('Images'),
 
