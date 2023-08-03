@@ -163,6 +163,22 @@ class EditLimoGroupScreen extends Screen
             return;
         }
 
+
+        //check if user already owns a beauty group
+        $owned_limo_group = LimoGroup::where('creator_user_id', $fields['creator_user_id'])->first();
+
+        //check if user is part of a beauty group
+        $user_limo_group = LimoGroupMember::where('invitee_user_id', $fields['creator_user_id'])->where('status', 1)->first();
+
+        if($owned_limo_group->id != $limoGroup->id){
+            //delete the old beauty group
+            $owned_limo_group->delete();
+
+        } elseif($user_limo_group->beauty_group_id != $limoGroup->id){
+            //remove them as a beauty group member from old beauty group
+            $user_limo_group->delete();
+        }
+
         try{
             $limoGroup->update($fields);
             Toast::success('Limo Group Updated');
