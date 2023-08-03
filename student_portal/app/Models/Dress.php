@@ -81,8 +81,8 @@ class Dress extends Model
                 }
 
                 // add ability to filter by vendor's company name
-                if (isset($filters['filter']['vendor_company_name'])) {
-                    $query->where('vendors.company_name', 'LIKE', "%{$filters['filter']['vendor_company_name']}%");
+                if (isset($filters['filter']['company_name'])) {
+                    $query->where('vendors.company_name', 'LIKE', "%{$filters['filter']['company_name']}%");
                 }
             }
 

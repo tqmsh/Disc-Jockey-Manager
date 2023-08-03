@@ -17,32 +17,25 @@ use Orchid\Support\Facades\Layout;
 
 class BulkUploadDressScreen extends Screen
 {
+    public string $name = "Bulk Upload Dresses";
+    public ?string $description = "Bulk upload dresses from a CSV file.";
+
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(): array
     {
         return [];
     }
 
     /**
-     * Display header name.
-     *
-     * @return string|null
-     */
-    public function name(): ?string
-    {
-        return 'Bulk Upload Dresses';
-    }
-
-    /**
      * Button commands.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return array
      */
-    public function commandBar(): iterable
+    public function commandBar(): array
     {
         return [
             Link::make('Back to Dress List')
@@ -50,7 +43,7 @@ class BulkUploadDressScreen extends Screen
                 ->route('platform.dresses'),
             Button::make('Process File')
                 ->type(Color::PRIMARY())
-                ->method('saveDress')
+                ->method('processCSVAndSaveDress')
                 ->icon('check'),
             Link::make('Download Sample CSV')
                 ->type(Color::INFO())
@@ -62,9 +55,9 @@ class BulkUploadDressScreen extends Screen
     /**
      * Views.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array
      */
-    public function layout(): iterable
+    public function layout(): array
     {
         return [
             Layout::rows([
@@ -78,28 +71,46 @@ class BulkUploadDressScreen extends Screen
         ];
     }
 
-
-    public function saveDress(Request $request)
+    /**
+     * Process the uploaded CSV file to save new Dress entries.
+     *
+     * @param Request $request
+     */
+    public function processCSVAndSaveDress(Request $request)
     {
+        // Validate request data
         $request->validate([
             'upload' => 'required|mimes:csv,txt|max:2048',
             'ignore_duplicates' => 'required|boolean',
         ]);
 
+        // Retrieve file and 'ignore_duplicates' value from the request
         $file = $request->file('upload');
         $ignoreDuplicates = $request->input('ignore_duplicates');
+
+        // Parse CSV data and ignore header row
         $csvData = array_map('str_getcsv', file($file->getPathName()));
         $dataWithoutHeader = array_slice($csvData, 1);
 
+        // Initialize empty arrays to store valid rows and model numbers
         $validRows = [];
         $modelNumbers = [];
 
-        foreach ($dataWithoutHeader as $row) {
+        // Get the count of rows
+        $rowCount = count($dataWithoutHeader);
+
+        // Iterate over each row in the CSV file using a for loop
+        for ($i = 0; $i < $rowCount; $i++) {
+            // Get current row
+            $row = $dataWithoutHeader[$i];
+
+            // Clean and pad data
             $row = array_pad($row, 7, null);
             $row = array_map(function ($item) {
                 return $item === "" ? null : trim($item);
             }, $row);
 
+            // Validate row data
             $validator = Validator::make($row, [
                 0 => 'required|max:255',
                 1 => 'required|max:255',
@@ -110,11 +121,14 @@ class BulkUploadDressScreen extends Screen
                 6 => 'nullable|url',
             ]);
 
+            // If validation fails, display an error message including the row number and return
             if ($validator->fails()) {
-                Toast::error('The file contains invalid data.');
+                // Add 2 to the index because the CSV header row is not included and indices are zero-based
+                Toast::error('Invalid data at row ' . ($i + 2) . '.');
                 return;
             }
 
+            // Prepare data for new Dress
             $preparedRow = [
                 'user_id' => Auth::id(),
                 'model_name' => $row[0],
@@ -129,6 +143,7 @@ class BulkUploadDressScreen extends Screen
             // Check if the model number already exists in the CSV file
             if (isset($modelNumbers[$preparedRow['model_number']])) {
                 if (!$ignoreDuplicates) {
+                    // If ignoreDuplicates is not set, display an error and return
                     Toast::error('The file contains entries with duplicate model numbers.');
                     return;
                 } else {
@@ -137,24 +152,30 @@ class BulkUploadDressScreen extends Screen
                 }
             }
 
+            // Add model number to modelNumbers array
             $modelNumbers[$preparedRow['model_number']] = true;
 
+            // Check if the Dress already exists in the database
             $exists = Dress::where('user_id', $preparedRow['user_id'])
                 ->where('model_number', $preparedRow['model_number'])
                 ->exists();
 
+            // If the Dress does not exist in the database or ignoreDuplicates is set, add it to the validRows array
             if (!$exists) {
                 $validRows[] = $preparedRow;
             } else if (!$ignoreDuplicates) {
-                Toast::warning('Some dresses in the file already exist.');
+                // If ignoreDuplicates is not set and the Dress exists in the database, display a warning and return
+                Toast::warning('Some dresses in the file already exist in the database.');
                 return;
             }
         }
 
+        // Iterate over the valid rows and create a new Dress for each
         foreach ($validRows as $row) {
             Dress::create($row);
         }
 
+        // Display a success message with the number of Dresses created
         Toast::success(str(count($validRows)) . ' dress(es) created.');
     }
 }
