@@ -420,6 +420,7 @@ class ViewBeautyGroupScreen extends Screen
     {
         try {
             $bid = BeautyGroupBid::find(request('bid_id'));
+            $new_vendor = User::find($bid->user_id);
             $bid->status = request('choice');
 
             if(request('choice') == 1){
@@ -433,7 +434,21 @@ class ViewBeautyGroupScreen extends Screen
                         'message' => 'Your bid for the ' . $old_beauty_group_bid->beautyGroup->name . ' beauty group has been changed. Please contact the beauty group owner for more information.',
                         'action' => '/admin/bids/history',
                     ]));
+
+                    $new_vendor->notify(new GeneralNotification([
+                        'title' => 'Beauty Group Bid Accepted',
+                        'message' => 'Your bid for the ' . $bid->beautyGroup->name . ' beauty group has been accepted. Please contact the beauty group owner for more information.',
+                        'action' => '/admin/bids/history',
+                    ]));
                 }
+            } else{
+
+                $new_vendor->notify(new GeneralNotification([
+                    'title' => 'Beauty Group Bid Rejected',
+                    'message' => 'Your bid for the ' . $bid->beautyGroup->name . ' beauty group has been rejected. Please contact the beauty group owner for more information.',
+                    'action' => '/admin/bids/history',
+                ]));
+
             }
 
             $bid->save();
