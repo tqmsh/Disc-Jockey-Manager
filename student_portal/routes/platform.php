@@ -33,7 +33,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
 use App\Orchid\Screens\ViewSingleDressScreen;
 use App\Orchid\Screens\ViewDressListScreen;
