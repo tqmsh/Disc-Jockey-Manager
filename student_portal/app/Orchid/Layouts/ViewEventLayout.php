@@ -29,12 +29,12 @@ class ViewEventLayout extends Table
     protected function columns(): iterable
     {
         return [                    
-            TD::make()
-            ->width('100px')
-            ->align(TD::ALIGN_RIGHT)
-            ->render(function($event){
-                return Button::make('Register')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('plus');
-            }), 
+            // TD::make()
+            // ->width('100px')
+            // ->align(TD::ALIGN_RIGHT)
+            // ->render(function($event){
+            //     return Button::make('Register')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id])->icon('plus');
+            // }), 
 
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
