@@ -2,11 +2,13 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\User;
 use App\Models\Events;
 use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Notifications\GeneralNotification;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
@@ -103,10 +105,31 @@ class ViewEventBidScreen extends Screen
 
     public function updateBid(Events $event)
     {
-        $bid = EventBids::find(request('bid_id'));
-        $bid->status = request('choice');
-        $bid->save();
-        Toast::success('Bid updated successfully!');
-        return redirect()->route('platform.eventBids.list', $event);
+        try{
+            $bid = EventBids::find(request('bid_id'));
+            $bid->status = request('choice');
+            $bid->save();
+            $vendor = User::find($bid->user_id);
+
+            if($bid->status == 1){
+                $vendor->notify(new GeneralNotification([
+                    'title' => 'Event Bid Accepted',
+                    'message' => 'Your bid for ' . $event->event_name . ' has been accepted!',
+                    'action' => '/admin/bid/history'
+                ]));
+                
+            } else {
+                $vendor->notify(new GeneralNotification([
+                    'title' => 'Event Bid Rejected',
+                    'message' => 'Your bid for ' . $event->event_name . ' has been rejected!',
+                    'action' => '/admin/bid/history'
+                ]));
+            }
+
+            Toast::success('Bid updated successfully!');
+            return redirect()->route('platform.eventBids.list', $event);
+        } catch (\Exception $e) {
+            Toast::error('Something went wrong. Error: ' . $e->getMessage());
+        }
     }
 }
