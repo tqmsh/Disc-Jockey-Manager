@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Seating;
@@ -20,8 +21,10 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
+use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewUnattendingStudentLayout;
 use App\Orchid\Layouts\ViewUnattendingStudentInviteLayout;
 
@@ -370,6 +373,14 @@ class ViewEventStudentScreen extends Screen
                         'table_approved' => 1,
                         'invited' => true
                     ]);
+
+                    $user = User::find($student);
+
+                    $user->notify(new GeneralNotification([
+                        'title' => 'You have been invited to an event',
+                        'message' => 'You have been invited to the event by the Prom Committee. Please check the event page for more details.',
+                        'action' => '/admin/events',
+                    ]));
                 }
 
                 Toast::success('Selected students invited succesfully');
@@ -458,6 +469,14 @@ class ViewEventStudentScreen extends Screen
                         'invitation_status' => 1, //this is to make sure that the student is not invited again
                         'table_approved' => 1,
                     ]);
+
+                    $user = User::find($student);
+
+                    $user->notify(new GeneralNotification([
+                        'title' => 'You have been added to an event',
+                        'message' => 'You have been added to the event ' . $event->title . ' by ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . '. Please check the event page for more details.',
+                        'action' => '/admin/events',
+                    ]));
                 }
 
                 Toast::success('Selected students added succesfully');
