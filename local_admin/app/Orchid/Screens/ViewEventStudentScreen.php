@@ -23,6 +23,7 @@ use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
 use App\Orchid\Layouts\ViewUnattendingStudentLayout;
+use App\Orchid\Layouts\ViewUnattendingStudentInviteLayout;
 
 class ViewEventStudentScreen extends Screen
 {
@@ -40,13 +41,13 @@ class ViewEventStudentScreen extends Screen
         return [
             'event' => $event,
             'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
-            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('approved', 1)->whereNotNull('table_id')->get(['user_id']))
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->paginate(20),
+            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id', 'tablename']))->paginate(20),
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
             'tables' => Seating::where('event_id', $event->id)->paginate(10),
-            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('approved', 0)->paginate(20),
+            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(20),
         ];
     }
 
@@ -73,13 +74,19 @@ class ViewEventStudentScreen extends Screen
                 ->icon('arrow-down')
                 ->list([
 
-                    Button::make('Add Selected Students to Event')
+                    Button::make('Manually Add Selected Students')
                         ->method('addStudents')
+                        ->confirm('Are you sure you want to add the selected students to: ' . $this->event->event_name . '?')
                         ->icon('plus'),
+                    
+                    Button::make('Invite Selected Students')
+                        ->method('inviteStudents')
+                        ->confirm('Are you sure you want to invite the selected students to: ' . $this->event->event_name . '? Duplicate invitations will be ignored.')
+                        ->icon('envelope'),
 
-                    Button::make('Remove Selected Students From Event')
+                    Button::make('Remove Selected Students')
                         ->method('deleteStudents')
-                        ->confirm('Are you sure you want to remove the selected students from: ' . $this->event->event_name)
+                        ->confirm('Are you sure you want to remove the selected students from: ' . $this->event->event_name . '?')
                         ->icon('trash'),
                 ]),
             Link::make('Back')
@@ -161,7 +168,11 @@ class ViewEventStudentScreen extends Screen
                     ViewStudentLayout::class
                 ],
 
-                'Add Students' => [
+                'Invite Students' => [
+                    ViewUnattendingStudentInviteLayout::class
+                ],
+
+                'Manually Add Students' => [
                     ViewUnattendingStudentLayout::class
                 ],
             ]),
@@ -192,7 +203,7 @@ class ViewEventStudentScreen extends Screen
                             //table name
                             TD::make('Assigned Table')
                                 ->render(function (Student $student) {
-                                    $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('approved', '1')->pluck('table_id'))->value('tablename');
+                                    $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('table_approved', '1')->pluck('table_id'))->value('tablename');
                                     return e($table);
                                 }),
                             
@@ -303,7 +314,7 @@ class ViewEventStudentScreen extends Screen
 
                         TD::make('Current Table')
                             ->render(function (EventAttendees $proposal) {
-                                return e(Seating::find(EventAttendees::where('user_id', $proposal->user_id)->where('event_id', $this->event->id)->where('approved', '1')->pluck('table_id'))->value('tablename'));
+                                return e(Seating::find(EventAttendees::where('user_id', $proposal->user_id)->where('event_id', $this->event->id)->where('table_approved', '1')->pluck('table_id'))->value('tablename'));
                             }),
 
                         TD::make('Requested Table Capacity')
@@ -341,6 +352,37 @@ class ViewEventStudentScreen extends Screen
 
     }
 
+    public function inviteStudents(Request $request, Events $event)
+    {
+        //get all students from post request
+        $students = $request->get('unattendingStudentsInvite');
+
+        try{
+
+            //if the array is not empty
+            if(!empty($students)){
+
+                //loop through the students and add them to db
+                foreach($students as $student){
+                    EventAttendees::firstOrCreate([
+                        'user_id' => $student,
+                        'event_id' => $event->id,
+                        'table_approved' => 1,
+                        'invited' => true
+                    ]);
+                }
+
+                Toast::success('Selected students invited succesfully');
+
+            }else{
+                Toast::warning('Please select students in order to invite them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to invite the selected students. Error Message: ' . $e->getMessage());
+        }
+    }
+
     public function handleTableChange(Request $request, Events $event)
     {
         $user_id = $request->get('user_id');
@@ -360,7 +402,7 @@ class ViewEventStudentScreen extends Screen
                 $old_entry = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->whereNot('table_id', $requested_table_id)->first();
                 Seating::find($old_entry->table_id)->increment('capacity');
                 $old_entry->delete();
-                EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update(['approved' => 1]);
+                EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update(['table_approved' => 1]);
                 $requested_table->decrement('capacity');
 
                 Toast::success('Table change request accepted');
@@ -413,7 +455,8 @@ class ViewEventStudentScreen extends Screen
                     EventAttendees::create([
                         'user_id' => $student,
                         'event_id' => $event->id,
-                        'approved' => 1,
+                        'invitation_status' => 1, //this is to make sure that the student is not invited again
+                        'table_approved' => 1,
                     ]);
                 }
 

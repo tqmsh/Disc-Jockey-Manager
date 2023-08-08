@@ -41,12 +41,12 @@ class ViewEventStudentScreen extends Screen
             'event' => $event,
             'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
             'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
-            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('approved', 1)->whereNotNull('table_id')->get(['user_id']))
+            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id', 'tablename']))->paginate(20),
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
             'tables' => Seating::where('event_id', $event->id)->paginate(10),
-            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('approved', 0)->paginate(20),
+            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(20),
         ];
     }
 
@@ -192,7 +192,7 @@ class ViewEventStudentScreen extends Screen
                             //table name
                             TD::make('Assigned Table')
                                 ->render(function (Student $student) {
-                                    $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('approved', '1')->pluck('table_id'))->value('tablename');
+                                    $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('table_approved', '1')->pluck('table_id'))->value('tablename');
                                     return e($table);
                                 }),
                             
@@ -303,7 +303,7 @@ class ViewEventStudentScreen extends Screen
 
                         TD::make('Current Table')
                             ->render(function (EventAttendees $proposal) {
-                                return e(Seating::find(EventAttendees::where('user_id', $proposal->user_id)->where('event_id', $this->event->id)->where('approved', '1')->pluck('table_id'))->value('tablename'));
+                                return e(Seating::find(EventAttendees::where('user_id', $proposal->user_id)->where('event_id', $this->event->id)->where('table_approved', '1')->pluck('table_id'))->value('tablename'));
                             }),
 
                         TD::make('Requested Table Capacity')
@@ -360,7 +360,7 @@ class ViewEventStudentScreen extends Screen
                 $old_entry = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->whereNot('table_id', $requested_table_id)->first();
                 Seating::find($old_entry->table_id)->increment('capacity');
                 $old_entry->delete();
-                EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update(['approved' => 1]);
+                EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update(['table_approved' => 1]);
                 $requested_table->decrement('capacity');
 
                 Toast::success('Table change request accepted');
@@ -413,7 +413,7 @@ class ViewEventStudentScreen extends Screen
                     EventAttendees::create([
                         'user_id' => $student,
                         'event_id' => $event->id,
-                        'approved' => 1,
+                        'table_approved' => 1,
                     ]);
                 }
 
