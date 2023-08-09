@@ -87,7 +87,7 @@ class EditSongRequestsScreen extends Screen
 
             $title= $request->input('song.title'); $artist= $request->input('song.artist');
 
-            $songRequest->title= $title; $songRequest->artist= $artist; 
+            $songRequest->title= $title; $songRequest->artist= $artist;
 
             return redirect()->route('platform.songreq.list');
 
