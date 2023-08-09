@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Seating;
@@ -22,7 +23,9 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
+use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewUnattendingStudentLayout;
+use App\Orchid\Layouts\ViewUnattendingStudentInviteLayout;
 
 class ViewEventStudentScreen extends Screen
 {
@@ -40,7 +43,7 @@ class ViewEventStudentScreen extends Screen
         return [
             'event' => $event,
             'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->paginate(20),
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->paginate(20),
             'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))
                                 ->filter(request(['ticketstatus', 'event_id', 'tablename']))->paginate(20),
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
@@ -73,13 +76,19 @@ class ViewEventStudentScreen extends Screen
                 ->icon('arrow-down')
                 ->list([
 
-                    Button::make('Add Selected Students to Event')
+                    Button::make('Manually Add Selected Students')
                         ->method('addStudents')
+                        ->confirm('Are you sure you want to add the selected students to: ' . $this->event->event_name . '?')
                         ->icon('plus'),
+                    
+                    Button::make('Invite Selected Students')
+                        ->method('inviteStudents')
+                        ->confirm('Are you sure you want to invite the selected students to: ' . $this->event->event_name . '? Duplicate invitations will be ignored.')
+                        ->icon('envelope'),
 
-                    Button::make('Remove Selected Students From Event')
+                    Button::make('Remove Selected Students')
                         ->method('deleteStudents')
-                        ->confirm('Are you sure you want to remove the selected students from: ' . $this->event->event_name)
+                        ->confirm('Are you sure you want to remove the selected students from: ' . $this->event->event_name . '?')
                         ->icon('trash'),
                 ]),
             Link::make('Back')
@@ -161,7 +170,11 @@ class ViewEventStudentScreen extends Screen
                     ViewStudentLayout::class
                 ],
 
-                'Add Students' => [
+                'Invite Students' => [
+                    ViewUnattendingStudentInviteLayout::class
+                ],
+
+                'Manually Add Students' => [
                     ViewUnattendingStudentLayout::class
                 ],
             ]),
@@ -341,6 +354,45 @@ class ViewEventStudentScreen extends Screen
 
     }
 
+    public function inviteStudents(Request $request, Events $event)
+    {
+        //get all students from post request
+        $students = $request->get('unattendingStudentsInvite');
+
+        try{
+
+            //if the array is not empty
+            if(!empty($students)){
+
+                //loop through the students and add them to db
+                foreach($students as $student){
+                    EventAttendees::firstOrCreate([
+                        'user_id' => $student,
+                        'event_id' => $event->id,
+                        'table_approved' => 1,
+                        'invited' => true
+                    ]);
+
+                    $user = User::find($student);
+
+                    $user->notify(new GeneralNotification([
+                        'title' => 'You have been invited to an event',
+                        'message' => 'You have been invited to the event by the Prom Committee. Please check the event page for more details.',
+                        'action' => '/admin/events',
+                    ]));
+                }
+
+                Toast::success('Selected students invited succesfully');
+
+            }else{
+                Toast::warning('Please select students in order to invite them');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to invite the selected students. Error Message: ' . $e->getMessage());
+        }
+    }
+
     public function handleTableChange(Request $request, Events $event)
     {
         $user_id = $request->get('user_id');
@@ -413,8 +465,17 @@ class ViewEventStudentScreen extends Screen
                     EventAttendees::create([
                         'user_id' => $student,
                         'event_id' => $event->id,
+                        'invitation_status' => 1, //this is to make sure that the student is not invited again
                         'table_approved' => 1,
                     ]);
+
+                    $user = User::find($student);
+
+                    $user->notify(new GeneralNotification([
+                        'title' => 'You have been added to an event',
+                        'message' => 'You have been added to the event ' . $event->title . ' by a Super Admin. Please check the event page for more details.',
+                        'action' => '/admin/events',
+                    ]));
                 }
 
                 Toast::success('Selected students added succesfully');
@@ -427,7 +488,6 @@ class ViewEventStudentScreen extends Screen
             Alert::error('There was a error trying to add the selected students. Error Message: ' . $e->getMessage());
         }
     }
-
     public function filter(Events $event){
         return redirect()->route('platform.eventStudents.list', [$event->id, 'ticketstatus' => request('ticketstatus')]);
     }

@@ -4,11 +4,11 @@ namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
 use App\Models\Events;
-use Orchid\Support\Color;
-use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Layouts\Table;
+use Orchid\Support\Color;
 
-class ViewRegisteredEventLayout extends Table
+class ViewEventInvitationsLayout extends Table
 {
     /**
      * Data source.
@@ -18,7 +18,7 @@ class ViewRegisteredEventLayout extends Table
      *
      * @var string
      */
-    protected $target = 'registered_events';
+    protected $target = 'eventInvitations';
 
 
     /**
@@ -29,27 +29,31 @@ class ViewRegisteredEventLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
-                ->width('100px')
-                ->align(TD::ALIGN_RIGHT)
-                ->render(function($event){
-                    return Button::make('Tables')->type(Color::DARK())->method('redirect', ['event_id' => $event->id, 'type' => 'table'])->icon('table');
-                }), 
-                
-            TD::make()
+            
+            TD::make('accept', 'Accept')
                 ->render(function (Events $event) {
-                    return Button::make('Song Requests')
-                        ->icon('music-tone-alt')         
-                        ->method('redirect', ['event_id' => $event->id, 'type' => 'songs'])
-                        ->type(Color::INFO());
+                    return Button::make('Accept')
+                        ->icon('check')
+                        ->method('updateInvitationStatus')
+                        ->confirm('Are you sure you want to accept this invitation?')
+                        ->type(Color::SUCCESS())
+                        ->parameters([
+                            'event_id' => $event->id,
+                            'invitation_status' => 1,
+                        ]);
                 }),
 
-            TD::make()
+            TD::make('decline', 'Reject')
                 ->render(function (Events $event) {
-                    return Button::make('Election')
-                        ->icon('people')         
-                        ->method('redirect', ['event_id' => $event->id, 'type' => 'election'])
-                        ->type(Color::LIGHT());
+                    return Button::make('Reject')
+                        ->icon('close')
+                        ->method('updateInvitationStatus')
+                        ->confirm('Are you sure you want to decline this invitation?')
+                        ->type(Color::DANGER())
+                        ->parameters([
+                            'event_id' => $event->id,
+                            'invitation_status' => 2,
+                        ]);
                 }),
 
             TD::make('event_name', 'Event Name')
@@ -81,7 +85,6 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function (Events $event) {
                     return e($event->event_rules);
                 }),
-    
         ];    
     }
 }
