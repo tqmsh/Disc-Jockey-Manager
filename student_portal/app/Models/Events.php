@@ -55,4 +55,8 @@ class Events extends Model
         $school = School::find($this->attributes['school_id']);
         return $this->attributes['event_name'] . ' (' . $this->attributes['school'] . ' | ' . $school->county . ') ';
     }
+
+    public function creator(){
+        return $this->belongsTo(User::class, 'event_creator');
+    }
 }

@@ -13,6 +13,8 @@ class EventAttendees extends Model
         'id',
         'user_id',
         'event_id', 
+        'invitation_status',
+        'invited',
         'table_id', 
         'ticketstatus', 
         'ticket_code',
