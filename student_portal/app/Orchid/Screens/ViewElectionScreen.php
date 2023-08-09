@@ -10,6 +10,7 @@ use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewPositionLayout;
+use Orchid\Support\Facades\Layout;
 
 class ViewElectionScreen extends Screen
 {
@@ -25,10 +26,12 @@ class ViewElectionScreen extends Screen
         $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
         abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
         $election = Election::where('event_id',$event->id)->first();
+        
+        
         return [
             'election' => $election,
             'position' => Position::where('election_id',$election->id)->paginate(10),
-            'event' => $event
+            'event' => $event,
         ];
     }
 
@@ -41,6 +44,7 @@ class ViewElectionScreen extends Screen
     {
         return 'Election: ' .$this->election->election_name;
     }
+
 
     /**
      * Button commands.
@@ -64,6 +68,7 @@ class ViewElectionScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::view('election_status'),
             ViewPositionLayout::class,
         ];
     }
