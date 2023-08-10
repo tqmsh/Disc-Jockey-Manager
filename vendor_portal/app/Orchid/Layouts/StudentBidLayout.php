@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
+use App\Models\User;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Region;
@@ -48,9 +49,9 @@ class StudentBidLayout extends Table
                         : '<i class="text-danger">●</i> Rejected');
                 }),
 
-            TD::make('student_id', 'Student ID')
+            TD::make('student_id', 'Student Email')
                 ->render(function($studentBid){
-                    return e($studentBid->student_id === null ? 'Student no longer exists': $studentBid->student_id);
+                    return e($studentBid->student_user_id === null ? 'Student no longer exists': User::find($studentBid->student_user_id)->email);
                 }),
 
             TD::make('school_name', 'School')->width('200px')

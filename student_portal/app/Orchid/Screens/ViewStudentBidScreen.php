@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\User;
 use App\Models\Events;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -9,16 +10,17 @@ use App\Models\Categories;
 use App\Models\StudentBids;
 use App\Models\LimoGroupBid;
 use App\Models\BeautyGroupBid;
-use App\Orchid\Layouts\ViewBeautyBidsLayout;
-use App\Orchid\Layouts\ViewBeautyGroupBidLayout;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewLimoBidsLayout;
+use App\Orchid\Layouts\ViewBeautyBidsLayout;
 use App\Orchid\Layouts\ViewStudentBidsLayout;
+use App\Orchid\Layouts\ViewBeautyGroupBidLayout;
 use App\Orchid\Layouts\ViewPendingStudentBidsLayout;
 
 class ViewStudentBidScreen extends Screen
@@ -105,7 +107,7 @@ class ViewStudentBidScreen extends Screen
         ];
     }
     
-    public function filter(Events $event)
+    public function filter()
     {
         return redirect()->route('platform.studentBids.list', ['category_id' => request('category_id')]);
     }
@@ -116,10 +118,32 @@ class ViewStudentBidScreen extends Screen
 
     public function updateBid()
     {
-        $bid = StudentBids::find(request('bid_id'));
-        $bid->status = request('choice');
-        $bid->save();
-        Toast::success('Bid updated successfully!');
-        return redirect()->route('platform.studentBids.list',);
+        try {
+            $bid = StudentBids::find(request('bid_id'));
+            $vendor = User::find($bid->user_id);
+            $bid->status = request('choice');
+            $bid->save();
+
+            if(request('choice') == 1){
+
+                $vendor->notify(new GeneralNotification([
+                    'title' => 'Student Bid Accepted!',
+                    'message' => 'Your bid for ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has been accepted!',
+                    'action' => '/admin/bids/history'
+                ]));
+            } else{
+
+                $vendor->notify(new GeneralNotification([
+                    'title' => 'Student Bid Declined!',
+                    'message' => 'Your bid for ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has been declined!',
+                    'action' => '/admin/bids/history'
+                ]));
+            }
+
+            Toast::success('Bid updated successfully!');
+            return redirect()->route('platform.studentBids.list');
+        } catch (\Exception $e) {
+            Toast::error('Something went wrong. Error: ' . $e->getMessage());
+        }
     }
 }

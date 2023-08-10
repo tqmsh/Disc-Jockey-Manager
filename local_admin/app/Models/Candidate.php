@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+// TODO get rid of this after
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Candidate extends Model
 {
@@ -21,7 +23,6 @@ class Candidate extends Model
 
     public function totalVotes($candidate_id)
     {   
-        $candidate_id = request('candidate_id');
         $totalVotes = 0;
         $allVoters = ElectionVotes::where('candidate_id',$candidate_id)->get();
 
@@ -32,8 +33,6 @@ class Candidate extends Model
             }
 
         }
-
         return $totalVotes;
-
     }
 }

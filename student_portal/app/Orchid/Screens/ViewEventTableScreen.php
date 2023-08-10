@@ -33,7 +33,7 @@ class ViewEventTableScreen extends Screen
         return [
             'event' => $event,
             'tables' => Seating::where('event_id', $event->id)->paginate(10),
-            'student_table' => Seating::find(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('approved', 1)->pluck('table_id')->first()) ?? null,
+            'student_table' => Seating::find(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('table_approved', 1)->pluck('table_id')->first()) ?? null,
         ];
     }
 
@@ -115,7 +115,7 @@ class ViewEventTableScreen extends Screen
     //used for getting the names of the students at a table
     private function getNames($tableId)
     {
-        $students = User::whereIn('id', EventAttendees::where('table_id', $tableId)->where('approved', 1)->pluck('user_id'))->get();
+        $students = User::whereIn('id', EventAttendees::where('table_id', $tableId)->where('table_approved', 1)->pluck('user_id'))->get();
         $names = [];
 
         foreach ($students as $student) {
@@ -133,7 +133,7 @@ class ViewEventTableScreen extends Screen
             $table = Seating::find(request('requested_table_id'));
             
             //check if the student has requested to be seated at another table
-            if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('approved', 0)->exists()){
+            if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('table_approved', 0)->exists()){
                 Toast::info('You have already requested to be seated at another table. Please wait for a admin to approve your request.');
                 return redirect()->route('platform.event.tables', $event);
             }
@@ -145,13 +145,13 @@ class ViewEventTableScreen extends Screen
             }
 
             //check if the student has already requested to be seated at this table
-            if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('table_id', $table->id)->where('approved', 0)->exists()){
+            if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('table_id', $table->id)->where('table_approved', 0)->exists()){
                 Toast::info('You have already requested to be seated at this table. Please wait for a admin to approve your request.');
                 return redirect()->route('platform.event.tables', $event);
             }
 
 
-            //insert the request into the database approved defaults to 0
+            //insert the request into the database table_approved defaults to 0
             EventAttendees::create([
                 'user_id' => Auth::user()->id,
                 'event_id' => $event->id,

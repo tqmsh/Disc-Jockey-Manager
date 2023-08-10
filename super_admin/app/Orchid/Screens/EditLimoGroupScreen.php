@@ -56,6 +56,7 @@ class EditLimoGroupScreen extends Screen
         return [
             Button::make('Update Limo Group')
                 ->icon('plus')
+                ->confirm('WARNING: Changing this limo group will remove the owner from their current limo group if they are in one. And if they own a limo group, it will delete it and all the memebers in it. Are you sure you want to change this limo group?')
                 ->method('updateLimoGroup'),
             
             Button::make('Delete Limo Group')
@@ -161,6 +162,22 @@ class EditLimoGroupScreen extends Screen
         if($fields['capacity'] < $limoGroup->capacity){
             Toast::error('Error Updating Limo Group. Capacity cannot be less than the number of members in the limo group.');
             return;
+        }
+
+
+        //check if user already owns a limo group
+        $owned_limo_group = LimoGroup::where('creator_user_id', $fields['creator_user_id'])->first();
+
+        //check if user is part of a limo group
+        $user_limo_group = LimoGroupMember::where('invitee_user_id', $fields['creator_user_id'])->where('status', 1)->first();
+
+        if($owned_limo_group != null && $owned_limo_group->id != $limoGroup->id){
+            //delete the old limo group
+            $owned_limo_group->delete();
+
+        } elseif($user_limo_group != null && $user_limo_group->limo_group_id != $limoGroup->id){
+            //remove them as a limo group member from old limo group
+            $user_limo_group->delete();
         }
 
         try{

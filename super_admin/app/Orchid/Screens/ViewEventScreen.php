@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
+use App\Models\Election;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Illuminate\Http\Request;

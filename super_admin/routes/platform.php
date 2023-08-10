@@ -9,7 +9,6 @@ use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
-use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSongsScreen;
@@ -42,12 +41,15 @@ use App\Orchid\Screens\EditLocaladminScreen;
 use App\Orchid\Screens\ViewLocaladminScreen;
 use App\Orchid\Screens\ViewRequestersScreen;
 use App\Orchid\Screens\CreateLimoGroupScreen;
+use App\Orchid\Screens\EditBeautyGroupScreen;
+use App\Orchid\Screens\ViewBeautyGroupScreen;
 use App\Orchid\Screens\CreateLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
+use App\Orchid\Screens\CreateBeautyGroupScreen;
 use App\Orchid\Screens\EditCourseSectionScreen;
 use App\Orchid\Screens\EditSectionLessonScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
@@ -60,6 +62,7 @@ use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\ViewPendingLocaladminScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
+use App\Orchid\Screens\ViewBeautyGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -206,6 +209,15 @@ Route::screen('/limo-groups/create', CreateLimoGroupScreen::class)->name('platfo
 Route::screen('/limo-groups/{limoGroup}/edit', EditLimoGroupScreen::class)->name('platform.limo-groups.edit');
 //view limo group members
 Route::screen('/limo-groups/{limoGroup}/members', ViewLimoGroupMembersScreen::class)->name('platform.limo-groups.members');
+
+//view beauty groups
+Route::screen('/beauty-groups', ViewBeautyGroupScreen::class)->name('platform.beauty-groups');
+//create beauty groups
+Route::screen('/beauty-groups/create', CreateBeautyGroupScreen::class)->name('platform.beauty-groups.create');
+//edit beauty group
+Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)->name('platform.beauty-groups.edit');
+//view beauty group members
+Route::screen('/beauty-groups/{beautyGroup}/members', ViewBeautyGroupMembersScreen::class)->name('platform.beauty-groups.members');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

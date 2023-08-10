@@ -9,6 +9,8 @@ use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewVotingScreen;
+use App\Orchid\Screens\ViewWinnersScreen;
+use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
@@ -64,6 +66,8 @@ Route::screen('/events/{event}/request-song', CreateSongRequestScreen::class)->n
 Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('platform.election.list');
 
 Route::screen('/events/election/vote/{position}', ViewVotingScreen::class)->name('platform.election.vote');
+
+Route::screen('/events/election/winners', ViewWinnersScreen::class)->name('platform.election.winners');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 

@@ -422,6 +422,8 @@ class ViewLimoGroupScreen extends Screen
         try {
             $bid = LimoGroupBid::find(request('bid_id'));
             $bid->status = request('choice');
+            $new_vendor = User::find($bid->user_id);
+
 
             if(request('choice') == 1){
                 $old_limo_group_bid = LimoGroupBid::where('limo_group_id', request('limo_group_id'))->where('status', 1)->first();
@@ -432,6 +434,17 @@ class ViewLimoGroupScreen extends Screen
                     $old_vendor->notify(new GeneralNotification([
                         'title' => 'Limo Group Bid Changed',
                         'message' => 'Your bid for the ' . $old_limo_group_bid->limoGroup->name . ' limo group has been changed. Please contact the limo group owner for more information.',
+                        'action' => '/admin/bids/history',
+                    ]));
+                    $new_vendor->notify(new GeneralNotification([
+                        'title' => 'Limo Group Bid Accepted',
+                        'message' => 'Your bid for the ' . $bid->limoGroup->name . ' limo group has been accepted. Please contact the limo group owner for more information.',
+                        'action' => '/admin/bids/history',
+                    ]));
+                } else{
+                    $new_vendor->notify(new GeneralNotification([
+                        'title' => 'Limo Group Bid rejected',
+                        'message' => 'Your bid for the ' . $bid->limoGroup->name . ' limo group has been rejected. Please contact the limo group owner for more information.',
                         'action' => '/admin/bids/history',
                     ]));
                 }

@@ -2,25 +2,25 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\LimoGroup;
+use App\Models\BeautyGroup;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewLimoGroupMembersLayout;
+use App\Orchid\Layouts\ViewBeautyGroupMembersLayout;
 
-class ViewLimoGroupMembersScreen extends Screen
+class ViewBeautyGroupMembersScreen extends Screen
 {
-    public $limoGroup;
+    public $beautyGroup;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(LimoGroup $limoGroup): iterable
+    public function query(BeautyGroup $beautyGroup): iterable
     {
         return [
-            'limoGroup' => $limoGroup,
-            'members' => $limoGroup->members()->paginate(10)
+            'beautyGroup' => $beautyGroup,
+            'members' => $beautyGroup->members()->paginate(10)
         ];
     }
 
@@ -31,7 +31,7 @@ class ViewLimoGroupMembersScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Members in: ' . $this->limoGroup->name . ' Group';
+        return 'Members in: ' . $this->beautyGroup->name . ' Group';
     }
 
     /**
@@ -43,7 +43,7 @@ class ViewLimoGroupMembersScreen extends Screen
     {
         return [
             Link::make('Back')
-                ->route('platform.limo-groups')
+                ->route('platform.beauty-groups')
                 ->icon('arrow-left')
         ];
     }
@@ -56,7 +56,7 @@ class ViewLimoGroupMembersScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewLimoGroupMembersLayout::class
+            ViewBeautyGroupMembersLayout::class
         ];
     }
 }
