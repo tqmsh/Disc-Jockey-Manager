@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\CreateBannedSongsScreen;
+use App\Orchid\Screens\EditSongScreen;
+use App\Orchid\Screens\ViewBannedSongsScreen;
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
@@ -63,6 +66,7 @@ use App\Orchid\Screens\ViewBeautyGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -151,6 +155,7 @@ Route::screen('/categories/{category}/edit', EditCategoryScreen::class)->name('p
 Route::screen('/regions', ViewRegionScreen::class)->name('platform.region.list');
 
 Route::screen('/songs', ViewSongsScreen::class)->name('platform.songs.list');
+Route::screen('/songs/edit/{song?}', EditSongScreen::class)->name('platform.songs.edit');
 
 //show edit region screen
 Route::screen('/regions/{regions}/edit', EditRegionScreen::class)->name('platform.region.edit');
@@ -165,7 +170,9 @@ Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platf
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
 Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
-Route::screen('/events/{songReq_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
+Route::screen('/events/{event_id}/banned-songs', ViewBannedSongsScreen::class)->name('platform.bannedSongs.list');
+Route::screen('/events/{event_id}/banned-songs/add', CreateBannedSongsScreen::class)->name('platform.bannedSongs.create');
+Route::screen('/events/{song_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
 //view courses screen route
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');

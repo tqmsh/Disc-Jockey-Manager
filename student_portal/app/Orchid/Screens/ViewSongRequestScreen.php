@@ -2,125 +2,62 @@
 
 namespace App\Orchid\Screens;
 
-use Exception;
 use App\Models\Events;
+use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
-use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewSongRequestLayout;
-use Illuminate\Http\Request;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Color;
-use Orchid\Screen\Fields\Select;
-use App\Models\Song;
-use App\Models\Student;
 use App\Models\SongRequest;
 use App\Models\EventAttendees;
-use App\Models\NoPlaySong;
-use Orchid\Screen\TD;   
-use Orchid\Support\Facades\Toast;
 
 class ViewSongRequestScreen extends Screen
 {
+    public Events $event;
 
-    public $event;
+    public function name(): ?string
+    {
+        return 'Song Request Data for ' . $this->event->event_name;
+    }
 
-    /**
-     * Query data.
-     *
-     * @return array
-     */
+    public string $description = 'View data on song requests made by all attendees of this event.';
+
     public function query(Events $event): iterable
     {
-        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
-        abort_if(!($studentAttendee->exists() &&  $studentAttendee->ticketstatus == 'Paid'), 403);
+        $studentAttendee = EventAttendees::where('user_id', Auth::id())
+            ->where('event_id', $event->id)
+            ->first();
+
+        abort_if(!($studentAttendee->exists() && $studentAttendee->ticketstatus == 'Paid'), 403);
+
+        $songRequests = SongRequest::where('event_id', $event->id)
+            ->select('song_requests.song_id', 'song_requests.event_id', DB::raw('COUNT(song_requests.user_id) as num_requesters'))
+            ->groupBy('song_requests.song_id', 'song_requests.event_id')
+            ->orderBy('num_requesters', 'desc')
+            ->paginate(10);
+
         return [
-            'songRequests' => SongRequest::where('event_id', $event->id)->paginate(10),
+            'songRequests' => $songRequests,
             'event' => $event
         ];
     }
-    /**
-     * Display header name.
-     *
-     * @return string|null
-     */
-    public function name(): ?string
-    {
-        return 'Song Requests';
-    }
 
-    /**
-     * Button commands.
-     *
-     * @return \Orchid\Screen\Action[]
-     */
     public function commandBar(): iterable
     {
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.event.list'),
+            Link::make('Request a Song')
+                ->icon('plus')
+                ->route('platform.songs.request', ['event' => $this->event->id])
         ];
     }
-    /**
-     * Views.
-     *
-     * @return \Orchid\Screen\Layout[]|string[]
-     */
+
     public function layout(): iterable
     {
         return [
-            Layout::tabs([
-                "Song Request List"=> ViewSongRequestLayout::class,
-
-                "Request a Song" =>[
-                    Layout::rows([
-                        Select::make('song.id')
-                        ->options(function(){
-                            $arr= array();
-                            foreach(Song::all() as $song){
-                                if(!NoPlaySong::where('song_id', $song -> id)->where('event_id', $this->event->id)->exists() && 
-                                !SongRequest::where('song_id', $song->id)->where('event_id', $this->event->id)->whereJsonContains('requester_user_ids', Auth::user()->id)->exists()){
-                                    $arr[$song->id]= $song->title . ' - ' . $song-> artist;
-                                }
-                            }
-                            return $arr;
-                        })
-                        -> empty('Choose a song'), 
-            
-                        Button::make('Submit')
-                        ->type(Color::PRIMARY())
-                        ->method('chooseSong')
-                        ->icon('plus')
-                        ])], 
-                ]),
-
+            ViewSongRequestLayout::class,
         ];
-    }
-    public function chooseSong(Request $request, Events $event){
-        try{
-            $song = Song::find($request->input('song.id'));
-
-            if(SongRequest::where('song_id', $song -> id)->exists()){
-                $songRequest= SongRequest::where('song_id', $song -> id) -> first();
-                $requesters= json_decode($songRequest -> requester_user_ids);  
-                array_push($requesters, auth()-> id());  
-                $songRequest -> requester_user_ids= json_encode($requesters); 
-                $songRequest -> save();     
-            }
-            else{
-                $formFields = $request->all();      
-                $formFields['requester_user_ids'] = json_encode([auth()->id()]);
-                $formFields['song_id'] = $song->id;
-                $formFields['event_id'] = $event -> id;
-                SongRequest::create($formFields);
-            }
-            Toast::success('Song Request created successfully');
-        }
-        catch(Exception $e){
-            Toast::error('There was a error trying to create the Song Request. Error Message: ' . $e);
-       }
- 
     }
 }

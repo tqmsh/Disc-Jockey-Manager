@@ -18,6 +18,7 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Select;
+use Orchid\Support\Facades\Toast;
 
 class ViewSongRequestsLayout extends Table
 {
@@ -31,7 +32,7 @@ class ViewSongRequestsLayout extends Table
      */
     protected $target = 'songRequests';
 
-    
+
     /**
      * Get the table cells to be displayed.
      *
@@ -41,40 +42,54 @@ class ViewSongRequestsLayout extends Table
     {
         return [
             TD::make()
-                ->render(function (SongRequest $songRequest){
-                    return CheckBox::make('songRequests[]')
-                        ->value($songRequest -> id)
+                ->render(function (SongRequest $songRequest) {
+                    return CheckBox::make('selectedSongRequests[]')
+                        ->value($songRequest->song_id)
                         ->checked(false);
                 }),
+
             TD::make('request_title', 'Title')
                 ->render(function (SongRequest $songRequest) {
-                return e(Song::find($songRequest -> song_id) -> title);
-            }),
+                    return e(Song::find($songRequest->song_id)->title);
+                }),
 
             TD::make('request_artist', 'Artist')
                 ->render(function (SongRequest $songRequest) {
-                return e(Song::find($songRequest -> song_id) -> artist);
-            }),
+                    return e(Song::find($songRequest->song_id)->artists);
+                }),
+
+            TD::make('explicit', 'Explicit')
+                ->popover("Songs that are marked as 'Unknown' have not be reviewed by Prom Planner, and may contain swear words.")
+                ->render(function (SongRequest $songRequest) {
+                    $song = Song::find($songRequest->song_id);
+                    if ($song->status == 0) return 'Unknown';
+                    return $song->explicit ? 'Yes' : 'No';
+                }),
 
             TD::make('num_requesters', 'Number of Requesters')
                 ->render(function (SongRequest $songRequest) {
-                return e(((json_decode($songRequest-> requester_user_ids, TRUE)) == null) ? 0 : count(json_decode($songRequest-> requester_user_ids, TRUE)));
-            }),
-
-            TD::make()
-                ->render(function (SongRequest $songRequest) {
-                    return Button::make('View Requesters')-> type(Color::PRIMARY())-> method('redirect', ["songReq_id" => $songRequest -> id])->icon('people');
+                    return e($songRequest->num_requesters);
                 }),
 
             TD::make()
                 ->render(function (SongRequest $songRequest) {
-                    return ModalToggle::make('Change')
-                        ->icon('microphone')         
+                    return Button::make('View Requesters')
+                        ->type(Color::PRIMARY())
+                        ->method('redirect', ["song_id" => $songRequest->song_id])
+                        ->icon('people');
+                }),
+
+            TD::make()
+                ->render(function (SongRequest $songRequest) {
+                    return ModalToggle::make('Change Song')
+                        ->icon('microphone')
                         ->modal('editSong')
                         ->modalTitle('Change Song')
                         ->type(Color::PRIMARY())
-                        ->method("update", ['songReq' => $songRequest -> id]);
+                        ->method("updateSong", ['prevSongId' => $songRequest->song_id]);
                 }),
+
         ];
+
     }
 }
