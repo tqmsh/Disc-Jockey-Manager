@@ -3,177 +3,65 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\Events;
-use App\Models\Student;
 use Orchid\Screen\Screen;
-use Illuminate\Support\Arr;
-use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
-use Orchid\Support\Facades\Layout;
-use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewEventLayout;
-use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewSongsLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Color;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\TextArea;
-use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\Select;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
-use App\Models\User;
 use App\Models\Song;
-use App\Models\SongRequest;
-use App\Models\NoPlaySong;
-use Orchid\Screen\TD;   
 
 class ViewSongsScreen extends Screen
 {
-    /**
-     * Query data.
-     *
-     * @return array
-     */
-    public function query(): iterable
+    public string $name = 'Songs';
+    public ?string $description = 'View, create, and delete songs';
+
+    public function query(Request $request): iterable
     {
-        return ['songs' => Song::latest('songs.created_at') -> paginate(10)];
+        $filters = $request->get('filter');
+        return [
+            'songs' => Song::filter($filters)
+                ->latest('songs.created_at')
+                ->paginate(10)
+        ];
     }
-    /**
-     * Display header name.
-     *
-     * @return string|null
-     */
-    public function name(): ?string
-    {
-        return 'Songs';
-    }
-    /**
-     * Button commands.
-     *
-     * @return \Orchid\Screen\Action[]
-     */
+
     public function commandBar(): iterable
     {
         return [
-            Link::make('Back')
-                ->icon('arrow-left')
-                ->route('platform.songs.list'),
-
-            ModalToggle::make('Add New Song')
-                ->modal('createSongModal')
-                ->method('create')
-                ->icon('plus'),
-
-            Button::make('Delete Song')
+            Link::make('Add New Song')
+                ->icon('plus')
+                ->route('platform.songs.edit'),
+            Button::make('Delete Selected Songs')
                 ->icon('trash')
+                ->confirm('Are you sure you want to delete the selected songs?')
                 ->method('delete'),
         ];
     }
-    /**
-     * Views.
-     *
-     * @return \Orchid\Screen\Layout[]|string[]
-     */
+
     public function layout(): iterable
     {
         return [
-
-          ViewSongsLayout::class,
-
-        Layout::modal('createSongModal', Layout::rows([
-            
-            Input::make('song.title')
-                ->title('Title')
-                ->placeholder('Song Title'),
-
-            Input::make('song.artist')
-                ->title('Artist')
-                ->placeholder('Song Artist'),
-
-        ]))
-        ->title('Create Song')
-        ->applyButton('Add Song'),
-
-        Layout::modal('editSongModal',  Layout::rows([
-            
-            Input::make('song.title')
-                ->title('Title')
-                ->placeholder('Song Title'),
-                
-
-            Input::make('song.artist')
-                ->title('Artist')
-                ->placeholder('Song Artist'),
-
-        ]))
-        ->title('Edit Song')
-        ->applyButton('Update Song'),
-
-
+            ViewSongsLayout::class,
         ];
     }
 
-    
-    public function create(Request $request)
-    {
-        try{
-        $title= $request->input('song.title'); $artist = $request->input('song.artist');
-            if($title== null || $artist== null){
-                Toast::error('Please fill all required fields.');  
-            }
-            else{
-                if(!Song::where(['title'=> $title, 'artist'=> $artist]) -> exists()){
-                    Song::create([
-                        'title' => $title,
-                        'artist' => $artist,
-                    ]);
-                }
-                else{
-                    Toast::warning('This song has been created previously');
-                }    
-            }
-        }
-        catch(Exception $e){
-            Toast::error('There was a error trying to create this Song. Error Message: ' . $e);
-        }
-    }
 
     public function delete(Request $request)
-    {   
-        $songs = $request->get('songs');
-        try{
-            if(!empty($songs)){
-                foreach($songs as $song){
+    {
+        $songs = $request->get('selectedSongs');
+        try {
+            if (!empty($songs)) {
+                foreach ($songs as $song) {
                     Song::where('id', $song)->delete();
                 }
-                Toast::success('Selected Song(s) deleted succesfully');
-            }else{
-                Toast::warning('Please select Songs in order to delete them');
+                Toast::success('Selected songs deleted successfully');
+            } else {
+                Toast::warning('Please select the songs to delete');
             }
-
-        }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected Songs. Error Message: ' . $e);
+        } catch (Exception $e) {
+            Alert::error('There was an error trying to delete the selected songs. Error Message: ' . $e);
         }
     }
-
-    public function edit(Request $request)
-    {
-        try{
-            $song = Song::find($request->get("song_id"));
-            $title= $request->input('song.title'); $artist = $request->input('song.artist');
-
-            $song ->title = ($title == null) ? $song ->title: $title;
-            $song ->artist= ($artist == null) ? $song ->artist: $artist;
-            $song->save();
-        }
-        catch(Exception $e){
-            Toast::error('There was a error trying to update this Song. Error Message: ' . $e);
-        }
-
-    }
-
-
-
-}   
+}

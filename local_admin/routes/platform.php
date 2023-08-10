@@ -2,8 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\AddBannedSongsScreen;
+use App\Orchid\Screens\CreateBannedSongsScreen;
+use App\Orchid\Screens\ViewBannedSongsScreen;
 use Tabuna\Breadcrumbs\Trail;
-use Illuminate\Support\Facades\Route;;
+use Illuminate\Support\Facades\Route;
+
+;
+
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewCourseScreen;
@@ -42,6 +48,7 @@ use App\Orchid\Screens\ViewBeautyGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -64,7 +71,7 @@ Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
 
 //show create student screen
-Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');        
+Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
 
 //show edit students screen
 Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
@@ -95,9 +102,11 @@ Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonS
 
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
-Route::screen('/events/{event_id}/songRequests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
+Route::screen('/events/{event_id}/song-requests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
+Route::screen('/events/{event_id}/banned-songs', ViewBannedSongsScreen::class)->name('platform.bannedSongs.list');
+Route::screen('/events/{event_id}/banned-songs/add', CreateBannedSongsScreen::class)->name('platform.bannedSongs.create');
 
-Route::screen('/events/{songReq_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
+Route::screen('/events/{song_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
 
 //Election
@@ -126,8 +135,6 @@ Route::screen('/beauty-groups', ViewBeautyGroupScreen::class)->name('platform.be
 Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembersScreen::class)->name('platform.beauty-groups.members');
 
 
-
- 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')

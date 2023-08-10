@@ -31,25 +31,17 @@ class ViewRequestersLayout extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make()
+                ->render(function ($requester) {
+                    return CheckBox::make('requesterList[]')
+                        ->value($requester)
+                        ->checked(false);
+                }),
 
-        TD::make()
-            ->render(function ($requester ){
-                return CheckBox::make('requesterList[]')
-                    ->value($requester)
-                    ->checked(false);  
-            }),
-
-        TD::make('requester_id', 'Requester User ID')
-            ->render(function ($requester) {
-                return e($requester);
-            }), 
-
-        TD::make('requester_name', 'Requester Name')
-            ->render(function ($requester) {
-                return e(Student::where('user_id', $requester)-> first() -> firstname . " " . Student::where('user_id', $requester)-> first() -> lastname);
-            }), 
-
-            
+            TD::make('requester_name', 'Requester Name')
+                ->render(function ($requester) {
+                    return e(Student::where('user_id', $requester)->first()->firstname . " " . Student::where('user_id', $requester)->first()->lastname);
+                }),
         ];
     }
 }

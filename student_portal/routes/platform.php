@@ -1,9 +1,10 @@
 <?php
 
 declare(strict_types=1);
+
+use App\Orchid\Screens\CreateSongRequestScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
-use App\Orchid\Screens\ListDressScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
@@ -12,14 +13,12 @@ use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
-use App\Orchid\Screens\ListDressWishScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
 use App\Orchid\Screens\CreateLimoGroupScreen;
 use App\Orchid\Screens\EditBeautyGroupScreen;
 use App\Orchid\Screens\ViewBeautyGroupScreen;
-use App\Orchid\Screens\ViewDressDetailScreen;
 use App\Orchid\Screens\ViewSongRequestScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -27,7 +26,6 @@ use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
-use App\Orchid\Screens\ViewLimoGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
@@ -62,6 +60,8 @@ Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platfor
 Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('platform.event.tables');
 
 Route::screen('/events/{event}/songs', ViewSongRequestScreen::class)->name('platform.songs.list');
+
+Route::screen('/events/{event}/request-song', CreateSongRequestScreen::class)->name('platform.songs.request');
 
 Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('platform.election.list');
 
