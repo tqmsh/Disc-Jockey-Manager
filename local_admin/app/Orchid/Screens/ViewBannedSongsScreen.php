@@ -5,7 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Events;
 use App\Models\NoPlaySong;
 use App\Models\Song;
-use App\Orchid\Layouts\ViewSongsLayoutNoEdit;
+use App\Orchid\Layouts\ViewSongsLayout;
 use Exception;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
@@ -49,6 +49,7 @@ class ViewBannedSongsScreen extends Screen
                 ->route('platform.bannedSongs.create', $this->event),
             Button::make('Unban Selected Songs')
                 ->icon('trash')
+                ->confirm('Are you sure you want to unban the selected songs?')
                 ->method('deleteSong'),
         ];
     }
@@ -56,7 +57,7 @@ class ViewBannedSongsScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewSongsLayoutNoEdit::class
+            ViewSongsLayout::class
         ];
     }
 

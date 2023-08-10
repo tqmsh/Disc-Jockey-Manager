@@ -7,7 +7,7 @@ use Orchid\Screen\TD;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
 
-class UserSongRequestsLayout extends Table
+class ViewUserSongRequestsLayout extends Table
 {
     protected $target = 'userSongRequests';
     public $title = 'Your Requested Songs';
@@ -34,8 +34,10 @@ class UserSongRequestsLayout extends Table
 
             TD::make('explicit', 'Explicit')
                 ->render(function (Song $song) {
+                    if ($song->status == 0) return 'Unknown';
                     return $song->explicit ? 'Yes' : 'No';
                 }),
+
         ];
     }
 }

@@ -55,12 +55,14 @@ class ViewSongRequestsScreen extends Screen
                 ->route('platform.bannedSongs.list', $this->event),
             Button::make('Delete Selected Song Requests')
                 ->icon('trash')
+                ->confirm('Are you sure you want to delete the selected song requests?')
                 ->method('delete'),
         ];
     }
 
     public function layout(): iterable
     {
+        /** @noinspection PhpParamsInspection */
         return [
             Layout::modal('editSong',
                 Layout::rows([
@@ -68,7 +70,9 @@ class ViewSongRequestsScreen extends Screen
                         ->options(function () {
                             return Song::whereDoesntHave('noPlaySongs', function ($query) {
                                 $query->where('event_id', $this->event->id);
-                            })->pluck('title', 'id')
+                            })
+                                ->where('status', 1)
+                                ->pluck('title', 'id')
                                 ->map(function ($title, $id) {
                                     return $title . ' - ' . Song::find($id)->artists;
                                 })->all();

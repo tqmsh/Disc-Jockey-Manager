@@ -58,6 +58,14 @@ class ViewSongRequestsLayout extends Table
                     return e(Song::find($songRequest->song_id)->artists);
                 }),
 
+            TD::make('explicit', 'Explicit')
+                ->popover("Songs that are marked as 'Unknown' have not be reviewed by Prom Planner, and may contain swear words.")
+                ->render(function (SongRequest $songRequest) {
+                    $song = Song::find($songRequest->song_id);
+                    if ($song->status == 0) return 'Unknown';
+                    return $song->explicit ? 'Yes' : 'No';
+                }),
+
             TD::make('num_requesters', 'Number of Requesters')
                 ->render(function (SongRequest $songRequest) {
                     return e($songRequest->num_requesters);

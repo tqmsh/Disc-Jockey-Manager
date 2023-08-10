@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\NoPlaySong;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -68,6 +69,12 @@ class EditSongScreen extends Screen
 
                 CheckBox::make('song.explicit')
                     ->title('Explicit')
+                    ->help('If the song has not been approved, the explicit field will be shown as `Unknown`.')
+                    ->sendTrueOrFalse(),
+
+                CheckBox::make('song.status')
+                    ->title('Status')
+                    ->help("Check this box if the song should be added to the universal songs table. Note that changing a song's status from 'Approved' to 'Pending' will also unban said song from all events.")
                     ->sendTrueOrFalse()
             ])
         ];
@@ -95,6 +102,11 @@ class EditSongScreen extends Screen
 
         try {
             $song->fill($data)->save();
+
+            if (!isset($data['status']) || !$data['status']) {
+                NoPlaySong::where('song_id', $song->id)->delete();
+            }
+
             Toast::info('Song saved successfully');
         } catch (Exception $e) {
             Toast::error('There was an error trying to save the song. Error Message: ' . $e->getMessage());

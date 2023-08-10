@@ -33,6 +33,7 @@ class CreateBannedSongsScreen extends Screen
 
         $songs = Song::filter($filters)
             ->whereNotIn('id', $noPlaySongIds)
+            ->where('status', 1)
             ->latest('songs.created_at')
             ->paginate(10);
 
@@ -69,6 +70,7 @@ class CreateBannedSongsScreen extends Screen
         try {
             if (!empty($noPlaySongs)) {
                 foreach ($noPlaySongs as $noPlaySongId) {
+                    if (Song::find($noPlaySongId)->status == 0) continue;
                     NoPlaySong::create([
                         'song_id' => $noPlaySongId,
                         'event_id' => $event->id

@@ -49,6 +49,7 @@ class ViewBannedSongsScreen extends Screen
                 ->route('platform.bannedSongs.create', $this->event),
             Button::make('Unban Selected Songs')
                 ->icon('trash')
+                ->confirm('Are you sure you want to unban the selected songs?')
                 ->method('deleteSong'),
         ];
     }

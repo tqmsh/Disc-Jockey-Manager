@@ -4,10 +4,8 @@ namespace App\Orchid\Layouts;
 
 use Orchid\Screen\TD;
 use App\Models\Song;
-use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Fields\CheckBox;
-use Orchid\Support\Color;
 
 class ViewSongsLayoutNoEdit extends Table
 {

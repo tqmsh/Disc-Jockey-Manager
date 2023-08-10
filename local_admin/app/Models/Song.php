@@ -14,7 +14,8 @@ class Song extends Model
     protected $fillable = [
         'title',
         'artists',
-        'explicit'
+        'explicit',
+        'status'
     ];
 
     public function getFullAttribute(): string
@@ -34,8 +35,19 @@ class Song extends Model
 
         if (isset($filters['explicit'])) {
             $filters['explicit'] = strtolower($filters['explicit']);
-            if ($filters['explicit'] == 'yes' || $filters['explicit'] == 'no') {
-                $query->where('explicit', $filters['explicit'] == 'yes');
+            if ($filters['explicit'] == 'yes') {
+                $query->where('explicit', 1)->where('status', 1);
+            } else if ($filters['explicit'] == 'no') {
+                $query->where('explicit', 0)->where('status', 1);
+            } else if ($filters['explicit'] == 'unknown') {
+                $query->where('status', 0);
+            }
+        }
+
+        if (isset($filters['status'])) {
+            $filters['status'] = strtolower($filters['status']);
+            if ($filters['status'] == 'approved' || $filters['status'] == 'pending') {
+                $query->where('status', $filters['status'] == 'approved');
             }
         }
 

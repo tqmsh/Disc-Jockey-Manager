@@ -6,7 +6,7 @@ use App\Models\Events;
 use App\Models\NoPlaySong;
 use App\Models\Song;
 use App\Models\SongRequest;
-use App\Orchid\Layouts\ViewSongsLayoutNoEdit;
+use App\Orchid\Layouts\ViewSongsLayout;
 use Exception;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
@@ -33,6 +33,7 @@ class CreateBannedSongsScreen extends Screen
 
         $songs = Song::filter($filters)
             ->whereNotIn('id', $noPlaySongIds)
+            ->where('status', 1)
             ->latest('songs.created_at')
             ->paginate(10);
 
@@ -59,7 +60,7 @@ class CreateBannedSongsScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewSongsLayoutNoEdit::class,
+            ViewSongsLayout::class,
         ];
     }
 
@@ -69,6 +70,7 @@ class CreateBannedSongsScreen extends Screen
         try {
             if (!empty($noPlaySongs)) {
                 foreach ($noPlaySongs as $noPlaySongId) {
+                    if (Song::find($noPlaySongId)->status == 0) continue;
                     NoPlaySong::create([
                         'song_id' => $noPlaySongId,
                         'event_id' => $event->id
