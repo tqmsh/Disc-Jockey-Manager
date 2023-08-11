@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 11, 2023 at 03:39 PM
+-- Generation Time: Aug 11, 2023 at 09:53 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -1091,7 +1091,7 @@ INSERT INTO `schools` (`id`, `nces_id`, `teacher_id`, `region_id`, `school_name`
 
 CREATE TABLE `school_dresses` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `event_id` bigint(20) UNSIGNED NOT NULL,
+  `school_id` bigint(20) UNSIGNED NOT NULL,
   `dress_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1174,8 +1174,8 @@ CREATE TABLE `songs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `artists` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `explicit` tinyint(1) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
+  `explicit` tinyint(1) NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1185,14 +1185,14 @@ CREATE TABLE `songs` (
 --
 
 INSERT INTO `songs` (`id`, `title`, `artists`, `explicit`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Baby Shark', 'Pinkfong', NULL, NULL, '2023-03-21 18:35:57', NULL),
-(2, 'Stronger', 'Kanye West', NULL, NULL, '2023-03-21 18:36:24', NULL),
-(3, 'Baby Love', 'Baby Love', NULL, NULL, '2023-03-21 18:36:24', NULL),
-(4, 'Truth Hurts', 'Lizzo', NULL, NULL, '2023-03-21 18:41:23', NULL),
-(5, 'Without You', 'Harry Nilsson', NULL, NULL, '2023-03-21 18:41:32', NULL),
-(6, 'Harry Nilsson', 'Harry Nilsson', NULL, NULL, '2023-03-21 18:41:38', NULL),
-(7, 'So What', 'Miles Davis', NULL, NULL, '2023-03-21 18:41:38', NULL),
-(8, 'Old Town Road', 'Lil Nas X', NULL, NULL, '2023-03-21 18:42:38', NULL);
+(1, 'Baby Shark', 'Pinkfong', 0, 0, '2023-03-21 18:35:57', NULL),
+(2, 'Stronger', 'Kanye West', 0, 0, '2023-03-21 18:36:24', NULL),
+(3, 'Baby Love', 'Baby Love', 0, 0, '2023-03-21 18:36:24', NULL),
+(4, 'Truth Hurts', 'Lizzo', 0, 0, '2023-03-21 18:41:23', NULL),
+(5, 'Without You', 'Harry Nilsson', 0, 0, '2023-03-21 18:41:32', NULL),
+(6, 'Harry Nilsson', 'Harry Nilsson', 0, 0, '2023-03-21 18:41:38', NULL),
+(7, 'So What', 'Miles Davis', 0, 0, '2023-03-21 18:41:38', NULL),
+(8, 'Old Town Road', 'Lil Nas X', 0, 0, '2023-03-21 18:42:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -1203,9 +1203,8 @@ INSERT INTO `songs` (`id`, `title`, `artists`, `explicit`, `status`, `created_at
 CREATE TABLE `song_requests` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `song_id` bigint(20) UNSIGNED NOT NULL,
-  `event_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `event_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `requester_user_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`requester_user_ids`)),
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1546,6 +1545,7 @@ ALTER TABLE `courses`
 --
 ALTER TABLE `dresses`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`,`model_number`),
   ADD KEY `user_id_dress_index` (`user_id`),
   ADD KEY `model_number_index` (`model_number`);
 
@@ -1554,6 +1554,7 @@ ALTER TABLE `dresses`
 --
 ALTER TABLE `dress_wishlist`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`,`dress_id`),
   ADD KEY `dress_wishlist_userid` (`user_id`),
   ADD KEY `dress_wishlist_dressid` (`dress_id`);
 
@@ -1692,6 +1693,7 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `no_play_songs`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `song_id_2` (`song_id`,`event_id`),
   ADD KEY `song_id` (`song_id`,`event_id`),
   ADD KEY `no-play-song-event` (`event_id`);
 
@@ -1750,7 +1752,9 @@ ALTER TABLE `schools`
 --
 ALTER TABLE `school_dresses`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `event_id_dress` (`event_id`),
+  ADD UNIQUE KEY `school_id` (`school_id`,`dress_id`),
+  ADD UNIQUE KEY `school_id_2` (`school_id`,`user_id`),
+  ADD KEY `event_id_dress` (`school_id`),
   ADD KEY `dress_id_dress` (`dress_id`),
   ADD KEY `user_id_dress` (`user_id`);
 
@@ -1779,13 +1783,15 @@ ALTER TABLE `sessions`
 -- Indexes for table `songs`
 --
 ALTER TABLE `songs`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `title` (`title`,`artists`);
 
 --
 -- Indexes for table `song_requests`
 --
 ALTER TABLE `song_requests`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `song_id_2` (`song_id`,`event_id`,`user_id`),
   ADD KEY `song_id` (`song_id`,`event_id`),
   ADD KEY `event_id` (`event_id`);
 
@@ -2295,7 +2301,7 @@ ALTER TABLE `schools`
 --
 ALTER TABLE `school_dresses`
   ADD CONSTRAINT `dress_id_rel` FOREIGN KEY (`dress_id`) REFERENCES `dresses` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `event_id_rel` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `school_id_rel` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_id_rel` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
