@@ -28,7 +28,9 @@ class ViewSongRequestScreen extends Screen
             ->where('event_id', $event->id)
             ->first();
 
-        abort_if(!($studentAttendee->exists() && $studentAttendee->ticketstatus == 'Paid'), 403);
+        //! NEED TO ADD THIS WHEN PAYMENT IS INTEGRATED && $studentAttendee->ticketstatus == 'Paid' 
+
+        abort_if(!($studentAttendee->exists()), 403);
 
         $songRequests = SongRequest::where('event_id', $event->id)
             ->select('song_requests.song_id', 'song_requests.event_id', DB::raw('COUNT(song_requests.user_id) as num_requesters'))
