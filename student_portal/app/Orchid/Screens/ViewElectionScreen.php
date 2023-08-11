@@ -24,7 +24,8 @@ class ViewElectionScreen extends Screen
     public function query(Events $event): iterable
     {
         $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
-        abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
+        //! NEED TO ADD THIS WHEN PAYMENT INTEGRATION IS DONE && $studentAttendee->ticketstatus == 'Paid'
+        abort_if(!($studentAttendee->exists() ), 403);
         $election = Election::where('event_id',$event->id)->first();
         
         
