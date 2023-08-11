@@ -17,7 +17,7 @@ class ViewSongRequestScreen extends Screen
 
     public function name(): ?string
     {
-        return 'Song Request Data for ' . $this->event->event_name;
+        return 'Song Requests: ' . $this->event->event_name;
     }
 
     public string $description = 'View data on song requests made by all attendees of this event.';

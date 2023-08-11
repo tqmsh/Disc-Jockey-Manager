@@ -81,6 +81,7 @@ class ViewRequestersScreen extends Screen
 
             Button::make('Delete Selected Requesters')
                 ->icon('trash')
+                ->confirm('Are you sure you want to delete the selected requesters?')
                 ->method('delete'),
 
         ];
