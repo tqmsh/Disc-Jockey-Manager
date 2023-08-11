@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 28, 2023 at 05:43 PM
+-- Generation Time: Aug 11, 2023 at 03:39 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -141,7 +141,91 @@ INSERT INTO `attachments` (`id`, `name`, `original_name`, `mime`, `extension`, `
 (53, '93f0be7d06d1b9b978ae8a14142cb33b26c8c327', 'blob', 'image/png', 'png', 181537, 0, '2023/07/26/', NULL, NULL, '3ce0d19e60df317135044bc4c1f03a4243804017', 's3', 155, NULL, '2023-07-27 01:20:11', '2023-07-27 01:20:11'),
 (54, '9363c181d9acbbdf4bdb266ab259c5ccebbdd96a', 'blob', 'image/png', 'png', 181646, 0, '2023/07/26/', NULL, NULL, 'd0e314e5b3d698bbf154ddb5347acb5bc3e014a2', 's3', 155, NULL, '2023-07-27 01:23:53', '2023-07-27 01:23:53'),
 (55, '2a1fe7c7d61a9b7e8a089b48d10a7ea5a23c12d2', 'blob', 'image/png', 'png', 181412, 0, '2023/07/26/', NULL, NULL, '85836731aa9811e88227e673ea17c60461639763', 's3', 155, NULL, '2023-07-27 01:28:29', '2023-07-27 01:28:29'),
-(56, 'a16dd23d9874710210b4e904ccfc9cdb92de2675', 'blob', 'image/png', 'png', 181364, 0, '2023/07/26/', NULL, NULL, 'df92d134e4a90840d539eed4cfb86981f7d68d5d', 's3', 155, NULL, '2023-07-27 01:35:07', '2023-07-27 01:35:07');
+(56, 'a16dd23d9874710210b4e904ccfc9cdb92de2675', 'blob', 'image/png', 'png', 181364, 0, '2023/07/26/', NULL, NULL, 'df92d134e4a90840d539eed4cfb86981f7d68d5d', 's3', 155, NULL, '2023-07-27 01:35:07', '2023-07-27 01:35:07'),
+(57, 'dc9f6ecc4d6256cce8aedde687c679ce5449d8bd', 'blob', 'image/png', 'png', 10962, 0, '2023/07/29/', NULL, NULL, '4d9d7e21d56d2a925179d3057199beed590b575a', 's3', 209, NULL, '2023-07-29 23:42:26', '2023-07-29 23:42:26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `beauty_groups`
+--
+
+CREATE TABLE `beauty_groups` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `creator_user_id` bigint(20) UNSIGNED NOT NULL,
+  `school_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `capacity` tinyint(4) NOT NULL,
+  `date` datetime NOT NULL,
+  `pickup_location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dropoff_location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `depart_time` datetime NOT NULL,
+  `dropoff_time` datetime NOT NULL,
+  `notes` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `beauty_groups`
+--
+
+INSERT INTO `beauty_groups` (`id`, `creator_user_id`, `school_id`, `name`, `capacity`, `date`, `pickup_location`, `dropoff_location`, `depart_time`, `dropoff_time`, `notes`, `created_at`, `updated_at`) VALUES
+(2, 207, 51, 'tryrty', 18, '2023-08-15 00:00:00', 'Colonel By SS', '1234 High Lane67i657i567i67i', '2023-08-08 12:00:00', '2023-08-08 12:00:00', 'rtyrtyrtytrytyuytui67i67i57i', '2023-08-01 21:26:31', '2023-08-03 21:24:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `beauty_group_bids`
+--
+
+CREATE TABLE `beauty_group_bids` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `beauty_group_id` bigint(20) UNSIGNED NOT NULL,
+  `region_id` bigint(20) UNSIGNED NOT NULL,
+  `package_id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) UNSIGNED NOT NULL,
+  `school_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_instructions` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `beauty_group_bids`
+--
+
+INSERT INTO `beauty_group_bids` (`id`, `user_id`, `beauty_group_id`, `region_id`, `package_id`, `category_id`, `school_name`, `notes`, `contact_instructions`, `company_name`, `url`, `status`, `created_at`, `updated_at`) VALUES
+(1, 210, 2, 1, 9, 19, 'Digitera School of Digital Marketing & Software', 'heyeyeyeyeyeye', 'heyeyeyeyeyeye', 'Salon Pros', 'https://amazon.com', 1, '2023-08-01 22:41:42', '2023-08-01 23:10:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `beauty_group_members`
+--
+
+CREATE TABLE `beauty_group_members` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `beauty_group_id` bigint(20) UNSIGNED NOT NULL,
+  `invitee_user_id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `paid` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `beauty_group_members`
+--
+
+INSERT INTO `beauty_group_members` (`id`, `beauty_group_id`, `invitee_user_id`, `status`, `paid`, `created_at`, `updated_at`) VALUES
+(1, 2, 155, 1, 0, '2023-08-01 21:26:31', '2023-08-01 21:26:31'),
+(2, 2, 207, 1, 0, '2023-08-01 21:29:30', '2023-08-01 21:30:46');
 
 -- --------------------------------------------------------
 
@@ -223,7 +307,8 @@ INSERT INTO `categories` (`id`, `name`, `status`, `order_num`, `created_at`, `up
 (14, 'Videographer', 1, 0, '2023-01-09 03:20:29', '2023-01-09 03:20:29'),
 (15, 'Caterer', 1, 0, '2023-01-09 03:20:35', '2023-01-09 03:20:35'),
 (17, 'Suggestion From Vendor', 1, 0, '2023-01-13 03:55:42', '2023-01-14 03:42:50'),
-(18, 'Limo', 1, 0, NULL, NULL);
+(18, 'Limo', 1, 0, NULL, NULL),
+(19, 'Salon', 1, 10, '2023-08-01 22:07:59', '2023-08-01 22:07:59');
 
 -- --------------------------------------------------------
 
@@ -380,7 +465,9 @@ CREATE TABLE `event_attendees` (
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `table_id` bigint(20) UNSIGNED DEFAULT NULL,
   `ticketstatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Unpaid',
-  `approved` tinyint(1) DEFAULT 0,
+  `table_approved` tinyint(1) DEFAULT 0,
+  `invitation_status` tinyint(1) NOT NULL DEFAULT 0,
+  `invited` tinyint(1) NOT NULL DEFAULT 0,
   `checked_in` tinyint(1) NOT NULL DEFAULT 0,
   `ticket_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -391,16 +478,13 @@ CREATE TABLE `event_attendees` (
 -- Dumping data for table `event_attendees`
 --
 
-INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `table_id`, `ticketstatus`, `approved`, `checked_in`, `ticket_code`, `created_at`, `updated_at`) VALUES
-(1, 146, 14, 9, 'Unpaid', 1, 0, NULL, '2023-02-12 19:55:58', '2023-05-20 20:34:54'),
-(2, 152, 14, 10, 'Paid', 1, 0, NULL, '2023-02-12 19:56:39', '2023-05-20 20:21:44'),
-(7, 169, 14, 9, 'Paid', 1, 0, NULL, '2023-02-13 01:57:06', '2023-05-20 20:52:54'),
-(8, 170, 14, 10, 'Unpaid', 1, 0, NULL, '2023-02-13 01:57:06', '2023-05-20 20:52:58'),
-(11, 146, 15, NULL, 'Unpaid', 1, 0, NULL, '2023-03-03 00:51:41', '2023-03-03 01:12:19'),
-(12, 154, 15, NULL, 'Unpaid', 1, 0, NULL, '2023-03-03 00:57:10', '2023-03-03 00:57:10'),
-(13, 198, 15, 6, 'Unpaid', 1, 0, NULL, '2023-03-03 01:12:05', '2023-03-03 01:12:13'),
-(27, 155, 14, 10, 'Paid', 1, 0, NULL, '2023-05-20 22:03:48', '2023-05-20 22:04:10'),
-(28, 207, 14, NULL, 'Paid', 1, 0, NULL, '2023-06-16 00:00:55', '2023-06-16 00:00:55');
+INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `table_id`, `ticketstatus`, `table_approved`, `invitation_status`, `invited`, `checked_in`, `ticket_code`, `created_at`, `updated_at`) VALUES
+(29, 145, 14, NULL, 'Unpaid', 1, 1, 0, 0, NULL, '2023-08-09 02:35:23', '2023-08-09 02:35:23'),
+(30, 146, 14, NULL, 'Unpaid', 1, 1, 0, 0, NULL, '2023-08-09 02:35:23', '2023-08-09 02:35:23'),
+(32, 152, 14, NULL, 'Unpaid', 1, 0, 1, 0, NULL, '2023-08-09 02:48:58', '2023-08-09 02:48:58'),
+(33, 154, 14, NULL, 'Unpaid', 1, 0, 1, 0, NULL, '2023-08-09 02:48:58', '2023-08-09 02:48:58'),
+(34, 155, 14, NULL, 'Unpaid', 1, 1, 1, 0, NULL, '2023-08-09 03:18:44', '2023-08-10 02:13:02'),
+(35, 207, 14, NULL, 'Unpaid', 1, 0, 1, 0, NULL, '2023-08-09 03:18:45', '2023-08-09 03:18:45');
 
 -- --------------------------------------------------------
 
@@ -573,7 +657,8 @@ CREATE TABLE `limo_group_bids` (
 --
 
 INSERT INTO `limo_group_bids` (`id`, `user_id`, `limo_group_id`, `region_id`, `package_id`, `category_id`, `school_name`, `notes`, `contact_instructions`, `company_name`, `url`, `status`, `created_at`, `updated_at`) VALUES
-(2, 197, 11, 1, 7, 11, 'Digitera School of Digital Marketing & Software', 'hi', 'hello', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-07-18 22:47:48', '2023-07-19 02:47:48');
+(3, 209, 11, 1, 8, 18, 'Digitera School of Digital Marketing & Software', 'notes', 'Contact Instructions', 'New Vendor LLC', 'https://amazon.com', 1, '2023-07-29 20:03:09', '2023-07-30 00:03:09'),
+(5, 197, 11, 1, 7, 18, 'Digitera School of Digital Marketing & Software', 'sfsfsdf', 'sdfsfsf', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-07-30 00:17:58', '2023-07-30 00:17:58');
 
 -- --------------------------------------------------------
 
@@ -702,17 +787,25 @@ CREATE TABLE `notifications` (
 
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
 ('0646e0a2-db0b-43e8-8737-a1d3d03f6b7a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-13T22:50:31.764684Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-14 02:56:46', '2023-07-14 02:50:31', '2023-07-14 02:56:46'),
+('0a27b85a-0658-4b38-88fe-af729d634867', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-08-05T18:28:46.999825Z\",\"type\":\"info\",\"title\":\"Student Bid Declined!\",\"message\":\"Your bid for Student 1Student 1 has been declined!\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bids\\/history\"}', '2023-08-05 22:32:34', '2023-08-05 22:28:47', '2023-08-05 22:32:34'),
 ('0e3c9d15-a224-4882-ad39-5bc8044cfff4', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-08T21:41:41.092658Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a limo group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\"}', '2023-07-09 01:41:49', '2023-07-09 01:41:41', '2023-07-09 01:41:49'),
+('12962260-9ac4-4a8a-87fb-baa3510e2b9f', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-08-01T17:29:30.716734Z\",\"type\":\"info\",\"title\":\"You have been invited to join a beauty group!\",\"message\":\"You have been invited to join a beauty group by Student 1 Student 1. Please check your beauty group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/beauty-groups\"}', '2023-08-01 21:30:36', '2023-08-01 21:29:30', '2023-08-01 21:30:36'),
+('2ba7ddde-a167-42c4-a748-dfbbfc917d8f', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-07-29T20:17:58.179452Z\",\"type\":\"info\",\"title\":\"New Limo Group Bid\",\"message\":\"You have a new bid for your limo group: Best Limo Group Edited\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-30 00:18:38', '2023-07-30 00:17:58', '2023-07-30 00:18:38'),
 ('394f577e-3aa7-42f8-bea2-5cec4b204b19', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-12T23:34:40.145183Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-13 03:36:07', '2023-07-13 03:34:40', '2023-07-13 03:36:07'),
 ('3eefd599-af0c-420e-8894-5b3e99cb3f09', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-13T22:33:40.001251Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-14 02:34:13', '2023-07-14 02:33:40', '2023-07-14 02:34:13'),
 ('4666566c-5d77-4912-8d9c-c5b53517d423', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-13T00:04:25.112416Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-13 04:04:54', '2023-07-13 04:04:25', '2023-07-13 04:04:54'),
 ('53c3fac8-3eb4-4e84-9f67-bd5020415e22', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:45:15.694475Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/platform.event.list\"}', '2023-06-26 22:45:21', '2023-06-26 22:45:15', '2023-06-26 22:45:21'),
+('601b0d77-83e6-468e-9a81-27f0fb590892', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-08-08T23:18:45.615676Z\",\"type\":\"info\",\"title\":\"You have been invited to an event\",\"message\":\"You have been invited to the event by the Prom Committee. Please check the event page for more details.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/events\"}', '2023-08-10 01:45:26', '2023-08-09 03:18:45', '2023-08-10 01:45:26'),
 ('747fba13-9fb0-4182-b7fa-43c7bb912c57', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:46:06.304498Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/events\"}', '2023-06-26 22:46:12', '2023-06-26 22:46:06', '2023-06-26 22:46:12'),
 ('7bcdc36a-bf01-4837-a08f-9df7dc3f60fc', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-13T00:24:41.275563Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-14 02:34:13', '2023-07-13 04:24:41', '2023-07-14 02:34:13'),
+('7f8cce26-a9f8-4e16-b88d-ada05a569239', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-07-29T20:03:09.477733Z\",\"type\":\"info\",\"title\":\"Limo Group Bid Changed\",\"message\":\"Your bid for theBest Limo Group Editedlimo group has been chnaged. Please contact the limo group owner for more information.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bids\\/history\"}', '2023-07-30 00:08:45', '2023-07-30 00:03:09', '2023-07-30 00:08:45'),
 ('8a24acc8-a38e-490e-9bcc-f2e4d4ded4ed', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-13T00:35:24.081673Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-13 04:35:50', '2023-07-13 04:35:24', '2023-07-13 04:35:50'),
 ('8fc07858-ad95-4ec7-a58a-0acd8d24474a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-06-26T18:45:23.192320Z\",\"type\":\"info\",\"title\":\"Limo Group Invitation\",\"message\":\"You have been invited to join a Limo mama group\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/platform.event.list\"}', '2023-06-26 22:50:10', '2023-06-26 22:45:23', '2023-06-26 22:50:10'),
+('9358b317-ffc7-4315-9b92-d5496d5f26ae', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-08-08T23:18:45.642358Z\",\"type\":\"info\",\"title\":\"You have been invited to an event\",\"message\":\"You have been invited to the event by the Prom Committee. Please check the event page for more details.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/events\"}', NULL, '2023-08-09 03:18:45', '2023-08-09 03:18:45'),
 ('9f9e6dab-1462-45a4-ac6f-83df5580a3dc', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-08T21:45:26.960888Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-09 01:46:15', '2023-07-09 01:45:26', '2023-07-09 01:46:15'),
-('ba257fcc-70b3-46ff-a384-b4981659cc2a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-13T00:21:48.869407Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-13 04:22:11', '2023-07-13 04:21:48', '2023-07-13 04:22:11');
+('ba257fcc-70b3-46ff-a384-b4981659cc2a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 207, '{\"time\":\"2023-07-13T00:21:48.869407Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-07-13 04:22:11', '2023-07-13 04:21:48', '2023-07-13 04:22:11'),
+('c01fd227-e853-4ae1-9728-6f164e6fba0b', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-09T22:13:02.217038Z\",\"type\":\"info\",\"title\":\"Event Invitation Accepted\",\"message\":\"Student 1 Student 1 has accepted your invitation to Digitera\'s Main DJ Event.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/events\\/students\\/14\"}', '2023-08-10 02:14:50', '2023-08-10 02:13:02', '2023-08-10 02:14:50'),
+('d5723fe7-e3f2-4a6e-87f3-a8d33f72eb17', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-08-01T18:41:43.122420Z\",\"type\":\"info\",\"title\":\"New Beauty Group Bid\",\"message\":\"You have a new bid for your beauty group: tryrty\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/beauty-groups\"}', '2023-08-01 23:03:01', '2023-08-01 22:41:43', '2023-08-01 23:03:01');
 
 -- --------------------------------------------------------
 
@@ -905,7 +998,9 @@ INSERT INTO `role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALU
 (198, 3, '2023-02-14 23:43:02', '2023-02-14 23:43:02'),
 (205, 3, '2023-03-27 00:13:31', '2023-03-27 00:13:31'),
 (207, 3, '2023-06-15 23:59:27', '2023-06-15 23:59:27'),
-(208, 2, '2023-07-19 21:00:54', '2023-07-19 21:00:54');
+(208, 2, '2023-07-19 21:00:54', '2023-07-19 21:00:54'),
+(209, 4, '2023-07-29 23:39:18', '2023-07-29 23:39:18'),
+(210, 4, '2023-08-01 22:31:18', '2023-08-01 22:31:18');
 
 -- --------------------------------------------------------
 
@@ -1024,7 +1119,7 @@ CREATE TABLE `seatings` (
 
 INSERT INTO `seatings` (`id`, `event_id`, `tablename`, `capacity`, `created_at`, `updated_at`) VALUES
 (6, 15, 'yoyo Table', 15, '2023-03-03 00:52:42', '2023-03-03 00:52:42'),
-(9, 14, 'Cool Kidz Table', 9, '2023-05-20 20:21:06', '2023-05-20 22:04:10'),
+(9, 14, 'Cool Kidz Table', 10, '2023-05-20 20:21:06', '2023-08-09 02:12:46'),
 (10, 14, 'DJ\'s Table', 10, '2023-05-20 20:21:22', '2023-05-20 22:04:10'),
 (11, 14, 'dfg', 10, '2023-05-20 20:26:20', '2023-05-20 21:33:46'),
 (12, 14, 'test test', 5, '2023-05-20 20:36:10', '2023-05-20 20:36:10');
@@ -1078,7 +1173,9 @@ CREATE TABLE `sessions` (
 CREATE TABLE `songs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `artist` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `artists` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `explicit` tinyint(1) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1087,15 +1184,15 @@ CREATE TABLE `songs` (
 -- Dumping data for table `songs`
 --
 
-INSERT INTO `songs` (`id`, `title`, `artist`, `created_at`, `updated_at`) VALUES
-(1, 'Baby Shark', 'Pinkfong', '2023-03-21 18:35:57', NULL),
-(2, 'Stronger', 'Kanye West', '2023-03-21 18:36:24', NULL),
-(3, 'Baby Love', 'Baby Love', '2023-03-21 18:36:24', NULL),
-(4, 'Truth Hurts', 'Lizzo', '2023-03-21 18:41:23', NULL),
-(5, 'Without You', 'Harry Nilsson', '2023-03-21 18:41:32', NULL),
-(6, 'Harry Nilsson', 'Harry Nilsson', '2023-03-21 18:41:38', NULL),
-(7, 'So What', 'Miles Davis', '2023-03-21 18:41:38', NULL),
-(8, 'Old Town Road', 'Lil Nas X', '2023-03-21 18:42:38', NULL);
+INSERT INTO `songs` (`id`, `title`, `artists`, `explicit`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Baby Shark', 'Pinkfong', NULL, NULL, '2023-03-21 18:35:57', NULL),
+(2, 'Stronger', 'Kanye West', NULL, NULL, '2023-03-21 18:36:24', NULL),
+(3, 'Baby Love', 'Baby Love', NULL, NULL, '2023-03-21 18:36:24', NULL),
+(4, 'Truth Hurts', 'Lizzo', NULL, NULL, '2023-03-21 18:41:23', NULL),
+(5, 'Without You', 'Harry Nilsson', NULL, NULL, '2023-03-21 18:41:32', NULL),
+(6, 'Harry Nilsson', 'Harry Nilsson', NULL, NULL, '2023-03-21 18:41:38', NULL),
+(7, 'So What', 'Miles Davis', NULL, NULL, '2023-03-21 18:41:38', NULL),
+(8, 'Old Town Road', 'Lil Nas X', NULL, NULL, '2023-03-21 18:42:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -1107,18 +1204,11 @@ CREATE TABLE `song_requests` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `song_id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `requester_user_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`requester_user_ids`)),
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `song_requests`
---
-
-INSERT INTO `song_requests` (`id`, `song_id`, `event_id`, `requester_user_ids`, `created_at`, `updated_at`) VALUES
-(20, 3, 14, '[155,207]', '2023-06-16 01:14:24', '2023-06-16 01:15:08'),
-(21, 4, 14, '[155,207]', '2023-06-16 01:14:26', '2023-06-16 01:15:10');
 
 -- --------------------------------------------------------
 
@@ -1195,7 +1285,7 @@ CREATE TABLE `student_bids` (
 --
 
 INSERT INTO `student_bids` (`id`, `user_id`, `student_user_id`, `region_id`, `package_id`, `category_id`, `school_name`, `notes`, `contact_instructions`, `company_name`, `url`, `status`, `created_at`, `updated_at`) VALUES
-(4, 197, 155, 1, 6, 11, 'Digitera School of Digital Marketing & Software', 'tyrtyrtyrtyrtyrty', 'rtyrtyrtyrtyrtyrty', 'Money Jockeys', 'https://promplanner.app/', 0, '2023-04-14 04:44:53', '2023-04-14 04:44:53'),
+(4, 197, 155, 1, 6, 11, 'Digitera School of Digital Marketing & Software', 'tyrtyrtyrtyrtyrty', 'rtyrtyrtyrtyrtyrty', 'Money Jockeys', 'https://promplanner.app/', 2, '2023-04-14 04:44:53', '2023-08-05 22:28:46'),
 (5, 197, 155, 1, 3, 11, 'Digitera School of Digital Marketing & Software', 'trywrtyretyertyer', 'tyertyretyertyerty', 'Money Jockeys', 'https://promplanner.app/', 1, '2023-04-14 04:45:03', '2023-04-14 04:46:17');
 
 -- --------------------------------------------------------
@@ -1228,7 +1318,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `pfp`, `remember_token`, `created_at`, `updated_at`) VALUES
-(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/19/bcc98b69978ec2e3435637329eb40e4fb2cf037e.png', '9b2aIHb2ou8cxSLf3pKuXHd9MLSTdLP488nLLHaVIVDXMrBCO7aT4UzYBwoi', '2022-10-16 21:27:25', '2023-05-20 03:00:14'),
+(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/19/bcc98b69978ec2e3435637329eb40e4fb2cf037e.png', 'vLHdoaVcPbg80bG9nAKnvR9iZfTV8xUFZMQqQIIZfd2fw0Vjq3SaXMUFnpIB', '2022-10-16 21:27:25', '2023-05-20 03:00:14'),
 (52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
 (67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
 (68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
@@ -1247,10 +1337,10 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', NULL, 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
 (149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', NULL, 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
 (150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', NULL, 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'yk4ETQYCaPVX6cecaucnciEUeEjAiJpgwnzVjYkRmAqN9Gaxn41HMADkVdg1', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'VJQ1duAXtxEHTEdSVSgrEFjODnZrV9ABoGYMrrT1rG2xehBnBvDSPFIDLXPo', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://promplanner.s3.amazonaws.com/2023/07/26/a16dd23d9874710210b4e904ccfc9cdb92de2675.png', 'mhVIH2M8NFhYv77EOAhMS5dH7sPBFOinQqCwBbllHKGJIXkHWn15QgLsf6vq', '2022-12-05 18:58:15', '2023-07-27 01:35:08'),
+(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://promplanner.s3.amazonaws.com/2023/07/26/a16dd23d9874710210b4e904ccfc9cdb92de2675.png', 'hIhKTq4hcxHdw5rUu7p2zqoUHdVVM707588Q1XmkFV26jk07Xy3bmbEOi6Az', '2022-12-05 18:58:15', '2023-07-27 01:35:08'),
 (169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
@@ -1262,12 +1352,14 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (194, 'Local admin Import 2', 'Local admin Import 2', 'wefwef', 'import222@gmail.com', '9632587459', 2, 'Canada', NULL, 1, NULL, '$2y$10$mlixKkSmH03ulCZn8K49ke4y1Gmbolu2WFfansuifJp2QvOmb3WiW', NULL, NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (195, 'Local admin Import 3', 'Local admin Import 3', 'wefwef', 'import333@gmail.com', '3698745236', 2, 'Canada', NULL, 1, NULL, '$2y$10$N4kQN9DKvJ1b87ycpA2aO.Gp55U3JV0.MyCO.0Er7wpsyuINGd1B2', NULL, NULL, '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (196, 'Ling Long', 'Trump Man', 'Ling Long', 'donaldtrump@trump.com', '(454) 546-4566', 4, 'USA', NULL, 1, NULL, '$2y$10$/0C9DuazC.JKb6Zh/uKhZuGPnjsKNvjsFzxjEDvuYdV4uN77dt4TO', NULL, NULL, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'https://promplanner.s3.amazonaws.com/2023/07/15/8c8eaea188336a6e6b0b62d8f6fbd91e05e3e02e.png', 'R81Qu5vyXGffNhekTwSZoaIeY8oKYYiSkfhvWWrNT5E9cZasae794Q6gowVr', '2023-01-21 02:41:46', '2023-07-15 23:00:55'),
+(197, 'Vendor001', 'Vendor001', 'Vendor001', 'vendor001@promplanner.com', '(454) 654-6546', 4, 'Canada', NULL, 1, NULL, '$2y$10$RCkk.xuRaueua/7bkthq7OJjLnwmjfPPMYbuI06Xckubita5l0LrW', 'https://promplanner.s3.amazonaws.com/2023/07/15/8c8eaea188336a6e6b0b62d8f6fbd91e05e3e02e.png', '2oB365qlLUm0v1iFZ7vL2CVwapsrIIs8TYT8d5NYCELJryWTqh8Vv2j3EhKz', '2023-01-21 02:41:46', '2023-07-15 23:00:55'),
 (198, 'bigman101', 'Zg man', 'Big man tings', 'bigman@tings.com', '(612) 354-8954', 3, 'Canada', NULL, 1, NULL, '$2y$10$B10Kj5SYsPn6EKwkyQRbPO7UmY/YqPWkzzzyiU0dZ3DWx.xLRnJpy', NULL, NULL, '2023-02-14 23:43:02', '2023-02-15 01:25:38'),
 (205, 'etanguan', 'Ethan', 'Guan', 'guanethan123@gmail.com', '613-287-1612', 3, 'Philippines', NULL, 1, NULL, '$2y$10$NQk4fTkCwz5R4dvcSILnW.36rqdQkMgOvl6ewaZNJc7Auabs5.Kbq', NULL, NULL, '2023-03-27 00:12:32', '2023-03-27 00:13:31'),
 (206, 'hgjh', 'dfgdfg', 'dfgdfg', 'johnsmith@hotmales.com', '(123) 456-1234', 3, 'Canada', NULL, 0, NULL, '$2y$10$M9d5cT6l4gKVgM2NLkoFCeBYZzDrQjelgu0NmyfIYH1S6UGAaIRPO', NULL, 'CUgw7kb0nu3boyDdLtQfaExJvTin7wKvvP8vcFFFMagnrgOXby2m2vxhk5Rp', '2023-06-15 23:55:18', '2023-06-15 23:55:18'),
-(207, 'Hi', 'Hi', 'Hi', 'Hi@Hi.com', '(554) 654-6546', 3, 'Canada', NULL, 1, NULL, '$2y$10$hOcPNnJ12wXMcAzv9NYj2ulADXHPV28mqCUEaw4xdI6qXkIXR3GK.', 'https://promplanner.s3.amazonaws.com/2023/07/18/d986f0eaef32fdb913996c61d012d6c8f9355140.png', 'yi5iC0hNjpsTBRwSWvKUlniwOtbT46zrMBfIQfM8nZpBn9R6pVdvWKMRl5gg', '2023-06-15 23:59:27', '2023-07-19 02:49:26'),
-(208, 'Farhan', 'Farhan', 'Khan', 'farhan.k2005@gmail.com', '(123) 456-7890', 2, 'Canada', NULL, 1, NULL, '$2y$10$5fxDoxckplZCoMUwV6wHHuaV.4qDveDqHEr//IoJGAaOQ.Oe9jCb2', NULL, NULL, '2023-07-19 21:00:54', '2023-07-19 21:00:54');
+(207, 'Hi', 'Hi', 'Hi', 'Hi@Hi.com', '(554) 654-6546', 3, 'Canada', NULL, 1, NULL, '$2y$10$hOcPNnJ12wXMcAzv9NYj2ulADXHPV28mqCUEaw4xdI6qXkIXR3GK.', 'https://promplanner.s3.amazonaws.com/2023/07/18/d986f0eaef32fdb913996c61d012d6c8f9355140.png', 'VAusVheTNFwTTUwlFhd0CVfoaE5QTL58apffjzvqBJJGHQMZ8FdfS9BpGoY3', '2023-06-15 23:59:27', '2023-07-19 02:49:26'),
+(208, 'Farhan', 'Farhan', 'Khan', 'farhan.k2005@gmail.com', '(123) 456-7890', 2, 'Canada', NULL, 1, NULL, '$2y$10$5fxDoxckplZCoMUwV6wHHuaV.4qDveDqHEr//IoJGAaOQ.Oe9jCb2', NULL, NULL, '2023-07-19 21:00:54', '2023-07-19 21:00:54'),
+(209, 'New Vendor', 'New', 'Vendor', 'newvendor@test.com', '(123) 456-789_', 4, 'Canada', NULL, 1, NULL, '$2y$10$1KevHCEsPX2kocUdG9lLYeSnWPix3we6uXKBCOAHUc3LovedO.bxy', 'https://promplanner.s3.amazonaws.com/2023/07/29/dc9f6ecc4d6256cce8aedde687c679ce5449d8bd.png', 'kRiO91CXPUcDNua1xBZDG9xDNYhUqg5842Hd1ogWTDKiBEgNOB7rI4iQeEEG', '2023-07-29 23:39:18', '2023-07-29 23:42:31'),
+(210, 'superadmin@gmail.com', 'Salon', 'Vendor', 'salonpros@gmail.com', '(456) 123-7895', 4, 'Canada', NULL, 1, NULL, '$2y$10$k7pH5bi6iDDKhV9//RgJ8uDE3tlV5sLq14xvU7L.hPt0WtVLDGzJm', NULL, 'UkpxEz9xP81CMT1eErL9v8xuKzzcbERXqpUHtgcSFeeBDWAg5i0n2Wmh1of5', '2023-08-01 22:31:18', '2023-08-01 22:31:18');
 
 -- --------------------------------------------------------
 
@@ -1302,7 +1394,9 @@ INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `account_status`, `compan
 (6, 188, 9, 1, 'Bidenn Corporatione', '4735 lol street', 'nah', 'nah', 'USA', '2353', 'dssdddsddss', 'https://www.youtube.com/', 'bidenjoe@isuck.com', '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
 (8, 190, 10, 1, 'Trump Party', '87 Dolla Dolla Bills', 'Money Land', 'fsdfs', 'USA', 'sdfsdf', 'dssdddsddss', 'https://www.youtube.com/', 'trumpman@maga.com', '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
 (9, 196, 9, 1, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', '(454) 546-4566', 'https://www.donaldjtrump.com/', 'donaldtrump@trump.com', '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(10, 197, 18, 1, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', '2023-01-21 02:41:46', '2023-07-15 23:00:55');
+(10, 197, 18, 1, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', '2023-01-21 02:41:46', '2023-07-15 23:00:55'),
+(14, 209, 18, 1, 'New Vendor LLC', '1234 Main St', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', '(123) 456-789_', 'https://amazon.com', 'newvendor@test.com', '2023-07-29 23:39:18', '2023-07-29 23:42:31'),
+(15, 210, 19, 1, 'Salon Pros', 'Salon Orad', 'Ottawa', 'Ontario', 'Canada', 'K1A 7G7', '(456) 123-7895', 'https://amazon.com', 'salonpros@gmail.com', '2023-08-01 22:31:18', '2023-08-01 22:31:18');
 
 -- --------------------------------------------------------
 
@@ -1330,7 +1424,9 @@ INSERT INTO `vendor_packages` (`id`, `user_id`, `package_name`, `description`, `
 (2, 197, 'Laid Back Venue', 'Venue for your laid back needs!', '199', 'https://promvendors.com/', '2023-01-26 18:17:56', NULL),
 (3, 197, 'LIFETIME VENDOR LICENSE', 'Purchasing this License gives the Vendor unrestricted LIFETIME access to the Vendor portal of Prom Planner for one region and one business category ONLY. If multiple regions are needed, then a separate license for each region must be purchased.', '2990', 'https://promplanner.app/product/lifetime-vendor-license/', '2023-01-26 23:19:21', '2023-01-26 23:19:21'),
 (6, 197, 'Lux Tuxs', 'Luxury Tuxedos for the prom king!', '250', 'https://promplanner.app/product/lifetime-vendor-license/', '2023-02-03 00:13:56', '2023-02-03 00:13:56'),
-(7, 197, 'Limo Package', 'Heres a descritopiojojsdfsdfsdfdfs', '500', 'https://github.com/fkhan613', '2023-07-16 01:30:56', '2023-07-16 01:30:56');
+(7, 197, 'Limo Package', 'Heres a descritopiojojsdfsdfsdfdfs', '500', 'https://github.com/fkhan613', '2023-07-16 01:30:56', '2023-07-16 01:30:56'),
+(8, 209, 'Limo Package', 'Yoyoyo', '500', 'https://promplanner.app/product/lifetime-vendor-license/', '2023-07-29 23:43:41', '2023-07-29 23:43:41'),
+(9, 210, 'Salon Exec Package', 'yertyrtyrtyryyy', '500', 'https://promplanner.app/product/lifetime-vendor-license/', '2023-08-01 22:41:22', '2023-08-01 22:41:22');
 
 -- --------------------------------------------------------
 
@@ -1351,7 +1447,18 @@ CREATE TABLE `vendor_paid_regions` (
 --
 
 INSERT INTO `vendor_paid_regions` (`id`, `user_id`, `region_id`, `created_at`, `updated_at`) VALUES
-(4, 197, 1, '2023-04-11 21:58:41', NULL);
+(4, 197, 1, '2023-04-11 21:58:41', NULL),
+(5, 197, 2, '2023-07-29 23:16:47', '2023-07-29 23:16:47'),
+(6, 188, 1, '2023-07-29 23:17:13', '2023-07-29 23:17:13'),
+(7, 188, 2, '2023-07-29 23:17:13', '2023-07-29 23:17:13'),
+(8, 188, 8, '2023-07-29 23:17:13', '2023-07-29 23:17:13'),
+(9, 196, 1, '2023-07-29 23:17:13', '2023-07-29 23:17:13'),
+(10, 196, 2, '2023-07-29 23:17:13', '2023-07-29 23:17:13'),
+(11, 196, 8, '2023-07-29 23:17:13', '2023-07-29 23:17:13'),
+(12, 209, 1, '2023-07-29 23:39:41', '2023-07-29 23:39:41'),
+(13, 209, 7, '2023-07-29 23:39:41', '2023-07-29 23:39:41'),
+(14, 210, 1, '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
+(15, 210, 7, '2023-08-01 22:31:18', '2023-08-01 22:31:18');
 
 --
 -- Indexes for dumped tables
@@ -1377,6 +1484,33 @@ ALTER TABLE `attachmentable`
 --
 ALTER TABLE `attachments`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `beauty_groups`
+--
+ALTER TABLE `beauty_groups`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `creator_user_id` (`creator_user_id`,`school_id`),
+  ADD KEY `beauty_group_school_id` (`school_id`);
+
+--
+-- Indexes for table `beauty_group_bids`
+--
+ALTER TABLE `beauty_group_bids`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`beauty_group_id`,`region_id`,`package_id`,`category_id`),
+  ADD KEY `category_id_bid_rel2` (`category_id`),
+  ADD KEY `beauty_group_id_bid_rel` (`beauty_group_id`),
+  ADD KEY `package_id_bid_rel2` (`package_id`),
+  ADD KEY `region_id_bid_rel2` (`region_id`);
+
+--
+-- Indexes for table `beauty_group_members`
+--
+ALTER TABLE `beauty_group_members`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `beauty_group_id` (`beauty_group_id`,`invitee_user_id`),
+  ADD KEY `invitee_user_id2` (`invitee_user_id`);
 
 --
 -- Indexes for table `campaigns`
@@ -1725,7 +1859,25 @@ ALTER TABLE `attachmentable`
 -- AUTO_INCREMENT for table `attachments`
 --
 ALTER TABLE `attachments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
+--
+-- AUTO_INCREMENT for table `beauty_groups`
+--
+ALTER TABLE `beauty_groups`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `beauty_group_bids`
+--
+ALTER TABLE `beauty_group_bids`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `beauty_group_members`
+--
+ALTER TABLE `beauty_group_members`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `campaigns`
@@ -1743,7 +1895,7 @@ ALTER TABLE `candidates`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -1785,7 +1937,7 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `event_attendees`
 --
 ALTER TABLE `event_attendees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `event_bids`
@@ -1827,7 +1979,7 @@ ALTER TABLE `limo_groups`
 -- AUTO_INCREMENT for table `limo_group_bids`
 --
 ALTER TABLE `limo_group_bids`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `limo_group_members`
@@ -1929,25 +2081,25 @@ ALTER TABLE `student_bids`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=211;
 
 --
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `vendor_packages`
 --
 ALTER TABLE `vendor_packages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `vendor_paid_regions`
 --
 ALTER TABLE `vendor_paid_regions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
@@ -1964,6 +2116,30 @@ ALTER TABLE `announcments`
 --
 ALTER TABLE `attachmentable`
   ADD CONSTRAINT `attachmentable_attachment_id_foreign` FOREIGN KEY (`attachment_id`) REFERENCES `attachments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `beauty_groups`
+--
+ALTER TABLE `beauty_groups`
+  ADD CONSTRAINT `beauty_creator_user_id` FOREIGN KEY (`creator_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `beauty_group_school_id` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `beauty_group_bids`
+--
+ALTER TABLE `beauty_group_bids`
+  ADD CONSTRAINT `beauty_group_id_bid_rel` FOREIGN KEY (`beauty_group_id`) REFERENCES `beauty_groups` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `category_id_bid_rel2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `package_id_bid_rel2` FOREIGN KEY (`package_id`) REFERENCES `vendor_packages` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `region_id_bid_rel2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_id_bid_rel2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `beauty_group_members`
+--
+ALTER TABLE `beauty_group_members`
+  ADD CONSTRAINT `beauty_group_id` FOREIGN KEY (`beauty_group_id`) REFERENCES `beauty_groups` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `invitee_user_id2` FOREIGN KEY (`invitee_user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `campaigns`
