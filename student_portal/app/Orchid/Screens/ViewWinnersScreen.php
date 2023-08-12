@@ -2,8 +2,14 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Election;
+use App\Models\Position;
+use App\Models\Candidate;
+
 use Orchid\Screen\Screen;
+use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;
+use App\Orchid\Layouts\ViewWinnersLayout;
 
 class ViewWinnersScreen extends Screen
 {
@@ -12,9 +18,16 @@ class ViewWinnersScreen extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Position $position): iterable
     {
-        return [];
+        $candidate = Candidate::where('position_id', $position->id)->paginate(10);
+        $election = Election::where('id', $position->election_id)->first();
+
+        return [
+            'position' => $position,
+            'candidate' => $candidate,
+            'election' => $election,
+        ];
     }
 
     /**
@@ -34,7 +47,11 @@ class ViewWinnersScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            // Link::make('Back')
+            //     ->icon('arrow-left')
+            //     ->route('platform.election.list', $this->election->event_id)
+        ];
     }
 
     /**
@@ -48,6 +65,8 @@ class ViewWinnersScreen extends Screen
             Layout::modal('HELLO WORLD', [
                 Layout::rows([]),
             ])->withoutApplyButton()->open(),
+
+            ViewWinnersLayout::class,
         ];
     }
 }
