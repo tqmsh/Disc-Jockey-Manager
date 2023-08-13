@@ -14,7 +14,8 @@
                     </h5>
                 </div>
                 <div class="col-sm">
-                    <a class="btn btn-primary rounded text-center icon-link" href="{{ route('platform.election.winners') }}">
+                    <a class="btn btn-primary rounded text-center icon-link" href="{{ route('platform.election.winners', $election->id) }}">
+                    {{-- <a class="btn btn-primary rounded text-center icon-link" href="{{ route('platform.election.winners') }}"> --}}
                         View Winners
                     </a>
 
