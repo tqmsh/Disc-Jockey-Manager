@@ -23,6 +23,7 @@ class ViewElectionScreen extends Screen
      */
     public function query(Events $event): iterable
     {
+        // TODO issue an alert and redirect instead of aborting
         $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
         abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
         $election = Election::where('event_id',$event->id)->first();

@@ -3,12 +3,15 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Election;
+use App\Models\Events;
 use App\Models\Position;
 use App\Models\Candidate;
 
 use Orchid\Screen\Screen;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewWinnersLayout;
 
 class ViewWinnersScreen extends Screen
@@ -18,9 +21,24 @@ class ViewWinnersScreen extends Screen
      *
      * @return array
      */
-    public function query(Election $election) : array
+    public function query(Election $election) : iterable
     {
-        return [];
+        $event = Events::where('id',$election->event_id)->first();
+        $candidates = Candidate::where('election_id', $election->id)->get();
+        $positions = Position::where('election_id', $election->id)->get();
+        
+        // TODO probably best to give user a warning instead
+        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
+        abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
+        $election = Election::where('id',$election->id)->first();
+
+        
+        return [
+            'election' => $election,
+            'event' => $event,
+            'positions' => $positions,
+            'candidates' => $candidates,
+        ];
     }  
 
     /**
@@ -38,9 +56,13 @@ class ViewWinnersScreen extends Screen
      *
      * @return \Orchid\Screen\Action[]
      */
-    public function commandBar() : array
+    public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.event.list')
+        ];
     }
 
     /**
@@ -50,64 +72,32 @@ class ViewWinnersScreen extends Screen
      */
     public function layout() : array
     {
-        return [];
+        return [
+            ViewWinnersLayout::class
+        ];
+    }
+
+    public function winners_check($positions, $candidates)
+    {
+        $highestVotes = 0;
+        foreach($positions as $position)
+        {
+            // Check for highest number of votes
+            foreach($candidates as $candidate)
+            {
+                if ($candidate->totalVotes() > $highestVotes)
+                {
+                    $highestVotes = $candidate->totalVotes();
+                }
+            }
+            // Fill array with candidates with highest votes
+            foreach($candidates as $candidate)
+            {
+                if ($candidate->totalVotes() > $highestVotes)
+                {
+                    $highestVotes = $candidate->totalVotes();
+                }
+            }
+        }
     }
 }
-//     public $election;
-//     /**
-//      * Query data.
-//      *
-//      * @return array
-//      */
-//     public function query(Election $election): iterable
-//     {
-//         // $candidate = Candidate::where('position_id', $position->id)->paginate(10);
-//         $election = Election::where('id', $election->id)->first();
-
-//         return [
-//             // 'position' => $position,
-//             // 'candidate' => $candidate,
-//             'election' => $election,
-//         ];
-//     }
-
-//     /**
-//      * Display header name.
-//      *
-//      * @return string|null
-//      */
-//     public function name(): ?string
-//     {
-//         return 'ViewWinnersScreen';
-//     }
-
-//     /**
-//      * Button commands.
-//      *
-//      * @return \Orchid\Screen\Action[]
-//      */
-//     public function commandBar(): iterable
-//     {
-//         return [
-//             // Link::make('Back')
-//             //     ->icon('arrow-left')
-//             //     ->route('platform.election.list', $this->election->event_id)
-//         ];
-//     }
-
-//     /**
-//      * Views.
-//      *
-//      * @return \Orchid\Screen\Layout[]|string[]
-//      */
-//     public function layout(): iterable
-//     {
-//         return [
-//             Layout::modal('HELLO WORLD', [
-//                 Layout::rows([]),
-//             ])->withoutApplyButton()->open(),
-
-//             ViewWinnersLayout::class,
-//         ];
-//     }
-// }

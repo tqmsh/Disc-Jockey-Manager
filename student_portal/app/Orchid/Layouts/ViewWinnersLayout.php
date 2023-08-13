@@ -7,6 +7,7 @@ use App\Models\Events;
 use App\Models\Position;
 use App\Models\Candidate;
 use Orchid\Support\Color;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
 
@@ -20,7 +21,7 @@ class ViewWinnersLayout extends Table
      *
      * @var string
      */
-    protected $target = 'candidate';
+    protected $target = 'positions';
 
     /**
      * Get the table cells to be displayed.
@@ -30,13 +31,15 @@ class ViewWinnersLayout extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make('position_name', 'Position Name')
+                ->render(function (Position $position) {
+                    return Link::make($position->position_name);
+            }),
             TD::make()
-                ->render(function (Events $event) {
-                    return Button::make('Election')
-                        ->icon('people')         
-                        ->method('redirect', ['event_id' => $event->id, 'type' => 'election'])
-                        ->type(Color::LIGHT());
-                }),
+                ->render(function($position){
+                    return Button::make('Candidates')->icon('people')->type(Color::DARK())
+                        ->method('redirect',['position' =>$position->id, 'type'=> "vote"]);
+            }), 
         ];
     }
 }
