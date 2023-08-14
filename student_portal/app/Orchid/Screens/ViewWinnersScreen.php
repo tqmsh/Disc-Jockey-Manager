@@ -2,13 +2,15 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Election;
 use App\Models\Events;
+use App\Models\Election;
 use App\Models\Position;
 use App\Models\Candidate;
+use App\Models\ElectionVotes;
+use App\Models\EventAttendees;
 
 use Orchid\Screen\Screen;
-use App\Models\EventAttendees;
+
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +18,8 @@ use App\Orchid\Layouts\ViewWinnersLayout;
 
 class ViewWinnersScreen extends Screen
 {
+    public $election;
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -32,7 +36,7 @@ class ViewWinnersScreen extends Screen
         abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
         $election = Election::where('id',$election->id)->first();
 
-        
+        // TODO might not need all of these
         return [
             'election' => $election,
             'event' => $event,
@@ -77,27 +81,64 @@ class ViewWinnersScreen extends Screen
         ];
     }
 
-    public function winners_check($positions, $candidates)
-    {
-        $highestVotes = 0;
-        foreach($positions as $position)
-        {
-            // Check for highest number of votes
-            foreach($candidates as $candidate)
-            {
-                if ($candidate->totalVotes() > $highestVotes)
-                {
-                    $highestVotes = $candidate->totalVotes();
-                }
+    public function totalVotes($candidate_id)
+    {   
+        $totalVotes = 0;
+        $allVoters = ElectionVotes::where('candidate_id',$candidate_id)->get();
+
+        if(!empty($allVoters)){
+
+            foreach($allVoters as $voter){
+                $totalVotes+=1;
             }
-            // Fill array with candidates with highest votes
-            foreach($candidates as $candidate)
+
+        }
+        return $totalVotes;
+    }
+
+    public function winner_check()
+    {
+        $position = Position::find(request('position'));
+        $candidates = Candidate::where('position_id', $position->id)->get();
+
+        $highestVotes = 0;
+        $tie = false;
+
+        $winner_ids = [];
+
+        // Check for highest number of votes
+        foreach($candidates as $candidate)
+        {
+            if (ViewWinnersScreen::totalVotes($candidate->id) > $highestVotes)
             {
-                if ($candidate->totalVotes() > $highestVotes)
-                {
-                    $highestVotes = $candidate->totalVotes();
-                }
+                $highestVotes = ViewWinnersScreen::totalVotes($candidate->id);
             }
         }
+        // check for tie
+        // Fill array with candidates with highest votes **
+        // Mention if there is a tie
+        // If the length of array is greater than 1 set tie to true
+        foreach($candidates as $candidate)
+        {
+            if ($candidate->totalVotes() == $highestVotes)
+            {
+                $highestVotes = $candidate->totalVotes();
+            }
+        }
+
+        // AFTERWARDS REDIRECT TO CORRECT PAGE
+        
+    }
+
+    // TODO MODIFY THIS AND PUT IN ABOVE FUNCTION
+    public function redirect($position, $type){
+        $type = request('type');
+        $position = Position::find(request('position'));
+        if($type == 'vote'){
+            return redirect() -> route('platform.election.vote', $position->id);
+        }
+        else {
+            return redirect()->route('platform.event.list');
+        }    
     }
 }

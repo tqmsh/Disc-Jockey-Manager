@@ -67,7 +67,6 @@ Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('plat
 
 Route::screen('/events/election/vote/{position}', ViewVotingScreen::class)->name('platform.election.vote');
 
-// /events/election/winners/{election}
 Route::screen('/events/election/winners/{election}', ViewWinnersScreen::class)->name('platform.election.winners');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
