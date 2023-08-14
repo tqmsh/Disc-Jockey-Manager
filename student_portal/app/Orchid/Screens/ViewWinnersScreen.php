@@ -2,19 +2,23 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
+
 use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
 use App\Models\Candidate;
-use App\Models\ElectionVotes;
-use App\Models\EventAttendees;
-
 use Orchid\Screen\Screen;
-
+use App\Models\ElectionVotes;
+use App\Models\ElectionWinner;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewWinnersLayout;
+
+use Orchid\Support\Facades\Toast;
 
 class ViewWinnersScreen extends Screen
 {
@@ -102,9 +106,6 @@ class ViewWinnersScreen extends Screen
         $candidates = Candidate::where('position_id', $position->id)->get();
 
         $highestVotes = 0;
-        $tie = false;
-
-        $winner_ids = [];
 
         // Check for highest number of votes
         foreach($candidates as $candidate)
@@ -114,19 +115,28 @@ class ViewWinnersScreen extends Screen
                 $highestVotes = ViewWinnersScreen::totalVotes($candidate->id);
             }
         }
-        // check for tie
-        // Fill array with candidates with highest votes **
-        // Mention if there is a tie
-        // If the length of array is greater than 1 set tie to true
+
         foreach($candidates as $candidate)
         {
-            if ($candidate->totalVotes() == $highestVotes)
+            // Stores the winner(s) into database if not already there
+            if (ViewWinnersScreen::totalVotes($candidate->id) == $highestVotes)
             {
-                $highestVotes = $candidate->totalVotes();
+                try {
+                    // CHECK IF THIS WINNER WAS ALREADY PUT IN THE DATABASE
+                    $field['candidate_id'] = $candidate->id;
+                    ElectionWinner::firstOrCreate($field);
+
+                    // IF NOT ALREADY THERE, ADD THEM IN
+                } catch(Exception $e){
+                
+                Alert::error('There was an error updating a winner. Error Code: ' . $e->getMessage());
+                }
             }
         }
 
         // AFTERWARDS REDIRECT TO CORRECT PAGE
+        // REDIRECT TO VIEWPOSITIONWINNERSCREEN OR SOMETHING
+        // THEN DISPLAY A CUSTOM PAGE FOR THE WINNER ON A BUTTON CLICK
         
     }
 
