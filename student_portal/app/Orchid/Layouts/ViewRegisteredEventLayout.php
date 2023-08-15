@@ -33,7 +33,10 @@ class ViewRegisteredEventLayout extends Table
                 ->width('100px')
                 ->align(TD::ALIGN_RIGHT)
                 ->render(function($event){
-                    return Button::make('Tables')->type(Color::DARK())->method('redirect', ['event_id' => $event->id, 'type' => 'table'])->icon('table');
+                    return Button::make('Tables')
+                                ->type(Color::DARK())
+                                ->method('redirect', ['event_id' => $event->id, 'type' => 'table'])
+                                ->icon('table');
                 }), 
                 
             TD::make()
