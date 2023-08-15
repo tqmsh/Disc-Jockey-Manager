@@ -24,7 +24,7 @@ class EditSongScreen extends Screen
     public function query(Song $song): array
     {
         if ($song->exists) {
-            $this->name = 'Edit Song';
+            $this->name = 'Edit Song: ' . $song->title;
             $this->description = 'Edit an existing song';
         } else {
             $this->name = 'Create Song';
@@ -69,12 +69,12 @@ class EditSongScreen extends Screen
 
                 CheckBox::make('song.explicit')
                     ->title('Explicit')
-                    ->help('If the song has not been approved, the explicit field will be shown as `Unknown`.')
+                    ->help('If the song\'s status is not `Approved`, the explicit field will be `Unknown`.')
                     ->sendTrueOrFalse(),
 
                 CheckBox::make('song.status')
                     ->title('Status')
-                    ->help("Check this box if the song should be added to the universal songs table. Note that changing a song's status from 'Approved' to 'Pending' will also unban said song from all events.")
+                    ->help("Check this box if the song should be added to the universal songs table. Note that changing a song's status from `Approved` to `Pending` will also unban said song from all events.")
                     ->sendTrueOrFalse()
             ])
         ];
@@ -107,7 +107,7 @@ class EditSongScreen extends Screen
                 NoPlaySong::where('song_id', $song->id)->delete();
             }
 
-            Toast::info('Song saved successfully');
+            Toast::success('Song saved successfully');
         } catch (Exception $e) {
             Toast::error('There was an error trying to save the song. Error Message: ' . $e->getMessage());
         }

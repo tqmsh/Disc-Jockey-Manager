@@ -20,7 +20,7 @@ class CreateBannedSongsScreen extends Screen
 
     public function name(): ?string
     {
-        return 'Ban Songs for ' . $this->event->event_name;
+        return 'Ban Songs: ' . $this->event->event_name;
     }
 
     public string $description = "Select songs to ban.";

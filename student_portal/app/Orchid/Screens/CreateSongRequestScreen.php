@@ -29,7 +29,7 @@ class CreateSongRequestScreen extends Screen
 
     public function name(): ?string
     {
-        return 'Request a Song for ' . $this->event->event_name;
+        return 'Request a Song: ' . $this->event->event_name;
     }
 
     public string $description = "Browse songs, and create and delete song requests.";
@@ -72,6 +72,7 @@ class CreateSongRequestScreen extends Screen
                 ->icon('plus'),
             Button::make('Remove Selected Song Requests')
                 ->method('removeSelectedRequests')
+                ->confirm('Are you sure you want to remove your selected song requests?')
                 ->icon('trash'),
         ];
     }
