@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['*', 'https://app.promplanner.app/', 'https://student.promplanner.app/', 'https://vendor.promplanner.app/', 'https://brand.promplanner.app/'],
 
     'allowed_origins_patterns' => [],
 
