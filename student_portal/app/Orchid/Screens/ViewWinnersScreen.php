@@ -137,18 +137,7 @@ class ViewWinnersScreen extends Screen
         // AFTERWARDS REDIRECT TO CORRECT PAGE
         // REDIRECT TO VIEWPOSITIONWINNERSCREEN OR SOMETHING
         // THEN DISPLAY A CUSTOM PAGE FOR THE WINNER ON A BUTTON CLICK
+        return redirect() -> route('platform.election.winners.position', $position->id);
         
-    }
-
-    // TODO MODIFY THIS AND PUT IN ABOVE FUNCTION
-    public function redirect($position, $type){
-        $type = request('type');
-        $position = Position::find(request('position'));
-        if($type == 'vote'){
-            return redirect() -> route('platform.election.vote', $position->id);
-        }
-        else {
-            return redirect()->route('platform.event.list');
-        }    
     }
 }

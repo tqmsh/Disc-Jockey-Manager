@@ -10,6 +10,7 @@ use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewVotingScreen;
 use App\Orchid\Screens\ViewWinnersScreen;
+use App\Orchid\Screens\ViewWinnersPositionScreen;
 use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
@@ -68,6 +69,8 @@ Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('plat
 Route::screen('/events/election/vote/{position}', ViewVotingScreen::class)->name('platform.election.vote');
 
 Route::screen('/events/election/winners/{election}', ViewWinnersScreen::class)->name('platform.election.winners');
+
+Route::screen('/events/election/winners/position/{position}', ViewWinnersPositionScreen::class)->name('platform.election.winners.position');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 
