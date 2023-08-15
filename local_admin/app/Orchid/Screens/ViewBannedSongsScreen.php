@@ -20,7 +20,7 @@ class ViewBannedSongsScreen extends Screen
 
     public function name(): string
     {
-        return 'Banned Songs for ' . $this->event->event_name;
+        return 'Banned Songs: ' . $this->event->event_name;
     }
 
     public string $description = "View, ban, and unban songs for this event.";
