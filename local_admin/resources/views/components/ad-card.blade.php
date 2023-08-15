@@ -16,9 +16,10 @@
 </div>
 </a>
 
-<script>
+<script type="text/javascript">
     function onclick_id{{  $ad["id"]  }}(){
         var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent({{  $ad['id']  }});
+        console.log(url)
         axios.put(url)
         }
 </script>
