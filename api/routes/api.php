@@ -35,7 +35,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register/student', [RegisterController::class, 'register']);
 
 // Impression counter
-Route::put("campaign_view/{id}", [AdController::class, "impression"]);
+Route::get("campaign_view/{id}", [AdController::class, "impression"]);
 // Click counter
 Route::put("campaign_click/{id}", [AdController::class, "click"]);
 
