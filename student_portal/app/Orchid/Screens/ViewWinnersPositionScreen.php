@@ -2,6 +2,12 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Events;
+use App\Models\Election;
+use App\Models\ElectionWinner;
+use App\Models\Position;
+use App\Models\Candidate;
+
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
@@ -12,9 +18,21 @@ class ViewWinnersPositionScreen extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Position $position): iterable
     {
-        return [];
+        $winner_ids = [];
+        $winners = ElectionWinner::where('position_id', $position->id)->get();
+        foreach($winners as $winner)
+        {
+            $winner_ids[] = $winner->candidate_id;
+        }
+
+        $winningCandidates = Candidate::whereIn('id', $winner_ids)->get();
+
+        return [
+            'winners' => $winners,
+            'winning_candidates' => $winningCandidates,
+        ];
     }
 
     /**

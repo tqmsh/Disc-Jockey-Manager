@@ -31,10 +31,6 @@ class ViewWinnersLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('id', 'Position ID')
-                ->render(function (Position $position) {
-                    return Link::make($position->id);
-            }),
             TD::make('position_name', 'Position Name')
                 ->render(function (Position $position) {
                     return Link::make($position->position_name);
