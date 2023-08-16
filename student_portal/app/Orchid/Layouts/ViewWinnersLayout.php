@@ -6,6 +6,7 @@ use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Position;
 use App\Models\Candidate;
+use App\Models\ElectionWinner;
 use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -21,7 +22,7 @@ class ViewWinnersLayout extends Table
      *
      * @var string
      */
-    protected $target = 'positions';
+    protected $target = 'winning_candidates';
 
     /**
      * Get the table cells to be displayed.
@@ -31,15 +32,14 @@ class ViewWinnersLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('position_name', 'Position Name')
-                ->render(function (Position $position) {
-                    return Link::make($position->position_name);
+            TD::make('position', 'Position')
+                ->render(function (ElectionWinner $winner) {
+                    return e(Position::find($winner->position_id)->position_name);
             }),
-            TD::make()
-                ->render(function($position){
-                    return Button::make('View Winner')->icon('chess-king')->type(Color::DARK())
-                        ->method('winner_check',['position'=>$position->id]);
-            }), 
+            TD::make('candidate', 'Candidate')
+                ->render(function (ElectionWinner $winner) {
+                    return e(Candidate::find($winner->candidate_id)->candidate_name);
+            }),
         ];
     }
 }

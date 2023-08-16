@@ -34,6 +34,24 @@ class ViewWinnersScreen extends Screen
         $event = Events::where('id',$election->event_id)->first();
         $candidates = Candidate::where('election_id', $election->id)->get();
         $positions = Position::where('election_id', $election->id)->get();
+
+        // putting winners in the database
+        foreach ($positions as $position)
+        {
+            ViewWinnersScreen::winner_check($position);
+        }
+
+        // the candidates from this election who are winners 
+        $candidate_ids = [];
+
+        foreach($candidates as $candidate)
+        {
+            $candidate_ids[] = $candidate->id;
+        }
+
+        $winningCandidates = ElectionWinner::whereIn('candidate_id', $candidate_ids)->get();
+
+        
         
         // TODO probably best to give user a warning instead
         $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
@@ -46,6 +64,7 @@ class ViewWinnersScreen extends Screen
             'event' => $event,
             'positions' => $positions,
             'candidates' => $candidates,
+            'winning_candidates' => $winningCandidates
         ];
     }  
 
@@ -100,14 +119,14 @@ class ViewWinnersScreen extends Screen
         return $totalVotes;
     }
 
-    public function winner_check()
+    public function winner_check($position)
     {
-        $position = Position::find(request('position'));
+        // $position = Position::find(request('position'));
         $candidates = Candidate::where('position_id', $position->id)->get();
 
         $highestVotes = 0;
 
-        // Check for highest number of votes
+        // Check for highest number of votes for the position
         foreach($candidates as $candidate)
         {
             if (ViewWinnersScreen::totalVotes($candidate->id) > $highestVotes)
@@ -134,11 +153,6 @@ class ViewWinnersScreen extends Screen
                 }
             }
         }
-
-        // AFTERWARDS REDIRECT TO CORRECT PAGE
-        // REDIRECT TO VIEWPOSITIONWINNERSCREEN OR SOMETHING
-        // THEN DISPLAY A CUSTOM PAGE FOR THE WINNER ON A BUTTON CLICK
-        return redirect() -> route('platform.election.winners.position', $position->id);
         
     }
 }
