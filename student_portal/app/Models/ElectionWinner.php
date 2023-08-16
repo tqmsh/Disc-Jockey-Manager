@@ -11,6 +11,7 @@ class ElectionWinner extends Model
 
     protected $fillable = [
         'candidate_id',
+        'position_id',
         'created_by',
         'updated_by',
     ];

@@ -124,6 +124,7 @@ class ViewWinnersScreen extends Screen
                 try {
                     // CHECK IF THIS WINNER WAS ALREADY PUT IN THE DATABASE
                     $field['candidate_id'] = $candidate->id;
+                    $field['position_id'] = $position->id;
                     ElectionWinner::firstOrCreate($field);
 
                     // IF NOT ALREADY THERE, ADD THEM IN
