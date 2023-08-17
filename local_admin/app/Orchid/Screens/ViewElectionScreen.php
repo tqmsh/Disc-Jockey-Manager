@@ -112,14 +112,30 @@ class ViewElectionScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [
-                Layout::tabs([
-                    "Positions"=>
-                        ViewPositionLayout::class,
-                    "All Candidates" =>
-                        ViewCandidateLayout::class
-                ])
-        ];
+        if (now() < $this->election->end_date)
+            {
+                return [
+                    Layout::tabs([
+                        "Positions"=>
+                            ViewPositionLayout::class,
+                        "All Candidates" =>
+                            ViewCandidateLayout::class
+                    ])
+                ];
+            }
+        else 
+            {
+                return[
+                    Layout::view('election_status'),
+                    Layout::tabs([
+                        "Positions"=>
+                            ViewPositionLayout::class,
+                        "All Candidates" =>
+                            ViewCandidateLayout::class
+                    ])
+                ];
+                
+            }
     }
 
     public function endElection(Events $event)
