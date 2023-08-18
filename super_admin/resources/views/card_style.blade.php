@@ -9,7 +9,7 @@
         border-radius: 3px;
         position: relative;
         overflow: hidden;
-        transition: .3s cubic-bezier(.6,.4,0,1),transform .15s ease;
+        transition: .3s cubic-bezier(.6, .4, 0, 1), transform .15s ease;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -18,7 +18,8 @@
         padding: 1.2em 1.2em 0.3em;
         max-width: calc({{  env("AD_SIZE")  }}px + 2.4em);
     }
-    .card__url{
+
+    .card__url {
         position: relative;
         overflow: hidden;
         display: flex;
@@ -33,7 +34,7 @@
     }
 
     .card > :not(span) {
-        transition: .3s cubic-bezier(.6,.4,0,1);
+        transition: .3s cubic-bezier(.6, .4, 0, 1);
     }
 
     .card > strong {
@@ -56,7 +57,7 @@
         border-radius: 3px;
         font-weight: bold;
         top: 10000%;
-        transition: all .3s cubic-bezier(.6,.4,0,1);
+        transition: all .3s cubic-bezier(.6, .4, 0, 1);
     }
 
     .card:hover span {
@@ -68,23 +69,26 @@
         background: var(--hover-bg);
     }
 
-    .card:hover>div,.card:hover>strong {
+    .card:hover > div, .card:hover > strong {
         opacity: 0;
     }
-    @media screen and (max-width: 991px){
-        img{
+
+    @media screen and (max-width: 991px) {
+        img {
             width: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
             height: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
         }
     }
-    @media screen and (max-width: 767px){
-        img{
+
+    @media screen and (max-width: 767px) {
+        img {
             width: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
             height: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
         }
     }
-    @media screen and (max-width: 479px){
-        img{
+
+    @media screen and (max-width: 479px) {
+        img {
             width: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
             height: min(calc(100% - 20px), {{  env("AD_SIZE")  }}px);
         }
@@ -92,44 +96,38 @@
 </style>
 
 <script>
-    function sendInternalRequestWithIdParam(image) {
-        id = image.id
+    function sendInternalRequestWithIdParam(image, id) {
         let triggered_ = image.dataset.triggered
         if (triggered_ !== "true") {
             // prepare the request URL with ID parameter
-            var url = `https://api.promplanner.app/api/campaign_view/${encodeURIComponent(id)}` ;
-            axios.put(url).then((result) => {
-                console.log(result.data);
-                console.log("Impression "+url)
-            }).catch((err) => {
-                console.log(err);
-            });
+            var url = 'https://api.promplanner.app/api/campaign_view/' + encodeURIComponent(id);
+            axios.put(url)
             image.dataset.triggered = "true";
+            console.log("Impression " + url)
         }
     }
 
-    function checkIfImageIsVisible(image, callback) {
+    function checkIfImageIsVisible(image, id, callback) {
         if (image != null) {
             var rect = image.getBoundingClientRect();
             var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
             if (rect.bottom >= 0 && rect.top < viewHeight) {
-                callback(image);
+                callback(image, id);
             }
         }
     }
 
     window.addEventListener("load", function () {
-        for (let card_ of document.getElementsByClassName("card"))
-        {
+        for (let card_ of document.getElementsByClassName("card")) {
             image = card_.getElementsByTagName("img")[0]
-            checkIfImageIsVisible(image, sendInternalRequestWithIdParam);
+            checkIfImageIsVisible(image, card_.id, sendInternalRequestWithIdParam);
         }
     });
 
     window.addEventListener('scroll', function () {
         for (let card_ of document.getElementsByClassName("card")) {
             image = card_.getElementsByTagName("img")[0]
-            checkIfImageIsVisible(image, sendInternalRequestWithIdParam);
+            checkIfImageIsVisible(image, card_.id, sendInternalRequestWithIdParam);
         }
     });
 </script>
