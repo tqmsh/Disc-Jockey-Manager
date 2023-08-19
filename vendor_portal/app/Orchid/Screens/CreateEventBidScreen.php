@@ -3,12 +3,14 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use App\Models\User;
 use App\Models\Events;
 use App\Models\Vendors;
 use Orchid\Screen\Sight;
 use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
+use App\Models\Localadmin;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
@@ -17,6 +19,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\GeneralNotification;
 
 class CreateEventBidScreen extends Screen
 {
@@ -140,12 +143,12 @@ class CreateEventBidScreen extends Screen
 
     public function createBid(Events $event){
 
-        $vendor = Vendors::where('user_id', Auth::user()->id)->first();
+        $vendor = Vendors::where('user_id', Auth::id())->first();
+        $localAdmins = User::where('role', 2)->whereIn('id', Localadmin::where('school_id', $event->school_id)->get('user_id')->toArray())->get();
 
-            try{   
+            try{  
 
                 if($this->validBid($event)){
-
                     
                     EventBids::create([
                         'user_id' => $vendor->user_id,
@@ -161,10 +164,18 @@ class CreateEventBidScreen extends Screen
                         'contact_instructions' => request('contact_instructions'),
                         'status' => 0
                     ]);
+
+                    foreach($localAdmins as $admin){
+                        $admin->notify(new GeneralNotification([
+                            'title' => 'A Bid Has Been Placed On Your Event',
+                            'message' => 'A vendor has created a bid on your event: ' . $event->event_name . '. Click to view the bid.',
+                            'action' => '/admin/events/bids/' . $event->id,
+                        ]));
+                    }
                         
                     Toast::success('Bid created succesfully');
                         
-                    return redirect()->route('platform.event.list');
+                    return redirect()->route('platform.bidopportunities.list');
                 }else{
                     Toast::error('Bid already exists');
                 }

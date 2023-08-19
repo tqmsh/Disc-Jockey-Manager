@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Http\Controllers;
 
+use App\Models\Localadmin;
 use Exception;
 use App\Models\User;
 use App\Models\School;
@@ -19,6 +20,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
+use App\Notifications\GeneralNotification;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -200,7 +202,7 @@ class LoginController extends Controller
             if(is_null($school_id)){
 
                 Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
-    
+
                 return redirect('/admin/register');
 
             }else{
@@ -224,6 +226,28 @@ class LoginController extends Controller
 
                         if($studentCreateSuccess){
                             Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
+
+                            //notify all admins that a new vendor has registered
+                            $superAdmins = User::where('role', 1)->get();
+                            $localAdmins = User::where('role', 2)->whereIn('id', Localadmin::where('school_id', $school_id)->get('user_id')->toArray())->get();
+
+                            foreach($superAdmins as $admin){
+                                $admin->notify(new GeneralNotification([
+                                    'title' => 'New Student Registered',
+                                    'message' => 'A new student has registered. Please approve or deny their account.',
+                                    'action' => '/admin/pendingstudents',
+
+                                ]));
+                            }
+                            
+                            foreach($localAdmins as $admin){
+                                $admin->notify(new GeneralNotification([
+                                    'title' => 'New Student Registered',
+                                    'message' => 'A new student has registered. Please approve or deny their account.',
+                                    'action' => '/admin/pendingstudents',
+
+                                ]));
+                            }
                     
                             return redirect('/admin/login');  
                         }

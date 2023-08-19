@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\School;
 use Illuminate\View\View;
 use App\Models\Localadmin;
-use App\Models\RoleUsers;
 use Illuminate\Http\Request;
 use Orchid\Access\UserSwitch;
 use Illuminate\Validation\Rule;
@@ -20,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
+use App\Notifications\GeneralNotification;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -222,7 +222,18 @@ class LoginController extends Controller
 
                         if($localadminCreateSuccess){
                             Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
-                    
+
+                            //notify all admins that a new vendor has registered
+                            $admins = User::where('role', 1)->get();
+
+                            foreach($admins as $admin){
+                                $admin->notify(new GeneralNotification([
+                                    'title' => 'New Local Admin Registered',
+                                    'message' => 'A new vendor has registered. Please approve or deny their account.',
+                                    'action' => '/admin/pendingvendors',
+
+                                ]));
+                            }
                             return redirect('/admin/login');  
                         }
                     }

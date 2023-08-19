@@ -120,7 +120,7 @@
         {{ __('State/Province') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Select::make('state_province')->fromModel(App\Models\School::class, 'state_province', 'state_province')->autofocus()->empty('Start typing to search...')!!}
+    {!! \Orchid\Screen\Fields\Select::make('state_province')->fromModel(App\Models\School::class, 'state_province', 'state_province')->allowAdd()->autofocus()->empty('Start typing to search...')!!}
 </div>
 
 <div class="mb-3">
