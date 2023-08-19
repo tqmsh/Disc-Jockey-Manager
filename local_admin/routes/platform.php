@@ -7,9 +7,6 @@ use App\Orchid\Screens\CreateBannedSongsScreen;
 use App\Orchid\Screens\ViewBannedSongsScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
-
-;
-
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewCourseScreen;
