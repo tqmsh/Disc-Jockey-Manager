@@ -9,7 +9,7 @@ use Orchid\Screen\Screen;
 use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewPositionLayout;
+use App\Orchid\Layouts\{ViewPositionLayout};
 use Orchid\Support\Facades\Layout;
 
 class ViewElectionScreen extends Screen

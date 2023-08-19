@@ -23,6 +23,7 @@ use Orchid\Support\Facades\Toast;
 class ViewWinnersScreen extends Screen
 {
     public $election;
+    public $event;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -88,7 +89,7 @@ class ViewWinnersScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.election.list', $this->event)
         ];
     }
 
