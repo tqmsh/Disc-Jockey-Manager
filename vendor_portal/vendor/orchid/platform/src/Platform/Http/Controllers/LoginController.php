@@ -6,8 +6,6 @@ namespace Orchid\Platform\Http\Controllers;
 
 use Exception;
 use App\Models\User;
-use App\Models\School;
-use App\Models\Student;
 use App\Models\Vendors;
 use App\Notifications\GeneralNotification;
 use Illuminate\View\View;
@@ -18,7 +16,6 @@ use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
-use Orchid\Support\Facades\Dashboard;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
