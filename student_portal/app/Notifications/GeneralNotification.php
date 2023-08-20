@@ -44,7 +44,7 @@ class GeneralNotification extends Notification
         return (new DashboardMessage)
             ->title($this->data['title'])
             ->message($this->data['message'])
-            ->action(url($this->data['action']));
+            ->action($this->data['action']);
     } 
 
     /**
