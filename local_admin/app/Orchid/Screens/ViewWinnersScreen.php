@@ -82,7 +82,7 @@ class ViewWinnersScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.eventPromvote.list', $this->event->id)
+                ->route('platform.eventPromvote.list', $this->event->id)   
         ];
     }
 

@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// TODO get rid of this after
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

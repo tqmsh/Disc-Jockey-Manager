@@ -54,12 +54,11 @@ class ViewWinnersScreen extends Screen
 
         
         
-        // TODO probably best to give user a warning instead
+        // TODO probably best to give user a warning too/instead
         $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
         abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
         $election = Election::where('id',$election->id)->first();
 
-        // TODO might not need all of these
         return [
             'election' => $election,
             'event' => $event,
