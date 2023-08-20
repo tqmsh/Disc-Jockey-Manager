@@ -11,11 +11,8 @@ use App\Models\Candidate;
 use Orchid\Screen\Screen;
 use App\Models\ElectionVotes;
 use App\Models\ElectionWinner;
-use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Alert;
-use Orchid\Support\Facades\Layout;
-use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewWinnersLayout;
 
 use Orchid\Support\Facades\Toast;
@@ -52,11 +49,6 @@ class ViewWinnersScreen extends Screen
 
         $winningCandidates = ElectionWinner::whereIn('candidate_id', $candidate_ids)->get();
 
-        
-        
-        // TODO probably best to give user a warning too/instead
-        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
-        abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
         $election = Election::where('id',$election->id)->first();
 
         return [

@@ -6,9 +6,7 @@ use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
 use Orchid\Screen\Screen;
-use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
-use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\{ViewPositionLayout};
 use Orchid\Support\Facades\Layout;
 
@@ -23,9 +21,6 @@ class ViewElectionScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        // TODO probably best to give user a warning too/instead
-        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
-        abort_if(!($studentAttendee->exists() &&  $studentAttendee-> ticketstatus == 'Paid'), 403);
         $election = Election::where('event_id',$event->id)->first();
         
         
