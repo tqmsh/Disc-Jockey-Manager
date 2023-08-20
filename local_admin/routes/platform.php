@@ -17,6 +17,7 @@ use App\Orchid\Screens\ViewStudentScreen;
 use App\Orchid\Screens\EditElectionScreen;
 use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\ViewElectionScreen;
+use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\EditCandidateScreen;
@@ -122,6 +123,8 @@ Route::screen('/events/promvote/{position_id}/candidate', ViewCandidateScreen::c
 Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.create');
 
 Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
+
+Route::screen('/events/election/winners/{election}', ViewWinnersScreen::class)->name('platform.election.winners');
 
 //limo group
 Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');

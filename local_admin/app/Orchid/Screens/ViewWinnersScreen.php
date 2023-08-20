@@ -11,8 +11,11 @@ use App\Models\Candidate;
 use Orchid\Screen\Screen;
 use App\Models\ElectionVotes;
 use App\Models\ElectionWinner;
+use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Alert;
+use Orchid\Support\Facades\Layout;
+use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewWinnersLayout;
 
 use Orchid\Support\Facades\Toast;
@@ -49,8 +52,7 @@ class ViewWinnersScreen extends Screen
 
         $winningCandidates = ElectionWinner::whereIn('candidate_id', $candidate_ids)->get();
 
-        $election = Election::where('id',$election->id)->first();
-
+        // TODO might not need all of these
         return [
             'election' => $election,
             'event' => $event,
@@ -80,7 +82,7 @@ class ViewWinnersScreen extends Screen
         return [
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.election.list', $this->event)
+                ->route('platform.eventPromvote.list', $this->event->id)   
         ];
     }
 

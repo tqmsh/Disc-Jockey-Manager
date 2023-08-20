@@ -6,10 +6,8 @@ use App\Models\Events;
 use App\Models\Election;
 use App\Models\Position;
 use Orchid\Screen\Screen;
-use App\Models\EventAttendees;
 use Orchid\Screen\Actions\Link;
-use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewPositionLayout;
+use App\Orchid\Layouts\{ViewPositionLayout};
 use Orchid\Support\Facades\Layout;
 
 class ViewElectionScreen extends Screen
@@ -23,9 +21,6 @@ class ViewElectionScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $studentAttendee= EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->first();
-        //! NEED TO ADD THIS WHEN PAYMENT INTEGRATION IS DONE && $studentAttendee->ticketstatus == 'Paid'
-        abort_if(!($studentAttendee->exists() ), 403);
         $election = Election::where('event_id',$event->id)->first();
         
         
@@ -68,10 +63,20 @@ class ViewElectionScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [
-            Layout::view('election_status'),
-            ViewPositionLayout::class,
-        ];
+        if (now() < $this->election->end_date)
+            {
+                return [
+                    ViewPositionLayout::class
+                ];
+            }
+        else 
+            {
+                return[
+                    Layout::view('election_status'),
+                    ViewPositionLayout::class
+                ];
+                
+            }
     }
 
     public function redirect($position, $type){
