@@ -11,9 +11,9 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\LimoGroupBid;
+use Illuminate\Mail\Message;
 use App\Models\VendorPackage;
 use App\Models\LimoGroupMember;
-use App\Notifications\GeneralNotification;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -22,8 +22,10 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
-use Orchid\Screen\Actions\ModalToggle;
+use Illuminate\Support\Facades\Mail;
 use App\Notifications\GroupInvitation;
+use Orchid\Screen\Actions\ModalToggle;
+use App\Notifications\GeneralNotification;
 
 class ViewLimoGroupScreen extends Screen
 {
@@ -557,6 +559,18 @@ class ViewLimoGroupScreen extends Screen
                             
                         } else{
                             //send email to the email entered by user
+
+                            $data = [
+                                'inviter_name' => Auth::user()->firstname . ' ' . Auth::user()->lastname,
+                                'inviter_school' => Auth::user()->student->school,
+                            ];
+
+                            Mail::send(
+                                'emails.limoGroup', $data, function (Message $message) use ($invitee_user_id) {
+                                    $message->subject('You have been invited to join a limo group!');
+                                    $message->to($invitee_user_id);
+                                }
+                            );
                         }
                     }
 

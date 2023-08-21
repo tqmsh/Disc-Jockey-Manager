@@ -10,6 +10,7 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\BeautyGroup;
+use Illuminate\Mail\Message;
 use App\Models\VendorPackage;
 use App\Models\BeautyGroupBid;
 use Orchid\Screen\Actions\Link;
@@ -21,6 +22,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Notifications\GroupInvitation;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Notifications\GeneralNotification;
@@ -559,6 +561,17 @@ class ViewBeautyGroupScreen extends Screen
                             
                         } else{
                             //send email to the email entered by user
+                            $data = [
+                                'inviter_name' => Auth::user()->firstname . ' ' . Auth::user()->lastname,
+                                'inviter_school' => Auth::user()->student->school,
+                            ];
+
+                            Mail::send(
+                                'emails.beautyGroup', $data, function (Message $message) use ($invitee_user_id) {
+                                    $message->subject('You have been invited to join a limo group!');
+                                    $message->to($invitee_user_id);
+                                }
+                            );
                         }
                     }
 
