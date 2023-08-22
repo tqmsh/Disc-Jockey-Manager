@@ -112,7 +112,7 @@ class ViewElectionScreen extends Screen
      */
     public function layout(): iterable
     {
-        if (now() > $this->election->end_date)
+        if (now() < $this->election->end_date)
             {
                 return [
                     Layout::tabs([
