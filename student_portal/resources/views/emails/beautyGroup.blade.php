@@ -1,9 +1,7 @@
-
-
 <body>
     <p>Dear student,</p>
-    <p>You have been invited to join a beauty group by: {{$inviter_name}} from: {{$inviter_school}}.</p>
-    <p><a href="https://promplanner.app/">Sign up for Prom Planner</a>  to accept or reject the invite and unlock the rest of your high school prom experience!</p>
+    <p>You have been invited to join a beauty group by: <strong>{{$inviter_name}}</strong> from: <strong>{{$inviter_school}}</strong>.</p>
+    <p><a href="https://promplanner.app/">Sign up for Prom Planner</a>  to accept or reject the invite and unlock the rest of your premium high school prom experience!</p>
     <br>
     <br>
     <p>Regards,</p>
