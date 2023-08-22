@@ -11,21 +11,25 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\LimoGroupBid;
+use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
 use App\Models\VendorPackage;
 use App\Models\LimoGroupMember;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\GroupInvitation;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Notifications\GeneralNotification;
+use Orchid\Screen\Fields\SimpleMDE;
 
 class ViewLimoGroupScreen extends Screen
 {
@@ -33,6 +37,7 @@ class ViewLimoGroupScreen extends Screen
     public $owner = false;
     public $owned_limo_group;
     public $limo_group_member_members;
+    public $current_limo_group_members;
 
     /**
      * Query data.
@@ -223,6 +228,39 @@ class ViewLimoGroupScreen extends Screen
                             }
                         }),
                     ]),
+
+                    Layout::rows([
+                        Input::make('subject')
+                            ->title('Subject')
+                            ->placeholder('Message subject line')
+                            ->help('Enter the subject line for your message'),
+
+                        Select::make('users.')
+                            ->title('Recipients')
+                            ->multiple()
+                            ->placeholder('Email addresses')
+                            ->help('Enter the users that you would like to send this message to.')
+                            ->options(function (){
+                                $members = [];
+
+                                foreach($this->query()['current_limo_group_members'] as $member){
+                                    $members[$member->user->email] = $member->user->firstname . ' '  . $member->user->lastname;
+                                }
+
+                                return $members;
+                            }),
+
+                        SimpleMDE::make('content')
+                            ->title('Content')
+                            ->toolbar(["text", "color", "header", "list", "format", "align", "link", ])
+                            ->placeholder('Insert text here ...')
+                            ->help('Add the content for the message that you would like to send.'),
+
+                        Button::make('Send')
+                            ->method('sendMessage')
+                            ->icon('paper-plane')
+                            ->type(Color::DARK())
+                    ])
     
                 ],
                 'Members in Group' => [
@@ -419,6 +457,30 @@ class ViewLimoGroupScreen extends Screen
         ];
     }
 
+    public function sendMessage(Request $request)
+    {
+        $data = $request->validate([
+            'subject' => 'required|min:6|max:50',
+            'users'   => 'required',
+            'content' => 'required|min:10',
+        ]);
+
+        $data['sender_email'] = Auth::user()->email;
+
+        Mail::send(
+            'emails.generalEmail', $data, 
+            function (Message $message) use ($request) {
+            $message->subject($request->get('subject'));
+
+            foreach ($request->get('users') as $email) {
+                $message->to($email);
+            }
+        });
+
+
+        Toast::info('Your email message has been sent successfully.');
+    }
+
     public function updateBid()
     {
         try {
@@ -496,7 +558,8 @@ class ViewLimoGroupScreen extends Screen
 
             return redirect()->route('platform.limo-groups');
         } catch(\Exception $e){
-
+            Toast::error($e->getMessage());
+            return redirect()->route('platform.limo-groups');
         }
 
     }

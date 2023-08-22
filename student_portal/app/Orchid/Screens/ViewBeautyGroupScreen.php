@@ -10,11 +10,13 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\BeautyGroup;
+use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
 use App\Models\VendorPackage;
 use App\Models\BeautyGroupBid;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Select;
 use App\Models\BeautyGroupMember;
 use Orchid\Screen\Actions\Button;
@@ -223,6 +225,33 @@ class ViewBeautyGroupScreen extends Screen
                             }
                         }),
                     ]),
+
+                    Layout::rows([
+                        Input::make('subject')
+                            ->title('Subject')
+                            ->placeholder('Message subject line')
+                            ->help('Enter the subject line for your message'),
+
+                        Select::make('users.')
+                            ->title('Recipients')
+                            ->multiple()
+                            ->placeholder('Email addresses')
+                            ->help('Enter the users that you would like to send this message to.')
+                            ->options(function (){
+                                $members = [];
+
+                                foreach($this->query()['current_limo_group_members'] as $member){
+                                    $members[$member->user->email] = $member->user->firstname . ' '  . $member->user->lastname;
+                                }
+
+                                return $members;
+                            }),
+
+                        Quill::make('content')
+                            ->title('Content')
+                            ->placeholder('Insert text here ...')
+                            ->help('Add the content for the message that you would like to send.')
+                    ])
     
                 ],
                 'Members in Group' => [
@@ -416,6 +445,26 @@ class ViewBeautyGroupScreen extends Screen
 
             ]),
         ];
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $request->validate([
+            'subject' => 'required|min:6|max:50',
+            'users'   => 'required',
+            'content' => 'required|min:10'
+        ]);
+
+        Mail::raw($request->get('content'), function (Message $message) use ($request) {
+            $message->subject($request->get('subject'));
+
+            foreach ($request->get('users') as $email) {
+                $message->to($email);
+            }
+        });
+
+
+        Toast::info('Your email message has been sent successfully.');
     }
 
     public function updateBid()
