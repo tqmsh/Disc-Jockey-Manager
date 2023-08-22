@@ -31,7 +31,6 @@ class ViewElectionScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $event->school_id, 403, 'You are not authorized to view this page');
         $election = Election::where('event_id', $event->id)->first();
         $position = Position::where('election_id', $election->id)->paginate(10);
         $candidate = Candidate::where('election_id',$election->id)->paginate(10);

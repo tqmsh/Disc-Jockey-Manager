@@ -36,8 +36,8 @@ use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\CreateElectionScreen;
 use App\Orchid\Screens\EditElectionScreen;
-// use App\Orchid\Screens\CreatePositionScreen;
-// use App\Orchid\Screens\EditPositionScreen;
+use App\Orchid\Screens\CreatePositionScreen;
+use App\Orchid\Screens\EditPositionScreen;
 // use App\Orchid\Screens\ViewCandidateScreen;
 // use App\Orchid\Screens\CreateCandidateScreen;
 // use App\Orchid\Screens\EditCandidateScreen;
@@ -219,9 +219,9 @@ Route::screen('/events/promvote/{event_id}/create', CreateElectionScreen::class)
 
 Route::screen('/events/promvote/{event_id}/edit', EditElectionScreen::class)->name('platform.eventPromvote.edit');
 
-// Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen::class)->name('platform.eventPromvotePosition.create');
+Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen::class)->name('platform.eventPromvotePosition.create');
 
-// Route::screen('/events/promvote/{position_id}/editPosition', EditPositionScreen::class)->name('platform.eventPromvotePosition.edit');
+Route::screen('/events/promvote/{position_id}/editPosition', EditPositionScreen::class)->name('platform.eventPromvotePosition.edit');
 
 // Route::screen('/events/promvote/{position_id}/candidate', ViewCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.list');
 
