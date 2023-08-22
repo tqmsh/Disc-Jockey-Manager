@@ -38,10 +38,10 @@ use App\Orchid\Screens\CreateElectionScreen;
 use App\Orchid\Screens\EditElectionScreen;
 use App\Orchid\Screens\CreatePositionScreen;
 use App\Orchid\Screens\EditPositionScreen;
-// use App\Orchid\Screens\ViewCandidateScreen;
-// use App\Orchid\Screens\CreateCandidateScreen;
-// use App\Orchid\Screens\EditCandidateScreen;
-// use App\Orchid\Screens\ViewWinnersScreen;
+use App\Orchid\Screens\ViewCandidateScreen;
+use App\Orchid\Screens\CreateCandidateScreen;
+use App\Orchid\Screens\EditCandidateScreen;
+use App\Orchid\Screens\ViewWinnersScreen;
 
 use App\Orchid\Screens\EditLimoGroupScreen;
 use App\Orchid\Screens\OrderCategoryScreen;
@@ -223,13 +223,13 @@ Route::screen('/events/promvote/{event_id}/createPosition', CreatePositionScreen
 
 Route::screen('/events/promvote/{position_id}/editPosition', EditPositionScreen::class)->name('platform.eventPromvotePosition.edit');
 
-// Route::screen('/events/promvote/{position_id}/candidate', ViewCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.list');
+Route::screen('/events/promvote/{position_id}/candidate', ViewCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.list');
 
-// Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.create');
+Route::screen('/events/promvote/{position_id}/candidate/create', CreateCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.create');
 
-// Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
+Route::screen('/events/promvote/candidate/{candidate_id}/edit', EditCandidateScreen::class)->name('platform.eventPromvotePositionCandidate.edit');
 
-// Route::screen('/events/election/winners/{election}', ViewWinnersScreen::class)->name('platform.election.winners');
+Route::screen('/events/election/winners/{election}', ViewWinnersScreen::class)->name('platform.election.winners');
 
 //view limo groups
 Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');
