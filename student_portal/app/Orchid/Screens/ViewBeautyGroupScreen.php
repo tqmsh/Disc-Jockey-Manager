@@ -23,6 +23,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Fields\SimpleMDE;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\GroupInvitation;
@@ -246,11 +247,12 @@ class ViewBeautyGroupScreen extends Screen
 
                                 return $members;
                             }),
-
-                        Quill::make('content')
+                            
+                        SimpleMDE::make('content')
                             ->title('Content')
+                            ->toolbar(["text", "color", "header", "list", "format", "align", "link", ])
                             ->placeholder('Insert text here ...')
-                            ->help('Add the content for the message that you would like to send.')
+                            ->help('Add the content for the message that you would like to send.'),
                     ])
     
                 ],
@@ -449,13 +451,17 @@ class ViewBeautyGroupScreen extends Screen
 
     public function sendMessage(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'subject' => 'required|min:6|max:50',
             'users'   => 'required',
-            'content' => 'required|min:10'
+            'content' => 'required|min:10',
         ]);
 
-        Mail::raw($request->get('content'), function (Message $message) use ($request) {
+        $data['sender_email'] = Auth::user()->email;
+
+        Mail::send(
+            'emails.generalEmail', $data, 
+            function (Message $message) use ($request) {
             $message->subject($request->get('subject'));
 
             foreach ($request->get('users') as $email) {
