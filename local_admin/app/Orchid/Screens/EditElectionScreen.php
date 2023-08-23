@@ -110,6 +110,15 @@ class EditElectionScreen extends Screen
 
             $electionFields = $request->all();
 
+            // Cannot submit if end date is before start date
+            
+            // End date is before start date
+            if ($election->end_date < $election->start_date)
+            {
+                Toast::error('The end date cannot be before the start date.');
+                return redirect()->route('platform.eventPromvote.list',$election->event_id);
+            }
+
             $election->update($electionFields);
 
             Toast::success('You have successfully updated ' . $request->input('election_name') . '.');

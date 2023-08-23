@@ -69,10 +69,11 @@ class ViewElectionScreen extends Screen
                     ->icon('pencil')
                     ->route('platform.eventPromvote.edit',$this->election->id),
 
-                Button::make('End Election')
+                Button::make('Delete Election')
                     ->icon('trash')
                     ->method('endElection',[$this->event])
-                    ->confirm(__('Are you sure you want to end election?')),
+                    ->confirm(__('Are you sure you want to DELETE this election? 🚨🚨🚨This action is PERMENANT and cannot be UNDONE🚨🚨🚨
+                    In order to END an election, change the elections end date to any date in the past.')),
             ]),
 
             DropDown::make('Position Options')
