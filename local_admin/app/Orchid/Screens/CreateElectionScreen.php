@@ -103,7 +103,7 @@ class CreateElectionScreen extends Screen
 
             if ($electionField['end_date'] < $electionField['start_date'])
             {
-                Toast::error('The end date cannot be before the start date.');
+                Toast::error('END DATE must be after START DATE and START DATE must be before END DATE.');
                 return redirect()->route('platform.event.list');
             }
 
