@@ -626,6 +626,7 @@ class ViewLimoGroupScreen extends Screen
                             $data = [
                                 'inviter_name' => Auth::user()->firstname . ' ' . Auth::user()->lastname,
                                 'inviter_school' => Auth::user()->student->school,
+                                'limo_group_name' => $limo_group_member->name,
                             ];
 
                             Mail::send(

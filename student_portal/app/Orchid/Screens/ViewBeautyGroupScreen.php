@@ -241,7 +241,7 @@ class ViewBeautyGroupScreen extends Screen
                             ->options(function (){
                                 $members = [];
 
-                                foreach($this->query()['current_limo_group_members'] as $member){
+                                foreach($this->query()['current_beauty_group_members'] as $member){
                                     $members[$member->user->email] = $member->user->firstname . ' '  . $member->user->lastname;
                                 }
 
@@ -619,11 +619,12 @@ class ViewBeautyGroupScreen extends Screen
                             $data = [
                                 'inviter_name' => Auth::user()->firstname . ' ' . Auth::user()->lastname,
                                 'inviter_school' => Auth::user()->student->school,
+                                'beauty_group_name' => $beauty_group->name,
                             ];
 
                             Mail::send(
                                 'emails.beautyGroup', $data, function (Message $message) use ($invitee_user_id) {
-                                    $message->subject('You have been invited to join a limo group!');
+                                    $message->subject('You have been invited to join a beauty group!');
                                     $message->to($invitee_user_id);
                                 }
                             );
