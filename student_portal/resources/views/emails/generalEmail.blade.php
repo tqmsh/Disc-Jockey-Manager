@@ -1,5 +1,5 @@
 <body>
-    <p><strong>From: </strong> {{$sender_email}}</p>
+    <p><strong>From: </strong> {{$sender->firstname}}  {{$sender->lastname}} | {{$sender->email}}</p>
     <p><strong>Message: </strong></p>
     <x-markdown>
         {{$content}}

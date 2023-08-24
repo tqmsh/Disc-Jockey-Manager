@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewEventInvitationsLayout;
+use Orchid\Screen\Actions\Button;
 
 class ViewEventScreen extends Screen
 {
@@ -56,6 +57,10 @@ class ViewEventScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Contact Your Prom Committees')
+                ->icon('comment')
+                ->route('platform.contact-prom-committees'),
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')
@@ -73,7 +78,7 @@ class ViewEventScreen extends Screen
         return [
           Layout::tabs([
                 'All Events' => [
-                    ViewEventLayout::class
+                    ViewEventLayout::class,
                 ],
                 'Your Registered Events' => [
                     ViewRegisteredEventLayout::class

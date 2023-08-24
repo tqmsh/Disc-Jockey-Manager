@@ -459,26 +459,30 @@ class ViewLimoGroupScreen extends Screen
 
     public function sendMessage(Request $request)
     {
-        $data = $request->validate([
-            'subject' => 'required|min:6|max:50',
-            'users'   => 'required',
-            'content' => 'required|min:10',
-        ]);
+        try {
+            $data = $request->validate([
+                'subject' => 'required|min:6|max:50',
+                'users'   => 'required',
+                'content' => 'required|min:10',
+            ]);
 
-        $data['sender_email'] = Auth::user()->email;
+            $data['sender'] = Auth::user();
 
-        Mail::send(
-            'emails.generalEmail', $data, 
-            function (Message $message) use ($request) {
-            $message->subject($request->get('subject'));
+            Mail::send(
+                'emails.generalEmail', $data, 
+                function (Message $message) use ($request) {
+                $message->subject($request->get('subject'));
 
-            foreach ($request->get('users') as $email) {
-                $message->to($email);
-            }
-        });
+                foreach ($request->get('users') as $email) {
+                    $message->to($email);
+                }
+            });
 
+            Toast::info('Your email message has been sent successfully.');
 
-        Toast::info('Your email message has been sent successfully.');
+        } catch (\Exception $e) {
+            Toast::error($e->getMessage());
+        }
     }
 
     public function updateBid()

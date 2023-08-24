@@ -57,6 +57,7 @@ class ViewEventLayout extends Table
                 ->render(function (Events $event) {
                     return e($event->event_rules);
                 }),
+
         ];    
     }
 }
