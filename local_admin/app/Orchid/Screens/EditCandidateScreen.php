@@ -2,12 +2,13 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
+use App\Models\Election;
+use App\Models\Position;
 use App\Models\Candidate;
 use Orchid\Screen\Screen;
-use Orchid\Screen\Actions\Link;
-use Exception;
-use App\Models\Position;
 use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
@@ -17,6 +18,7 @@ use Orchid\Support\Facades\Layout;
 
 class EditCandidateScreen extends Screen
 {
+    public $election;
     public $candidate;
     public $position;
     public $positions;
@@ -29,7 +31,9 @@ class EditCandidateScreen extends Screen
     {
         $position = Position::where('id',$candidate->position_id)->first();
         $positions = Position::where('election_id',$candidate->election_id)->paginate(20);
+        $election = Election::where('id', $candidate->election_id)->first();
         return [
+            'election' => $election,
             'candidate' => $candidate,
             'position' => $position,
             'positions' => $positions
@@ -59,7 +63,7 @@ class EditCandidateScreen extends Screen
                 ->method('update'),
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.eventPromvotePositionCandidate.list', $this->position->id)
+                ->route('platform.eventPromvote.list', $this->election->event_id)
         ];
     }
 
@@ -101,12 +105,13 @@ class EditCandidateScreen extends Screen
         try{
 
             $candidateFields = $request->all();
+            $election = Election::where('id', $candidate->election_id)->first();
 
             $candidate->update($candidateFields);
 
             Toast::success('You have successfully updated this candidate');
 
-            return redirect()->route('platform.eventPromvotePositionCandidate.list', $candidate->position_id);
+            return redirect()->route('platform.eventPromvote.list', $election->event_id);
 
         }catch(Exception $e){
 
