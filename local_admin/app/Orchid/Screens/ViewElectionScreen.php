@@ -218,4 +218,12 @@ class ViewElectionScreen extends Screen
             return redirect()->route('platform.event.list');
         }    
     }
+
+    public function redirect_candidate($candidate, $type){
+        $type = request('type');
+        $candidate = Candidate::find(request('candidate'));
+        if($type == 'edit'){
+            return redirect() -> route('platform.eventPromvotePositionCandidate.edit', $candidate->id);
+        }
+    }
 }
