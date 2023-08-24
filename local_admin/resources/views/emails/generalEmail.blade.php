@@ -1,6 +1,6 @@
 <body>
     <p><strong>From: </strong> {{$sender->firstname}}  {{$sender->lastname}} | {{$sender->email}}</p>
-    <p><strong>Category: </strong>Student</p>
+    <p><strong>Category: </strong>Local Admin | Prom Commitee</p>
     <p><strong>Message: </strong></p>
     <x-markdown>
         {{$content}}

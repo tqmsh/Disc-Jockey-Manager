@@ -63,6 +63,10 @@ class ViewStudentScreen extends Screen
                 ->icon('trash')
                 ->method('deleteStudents')
                 ->confirm(__('Are you sure you want to delete the selected students?')),
+
+            Link::make('Contact Students')
+                ->icon('comment')
+                ->route('platform.contact-students'),
                 
             Link::make('Back')
                 ->icon('arrow-left')

@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\AddBannedSongsScreen;
-use App\Orchid\Screens\CreateBannedSongsScreen;
-use App\Orchid\Screens\ViewBannedSongsScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\EditEventScreen;
@@ -14,20 +11,23 @@ use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\ViewStudentScreen;
+use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\EditElectionScreen;
 use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\ViewElectionScreen;
-use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
 use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\EditCandidateScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
 use App\Orchid\Screens\ViewCandidateScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
+use App\Orchid\Screens\AddBannedSongsScreen;
+use App\Orchid\Screens\ContactStudentScreen;
 use App\Orchid\Screens\CreateElectionScreen;
 use App\Orchid\Screens\CreatePositionScreen;
 use App\Orchid\Screens\ViewRequestersScreen;
 use App\Orchid\Screens\CreateCandidateScreen;
+use App\Orchid\Screens\ViewBannedSongsScreen;
 use App\Orchid\Screens\ViewBeautyGroupScreen;
 use App\Orchid\Screens\ViewNoPlaySongsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
@@ -35,6 +35,7 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
+use App\Orchid\Screens\CreateBannedSongsScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
@@ -133,6 +134,9 @@ Route::screen('/limo-groups/{limo_group_id}/members', ViewLimoGroupMembersScreen
 //beauty groups
 Route::screen('/beauty-groups', ViewBeautyGroupScreen::class)->name('platform.beauty-groups');
 Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembersScreen::class)->name('platform.beauty-groups.members');
+
+Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.contact-students');
+
 
 
 // Platform > Profile
