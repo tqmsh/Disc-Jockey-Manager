@@ -30,8 +30,7 @@ class ViewEventScreen extends Screen
     {
         $registered_event_ids = EventAttendees::where('user_id', Auth::user()->id)->where('invitation_status', 1)->get('event_id')->toArray();
         $registered_event_ids = Arr::pluck($registered_event_ids, ['event_id']);
-        $invitedEvents = EventAttendees::where('user_id', Auth::user()->id)->where('invitation_status', 0)->where('invited', 1)->get('event_id')->toArray();
-        $invitedEvents = Arr::pluck($invitedEvents, ['event_id']);
+        $invitedEvents = EventAttendees::where('user_id', Auth::id())->where('invitation_status', 0)->where('invited', 1)->get('event_id');
 
         return [
             'events' => Events::where('school_id', Auth::user()->student->school_id)->latest('events.created_at')->paginate(10),
