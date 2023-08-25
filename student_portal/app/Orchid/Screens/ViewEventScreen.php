@@ -3,20 +3,21 @@
 namespace App\Orchid\Screens;
 
 
+use App\Models\User;
 use App\Models\Events;
 use App\Models\Election;
 use Orchid\Screen\Screen;
 use Illuminate\Support\Arr;
 use App\Models\EventAttendees;
-use App\Notifications\GeneralNotification;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
+use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewEventInvitationsLayout;
-use Orchid\Screen\Actions\Button;
 
 class ViewEventScreen extends Screen
 {
@@ -95,18 +96,18 @@ class ViewEventScreen extends Screen
         $eventAttendee->invitation_status = $invitation_status;
         $eventAttendee->save();
         $event = Events::find($event_id);
-        $event_creator = $event->creator()->first();
+        $event_inviter = User::find($eventAttendee->inviter_user_id);
 
         //send notification to event creator that user has accepted invitation
         if($invitation_status == 1){
 
-            $event_creator->notify(new GeneralNotification([
+            $event_inviter->notify(new GeneralNotification([
                 'title' => 'Event Invitation Accepted',
                 'message' => Auth::user()->firstname . ' ' .Auth::user()->lastname . ' has accepted your invitation to ' . $event->event_name . '.',
                 'action' => '/admin/events/students/' . $event_id,
             ]));
         } else{
-            $event_creator->notify(new GeneralNotification([
+            $event_inviter->notify(new GeneralNotification([
                 'title' => 'Event Invitation Declined',
                 'message' => Auth::user()->firstname . ' ' .Auth::user()->lastname . ' has declined your invitation to ' . $event->event_name . '.',
                 'action' => '/admin/events/students/' . $event_id,
