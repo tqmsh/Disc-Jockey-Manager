@@ -115,7 +115,7 @@ class ExampleScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Sample Screen Components';
+        return 'View Statistics and More';
     }
 
     /**
@@ -127,44 +127,6 @@ class ExampleScreen extends Screen
     {
         return [
 
-            Button::make('Show toast')
-                ->method('showToast')
-                ->novalidate()
-                ->icon('bag'),
-
-            ModalToggle::make('Launch demo modal')
-                ->modal('exampleModal')
-                ->method('showToast')
-                ->icon('full-screen'),
-
-            Button::make('Export file')
-                ->method('export')
-                ->icon('cloud-download')
-                ->rawClick()
-                ->novalidate(),
-
-            DropDown::make('Dropdown button')
-                ->icon('folder-alt')
-                ->list([
-
-                    Button::make('Action')
-                        ->method('showToast')
-                        ->icon('bag'),
-
-                    Button::make('Another action')
-                        ->method('showToast')
-                        ->icon('bubbles'),
-
-                    Button::make('Something else here')
-                        ->method('showToast')
-                        ->icon('bulb'),
-
-                    Button::make('Confirm button')
-                        ->method('showToast')
-                        ->confirm('If you click you will see a toast message')
-                        ->novalidate()
-                        ->icon('shield'),
-                ]),
 
         ];
     }
@@ -212,22 +174,7 @@ class ExampleScreen extends Screen
 
             Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
 
-            Layout::modal('exampleModal', Layout::rows([
-                Input::make('toast')
-                    ->title('Messages to display')
-                    ->placeholder('Hello world!')
-                    ->help('The entered text will be displayed on the right side as a toast.')
-                    ->required(),
-            ]))->title('Create your own toast message'),
         ];
-    }
-
-    /**
-     * @param Request $request
-     */
-    public function showToast(Request $request): void
-    {
-        Toast::warning($request->get('toast', 'Hello, world! This is a toast message.'));
     }
 
     /**
