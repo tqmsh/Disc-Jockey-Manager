@@ -21,6 +21,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
 use App\Notifications\GeneralNotification;
@@ -392,6 +393,7 @@ class ViewEventStudentScreen extends Screen
                 foreach($students as $student){
                     EventAttendees::firstOrCreate([
                         'user_id' => $student,
+                        'inviter_user_id' => Auth::id(),
                         'event_id' => $event->id,
                         'table_approved' => 1,
                         'invited' => true
@@ -488,6 +490,7 @@ class ViewEventStudentScreen extends Screen
                 foreach($students as $student){
                     EventAttendees::create([
                         'user_id' => $student,
+                        'inviter_user_id' => Auth::id(),
                         'event_id' => $event->id,
                         'invitation_status' => 1, //this is to make sure that the student is not invited again
                         'table_approved' => 1,
