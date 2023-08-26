@@ -98,8 +98,6 @@ class CreateElectionScreen extends Screen
         try{
 
             $electionField = $request->all();
-            $electionField['event_id'] = $event->id;
-            $electionField['school_id'] = $event->school_id;
 
             if ($electionField['end_date'] < $electionField['start_date'])
             {
