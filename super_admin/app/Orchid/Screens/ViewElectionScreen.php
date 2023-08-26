@@ -68,10 +68,11 @@ class ViewElectionScreen extends Screen
                     ->icon('pencil')
                     ->route('platform.eventPromvote.edit',$this->election->id),
 
-                Button::make('End Election')
+                Button::make('Delete Election')
                     ->icon('trash')
-                    ->method('endElection',[$this->event])
-                    ->confirm(__('Are you sure you want to end election?')),
+                    ->method('deleteElection',[$this->event])
+                    ->confirm(__('Are you sure you want to DELETE this election? 🚨🚨🚨This action is PERMENANT and cannot be UNDONE🚨🚨🚨
+                    In order to END an election, change the elections end date to any date in the past.')),
             ]),
 
             DropDown::make('Position Options')
@@ -137,7 +138,7 @@ class ViewElectionScreen extends Screen
             }
     }
 
-    public function endElection(Events $event)
+    public function deleteElection(Events $event)
     {   
         $election = Election::where('event_id', $event->id);
         $position = Position::where('election_id', $election->first()->id);
@@ -147,12 +148,12 @@ class ViewElectionScreen extends Screen
             }
             $election->delete();
 
-            Toast::success('Election ended succesfully');
+            Toast::success('Election delted succesfully');
 
             return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+            Toast::error('There was a error trying to delete the selected events. Error Message: ' . $e);
         }
     }
 
