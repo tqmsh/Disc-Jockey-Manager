@@ -101,6 +101,12 @@ class CreateElectionScreen extends Screen
             $electionField['event_id'] = $event->id;
             $electionField['school_id'] = $event->school_id;
 
+            if ($electionField['end_date'] < $electionField['start_date'])
+            {
+                Toast::error('END DATE must be after START DATE and START DATE must be before END DATE.');
+                return redirect()->route('platform.event.list');
+            }
+            
             Election::create($electionField);
 
             Toast::success('Election Added Succesfully');
