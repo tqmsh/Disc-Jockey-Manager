@@ -36,7 +36,11 @@ class ViewEventLayout extends Table
                         ->value($event->id)
                         ->checked(false);
                 }),
-
+            TD::make('event_name', 'Event Name')
+                ->render(function (Events $event) {
+                    return Link::make($event->event_name)
+                        ->route('platform.event.edit', $event);
+                }),
             TD::make()
                 ->render(function($event){
                     return Button::make('Students')->method('redirect', ['event_id' => $event->id, 'type' => 'student'])->icon('people')->type(Color::DARK());
@@ -60,11 +64,6 @@ class ViewEventLayout extends Table
                         ->type(Color::INFO());
                 }),
 
-            TD::make('event_name', 'Event Name')
-                ->render(function (Events $event) {
-                    return Link::make($event->event_name)
-                        ->route('platform.event.edit', $event);
-                }),
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {
                     return Link::make($event->event_start_time)
