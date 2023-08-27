@@ -92,7 +92,7 @@ class EditCandidateScreen extends Screen
                     ->required()
                     ->horizontal(), 
 
-            ])->title('Make a Candidate'),
+            ])->title('Edit this Candidate'),
         ];
     }
 

@@ -79,7 +79,7 @@ class EditPositionScreen extends Screen
                     ->horizontal()
                     ->value($this->position->position_name),
 
-            ])->title('Edit an Election'),
+            ])->title('Edit This Position'),
         ];
     }
 
