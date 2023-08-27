@@ -148,7 +148,7 @@ class ViewElectionScreen extends Screen
             }
             $election->delete();
 
-            Toast::success('Election delted succesfully');
+            Toast::success('Election deleted succesfully');
 
             return redirect()->route('platform.event.list');
 
@@ -216,5 +216,13 @@ class ViewElectionScreen extends Screen
         else {
             return redirect()->route('platform.event.list');
         }    
+    }
+
+    public function redirect_candidate($candidate, $type){
+        $type = request('type');
+        $candidate = Candidate::find(request('candidate'));
+        if($type == 'edit'){
+            return redirect() -> route('platform.eventPromvotePositionCandidate.edit', $candidate->id);
+        }
     }
 }
