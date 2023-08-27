@@ -36,10 +36,6 @@ class ViewEventLayout extends Table
                 ->render(function (Events $event) {
                     return e($event->event_start_time);
                 }),
-            TD::make('school', 'School')
-                ->render(function (Events $event) {
-                    return e($event->school);
-                }),
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {
                     return e($event->event_address);

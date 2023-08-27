@@ -70,11 +70,6 @@ class ViewEventLayout extends Table
                     return Link::make($event->event_start_time)
                         ->route('platform.event.edit', $event);
                 }),
-            TD::make('school', 'School')
-                ->render(function (Events $event) {
-                    return Link::make($event->school)
-                        ->route('platform.event.edit', $event);
-                }),
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {
                     return Link::make($event->event_address)
