@@ -10,4 +10,25 @@ class Food extends Model
 {
     use HasFactory;
     use AsSource;
+
+    protected $fillable = [
+        'id',
+        'event_id',
+        'name',
+        'description',
+        'image',
+        'vegetarian',
+        'vegan',
+        'halal',
+        'kosher',
+        'gluten_free',
+        'nut_free',
+        'created_at',
+        'updated_at',
+    ];
+
+    public function event()
+    {
+        return $this->belongsTo(Events::class);
+    }
 }

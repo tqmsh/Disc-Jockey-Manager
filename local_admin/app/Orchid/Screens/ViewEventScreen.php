@@ -146,26 +146,25 @@ class ViewEventScreen extends Screen
     }
 
     public function redirect($event, $type){
-        if($type == 'event'){
-            return redirect()->route('platform.eventBids.list', $event);
-        } 
-        else if($type == 'promvote'){
-            $election = Election::where('event_id', $event)->first();
-            if($election != null){
-                return redirect() -> route('platform.eventPromvote.list', $event);
-            }
-            else{
-                return redirect() -> route('platform.eventPromvote.create', $event);
-            }
+        switch($type){
+            case 'event':
+                return redirect()->route('platform.eventBids.list', $event);
+            case 'promvote':
+                $election = Election::where('event_id', $event)->first();
+                if($election != null){
+                    return redirect() -> route('platform.eventPromvote.list', $event);
+                }
+                else{
+                    return redirect() -> route('platform.eventPromvote.create', $event);
+                }
+            case 'edit':
+                return redirect() -> route('platform.event.edit', $event);
+            case 'songReq':
+                return redirect()->route('platform.songreq.list', $event);
+            case 'student':
+                return redirect()->route('platform.eventStudents.list', $event);
+            case 'food':
+                return redirect()->route('platform.eventFood.list', $event);
         }
-        else if($type == 'edit'){
-            return redirect() -> route('platform.event.edit', $event);
-        }
-        else if($type == 'songReq'){
-            return redirect()->route('platform.songreq.list', $event);
-        }
-        else {
-            return redirect()->route('platform.eventStudents.list', $event);
-        }    
     }
 }

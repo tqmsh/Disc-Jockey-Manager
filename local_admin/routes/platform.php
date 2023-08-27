@@ -20,6 +20,7 @@ use App\Orchid\Screens\CreateStudentScreen;
 use App\Orchid\Screens\EditCandidateScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
 use App\Orchid\Screens\ViewCandidateScreen;
+use App\Orchid\Screens\ViewEventFoodScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\AddBannedSongsScreen;
 use App\Orchid\Screens\ContactStudentScreen;
@@ -36,6 +37,8 @@ use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\CreateBannedSongsScreen;
+use App\Orchid\Screens\CreateFoodScreen;
+use App\Orchid\Screens\EditFoodScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
@@ -104,6 +107,12 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 Route::screen('/events/{event_id}/song-requests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
 Route::screen('/events/{event_id}/banned-songs', ViewBannedSongsScreen::class)->name('platform.bannedSongs.list');
 Route::screen('/events/{event_id}/banned-songs/add', CreateBannedSongsScreen::class)->name('platform.bannedSongs.create');
+Route::screen('/events/{event_id}/menu', ViewEventFoodScreen::class)->name('platform.eventFood.list');
+Route::screen('/events/{event_id}/menu/add-item', CreateFoodScreen::class)->name('platform.eventFood.create');
+Route::screen('/events/{event_id}/menu/{food_id}/edit', EditFoodScreen::class)->name('platform.eventFood.edit');
+
+
+
 
 Route::screen('/events/{song_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
