@@ -104,6 +104,7 @@ class ViewCandidateScreen extends Screen
         }
     }
 
+    // TODOTODO can prolly delete this
     // public function redirect($candidate, $type){
     //     $type = request('type');
     //     $candidate = Candidate::find(request('candidate'));

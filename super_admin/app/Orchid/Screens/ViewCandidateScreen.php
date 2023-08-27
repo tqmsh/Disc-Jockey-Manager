@@ -104,15 +104,22 @@ class ViewCandidateScreen extends Screen
         }
     }
 
-    public function redirect($candidate, $type){
+    // public function redirect($candidate, $type){
+    //     $type = request('type');
+    //     $candidate = Candidate::find(request('candidate'));
+    //     if($type == 'edit'){
+    //         // dd($candidate);
+    //         return redirect() -> route('platform.eventPromvotePositionCandidate.edit', $candidate->id);
+    //     }
+    //     else {
+    //         return redirect()->route('platform.event.list');
+    //     }    
+    // }
+    public function redirect_candidate($candidate, $type){
         $type = request('type');
         $candidate = Candidate::find(request('candidate'));
         if($type == 'edit'){
-            // dd($candidate);
             return redirect() -> route('platform.eventPromvotePositionCandidate.edit', $candidate->id);
         }
-        else {
-            return redirect()->route('platform.event.list');
-        }    
     }
 }
