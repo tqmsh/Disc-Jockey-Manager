@@ -15,4 +15,19 @@ class ElectionWinner extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function totalVotes($candidate_id)
+    {   
+        $totalVotes = 0;
+        $allVoters = ElectionVotes::where('candidate_id',$candidate_id)->get();
+
+        if(!empty($allVoters)){
+
+            foreach($allVoters as $voter){
+                $totalVotes+=1;
+            }
+
+        }
+        return $totalVotes;
+    }
 }

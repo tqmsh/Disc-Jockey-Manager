@@ -40,6 +40,11 @@ class ViewWinnersLayout extends Table
                 ->render(function (ElectionWinner $winner) {
                     return e(Candidate::find($winner->candidate_id)->candidate_name);
             }),
+            TD::make('total_votes', 'Total Votes')
+                ->render(function (ElectionWinner $winner) {
+                    $totalVotes = $winner->totalVotes($winner->candidate_id);
+                    return e($totalVotes);
+            }),
         ];
     }
 }
