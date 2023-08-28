@@ -58,14 +58,13 @@ class ViewEventFoodLayout extends Table
                 ->render(function (Food $food) {
                     return $food->description;
                 }),
-
-            TD::make('vegetarian', 'Vegetarian')
-                ->render(function (Food $food) {
-                    return $food->vegetarian ? 'Yes' : 'No';
-                }),
             TD::make('nut_free', 'Nut Free')
                 ->render(function (Food $food) {
                     return $food->nut_free ? 'Yes' : 'No';
+                }),
+            TD::make('vegetarian', 'Vegetarian')
+                ->render(function (Food $food) {
+                    return $food->vegetarian ? 'Yes' : 'No';
                 }),
             TD::make('vegan', 'Vegan')
                 ->render(function (Food $food) {

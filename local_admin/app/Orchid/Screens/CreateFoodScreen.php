@@ -5,15 +5,16 @@ namespace App\Orchid\Screens;
 use App\Models\Food;
 use App\Models\Events;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Cropper;
+use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\TextArea;
-use Orchid\Screen\Fields\Upload;
 use Orchid\Support\Facades\Layout;
-use Orchid\Support\Facades\Toast;
 
 class CreateFoodScreen extends Screen
 {
@@ -74,8 +75,6 @@ class CreateFoodScreen extends Screen
                     Cropper::make("item.image")
                         ->storage("s3")
                         ->title("Image")
-                        ->width('100')
-                        ->height('100')
                         ->help("Image to display")
                         ->acceptedFiles('image/jpeg,image/png,image/jpg'),
 
@@ -140,12 +139,15 @@ class CreateFoodScreen extends Screen
         ];
     }
 
-    public function createItem(Events $event){
+    public function createItem(Events $event, Request $request){
 
         try{
+            $validate = request('item');
+            unset($validate['image']);
             $item = request('item');
             $item['event_id'] = $event->id;
-            Food::firstOrCreate($item, $item);
+
+            Food::firstOrCreate($validate, $item);
 
             Toast::success('Item added successfully.');
 
