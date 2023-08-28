@@ -40,13 +40,16 @@ class ViewEventFoodLayout extends Table
                 ->render(function (Food $food) {
                     return Button::make('Edit')
                                 -> type(Color::PRIMARY())
-                                -> method('redirect', ['event_id'=>$food->id, 'type'=>"edit"])
+                                -> method('redirect', ['food_id'=>$food->id, 'type'=>"edit"])
                                 ->icon('pencil');
                 }),
 
             TD::make('image', "Image")
                 ->render(function (Food $food) {
-                    return "<img src='" . $food->image . "' width='100px' height='100px'>";
+
+                    ($food->image !=null) ? $food->image  : $food->image = "https://placehold.co/100x100?text=No+Image" ;
+
+                    return "<img src='{$food->image}' style='width:100px;height:100px;'>";
                 }),
 
             TD::make('name', 'Name')

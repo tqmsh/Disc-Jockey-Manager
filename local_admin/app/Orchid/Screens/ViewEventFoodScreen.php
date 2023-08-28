@@ -83,10 +83,10 @@ class ViewEventFoodScreen extends Screen
         }
     }
 
-    public function redirect($event_id, $type)
+    public function redirect(Events $event, $food_id, $type)
     {
-        if ($type == "edit") {
-            return redirect()->route('platform.eventFood.edit', $event_id);
+        if (request('type') == "edit") {
+            return redirect()->route('platform.eventFood.edit', ['event_id' => $event->id, 'food_id' => request('food_id')]);
         }
     }
 }

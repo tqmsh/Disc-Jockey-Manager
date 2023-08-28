@@ -2,18 +2,33 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Food;
+use App\Models\Events;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Cropper;
+use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class EditFoodScreen extends Screen
 {
+    public $event;
+    public $food;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event, Food $food): iterable
     {
-        return [];
+        return [
+            'event' => $event,
+            'food' => $food,
+        ];
     }
 
     /**
@@ -23,7 +38,7 @@ class EditFoodScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'EditFoodScreen';
+        return 'Edit Item: ' . $this->food->name;
     }
 
     /**
@@ -33,7 +48,19 @@ class EditFoodScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Save')
+                ->icon('save')
+                ->method('updateItem'),
+
+            Button::make('Delete')
+                ->icon('trash')
+                ->method('deleteItem')
+                ->confirm('Are you sure you want to delete this item?'),
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.eventFood.list', $this->event->id),
+        ];
     }
 
     /**
@@ -43,6 +70,114 @@ class EditFoodScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+          Layout::columns([
+
+                Layout::rows([
+
+                    Cropper::make("item.image")
+                        ->storage("s3")
+                        ->title("Image")
+                        ->help("Image to display")
+                        ->acceptedFiles('image/jpeg,image/png,image/jpg')
+                        ->value($this->food->image),
+
+                    Input::make('item.name')
+                        ->title('Name')
+                        ->placeholder('Ex. Pizza')
+                        ->required()
+                        ->help('Enter the name of your item item.')
+                        ->horizontal()
+                        ->value($this->food->name),
+
+                    TextArea::make('item.description')
+                        ->title('Description')
+                        ->placeholder('Ex. Pepperoni Pizza with extra cheese, onions, olives and mushrooms.')
+                        ->help('Enter the description of your item item.')
+                        ->rows(4)
+                        ->horizontal()
+                        ->value($this->food->description),
+                ])->title('Item Details'),
+
+
+                Layout::rows([
+
+
+                    CheckBox::make('item.nut_free')
+                        ->title('Nut Free')
+                        ->help('Check if this item is nut free.')
+                        ->sendTrueOrFalse()
+                        ->value($this->food->nut_free),
+                        
+                    CheckBox::make('item.vegetarian')
+                        ->title('Vegetarian')
+                        ->help('Check if this item is vegetarian.')
+                        ->sendTrueOrFalse()
+                        ->value($this->food->vegetarian),
+                    
+                    CheckBox::make('item.vegan')
+                        ->title('Vegan')
+                        ->help('Check if this item is vegan.')
+                        ->sendTrueOrFalse()
+                        ->value($this->food->vegan),
+
+                    CheckBox::make('item.halal')
+                        ->title('Halal')
+                        ->help('Check if this item is halal.')
+                        ->sendTrueOrFalse()
+                        ->value($this->food->halal),
+                    
+                    CheckBox::make('item.gluten_free')
+                        ->title('Gluten Free')
+                        ->help('Check if this item is gluten free.')
+                        ->sendTrueOrFalse()
+                        ->value($this->food->gluten_free),
+
+                    CheckBox::make('item.kosher')
+                        ->title('Kosher')
+                        ->help('Check if this item is kosher.')
+                        ->sendTrueOrFalse()
+                        ->value($this->food->kosher),
+
+                    CheckBox::make('item.dairy_free')
+                        ->title('Dairy Free')
+                        ->help('Check if this item is dairy free.')
+                        ->sendTrueOrFalse()
+                        ->value($this->food->dairy_free),
+
+                ])->title('Dietary Restrictions'),
+
+            ]),
+        ];
+    }
+
+    public function updateItem(Events $event, Food $food)
+    {
+        try{
+            unset($food['image']);
+            $item = request('item');
+            $item['event_id'] = $event->id;
+
+            Food::updateOrCreate($food->toArray(), $item);
+
+            Toast::success('Item updated successfully.');
+
+            return redirect()->route('platform.eventFood.list', $event->id);
+        }catch(\Exception $e){
+            Toast::error('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteItem(Events $event, Food $food)
+    {
+        try{
+            $food->delete();
+
+            Toast::success('Item deleted successfully.');
+
+            return redirect()->route('platform.eventFood.list', $event->id);
+        }catch(\Exception $e){
+            Toast::error('Error: ' . $e->getMessage());
+        }
     }
 }
