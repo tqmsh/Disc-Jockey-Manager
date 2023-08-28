@@ -49,4 +49,8 @@ class School extends Model
         return $this->attributes['school_name'] . ' (' . $this->attributes['county'] . ', ' . $this->attributes['state_province'] .')';
     }
 
+    public function students(){
+        return $this->hasMany(Student::class, 'school_id', 'id');
+    }
+
 }

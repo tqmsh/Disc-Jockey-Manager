@@ -3,17 +3,19 @@
 namespace App\Orchid\Screens;
 
 
+use App\Models\User;
 use App\Models\Events;
 use App\Models\Election;
 use Orchid\Screen\Screen;
 use Illuminate\Support\Arr;
 use App\Models\EventAttendees;
-use App\Notifications\GeneralNotification;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewEventLayout;
+use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewEventInvitationsLayout;
 
@@ -28,8 +30,7 @@ class ViewEventScreen extends Screen
     {
         $registered_event_ids = EventAttendees::where('user_id', Auth::user()->id)->where('invitation_status', 1)->get('event_id')->toArray();
         $registered_event_ids = Arr::pluck($registered_event_ids, ['event_id']);
-        $invitedEvents = EventAttendees::where('user_id', Auth::user()->id)->where('invitation_status', 0)->where('invited', 1)->get('event_id')->toArray();
-        $invitedEvents = Arr::pluck($invitedEvents, ['event_id']);
+        $invitedEvents = EventAttendees::where('user_id', Auth::id())->where('invitation_status', 0)->where('invited', 1)->get('event_id');
 
         return [
             'events' => Events::where('school_id', Auth::user()->student->school_id)->latest('events.created_at')->paginate(10),
@@ -56,6 +57,10 @@ class ViewEventScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Contact Your Prom Committees')
+                ->icon('comment')
+                ->route('platform.contact-prom-committees'),
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')
@@ -73,7 +78,7 @@ class ViewEventScreen extends Screen
         return [
           Layout::tabs([
                 'All Events' => [
-                    ViewEventLayout::class
+                    ViewEventLayout::class,
                 ],
                 'Your Registered Events' => [
                     ViewRegisteredEventLayout::class
@@ -90,18 +95,18 @@ class ViewEventScreen extends Screen
         $eventAttendee->invitation_status = $invitation_status;
         $eventAttendee->save();
         $event = Events::find($event_id);
-        $event_creator = $event->creator()->first();
+        $event_inviter = User::find($eventAttendee->inviter_user_id);
 
         //send notification to event creator that user has accepted invitation
         if($invitation_status == 1){
 
-            $event_creator->notify(new GeneralNotification([
+            $event_inviter->notify(new GeneralNotification([
                 'title' => 'Event Invitation Accepted',
                 'message' => Auth::user()->firstname . ' ' .Auth::user()->lastname . ' has accepted your invitation to ' . $event->event_name . '.',
                 'action' => '/admin/events/students/' . $event_id,
             ]));
         } else{
-            $event_creator->notify(new GeneralNotification([
+            $event_inviter->notify(new GeneralNotification([
                 'title' => 'Event Invitation Declined',
                 'message' => Auth::user()->firstname . ' ' .Auth::user()->lastname . ' has declined your invitation to ' . $event->event_name . '.',
                 'action' => '/admin/events/students/' . $event_id,

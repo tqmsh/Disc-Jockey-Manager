@@ -60,4 +60,8 @@ class Events extends Model
     public function bids(){
         return $this->hasMany(EventBids::class, 'event_id');
     }
+
+    public function food(){
+        return $this->hasMany(Food::class, 'event_id');
+    }
 }

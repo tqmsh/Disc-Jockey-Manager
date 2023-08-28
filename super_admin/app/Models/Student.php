@@ -49,6 +49,19 @@ class Student extends Model
                 $query->where('country', 'like', '%' . request('country') . '%');
             }
 
+            if(!empty($filters['name'])){
+                $query->where('firstname', 'like', '%' . $filters['name'] . '%')
+                    ->orWhere('lastname', 'like', '%' . $filters['name'] . '%');
+            }
+
+            if(!empty($filters['email'])){
+                $query->where('email', 'like', '%' . $filters['email'] . '%');
+            }
+
+            if(!empty($filters['grade'])){
+                $query->where('grade', 'like', '%' . $filters['grade'] . '%');
+            }
+
             if(isset($filters['school_board'])){
                 $query->where('school_board', 'like', '%' . request('school_board') . '%');
             }
