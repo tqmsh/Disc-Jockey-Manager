@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\CreateSongRequestScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
@@ -13,18 +12,23 @@ use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
+use App\Orchid\Screens\ViewDressListScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
 use App\Orchid\Screens\CreateLimoGroupScreen;
 use App\Orchid\Screens\EditBeautyGroupScreen;
 use App\Orchid\Screens\ViewBeautyGroupScreen;
+use App\Orchid\Screens\ViewSingleDressScreen;
 use App\Orchid\Screens\ViewSongRequestScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
+use App\Orchid\Screens\ContactLocalAdminScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
+use App\Orchid\Screens\CreateSongRequestScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewDressWishlistScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -32,9 +36,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\ViewDressWishlistScreen;
-use App\Orchid\Screens\ViewSingleDressScreen;
-use App\Orchid\Screens\ViewDressListScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,6 +101,8 @@ Route::screen('/beauty-groups/create', CreateBeautyGroupScreen::class)->name('pl
 
 //edit beauty group
 Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)->name('platform.beauty-groups.edit');
+
+Route::screen('/contact-prom-committees', ContactLocalAdminScreen::class)->name('platform.contact-prom-committees');
 
 
 // Platform > Profile

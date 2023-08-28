@@ -29,6 +29,10 @@ class ViewRegisteredEventLayout extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make('event_name', 'Event Name')
+                ->render(function (Events $event) {
+                    return e($event->event_name);
+                }),
             TD::make()
                 ->width('100px')
                 ->align(TD::ALIGN_RIGHT)
@@ -54,18 +58,9 @@ class ViewRegisteredEventLayout extends Table
                         ->method('redirect', ['event_id' => $event->id, 'type' => 'election'])
                         ->type(Color::LIGHT());
                 }),
-
-            TD::make('event_name', 'Event Name')
-                ->render(function (Events $event) {
-                    return e($event->event_name);
-                }),
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {
                     return e($event->event_start_time);
-                }),
-            TD::make('school', 'School')
-                ->render(function (Events $event) {
-                    return e($event->school);
                 }),
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {

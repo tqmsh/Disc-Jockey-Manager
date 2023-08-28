@@ -37,6 +37,19 @@ class Student extends Model
             if(isset($filters['sort_option'])){
                 $query->orderByRaw($filters['sort_option'] . ' ASC');
             }
+
+            if(!empty($filters['name'])){
+                $query->where('firstname', 'like', '%' . $filters['name'] . '%')
+                    ->orWhere('lastname', 'like', '%' . $filters['name'] . '%');
+            }
+
+            if(!empty($filters['email'])){
+                $query->where('email', 'like', '%' . $filters['email'] . '%');
+            }
+
+            if(!empty($filters['grade'])){
+                $query->where('grade', 'like', '%' . $filters['grade'] . '%');
+            }
             
             if(isset($filters['event_id']) || isset($filters['ticketstatus'])){
                 $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id');
