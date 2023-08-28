@@ -161,10 +161,10 @@ class ViewPendingStudentScreen extends Screen
                     User::where('id', $student_id)->delete();
                 }
 
-                Toast::success('Selected local admins deleted succesfully');
+                Toast::success('Selected students deleted succesfully');
 
             }else{
-                Toast::warning('Please select local admins in order to delete them');
+                Toast::warning('Please select students in order to delete them');
             }
 
         }catch(Exception $e){
