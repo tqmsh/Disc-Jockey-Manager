@@ -4,10 +4,15 @@ namespace App\Orchid\Screens;
 
 use App\Models\Events;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
+use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventFoodLayout;
+use Orchid\Screen\Fields\CheckBox;
 
 class ViewEventFoodScreen extends Screen
 {
@@ -17,11 +22,12 @@ class ViewEventFoodScreen extends Screen
      *
      * @return array
      */
-    public function query(Events $event): iterable
+    public function query(Events $event, Request $request): iterable
     {
+        $filters = $request->get('filter') ?? [];
         return [
             'event' => $event,
-            'food' => $event->food()->paginate(10),
+            'food' => $event->food()->filter($filters)->paginate(10),
         ];
     }
 
@@ -66,8 +72,69 @@ class ViewEventFoodScreen extends Screen
     public function layout(): iterable
     {
         return [
+
+            Layout::columns([
+
+                Layout::rows([
+                    Input::make('filter.name')
+                        ->title('Name')
+                        ->value(request()->get('filter')['name'] ?? '')
+                        ->placeholder('Filter by name'),
+
+                    Group::make([
+                        Button::make('Filter')
+                            ->method('applyFilters')
+                            ->icon('filter'),
+                        Button::make('Clear Filters')
+                            ->method('clearFilters')
+                            ->icon('close'),
+                    ])
+                ]),
+
+                Layout::rows([
+                    CheckBox::make('filter.nut_free')
+                        ->placeholder('Nut Free')
+                        ->value(request()->get('filter')['nut_free'] ?? false),
+
+                    CheckBox::make('filter.vegetarian')
+                        ->placeholder('Vegetarian')
+                        ->value(request()->get('filter')['vegetarian'] ?? false),
+
+                    CheckBox::make('filter.vegan')
+                        ->placeholder('Vegan')
+                        ->value(request()->get('filter')['vegan'] ?? false),
+
+                    CheckBox::make('filter.halal')
+                        ->placeholder('Halal')
+                        ->value(request()->get('filter')['halal'] ?? false),
+                    
+                    CheckBox::make('filter.dairy_free')
+                        ->placeholder('Dairy Free')
+                        ->value(request()->get('filter')['dairy_free'] ?? false),
+                                            
+                    CheckBox::make('filter.kosher')
+                        ->placeholder('Kosher')
+                        ->value(request()->get('filter')['kosher'] ?? false),
+                    
+                    CheckBox::make('filter.gluten_free')
+                        ->placeholder('Gluten Free')
+                        ->value(request()->get('filter')['gluten_free'] ?? false),
+                ])
+
+            ]),
             ViewEventFoodLayout::class,
         ];
+    }
+
+    public function applyFilters(Request $request, Events $event)
+    {
+        $filterParams = $request->input('filter');
+        return redirect()->route('platform.eventFood.list', ['event_id' => $event->id, 'filter' => $filterParams]);
+    }
+
+    public function clearFilters(Events $event)
+    {
+        return redirect()->route('platform.eventFood.list', ['event_id' => $event->id]);
     }
 
     public function deleteItems(Events $event)
