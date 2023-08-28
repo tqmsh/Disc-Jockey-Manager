@@ -104,44 +104,37 @@ class EditFoodScreen extends Screen
 
 
                     CheckBox::make('item.nut_free')
-                        ->title('Nut Free')
-                        ->help('Check if this item is nut free.')
+                        ->placeholder('Nut Free')
                         ->sendTrueOrFalse()
                         ->value($this->food->nut_free),
                         
                     CheckBox::make('item.vegetarian')
-                        ->title('Vegetarian')
-                        ->help('Check if this item is vegetarian.')
+                        ->placeholder('Vegetarian')
                         ->sendTrueOrFalse()
                         ->value($this->food->vegetarian),
                     
                     CheckBox::make('item.vegan')
-                        ->title('Vegan')
-                        ->help('Check if this item is vegan.')
+                        ->placeholder('Vegan')
                         ->sendTrueOrFalse()
                         ->value($this->food->vegan),
 
                     CheckBox::make('item.halal')
-                        ->title('Halal')
-                        ->help('Check if this item is halal.')
+                        ->placeholder('Halal')
                         ->sendTrueOrFalse()
                         ->value($this->food->halal),
                     
                     CheckBox::make('item.gluten_free')
-                        ->title('Gluten Free')
-                        ->help('Check if this item is gluten free.')
+                        ->placeholder('Gluten Free')
                         ->sendTrueOrFalse()
                         ->value($this->food->gluten_free),
 
                     CheckBox::make('item.kosher')
-                        ->title('Kosher')
-                        ->help('Check if this item is kosher.')
+                        ->placeholder('Kosher')
                         ->sendTrueOrFalse()
                         ->value($this->food->kosher),
 
                     CheckBox::make('item.dairy_free')
-                        ->title('Dairy Free')
-                        ->help('Check if this item is dairy free.')
+                        ->placeholder('Dairy Free')
                         ->sendTrueOrFalse()
                         ->value($this->food->dairy_free),
 

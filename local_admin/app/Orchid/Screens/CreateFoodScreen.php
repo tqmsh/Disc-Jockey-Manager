@@ -98,38 +98,31 @@ class CreateFoodScreen extends Screen
 
 
                     CheckBox::make('item.nut_free')
-                        ->title('Nut Free')
-                        ->help('Check if this item is nut free.')
+                        ->placeholder('Nut Free')
                         ->sendTrueOrFalse(),
                         
                     CheckBox::make('item.vegetarian')
-                        ->title('Vegetarian')
-                        ->help('Check if this item is vegetarian.')
+                        ->placeholder('Vegetarian')
                         ->sendTrueOrFalse(),
                     
                     CheckBox::make('item.vegan')
-                        ->title('Vegan')
-                        ->help('Check if this item is vegan.')
+                        ->placeholder('Vegan')
                         ->sendTrueOrFalse(),
 
                     CheckBox::make('item.halal')
-                        ->title('Halal')
-                        ->help('Check if this item is halal.')
+                        ->placeholder('Halal')
                         ->sendTrueOrFalse(),
                     
                     CheckBox::make('item.gluten_free')
-                        ->title('Gluten Free')
-                        ->help('Check if this item is gluten free.')
+                        ->placeholder('Gluten Free')
                         ->sendTrueOrFalse(),
 
                     CheckBox::make('item.kosher')
-                        ->title('Kosher')
-                        ->help('Check if this item is kosher.')
+                        ->placeholder('Kosher')
                         ->sendTrueOrFalse(),
 
                     CheckBox::make('item.dairy_free')
-                        ->title('Dairy Free')
-                        ->help('Check if this item is dairy free.')
+                        ->placeholder('Dairy Free')
                         ->sendTrueOrFalse(),
 
                 ])->title('Dietary Restrictions'),
