@@ -23,6 +23,7 @@ class Food extends Model
         'kosher',
         'gluten_free',
         'nut_free',
+        'dairy_free',
         'created_at',
         'updated_at',
     ];

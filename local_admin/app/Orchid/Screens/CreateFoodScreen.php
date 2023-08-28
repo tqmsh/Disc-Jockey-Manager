@@ -2,18 +2,32 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Food;
+use App\Models\Events;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\Cropper;
+use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Screen\Fields\Upload;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class CreateFoodScreen extends Screen
 {
+    public $event;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event): iterable
     {
-        return [];
+        return [
+            'event' => $event,
+        ];
     }
 
     /**
@@ -23,7 +37,7 @@ class CreateFoodScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'CreateFoodScreen';
+        return 'Add Food Item to: ' . $this->event->event_name;
     }
 
     /**
@@ -33,7 +47,15 @@ class CreateFoodScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Add')
+                ->icon('plus')
+                ->method('createItem'),
+
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.eventFood.list', $this->event->id),
+        ];
     }
 
     /**
@@ -43,6 +65,93 @@ class CreateFoodScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+
+            Layout::columns([
+
+                Layout::rows([
+
+                    Cropper::make("item.image")
+                        ->storage("s3")
+                        ->title("Image")
+                        ->width('100')
+                        ->height('100')
+                        ->help("Image to display")
+                        ->acceptedFiles('image/jpeg,image/png,image/jpg'),
+
+                    Input::make('item.name')
+                        ->title('Name')
+                        ->placeholder('Ex. Pizza')
+                        ->required()
+                        ->help('Enter the name of your item item.')
+                        ->horizontal(),
+
+                    TextArea::make('item.description')
+                        ->title('Description')
+                        ->placeholder('Ex. Pepperoni Pizza with extra cheese, onions, olives and mushrooms.')
+                        ->help('Enter the description of your item item.')
+                        ->rows(4)
+                        ->horizontal(),
+                ])->title('Item Details'),
+
+
+                Layout::rows([
+
+
+                    CheckBox::make('item.nut_free')
+                        ->title('Nut Free')
+                        ->help('Check if this item is nut free.')
+                        ->sendTrueOrFalse(),
+                        
+                    CheckBox::make('item.vegetarian')
+                        ->title('Vegetarian')
+                        ->help('Check if this item is vegetarian.')
+                        ->sendTrueOrFalse(),
+                    
+                    CheckBox::make('item.vegan')
+                        ->title('Vegan')
+                        ->help('Check if this item is vegan.')
+                        ->sendTrueOrFalse(),
+
+                    CheckBox::make('item.halal')
+                        ->title('Halal')
+                        ->help('Check if this item is halal.')
+                        ->sendTrueOrFalse(),
+                    
+                    CheckBox::make('item.gluten_free')
+                        ->title('Gluten Free')
+                        ->help('Check if this item is gluten free.')
+                        ->sendTrueOrFalse(),
+
+                    CheckBox::make('item.kosher')
+                        ->title('Kosher')
+                        ->help('Check if this item is kosher.')
+                        ->sendTrueOrFalse(),
+
+                    CheckBox::make('item.dairy_free')
+                        ->title('Dairy Free')
+                        ->help('Check if this item is dairy free.')
+                        ->sendTrueOrFalse(),
+
+                ])->title('Dietary Restrictions'),
+
+            ]),
+
+        ];
+    }
+
+    public function createItem(Events $event){
+
+        try{
+            $item = request('item');
+            $item['event_id'] = $event->id;
+            Food::firstOrCreate($item, $item);
+
+            Toast::success('Item added successfully.');
+
+            return redirect()->route('platform.eventFood.list', $event->id);
+        }catch(\Exception $e){
+            Toast::error('Error: ' . $e->getMessage());
+        }
     }
 }

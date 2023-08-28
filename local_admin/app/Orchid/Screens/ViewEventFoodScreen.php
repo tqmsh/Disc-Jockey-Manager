@@ -7,6 +7,7 @@ use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
+use App\Orchid\Layouts\ViewEventFoodLayout;
 
 class ViewEventFoodScreen extends Screen
 {
@@ -64,19 +65,28 @@ class ViewEventFoodScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ViewEventFoodLayout::class,
+        ];
     }
 
-    public function deleteItems()
+    public function deleteItems(Events $event)
     {
         try {
-            $ids = $this->getRequest()->get('ids');
+            $ids = request('items');
 
-            Events::findOrFail($this->event->id)->food()->whereIn('id', $ids)->delete();
+            Events::findOrFail($event->id)->food()->whereIn('id', $ids)->delete();
 
             Toast::success('Items Deleted Successfully!');
         } catch (\Exception $e) {
             Toast::error($e->getMessage());
+        }
+    }
+
+    public function redirect($event_id, $type)
+    {
+        if ($type == "edit") {
+            return redirect()->route('platform.eventFood.edit', $event_id);
         }
     }
 }
