@@ -17,6 +17,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewPositionLayout;
+use App\Orchid\Screens\ViewElectionScreen as ScreensViewElectionScreen;
 use Orchid\Screen\Actions\DropDown;
 
 class ViewElectionScreen extends Screen
@@ -59,50 +60,80 @@ class ViewElectionScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-            DropDown::make('Election Options')
-            ->icon('options-vertical')
-            ->list([
+        // If election is ongoing
+        if (now() < $this->election->end_date)
+        {
+            return [
+                DropDown::make('Election Options')
+                ->icon('options-vertical')
+                ->list([
+    
+                    Link::make('Edit Election')
+                        ->icon('pencil')
+                        ->route('platform.eventPromvote.edit',$this->election->id),
+    
+                    Button::make('Delete Election')
+                        ->icon('trash')
+                        ->method('deleteElection',[$this->event])
+                        ->confirm(__('Are you sure you want to DELETE this election? 🚨🚨🚨This action is PERMENANT and cannot be UNDONE🚨🚨🚨
+                        In order to END an election, change the elections end date to any date in the past.')),
+                ]),
+    
+                DropDown::make('Position Options')
+                ->icon('options-vertical')
+                ->list([
+    
+                    Link::make('Create Position')
+                        ->icon('plus')
+                        ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
+    
+                    Button::make('Delete Selected Positions')
+                        ->icon('trash')
+                        ->method('deletePosition')
+                        ->confirm(__('Are you sure you want to delete selected positions?')),
+                ]),
+    
+                DropDown::make('Candidate Options')
+                ->icon('options-vertical')
+                ->list([
+    
+                    Button::make('Delete Selected Candidates')
+                        ->icon('trash')
+                        ->method('deleteCandidates')
+                        ->confirm(__('Are you sure you want to delete selected candidates?')),
+                ]),
+    
+                Link::make('Back')
+                    ->icon('arrow-left')
+                    ->route('platform.event.list')
+            ];
+        }
+        // if election is over
+        else
+        {
+            return 
+            [
+                DropDown::make('Election Options')
+                ->icon('options-vertical')
+                ->list([
+    
+                    Link::make('Edit Election')
+                        ->icon('pencil')
+                        ->route('platform.eventPromvote.edit',$this->election->id),
+    
+                    Button::make('Delete Election')
+                        ->icon('trash')
+                        ->method('deleteElection',[$this->event])
+                        ->confirm(__('Are you sure you want to DELETE this election? 🚨🚨🚨This action is PERMENANT and cannot be UNDONE🚨🚨🚨
+                        In order to END an election, change the elections end date to any date in the past.')),
+                ]),
 
-                Link::make('Edit Election')
-                    ->icon('pencil')
-                    ->route('platform.eventPromvote.edit',$this->election->id),
-
-                Button::make('Delete Election')
-                    ->icon('trash')
-                    ->method('deleteElection',[$this->event])
-                    ->confirm(__('Are you sure you want to DELETE this election? 🚨🚨🚨This action is PERMENANT and cannot be UNDONE🚨🚨🚨
-                    In order to END an election, change the elections end date to any date in the past.')),
-            ]),
-
-            DropDown::make('Position Options')
-            ->icon('options-vertical')
-            ->list([
-
-                Link::make('Create Position')
-                    ->icon('plus')
-                    ->redirect() -> route('platform.eventPromvotePosition.create',$this->election->id),
-
-                Button::make('Delete Selected Positions')
-                    ->icon('trash')
-                    ->method('deletePosition')
-                    ->confirm(__('Are you sure you want to delete selected positions?')),
-            ]),
-
-            DropDown::make('Candidate Options')
-            ->icon('options-vertical')
-            ->list([
-
-                Button::make('Delete Selected Candidates')
-                    ->icon('trash')
-                    ->method('deleteCandidates')
-                    ->confirm(__('Are you sure you want to delete selected candidates?')),
-            ]),
-
-            Link::make('Back')
-                ->icon('arrow-left')
-                ->route('platform.event.list')
-        ];
+                Link::make('Back')
+                    ->icon('arrow-left')
+                    ->route('platform.event.list')
+            ];
+        }
+        
     }
 
     /**
@@ -112,6 +143,7 @@ class ViewElectionScreen extends Screen
      */
     public function layout(): iterable
     {
+        // If election is ongoing
         if (now() < $this->election->end_date)
             {
                 return [
@@ -123,13 +155,12 @@ class ViewElectionScreen extends Screen
                     ])
                 ];
             }
+        // If election is over
         else 
             {
                 return[
                     Layout::view('election_status'),
                     Layout::tabs([
-                        "Positions"=>
-                            ViewPositionLayout::class,
                         "All Candidates" =>
                             ViewCandidateLayout::class
                     ])
@@ -218,11 +249,20 @@ class ViewElectionScreen extends Screen
         }    
     }
 
-    public function redirect_candidate($candidate, $type){
-        $type = request('type');
+    public function redirect_candidate($candidate){
+        // TODOTODO Keep parameter or this thing below?
         $candidate = Candidate::find(request('candidate'));
-        if($type == 'edit'){
+        $election = Election::where('id', $candidate->election_id)->first();
+
+        if (now() < $election->end_date)
+        {
             return redirect() -> route('platform.eventPromvotePositionCandidate.edit', $candidate->id);
         }
+        // If election is over
+        else
+        {
+            Toast::error('Position and candidate edits cannot be made for an election that has passed its end date.');
+        }
+        
     }
 }
