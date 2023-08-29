@@ -12,6 +12,7 @@ class EventAttendees extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'inviter_user_id',
         'event_id', 
         'invitation_status',
         'invited',

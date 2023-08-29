@@ -10,17 +10,22 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\BeautyGroup;
+use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use App\Models\VendorPackage;
 use App\Models\BeautyGroupBid;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Select;
 use App\Models\BeautyGroupMember;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Fields\SimpleMDE;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Notifications\GroupInvitation;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Notifications\GeneralNotification;
@@ -221,6 +226,34 @@ class ViewBeautyGroupScreen extends Screen
                             }
                         }),
                     ]),
+
+                    Layout::rows([
+                        Input::make('subject')
+                            ->title('Subject')
+                            ->placeholder('Message subject line')
+                            ->help('Enter the subject line for your message'),
+
+                        Select::make('users.')
+                            ->title('Recipients')
+                            ->multiple()
+                            ->placeholder('Email addresses')
+                            ->help('Enter the users that you would like to send this message to.')
+                            ->options(function (){
+                                $members = [];
+
+                                foreach($this->query()['current_beauty_group_members'] as $member){
+                                    $members[$member->user->email] = $member->user->firstname . ' '  . $member->user->lastname;
+                                }
+
+                                return $members;
+                            }),
+                            
+                        SimpleMDE::make('content')
+                            ->title('Content')
+                            ->toolbar(["text", "color", "header", "list", "format", "align", "link", ])
+                            ->placeholder('Insert text here ...')
+                            ->help('Add the content for the message that you would like to send.'),
+                    ])
     
                 ],
                 'Members in Group' => [
@@ -416,6 +449,34 @@ class ViewBeautyGroupScreen extends Screen
         ];
     }
 
+    public function sendMessage(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'subject' => 'required|min:6|max:50',
+                'users'   => 'required',
+                'content' => 'required|min:10',
+            ]);
+
+            $data['sender'] = Auth::user();
+
+            Mail::send(
+                'emails.generalEmail', $data, 
+                function (Message $message) use ($request) {
+                $message->subject($request->get('subject'));
+
+                foreach ($request->get('users') as $email) {
+                    $message->to($email);
+                }
+            });
+
+            Toast::info('Your email message has been sent successfully.');
+
+        } catch (\Exception $e) {
+            Toast::error($e->getMessage());
+        }
+    }
+
     public function updateBid()
     {
         try {
@@ -559,6 +620,18 @@ class ViewBeautyGroupScreen extends Screen
                             
                         } else{
                             //send email to the email entered by user
+                            $data = [
+                                'inviter_name' => Auth::user()->firstname . ' ' . Auth::user()->lastname,
+                                'inviter_school' => Auth::user()->student->school,
+                                'beauty_group_name' => $beauty_group->name,
+                            ];
+
+                            Mail::send(
+                                'emails.beautyGroup', $data, function (Message $message) use ($invitee_user_id) {
+                                    $message->subject('You have been invited to join a beauty group!');
+                                    $message->to($invitee_user_id);
+                                }
+                            );
                         }
                     }
 

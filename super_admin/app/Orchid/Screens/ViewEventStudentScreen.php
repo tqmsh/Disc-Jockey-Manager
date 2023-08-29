@@ -21,6 +21,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewStudentLayout;
 use App\Notifications\GeneralNotification;
@@ -38,16 +39,15 @@ class ViewEventStudentScreen extends Screen
      *
      * @return array
      */
-    public function query(Events $event): iterable
+    public function query(Request $request, Events $event): iterable
     {
+        $filters = $request->get('filter') ?? [];
         return [
             'event' => $event,
-            'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter(request(['ticketstatus', 'event_id']))->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->paginate(20),
-            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))
-                                ->filter(request(['ticketstatus', 'event_id', 'tablename']))->paginate(20),
-            'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))
-                                ->filter(request(['ticketstatus', 'event_id']))->paginate(20),
+            'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter($filters)->paginate(20),
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->filter($filters)->paginate(20),
+            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))->filter($filters)->paginate(20),
+            'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))->filter($filters)->paginate(20),
             'tables' => Seating::where('event_id', $event->id)->paginate(10),
             'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(20),
         ];
@@ -147,22 +147,36 @@ class ViewEventStudentScreen extends Screen
             ->withoutCloseButton(),
 
             Layout::rows([
-
                 Group::make([
-
-                    Select::make('ticketstatus')
+                    Input::make('filter.name')
+                        ->title('Name')
+                        ->value(request()->get('filter')['name'] ?? '')
+                        ->placeholder('Filter by name'),
+                    Input::make('filter.email')
+                        ->title('Email')
+                        ->value(request()->get('filter')['email'] ?? '')
+                        ->placeholder('Filter by email'),
+                    Input::make('filter.grade')
+                        ->title('Grade')
+                        ->value(request()->get('filter')['grade'] ?? '')
+                        ->placeholder('Filter by grade'),
+                    Select::make('filter.ticketstatus')
+                        ->title('Ticket Status')
                         ->empty('Ticket Status')
                         ->options([
                             'Paid' => 'Paid',
                             'Unpaid' => 'Unpaid'
-                        ]),
-
-                    Button::make('Filter')
-                        ->icon('filter')
-                        ->method('filter')
-                        ->type(Color::DEFAULT()),
+                        ])
+                        ->value(request()->get('filter')['ticketstatus'] ?? ''),
                 ]),
-                    
+                Group::make([
+                    Button::make('Filter')
+                        ->method('applyFilters')
+                        ->icon('filter'),
+                    Button::make('Clear Filters')
+                        ->method('clearFilters')
+                        ->icon('close'),
+                ])
             ]),
 
             Layout::tabs([
@@ -354,6 +368,17 @@ class ViewEventStudentScreen extends Screen
 
     }
 
+    public function applyFilters(Request $request, Events $event)
+    {
+        $filterParams = $request->only(['filter.name', 'filter.email', 'filter.grade']);
+        return redirect()->route('platform.eventStudents.list', ['event_id' => $event->id, 'filter' => $filterParams['filter']]);
+    }
+
+    public function clearFilters(Events $event)
+    {
+        return redirect()->route('platform.eventStudents.list', ['event_id' => $event->id]);
+    }
+    
     public function inviteStudents(Request $request, Events $event)
     {
         //get all students from post request
@@ -368,6 +393,7 @@ class ViewEventStudentScreen extends Screen
                 foreach($students as $student){
                     EventAttendees::firstOrCreate([
                         'user_id' => $student,
+                        'inviter_user_id' => Auth::id(),
                         'event_id' => $event->id,
                         'table_approved' => 1,
                         'invited' => true
@@ -464,6 +490,7 @@ class ViewEventStudentScreen extends Screen
                 foreach($students as $student){
                     EventAttendees::create([
                         'user_id' => $student,
+                        'inviter_user_id' => Auth::id(),
                         'event_id' => $event->id,
                         'invitation_status' => 1, //this is to make sure that the student is not invited again
                         'table_approved' => 1,
