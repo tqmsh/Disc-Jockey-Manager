@@ -58,8 +58,8 @@ class ViewCandidateLayout extends Table
             TD::make()
                 ->render(function($candidate){
                     return Button::make('Edit')->icon('pencil')->type(Color::PRIMARY())
-                        ->method('redirect_candidate',['candidate' =>$candidate->id, 'type'=> "edit"]);
-            }), 
+                        ->method('redirect_candidate',['candidate' =>$candidate->id]);
+            }),
         ];
     }
 }
