@@ -13,6 +13,7 @@ use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
 use App\Orchid\Screens\ViewDressListScreen;
+use App\Orchid\Screens\ViewEventFoodScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
@@ -63,6 +64,8 @@ Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('plat
 Route::screen('/events/{event}/songs', ViewSongRequestScreen::class)->name('platform.songs.list');
 
 Route::screen('/events/{event}/request-song', CreateSongRequestScreen::class)->name('platform.songs.request');
+
+Route::screen('/events/{event_id}/menu', ViewEventFoodScreen::class)->name('platform.eventFood.list');
 
 Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('platform.election.list');
 
