@@ -17,6 +17,7 @@ use Orchid\Screen\Fields\CheckBox;
 class ViewEventFoodScreen extends Screen
 {
     public $event;
+    public $allergies;
     /**
      * Query data.
      *
@@ -27,6 +28,7 @@ class ViewEventFoodScreen extends Screen
         $filters = $request->get('filter') ?? [];
         return [
             'event' => $event,
+            'allergies' => $event->allergies(),
             'food' => $event->food()->filter($filters)->paginate(10),
         ];
     }
@@ -85,13 +87,17 @@ class ViewEventFoodScreen extends Screen
                         Button::make('Filter')
                             ->method('applyFilters')
                             ->icon('filter'),
+
                         Button::make('Clear Filters')
                             ->method('clearFilters')
                             ->icon('close'),
-                    ])
+                    ]),
+
                 ]),
 
+                
                 Layout::rows([
+
                     CheckBox::make('filter.nut_free')
                         ->placeholder('Nut Free')
                         ->value(request()->get('filter')['nut_free'] ?? false),
@@ -119,9 +125,12 @@ class ViewEventFoodScreen extends Screen
                     CheckBox::make('filter.gluten_free')
                         ->placeholder('Gluten Free')
                         ->value(request()->get('filter')['gluten_free'] ?? false),
-                ])
+                ]),
 
+                Layout::view('allergies'),
             ]),
+
+
             ViewEventFoodLayout::class,
         ];
     }
