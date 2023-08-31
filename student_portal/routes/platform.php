@@ -37,6 +37,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewSingleFoodScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,8 @@ Route::screen('/events/{event}/songs', ViewSongRequestScreen::class)->name('plat
 Route::screen('/events/{event}/request-song', CreateSongRequestScreen::class)->name('platform.songs.request');
 
 Route::screen('/events/{event_id}/menu', ViewEventFoodScreen::class)->name('platform.eventFood.list');
+
+Route::screen('/events/{event_id}/menu/{food_id}/item', ViewSingleFoodScreen::class)->name('platform.eventFoodSingle.list');
 
 Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('platform.election.list');
 

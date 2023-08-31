@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\EventAttendees;
 use App\Models\Events;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class ViewEventFoodScreen extends Screen
      */
     public function query(Events $event, Request $request): iterable
     {
+        abort_if(EventAttendees::where('event_id', $event->id)->where('user_id', auth()->user()->id)->count() == 0, 404, 'You are not registered for this event!');
         $filters = $request->get('filter') ?? [];
         return [
             'event' => $event,
