@@ -128,15 +128,21 @@ class ViewEventScreen extends Screen
         else if($type == 'election'){
             $election = Election::where('event_id',$event_id)->first();
 
-            if (now() < $election->start_date)
-            {
-                Toast::warning('This election has not started yet.');
-                return redirect()->route('platform.event.register', $event_id);
-            }
-
+            // Election exists
             if ($election != null){
-                return redirect()->route('platform.election.list', $event_id);
+                // Election hasnt started
+                if (now() < $election->start_date)
+                {
+                    Toast::warning('This election has not started yet.');
+                    return redirect()->route('platform.event.register', $event_id);
+                }
+                // Ongoing or ended election
+                else
+                {
+                    return redirect()->route('platform.election.list', $event_id);
+                }
             }
+            // Election doesnt exist
             else{
                 Toast::warning('An election is not yet created, speak to supervisor to open an election');
             }
