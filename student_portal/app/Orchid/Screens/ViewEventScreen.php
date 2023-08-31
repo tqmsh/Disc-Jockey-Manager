@@ -134,7 +134,7 @@ class ViewEventScreen extends Screen
                 if (now() < $election->start_date)
                 {
                     Toast::warning('This election has not started yet.');
-                    return redirect()->route('platform.event.register', $event_id);
+                    return redirect()->route('platform.event.list');
                 }
                 // Ongoing or ended election
                 else
