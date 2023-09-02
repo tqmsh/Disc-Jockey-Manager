@@ -141,10 +141,7 @@ class ViewCourseSectionScreen extends Screen
             //if the array is not empty
             if(!empty($sections)){
 
-                //loop through the courses and delete them from db
-                foreach($sections as $section_id){
-                    Section::find($section_id)->delete();
-                }
+                Section::whereIn('id', $sections)->delete();
 
                 Toast::success('Selected sections deleted succesfully');
 

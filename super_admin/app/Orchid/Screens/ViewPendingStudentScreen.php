@@ -156,10 +156,8 @@ class ViewPendingStudentScreen extends Screen
             //if the array is not empty
             if(!empty($students)){
 
-                //loop through the students and delete them from db
-                foreach($students as $student_id){
-                    User::where('id', $student_id)->delete();
-                }
+                //delete all students
+                Student::whereIn('id', $students)->delete();
 
                 Toast::success('Selected students deleted succesfully');
 
