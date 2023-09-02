@@ -161,7 +161,7 @@ class ViewPendingLocaladminScreen extends Screen
             if(!empty($localadmins)){
 
                 //delete all selected localadmins
-                Localadmin::whereIn('id', $localadmins)->delete();
+                User::whereIn('id', $localadmins)->delete();
 
                 Toast::success('Selected local admins deleted succesfully');
 

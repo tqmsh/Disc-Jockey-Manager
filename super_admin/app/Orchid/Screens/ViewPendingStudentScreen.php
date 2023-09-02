@@ -157,7 +157,7 @@ class ViewPendingStudentScreen extends Screen
             if(!empty($students)){
 
                 //delete all students
-                Student::whereIn('id', $students)->delete();
+                User::whereIn('id', $students)->delete();
 
                 Toast::success('Selected students deleted succesfully');
 
