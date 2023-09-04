@@ -74,10 +74,7 @@ class ViewBeautyGroupScreen extends Screen
     }
 
     public function deleteBeautyGroups(){
-        $beautyGroups = BeautyGroup::whereIn('id', request('beautyGroups'))->get();
-        foreach($beautyGroups as $beautyGroup){
-            $beautyGroup->delete();
-        }
+        BeautyGroup::whereIn('id', request('beautyGroups'))->delete();
         Toast::success('Selected Beauty Groups Deleted Successfully');
     }
 

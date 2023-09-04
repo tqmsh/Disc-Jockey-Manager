@@ -89,7 +89,9 @@ class ViewCandidateScreen extends Screen
             //if the array is not empty
             if(!empty($candidates)){
 
-                Candidate::whereIn('id', $candidates)->delete();
+                foreach($candidates as $candidate){
+                    Candidate::where('id', $candidate)->delete();
+                }
 
                 Toast::success('Selected candidates deleted succesfully');
 

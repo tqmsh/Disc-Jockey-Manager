@@ -64,4 +64,20 @@ class Events extends Model
     public function food(){
         return $this->hasMany(Food::class, 'event_id');
     }
+
+    public function students(){
+        return $this->hasMany(EventAttendees::class, 'event_id');
+    }
+
+    public function allergies(){
+        $allergies = Student::whereIn('user_id', EventAttendees::where('event_id', $this->id)->pluck('user_id'))->whereNotNull('allergies')->pluck('allergies')->toArray();
+
+        //make the array unique and get the count of each allergy
+        $allergies = array_count_values($allergies);
+
+        //sort the array by the count of each allergy
+        arsort($allergies);
+
+        return $allergies;
+    }
 }

@@ -106,7 +106,7 @@ class CreateElectionScreen extends Screen
                 Toast::error('END DATE must be after START DATE and START DATE must be before END DATE.');
                 return redirect()->route('platform.event.list');
             }
-
+            
             Election::create($electionField);
 
             Toast::success('Election Added Succesfully');

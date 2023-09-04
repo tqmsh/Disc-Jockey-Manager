@@ -58,6 +58,10 @@ class ViewRegisteredEventLayout extends Table
                         ->method('redirect', ['event_id' => $event->id, 'type' => 'election'])
                         ->type(Color::LIGHT());
                 }),
+            TD::make()
+                ->render(function($event){
+                    return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
+                }), 
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {
                     return e($event->event_start_time);

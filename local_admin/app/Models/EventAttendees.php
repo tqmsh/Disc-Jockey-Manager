@@ -23,4 +23,8 @@ class EventAttendees extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function student(){
+        return $this->belongsTo(Student::class, 'user_id');
+    }
 }

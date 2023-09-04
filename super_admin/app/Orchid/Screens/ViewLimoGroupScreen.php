@@ -74,10 +74,7 @@ class ViewLimoGroupScreen extends Screen
     }
 
     public function deleteLimoGroups(){
-        $limoGroups = LimoGroup::whereIn('id', request('limoGroups'))->get();
-        foreach($limoGroups as $limoGroup){
-            $limoGroup->delete();
-        }
+        LimoGroup::whereIn('id', request('limo_group_id'))->delete();
         Toast::success('Selected Limo Groups Deleted Successfully');
     }
 

@@ -2,17 +2,18 @@
 
 namespace App\Orchid\Screens;
 
+use Exception;
 use App\Models\Campaign;
-use App\Orchid\Layouts\ViewAdLayoutInactive;
-use App\Orchid\Layouts\ViewAdLayoutPending;
-use App\Orchid\Layouts\ViewAdLayoutActive;
-use Illuminate\Http\Request;
-use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
-use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Orchid\Support\Facades\Layout;
+use App\Orchid\Layouts\ViewAdLayoutActive;
+use App\Orchid\Layouts\ViewAdLayoutPending;
+use App\Orchid\Layouts\ViewAdLayoutInactive;
 
 class ViewAdScreen extends Screen
 {
@@ -93,11 +94,8 @@ class ViewAdScreen extends Screen
         try{
             //if the array is not empty
             if(!empty($campaigns)){
-
-                //loop through the campaigns and delete them from db
-                foreach($campaigns as $campaign){
-                    Campaign::where('id', $campaign)->delete();
-                }
+                
+                Campaign::whereIn('id', $campaigns)->delete();
 
                 Toast::success('Selected campaigns deleted successfully');
 

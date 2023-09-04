@@ -156,10 +156,7 @@ class ViewPendingVendorScreen extends Screen
             //if the array is not empty
             if(!empty($vendor_ids)){
 
-                //loop through the vendors and delete them from db
-                foreach($vendor_ids as $vendor_id){
-                    User::where('id', $vendor_id)->delete();
-                }
+                User::whereIn('id', $vendor_ids)->delete();
 
                 Toast::success('Selected vendors deleted succesfully');
 

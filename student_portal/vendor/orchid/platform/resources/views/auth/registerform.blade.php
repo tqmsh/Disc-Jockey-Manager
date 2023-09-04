@@ -111,7 +111,7 @@
         {{ __('Allergies') }}
     </label>
 
-    {!! \Orchid\Screen\Fields\Input::make('allergies')->autofocus()->placeholder('Ex. Peanuts') !!}
+    {!! \Orchid\Screen\Fields\Input::make('allergies')->autofocus()->placeholder('Ex. Peanuts')->help('Leave blank if you have no allergies') !!}
 </div>
 
 

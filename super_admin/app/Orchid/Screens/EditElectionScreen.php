@@ -29,7 +29,6 @@ class EditElectionScreen extends Screen
      */
     public function query(Election $election): iterable
     {
-        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');
         return [
             'election' => $election,
         ];
@@ -109,7 +108,7 @@ class EditElectionScreen extends Screen
         try{
 
             $electionFields = $request->all();
-            
+
             if ($electionFields['end_date'] < $electionFields['start_date'])
             {
                 Toast::error('END DATE must be after START DATE and START DATE must be before END DATE.');

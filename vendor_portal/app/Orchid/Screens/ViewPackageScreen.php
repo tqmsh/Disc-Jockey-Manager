@@ -86,10 +86,7 @@ class ViewPackageScreen extends Screen
             //if the array is not empty
             if(!empty($packages)){
 
-                //loop through the packages and delete them from db
-                foreach($packages as $package){
-                    VendorPackage::where('id', $package)->delete();
-                }
+                VendorPackage::whereIn('id', $packages)->delete();
 
                 Toast::success('Selected packages deleted succesfully');
 
