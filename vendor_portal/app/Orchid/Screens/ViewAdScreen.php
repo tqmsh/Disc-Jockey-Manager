@@ -101,10 +101,7 @@ class ViewAdScreen extends Screen
             //if the array is not empty
             if(!empty($campaigns)){
 
-                //loop through the campaigns and delete them from db
-                foreach($campaigns as $campaign){
-                    Campaign::where('id', $campaign)->delete();
-                }
+                Campaign::whereIn('id', $campaigns)->delete();
 
                 Toast::success('Selected campaigns deleted successfully');
 

@@ -154,10 +154,7 @@ class ViewStudentScreen extends Screen
             //if the array is not empty
             if(!empty($students)){
 
-                //loop through the students and delete them from db
-                foreach($students as $student){
-                    User::where('id', $student)->delete();
-                }
+                User::whereIn('id', $students)->delete();
 
                 Alert::success('Selected students deleted succesfully');
 

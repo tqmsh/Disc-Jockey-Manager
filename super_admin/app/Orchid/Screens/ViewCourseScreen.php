@@ -139,10 +139,7 @@ class ViewCourseScreen extends Screen
             //if the array is not empty
             if(!empty($courses)){
 
-                //loop through the courses and delete them from db
-                foreach($courses as $course_id){
-                    Course::find($course_id)->delete();
-                }
+                Course::whereIn('id', $courses)->delete();
 
                 Toast::success('Selected courses deleted succesfully');
 

@@ -161,6 +161,7 @@ class ViewCategoryScreen extends Screen
         //get all categories from post request
         $categories = $request->get('categories');
         $pending_categories = $request->get("pending_categories");
+        
         if(is_null($categories)){
             $categories = $pending_categories;
         }
@@ -169,10 +170,7 @@ class ViewCategoryScreen extends Screen
             //if the array is not empty
             if(!empty($categories)){
 
-                //loop through the categories and delete them from db
-                foreach($categories as $category){
-                    Categories::where('id', $category)->delete();
-                }
+                Categories::whereIn('id', $categories)->delete();
 
                 Toast::success('Selected categories deleted succesfully');
 

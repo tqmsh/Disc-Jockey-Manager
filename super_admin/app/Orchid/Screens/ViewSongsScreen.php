@@ -53,9 +53,7 @@ class ViewSongsScreen extends Screen
         $songs = $request->get('selectedSongs');
         try {
             if (!empty($songs)) {
-                foreach ($songs as $song) {
-                    Song::where('id', $song)->delete();
-                }
+                Song::whereIn('id', $songs)->delete();
                 Toast::success('Selected songs deleted successfully');
             } else {
                 Toast::warning('Please select the songs to delete');

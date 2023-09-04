@@ -13,6 +13,7 @@ use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
 use App\Orchid\Screens\ViewDressListScreen;
+use App\Orchid\Screens\ViewEventFoodScreen;
 use App\Orchid\Screens\ViewLimoGroupScreen;
 use App\Orchid\Screens\ViewEventTableScreen;
 use App\Orchid\Screens\ViewStudentBidScreen;
@@ -36,6 +37,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewSingleFoodScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +65,10 @@ Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('plat
 Route::screen('/events/{event}/songs', ViewSongRequestScreen::class)->name('platform.songs.list');
 
 Route::screen('/events/{event}/request-song', CreateSongRequestScreen::class)->name('platform.songs.request');
+
+Route::screen('/events/{event_id}/menu', ViewEventFoodScreen::class)->name('platform.eventFood.list');
+
+Route::screen('/events/{event_id}/menu/{food_id}/item', ViewSingleFoodScreen::class)->name('platform.eventFoodSingle.list');
 
 Route::screen('/events/{event}/election', ViewElectionScreen::class)->name('platform.election.list');
 
@@ -119,7 +125,7 @@ Route::screen('dashboard', ExampleScreen::class)
     ->name('platform.example')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
-            ->push('Dashboard');
+            ->push('Main Menu');
     });
 
 Route::screen('dresses', ViewDressListScreen::class)
