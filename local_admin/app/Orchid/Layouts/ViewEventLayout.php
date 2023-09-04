@@ -65,7 +65,7 @@ class ViewEventLayout extends Table
                 }),
             TD::make()
                 ->render(function($event){
-                    return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('people')->type(Color::SUCCESS());
+                    return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
                 }), 
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {

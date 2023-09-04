@@ -290,7 +290,7 @@ Route::screen('dashboard', ExampleScreen::class)
     ->name('platform.example')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
-            ->push('Dashboard');
+            ->push('Main Menu');
     });
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');

@@ -123,10 +123,8 @@ class ViewEventScreen extends Screen
             //if the array is not empty
             if(!empty($events)){
 
-                //loop through the events and delete them from db
-                foreach($events as $event){
-                    Events::where('id', $event)->delete();
-                }
+                //delete all events in the array
+                Events::whereIn('id', $events)->delete();
 
                 Toast::success('Selected events deleted succesfully');
 

@@ -133,10 +133,7 @@ class ViewSchoolScreen extends Screen
             //if the array is not empty
             if(!empty($schools)){
 
-                //loop through the schools and delete them from db
-                foreach($schools as $school){
-                    School::where('id', $school)->delete();
-                }
+                School::whereIn('id', $schools)->delete();
 
                 Toast::success('Selected schools deleted succesfully');
 

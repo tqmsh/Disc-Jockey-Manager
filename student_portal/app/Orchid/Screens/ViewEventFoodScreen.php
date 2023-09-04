@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\EventAttendees;
 use App\Models\Events;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class ViewEventFoodScreen extends Screen
 {
     public $event;
     public $allergies;
+    public $food;
     /**
      * Query data.
      *
@@ -25,6 +27,7 @@ class ViewEventFoodScreen extends Screen
      */
     public function query(Events $event, Request $request): iterable
     {
+        abort_if(EventAttendees::where('event_id', $event->id)->where('user_id', auth()->user()->id)->count() == 0, 404, 'You are not registered for this event!');
         $filters = $request->get('filter') ?? [];
         return [
             'event' => $event,
@@ -50,16 +53,7 @@ class ViewEventFoodScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-            Link::make('Add Item')
-                ->icon('plus')
-                ->route('platform.eventFood.create', $this->event->id),
-
-            Button::make('Delete Selected Items')
-                ->icon('trash')
-                ->method('deleteItems')
-                ->confirm('Are you sure you want to delete these items?'),
-            
+        return [            
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list', $this->event->id),
@@ -126,12 +120,10 @@ class ViewEventFoodScreen extends Screen
                         ->placeholder('Gluten Free')
                         ->value(request()->get('filter')['gluten_free'] ?? false),
                 ]),
-
-                Layout::view('allergies'),
             ]),
 
+            Layout::view('event_menu', ['items' => $this->food]),
 
-            ViewEventFoodLayout::class,
         ];
     }
 
@@ -146,23 +138,10 @@ class ViewEventFoodScreen extends Screen
         return redirect()->route('platform.eventFood.list', ['event_id' => $event->id]);
     }
 
-    public function deleteItems(Events $event)
-    {
-        try {
-            $ids = request('items');
-
-            Events::findOrFail($event->id)->food()->whereIn('id', $ids)->delete();
-
-            Toast::success('Items Deleted Successfully!');
-        } catch (\Exception $e) {
-            Toast::error($e->getMessage());
-        }
-    }
-
     public function redirect(Events $event, $food_id, $type)
     {
-        if (request('type') == "edit") {
-            return redirect()->route('platform.eventFood.edit', ['event_id' => $event->id, 'food_id' => request('food_id')]);
+        if (request('type') == "view") {
+            return redirect()->route('platform.eventFood.view', ['event_id' => $event->id, 'food_id' => request('food_id')]);
         }
     }
 }

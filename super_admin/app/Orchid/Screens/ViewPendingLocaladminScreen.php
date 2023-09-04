@@ -160,10 +160,8 @@ class ViewPendingLocaladminScreen extends Screen
             //if the array is not empty
             if(!empty($localadmins)){
 
-                //loop through the localadmins and delete them from db
-                foreach($localadmins as $localadmin_id){
-                    User::where('id', $localadmin_id)->delete();
-                }
+                //delete all selected localadmins
+                User::whereIn('id', $localadmins)->delete();
 
                 Toast::success('Selected local admins deleted succesfully');
 

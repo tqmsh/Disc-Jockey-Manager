@@ -146,6 +146,8 @@ class ViewEventScreen extends Screen
             else{
                 Toast::warning('An election is not yet created, speak to supervisor to open an election');
             }
+        } else if($type == 'food'){
+            return redirect()->route('platform.eventFood.list', $event_id);
         }
 
         return redirect()->route('platform.event.register', $event_id);   

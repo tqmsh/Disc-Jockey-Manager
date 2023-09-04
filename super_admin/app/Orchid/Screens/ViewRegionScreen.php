@@ -203,12 +203,10 @@ class ViewRegionScreen extends Screen
         try{
             //if the array is not empty
             if(!empty($regions)){
-
-                //loop through the regions and delete them from db
-                foreach($regions as $region){
-                    Region::where('id', $region)->delete();
-                }
-
+                
+                //delete all regions in the array
+                Region::whereIn('id', $regions)->delete();
+                
                 Toast::success('Selected regions deleted succesfully');
 
             }else{
