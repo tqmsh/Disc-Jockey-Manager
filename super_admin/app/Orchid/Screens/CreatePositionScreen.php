@@ -6,7 +6,6 @@ use Exception;
 use App\Models\Election;
 use App\Models\Position;
 use Orchid\Screen\Screen;
-use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -14,23 +13,19 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use Illuminate\Support\Facades\Auth;
 
-class EditPositionScreen extends Screen
+
+class CreatePositionScreen extends Screen
 {
-    public $position;
     public $election;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Position $position): iterable
+    public function query(Election $election): iterable
     {
-        $election = Election::where('id', $position->election_id)->first();
-        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');
         return [
-            'position' => $position,
             'election' => $election
         ];
     }
@@ -42,7 +37,7 @@ class EditPositionScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Position: ' .$this->election->position_name;
+        return 'Add New Position to: ' . $this->election->election_name;
     }
 
     /**
@@ -53,10 +48,9 @@ class EditPositionScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Submit')
-                ->icon('check')
-                ->method('update'),
-                
+            Button::make('Add')
+                ->icon('plus')
+                ->method('createPosition',[$this->election]),
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.eventPromvote.list', $this->election->event_id)
@@ -77,29 +71,29 @@ class EditPositionScreen extends Screen
                     ->title('Position Name')
                     ->type('text')
                     ->required()
-                    ->horizontal()
-                    ->value($this->position->position_name),
+                    ->placeholder('New Position') 
+                    ->horizontal(),
 
-            ])->title('Edit This Position'),
+            ])->title('Make a Position'),
         ];
     }
 
-    public function update(Position $position, Request $request)
-    {
-        $election = Election::where('id', $position->election_id)->first();
+    public function createPosition(Request $request, Election $election){
+
         try{
 
-            $positionFields = $request->all();
+            $positionField = $request->all();
+            $positionField['election_id'] = $election->id;
 
-            $position->update($positionFields);
+            Position::create($positionField);
 
-            Toast::success('You have successfully updated ' . $request->input('election_name') . '.');
-
+            Toast::success('Position Added Succesfully');
+            
             return redirect()->route('platform.eventPromvote.list',$election->event_id);
 
         }catch(Exception $e){
-
-            Alert::error('There was an error editing this event. Error Code: ' . $e->getMessage());
+            
+            Alert::error('There was an error creating this position. Error Code: ' . $e->getMessage());
         }
     }
 }

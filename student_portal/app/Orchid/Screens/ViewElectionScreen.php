@@ -63,12 +63,14 @@ class ViewElectionScreen extends Screen
      */
     public function layout(): iterable
     {
+        // election is ongoing
         if (now() < $this->election->end_date)
             {
                 return [
                     ViewPositionLayout::class
                 ];
             }
+        // Election has ended
         else 
             {
                 return[
