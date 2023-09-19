@@ -7,6 +7,8 @@ use App\Models\Election;
 use App\Models\Position;
 use App\Models\Candidate;
 use Orchid\Screen\Screen;
+use App\Models\Localadmin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Select;
@@ -32,6 +34,11 @@ class EditCandidateScreen extends Screen
         $position = Position::where('id',$candidate->position_id)->first();
         $positions = Position::where('election_id',$candidate->election_id)->paginate(20);
         $election = Election::where('id', $candidate->election_id)->first();
+        
+        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');
+        
+        // Election has ended
+        abort_if(now() > $election->end_date, 403, 'You are not authorized to view this page.');
         return [
             'election' => $election,
             'candidate' => $candidate,
