@@ -34,7 +34,7 @@ class EditAdScreen extends Screen
     public function query(Campaign $campaign): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-        abort_if($this->vendor->user_id != $campaign->user_id, 403);
+        abort_if($this->vendor->user_id != $campaign->user_id || $campaign->active == 1, 403, "Forbidden");
         $array = Auth::user()->paidRegions->toArray();
 
         //get all the region_ids of the array
