@@ -36,6 +36,9 @@ class ViewWinnersScreen extends Screen
         $candidates = Candidate::where('election_id', $election->id)->get();
         $positions = Position::where('election_id', $election->id)->get();
 
+        // Election hasnt ended yet
+        abort_if(now() < $election->end_date, 403, 'You are not authorized to view this page.');
+
         // putting winners in the database
         foreach ($positions as $position)
         {
