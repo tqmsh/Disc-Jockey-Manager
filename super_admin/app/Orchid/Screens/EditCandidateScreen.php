@@ -32,6 +32,10 @@ class EditCandidateScreen extends Screen
         $position = Position::where('id',$candidate->position_id)->first();
         $positions = Position::where('election_id',$candidate->election_id)->paginate(20);
         $election = Election::where('id', $candidate->election_id)->first();
+
+        // Election has ended
+        abort_if(now() > $election->end_date, 403, 'You are not authorized to view this page.');
+        
         return [
             'election' => $election,
             'candidate' => $candidate,
