@@ -25,6 +25,9 @@ class CreatePositionScreen extends Screen
      */
     public function query(Election $election): iterable
     {
+        // Election has ended
+        abort_if(now() > $election->end_date, 403, 'You are not authorized to view this page.');
+        
         return [
             'election' => $election
         ];
