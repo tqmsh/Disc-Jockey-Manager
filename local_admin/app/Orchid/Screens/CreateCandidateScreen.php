@@ -33,6 +33,10 @@ class CreateCandidateScreen extends Screen
     {
         $election = Election::where('id',$position->election_id)->first();
         abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');
+        
+        // Election has ended
+        abort_if(now() > $election->end_date, 403, 'You are not authorized to view this page.');
+        
         return [
             'position' => $position,
             'election' => $election
