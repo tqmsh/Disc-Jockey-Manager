@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\BuyCreditsScreen;
+
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
@@ -90,6 +92,14 @@ Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->nam
 Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+
+Route::screen('/shop', BuyCreditsScreen::class)
+    ->name('platform.shop')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.index')
+            ->push(__('Shop'), route('platform.shop'));
+    });
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

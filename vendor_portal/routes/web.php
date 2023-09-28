@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Orchid\Screens\BuyCreditsScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return view('welcome');
 });
+
+Route::post('paypal/payment', [BuyCreditsScreen::class, 'payment'])->name('paypal');
+
+
+Route::get('success/success', [BuyCreditsScreen::class, 'success'])->name('paypal_success');
+Route::get('success/cancel', [BuyCreditsScreen::class, 'cancel'])->name('paypal_cancel');
+
