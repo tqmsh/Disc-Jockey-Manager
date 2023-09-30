@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Orchid;
+use App\Models\Vendors;
 
 use Orchid\Support\Color;
 use Orchid\Platform\Dashboard;
@@ -29,6 +30,9 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         abort_if(Auth::user()->role != 4, 403, 'You are not authorized to view this page.');
+
+        $vendor = Vendors::where('user_id', Auth::user()->id)->first();
+
   
         return [
                 
@@ -37,6 +41,12 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('home')
             ->title('CORE')
             ->route('platform.example'),
+
+            // SHOP
+            Menu::make('Shop')
+            ->icon('bag')
+            ->route('platform.shop', ['vendor' => $vendor]),
+
 
             //MONEYYY MAKER
             Menu::make('Bids')

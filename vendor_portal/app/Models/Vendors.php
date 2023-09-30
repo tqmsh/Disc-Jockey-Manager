@@ -16,4 +16,8 @@ class Vendors extends Model
     public function category(){
         return $this->belongsTo(Categories::class, 'category_id', 'id');
     }
+
+    public function payments() {
+        return $this->hasMany(Payment::class);
+    }
 }
