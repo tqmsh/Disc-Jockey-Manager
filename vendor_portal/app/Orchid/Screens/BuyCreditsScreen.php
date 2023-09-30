@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Orchid\Screens;
-
+use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -17,6 +17,7 @@ use Srmklive\PayPal\Services\PayPal as PayPalclient;
 // Commit test
 class BuyCreditsScreen extends Screen
 {
+    private $price_1;
     /**
      * Query data.
      *
@@ -54,12 +55,26 @@ class BuyCreditsScreen extends Screen
      */
     public function layout(): iterable
     {
+
+        $vendor = Vendors::where('user_id', Auth::user()->id)->first();
+
         return [
-            Layout::view('buy_credits')
+            Layout::view('buy_credits', compact('vendor'))
         ];
     }
 
     public function payment(Request $request) {
+
+        // dd($request->price);
+
+        // $price = $request->price;
+        // $credits = $request->input('credits');
+
+        // dd($price, $credits);
+
+        // dd($request);
+
+        // $this->price_1 = $request->input('price');
 
         $provider = new PaypalClient;
         $provider->setApiCredentials(config('paypal'));
@@ -68,7 +83,8 @@ class BuyCreditsScreen extends Screen
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [
-                "return_url" => route('paypal_success'),
+                // Success function gets called here
+                "return_url" => route('paypal_success',['price' => $request->price,'credits' => $request->credits]),
                 "cancel_url" => route('paypal_cancel')
             ],
             "purchase_units" => [
@@ -91,37 +107,45 @@ class BuyCreditsScreen extends Screen
         } else {
             return redirect()->route('paypal_cancel');
         }
-
         
     }
 
-    public function success(Request $request) {
+    public function success(Request $request, $price, $credits) {
 
-        // dd($request->input('credits'))
+        // dd($price, $credits);
+
+        // dd($request->input('credits'), )
         $provider = new PaypalClient;
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
         $response =  $provider->capturePaymentOrder($request->token);
 
-        $price = $request->input('price');
-        $credits = $request->input('credits');
+        // $price = $request->input('price');
+        // $credits = $request->input('credits');
+
+        // dd($price, $credits);
+        // dd($this->price_1);
 
         // Last check to see if the Payment went trough successfully
         if(isset($response['status']) && $response['status'] == 'COMPLETED') {
 
             $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
+            // Add Data to the database
             Payment::create([
                 'user_id' => $vendor->user_id,
                 'credits_given' => $credits,
                 'payment_amount' => $price, // Assign the price to payment_amount
                 'date' => now(),
             ]);
+
+            $vendor->increment('credits', $credits);
+            $vendor->save();
             
 
             Toast::success('Credits bought Successfully!');
 
-            return redirect()->route('platform.shop');
+            return redirect()->route('platform.shop', ['vendor' => $vendor]);
 
         } else { 
             return redirect()->route('paypal_cancel');
