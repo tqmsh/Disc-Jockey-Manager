@@ -136,7 +136,6 @@ class BuyCreditsScreen extends Screen
                 'user_id' => $vendor->user_id,
                 'credits_given' => $credits,
                 'payment_amount' => $price, // Assign the price to payment_amount
-                'date' => now(),
             ]);
 
             $vendor->increment('credits', $credits);

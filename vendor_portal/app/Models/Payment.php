@@ -11,7 +11,7 @@ class Payment extends Model
 
     protected $table = 'payments';
 
-    protected $fillable = ['user_id', 'credits_given', 'payment_amount', 'date'];
+    protected $fillable = ['user_id', 'credits_given', 'payment_amount'];
 
 
     public function vendor() {
