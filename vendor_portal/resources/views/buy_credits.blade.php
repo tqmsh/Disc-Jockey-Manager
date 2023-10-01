@@ -10,7 +10,7 @@
 <div class="shadow bg-white text-black rounded-lg border border-black px-4 mx-4">
   <div class="stat grid grid-cols-1 gap-x-4 p-6 justify-end mr-20 inline-block">
     <div class="stat-title text-black">Total Credits</div>
-    <div class="stat-value text-3xl font-semibold">{{ $vendor->credits }}</div>
+    <div class="stat-value text-3xl font-semibold">{{ Auth::user()->vendor->credits }}</div>
   </div>
 </div>
 

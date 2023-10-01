@@ -59,7 +59,7 @@ class BuyCreditsScreen extends Screen
         $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
         return [
-            Layout::view('buy_credits', compact('vendor'))
+            Layout::view('buy_credits')
         ];
     }
 
@@ -145,7 +145,7 @@ class BuyCreditsScreen extends Screen
 
             Toast::success('Credits bought Successfully!');
 
-            return redirect()->route('platform.shop', ['vendor' => $vendor]);
+            return redirect()->route('platform.shop');
 
         } else { 
             return redirect()->route('paypal_cancel');

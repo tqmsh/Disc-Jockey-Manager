@@ -98,13 +98,13 @@ Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', View
 
 // $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
-Route::screen('/shop{vendor}', BuyCreditsScreen::class)
-    ->name('platform.shop');
-    // ->breadcrumbs(function (Trail $trail) {
-    //     return $trail
-    //         ->parent('platform.index')
-    //         ->push(__('Shop'), route('platform.shop', ['vendor' => $vendor]));
-    // });
+Route::screen('/shop', BuyCreditsScreen::class)
+    ->name('platform.shop')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.index')
+            ->push(__('Shop'), route('platform.shop'));
+    });
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
