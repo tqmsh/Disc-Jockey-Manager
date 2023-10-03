@@ -148,7 +148,7 @@ class ViewStudentScreen extends Screen
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected students. Error Message: ' . $e);
+            Alert::error('There was a error trying to deleted the selected students. Error Message: ' . $e->getMessage());
         }
     }
 }

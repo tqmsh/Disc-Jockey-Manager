@@ -43,7 +43,7 @@ class Localadmin extends Model
 
         }catch(Exception $e){
 
-            Alert::error('There was an error processing the filter. Error Message: ' . $e);
+            Alert::error('There was an error processing the filter. Error Message: ' . $e->getMessage());
         }
     }
 }

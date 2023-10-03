@@ -184,7 +184,7 @@ class ViewElectionScreen extends Screen
             return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to delete the selected events. Error Message: ' . $e);
+            Toast::error('There was a error trying to delete the selected events. Error Message: ' . $e->getMessage());
         }
     }
 
@@ -208,7 +208,7 @@ class ViewElectionScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e->getMessage());
         }
     }
 
@@ -231,7 +231,7 @@ class ViewElectionScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e->getMessage());
         }
     }
 

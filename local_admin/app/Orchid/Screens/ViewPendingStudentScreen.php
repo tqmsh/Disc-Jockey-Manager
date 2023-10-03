@@ -145,7 +145,7 @@ class ViewPendingStudentScreen extends Screen
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to accept the selected students. Error Message: ' . $e);
+            Alert::error('There was a error trying to accept the selected students. Error Message: ' . $e->getMessage());
         }
     }
 
@@ -168,7 +168,7 @@ class ViewPendingStudentScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected students. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected students. Error Message: ' . $e->getMessage());
         }
     }
 }
