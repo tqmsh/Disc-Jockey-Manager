@@ -163,7 +163,7 @@ class ViewVendorScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to add the paid regions to the selected vendors. Error Message: ' . $e);
+            Toast::error('There was a error trying to add the paid regions to the selected vendors. Error Message: ' . $e->getMessage());
         }
     }
 
@@ -195,7 +195,7 @@ class ViewVendorScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected vendors. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected vendors. Error Message: ' . $e->getMessage());
         }
     }
 }

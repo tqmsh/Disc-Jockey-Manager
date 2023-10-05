@@ -142,7 +142,7 @@ class EditPackageScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this package. Error Code: ' . $e);
+            Alert::error('There was an error deleting this package. Error Code: ' . $e->getMessage());
         }
     }
 
