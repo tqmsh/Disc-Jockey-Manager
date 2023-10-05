@@ -60,7 +60,7 @@ class CreateAdScreen extends Screen
     {
         return [
 
-            Button::make('Create Campaign')
+            Button::make('Create Campaign (50 credits)')
                 ->icon('plus')
                 ->method('createAd'),
 
@@ -107,7 +107,7 @@ class CreateAdScreen extends Screen
                     ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal(),
                 Cropper::make("campaign_image")
-                    ->storage("s3")
+                     ->storage("s3")
                     ->title("Image")
                     ->width(env("AD_SIZE"))
                     ->height(env("AD_SIZE"))
@@ -121,25 +121,29 @@ class CreateAdScreen extends Screen
 
     public function createAd(Request $request){
         try{
+            if ((Auth::user()->vendor->credits) >= 50) {
+                if($this->validAd($request)){
+                    Campaign::create([
+                        "user_id"=>Auth::user()->id,
+                        "category_id"=>Vendors::where('user_id', Auth::user()->id)->first()->category_id,
+                        "region_id"=>$request->input("campaign_region"),
+                        "title"=>$request->input("campaign_name"),
+                        "image"=>$request->input("campaign_image"),
+                        "website"=>$request->input("campaign_link"),
+                        "clicks"=>0,
+                        "impressions"=>0
+                    ]);
+                    //toast success message
+                    Toast::success('Campaign Created Successfully');
+                    //redirect to vendor list
+                    return redirect()->route('platform.ad.list');
 
-            if($this->validAd($request)){
-                Campaign::create([
-                    "user_id"=>Auth::user()->id,
-                    "category_id"=>Vendors::where('user_id', Auth::user()->id)->first()->category_id,
-                    "region_id"=>$request->input("campaign_region"),
-                    "title"=>$request->input("campaign_name"),
-                    "image"=>$request->input("campaign_image"),
-                    "website"=>$request->input("campaign_link"),
-                    "clicks"=>0,
-                    "impressions"=>0
-                ]);
-                //toast success message
-                Toast::success('Campaign Created Successfully');
-                //redirect to vendor list
-                return redirect()->route('platform.ad.list');
-
-            }else{
-                Toast::error('Campaign already exists in this region.');
+                }else{
+                    Toast::error('Campaign already exists in this region.');
+                }
+            } else {
+                Toast::error('Insuficient Credits');
+                return redirect()->route('platform.shop');
             }
 
         }catch(Exception $e){
