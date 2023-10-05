@@ -59,7 +59,7 @@ class CreateEventBidScreen extends Screen
     {
         return [
 
-            Button::make('Send Bid')
+            Button::make('Send Bid (50 credits)')
                 ->icon('plus')
                 ->method('createBid'),
 
@@ -148,41 +148,46 @@ class CreateEventBidScreen extends Screen
 
             try{  
 
-                if($this->validBid($event)){
-                    
-                    EventBids::create([
-                        'user_id' => $vendor->user_id,
-                        'event_id' => $event->id,
-                        'package_id' => request('package_id'),
-                        'notes' => request('notes'),
-                        'category_id' => $vendor->category_id,
-                        'event_date' => $event->event_start_time,
-                        'school_name' => $event->school,
-                        'region_id' => $event->region_id,
-                        'company_name' => $vendor->company_name,
-                        'url' => $vendor->website,
-                        'contact_instructions' => request('contact_instructions'),
-                        'status' => 0
-                    ]);
+                if ((Auth::user()->vendor->credits) >= 50) {
+                    if($this->validBid($event)){
+                        
+                        EventBids::create([
+                            'user_id' => $vendor->user_id,
+                            'event_id' => $event->id,
+                            'package_id' => request('package_id'),
+                            'notes' => request('notes'),
+                            'category_id' => $vendor->category_id,
+                            'event_date' => $event->event_start_time,
+                            'school_name' => $event->school,
+                            'region_id' => $event->region_id,
+                            'company_name' => $vendor->company_name,
+                            'url' => $vendor->website,
+                            'contact_instructions' => request('contact_instructions'),
+                            'status' => 0
+                        ]);
 
-                    foreach($localAdmins as $admin){
-                        $admin->notify(new GeneralNotification([
-                            'title' => 'A Bid Has Been Placed On Your Event',
-                            'message' => 'A vendor has created a bid on your event: ' . $event->event_name . '. Click to view the bid.',
-                            'action' => '/admin/events/bids/' . $event->id,
-                        ]));
+                        foreach($localAdmins as $admin){
+                            $admin->notify(new GeneralNotification([
+                                'title' => 'A Bid Has Been Placed On Your Event',
+                                'message' => 'A vendor has created a bid on your event: ' . $event->event_name . '. Click to view the bid.',
+                                'action' => '/admin/events/bids/' . $event->id,
+                            ]));
+                        }
+                            
+                        Toast::success('Bid created succesfully');
+                            
+                        return redirect()->route('platform.bidopportunities.list');
+                    }else{
+                        Toast::error('Bid already exists');
                     }
-                        
-                    Toast::success('Bid created succesfully');
-                        
-                    return redirect()->route('platform.bidopportunities.list');
-                }else{
-                    Toast::error('Bid already exists');
-                }
-    
-            }catch(Exception $e){
-                Alert::error('Error: ' . $e->getMessage());
+            } else {
+                Toast::error('Insuficient Credits');
+                return redirect()->route('platform.shop');
             }
+    
+        }catch(Exception $e){
+            Alert::error('Error: ' . $e->getMessage());
+        }
     }
 
     private function validBid(Events $event){
