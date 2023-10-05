@@ -14,6 +14,8 @@ use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewAdLayoutActive;
 use App\Orchid\Layouts\ViewAdLayoutPending;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
+use App\Models\Vendors;
+
 
 class ViewAdScreen extends Screen
 {
@@ -111,8 +113,16 @@ class ViewAdScreen extends Screen
     public function updateCampaign()
     {
         $campaign = Campaign::find(request('campaign_id'));
+
+        $adPrice = 50;
+        $vendor = Vendors::where('user_id', $campaign->user_id)->first();
+
         $campaign->active = request('active');
         $campaign->save();
+
+        if (($campaign->active) == 1) {
+            $vendor->decrement('credits', $adPrice);
+        } 
 
         Toast::success('Campaign updated successfully!');
 
