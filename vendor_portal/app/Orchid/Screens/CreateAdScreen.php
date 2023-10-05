@@ -107,7 +107,7 @@ class CreateAdScreen extends Screen
                     ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal(),
                 Cropper::make("campaign_image")
-                    // ->storage("s3")
+                     ->storage("s3")
                     ->title("Image")
                     ->width(env("AD_SIZE"))
                     ->height(env("AD_SIZE"))
