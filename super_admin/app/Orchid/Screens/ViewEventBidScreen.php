@@ -15,6 +15,8 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventBidsLayout;
 use App\Orchid\Layouts\ViewPendingEventBidsLayout;
+use App\Models\Vendors;
+
 
 class ViewEventBidScreen extends Screen
 {

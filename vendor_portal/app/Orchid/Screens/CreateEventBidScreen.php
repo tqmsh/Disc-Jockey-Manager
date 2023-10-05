@@ -21,6 +21,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\GeneralNotification;
 
+
 class CreateEventBidScreen extends Screen
 {
     public $event;
