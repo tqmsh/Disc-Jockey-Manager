@@ -59,7 +59,7 @@ class ViewSongsScreen extends Screen
                 Toast::warning('Please select the songs to delete');
             }
         } catch (Exception $e) {
-            Alert::error('There was an error trying to delete the selected songs. Error Message: ' . $e);
+            Alert::error('There was an error trying to delete the selected songs. Error Message: ' . $e->getMessage());
         }
     }
 }

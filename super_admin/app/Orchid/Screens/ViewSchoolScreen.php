@@ -142,7 +142,7 @@ class ViewSchoolScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected schools. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected schools. Error Message: ' . $e->getMessage());
         }
     }
 }

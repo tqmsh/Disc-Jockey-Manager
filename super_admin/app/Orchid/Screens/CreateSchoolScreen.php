@@ -278,7 +278,7 @@ class CreateSchoolScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error creating this school. Error Code: ' . $e);
+            Alert::error('There was an error creating this school. Error Code: ' . $e->getMessage());
         }
     }
 
@@ -334,7 +334,7 @@ class CreateSchoolScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error mass importing the schools. Error Code: ' . $e);
+            Alert::error('There was an error mass importing the schools. Error Code: ' . $e->getMessage());
         }
     }
 

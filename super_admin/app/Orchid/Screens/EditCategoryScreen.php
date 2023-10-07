@@ -109,7 +109,7 @@ class EditCategoryScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this category. Error Code: ' . $e);
+            Alert::error('There was an error deleting this category. Error Code: ' . $e->getMessage());
         }
     }
 }
