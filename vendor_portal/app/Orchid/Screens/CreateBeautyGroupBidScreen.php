@@ -59,7 +59,7 @@ class CreateBeautyGroupBidScreen extends Screen
     {
         return [ 
 
-            Button::make('Send Bid')
+            Button::make('Send Bid (50 credits)')
                 ->icon('plus')
                 ->method('createBid'),
 
@@ -154,37 +154,42 @@ class CreateBeautyGroupBidScreen extends Screen
 
             try{   
 
-                if($this->validBid($beautyGroup)){
-                    
-                    BeautyGroupBid::create([
-                        'user_id' => $vendor->user_id,
-                        'beauty_group_id' => $beautyGroup->id,
-                        'package_id' => request('package_id'),
-                        'notes' => request('notes'),
-                        'category_id' => $vendor->category_id,
-                        'school_name' => $beautyGroup->school->school_name,
-                        'region_id' => $beautyGroup->school->region_id,
-                        'company_name' => $vendor->company_name,
-                        'url' => $vendor->website,
-                        'contact_instructions' => request('contact_instructions'),
-                        'status' => 0
-                    ]);
+                if ((Auth::user()->vendor->credits) >= 50) {
 
-                    $beautyGroupOwner = User::find($beautyGroup->owner->user_id);
+                    if($this->validBid($beautyGroup)){
+                        
+                        BeautyGroupBid::create([
+                            'user_id' => $vendor->user_id,
+                            'beauty_group_id' => $beautyGroup->id,
+                            'package_id' => request('package_id'),
+                            'notes' => request('notes'),
+                            'category_id' => $vendor->category_id,
+                            'school_name' => $beautyGroup->school->school_name,
+                            'region_id' => $beautyGroup->school->region_id,
+                            'company_name' => $vendor->company_name,
+                            'url' => $vendor->website,
+                            'contact_instructions' => request('contact_instructions'),
+                            'status' => 0
+                        ]);
 
-                    $beautyGroupOwner->notify(new GeneralNotification([
-                        'title' => 'New Beauty Group Bid',
-                        'message' => 'You have a new bid for your beauty group: ' . $beautyGroup->name,
-                        'action' => '/admin/beauty-groups',
-                    ]));
-                        
-                    Toast::success('Bid created succesfully');
-                        
-                    return redirect()->route('platform.bidopportunities.list');
-                }else{
-                    Toast::error('Bid already exists');
+                        $beautyGroupOwner = User::find($beautyGroup->owner->user_id);
+
+                        $beautyGroupOwner->notify(new GeneralNotification([
+                            'title' => 'New Beauty Group Bid',
+                            'message' => 'You have a new bid for your beauty group: ' . $beautyGroup->name,
+                            'action' => '/admin/beauty-groups',
+                        ]));
+                            
+                        Toast::success('Bid created succesfully');
+                            
+                        return redirect()->route('platform.bidopportunities.list');
+                    }else{
+                        Toast::error('Bid already exists');
+                    }
+                } else {
+                    Toast::error('Insuficient Credits');
+                    return redirect()->route('platform.shop'); 
                 }
-    
             }catch(Exception $e){
                 Alert::error('Error: ' . $e->getMessage());
             }

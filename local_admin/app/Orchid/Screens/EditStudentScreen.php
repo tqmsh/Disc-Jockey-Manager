@@ -168,7 +168,7 @@ class EditStudentScreen extends Screen
 
         }catch(Exception $e){
             
-            Alert::error('There was an error deleting this student. Error Code: ' . $e);
+            Alert::error('There was an error deleting this student. Error Code: ' . $e->getMessage());
         }
     }
 

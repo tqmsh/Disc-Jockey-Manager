@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\User;
+use App\Models\Vendors;
 use Orchid\Screen\TD;
 use App\Models\Student;
 use Orchid\Screen\Sight;
@@ -491,9 +492,12 @@ class ViewLimoGroupScreen extends Screen
             $bid = LimoGroupBid::find(request('bid_id'));
             $bid->status = request('choice');
             $new_vendor = User::find($bid->user_id);
-
+            $vendor = Vendors::where('user_id', $bid->user_id)->first();
+            $adPrice = 50;
 
             if(request('choice') == 1){
+                $vendor->decrement('credits', $adPrice);
+
                 $old_limo_group_bid = LimoGroupBid::where('limo_group_id', request('limo_group_id'))->where('status', 1)->first();
                 if($old_limo_group_bid != null){
                     $old_limo_group_bid->status = 0;

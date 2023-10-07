@@ -108,7 +108,7 @@ class DashboardScreen extends Screen
                 'locations' => $location_count
             ];
         } catch (Exception $e) {
-            Toast::error('There was an error processing the filter. Error Message: ' . $e);
+            Toast::error('There was an error processing the filter. Error Message: ' . $e->getMessage());
         }
         return [
             'dressesClaimed' => -1,

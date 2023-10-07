@@ -247,7 +247,7 @@ class EditSchoolScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error editing this school. Error Code: ' . $e);
+            Alert::error('There was an error editing this school. Error Code: ' . $e->getMessage());
         }
     }
 
@@ -265,7 +265,7 @@ class EditSchoolScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this school. Error Code: ' . $e);
+            Alert::error('There was an error deleting this school. Error Code: ' . $e->getMessage());
         }
     }
 

@@ -142,7 +142,7 @@ class ViewLocaladminScreen extends Screen
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
+            Alert::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e->getMessage());
         }
     }
 }
