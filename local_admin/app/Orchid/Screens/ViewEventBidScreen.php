@@ -111,7 +111,12 @@ class ViewEventBidScreen extends Screen
             $bid->save();
             $vendor = User::find($bid->user_id);
 
+            $adPrice = 50;
+
             if($bid->status == 1){
+
+                $vendor->decrement('credits', $adPrice);
+
                 $vendor->notify(new GeneralNotification([
                     'title' => 'Event Bid Accepted',
                     'message' => 'Your bid for ' . $event->event_name . ' has been accepted!',

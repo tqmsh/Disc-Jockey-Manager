@@ -15,6 +15,8 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Orchid\Layouts\ViewEventBidsLayout;
 use App\Orchid\Layouts\ViewPendingEventBidsLayout;
+use App\Models\Vendors;
+
 
 class ViewEventBidScreen extends Screen
 {
@@ -106,6 +108,14 @@ class ViewEventBidScreen extends Screen
         $bid = EventBids::find(request('bid_id'));
         $bid->status = request('choice');
         $bid->save();
+
+        $adPrice = 50;
+        $vendor = Vendors::where('user_id', $bid->user_id)->first();
+
+        if (($bid->status) == 1) {
+            $vendor->decrement('credits', $adPrice);
+        } 
+
         Toast::success('Bid updated successfully!');
         return redirect()->route('platform.eventBids.list', $event);
     }
