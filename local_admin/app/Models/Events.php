@@ -24,6 +24,9 @@ class Events extends Model
 
             $query->join('schools', 'schools.id', '=', 'school_id');
 
+            if(isset($filters['event'])){
+                $query->where('event_name', 'like', '%' . request('event') . '%');
+            }
 
             if(isset($filters['school'])){
                 $query ->where('school', 'like', '%' . request('school') . '%');
