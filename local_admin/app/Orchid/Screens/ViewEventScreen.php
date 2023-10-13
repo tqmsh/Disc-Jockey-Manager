@@ -84,7 +84,7 @@ class ViewEventScreen extends Screen
                 Group::make([
                     
                     Select::make('event')
-                        ->title('Event')
+                        ->title('Search Events')
                         ->help('Type in boxes to search')
                         ->empty('No selection')
                         ->fromQuery(Events::query()->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name', 'event_name'),
