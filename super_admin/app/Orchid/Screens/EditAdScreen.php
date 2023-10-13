@@ -170,7 +170,7 @@ class EditAdScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this campaign. Error Code: ' . $e);
+            Alert::error('There was an error deleting this campaign. Error Code: ' . $e->getMessage());
         }
     }
 

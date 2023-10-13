@@ -142,7 +142,7 @@ class ViewPendingVendorScreen extends Screen
             }
 
         }catch(Exception $e){
-            Alert::error('There was a error trying to accept the selected vendors. Error Message: ' . $e);
+            Alert::error('There was a error trying to accept the selected vendors. Error Message: ' . $e->getMessage());
         }
     }
 
@@ -165,7 +165,7 @@ class ViewPendingVendorScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected vendors. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected vendors. Error Message: ' . $e->getMessage());
         }
     }
 
