@@ -28,6 +28,12 @@ class Events extends Model
                 $query->where('event_name', 'like', '%' . request('event') . '%');
             }
 
+            if(isset($filters['sort_option'])){
+                // Specify ASC or DESC in sort_option string
+                // Otherwise, defaults to ASC
+                $query->orderByRaw($filters['sort_option']);
+            }
+
             if(isset($filters['school'])){
                 $query ->where('school', 'like', '%' . request('school') . '%');
             }
