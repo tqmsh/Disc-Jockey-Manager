@@ -19,6 +19,9 @@ use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewEventInvitationsLayout;
 
+use Illuminate\Http\Request;
+use Srmklive\PayPal\Services\PayPal as PayPalclient;
+
 class ViewEventScreen extends Screen
 {
     /**
@@ -125,6 +128,13 @@ class ViewEventScreen extends Screen
         else if($type == 'songs'){
             return redirect()->route('platform.songs.list', $event_id);
         }
+        else if ($type == 'buyTickets') {
+            // return redirect()->route('platform.limo-groups');
+
+            // return redirect()->away('https://www.google.com');
+
+            // return redirect()->route('paypal', $event_id);
+        }
         else if($type == 'election'){
             $election = Election::where('event_id',$event_id)->first();
 
@@ -151,5 +161,106 @@ class ViewEventScreen extends Screen
         }
 
         return redirect()->route('platform.event.register', $event_id);   
+    }
+
+    public function payment(Request $request) {
+        // ADD API NOW 
+        // dd('payment funtion #1');
+
+        // $price = $request->price;
+        // $credits = $request->input('credits');
+
+        // dd($price, $credits);
+
+        // dd($request);
+
+        // $this->price_1 = $request->input('price');
+
+        $provider = new PaypalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                // Success function gets called here
+                "return_url" => route('paypal_success'),
+                "cancel_url" => route('paypal_cancel')
+            ],
+            "purchase_units" => [
+                [
+                    "amount" => [
+                        "currency_code" => "CAD",
+                        "value" => 20
+                    ]
+                ]
+            ]
+        ]); 
+        // dd($response);
+
+
+
+        if(isset($response['id']) && $response['id']!=null) {
+            foreach($response['links'] as $link) {
+                if($link['rel'] === 'approve') {
+                    // dd($link['href']);
+                    return redirect()->away($link["href"]);
+                    // return redirect()->route('platform.limo-groups');
+                }
+            }
+        } else {
+            return redirect()->route('paypal_cancel');
+        }
+        
+    }
+
+    public function success(Request $request) {
+        dd('success funtion');
+
+
+        // dd($price, $credits);
+
+        // dd($request->input('credits'), )
+        $provider = new PaypalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+        $response =  $provider->capturePaymentOrder($request->token);
+
+        // $price = $request->input('price');
+        // $credits = $request->input('credits');
+
+        // dd($price, $credits);
+        // dd($this->price_1);
+
+        // Last check to see if the Payment went trough successfully
+        if(isset($response['status']) && $response['status'] == 'COMPLETED') {
+
+            // $vendor = Vendors::where('user_id', Auth::user()->id)->first();
+
+            // Add Data to the database
+            // Payment::create([
+            //     'user_id' => $vendor->user_id,
+            //     'credits_given' => $credits,
+            //     'payment_amount' => $price, // Assign the price to payment_amount
+            // ]);
+
+            // $vendor->increment('credits', $credits);
+            // $vendor->save();
+
+            dd("success");
+            
+
+            Toast::success('Credits bought Successfully!');
+
+            return redirect()->route('platform.event.list');
+
+        } else { 
+            return redirect()->route('paypal_cancel');
+
+        }
+    }
+
+    public function cancel() {
+        Toast::error('Error');
     }
 }

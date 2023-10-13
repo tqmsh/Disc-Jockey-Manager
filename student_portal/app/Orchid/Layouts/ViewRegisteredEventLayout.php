@@ -62,6 +62,18 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
                 }), 
+            
+            // Buy tickets button
+            TD::make()
+                ->render(function (Events $event) {
+                    return Button::make('Buy Tickets')
+                        ->icon('money')
+                        // ->method('redirect', ['event_id' => $event->id, 'type' => 'buyTickets'])
+                        // ->method('payment',['event_id' => $event->id, 'type' => 'buyTickets'])
+                        ->method('payment')
+                        ->type(Color::PRIMARY());
+                }),
+
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {
                     return e($event->event_start_time);

@@ -1,5 +1,9 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Orchid\Screens\BuyTicketsScreen;
+use App\Orchid\Screens\ViewEventScreen;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return view('welcome');
 });
+
+Route::post('paypal/payment/{event}', [ViewEventScreen::class, 'payment'])->name('paypal');
+
+Route::get('success/success', [ViewEventScreen::class, 'success'])->name('paypal_success');
+
+Route::get('success/cancel', [ViewEventScreen::class, 'cancel'])->name('paypal_cancel');
