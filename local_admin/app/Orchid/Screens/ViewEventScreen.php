@@ -29,7 +29,7 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         return [
-            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->filter(request(['event',]))->latest('events.created_at')->paginate(10),
+            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->filter(request(['event', 'sort_option',]))->latest('events.created_at')->paginate(10),
         ];
     }
 
@@ -88,6 +88,16 @@ class ViewEventScreen extends Screen
                         ->help('Type in boxes to search')
                         ->empty('No selection')
                         ->fromQuery(Events::query()->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name', 'event_name'),
+                    
+                    Select::make('sort_option')
+                        ->title('Order Events By')
+                        ->empty('No selection')
+                        ->options([
+                            'event_start_time ASC' => 'Start Date/Time (Earliest First)',
+                            'event_start_time DESC' => 'Start Date/Time (Latest First)',
+                            'event_finish_time ASC' => 'End Date/Time (Earliest First)',
+                            'event_finish_time DESC' => 'End Date/Time (Latest First)',
+                        ])
                 ]),
                 
                 Button::make('Filter')
@@ -101,7 +111,7 @@ class ViewEventScreen extends Screen
     }
 
     public function filter(){
-        return redirect()->route('platform.event.list', request(['event',]));
+        return redirect()->route('platform.event.list', request(['event', 'sort_option',]));
     }
 
     public function deleteEvents(Request $request)
