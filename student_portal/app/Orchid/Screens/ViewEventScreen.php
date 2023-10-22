@@ -18,6 +18,7 @@ use App\Orchid\Layouts\ViewEventLayout;
 use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewEventInvitationsLayout;
+use App\Http\Controllers\EventAttendeesController;
 
 use Illuminate\Http\Request;
 use Srmklive\PayPal\Services\PayPal as PayPalclient;
@@ -128,12 +129,8 @@ class ViewEventScreen extends Screen
         else if($type == 'songs'){
             return redirect()->route('platform.songs.list', $event_id);
         }
-        else if ($type == 'buyTickets') {
-            // return redirect()->route('platform.limo-groups');
-
-            // return redirect()->away('https://www.google.com');
-
-            // return redirect()->route('paypal', $event_id);
+        else if ($type == 'ticketBought') {
+            return redirect()->route('platform.event.list');
         }
         else if($type == 'election'){
             $election = Election::where('event_id',$event_id)->first();
@@ -163,19 +160,7 @@ class ViewEventScreen extends Screen
         return redirect()->route('platform.event.register', $event_id);   
     }
 
-    public function payment(Request $request) {
-        // ADD API NOW 
-        // dd('payment funtion #1');
-
-        // $price = $request->price;
-        // $credits = $request->input('credits');
-
-        // dd($price, $credits);
-
-        // dd($request);
-
-        // $this->price_1 = $request->input('price');
-
+    public function payment(Request $request, Events $event, $event_id) {
         $provider = new PaypalClient;
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
@@ -184,28 +169,23 @@ class ViewEventScreen extends Screen
             "intent" => "CAPTURE",
             "application_context" => [
                 // Success function gets called here
-                "return_url" => route('paypal_success'),
+                "return_url" => route('paypal_success', ['event_id' => $event->id]),
                 "cancel_url" => route('paypal_cancel')
             ],
             "purchase_units" => [
                 [
                     "amount" => [
                         "currency_code" => "CAD",
-                        "value" => 20
+                        "value" => $event->ticket_price,
                     ]
                 ]
             ]
         ]); 
-        // dd($response);
-
-
 
         if(isset($response['id']) && $response['id']!=null) {
             foreach($response['links'] as $link) {
                 if($link['rel'] === 'approve') {
-                    // dd($link['href']);
                     return redirect()->away($link["href"]);
-                    // return redirect()->route('platform.limo-groups');
                 }
             }
         } else {
@@ -214,43 +194,37 @@ class ViewEventScreen extends Screen
         
     }
 
-    public function success(Request $request) {
-        dd('success funtion');
+    public function success(Request $request, $event_id) {
 
-
-        // dd($price, $credits);
-
-        // dd($request->input('credits'), )
         $provider = new PaypalClient;
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
         $response =  $provider->capturePaymentOrder($request->token);
 
-        // $price = $request->input('price');
-        // $credits = $request->input('credits');
-
-        // dd($price, $credits);
-        // dd($this->price_1);
-
         // Last check to see if the Payment went trough successfully
         if(isset($response['status']) && $response['status'] == 'COMPLETED') {
 
-            // $vendor = Vendors::where('user_id', Auth::user()->id)->first();
+            EventAttendees::where('user_id', Auth::user()->id)
+                                    ->where('event_id', $event_id)
+                                    ->update(array('ticketstatus' => 'paid'));
+                        
 
-            // Add Data to the database
-            // Payment::create([
-            //     'user_id' => $vendor->user_id,
-            //     'credits_given' => $credits,
-            //     'payment_amount' => $price, // Assign the price to payment_amount
-            // ]);
+            Toast::success('Tickets bought Successfully!');
 
-            // $vendor->increment('credits', $credits);
-            // $vendor->save();
+            $user = Auth::user();
 
-            dd("success");
-            
+            $requestData = new Request();
+            $requestData->setUserResolver(function () use ($user) {
+                return $user;
+            });
 
-            Toast::success('Credits bought Successfully!');
+            $requestData->merge([
+                'attendee_id' => strval(Auth::user()->id),
+                'event_id' => $event_id
+            ]);
+
+            $eventAttendeesController = new EventAttendeesController();
+            $response_1 = $eventAttendeesController->createCode($requestData);
 
             return redirect()->route('platform.event.list');
 

@@ -7,6 +7,10 @@ use App\Models\Events;
 use Orchid\Support\Color;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
+use App\Models\EventAttendees;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class ViewRegisteredEventLayout extends Table
 {
@@ -66,13 +70,23 @@ class ViewRegisteredEventLayout extends Table
             // Buy tickets button
             TD::make()
                 ->render(function (Events $event) {
-                    return Button::make('Buy Tickets')
-                        ->icon('money')
-                        // ->method('redirect', ['event_id' => $event->id, 'type' => 'buyTickets'])
-                        // ->method('payment',['event_id' => $event->id, 'type' => 'buyTickets'])
-                        ->method('payment')
-                        ->type(Color::PRIMARY());
+                    $eventAttendee = EventAttendees::where('user_id', Auth::user()->id)
+                    ->where('event_id', $event->id)
+                    ->first();
+
+                    if ($eventAttendee->ticketstatus == 'Unpaid') {
+                        return Button::make('Buy Tickets')
+                            ->icon('money')
+                            ->method('payment',['event_id' => $event->id])
+                            ->type(Color::PRIMARY());
+                    } else if ($eventAttendee->ticketstatus == 'paid'){
+                        return Button::make('Tickets Bought')
+                            ->icon('check')
+                            ->method('redirect', ['event_id' => $event->id, 'type' => 'ticketBought'])
+                            ->type(Color::SUCCESS());
+                    }
                 }),
+            
 
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {
