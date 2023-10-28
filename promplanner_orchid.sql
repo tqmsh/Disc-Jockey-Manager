@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2023 at 07:44 PM
+-- Generation Time: Oct 28, 2023 at 06:32 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `promplanner_orchid`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `actual_expenses_revenues`
+--
+
+CREATE TABLE `actual_expenses_revenues` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `universal_id` bigint(20) UNSIGNED NOT NULL,
+  `event_id` bigint(20) UNSIGNED NOT NULL,
+  `type` tinyint(4) NOT NULL COMMENT '1=Expense 2=Revenue',
+  `budget` int(11) NOT NULL,
+  `actual` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_updated_user_id` bigint(20) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -172,7 +190,10 @@ INSERT INTO `attachments` (`id`, `name`, `original_name`, `mime`, `extension`, `
 (84, '9bf017af2ea6055377e7c30fe3da3ed6a86774ea', 'blob', 'image/png', 'png', 2296389, 0, '2023/08/28/', NULL, NULL, 'decd16d8f0bd7db52c05eabda4dad6a8f265997e', 's3', 151, NULL, '2023-08-28 19:41:09', '2023-08-28 19:41:09'),
 (85, '4b258f9ee8911a9f3e76e88d8d1ab6462e2e2790', 'blob', 'image/png', 'png', 2282812, 0, '2023/08/28/', NULL, NULL, '784d5a737a8cb8054aab998bad0793fc00058746', 's3', 151, NULL, '2023-08-28 19:48:31', '2023-08-28 19:48:31'),
 (86, 'bada0d067ee1cda08adcd86c7f373469cae9228e', 'blob', 'image/png', 'png', 2084604, 0, '2023/08/28/', NULL, NULL, 'f8cc5745a08188c4ad0c9a21c01370e68762c6f4', 's3', 151, NULL, '2023-08-28 19:49:51', '2023-08-28 19:49:51'),
-(87, '2ceb104c3fb5502a82b49e24a5cd18cf97b3574c', 'blob', 'image/png', 'png', 2221813, 0, '2023/08/28/', NULL, NULL, '7897650ee3ed3769b35babac92ecfe9004a89e28', 's3', 151, NULL, '2023-08-28 19:51:47', '2023-08-28 19:51:47');
+(87, '2ceb104c3fb5502a82b49e24a5cd18cf97b3574c', 'blob', 'image/png', 'png', 2221813, 0, '2023/08/28/', NULL, NULL, '7897650ee3ed3769b35babac92ecfe9004a89e28', 's3', 151, NULL, '2023-08-28 19:51:47', '2023-08-28 19:51:47'),
+(88, '6cf9468c8a98f5307f49a79d1e11a95812797bbf', 'venture-tech-website-favicon-white.webp', 'image/webp', 'webp', 588, 0, '2023/08/30/', NULL, NULL, 'f197f1c90d8e5787577ee098992b688a3025ec02', 's3', 151, NULL, '2023-08-30 21:02:19', '2023-08-30 21:02:19'),
+(89, '437a8a40b2383cab2df953c300cc12299ad93c53', 'blob', 'image/png', 'png', 3417441, 0, '2023/08/30/', NULL, NULL, 'c7c8d4f84c394265251ad6549bd418b9261663f2', 's3', 151, NULL, '2023-08-31 00:41:41', '2023-08-31 00:41:41'),
+(90, '819278e0a85660c4daf58c4b477f56a93814b1aa', 'blob', 'image/png', 'png', 2074669, 0, '2023/08/30/', NULL, NULL, '47660063ee2a716d78e2178b9fe40b6f01e91d30', 's3', 151, NULL, '2023-08-31 00:43:39', '2023-08-31 00:43:39');
 
 -- --------------------------------------------------------
 
@@ -616,7 +637,9 @@ CREATE TABLE `food` (
 --
 
 INSERT INTO `food` (`id`, `event_id`, `name`, `description`, `image`, `vegetarian`, `vegan`, `halal`, `gluten_free`, `kosher`, `nut_free`, `dairy_free`, `created_at`, `updated_at`) VALUES
-(6, 14, 'Pepperoni Pizza', 'Pepperoni pizza with onions, mushrooms, olives, peppers and extra cheese', 'https://promplanner.s3.amazonaws.com/2023/08/28/bada0d067ee1cda08adcd86c7f373469cae9228e.png', 0, 0, 0, 0, 0, 1, 0, '2023-08-28 19:50:15', '2023-08-28 20:23:38');
+(6, 14, 'Pepperoni Pizza', 'Pepperoni pizza with onions, mushrooms, olives, peppers and extra cheese', 'https://promplanner.s3.amazonaws.com/2023/08/28/bada0d067ee1cda08adcd86c7f373469cae9228e.png', 0, 0, 0, 0, 0, 1, 0, '2023-08-28 19:50:15', '2023-08-28 20:23:38'),
+(8, 14, 'Steak', 'Pan seared steak seasoned with salt, pepper, rosemary and seared in butter.', 'https://promplanner.s3.amazonaws.com/2023/08/30/437a8a40b2383cab2df953c300cc12299ad93c53.png', 0, 0, 1, 1, 0, 1, 1, '2023-08-31 00:42:27', '2023-08-31 00:42:27'),
+(9, 14, 'Pasta', 'Buttery pasta with sausages and basil', 'https://promplanner.s3.amazonaws.com/2023/08/30/819278e0a85660c4daf58c4b477f56a93814b1aa.png', 0, 0, 0, 0, 0, 1, 1, '2023-08-31 00:44:12', '2023-08-31 00:44:12');
 
 -- --------------------------------------------------------
 
@@ -849,7 +872,7 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('7af33cc6-8454-4f1e-beef-347f5f0d33b6', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-19T01:51:11.001733Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingstudents\"}', '2023-08-26 01:16:03', '2023-08-19 05:51:11', '2023-08-26 01:16:03'),
 ('7f8cce26-a9f8-4e16-b88d-ada05a569239', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-07-29T20:03:09.477733Z\",\"type\":\"info\",\"title\":\"Limo Group Bid Changed\",\"message\":\"Your bid for theBest Limo Group Editedlimo group has been chnaged. Please contact the limo group owner for more information.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bids\\/history\"}', '2023-07-30 00:08:45', '2023-07-30 00:03:09', '2023-07-30 00:08:45'),
 ('8bb08253-3a9d-48eb-a3e1-ea1a5da58ffd', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-19T01:12:19.499838Z\",\"type\":\"info\",\"title\":\"New Vendor Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingvendors\"}', '2023-08-19 05:13:09', '2023-08-19 05:12:19', '2023-08-19 05:13:09'),
-('93c76c20-7678-4720-80a5-541c23abf6b9', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-08-19T02:15:53.972713Z\",\"type\":\"info\",\"title\":\"Event Bid Rejected\",\"message\":\"Your bid for Digitera\'s Main DJ Event has been rejected!\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bid\\/history\"}', NULL, '2023-08-19 06:15:53', '2023-08-19 06:15:53'),
+('93c76c20-7678-4720-80a5-541c23abf6b9', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-08-19T02:15:53.972713Z\",\"type\":\"info\",\"title\":\"Event Bid Rejected\",\"message\":\"Your bid for Digitera\'s Main DJ Event has been rejected!\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bid\\/history\"}', '2023-10-01 02:48:19', '2023-08-19 06:15:53', '2023-10-01 02:48:19'),
 ('968a6138-ab6f-48df-9eeb-676dac91e051', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-25T21:40:46.311698Z\",\"type\":\"info\",\"title\":\"Event Invitation Accepted\",\"message\":\"Farhan Work has accepted your invitation to The Perfect Event For You!.\",\"action\":\"\\/admin\\/events\\/students\\/15\"}', '2023-08-26 01:41:33', '2023-08-26 01:40:46', '2023-08-26 01:41:33'),
 ('a44c7f6a-ef30-4db4-928c-803a5d99080d', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 213, '{\"time\":\"2023-08-25T21:36:24.565712Z\",\"type\":\"info\",\"title\":\"You have been invited to an event\",\"message\":\"You have been invited to the event by the Prom Committee. Please check the event page for more details.\",\"action\":\"\\/admin\\/events\"}', '2023-08-26 01:37:06', '2023-08-26 01:36:24', '2023-08-26 01:37:06'),
 ('ac1963fc-e445-4ab2-9e46-cd44297ee761', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-08-22T16:40:06.483151Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Hi Hi. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-08-22 20:44:00', '2023-08-22 20:40:06', '2023-08-22 20:44:00'),
@@ -892,6 +915,28 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `payment_amount` decimal(10,0) NOT NULL DEFAULT 0,
+  `credits_given` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `user_id`, `payment_amount`, `credits_given`, `created_at`, `updated_at`) VALUES
+(1, 197, '29', 10, '2023-10-01 02:43:53', '2023-10-01 02:43:53');
 
 -- --------------------------------------------------------
 
@@ -1293,8 +1338,8 @@ CREATE TABLE `students` (
 INSERT INTO `students` (`id`, `user_id`, `school_id`, `firstname`, `lastname`, `grade`, `phonenumber`, `email`, `account_status`, `school`, `allergies`, `created_at`, `updated_at`) VALUES
 (105, 145, 53, 'John', 'Smith', 12, '(465) 987-9797', 'johnsmith@gmail.com', 1, 'Colonel By Secondary School', NULL, '2022-11-20 11:14:59', '2023-06-15 23:57:13'),
 (106, 146, 51, 'Jane', 'Doe', 10, '(456) 879-4564', 'janedoe@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-11-20 11:23:42', '2022-11-26 22:17:01'),
-(107, 152, 51, 'Hey', 'Man', 12, '(546) 465-6464', 'heyman@heyman.com', 1, 'Digitera School of Digital Marketing & Software', 'Hey Man', '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
-(109, 154, 51, 'retert', 'ert', 9, '(546) 464-6465', 'loca65+ladmin001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', '55', '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
+(107, 152, 51, 'Hey', 'Man', 12, '(546) 465-6464', 'heyman@heyman.com', 1, 'Digitera School of Digital Marketing & Software', 'Dairy', '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
+(109, 154, 51, 'retert', 'ert', 9, '(546) 464-6465', 'loca65+ladmin001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
 (110, 155, 51, 'Student 1', 'Student 1', 12, '(546) 897-8921', 'student001@promplanner.com', 1, 'Digitera School of Digital Marketing & Software', 'Peanuts', '2022-12-05 18:58:15', '2023-07-27 01:35:08'),
 (121, 169, 51, 'Import 1', 'efwefwef', 9, '12345678910', 'import1@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nuts', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (122, 170, 51, 'Import 2', 'wefwef', 10, '9632587459', 'import2@gmail.com', 1, 'Digitera School of Digital Marketing & Software', 'Nutseeee', '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
@@ -1347,6 +1392,21 @@ INSERT INTO `student_bids` (`id`, `user_id`, `student_user_id`, `region_id`, `pa
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `universal_expenses_revenues`
+--
+
+CREATE TABLE `universal_expenses_revenues` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` tinyint(4) NOT NULL COMMENT '1=Expense 2=Revenue',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `last_updated_user_id` bigint(20) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1393,10 +1453,10 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', NULL, 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
 (149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', NULL, 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
 (150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', NULL, 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'jZPsw9fwvJGXZVyzRpbXv7QEtb0wlNpdd48viKSu94UkA4tvPWglmyInfKUt', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'uxbFoi5LJscH5kyZZXmMIdYUZCH0woO0moYRdf8x4Gt9CzhZIY1WaBuBJgmS', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://promplanner.s3.amazonaws.com/2023/07/26/a16dd23d9874710210b4e904ccfc9cdb92de2675.png', 'cDxT7pqIDePkV3VzkABaWL4fFbEadJaMBuTQ7uKdnPgYC6LLRRGYqiuO1ScT', '2022-12-05 18:58:15', '2023-07-27 01:35:08'),
+(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://promplanner.s3.amazonaws.com/2023/07/26/a16dd23d9874710210b4e904ccfc9cdb92de2675.png', 'wEupjKv1QtHTM2cyXDj7V4esqcK65nmNdu1poyqPRglNqsVUDmngLs75PeY0', '2022-12-05 18:58:15', '2023-07-27 01:35:08'),
 (169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
@@ -1440,6 +1500,7 @@ CREATE TABLE `vendors` (
   `phonenumber` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `website` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `credits` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1448,15 +1509,15 @@ CREATE TABLE `vendors` (
 -- Dumping data for table `vendors`
 --
 
-INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `account_status`, `company_name`, `address`, `city`, `state_province`, `country`, `zip_postal`, `phonenumber`, `website`, `email`, `created_at`, `updated_at`) VALUES
-(2, 181, 13, 1, 'Update Vendor', 'Update Vendor', 'Ottawa', 'Ontario', 'Costa Rica', 'K1K 2G6', '(455) 674-9877', 'https://laravel.com/docs/9.x/requests#retrieving-a-portion-of-the-input-data', 'UpdateVendor@hotmail.com', '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
-(6, 188, 9, 1, 'Bidenn Corporatione', '4735 lol street', 'nah', 'nah', 'USA', '2353', 'dssdddsddss', 'https://www.youtube.com/', 'bidenjoe@isuck.com', '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
-(8, 190, 10, 1, 'Trump Party', '87 Dolla Dolla Bills', 'Money Land', 'fsdfs', 'USA', 'sdfsdf', 'dssdddsddss', 'https://www.youtube.com/', 'trumpman@maga.com', '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
-(9, 196, 9, 1, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', '(454) 546-4566', 'https://www.donaldjtrump.com/', 'donaldtrump@trump.com', '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(10, 197, 18, 1, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', '2023-01-21 02:41:46', '2023-07-15 23:00:55'),
-(14, 209, 18, 1, 'New Vendor LLC', '1234 Main St', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', '(123) 456-789_', 'https://amazon.com', 'newvendor@test.com', '2023-07-29 23:39:18', '2023-07-29 23:42:31'),
-(15, 210, 19, 1, 'Salon Pros', 'Salon Orad', 'Ottawa', 'Ontario', 'Canada', 'K1A 7G7', '(456) 123-7895', 'https://amazon.com', 'salonpros@gmail.com', '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
-(16, 211, 12, 0, 'NewMan Inc', 'NewManInc 123', 'Ottawa', 'Ontario', 'Canada', 'K1K2G6', '(445) 454-5454', 'https://promplanner.app/prom-planner-team/', 'NewManInc@gmail.com', '2023-08-19 05:12:18', '2023-08-19 05:12:18');
+INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `account_status`, `company_name`, `address`, `city`, `state_province`, `country`, `zip_postal`, `phonenumber`, `website`, `email`, `credits`, `created_at`, `updated_at`) VALUES
+(2, 181, 13, 1, 'Update Vendor', 'Update Vendor', 'Ottawa', 'Ontario', 'Costa Rica', 'K1K 2G6', '(455) 674-9877', 'https://laravel.com/docs/9.x/requests#retrieving-a-portion-of-the-input-data', 'UpdateVendor@hotmail.com', 0, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
+(6, 188, 9, 1, 'Bidenn Corporatione', '4735 lol street', 'nah', 'nah', 'USA', '2353', 'dssdddsddss', 'https://www.youtube.com/', 'bidenjoe@isuck.com', 0, '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
+(8, 190, 10, 1, 'Trump Party', '87 Dolla Dolla Bills', 'Money Land', 'fsdfs', 'USA', 'sdfsdf', 'dssdddsddss', 'https://www.youtube.com/', 'trumpman@maga.com', 0, '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
+(9, 196, 9, 1, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', '(454) 546-4566', 'https://www.donaldjtrump.com/', 'donaldtrump@trump.com', 0, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
+(10, 197, 18, 1, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', 10, '2023-01-21 02:41:46', '2023-10-01 02:43:53'),
+(14, 209, 18, 1, 'New Vendor LLC', '1234 Main St', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', '(123) 456-789_', 'https://amazon.com', 'newvendor@test.com', 0, '2023-07-29 23:39:18', '2023-07-29 23:42:31'),
+(15, 210, 19, 1, 'Salon Pros', 'Salon Orad', 'Ottawa', 'Ontario', 'Canada', 'K1A 7G7', '(456) 123-7895', 'https://amazon.com', 'salonpros@gmail.com', 0, '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
+(16, 211, 12, 0, 'NewMan Inc', 'NewManInc 123', 'Ottawa', 'Ontario', 'Canada', 'K1K2G6', '(445) 454-5454', 'https://promplanner.app/prom-planner-team/', 'NewManInc@gmail.com', 0, '2023-08-19 05:12:18', '2023-08-19 05:12:18');
 
 -- --------------------------------------------------------
 
@@ -1523,6 +1584,15 @@ INSERT INTO `vendor_paid_regions` (`id`, `user_id`, `region_id`, `created_at`, `
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `actual_expenses_revenues`
+--
+ALTER TABLE `actual_expenses_revenues`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `universal_id` (`universal_id`,`event_id`),
+  ADD KEY `last_updated_user_id` (`last_updated_user_id`),
+  ADD KEY `event_id_ex_rev` (`event_id`);
 
 --
 -- Indexes for table `announcments`
@@ -1774,6 +1844,13 @@ ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `payments_user_id` (`user_id`);
+
+--
 -- Indexes for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
@@ -1885,6 +1962,13 @@ ALTER TABLE `student_bids`
   ADD KEY `category_id` (`category_id`);
 
 --
+-- Indexes for table `universal_expenses_revenues`
+--
+ALTER TABLE `universal_expenses_revenues`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `last_updated_user_id` (`last_updated_user_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1920,6 +2004,12 @@ ALTER TABLE `vendor_paid_regions`
 --
 
 --
+-- AUTO_INCREMENT for table `actual_expenses_revenues`
+--
+ALTER TABLE `actual_expenses_revenues`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `announcments`
 --
 ALTER TABLE `announcments`
@@ -1935,7 +2025,7 @@ ALTER TABLE `attachmentable`
 -- AUTO_INCREMENT for table `attachments`
 --
 ALTER TABLE `attachments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `beauty_groups`
@@ -2037,7 +2127,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `food`
 --
 ALTER TABLE `food`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `invitation`
@@ -2086,6 +2176,12 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `no_play_songs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -2160,6 +2256,12 @@ ALTER TABLE `student_bids`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `universal_expenses_revenues`
+--
+ALTER TABLE `universal_expenses_revenues`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -2186,6 +2288,14 @@ ALTER TABLE `vendor_paid_regions`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `actual_expenses_revenues`
+--
+ALTER TABLE `actual_expenses_revenues`
+  ADD CONSTRAINT `event_id_ex_rev` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `last_updated_user_id_actual` FOREIGN KEY (`last_updated_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `universal_id_rel` FOREIGN KEY (`universal_id`) REFERENCES `universal_expenses_revenues` (`id`);
 
 --
 -- Constraints for table `announcments`
@@ -2361,6 +2471,12 @@ ALTER TABLE `no_play_songs`
   ADD CONSTRAINT `no-play-song-event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payments_user_id_rel` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `positions`
 --
 ALTER TABLE `positions`
@@ -2428,6 +2544,12 @@ ALTER TABLE `student_bids`
   ADD CONSTRAINT `student_bids_ibfk_3` FOREIGN KEY (`package_id`) REFERENCES `vendor_packages` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_bids_ibfk_4` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_user_id` FOREIGN KEY (`student_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `universal_expenses_revenues`
+--
+ALTER TABLE `universal_expenses_revenues`
+  ADD CONSTRAINT `user_id_last_updated` FOREIGN KEY (`last_updated_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `users`
