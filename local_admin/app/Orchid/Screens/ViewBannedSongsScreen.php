@@ -77,7 +77,7 @@ class ViewBannedSongsScreen extends Screen
                 Toast::warning('You have not selected any songs');
             }
         } catch (Exception $e) {
-            Alert::error('There was an error trying to unban the selected songs. Error Message: ' . $e);
+            Alert::error('There was an error trying to unban the selected songs. Error Message: ' . $e->getMessage());
         }
     }
 }

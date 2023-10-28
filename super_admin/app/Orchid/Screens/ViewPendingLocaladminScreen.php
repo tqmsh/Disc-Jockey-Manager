@@ -170,7 +170,7 @@ class ViewPendingLocaladminScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected local admins. Error Message: ' . $e->getMessage());
         }
     }
 }

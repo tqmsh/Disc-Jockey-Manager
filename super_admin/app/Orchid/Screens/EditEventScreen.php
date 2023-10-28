@@ -211,7 +211,7 @@ class EditEventScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this event. Error Code: ' . $e);
+            Alert::error('There was an error deleting this event. Error Code: ' . $e->getMessage());
         }     
     }
 }

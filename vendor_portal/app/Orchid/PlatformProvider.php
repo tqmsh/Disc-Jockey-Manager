@@ -45,7 +45,7 @@ class PlatformProvider extends OrchidServiceProvider
             // SHOP
             Menu::make('Shop')
             ->icon('bag')
-            ->route('platform.shop', ['vendor' => $vendor]),
+            ->route('platform.shop'),
 
 
             //MONEYYY MAKER

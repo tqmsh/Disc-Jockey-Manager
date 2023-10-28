@@ -89,7 +89,7 @@ class Dress extends Model
             $query->select('dresses.*', 'vendors.company_name');
 
         } catch (Exception $e) {
-            Toast::error('There was an error processing the scope filter. Error Message: ' . $e);
+            Toast::error('There was an error processing the scope filter. Error Message: ' . $e->getMessage());
         }
     }
 

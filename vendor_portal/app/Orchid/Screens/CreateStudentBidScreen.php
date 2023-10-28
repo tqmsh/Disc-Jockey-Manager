@@ -21,6 +21,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\GeneralNotification;
 
+
 class CreateStudentBidScreen extends Screen
 {
     public $student;
@@ -58,7 +59,7 @@ class CreateStudentBidScreen extends Screen
     {
         return [
 
-            Button::make('Send Bid')
+            Button::make('Send Bid (50 credits)')
                 ->icon('plus')
                 ->method('createBid'),
 
@@ -146,37 +147,41 @@ class CreateStudentBidScreen extends Screen
 
             try{   
 
-                if($this->validBid($student)){
-                    
-                    StudentBids::create([
-                        'user_id' => $vendor->user_id,
-                        'student_user_id' => $student->user_id,
-                        'package_id' => request('package_id'),
-                        'notes' => request('notes'),
-                        'category_id' => $vendor->category_id,
-                        'school_name' => $student->school,
-                        'region_id' => $student->school()->first()->region_id,
-                        'company_name' => $vendor->company_name,
-                        'url' => $vendor->website,
-                        'contact_instructions' => request('contact_instructions'),
-                        'status' => 0
-                    ]);
-
-                    $user = User::find($student->user_id);
-
-                    $user->notify(new GeneralNotification([
-                        'title' => 'New Bid placed on you!',
-                        'message' => 'You have a new bid placed on you from: ' . $vendor->company_name,
-                        'action' => '/admin/bids',
-                    ]));
+                if ((Auth::user()->vendor->credits) >= 50) {
+                    if($this->validBid($student)){
                         
-                    Toast::success('Bid created succesfully');
-                        
-                    return redirect()->route('platform.bidopportunities.list');
-                }else{
-                    Toast::error('Bid already exists');
+                        StudentBids::create([
+                            'user_id' => $vendor->user_id,
+                            'student_user_id' => $student->user_id,
+                            'package_id' => request('package_id'),
+                            'notes' => request('notes'),
+                            'category_id' => $vendor->category_id,
+                            'school_name' => $student->school,
+                            'region_id' => $student->school()->first()->region_id,
+                            'company_name' => $vendor->company_name,
+                            'url' => $vendor->website,
+                            'contact_instructions' => request('contact_instructions'),
+                            'status' => 0
+                        ]);
+
+                        $user = User::find($student->user_id);
+
+                        $user->notify(new GeneralNotification([
+                            'title' => 'New Bid placed on you!',
+                            'message' => 'You have a new bid placed on you from: ' . $vendor->company_name,
+                            'action' => '/admin/bids',
+                        ]));
+                            
+                        Toast::success('Bid created succesfully');
+                            
+                        return redirect()->route('platform.bidopportunities.list');
+                    }else{
+                        Toast::error('Bid already exists');
+                    }
+                } else {
+                    Toast::error('Insuficient Credits');
+                    return redirect()->route('platform.shop');
                 }
-    
             }catch(Exception $e){
                 Alert::error('Error: ' . $e->getMessage());
             }

@@ -110,7 +110,7 @@ class EditRegionScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this region. Error Code: ' . $e);
+            Alert::error('There was an error deleting this region. Error Code: ' . $e->getMessage());
         }
     }
 }
