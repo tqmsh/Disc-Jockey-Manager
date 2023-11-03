@@ -29,7 +29,7 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         return [
-            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->paginate(10),
+            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->filter(request(['event', 'sort_option',]))->latest('events.created_at')->paginate(10),
         ];
     }
 
@@ -83,25 +83,24 @@ class ViewEventScreen extends Screen
 
                 Group::make([
                     
-                    Select::make('school')
-                        ->title('School')
-                        ->help('Type in boxes to search')
-                        ->empty('Start typing to search...')
+                    Select::make('event')
+                        ->title('Search Events')
+                        ->help('Type in boxes to search')            ->empty('No selection')
                         ->fromModel(Events::class, 'school', 'school'),
 
                     Select::make('country')
                         ->title('Country')
-                        ->empty('Start typing to search...')
+                        ->empty('No selection')
                         ->fromModel(School::class, 'country', 'country'),
 
                     Select::make('school_board')
                         ->title('School Board')
-                        ->empty('Start typing to search...')
+                        ->empty('No selection')
                         ->fromModel(School::class, 'school_board', 'school_board'),
 
                     Select::make('state_province')
                         ->title('State/Province')
-                        ->empty('Start typing to search...')
+                        ->empty('No selection')
                         ->fromModel(School::class, 'state_province', 'state_province'),
                 ]),
                 
@@ -116,7 +115,7 @@ class ViewEventScreen extends Screen
     }
 
     public function filter(){
-        return redirect()->route('platform.event.list', request(['school', 'country', 'school_board', 'state_province']));
+        return redirect()->route('platform.event.list', request(['event', 'sort_option',]));
     }
 
     public function deleteEvents(Request $request)

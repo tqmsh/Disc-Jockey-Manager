@@ -2,14 +2,17 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\User;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Region;
 use App\Models\Vendors;
+use App\Notifications\GeneralNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Cropper;
@@ -133,6 +136,15 @@ class CreateAdScreen extends Screen
                     "clicks"=>0,
                     "impressions"=>0
                 ]);
+
+                    // Send notification to all super admins that vendor has created an ad
+                    $super_admins = User::where('role', 1)->get();
+                    Notification::send($super_admins, new GeneralNotification([
+                        'title' => 'New Campaign Created',
+                        'message' => Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has created a new campaign. Please accept or reject it.',
+                        'action' => '/admin/campaigns',
+                    ]));
+
                 //toast success message
                 Toast::success('Campaign Created Successfully');
                 //redirect to vendor list
