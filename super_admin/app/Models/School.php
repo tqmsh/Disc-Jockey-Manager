@@ -53,4 +53,9 @@ class School extends Model
         return $this->attributes['school_name'] . ' (' . $this->attributes['county'] . ', ' . $this->attributes['state_province'] .')';
     }
 
+    public function events() {
+        return $this->hasMany(Event::class);
+    }
+
+
 }

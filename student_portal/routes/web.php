@@ -15,3 +15,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return view('welcome');
 });
+
+Route::get('paypal/payment', [ViewEventScreen::class, 'payment'])->name('paypal');
+
+Route::get('success/success/{event_id}', [ViewEventScreen::class, 'success'])->name('paypal_success');
+
+Route::get('success/cancel', [ViewEventScreen::class, 'cancel'])->name('paypal_cancel');

@@ -30,6 +30,72 @@ class ViewEventLayout extends Table
      */
     protected function columns(): iterable
     {
+        $stateAbbreviations = [
+            'Alabama' => 'AL',
+            'Alaska' => 'AK',
+            'Arizona' => 'AZ',
+            'Arkansas' => 'AR',
+            'California' => 'CA',
+            'Colorado' => 'CO',
+            'Connecticut' => 'CT',
+            'Delaware' => 'DE',
+            'Florida' => 'FL',
+            'Georgia' => 'GA',
+            'Hawaii' => 'HI',
+            'Idaho' => 'ID',
+            'Illinois' => 'IL',
+            'Indiana' => 'IN',
+            'Iowa' => 'IA',
+            'Kansas' => 'KS',
+            'Kentucky' => 'KY',
+            'Louisiana' => 'LA',
+            'Maine' => 'ME',
+            'Maryland' => 'MD',
+            'Massachusetts' => 'MA',
+            'Michigan' => 'MI',
+            'Minnesota' => 'MN',
+            'Mississippi' => 'MS',
+            'Missouri' => 'MO',
+            'Montana' => 'MT',
+            'Nebraska' => 'NE',
+            'Nevada' => 'NV',
+            'New Hampshire' => 'NH',
+            'New Jersey' => 'NJ',
+            'New Mexico' => 'NM',
+            'New York' => 'NY',
+            'North Carolina' => 'NC',
+            'North Dakota' => 'ND',
+            'Ohio' => 'OH',
+            'Oklahoma' => 'OK',
+            'Oregon' => 'OR',
+            'Pennsylvania' => 'PA',
+            'Rhode Island' => 'RI',
+            'South Carolina' => 'SC',
+            'South Dakota' => 'SD',
+            'Tennessee' => 'TN',
+            'Texas' => 'TX',
+            'Utah' => 'UT',
+            'Vermont' => 'VT',
+            'Virginia' => 'VA',
+            'Washington' => 'WA',
+            'West Virginia' => 'WV',
+            'Wisconsin' => 'WI',
+            'Wyoming' => 'WY',
+            'Alberta' => 'AB',
+            'British Columbia' => 'BC',
+            'Manitoba' => 'MB',
+            'New Brunswick' => 'NB',
+            'Newfoundland and Labrador' => 'NL',
+            'Northwest Territories' => 'NT',
+            'Nova Scotia' => 'NS',
+            'Nunavut' => 'NU',
+            'Ontario' => 'ON',
+            'Prince Edward Island' => 'PE',
+            'Quebec' => 'QC',
+            'Saskatchewan' => 'SK',
+            'Yukon' => 'YT',
+        ];
+        
         return [
             TD::make()
                 ->render(function (Events $event){
@@ -59,45 +125,28 @@ class ViewEventLayout extends Table
                         ->icon('music-tone-alt')         
                         ->method('redirect', ['event_id' => $event->id, 'type' => 'songReq'])
                         ->type(Color::INFO());
+                        // ->class('blue', 'responsive-button', 'button');
                 }),
 
 
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
-                    return Link::make($event->event_name)
-                        ->route('platform.event.edit', $event);
-                }),
-            TD::make('event_start_time', 'Event Start Date')
-                ->render(function (Events $event) {
-                    return Link::make($event->event_start_time)
-                        ->route('platform.event.edit', $event);
-                }),
+                    return $event->event_name;
+                })->width('45%'),
+
             TD::make('school', 'School')
                 ->render(function (Events $event) {
-                    return Link::make($event->school)
-                        ->route('platform.event.edit', $event);
-                }),
-            TD::make('event_address', 'Event Address')
-                ->render(function (Events $event) {
-                    return Link::make($event->event_address)
-                        ->route('platform.event.edit', $event);
-                }),
-            TD::make('event_zip_postal', 'Event Zip/Postal')
-                ->render(function (Events $event) {
-                    return Link::make($event->event_zip_postal)
-                        ->route('platform.event.edit', $event);
-                }),
-            TD::make('event_info', 'Event Info')
-                ->render(function (Events $event) {
-                    return Link::make($event->event_info)
-                        ->route('platform.event.edit', $event);
-                }),
+                    return $event->school;
+                })->width('75%'),
 
-            TD::make('event_rules', 'Event Rules')
-                ->render(function (Events $event) {
-                    return Link::make($event->event_rules)
-                        ->route('platform.event.edit', $event);
-                }),
+            TD::make('state_province', 'State')
+                ->render(function (Events $event) use ($stateAbbreviations) {
+                    $stateName = $event->school_1->state_province;
+                    $abbreviation = $stateAbbreviations[$stateName] ?? $stateName;
+
+                    return $abbreviation;
+                })->width('10px'),
+
                 
             TD::make()
                 ->render(function (Events $event) {

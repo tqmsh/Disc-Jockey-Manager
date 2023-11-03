@@ -86,22 +86,22 @@ class ViewEventScreen extends Screen
                     Select::make('school')
                         ->title('School')
                         ->help('Type in boxes to search')
-                        ->empty('No selection')
+                        ->empty('Start typing to search...')
                         ->fromModel(Events::class, 'school', 'school'),
 
                     Select::make('country')
                         ->title('Country')
-                        ->empty('No selection')
+                        ->empty('Start typing to search...')
                         ->fromModel(School::class, 'country', 'country'),
 
                     Select::make('school_board')
                         ->title('School Board')
-                        ->empty('No selection')
+                        ->empty('Start typing to search...')
                         ->fromModel(School::class, 'school_board', 'school_board'),
 
                     Select::make('state_province')
                         ->title('State/Province')
-                        ->empty('No selection')
+                        ->empty('Start typing to search...')
                         ->fromModel(School::class, 'state_province', 'state_province'),
                 ]),
                 
