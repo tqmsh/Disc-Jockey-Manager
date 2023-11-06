@@ -181,11 +181,16 @@ class LoginController extends Controller
             try{
 
                 //check if the school the user entered is valid
-                $school_id = School::where('school_name', $formFields['school'])
-                                    ->where('county',  $formFields['county'])
+                $school = School::where('school_name', $formFields['school'])
                                     ->where('state_province', $formFields['state_province'])
-                                    ->where('country', $formFields['country'])
-                                    ->get('id')->value('id');
+                                    ->where('country', $formFields['country']);
+                
+                // Get school based off either county or city depending on which is present
+                if (array_key_exists('county', $formFields)) {
+                    $school_id = $school->where('county', $formFields['county'])->get()->value('id');
+                } else {
+                    $school_id = $school->where('city_municipality', $formFields['city_municipality'])->get()->value('id');
+                }
 
             }catch(Exception $e){
 
