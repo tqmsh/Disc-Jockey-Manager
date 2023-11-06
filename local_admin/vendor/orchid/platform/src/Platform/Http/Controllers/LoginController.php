@@ -172,7 +172,7 @@ class LoginController extends Controller
                 'school' => ['required'],
                 'country' => ['required'],
                 'state_province' => ['required'],
-                'county' => ['required'],
+                'county' => ['required_without_all:city_municipality', 'prohibited_unless:city_municipality,null'],
             ]);
     
             // Hash Password
