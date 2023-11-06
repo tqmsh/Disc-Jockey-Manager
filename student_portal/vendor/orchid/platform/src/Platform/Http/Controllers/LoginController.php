@@ -174,7 +174,8 @@ class LoginController extends Controller
                 'school' => ['required'],
                 'country' => ['required'],
                 'state_province' => ['required'],
-                'county' => ['required'],
+                'county' => ['required_if:country,USA', 'prohibited_if:country,Canada'],
+                'city_municipality' => ['required_if:country,Canada', 'prohibited_if:country,USA'],
                 'grade' => ['required'],
                 'allergies' => ['nullable'],
             ]);
