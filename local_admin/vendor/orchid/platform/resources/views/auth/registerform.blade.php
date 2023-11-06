@@ -95,10 +95,19 @@
         <div class="mb-3">
 
             <label class="form-label">
-                {{ __('County') }}
+                {{ __('County (USA Only)') }}
             </label>
 
             {!! \Orchid\Screen\Fields\Select::make('county')->fromModel(App\Models\School::class, 'county', 'county')->autofocus()->empty('Start typing to search...') !!}
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                {{ __('City/Municipality (Canada Only) ')}}
+            </label>
+
+            {!! \Orchid\Screen\Fields\Select::make('city_municipality')->fromModel(App\Models\School::class, 'city_municipality', 'city_municipality')->autofocus()->empty('Start typing to search...') !!}
         </div>
     </div>
 
