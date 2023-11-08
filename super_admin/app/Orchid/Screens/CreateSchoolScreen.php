@@ -97,7 +97,10 @@ class CreateSchoolScreen extends Screen
                             • fax <br>
                             • website <br>
                             • total_students <br>
-                            • school_data <br>')
+                            • school_data <br>'),
+                        Link::make('Download Sample CSV')
+                            ->icon('download')
+                            ->href('/sample_schools_upload.csv')
                 ]),
             ])
             ->title('Mass Import Schools')
