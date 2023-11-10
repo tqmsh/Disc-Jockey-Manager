@@ -101,7 +101,10 @@ class CreateVendorScreen extends Screen
                             • state_province <br>
                             • zip_postal <br>
                             • phonenumber <br>
-                            • website <br>')
+                            • website <br>'),
+                    Link::make('Download Sample CSV')
+                        ->icon('download')
+                        ->href('/sample_vendors_upload.csv')
                 ]),
             ])
             ->title('Mass Import Vendors')
