@@ -40,6 +40,10 @@ class PlatformProvider extends OrchidServiceProvider
             ->title('CORE')
             ->route('platform.example'),
 
+            Menu::make('Profile')
+                ->route('platform.profile')
+                ->icon('user'),
+
             //student nav option
             Menu::make('Events')
             ->icon('diamond')
@@ -60,7 +64,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('fa.shirt')
                 ->route('platform.beauty-groups'),
             ]),
-
+            
             Menu::make('My Specs')
             ->icon('brush')
             ->route('platform.studentSpecs.list'),

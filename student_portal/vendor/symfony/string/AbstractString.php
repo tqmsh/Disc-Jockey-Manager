@@ -452,15 +452,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
 
         try {
             if (false === $chunks = preg_split($delimiter, $this->string, $limit, $flags)) {
-                $lastError = preg_last_error();
-
-                foreach (get_defined_constants(true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && str_ends_with($k, '_ERROR')) {
-                        throw new RuntimeException('Splitting failed with '.$k.'.');
-                    }
-                }
-
-                throw new RuntimeException('Splitting failed with unknown error code.');
+                throw new RuntimeException('Splitting failed with error: '.preg_last_error_msg());
             }
         } finally {
             restore_error_handler();
@@ -520,8 +512,11 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
         try {
             try {
                 $b->string = mb_convert_encoding($this->string, $toEncoding, 'UTF-8');
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException|\ValueError $e) {
                 if (!\function_exists('iconv')) {
+                    if ($e instanceof \ValueError) {
+                        throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+                    }
                     throw $e;
                 }
 

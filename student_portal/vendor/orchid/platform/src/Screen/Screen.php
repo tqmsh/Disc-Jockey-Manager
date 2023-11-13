@@ -19,6 +19,9 @@ use Throwable;
 
 /**
  * Class Screen.
+ *
+ * This is the main class for creating screens in the Orchid. A screen is a web page
+ * that displays content and allows for user interaction.
  */
 abstract class Screen extends Controller
 {
@@ -32,7 +35,7 @@ abstract class Screen extends Controller
     private const COUNT_ROUTE_VARIABLES = 1;
 
     /**
-     * The view rendered
+     * The base view that will be rendered.
      *
      * @return string
      */
@@ -42,7 +45,7 @@ abstract class Screen extends Controller
     }
 
     /**
-     * Display header name.
+     * The name of the screen to be displayed in the header.
      *
      * @return string|null
      */
@@ -52,7 +55,7 @@ abstract class Screen extends Controller
     }
 
     /**
-     * Display header description.
+     * A description of the screen to be displayed in the header.
      *
      * @return string|null
      */
@@ -62,7 +65,7 @@ abstract class Screen extends Controller
     }
 
     /**
-     * Permission
+     * The permissions required to access this screen.
      *
      * @return iterable|null
      */
@@ -79,7 +82,7 @@ abstract class Screen extends Controller
     private $source;
 
     /**
-     * Button commands.
+     * The command buttons for this screen.
      *
      * @return Action[]
      */
@@ -89,13 +92,15 @@ abstract class Screen extends Controller
     }
 
     /**
-     * Views.
+     * The layout for this screen, consisting of a collection of views.
      *
      * @return Layout[]
      */
     abstract public function layout(): iterable;
 
     /**
+     * Builds the screen using the given data repository.
+     *
      * @param \Orchid\Screen\Repository $repository
      *
      * @return View
@@ -108,13 +113,14 @@ abstract class Screen extends Controller
     }
 
     /**
+     * Builds the screen asynchronously using the given method and template slug.
+     *
      * @param string $method
      * @param string $slug
      *
      * @throws Throwable
      *
      * @return View
-     *
      */
     public function asyncBuild(string $method, string $slug)
     {
@@ -127,12 +133,8 @@ abstract class Screen extends Controller
 
         /** @var Layout $layout */
         $layout = collect($this->layout())
-            ->map(function ($layout) {
-                return is_object($layout) ? $layout : resolve($layout);
-            })
-            ->map(function (Layout $layout) use ($slug) {
-                return $layout->findBySlug($slug);
-            })
+            ->map(fn ($layout) => is_object($layout) ? $layout : resolve($layout))
+            ->map(fn (Layout $layout) => $layout->findBySlug($slug))
             ->filter()
             ->whenEmpty(function () use ($slug) {
                 abort(404, "Async template: {$slug} not found");
@@ -186,9 +188,7 @@ abstract class Screen extends Controller
         $reflections = (new \ReflectionClass($this))->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         $publicProperty = collect($reflections)
-            ->map(function (\ReflectionProperty $property) {
-                return $property->getName();
-            });
+            ->map(fn (\ReflectionProperty $property) => $property->getName());
 
         collect($query)->only($publicProperty)->each(function ($value, $key) {
             $this->$key = $value;
@@ -196,7 +196,7 @@ abstract class Screen extends Controller
     }
 
     /**
-     *  Response or HTTP code that will be returned if user does not have access to screen.
+     * Response or HTTP code that will be returned if user does not have access to screen.
      *
      * @return int | \Symfony\Component\HttpFoundation\Response
      */
@@ -326,18 +326,14 @@ abstract class Screen extends Controller
             ->getMethods(\ReflectionMethod::IS_PUBLIC);
 
         return collect($class)
-            ->mapWithKeys(function (\ReflectionMethod $method) {
-                return [$method->name => $method];
-            })
+            ->mapWithKeys(fn (\ReflectionMethod $method) => [$method->name => $method])
             ->except(get_class_methods(Screen::class))
             ->except(['query'])
-            ->whenEmpty(function () {
-                /*
-                 * Route filtering requires at least one element to be present.
-                 * We set __invoke by default, since it must be public.
-                 */
-                return collect('__invoke');
-            })
+            /*
+             * Route filtering requires at least one element to be present.
+             * We set __invoke by default, since it must be public.
+             */
+            ->whenEmpty(fn () => collect('__invoke'))
             ->keys();
     }
 }

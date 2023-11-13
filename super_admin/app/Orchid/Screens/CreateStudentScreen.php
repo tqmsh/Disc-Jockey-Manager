@@ -95,8 +95,13 @@ class CreateStudentScreen extends Screen
                             • school <br>
                             • state_province <br>
                             • country <br>
-                            • county <br>')
-                ]),
+                            • county <br>'),
+                        
+                            Link::make('Download CSV Sample')
+                            ->route('csv'),
+                        
+
+                ]),                    
             ])
             ->title('Mass Import Students')
             ->applyButton('Import')

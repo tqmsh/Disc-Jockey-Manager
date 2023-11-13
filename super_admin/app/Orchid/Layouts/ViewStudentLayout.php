@@ -48,16 +48,16 @@ class ViewStudentLayout extends Table
                     return Link::make($student->lastname)
                         ->route('platform.student.edit', $student);
                 }),
-            TD::make('email', 'Email')
-                ->render(function (Student $student) {
-                    return Link::make($student->email)
-                        ->route('platform.student.edit', $student);
-                }),
-            TD::make('country', 'Country')
-                ->render(function (Student $student) {
-                    return Link::make(User::find($student->user_id)->country)
-                        ->route('platform.student.edit', $student);
-                }),
+            // TD::make('email', 'Email')
+            //     ->render(function (Student $student) {
+            //         return Link::make($student->email)
+            //             ->route('platform.student.edit', $student);
+            //     }),
+            // TD::make('country', 'Country')
+            //     ->render(function (Student $student) {
+            //         return Link::make(User::find($student->user_id)->country)
+            //             ->route('platform.student.edit', $student);
+            //     }),
             TD::make('school', 'School')
                 ->render(function (Student $student) {
                     return Link::make($student->school)
@@ -68,16 +68,16 @@ class ViewStudentLayout extends Table
                     return Link::make($student->grade)
                         ->route('platform.student.edit', $student);
                 }),
-            TD::make('phonenumber', 'Phone Number')
-                ->render(function (Student $student) {
-                    return Link::make($student->phonenumber)
-                        ->route('platform.student.edit', $student);
-                }),
-            TD::make('allergies', 'Allergies')
-                ->render(function (Student $student) {
-                    return Link::make($student->allergies)
-                        ->route('platform.student.edit', $student);
-                }),
+            // TD::make('phonenumber', 'Phone Number')
+            //     ->render(function (Student $student) {
+            //         return Link::make($student->phonenumber)
+            //             ->route('platform.student.edit', $student);
+            //     }),
+            // TD::make('allergies', 'Allergies')
+            //     ->render(function (Student $student) {
+            //         return Link::make($student->allergies)
+            //             ->route('platform.student.edit', $student);
+            //     }),
 
                 
             TD::make()

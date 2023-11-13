@@ -511,8 +511,7 @@ class ReflectionClosure extends ReflectionFunction
                         // named arguments...
                         case ':':
                             if ($lastState === 'closure' && $context === 'root') {
-                                $state = 'ignore_next';
-                                $lastState = 'closure';
+                                $state = 'closure';
                                 $code .= $id_start.$token;
                             }
 
@@ -643,6 +642,11 @@ class ReflectionClosure extends ReflectionFunction
                     break;
                 case 'anonymous':
                     switch ($token[0]) {
+                        case T_NAME_QUALIFIED:
+                            [$id_start, $id_start_ci, $id_name] = $this->parseNameQualified($token[1]);
+                            $state = 'id_name';
+                            $lastState = 'anonymous';
+                            break 2;
                         case T_NS_SEPARATOR:
                         case T_STRING:
                             $id_start = $token[1];
@@ -651,7 +655,7 @@ class ReflectionClosure extends ReflectionFunction
                             $state = 'id_name';
                             $context = 'extends';
                             $lastState = 'anonymous';
-                        break;
+                            break;
                         case '{':
                             $state = 'closure';
                             if (! $inside_structure) {
