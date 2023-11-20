@@ -170,4 +170,13 @@ export default class extends ApplicationController {
         event.preventDefault();
         return false;
     }
+
+    checked(event) {
+        event.target.offsetParent.querySelectorAll('input').forEach((input) => {
+            input.removeAttribute('checked');
+        });
+
+        event.target.setAttribute('checked', 'checked');
+        event.target.dispatchEvent(new Event("change"));
+    }
 }
