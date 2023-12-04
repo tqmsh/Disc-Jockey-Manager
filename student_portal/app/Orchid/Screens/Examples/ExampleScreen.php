@@ -7,6 +7,10 @@ use App\Models\Categories;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Vendors;
+use App\Models\EventAttendees;
+use App\Models\Events;
+use App\Models\StudentBids;
+use Carbon\Carbon;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
@@ -57,6 +61,29 @@ class ExampleScreen extends Screen
      */
     public function query(): iterable
     {
+        $user = Auth::user();
+        $now = Carbon::now();
+
+        // Remaining Days Until Prom
+        $newestPromInvitation = EventAttendees::where('user_id', $user->id)->latest('created_at')->first();
+        $newestEventId =  $newestPromInvitation->event_id;
+        $newestEventForUser = Events::find($newestEventId);
+        $eventStartTime = $newestEventForUser->event_start_time;
+        $eventStartTime = Carbon::parse($eventStartTime);
+        $daysLeftUntilEvent = $now->diffInDays($eventStartTime, false);
+
+        if ($daysLeftUntilEvent < 0) {
+            $daysLeftUntilEvent =  "No Upcoming Events";
+        }
+
+        // Add no upencoming event
+
+        // Bid Counting
+        $TotalDirectBidsReceived = StudentBids::where('student_user_id', $user->id)->where('status', 0)->count();
+        $TotalBidsRepliedTo = StudentBids::where('student_user_id', $user->id)->whereIn('status', [1,2])->count();
+
+
+
         $this->campaigns = Campaign::where("region_id", School::find(Student::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
         return [
             "ad_ids" =>"",
@@ -91,10 +118,10 @@ class ExampleScreen extends Screen
 
             ],
             'metrics' => [
-                'sales'    => ['value' => number_format(6851), 'diff' => 10.08],
-                'visitors' => ['value' => number_format(24668), 'diff' => -30.76],
-                'orders'   => ['value' => number_format(10000), 'diff' => 0],
-                'total'    => number_format(65661),
+                'daysLeftUntilEvent'           => $daysLeftUntilEvent,
+                'ItemsRemainingOnChecklist'    => ['value' => number_format(24668), 'diff' => -30.76],
+                'totalDirectBidsReceived'   => $TotalDirectBidsReceived,
+                'totalDirectBidsRepliedTo' => $TotalBidsRepliedTo,
             ],
         ];
     }
@@ -153,10 +180,10 @@ class ExampleScreen extends Screen
 
         return [
             Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
+                'Remaining Days Until Prom' => 'metrics.daysLeftUntilEvent',
+                'Items remaining on Checklist' => 'metrics.ItemsRemainingOnChecklist',
+                'Total Direct Bids Received' => 'metrics.totalDirectBidsReceived',
+                'Total Direct Bids Replied To' => 'metrics.totalDirectBidsRepliedTo',
             ]),
             Layout::view("card_style"),
 
