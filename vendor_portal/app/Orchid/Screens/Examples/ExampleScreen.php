@@ -5,6 +5,11 @@ namespace App\Orchid\Screens\Examples;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Vendors;
+use App\Models\EventBids;
+use App\Models\StudentBids;
+use App\Models\LimoGroupBid;
+use App\Models\Dress;
+use App\Models\Wishlist;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
@@ -18,6 +23,8 @@ use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\Auth;
+
 
 class ExampleScreen extends Screen
 {
@@ -54,6 +61,39 @@ class ExampleScreen extends Screen
      */
     public function query(): iterable
     {
+        $user = Auth::user(); // User is #197
+        // dd($user->id);
+
+        // Direct Bids Sent
+
+        $eventBidsSent = EventBids::where('user_id', $user->id)->count();
+        $studentBidsSent = StudentBids::where('user_id', $user->id)->count();
+        $limoBidsSent = LimoGroupBid::where('user_id', $user->id)->count();
+
+        $totalBidsSent = $eventBidsSent + $studentBidsSent + $limoBidsSent;
+
+        // Direct Bids that received replies
+        $eventBidsReplied = EventBids::where('user_id', $user->id)->whereIn('status', [1,2])->count();
+        $studentBidsReplied = StudentBids::where('user_id', $user->id)->whereIn('status', [1,2])->count();
+        $limoBidsReplied = LimoGroupBid::where('user_id', $user->id)->whereIn('status', [1,2])->count();
+
+        $totalBidsReplied = $eventBidsReplied + $studentBidsReplied + $limoBidsReplied;
+
+        // Wishlist Mentions
+        $ownedDresses = Dress::where('user_id', $user->id)->get();
+
+        $wishlistMentionsCount = 0;
+
+        foreach ($ownedDresses as $dress) {
+            $wishlistMentionsCount += Wishlist::where('dress_id', $dress->id)->count();
+        }
+
+        // Direct bids left
+        $creditTotal = $user->credits;
+        $bidsLeft = floor($creditTotal / 50);
+
+
+
         $this->campaigns = Campaign::where("active", 1)->get();
         return [
             'charts'  => [
@@ -88,10 +128,10 @@ class ExampleScreen extends Screen
 
             ],
             'metrics' => [
-                'sales'    => ['value' => number_format(6851), 'diff' => 10.08],
-                'visitors' => ['value' => number_format(24668), 'diff' => -30.76],
-                'orders'   => ['value' => number_format(10000), 'diff' => 0],
-                'total'    => number_format(65661),
+                'totalBidsSent'     => $totalBidsSent,
+                'directBidsReplied' => $totalBidsReplied,
+                'bidsLeft'          => $bidsLeft,
+                'wishlistMentions'  => $wishlistMentionsCount,
             ],
         ];
     }
@@ -149,17 +189,12 @@ class ExampleScreen extends Screen
         usort($arr_ads, [$this, 'customSort']);
         return [
             Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
+                'Direct Bids sent'    => 'metrics.totalBidsSent',
+                'Direct Bids that received replies' => 'metrics.directBidsReplied',
+                'Direct Bids remaining' => 'metrics.bidsLeft',
+                'Wishlist mentions' => 'metrics.wishlistMentions',
             ]),
-            Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
-            ]),
+
             Layout::view("card_style"),
 
             Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
