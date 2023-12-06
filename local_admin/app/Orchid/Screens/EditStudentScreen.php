@@ -9,6 +9,7 @@ use Orchid\Screen\Screen;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
@@ -116,11 +117,20 @@ class EditStudentScreen extends Screen
                     ->placeholder('Ex. (613) 859-5863')
                     ->value($this->student->phonenumber),
 
-                Input::make('allergies')
+                Select::make('allergies')
                     ->title('Allergies')
-                    ->type('text')
                     ->horizontal()
-                    ->value($this->student->allergies),               
+                    ->value($this->student->allergies)
+                    ->options([
+                        'Peanuts' => 'Peanuts',
+                        'Tree Nuts' => 'Tree Nuts',
+                        'Shellfish' => 'Shellfish',
+                        'Milk' => 'Milk',
+                        'Eggs' => 'Eggs',
+                        'Wheat' => 'Wheat',
+                        'Soy' => 'Soy',
+                        'Fish' => 'Fish',
+                    ]),                           
             ]),
         ];
     }

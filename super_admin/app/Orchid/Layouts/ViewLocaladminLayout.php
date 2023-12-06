@@ -47,11 +47,11 @@ class ViewLocaladminLayout extends Table
                     return Link::make($Localadmin->lastname)
                         ->route('platform.localadmin.edit', $Localadmin->id);
                 }),
-            TD::make('phonenumber', 'Phone Number')
-                ->render(function (Localadmin $Localadmin) {
-                    return Link::make($Localadmin->phonenumber)
-                        ->route('platform.localadmin.edit', $Localadmin->id);
-                }),
+            // TD::make('phonenumber', 'Phone Number')
+            //     ->render(function (Localadmin $Localadmin) {
+            //         return Link::make($Localadmin->phonenumber)
+            //             ->route('platform.localadmin.edit', $Localadmin->id);
+            //     }),
             TD::make('email', 'Email')
                 ->render(function (Localadmin $Localadmin) {
                     return Link::make($Localadmin->email)
@@ -59,7 +59,13 @@ class ViewLocaladminLayout extends Table
                 }),
             TD::make('school', 'School')
                 ->render(function (Localadmin $Localadmin) {
-                    return Link::make($Localadmin->school)
+                    $school = $Localadmin->school;
+
+                    if(strlen($school) > 30) {
+                        $school = substr($school, 0, 25) . '...';
+                    }
+
+                    return Link::make($school)
                         ->route('platform.localadmin.edit', $Localadmin->id);
                 }),
 
