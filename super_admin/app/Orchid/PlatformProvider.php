@@ -81,7 +81,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->badge(function () {
                     return count(Campaign::where('active', 0)->get());
                 })
-                ->route('platform.ad.list')
+                ->route('platform.ad.list'),
+
+                Menu::make('Vendor Finances')
+                ->icon('paypal')
+                ->route('platform.vendor.credits'),
             ]),
 
             Menu::make('Schools')

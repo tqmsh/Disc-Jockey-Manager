@@ -43,6 +43,10 @@ use App\Orchid\Screens\CreateCandidateScreen;
 use App\Orchid\Screens\EditCandidateScreen;
 use App\Orchid\Screens\ViewWinnersScreen;
 
+use App\Orchid\Screens\ViewVendorCreditsScreen;
+use App\Orchid\Screens\ViewVendorPaymentsScreen;
+
+
 use App\Orchid\Screens\EditLimoGroupScreen;
 use App\Orchid\Screens\OrderCategoryScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -113,6 +117,13 @@ Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vend
 
 //show edit vendors screen
 Route::screen('/vendors/{vendor}/edit', EditVendorScreen::class)->name('platform.vendor.edit');
+
+//Vendor Credits
+Route::screen('/vendors/credits', ViewVendorCreditsScreen::class)->name('platform.vendor.credits');
+
+Route::screen('/vendors/{vendor}/payments', ViewVendorPaymentsScreen::class)->name('platform.vendor.payments');
+
+
 
 //show schools screen
 Route::screen('/schools', ViewSchoolScreen::class)->name('platform.school.list');
