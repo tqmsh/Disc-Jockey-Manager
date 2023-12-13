@@ -40,6 +40,14 @@
     @foreach(Dashboard::getResource('scripts') as $scripts)
         <script src="{{  $scripts }}" defer type="text/javascript"></script>
     @endforeach
+    
+    <script defer>
+        // Initialize all bootstrap tooltips as per https://getbootstrap.com/docs/5.2/components/tooltips/
+        addEventListener("turbo:load", (event) => {
+            var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            tooltipTriggerList.forEach(triggerElement => new Bootstrap.Tooltip(triggerElement))
+        })
+    </script>
 </head>
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }}" data-controller="pull-to-refresh">
