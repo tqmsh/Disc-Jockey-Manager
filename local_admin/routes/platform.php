@@ -57,6 +57,8 @@ use App\Orchid\Screens\ViewPromActualScreen;
 use App\Http\Controllers\BudgetPDFController;
 use App\Http\Controllers\ActualPDFController;
 use App\Orchid\Screens\EditActualScreen;
+use App\Orchid\Screens\ViewCoupleDetailsScreen;
+use App\Orchid\Screens\ViewCouplesScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,12 +119,10 @@ Route::screen('/events/{event_id}/banned-songs/add', CreateBannedSongsScreen::cl
 Route::screen('/events/{event_id}/menu', ViewEventFoodScreen::class)->name('platform.eventFood.list');
 Route::screen('/events/{event_id}/menu/add-item', CreateFoodScreen::class)->name('platform.eventFood.create');
 Route::screen('/events/{event_id}/menu/{food_id}/edit', EditFoodScreen::class)->name('platform.eventFood.edit');
-
-
-
-
 Route::screen('/events/{song_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
+Route::screen('/couples', ViewCouplesScreen::class)->name('platform.couples.list');
+Route::screen('/couples/{couple}', ViewCoupleDetailsScreen::class)->name('platform.couples.info');
 
 //Election
 Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');

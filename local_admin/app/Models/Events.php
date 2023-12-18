@@ -89,4 +89,12 @@ class Events extends Model
 
         return $allergies;
     }
+
+    public function couples(){
+        return $this->hasMany(Couple::class, 'event_id', 'id');
+    }
+
+    public function couple_requests(){
+        return $this->hasMany(CoupleRequest::class, 'event_id', 'id');
+    }
 }

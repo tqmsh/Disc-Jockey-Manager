@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-
+use App\Orchid\Screens\PromDateScreen;
+use App\Orchid\Screens\ViewCoupleDetailsScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
@@ -92,6 +93,11 @@ Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->nam
 Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+
+// View PromDate
+Route::screen('/promdate', PromDateScreen::class)->name('platform.promdate');
+// View Couple Details
+Route::screen('/couple/{couple}', ViewCoupleDetailsScreen::class)->name("platform.couple");
 
 //view student bid screen
 Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.list');
