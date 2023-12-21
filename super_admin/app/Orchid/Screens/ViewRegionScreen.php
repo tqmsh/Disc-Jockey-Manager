@@ -8,6 +8,7 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -80,7 +81,10 @@ class ViewRegionScreen extends Screen
                         ->type('file')
                         ->title('File must be in csv format. Ex. regions.csv')
                         ->help('The csv file MUST HAVE these fields and they need to be named accordingly to successfully import the regions: <br>
-                            • name <br>')
+                            • name <br>'),
+                    Link::make('Download Sample CSV')
+                        ->icon('download')
+                        ->href('/sample_regions_upload.csv')
                 ]),
             ])
             ->title('Mass Import Regions')
