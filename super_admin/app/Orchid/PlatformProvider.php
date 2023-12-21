@@ -168,7 +168,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ]),
 
             Menu::make("Contracts")
-                ->icon('fa.file-contract')
+                ->icon('doc')
                 ->route('platform.contract.list'),
 
             Menu::make('Prom Planner Guide')
