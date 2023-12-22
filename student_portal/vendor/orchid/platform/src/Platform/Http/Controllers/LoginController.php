@@ -124,6 +124,127 @@ class LoginController extends Controller
         ]);
     }
 
+    public function showRegisterForm(Request $request){
+        $user = $request->cookie('lockUser');
+
+        /** @var EloquentUserProvider $provider */
+        $provider = $this->guard->getProvider();
+
+        $model = $provider->createModel()->find($user);
+
+        return view('platform::auth.register', [
+            'isLockUser' => optional($model)->exists ?? false,
+            'lockUser'   => $model,
+        ]);    
+    }
+
+    public function register(Request $request){
+
+            //$request->validate will automatically validate unique emails and other specefied validations
+            $formFields = $request->validate([
+                'name' => ['required'],
+                'firstname' => ['required'],
+                'lastname' => ['required', 'min:3'],
+                'email' => ['required', 'email', Rule::unique('users', 'email')],
+                'password' => 'required|confirmed|min:6',
+                'password_confirmation' => ['required'],
+                'phonenumber' => ['required'],
+                'school' => ['required'],
+                'country' => ['required'],
+                'state_province' => ['required'],
+                'county' => ['required_if:country,USA', 'prohibited_if:country,Canada'],
+                'city_municipality' => ['required_if:country,Canada', 'prohibited_if:country,USA'],
+                'grade' => ['required'],
+                'allergies' => ['nullable'],
+            ]);
+    
+            // Hash Password
+            $formFields['password'] = bcrypt($formFields['password']);
+            
+            try{
+
+                //check if the school the user entered is valid
+                $school = School::where('school_name', $formFields['school'])
+                                    ->where('state_province', $formFields['state_province'])
+                                    ->where('country', $formFields['country']);
+                                
+                // Get school based off either county or city depending on which is present
+                if (array_key_exists('county', $formFields)) {
+                    $school_id = $school->where('county', $formFields['county'])->get()->value('id');
+                } else {
+                    $school_id = $school->where('city_municipality', $formFields['city_municipality'])->get()->value('id');
+                }
+
+            }catch(Exception $e){
+
+                Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
+    
+                return redirect('/admin/register');
+            }
+
+    
+            if(is_null($school_id)){
+
+                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
+
+                return redirect('/admin/register');
+
+            }else{
+
+                try{
+
+                    $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
+                    $userTableFields['password'] = $formFields['password'];
+                    $userTableFields['role'] = 3;
+
+                    $user = User::create($userTableFields);
+    
+                    if($user){
+                        
+                        $studentTableFields = $request->only(['firstname', 'lastname', 'email', 'phonenumber', 'school', 'grade', 'allergies']);
+                        
+                        $studentTableFields['school_id'] = $school_id;
+                        $studentTableFields['user_id'] = $user->id;
+
+                        $studentCreateSuccess = Student::create($studentTableFields);
+
+                        if($studentCreateSuccess){
+                            Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
+
+                            //notify all admins that a new vendor has registered
+                            $superAdmins = User::where('role', 1)->get();
+                            $localAdmins = User::where('role', 2)->whereIn('id', Localadmin::where('school_id', $school_id)->get('user_id')->toArray())->get();
+
+                            foreach($superAdmins as $admin){
+                                $admin->notify(new GeneralNotification([
+                                    'title' => 'New Student Registered',
+                                    'message' => 'A new student has registered. Please approve or deny their account.',
+                                    'action' => '/admin/pendingstudents',
+
+                                ]));
+                            }
+                            
+                            foreach($localAdmins as $admin){
+                                $admin->notify(new GeneralNotification([
+                                    'title' => 'New Student Registered',
+                                    'message' => 'A new student has registered. Please approve or deny their account.',
+                                    'action' => '/admin/pendingstudents',
+
+                                ]));
+                            }
+                    
+                            return redirect('/admin/login');  
+                        }
+                    }
+
+                }catch(Exception $e){
+
+                    Session::flash('message', 'There was an error creating your account. Please contact one of the admins of Prom Planner.' . $e);
+            
+                    return redirect('/admin/register');
+                }
+            }
+    }
     /**
      * @param CookieJar $cookieJar
      *

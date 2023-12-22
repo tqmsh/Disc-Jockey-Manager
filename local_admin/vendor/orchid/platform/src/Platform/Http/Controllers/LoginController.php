@@ -180,7 +180,8 @@ class LoginController extends Controller
                 'school' => ['required'],
                 'country' => ['required'],
                 'state_province' => ['required'],
-                'county' => ['required'],
+                'county' => ['required_if:country,USA', 'prohibited_if:country,Canada'],
+                'city_municipality' => ['required_if:country,Canada', 'prohibited_if:country,USA'],
             ]);
     
             // Hash Password
@@ -189,11 +190,16 @@ class LoginController extends Controller
             try{
 
                 //check if the school the user entered is valid
-                $school_id = School::where('school_name', $formFields['school'])
-                                    ->where('county',  $formFields['county'])
+                $school = School::where('school_name', $formFields['school'])
                                     ->where('state_province', $formFields['state_province'])
-                                    ->where('country', $formFields['country'])
-                                    ->get('id')->value('id');
+                                    ->where('country', $formFields['country']);
+                
+                // Get school based off either county or city depending on which is present
+                if (array_key_exists('county', $formFields)) {
+                    $school_id = $school->where('county', $formFields['county'])->get()->value('id');
+                } else {
+                    $school_id = $school->where('city_municipality', $formFields['city_municipality'])->get()->value('id');
+                }
 
             }catch(Exception $e){
 
