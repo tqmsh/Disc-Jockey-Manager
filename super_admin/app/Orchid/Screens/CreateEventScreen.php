@@ -73,7 +73,7 @@ class CreateEventScreen extends Screen
                     ->title('Event Name')
                     ->type('text')
                     ->required()
-                    ->placeholder('give a name to the event please')
+                    ->placeholder('Give a name to the event please')
                     ->horizontal(),
 
                 DateTimer::make('event_start_time')
