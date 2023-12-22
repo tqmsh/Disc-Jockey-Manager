@@ -70,6 +70,12 @@ class EditSpecsScreen extends Screen
             return [
                 Layout::rows([
 
+                    Input::make('age')
+                        ->title('Age')
+                        ->type('text')
+                        ->horizontal()
+                        ->value($this->specs->age),
+
                     Input::make('height')
                         ->title('Height')
                         ->type('text')
@@ -80,13 +86,13 @@ class EditSpecsScreen extends Screen
                         ->title('Weight')
                         ->type('text')
                         ->horizontal()
-                        ->value($this->specs->weight_pounds),
+                        ->value($this->specs->weight),
                     
-                    Input::make('hair_color')
-                        ->title('Hair Color')
+                    Input::make('hair_colour')
+                        ->title('Hair Colour')
                         ->type('text')
                         ->horizontal()
-                        ->value($this->specs->hair_color),
+                        ->value($this->specs->hair_colour),
                         
                     Input::make('hair_style')
                         ->title('Hair Style')
@@ -94,23 +100,23 @@ class EditSpecsScreen extends Screen
                         ->horizontal()
                         ->value($this->specs->hair_style),
                         
-                    Input::make('hair_length')
-                        ->title('Hair Length')
-                        ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->hair_length),
+                    // Input::make('hair_length')
+                    //     ->title('Hair Length')
+                    //     ->type('text')
+                    //     ->horizontal()
+                    //     ->value($this->specs->hair_length),
                         
-                    Input::make('skin_complexion')
+                    Input::make('complexion')
                         ->title('Skin Complection')
                         ->type('text')
                         ->horizontal()
-                        ->value($this->specs->skin_complexion),
+                        ->value($this->specs->complexion),
                         
                     Input::make('eye_color')
                         ->title('Eye Color')
                         ->type('text')
                         ->horizontal()
-                        ->value($this->specs->eye_color),
+                        ->value($this->specs->eye_colour),
                         
                     Input::make('lip_style')
                         ->title('Lip Style')
@@ -154,6 +160,11 @@ class EditSpecsScreen extends Screen
             // If gender is not equal to 2, return an empty array or any alternative layout/content you want.
             return [
                 Layout::rows([
+                    Input::make('age')
+                        ->title('Age')
+                        ->type('text')
+                        ->horizontal()
+                        ->value($this->specs->age),
 
                     Input::make('height')
                         ->title('Height')
@@ -161,11 +172,11 @@ class EditSpecsScreen extends Screen
                         ->horizontal()
                         ->value($this->specs->height),
                     
-                    Input::make('weight_pounds')
+                    Input::make('weight')
                         ->title('Weight')
                         ->type('text')
                         ->horizontal()
-                        ->value($this->specs->weight_pounds),
+                        ->value($this->specs->weight),
                     
                     Input::make('body_type')
                         ->title('Body Type')
@@ -173,11 +184,11 @@ class EditSpecsScreen extends Screen
                         ->horizontal()
                         ->value($this->specs->body_type),
                     
-                    Input::make('skin_complexion')
+                    Input::make('complexion')
                         ->title('Skin Complection')
                         ->type('text')
                         ->horizontal()
-                        ->value($this->specs->skin_complexion),
+                        ->value($this->specs->complexion),
                     
                     Input::make('notes')
                         ->title('Notes')

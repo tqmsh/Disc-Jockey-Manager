@@ -67,41 +67,47 @@ class CreateSpecsScreen extends Screen
         Layout::tabs([
             'Female' => [
                 Layout::rows([
-                    Group::make([
-                        Select::make('height_feet')
-                            ->vertical()
-                            ->options([
-                                '4' => '4',
-                                '5' => '5',
-                                '6' => '6'
-                            ])
-                            ->title('Height')
-                            ->help('Feet'),
-                        Select::make('male_height_inches')
-                        ->vertical()
-                        ->options([
-                            '0' => '0',
-                            '1' => '1',
-                            '2' => '2',
-                            '3' => '3',
-                            '4' => '4',
-                            '5' => '5',
-                            '6' => '6',
-                            '7' => '7',
-                            '8' => '8',
-                            '9' => '9',
-                            '10' => '10',
-                            '11' => '11',
-                        ])
-                        ->help('Inches')->title('‎ '),
-                    ])->autoWidth(),
+                    // Group::make([
+                    //     Select::make('height_feet')
+                    //         ->vertical()
+                    //         ->options([
+                    //             '4' => '4',
+                    //             '5' => '5',
+                    //             '6' => '6'
+                    //         ])
+                    //         ->title('Height')
+                    //         ->help('Feet'),
+                    //     Select::make('male_height_inches')
+                    //     ->vertical()
+                    //     ->options([
+                    //         '0' => '0',
+                    //         '1' => '1',
+                    //         '2' => '2',
+                    //         '3' => '3',
+                    //         '4' => '4',
+                    //         '5' => '5',
+                    //         '6' => '6',
+                    //         '7' => '7',
+                    //         '8' => '8',
+                    //         '9' => '9',
+                    //         '10' => '10',
+                    //         '11' => '11',
+                    //     ])
+                    //     ->help('Inches')->title('‎ '),
+                    // ])->autoWidth(),
+                    
+                    Input::make('height')
+                        ->title('Height (cm)')
+                        ->type('text')
+                        ->horizontal(),
 
-                    Input::make('weight_pounds')
+
+                    Input::make('weight')
                         ->title('Weight (Pounds)')
                         ->type('text')
                         ->horizontal(),
 
-                    Select::make('hair_color')
+                    Select::make('hair_colour')
                         ->title('Hair Color')
                         ->type('text')
                         ->horizontal()
@@ -130,18 +136,18 @@ class CreateSpecsScreen extends Screen
                             'updo' => 'Updo',
                         ]),
 
-                    Select::make('hair_length')
-                        ->title('Hair Length')
-                        ->type('text')
-                        ->horizontal()
-                        ->options([
-                            'short' => 'Short',
-                            'medium' => 'Medium',
-                            'long' => 'Long',
+                    // Select::make('hair_length')
+                    //     ->title('Hair Length')
+                    //     ->type('text')
+                    //     ->horizontal()
+                    //     ->options([
+                    //         'short' => 'Short',
+                    //         'medium' => 'Medium',
+                    //         'long' => 'Long',
                             
-                        ]),
+                    //     ]),
 
-                    Select::make('skin_complexion')
+                    Select::make('complexion')
                         ->title('Skin Complexion')
                         ->type('text')
                         ->horizontal()
@@ -153,8 +159,8 @@ class CreateSpecsScreen extends Screen
                             'dark' => 'Dark',
                         ]),
 
-                    Select::make('eye_color')
-                        ->title('Eye Color')
+                    Select::make('eye_colour')
+                        ->title('Eye Colour')
                         ->type('text')
                         ->horizontal()
                         ->options([
@@ -280,32 +286,37 @@ class CreateSpecsScreen extends Screen
             ],
             'Male' => [
                 Layout::rows([
-                    Group::make([
-                            Select::make('male_height_feet')
-                                ->options([
-                                    '4' => '4',
-                                    '5' => '5',
-                                    '6' => '6'
-                                ])
-                                ->title('Height')
-                                ->help('Feet'),
-                            Select::make('male_height_inches')
-                            ->options([
-                                '0' => '0',
-                                '1' => '1',
-                                '2' => '2',
-                                '3' => '3',
-                                '4' => '4',
-                                '5' => '5',
-                                '6' => '6',
-                                '7' => '7',
-                                '8' => '8',
-                                '9' => '9',
-                                '10' => '10',
-                                '11' => '11',
-                            ])
-                            ->help('Inches')->title('‎ '),
-                        ])->autoWidth(),
+                    // Group::make([
+                        //     Select::make('male_height_feet')
+                        //         ->options([
+                        //             '4' => '4',
+                        //             '5' => '5',
+                        //             '6' => '6'
+                        //         ])
+                        //         ->title('Height')
+                        //         ->help('Feet'),
+                        //     Select::make('male_height_inches')
+                        //     ->options([
+                        //         '0' => '0',
+                        //         '1' => '1',
+                        //         '2' => '2',
+                        //         '3' => '3',
+                        //         '4' => '4',
+                        //         '5' => '5',
+                        //         '6' => '6',
+                        //         '7' => '7',
+                        //         '8' => '8',
+                        //         '9' => '9',
+                        //         '10' => '10',
+                        //         '11' => '11',
+                        //     ])
+                        //     ->help('Inches')->title('‎ '),
+                        // ])->autoWidth(),
+
+                    Input::make('male_height')
+                        ->title('Height (cm)')
+                        ->type('text')
+                        ->horizontal(),
 
 
                     Input::make('male_weight_pounds')
@@ -361,19 +372,21 @@ class CreateSpecsScreen extends Screen
 
         try{
             $formFields = $request->all();
-            $formFields['user_id'] = auth()->id();
+            $formFields['student_user_id'] = auth()->id();
             $formFields['gender'] = $gender;
             // dd($formFields);
 
             if ($gender == 1) {
-                $formFields['height'] = ($request->get('male_height_feet') . "'" . $request->get('male_height_inches') . "\"");
-                $formFields['weight_pounds'] = $request->get('male_weight_pounds');
-                $formFields['skin_complexion'] = $request->get('male_skin_complexion');
+                // $formFields['height'] = ($request->get('male_height_feet') . "'" . $request->get('male_height_inches') . "\"");
+                $formFields['height'] = ($request->get('male_height'));
+                $formFields['weight'] = $request->get('male_weight_pounds');
+                $formFields['complexion'] = $request->get('male_skin_complexion');
                 $formFields['notes'] = $request->get('male_notes');
             } else {
-                $formFields['height'] = ($request->get('height_feet') . "'" . $request->get('height_inches') . "\"");
-                $formFields['weight_pounds'] = $request->get('weight_pounds');
-                $formFields['skin_complexion'] = $request->get('skin_complexion');
+                // $formFields['height'] = ($request->get('height_feet') . "'" . $request->get('height_inches') . "\"");
+                $formFields['height'] = ($request->get('height'));
+                $formFields['weight'] = $request->get('weight');
+                $formFields['complexion'] = $request->get('complexion');
                 $formFields['notes'] = $request->get('notes');
             }
 

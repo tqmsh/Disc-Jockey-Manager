@@ -34,7 +34,7 @@ class ViewSpecsScreen extends Screen
      */
     public function query(Specs $specs): iterable
     {
-        $user_specs = Specs::where('user_id', Auth::user()->id)->first();
+        $user_specs = Specs::where('student_user_id', Auth::user()->id)->first();
 
         return [
             // dd($specs),
@@ -64,7 +64,7 @@ class ViewSpecsScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        $user_specs = Specs::where('user_id', Auth::user()->id)->first();
+        $user_specs = Specs::where('student_user_id', Auth::user()->id)->first();
 
         $commands = [];
 
@@ -94,7 +94,7 @@ class ViewSpecsScreen extends Screen
     {
         $this->specs = 'user_specs';
 
-        $user_specs = Specs::where('user_id', Auth::user()->id)->first();
+        $user_specs = Specs::where('student_user_id', Auth::user()->id)->first();
 
         if ($user_specs !== null) {
             if ($user_specs->gender == 2) {
@@ -104,15 +104,20 @@ class ViewSpecsScreen extends Screen
                             ->render(function (Specs $specs_1 = null) {
                                 return $specs_1->height ?? " ";
                         }),    
-                        
-                        Sight::make('weight_pounds', 'Weight')
+
+                        Sight::make('age', 'Age')
                             ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->weight_pounds ?? " "; 
+                                return $specs_1->age ?? " ";
+                            }),
+                        
+                        Sight::make('weight', 'Weight')
+                            ->render(function (Specs $specs_1 = null) {
+                                return $specs_1->weight ?? " "; 
                         }),   
 
-                        Sight::make('hair_color', 'Hair Color')
+                        Sight::make('hair_colour', 'Hair Color')
                             ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->hair_color ?? " ";
+                                return $specs_1->hair_colour ?? " ";
                             
                         }), 
 
@@ -122,21 +127,21 @@ class ViewSpecsScreen extends Screen
                             
                         }), 
 
-                        Sight::make('hair_length', 'Hair Length')
+                        // Sight::make('hair_length', 'Hair Length')
+                        //     ->render(function (Specs $specs_1 = null) {
+                        //         return $specs_1->hair_length ?? " ";
+                            
+                        // }), 
+
+                        Sight::make('complexion', 'Skin complexion')
                             ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->hair_length ?? " ";
+                                return $specs_1->complexion ?? " ";
                             
                         }), 
 
-                        Sight::make('skin_complexion', 'Hair complexion')
+                        Sight::make('eye_colour', 'Eye Color')
                             ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->skin_complexion ?? " ";
-                            
-                        }), 
-
-                        Sight::make('eye_color', 'Eye Color')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->eye_color ?? " ";
+                                return $specs_1->eye_colour ?? " ";
                             
                         }), 
 
@@ -179,9 +184,14 @@ class ViewSpecsScreen extends Screen
                                 return $specs_1->height ?? " ";
                         }),    
 
+                        Sight::make('age', 'Age')
+                            ->render(function (Specs $specs_1 = null) {
+                                return $specs_1->age ?? " ";
+                            }),
+
                         Sight::make('weight_pounds', 'Weight')
                             ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->weight_pounds ?? " ";
+                                return $specs_1->weight ?? " ";
                         }),   
 
                         Sight::make('body_type', 'Body Type')
@@ -191,7 +201,7 @@ class ViewSpecsScreen extends Screen
                         
                         Sight::make('skin_complexion', 'Skin Complexion')
                             ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->skin_complexion ?? " ";
+                                return $specs_1->complexion ?? " ";
                         }), 
 
                         Sight::make('notes', 'Notes')

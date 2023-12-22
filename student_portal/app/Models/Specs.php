@@ -14,18 +14,18 @@ class Specs extends Model
 
     protected $table = 'student_specs';
 
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'student_user_id';
 
     protected $fillable = [
-        'user_id',
+        'student_user_id',
         'gender',
+        'age',
         'height',
-        'weight_pounds',
-        'hair_color',
+        'weight',
+        'hair_colour',
         'hair_style',
-        'hair_length',
-        'skin_complexion',
-        'eye_color',
+        'complexion',
+        'eye_colour',
         'lip_style',
         'bust',
         'waist',
