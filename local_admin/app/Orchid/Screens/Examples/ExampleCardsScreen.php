@@ -22,7 +22,7 @@ class ExampleCardsScreen extends Screen
     public function query(): iterable
     {
         return [
-            'user' => User::firstOrFail(),
+            'user' => User::where('id', 151)->first(),
         ];
     }
 

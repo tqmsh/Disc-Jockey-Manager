@@ -50,6 +50,11 @@ use App\Orchid\Screens\ViewBeautyGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewPromProfitScreen;
+use App\Orchid\Screens\ViewPromBudgetScreen;
+use App\Orchid\Screens\ViewPromActualScreen;
+use App\Http\Controllers\BudgetPDFController;
+use App\Http\Controllers\ActualPDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -172,3 +177,25 @@ Route::screen('example-charts', ExampleChartsScreen::class)->name('platform.exam
 Route::screen('example-editors', ExampleTextEditorsScreen::class)->name('platform.example.editors');
 Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.example.cards');
 Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
+
+//show profit screen
+Route::screen('/profit', ViewPromProfitScreen::class)->name('platform.profit.list');
+
+//show budget screen
+Route::screen('/events/{event_id}/budget', ViewPromBudgetScreen::class)->name('platform.budget.list');
+
+//show budget screen
+Route::screen('/events/{event_id}/actual', ViewPromActualScreen::class)->name('platform.actual.list');
+
+//show budget income statement pdf screen
+Route::get('/events/{event_id}/budget/view-pdf', [BudgetPDFController::class, 'viewPDF'])->name('platform.budget.viewPDF');
+
+//download budget income statement pdf
+Route::get('/events/{event_id}/budget/download-pdf', [BudgetPDFController::class, 'downloadPDF'])->name('platform.budget.downloadPDF');
+
+//show actual income statement pdf screen
+Route::get('/events/{event_id}/actual/view-pdf', [ActualPDFController::class, 'viewPDF'])->name('platform.actual.viewPDF');
+
+//download actual income statement pdf
+Route::get('/events/{event_id}/actual/download-pdf', [ActualPDFController::class, 'downloadPDF'])->name('platform.actual.downloadPDF');
+
