@@ -65,27 +65,40 @@ class LoginController extends Controller
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function login(Request $request)
+    public function login(Request $request, CookieJar $cookieJar)
     {
-        $request->validate([
-            'email'    => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        $auth = $this->guard->attempt(
-            $request->only(['email', 'password']),
-            $request->filled('remember')
-        );
-
-        if ($auth) {
-            $this->setStartTimeInSession();
-            return $this->sendLoginResponse($request);
+        try {
+            $request->validate([
+                'email'    => 'required|string',
+                'password' => 'required|string',
+            ]);
+    
+            $auth = $this->guard->attempt(
+                $request->only(['email', 'password']),
+                $request->filled('remember')
+            );
+    
+            if ($auth) {
+                $user = User::where('email', $request->input('email'))->first();
+    
+                if ($user->role != 3 || $user->account_status == 0) {
+                    $this->guard->logout();
+                    $cookieJar->forget('lockUser');
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+    
+                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.')]);
+                }
+            }
+        } catch (Exception $e) {
+            Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
+    
+            return redirect('/admin/register');
         }
-
-        throw ValidationException::withMessages([
-            'email' => __('The details you entered did not match our records. Please double-check and try again.'),
-        ]);
     }
+    
+
+
 
     /**
      * Send the response after the user was authenticated.
@@ -262,7 +275,7 @@ class LoginController extends Controller
      */
     public function switchLogout()
     {
-        Impersonation::logout();
+        UserSwitch::logout();
 
         return redirect()->route(config('platform.index'));
     }
