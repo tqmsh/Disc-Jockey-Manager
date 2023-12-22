@@ -36,6 +36,7 @@ class ViewPromBudgetScreen extends Screen
      */
     public function query(Events $event): iterable
     {
+
         return [
             'event' => $event,
             'table' => UniversalExpenseRevenue::all(),
