@@ -79,13 +79,7 @@ class PlatformProvider extends OrchidServiceProvider
                     ->icon('fa.shirt')
                     ->route('platform.beauty-groups'),
                 ]),
-
-            //student nav option
-            Menu::make('Prom Profit')
-            ->icon('money')
-            ->route('platform.profit.list'),
-
-
+        
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
