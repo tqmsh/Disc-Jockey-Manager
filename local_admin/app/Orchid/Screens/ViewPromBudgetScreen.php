@@ -23,16 +23,11 @@ use Illuminate\Support\Facades\Auth;
 class ViewPromBudgetScreen extends Screen
 {
 
-    private $profit;
-
+    public $profit;
     public $event;
-
     public $table;
-
     public $budget;
-
     public $type; 
-
     public $open;
     /**
      * Query data.

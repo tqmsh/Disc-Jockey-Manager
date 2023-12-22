@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Exception;
 use Orchid\Screen\AsSource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ActualExpenseRevenue extends Model
 {
@@ -14,7 +12,7 @@ class ActualExpenseRevenue extends Model
     use AsSource;
 
 
-    protected $table = 'actual_expense_revenues';
+    protected $table = 'actual_expenses_revenues';
     
     protected $fillable = [
         'universal_id', 

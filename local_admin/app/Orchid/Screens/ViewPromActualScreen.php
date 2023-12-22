@@ -27,11 +27,8 @@ class ViewPromActualScreen extends Screen
 {
    
     public $event;
-
     public $actual;
-
     public $table;
-
     public $open;
 
     /**
