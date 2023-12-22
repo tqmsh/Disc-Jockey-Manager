@@ -9,14 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Events extends Model
 {
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['event_name', 'venue_id', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'region_id', 'school', 'event_zip_postal', 'event_rules', 'open', 'capacity', 'ticket_price'];
+    protected $fillable = ['event_name', 'venue_id', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'region_id', 'school', 'event_zip_postal', 'event_rules'];
 
 
     public function scopeFilter($query, array $filters){
@@ -90,8 +89,4 @@ class Events extends Model
 
         return $allergies;
     }
-
-    /*public function profit(): HasOne {
-        return $this->hasOne(ActualExpenseRevenue::class, 'event_id');
-    }*/
 }
