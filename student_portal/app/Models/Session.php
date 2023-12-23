@@ -10,4 +10,13 @@ class Session extends Model
 {
     use HasFactory;
     use AsSource;
+
+    protected $fillable = [
+        'user_id',
+        'time',
+        'role',
+        'created_at',
+        'updated_at'
+
+    ];
 }
