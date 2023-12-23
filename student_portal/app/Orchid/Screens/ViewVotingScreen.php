@@ -32,6 +32,9 @@ class ViewVotingScreen extends Screen
         $candidate = Candidate::where('position_id', $position->id)->paginate(10);
         $election = Election::where('id', $position->election_id)->first();
 
+        // Election hasnt started yet
+        abort_if(now() < $election->start_date, 403, 'You are not authorized to view this page.');
+
         return [
             'position' => $position,
             'candidate' => $candidate,

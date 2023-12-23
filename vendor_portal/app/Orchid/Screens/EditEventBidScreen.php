@@ -146,7 +146,7 @@ class EditEventBidScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error deleting this bid. Error Code: ' . $e);
+            Alert::error('There was an error deleting this bid. Error Code: ' . $e->getMessage());
         }
     }
 

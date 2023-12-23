@@ -97,7 +97,10 @@ class CreateSchoolScreen extends Screen
                             • fax <br>
                             • website <br>
                             • total_students <br>
-                            • school_data <br>')
+                            • school_data <br>'),
+                        Link::make('Download Sample CSV')
+                            ->icon('download')
+                            ->href('/sample_schools_upload.csv')
                 ]),
             ])
             ->title('Mass Import Schools')
@@ -278,7 +281,7 @@ class CreateSchoolScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error creating this school. Error Code: ' . $e);
+            Alert::error('There was an error creating this school. Error Code: ' . $e->getMessage());
         }
     }
 
@@ -334,7 +337,7 @@ class CreateSchoolScreen extends Screen
 
         }catch(Exception $e){
 
-            Alert::error('There was an error mass importing the schools. Error Code: ' . $e);
+            Alert::error('There was an error mass importing the schools. Error Code: ' . $e->getMessage());
         }
     }
 

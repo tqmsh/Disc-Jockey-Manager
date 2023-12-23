@@ -90,7 +90,10 @@ class CreateStudentScreen extends Screen
                             • phonenumber <br>
                             • email <br>
                             • password <br>
-                            • allergies <br>')
+                            • allergies <br>'),
+                    Link::make('Download Sample CSV')
+                        ->icon('download')
+                        ->href('/sample_vendors_upload.csv')
                 ]),
             ])
             ->title('Mass Import Students')

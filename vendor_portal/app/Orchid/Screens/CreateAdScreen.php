@@ -2,14 +2,17 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\User;
 use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Region;
 use App\Models\Vendors;
+use App\Notifications\GeneralNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Cropper;
@@ -60,7 +63,7 @@ class CreateAdScreen extends Screen
     {
         return [
 
-            Button::make('Create Campaign')
+            Button::make('Create Campaign (50 credits)')
                 ->icon('plus')
                 ->method('createAd'),
 
@@ -107,7 +110,7 @@ class CreateAdScreen extends Screen
                     ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal(),
                 Cropper::make("campaign_image")
-                    ->storage("s3")
+                     ->storage("s3")
                     ->title("Image")
                     ->width(env("AD_SIZE"))
                     ->height(env("AD_SIZE"))
@@ -121,25 +124,38 @@ class CreateAdScreen extends Screen
 
     public function createAd(Request $request){
         try{
+            if ((Auth::user()->vendor->credits) >= 50) {
+                if($this->validAd($request)){
+                    Campaign::create([
+                        "user_id"=>Auth::user()->id,
+                        "category_id"=>Vendors::where('user_id', Auth::user()->id)->first()->category_id,
+                        "region_id"=>$request->input("campaign_region"),
+                        "title"=>$request->input("campaign_name"),
+                        "image"=>$request->input("campaign_image"),
+                        "website"=>$request->input("campaign_link"),
+                        "clicks"=>0,
+                        "impressions"=>0
+                    ]);
 
-            if($this->validAd($request)){
-                Campaign::create([
-                    "user_id"=>Auth::user()->id,
-                    "category_id"=>Vendors::where('user_id', Auth::user()->id)->first()->category_id,
-                    "region_id"=>$request->input("campaign_region"),
-                    "title"=>$request->input("campaign_name"),
-                    "image"=>$request->input("campaign_image"),
-                    "website"=>$request->input("campaign_link"),
-                    "clicks"=>0,
-                    "impressions"=>0
-                ]);
-                //toast success message
-                Toast::success('Campaign Created Successfully');
-                //redirect to vendor list
-                return redirect()->route('platform.ad.list');
+                    // Send notification to all super admins that vendor has created an ad
+                    $super_admins = User::where('role', 1)->get();
+                    Notification::send($super_admins, new GeneralNotification([
+                        'title' => 'New Campaign Created',
+                        'message' => Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has created a new campaign. Please accept or reject it.',
+                        'action' => '/admin/campaigns',
+                    ]));
 
-            }else{
-                Toast::error('Campaign already exists in this region.');
+                    //toast success message
+                    Toast::success('Campaign Created Successfully');
+                    //redirect to vendor list
+                    return redirect()->route('platform.ad.list');
+
+                }else{
+                    Toast::error('Campaign already exists in this region.');
+                }
+            } else {
+                Toast::error('Insuficient Credits');
+                return redirect()->route('platform.shop');
             }
 
         }catch(Exception $e){

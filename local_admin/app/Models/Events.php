@@ -24,6 +24,15 @@ class Events extends Model
 
             $query->join('schools', 'schools.id', '=', 'school_id');
 
+            if(isset($filters['event'])){
+                $query->where('event_name', 'like', '%' . request('event') . '%');
+            }
+
+            if(isset($filters['sort_option'])){
+                // Specify ASC or DESC in sort_option string
+                // Otherwise, defaults to ASC
+                $query->orderByRaw($filters['sort_option']);
+            }
 
             if(isset($filters['school'])){
                 $query ->where('school', 'like', '%' . request('school') . '%');
@@ -46,7 +55,7 @@ class Events extends Model
 
         }catch(Exception $e){
 
-            Alert::error('There was an error processing the filter. Error Message: ' . $e);
+            Alert::error('There was an error processing the filter. Error Message: ' . $e->getMessage());
         }
     }
 

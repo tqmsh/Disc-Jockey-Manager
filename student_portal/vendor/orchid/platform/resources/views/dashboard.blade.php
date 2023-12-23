@@ -54,7 +54,8 @@
 @section('body-right')
 
     <div class="mt-3 mt-md-4">
-
+        @include("platform::socialsTopBar")
+        
         @if(Breadcrumbs::has())
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb px-4 mb-2">
