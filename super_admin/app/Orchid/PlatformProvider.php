@@ -81,7 +81,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->badge(function () {
                     return count(Campaign::where('active', 0)->get());
                 })
-                ->route('platform.ad.list')
+                ->route('platform.ad.list'),
+
+                Menu::make('Vendor Finances')
+                ->icon('paypal')
+                ->route('platform.vendor.credits'),
             ]),
 
             Menu::make('Schools')
@@ -171,6 +175,26 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('lock')
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles'),
+
+            Menu::make('Prom Planner Sites')
+                ->icon('arrow-down')
+                ->list([
+                    Menu::make('Prom Planner')
+                        ->icon('ps.prom-planner')
+                        ->url('https://promplanner.app/'),
+                    Menu::make('Prom Marketing')
+                        ->icon('ps.prom-marketing')
+                        ->url('https://prommarketing.com/'),
+                    Menu::make('Prom Radio')
+                        ->icon('ps.prom-radio')
+                        ->url('https://promradio.com/'),
+                    Menu::make('Prom Teen')
+                        ->icon('ps.prom-teen')
+                        ->url('https://promteen.com/'),
+                    Menu::make('Prom Vendors')
+                        ->icon('ps.prom-vendor')
+                        ->url('https://promvendors.com/'),
+                ]),
 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')
