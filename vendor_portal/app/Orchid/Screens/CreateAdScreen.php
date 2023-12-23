@@ -63,7 +63,7 @@ class CreateAdScreen extends Screen
     {
         return [
 
-            Button::make('Create Campaign')
+            Button::make('Create Campaign (50 credits)')
                 ->icon('plus')
                 ->method('createAd'),
 
@@ -110,7 +110,7 @@ class CreateAdScreen extends Screen
                     ->fromQuery(Region::query()->whereIn('id', $this->paidRegionIds), 'name')
                     ->horizontal(),
                 Cropper::make("campaign_image")
-                    ->storage("s3")
+                     ->storage("s3")
                     ->title("Image")
                     ->width(env("AD_SIZE"))
                     ->height(env("AD_SIZE"))
@@ -122,44 +122,53 @@ class CreateAdScreen extends Screen
         ];
     }
 
-    public function createAd(Request $request){
-        try{
-
-            if($this->validAd($request)){
+public function createAd(Request $request)
+{
+    try {
+        // Check credits
+        if (Auth::user()->vendor->credits >= 50) {
+            // Check if the ad is valid
+            if ($this->validAd($request)) {
+                // Create the campaign
                 Campaign::create([
-                    "user_id"=>Auth::user()->id,
-                    "category_id"=>Vendors::where('user_id', Auth::user()->id)->first()->category_id,
-                    "region_id"=>$request->input("campaign_region"),
-                    "title"=>$request->input("campaign_name"),
-                    "image"=>$request->input("campaign_image"),
-                    "website"=>$request->input("campaign_link"),
-                    "clicks"=>0,
-                    "impressions"=>0
+                    "user_id" => Auth::user()->id,
+                    "category_id" => Vendors::where('user_id', Auth::user()->id)->first()->category_id,
+                    "region_id" => $request->input("campaign_region"),
+                    "title" => $request->input("campaign_name"),
+                    "image" => $request->input("campaign_image"),
+                    "website" => $request->input("campaign_link"),
+                    "clicks" => 0,
+                    "impressions" => 0
                 ]);
 
-                    // Send notification to all super admins that vendor has created an ad
-                    $super_admins = User::where('role', 1)->get();
-                    Notification::send($super_admins, new GeneralNotification([
-                        'title' => 'New Campaign Created',
-                        'message' => Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has created a new campaign. Please accept or reject it.',
-                        'action' => '/admin/campaigns',
-                    ]));
+                // Send notification to all super admins that a vendor has created an ad
+                $super_admins = User::where('role', 1)->get();
+                Notification::send($super_admins, new GeneralNotification([
+                    'title' => 'New Campaign Created',
+                    'message' => Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has created a new campaign. Please accept or reject it.',
+                    'action' => '/admin/campaigns',
+                ]));
 
-                //toast success message
+                // Toast success message
                 Toast::success('Campaign Created Successfully');
-                //redirect to vendor list
+                // Redirect to the ad list
                 return redirect()->route('platform.ad.list');
-
-            }else{
+            } else {
+                // Toast error message
                 Toast::error('Campaign already exists in this region.');
             }
-
-        }catch(Exception $e){
-
-            //toast error message
-            Alert::error('There was an error creating this campaign Error Code: ' . $e->getMessage());
+        } else {
+            // Toast error message for insufficient credits
+            Toast::error('Insufficient Credits');
+            // Redirect to the shop
+            return redirect()->route('platform.shop');
         }
+    } catch (Exception $e) {
+        // Toast error message
+        Alert::error('There was an error creating this campaign. Error Code: ' . $e->getMessage());
     }
+}
+
     public function validAd(Request $request){
         return count(Campaign::where("user_id", Auth::user()->id)
             ->where("category_id", $request->input("campaign_category"))

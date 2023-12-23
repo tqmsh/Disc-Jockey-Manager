@@ -98,7 +98,7 @@ class ViewCandidateScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e->getMessage());
         }
     }
 

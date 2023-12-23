@@ -22,6 +22,8 @@ use App\Orchid\Layouts\ViewBeautyBidsLayout;
 use App\Orchid\Layouts\ViewStudentBidsLayout;
 use App\Orchid\Layouts\ViewBeautyGroupBidLayout;
 use App\Orchid\Layouts\ViewPendingStudentBidsLayout;
+use App\Models\Vendors;
+
 
 class ViewStudentBidScreen extends Screen
 {
@@ -121,10 +123,15 @@ class ViewStudentBidScreen extends Screen
         try {
             $bid = StudentBids::find(request('bid_id'));
             $vendor = User::find($bid->user_id);
+            $vendor_1 = Vendors::where('user_id', $bid->user_id)->first();
             $bid->status = request('choice');
             $bid->save();
 
+            $adPrice = 50;
+
+
             if(request('choice') == 1){
+                $vendor_1->decrement('credits', $adPrice);
 
                 $vendor->notify(new GeneralNotification([
                     'title' => 'Student Bid Accepted!',

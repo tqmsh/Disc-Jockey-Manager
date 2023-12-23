@@ -85,7 +85,8 @@ class ViewEventScreen extends Screen
                     
                     Select::make('event')
                         ->title('Search Events')
-                        ->help('Type in boxes to search')            ->empty('No selection')
+                        ->help('Type in boxes to search')
+                         ->empty('No selection')
                         ->fromModel(Events::class, 'school', 'school'),
 
                     Select::make('country')
@@ -100,8 +101,19 @@ class ViewEventScreen extends Screen
 
                     Select::make('state_province')
                         ->title('State/Province')
+                        ->help('Type in boxes to search')
                         ->empty('No selection')
-                        ->fromModel(School::class, 'state_province', 'state_province'),
+                        ->fromQuery(Events::query()->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name', 'event_name'),
+                    
+                    Select::make('sort_option')
+                        ->title('Order Events By')
+                        ->empty('No selection')
+                        ->options([
+                            'event_start_time ASC' => 'Start Date/Time (Earliest First)',
+                            'event_start_time DESC' => 'Start Date/Time (Latest First)',
+                            'event_finish_time ASC' => 'End Date/Time (Earliest First)',
+                            'event_finish_time DESC' => 'End Date/Time (Latest First)',
+                        ])
                 ]),
                 
                 Button::make('Filter')
@@ -137,7 +149,7 @@ class ViewEventScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e->getMessage());
         }
     }
 

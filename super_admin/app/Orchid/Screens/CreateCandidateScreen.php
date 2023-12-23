@@ -32,6 +32,10 @@ class CreateCandidateScreen extends Screen
     public function query(Position $position): iterable
     {
         $election = Election::where('id',$position->election_id)->first();
+
+        // Election has ended
+        abort_if(now() > $election->end_date, 403, 'You are not authorized to view this page.');
+        
         return [
             'position' => $position,
             'election' => $election

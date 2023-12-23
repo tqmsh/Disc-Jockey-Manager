@@ -148,7 +148,7 @@ class ViewCourseScreen extends Screen
             }
 
         }catch(Exception $e){
-            Toast::error('There was a error trying to deleted the selected courses. Error Message: ' . $e);
+            Toast::error('There was a error trying to deleted the selected courses. Error Message: ' . $e->getMessage());
         }
     }
 }

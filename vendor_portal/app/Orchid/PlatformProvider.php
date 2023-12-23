@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Orchid;
+use App\Models\Vendors;
 
 use Orchid\Support\Color;
 use Orchid\Platform\Dashboard;
@@ -29,6 +30,9 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         abort_if(Auth::user()->role != 4, 403, 'You are not authorized to view this page.');
+
+        $vendor = Vendors::where('user_id', Auth::user()->id)->first();
+
   
         return [
                 
@@ -37,6 +41,12 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('home')
             ->title('CORE')
             ->route('platform.example'),
+
+            // SHOP
+            Menu::make('Shop')
+            ->icon('bag')
+            ->route('platform.shop'),
+
 
             //MONEYYY MAKER
             Menu::make('Bids')
@@ -63,6 +73,26 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
+
+            Menu::make('Prom Planner Sites')
+                ->icon('arrow-down')
+                ->list([
+                    Menu::make('Prom Planner')
+                        ->icon('ps.prom-planner')
+                        ->url('https://promplanner.app/'),
+                    Menu::make('Prom Marketing')
+                        ->icon('ps.prom-marketing')
+                        ->url('https://prommarketing.com/'),
+                    Menu::make('Prom Radio')
+                        ->icon('ps.prom-radio')
+                        ->url('https://promradio.com/'),
+                    Menu::make('Prom Teen')
+                        ->icon('ps.prom-teen')
+                        ->url('https://promteen.com/'),
+                    Menu::make('Prom Vendors')
+                        ->icon('ps.prom-vendor')
+                        ->url('https://promvendors.com/'),
+                ]),
                 
             Menu::make('Examples Layouts')
                 ->title('PLACEHOLDERS')

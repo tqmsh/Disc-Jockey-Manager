@@ -145,7 +145,7 @@ class ViewSongRequestsScreen extends Screen
                 Toast::warning('No songs requests were selected');
             }
         } catch (Exception $e) {
-            Alert::error('There was an error trying to delete the selected song requests. Error Message: ' . $e);
+            Alert::error('There was an error trying to delete the selected song requests. Error Message: ' . $e->getMessage());
         }
     }
 }

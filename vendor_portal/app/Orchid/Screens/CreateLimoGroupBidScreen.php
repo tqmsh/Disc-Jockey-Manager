@@ -59,7 +59,7 @@ class CreateLimoGroupBidScreen extends Screen
     {
         return [ 
 
-            Button::make('Send Bid')
+            Button::make('Send Bid (50 credits)')
                 ->icon('plus')
                 ->method('createBid'),
 
@@ -154,35 +154,42 @@ class CreateLimoGroupBidScreen extends Screen
 
             try{   
 
-                if($this->validBid($limoGroup)){
-                    
-                    LimoGroupBid::create([
-                        'user_id' => $vendor->user_id,
-                        'limo_group_id' => $limoGroup->id,
-                        'package_id' => request('package_id'),
-                        'notes' => request('notes'),
-                        'category_id' => $vendor->category_id,
-                        'school_name' => $limoGroup->school->school_name,
-                        'region_id' => $limoGroup->school->region_id,
-                        'company_name' => $vendor->company_name,
-                        'url' => $vendor->website,
-                        'contact_instructions' => request('contact_instructions'),
-                        'status' => 0
-                    ]);
+                if ((Auth::user()->vendor->credits) >= 50) {
 
-                    $limoGroupOwner = User::find($limoGroup->owner->user_id);
+                    if($this->validBid($limoGroup)){
+                        
+                        LimoGroupBid::create([
+                            'user_id' => $vendor->user_id,
+                            'limo_group_id' => $limoGroup->id,
+                            'package_id' => request('package_id'),
+                            'notes' => request('notes'),
+                            'category_id' => $vendor->category_id,
+                            'school_name' => $limoGroup->school->school_name,
+                            'region_id' => $limoGroup->school->region_id,
+                            'company_name' => $vendor->company_name,
+                            'url' => $vendor->website,
+                            'contact_instructions' => request('contact_instructions'),
+                            'status' => 0
+                        ]);
 
-                    $limoGroupOwner->notify(new GeneralNotification([
-                        'title' => 'New Limo Group Bid',
-                        'message' => 'You have a new bid for your limo group: ' . $limoGroup->name,
-                        'action' => '/admin/limo-groups',
-                    ]));
-                        
-                    Toast::success('Bid created succesfully');
-                        
-                    return redirect()->route('platform.bidopportunities.list');
-                }else{
-                    Toast::error('Bid already exists');
+                        $limoGroupOwner = User::find($limoGroup->owner->user_id);
+
+                        $limoGroupOwner->notify(new GeneralNotification([
+                            'title' => 'New Limo Group Bid',
+                            'message' => 'You have a new bid for your limo group: ' . $limoGroup->name,
+                            'action' => '/admin/limo-groups',
+                        ]));
+                            
+                        Toast::success('Bid created succesfully');
+                            
+                        return redirect()->route('platform.bidopportunities.list');
+
+                    }else{
+                        Toast::error('Bid already exists');
+                    }
+                } else {
+                    Toast::error('Insuficient Credits');
+                    return redirect()->route('platform.shop'); 
                 }
     
             }catch(Exception $e){
