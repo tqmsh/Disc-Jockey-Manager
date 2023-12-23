@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Http\Controllers;
 
-use Illuminate\Auth\EloquentUserProvider;
+use Exception;
 use App\Models\Session;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Cookie\CookieJar;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Cookie\CookieJar;
 use Orchid\Access\Impersonation;
+use Orchid\Platform\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
