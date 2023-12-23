@@ -15,3 +15,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return view('welcome');
 });
+
+Route::get('/download-csv', function () {
+    $filePath = public_path('image/sample.csv'); // Replace with the actual path to your CSV file
+
+    $headers = [
+        'Content-Type' => 'text/csv',
+        'Refresh' => '0',
+    ];
+    return Response::download($filePath, 'sample.csv', $headers);
+    
+})->name('csv');
+
+Route::post('/user/tab-closed', [LoginController::class, 'logout']);

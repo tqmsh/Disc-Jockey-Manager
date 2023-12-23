@@ -131,3 +131,16 @@
         </div>
     </body>
 </html>
+
+<script>
+    window.addEventListener('beforeunload', function (e) {
+        fetch('/user/tab-closed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            body: JSON.stringify({}),
+        });
+    });
+</script>

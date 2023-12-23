@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Http\Controllers;
 
-use App\Models\Localadmin;
 use Exception;
-use App\Models\User;
-use App\Models\School;
-use App\Models\Student;
+use App\Models\Session;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use Orchid\Access\UserSwitch;
-use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
+use Orchid\Access\Impersonation;
+use Orchid\Platform\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
-use App\Notifications\GeneralNotification;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -59,6 +54,10 @@ class LoginController extends Controller
         ]);
     }
 
+    private function setStartTimeInSession(): void {
+        session(['login_start_time' => now()]);
+    }
+
     /**
      * Handle a login request to the application.
      *
@@ -70,44 +69,38 @@ class LoginController extends Controller
      */
     public function login(Request $request, CookieJar $cookieJar)
     {
-        try{
+        try {
             $request->validate([
                 'email'    => 'required|string',
                 'password' => 'required|string',
             ]);
-
+    
             $auth = $this->guard->attempt(
                 $request->only(['email', 'password']),
                 $request->filled('remember')
             );
-
+    
             if ($auth) {
-
                 $user = User::where('email', $request->input('email'))->first();
-
-                if($user->role != 3 || $user->account_status == 0){
-
+    
+                if ($user->role != 3 || $user->account_status == 0) {
                     $this->guard->logout();
-
                     $cookieJar->forget('lockUser');
-
                     $request->session()->invalidate();
-
                     $request->session()->regenerateToken();
-
-                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
+    
+                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.')]);
                 }
-
-                return $this->sendLoginResponse($request);
             }
-
-            throw ValidationException::withMessages([
-                'email' => __('The details you entered did not match our records. Please double-check and try again.'),
-            ]);
-        }catch(Exception $e){
-            throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
+        } catch (Exception $e) {
+            Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
+    
+            return redirect('/admin/register');
         }
     }
+    
+
+
 
     /**
      * Send the response after the user was authenticated.
@@ -267,7 +260,6 @@ class LoginController extends Controller
                 }
             }
     }
-
     /**
      * @param CookieJar $cookieJar
      *
@@ -299,6 +291,22 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+
+        $user = $this->guard->user();
+
+        $start_time = $request->session()->get('login_start_time');
+
+        $logoutTime = now();
+
+        $sessionTime = $logoutTime->diffInSeconds($start_time);
+
+        Session::create([
+            'user_id' => $user->id,
+            'time' => $sessionTime,
+            'role' => $user->role,
+        ]);
+
+        $user->update(['start_time' => null]);
         $this->guard->logout();
 
         $request->session()->invalidate();
