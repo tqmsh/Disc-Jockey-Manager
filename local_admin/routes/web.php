@@ -15,3 +15,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return view('welcome');
 });
+
+Route::post('/user/tab-closed', [LoginController::class, 'logout']);
