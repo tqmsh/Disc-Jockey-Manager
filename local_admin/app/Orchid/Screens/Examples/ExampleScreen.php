@@ -92,7 +92,7 @@ class ExampleScreen extends Screen
         $paidAttendeesCountPercentage = $newestEvent->capacity !== null && $newestEvent->capacity > 0 ? number_format(($paidAttendeesCount / $newestEvent->capacity) * 100, 2) . " %" : "Capacity Not Set";
     
         // Direct Bids recieved
-        $DirectBidsRecieved = EventBids::where('event_id', $newestEvent)->where('status', 0)->count();
+        $DirectBidsRecieved = EventBids::where('event_id', $newestEvent)->count();
 
         // Direct Bids Replied to
         $DirectBidsRepliedTo = EventBids::where('event_id', $newestEvent)->whereIn('status', [1,2])->count();
