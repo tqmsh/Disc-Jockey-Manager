@@ -79,7 +79,7 @@ class ExampleScreen extends Screen
         // Add no upencoming event
 
         // Bid Counting
-        $TotalDirectBidsReceived = StudentBids::where('student_user_id', $user->id)->where('status', 0)->count();
+        $TotalDirectBidsReceived = StudentBids::where('student_user_id', $user->id)->count();
         $TotalBidsRepliedTo = StudentBids::where('student_user_id', $user->id)->whereIn('status', [1,2])->count();
 
 
@@ -119,7 +119,7 @@ class ExampleScreen extends Screen
             ],
             'metrics' => [
                 'daysLeftUntilEvent'           => $daysLeftUntilEvent,
-                'ItemsRemainingOnChecklist'    => ['value' => number_format(24668), 'diff' => -30.76],
+                'ItemsRemainingOnChecklist'    => 0,
                 'totalDirectBidsReceived'   => $TotalDirectBidsReceived,
                 'totalDirectBidsRepliedTo' => $TotalBidsRepliedTo,
             ],
