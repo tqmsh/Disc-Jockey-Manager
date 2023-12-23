@@ -7,6 +7,7 @@ namespace Orchid\Platform\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Models\Vendors;
+use App\Models\Session as UserSession;
 use App\Notifications\GeneralNotification;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -57,6 +58,10 @@ class LoginController extends Controller
         ]);
     }
 
+    private function setStartTimeInSession(): void {
+        session(['login_start_time' => now()]);
+    }
+
     /**
      * Handle a login request to the application.
      *
@@ -95,6 +100,8 @@ class LoginController extends Controller
 
                     throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
                 }
+
+                $this->setStartTimeInSession();
 
                 return $this->sendLoginResponse($request);
             }
@@ -259,6 +266,22 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = $this->guard->user();
+
+        $start_time = $request->session()->get('login_start_time');
+
+        $logoutTime = now();
+
+        $sessionTime = $logoutTime->diffInSeconds($start_time);
+
+        UserSession::create([
+            'user_id' => $user->id,
+            'time' => $sessionTime,
+            'role' => $user->role,
+        ]);
+
+        $user->update(['start_time' => null]);
+
         $this->guard->logout();
 
         $request->session()->invalidate();
@@ -269,4 +292,6 @@ class LoginController extends Controller
             ? new JsonResponse([], 204)
             : redirect('/');
     }
+
+    
 }
