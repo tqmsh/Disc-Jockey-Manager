@@ -35,7 +35,11 @@ class ViewRegisteredEventLayout extends Table
         return [
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
-                    return e($event->event_name);
+                    // return e($event->event_name);
+
+                    return Button::make($event->event_name)
+                                ->type(Color::LIGHT())
+                                ->method('redirect', ['event_id' => $event->id, 'type' => 'eventInformation']);
                 }),
             TD::make()
                 ->width('100px')
@@ -66,6 +70,7 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
                 }), 
+
             
             // Buy tickets button
             TD::make()
@@ -109,6 +114,7 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function (Events $event) {
                     return e($event->event_rules);
                 }),
+
     
         ];    
     }

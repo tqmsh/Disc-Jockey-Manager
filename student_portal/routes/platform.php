@@ -31,6 +31,7 @@ use App\Orchid\Screens\CreateSongRequestScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
+use App\Orchid\Screens\ViewEventInformationScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
@@ -62,6 +63,8 @@ Route::middleware(['cors'])->group(function () {
 
 //show event registration screen
 Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platform.event.register');
+
+Route::screen('/events/{event}/information', ViewEventInformationScreen::class)->name('platform.event.information');
 
 Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('platform.event.tables');
 
