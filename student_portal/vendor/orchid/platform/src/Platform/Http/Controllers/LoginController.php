@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
 use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
@@ -68,7 +69,7 @@ class LoginController extends Controller
      *
      * @return JsonResponse|RedirectResponse
      */
- public function login(Request $request, CookieJar $cookieJar)
+public function login(Request $request, CookieJar $cookieJar)
 {
     try {
         $request->validate([
@@ -93,6 +94,8 @@ class LoginController extends Controller
                 throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.')]);
             }
 
+            $this->setStartTimeInSession();
+
             return $this->sendLoginResponse($request);
         }
     } catch (Exception $e) {
@@ -105,6 +108,7 @@ class LoginController extends Controller
         'email' => __('The details you entered did not match our records. Please double-check and try again.'),
     ]);
 }
+
 
     
 

@@ -31,7 +31,11 @@ class ViewRegisteredEventLayout extends Table
         return [
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
-                    return e($event->event_name);
+                    // return e($event->event_name);
+
+                    return Button::make($event->event_name)
+                                ->type(Color::LIGHT())
+                                ->method('redirect', ['event_id' => $event->id, 'type' => 'eventInformation']);
                 }),
             TD::make()
                 ->width('100px')
@@ -62,27 +66,6 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
                 }), 
-            TD::make('event_start_time', 'Event Start Date')
-                ->render(function (Events $event) {
-                    return e($event->event_start_time);
-                }),
-            TD::make('event_address', 'Event Address')
-                ->render(function (Events $event) {
-                    return e($event->event_address);
-                }),
-            TD::make('event_zip_postal', 'Event Zip/Postal')
-                ->render(function (Events $event) {
-                    return e($event->event_zip_postal);
-                }),
-            TD::make('event_info', 'Event Info')
-                ->render(function (Events $event) {
-                    return e($event->event_info);
-                }),
-
-            TD::make('event_rules', 'Event Rules')
-                ->render(function (Events $event) {
-                    return e($event->event_rules);
-                }),
     
         ];    
     }

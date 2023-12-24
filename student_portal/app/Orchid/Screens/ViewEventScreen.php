@@ -125,6 +125,9 @@ class ViewEventScreen extends Screen
         else if($type == 'songs'){
             return redirect()->route('platform.songs.list', $event_id);
         }
+        else if ($type == 'eventInformation') {
+            return redirect()->route('platform.event.information', $event_id);
+        }
         else if($type == 'election'){
             $election = Election::where('event_id',$event_id)->first();
 
