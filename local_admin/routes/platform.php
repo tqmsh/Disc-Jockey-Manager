@@ -50,6 +50,7 @@ use App\Orchid\Screens\ViewBeautyGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewContractScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,7 +147,8 @@ Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembers
 
 Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.contact-students');
 
-
+// Contracts
+Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
