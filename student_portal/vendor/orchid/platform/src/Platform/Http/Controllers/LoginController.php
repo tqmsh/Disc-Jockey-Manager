@@ -8,6 +8,7 @@ use Exception;
 use App\Models\Session;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
 use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
@@ -91,6 +92,11 @@ class LoginController extends Controller
     
                     throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.')]);
                 }
+
+                
+                $this->setStartTimeInSession();
+
+                return $this->sendLoginResponse($request);
             }
         } catch (Exception $e) {
             Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
