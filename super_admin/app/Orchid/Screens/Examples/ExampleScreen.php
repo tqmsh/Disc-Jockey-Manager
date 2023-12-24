@@ -4,7 +4,11 @@ namespace App\Orchid\Screens\Examples;
 
 use App\Models\Campaign;
 use App\Models\Categories;
+use App\Models\School;
+use App\Models\Student;
 use App\Models\Vendors;
+use App\Models\Session;
+use Carbon\Carbon;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
@@ -18,6 +22,9 @@ use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use DateTime;
+use DateInterval;
+// i123333
 
 class ExampleScreen extends Screen
 {
@@ -90,10 +97,20 @@ class ExampleScreen extends Screen
 
             ],
             'metrics' => [
-                'sales'    => ['value' => number_format(6851), 'diff' => 10.08],
-                'visitors' => ['value' => number_format(24668), 'diff' => -30.76],
-                'orders'   => ['value' => number_format(10000), 'diff' => 0],
-                'total'    => number_format(65661),
+                'totalSchools'    => School::count(),
+                'totalStudents'   => Student::count(),
+                'totalVendors'    => Vendors::count(),
+                'totalBrands'     => Vendors::count(),
+
+                'schoolSessionAvgDuration' => Session::averageDurationForSchools(),
+                'studentsSessionAvgDuration' => Session::averageDurationForStudents(),
+                'vendorsSessionAvgDuration' => Session::averageDurationForVendors(),
+                'brandsSessionAvgDuration' => Session::averageDurationForBrands(),
+
+
+
+
+
             ],
         ];
     }
@@ -138,6 +155,46 @@ class ExampleScreen extends Screen
      */
     public function layout(): iterable
     {
+
+        $now = new DateTime(); // Create a DateTime object representing the current date and time
+        
+        // Calculate the date and time 30 days ago
+        $oneDayAgo = clone $now;
+        $oneDayAgo->sub(new DateInterval('P1D'));
+        
+        $sevenDaysAgo = clone $now;
+        $sevenDaysAgo->sub(new DateInterval('P7D'));
+        
+        $thirtyDaysAgo = clone $now;
+        $thirtyDaysAgo->sub(new DateInterval('P30D'));
+        
+        $ninetyDaysAgo = clone $now;
+        $ninetyDaysAgo->sub(new DateInterval('P90D'));
+        
+        // Count the number of schools created in the last 30 days
+        $numberOfSchoolsLastDay    = School::where('created_at', '>=', $oneDayAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfSchoolsLast7Days  = School::where('created_at', '>=', $sevenDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfSchoolsLast30Days = School::where('created_at', '>=', $thirtyDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfSchoolsLast90Days = School::where('created_at', '>=', $ninetyDaysAgo->format('Y-m-d H:i:s'))->count();
+        
+        $numberOfStudentsLastDay    = Student::where('created_at', '>=', $oneDayAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfStudentsLast7Days  = Student::where('created_at', '>=', $sevenDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfStudentsLast30Days = Student::where('created_at', '>=', $thirtyDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfStudentsLast90Days = Student::where('created_at', '>=', $ninetyDaysAgo->format('Y-m-d H:i:s'))->count();
+
+        $numberOfVendorsLastDay    = Vendors::where('created_at', '>=', $oneDayAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfVendorsLast7Days  = Vendors::where('created_at', '>=', $sevenDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfVendorsLast30Days = Vendors::where('created_at', '>=', $thirtyDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfVendorsLast90Days = Vendors::where('created_at', '>=', $ninetyDaysAgo->format('Y-m-d H:i:s'))->count();
+
+        $numberOfBrandsLastDay    = Vendors::where('created_at', '>=', $oneDayAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfBrandsLast7Days  = Vendors::where('created_at', '>=', $sevenDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfBrandsLast30Days = Vendors::where('created_at', '>=', $thirtyDaysAgo->format('Y-m-d H:i:s'))->count();
+        $numberOfBrandsLast90Days = Vendors::where('created_at', '>=', $ninetyDaysAgo->format('Y-m-d H:i:s'))->count();
+        
+
+        // dd($numberOfStudentsLast90Days);
+        
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
             $arr_ads[] = ["id"=>$campaign->id,
@@ -152,23 +209,58 @@ class ExampleScreen extends Screen
         usort($arr_ads, [$this, 'customSort']);
         return [
             Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
+                'Total Schools'  => 'metrics.totalSchools',
+                'Total Students' => 'metrics.totalStudents',
+                'Total Vendors'  => 'metrics.totalVendors',
+                'Total Brands'   => 'metrics.totalBrands',
             ]),
+
+            Layout::view("new_schools",[ //Schools
+                                        'numOfSchools1'  => $numberOfSchoolsLastDay,
+                                        'numOfSchools7'  => $numberOfSchoolsLast7Days,
+                                        'numOfSchools30' => $numberOfSchoolsLast30Days,
+                                        'numOfSchools90' => $numberOfSchoolsLast90Days,
+                                        //Students
+                                        'numOfStudents1'  => $numberOfStudentsLastDay,
+                                        'numOfStudents7'  => $numberOfStudentsLast7Days,
+                                        'numOfStudents30' => $numberOfStudentsLast30Days,
+                                        'numOfStudents90' => $numberOfStudentsLast90Days,
+
+                                        //Vendors
+                                        'numOfVendors1'  => $numberOfVendorsLastDay,
+                                        'numOfVendors7'  => $numberOfVendorsLast7Days,
+                                        'numOfVendors30' => $numberOfVendorsLast30Days,
+                                        'numOfVendors90' => $numberOfVendorsLast90Days,
+
+                                        //Brands
+                                        'numOfBrands1'  => $numberOfBrandsLastDay,
+                                        'numOfBrands7'  => $numberOfBrandsLast7Days,
+                                        'numOfBrands30' => $numberOfBrandsLast30Days,
+                                        'numOfBrands90' => $numberOfBrandsLast90Days,
+                                        ]),
+
             Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
+                'Schools Avg Session duration'   => 'metrics.schoolSessionAvgDuration',
+                'Students Avg Session duration'  => 'metrics.studentsSessionAvgDuration',
+                'Vendors Avg Session duration'  => 'metrics.vendorsSessionAvgDuration',
+                'Brands Avg Session duration'  => 'metrics.brandsSessionAvgDuration',
+
+
+
             ]),
-            Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
-            ]),
+                                        
+            // Layout::metrics([
+            //     'Sales Today'    => 'metrics.sales',
+            //     'Visitors Today' => 'metrics.visitors',
+            //     'Pending Orders' => 'metrics.orders',
+            //     'Total Earnings' => 'metrics.total',
+            // ]),
+            // Layout::metrics([
+            //     'Sales Today'    => 'metrics.sales',
+            //     'Visitors Today' => 'metrics.visitors',
+            //     'Pending Orders' => 'metrics.orders',
+            //     'Total Earnings' => 'metrics.total',
+            // ]),
 
             Layout::view("card_style"),
 

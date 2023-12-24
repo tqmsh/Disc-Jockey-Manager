@@ -157,6 +157,14 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->placeholder('Ex. 29.99')
                     ->horizontal(), 
+
+     
+                Input::make('capacity')
+                    ->title('Event Capacity')
+                    ->type('text')
+                    ->required()
+                    ->placeholder('Ex. 100')
+                    ->horizontal(), 
             ]),
         ];
     }

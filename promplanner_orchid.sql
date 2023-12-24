@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2023 at 06:32 PM
+-- Generation Time: Dec 23, 2023 at 11:27 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -193,7 +193,8 @@ INSERT INTO `attachments` (`id`, `name`, `original_name`, `mime`, `extension`, `
 (87, '2ceb104c3fb5502a82b49e24a5cd18cf97b3574c', 'blob', 'image/png', 'png', 2221813, 0, '2023/08/28/', NULL, NULL, '7897650ee3ed3769b35babac92ecfe9004a89e28', 's3', 151, NULL, '2023-08-28 19:51:47', '2023-08-28 19:51:47'),
 (88, '6cf9468c8a98f5307f49a79d1e11a95812797bbf', 'venture-tech-website-favicon-white.webp', 'image/webp', 'webp', 588, 0, '2023/08/30/', NULL, NULL, 'f197f1c90d8e5787577ee098992b688a3025ec02', 's3', 151, NULL, '2023-08-30 21:02:19', '2023-08-30 21:02:19'),
 (89, '437a8a40b2383cab2df953c300cc12299ad93c53', 'blob', 'image/png', 'png', 3417441, 0, '2023/08/30/', NULL, NULL, 'c7c8d4f84c394265251ad6549bd418b9261663f2', 's3', 151, NULL, '2023-08-31 00:41:41', '2023-08-31 00:41:41'),
-(90, '819278e0a85660c4daf58c4b477f56a93814b1aa', 'blob', 'image/png', 'png', 2074669, 0, '2023/08/30/', NULL, NULL, '47660063ee2a716d78e2178b9fe40b6f01e91d30', 's3', 151, NULL, '2023-08-31 00:43:39', '2023-08-31 00:43:39');
+(90, '819278e0a85660c4daf58c4b477f56a93814b1aa', 'blob', 'image/png', 'png', 2074669, 0, '2023/08/30/', NULL, NULL, '47660063ee2a716d78e2178b9fe40b6f01e91d30', 's3', 151, NULL, '2023-08-31 00:43:39', '2023-08-31 00:43:39'),
+(91, '765075f3cbb6b2c78211bd5aa47864e4dbd9c974', 'blob', 'image/png', 'png', 170735, 0, '2023/12/23/', NULL, NULL, '71a97677d1049bb110a59cb4b6044db0692fceab', 's3', 151, NULL, '2023-12-24 03:14:47', '2023-12-24 03:14:47');
 
 -- --------------------------------------------------------
 
@@ -504,6 +505,9 @@ CREATE TABLE `events` (
   `event_zip_postal` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `event_info` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `event_rules` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `open` tinyint(1) DEFAULT 1 COMMENT '1 = Open, 0 = Closed',
+  `capacity` int(11) DEFAULT NULL,
+  `ticket_price` decimal(10,0) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -512,11 +516,11 @@ CREATE TABLE `events` (
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`id`, `event_creator`, `school_id`, `region_id`, `venue_id`, `event_name`, `event_start_time`, `event_finish_time`, `school`, `event_address`, `event_zip_postal`, `event_info`, `event_rules`, `created_at`, `updated_at`) VALUES
-(6, 108, 32, 12, 9, 'Cool Kidz Party', '2022-11-11 15:05:41', '2022-11-18 15:05:41', 'Cool School', '789 Cool Street', 'ILK OL8', 'Cool dresses ', 'ONLY COOL KIDS ALLOWED', '2022-11-04 19:05:41', '2022-11-15 01:34:49'),
-(13, 13, 53, 1, NULL, 'Colonel By\'s Main Event', '2022-11-21 12:00:00', '2022-11-22 12:00:00', 'Colonel By Secondary School', '2381 Ogilvie Rd', 'K1J 7N4', 'Formal Attire', 'No Violence', '2022-11-20 11:16:51', '2022-11-20 11:16:51'),
-(14, 13, 51, 1, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
-(15, 151, 51, 1, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', '2022-12-02 01:03:59', '2022-12-02 01:03:59');
+INSERT INTO `events` (`id`, `event_creator`, `school_id`, `region_id`, `venue_id`, `event_name`, `event_start_time`, `event_finish_time`, `school`, `event_address`, `event_zip_postal`, `event_info`, `event_rules`, `open`, `capacity`, `ticket_price`, `created_at`, `updated_at`) VALUES
+(6, 108, 32, 12, 9, 'Cool Kidz Party', '2022-11-11 15:05:41', '2022-11-18 15:05:41', 'Cool School', '789 Cool Street', 'ILK OL8', 'Cool dresses ', 'ONLY COOL KIDS ALLOWED', 1, 0, NULL, '2022-11-04 19:05:41', '2022-11-15 01:34:49'),
+(13, 13, 53, 1, NULL, 'Colonel By\'s Main Event', '2022-11-21 12:00:00', '2022-11-22 12:00:00', 'Colonel By Secondary School', '2381 Ogilvie Rd', 'K1J 7N4', 'Formal Attire', 'No Violence', 1, 0, NULL, '2022-11-20 11:16:51', '2022-11-20 11:16:51'),
+(14, 13, 51, 1, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', 1, 0, NULL, '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
+(15, 151, 51, 1, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', 1, 0, NULL, '2022-12-02 01:03:59', '2022-12-02 01:03:59');
 
 -- --------------------------------------------------------
 
@@ -790,7 +794,7 @@ INSERT INTO `localadmins` (`id`, `user_id`, `school_id`, `account_status`, `firs
 (18, 108, 53, 1, 'Camille', 'Williams', '(187) 264-8912', 'camillewilliams@gmail.com', 'Colonel By Secondary School', '2022-10-13 19:11:55', '2022-11-19 04:25:53'),
 (24, 114, 5, 1, 'Sigrid', 'Lindgren', '(951) 460-6134', 'manuela.williamson@example.com', 'Bayer LLC', '2022-10-13 19:11:55', '2022-11-19 04:25:53'),
 (44, 144, 53, 1, 'Permissions', 'Permissions', '(456) 456-4546', 'Permissions@Permissions.com', 'Colonel By Secondary School', '2022-11-19 04:27:23', '2022-11-19 04:40:43'),
-(45, 151, 51, 1, 'Local Admin 1', 'Local Admin 1', '(546) 456-4564', 'localadmin001@promplanner.com', 'Digitera School of Digital Marketing & Software', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
+(45, 151, 51, 1, 'Local Admin 1', 'Local Admin 1', '(546) 456-4564', 'localadmin001@promplanner.com', 'Digitera School of Digital Marketing & Software', '2022-12-02 00:58:48', '2023-12-24 03:14:48'),
 (49, 185, 53, 1, 'RoleUser Perms', 'RoleUser Perms', '(556) 466-4645', 'RoleUserPerms@RoleUserPerms.com', 'Colonel By Secondary School', '2023-01-07 23:45:06', '2023-01-07 23:45:06'),
 (51, 192, 53, 1, 'PendingTest', 'PendingTest', '(778) 979-7979', 'PendingTest@PendingTest.com', 'Colonel By Secondary School', '2023-01-10 23:54:52', '2023-01-10 23:55:32'),
 (52, 193, 53, 1, 'Local admin Import 1', 'efwefwef', '12345678910', 'import111@gmail.com', 'Colonel By Secondary School', '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
@@ -966,6 +970,39 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (2, 'App\\Models\\User', 205, 'myapptoken', '92ccaee44e20abc7e97f6614df419be5d12c2fec9039f90889fef6e3897841cd', '[\"*\"]', NULL, NULL, '2023-03-27 01:00:15', '2023-03-27 01:00:15'),
 (3, 'App\\Models\\User', 205, 'myapptoken', 'ecc18c18bc10519193071f6c2948ee9be3037061bc429a9c57f13e815d7aeda1', '[\"*\"]', NULL, NULL, '2023-03-27 14:45:02', '2023-03-27 14:45:02'),
 (4, 'App\\Models\\User', 205, 'myapptoken', '47495b9907931fdddd422460c5b233cc6944e06194bd4855223037e01010574a', '[\"*\"]', NULL, NULL, '2023-03-27 14:45:52', '2023-03-27 14:45:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `polls`
+--
+
+CREATE TABLE `polls` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `school_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `vendor_user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `approved` tinyint(4) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `poll_options`
+--
+
+CREATE TABLE `poll_options` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `poll_id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1264,6 +1301,14 @@ CREATE TABLE `sessions` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `time`, `role`, `created_at`, `updated_at`) VALUES
+(1, 151, 116, '2', '2023-12-24 03:04:04', '2023-12-24 03:04:04'),
+(2, 155, 0, '3', '2023-12-24 03:12:49', '2023-12-24 03:12:49');
+
 -- --------------------------------------------------------
 
 --
@@ -1392,6 +1437,48 @@ INSERT INTO `student_bids` (`id`, `user_id`, `student_user_id`, `region_id`, `pa
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `student_poll_votes`
+--
+
+CREATE TABLE `student_poll_votes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `poll_id` bigint(20) UNSIGNED NOT NULL,
+  `poll_options_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_specs`
+--
+
+CREATE TABLE `student_specs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_user_id` bigint(20) UNSIGNED NOT NULL,
+  `age` tinyint(4) DEFAULT NULL,
+  `gender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hair_colour` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hair_style` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `complexion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bust` float DEFAULT NULL COMMENT 'in cm',
+  `waist` float DEFAULT NULL COMMENT 'in cm',
+  `hips` float DEFAULT NULL COMMENT 'in cm',
+  `height` float DEFAULT NULL COMMENT 'in cm',
+  `weight` float DEFAULT NULL COMMENT 'in pounds',
+  `lip_style` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `eye_colour` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `universal_expenses_revenues`
 --
 
@@ -1403,6 +1490,14 @@ CREATE TABLE `universal_expenses_revenues` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `last_updated_user_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `universal_expenses_revenues`
+--
+
+INSERT INTO `universal_expenses_revenues` (`id`, `name`, `type`, `created_at`, `updated_at`, `last_updated_user_id`) VALUES
+(1, 'Tickets', 2, '2023-12-22 05:00:00', '0000-00-00 00:00:00', NULL),
+(2, 'Food', 1, '2023-12-22 20:53:15', '2023-12-22 20:53:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -1453,10 +1548,10 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (148, 'Super Admin 1', 'Admin001', 'Admin001', 'admin001@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$l7WjvuqK6ZCPGmLKLFy0y.287OiRMarJO6UzjDJlv1LIi57oouvl2', NULL, 'v5MeVDCjb01jQacTOWLm4xjN85KKqmNUgV3gNYBHuqmqsXtMebtldhExOI7J', NULL, NULL),
 (149, 'Super Admin 2', 'Admin002', 'Admin002', 'admin002@promplanner.com', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$ul5yg6bZ47cb4ObQpFy3fO0MR6WjyMts7D6hEkU6ukKFMPPE0gAuu', NULL, 'dhiYncQ7UYPaA4x88h4k6HUYP4JPc91YuJcSODgbZbGvUs1kA1SUZxmi7vIh', NULL, NULL),
 (150, 'Super Admin 3', 'Admin003', 'Admin003', '		\r\nadmin003@promplanner.com\r\n', NULL, 1, NULL, NULL, 0, NULL, '$2y$10$OSjHjhsYws3ep7ces2HtCOGu/Q62Ki6ud8Zrk2BFG6RTSiCnYBKmS', NULL, 'lhf0VN0la6IXJ0JfPPqomBG8cpxodRAxARKMhQbkUybsz2oOpvNY7JwBvslc', NULL, NULL),
-(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/06/03/3d06b57245183dadac464b4dfdc726256abee4b7.png', 'uxbFoi5LJscH5kyZZXmMIdYUZCH0woO0moYRdf8x4Gt9CzhZIY1WaBuBJgmS', '2022-12-02 00:58:48', '2023-06-03 05:10:25'),
+(151, 'Local Admin 1', 'Local Admin 1', 'Local Admin 1', 'localadmin001@promplanner.com', '(546) 456-4564', 2, 'Canada', NULL, 1, NULL, '$2y$10$nE2mIZ/TMlBq7SC6m/yPnetNlGmODb4GSy3MrIpFf9zRDhWocqCOG', 'https://promplanner.s3.amazonaws.com/2023/12/23/765075f3cbb6b2c78211bd5aa47864e4dbd9c974.png', 'BVuVjXK7oWkuCBNqeuFv1FIA9tTB9TcpYWPzoUiimFJibRuEQnJE6g13yx5s', '2022-12-02 00:58:48', '2023-12-24 03:14:48'),
 (152, 'heyman', 'Hey', 'Man', 'heyman@heyman.com', '(546) 465-6464', 3, 'Canada', NULL, 1, NULL, '$2y$10$D4sD55GOTHr6hIrxQsG7L.rsn6uwLgUFCC0yXs.m0Fbk33WzyItxC', NULL, NULL, '2022-12-02 01:04:53', '2022-12-04 21:44:41'),
 (154, 'localadmin001@promplanner.com', 'retert', 'ert', 'loca65+ladmin001@promplanner.com', '(546) 464-6465', 3, 'Canada', NULL, 1, NULL, '$2y$10$OXW.OPZd1NBpH0fTrqoQjOnxs9V07Rbn.H47yBrg.bcvDYp.0ZH4O', NULL, NULL, '2022-12-02 01:13:35', '2022-12-02 01:14:41'),
-(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://promplanner.s3.amazonaws.com/2023/07/26/a16dd23d9874710210b4e904ccfc9cdb92de2675.png', 'wEupjKv1QtHTM2cyXDj7V4esqcK65nmNdu1poyqPRglNqsVUDmngLs75PeY0', '2022-12-05 18:58:15', '2023-07-27 01:35:08'),
+(155, 'Student 1', 'Student 1', 'Student 1', 'student001@promplanner.com', '(546) 897-8921', 3, 'Canada', NULL, 1, NULL, '$2y$10$N5f8aqLb2QVc09MgKc1hSuxlyWJeb522cBHpSHE2vb15WjZi5VAUa', 'https://promplanner.s3.amazonaws.com/2023/07/26/a16dd23d9874710210b4e904ccfc9cdb92de2675.png', 'GEeKXaV0cdZlgLsavpQcD0KxhNi5hGJWzbAPzuSXGzzmVHjANob6Msk3JV9B', '2022-12-05 18:58:15', '2023-07-27 01:35:08'),
 (169, 'Import 1', 'Import 1', 'efwefwef', 'import1@gmail.com', '12345678910', 3, 'Canada', NULL, 1, NULL, '$2y$10$.Tzvl/8uuCeVHLxilSrk9ewJmOAvnVJH5c1L4PD2JocHkVTxg63xe', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (170, 'Import 2', 'Import 2', 'wefwef', 'import2@gmail.com', '9632587459', 3, 'Canada', NULL, 1, NULL, '$2y$10$zDlcJegCYOuBoqkeQpKKieBlT8I5nmcpxgzOsjBCqeccgYOwqJPNi', NULL, NULL, '2022-12-10 22:23:29', '2022-12-10 22:23:29'),
 (181, 'sdfsdfsdf', 'Update Vendor', 'Update Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', 4, 'Costa Rica', NULL, 1, NULL, '$2y$10$DYa3I4sOLm31EwAPq0xzbesh8Mp2RYSlw8bbZoJawiKypoAUfASqm', NULL, NULL, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
@@ -1859,6 +1954,21 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
+-- Indexes for table `polls`
+--
+ALTER TABLE `polls`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `school_id` (`school_id`,`vendor_user_id`),
+  ADD KEY `polls_ibfk_2` (`vendor_user_id`);
+
+--
+-- Indexes for table `poll_options`
+--
+ALTER TABLE `poll_options`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `poll_id` (`poll_id`);
+
+--
 -- Indexes for table `positions`
 --
 ALTER TABLE `positions`
@@ -1962,6 +2072,22 @@ ALTER TABLE `student_bids`
   ADD KEY `category_id` (`category_id`);
 
 --
+-- Indexes for table `student_poll_votes`
+--
+ALTER TABLE `student_poll_votes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`poll_id`,`poll_options_id`),
+  ADD KEY `student_poll_votes_ibfk_2` (`poll_id`),
+  ADD KEY `student_poll_votes_ibfk_3` (`poll_options_id`);
+
+--
+-- Indexes for table `student_specs`
+--
+ALTER TABLE `student_specs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_user_id_specs` (`student_user_id`);
+
+--
 -- Indexes for table `universal_expenses_revenues`
 --
 ALTER TABLE `universal_expenses_revenues`
@@ -2025,7 +2151,7 @@ ALTER TABLE `attachmentable`
 -- AUTO_INCREMENT for table `attachments`
 --
 ALTER TABLE `attachments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `beauty_groups`
@@ -2190,6 +2316,18 @@ ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `polls`
+--
+ALTER TABLE `polls`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `poll_options`
+--
+ALTER TABLE `poll_options`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
@@ -2229,7 +2367,7 @@ ALTER TABLE `sections`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `songs`
@@ -2256,10 +2394,22 @@ ALTER TABLE `student_bids`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `student_poll_votes`
+--
+ALTER TABLE `student_poll_votes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `student_specs`
+--
+ALTER TABLE `student_specs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `universal_expenses_revenues`
 --
 ALTER TABLE `universal_expenses_revenues`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -2477,6 +2627,19 @@ ALTER TABLE `payments`
   ADD CONSTRAINT `payments_user_id_rel` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `polls`
+--
+ALTER TABLE `polls`
+  ADD CONSTRAINT `polls_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `polls_ibfk_2` FOREIGN KEY (`vendor_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `poll_options`
+--
+ALTER TABLE `poll_options`
+  ADD CONSTRAINT `poll_options_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `polls` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `positions`
 --
 ALTER TABLE `positions`
@@ -2544,6 +2707,20 @@ ALTER TABLE `student_bids`
   ADD CONSTRAINT `student_bids_ibfk_3` FOREIGN KEY (`package_id`) REFERENCES `vendor_packages` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_bids_ibfk_4` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_user_id` FOREIGN KEY (`student_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `student_poll_votes`
+--
+ALTER TABLE `student_poll_votes`
+  ADD CONSTRAINT `student_poll_votes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `student_poll_votes_ibfk_2` FOREIGN KEY (`poll_id`) REFERENCES `polls` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `student_poll_votes_ibfk_3` FOREIGN KEY (`poll_options_id`) REFERENCES `poll_options` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `student_specs`
+--
+ALTER TABLE `student_specs`
+  ADD CONSTRAINT `student_user_id_specs_rel` FOREIGN KEY (`student_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `universal_expenses_revenues`

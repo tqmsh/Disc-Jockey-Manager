@@ -115,6 +115,19 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->placeholder('29.99')
                     ->horizontal(), 
+                
+                Input::make('capacity')
+                    ->title('Event Capacity')
+                    ->type('text')
+                    ->required()
+                    ->placeholder('Ex. 100')
+                    ->horizontal(), 
+                
+                Button::make('Submit')
+                // ->icon('plus')
+                ->type(Color::PRIMARY())
+                ->method('createEvent'),
+                
                     
             ])->title('Make your dream event'),
         ];
