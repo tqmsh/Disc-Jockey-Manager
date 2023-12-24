@@ -40,10 +40,6 @@ class PlatformProvider extends OrchidServiceProvider
             ->title('CORE')
             ->route('platform.example'),
 
-            Menu::make('Profile')
-                ->route('platform.profile')
-                ->icon('user'),
-
             //student nav option
             Menu::make('Events')
             ->icon('diamond')
