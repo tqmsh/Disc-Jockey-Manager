@@ -478,41 +478,47 @@ class ViewEventStudentScreen extends Screen
 
     public function addStudents(Request $request, Events $event)
     {
+        $numberOfStudents = EventAttendees::where('event_id', $event->id)->count();
         //get all students from post request
         $students = $request->get('unattendingStudents');
 
-        try{
+        if (($event->capacity) == NULL || $event->capacity > $numberOfStudents) {
 
-            //if the array is not empty
-            if(!empty($students)){
+            try{
 
-                //loop through the students and add them to db
-                foreach($students as $student){
-                    EventAttendees::create([
-                        'user_id' => $student,
-                        'inviter_user_id' => Auth::id(),
-                        'event_id' => $event->id,
-                        'invitation_status' => 1, //this is to make sure that the student is not invited again
-                        'table_approved' => 1,
-                    ]);
+                //if the array is not empty
+                if(!empty($students)){
 
-                    $user = User::find($student);
+                    //loop through the students and add them to db
+                    foreach($students as $student){
+                        EventAttendees::create([
+                            'user_id' => $student,
+                            'inviter_user_id' => Auth::id(),
+                            'event_id' => $event->id,
+                            'invitation_status' => 1, //this is to make sure that the student is not invited again
+                            'table_approved' => 1,
+                        ]);
 
-                    $user->notify(new GeneralNotification([
-                        'title' => 'You have been added to an event',
-                        'message' => 'You have been added to the event ' . $event->title . ' by ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . '. Please check the event page for more details.',
-                        'action' => '/admin/events',
-                    ]));
+                        $user = User::find($student);
+
+                        $user->notify(new GeneralNotification([
+                            'title' => 'You have been added to an event',
+                            'message' => 'You have been added to the event ' . $event->title . ' by ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . '. Please check the event page for more details.',
+                            'action' => '/admin/events',
+                        ]));
+                    }
+
+                    Toast::success('Selected students added succesfully');
+
+                }else{
+                    Toast::warning('Please select students in order to add them');
                 }
 
-                Toast::success('Selected students added succesfully');
-
-            }else{
-                Toast::warning('Please select students in order to add them');
+            }catch(Exception $e){
+                Alert::error('There was a error trying to add the selected students. Error Message: ' . $e->getMessage());
             }
-
-        }catch(Exception $e){
-            Alert::error('There was a error trying to add the selected students. Error Message: ' . $e->getMessage());
+        } else {
+            Alert::error("This Event has reached it's maximum capacity");
         }
     }
 

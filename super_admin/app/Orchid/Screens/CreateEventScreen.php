@@ -15,6 +15,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 
@@ -72,7 +73,7 @@ class CreateEventScreen extends Screen
                     ->title('Event Name')
                     ->type('text')
                     ->required()
-                    ->placeholder('Colonel By\'s Main Event')
+                    ->placeholder('Give a name to the event please')
                     ->horizontal(),
 
                 DateTimer::make('event_start_time')
@@ -103,19 +104,20 @@ class CreateEventScreen extends Screen
                     ->placeholder('Ex. K1J 7N4')
                     ->horizontal(),
 
-                Input::make('event_info')
+                TextArea::make('event_info')
                     ->title('Event Info')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. Formal Attire')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->rows(5),
 
-                Input::make('event_rules')
+                TextArea::make('event_rules')
                     ->title('Event Rules')
-                    ->type('text')
                     ->required()
                     ->placeholder('Ex. No Violence')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->rows(5),
                     
                 Select::make('venue_id')
                     ->title('Venue')
@@ -148,7 +150,20 @@ class CreateEventScreen extends Screen
                     ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province'),
-                    
+                
+                Input::make('ticket_price')
+                    ->title('Ticket Price $')
+                    ->type('text')
+                    ->required()
+                    ->placeholder('Ex. 29.99')
+                    ->horizontal(), 
+                
+                Input::make('capacity')
+                    ->title('Event Capacity')
+                    ->type('text')
+                    ->required()
+                    ->placeholder('Ex. 100')
+                    ->horizontal(), 
             ]),
         ];
     }
@@ -168,6 +183,7 @@ class CreateEventScreen extends Screen
             }
 
             $formFields = $request->all();
+            // dd($formFields);
             $formFields['event_creator'] = auth()->id();
             $formFields['school_id'] = $school_id;
 

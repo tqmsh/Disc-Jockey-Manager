@@ -7,6 +7,11 @@ use App\Models\Categories;
 use App\Models\Localadmin;
 use App\Models\School;
 use App\Models\Vendors;
+use App\Models\Student;
+use App\Models\Events;
+use App\Models\EventAttendees;
+use App\Models\EventBids;
+use App\Models\ActualExpenseRevenue;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
@@ -57,6 +62,49 @@ class ExampleScreen extends Screen
      */
     public function query(): iterable
     {
+
+        // Questions
+        // 1. Event capacity doesent exist
+        // 2. Is Direct Bids received the total or unreplied
+        // 3. Brands is not a thing on promplanner yet
+        // 4. Is direct bids replied to only for newest event of all
+        // 5. Revenue and Expenses doesn't exist
+        // 6. Don't see a Checklist
+
+        // Status meaning for event_bids:
+        // 1 == accepted
+        // 0 == Pending
+        // 2 == Rejected
+
+        $user = Auth::user();
+        $localAdmin = LocalAdmin::where('user_id', $user->id)->first();
+
+        // Pending Students
+        $schoolId = $localAdmin->school_id;
+        $numberOfStudents = Student::where('school_id', $schoolId)->count();
+        $pendingStudents  = Student::where('school_id', $schoolId)->where('account_status', 0)->count();
+
+        // Total tickets Sold
+        $newestEvent = Events::where('event_creator', $user->id)->latest('created_at')->first();
+        $newestEventId = $newestEvent->id;
+        $paidAttendeesCount = EventAttendees::where('event_id', $newestEventId)->where('ticketstatus', 'paid')->count();
+
+        $paidAttendeesCountPercentage = $newestEvent->capacity !== null && $newestEvent->capacity > 0 ? number_format(($paidAttendeesCount / $newestEvent->capacity) * 100, 2) . " %" : "Capacity Not Set";
+    
+        // Direct Bids recieved
+        $DirectBidsRecieved = EventBids::where('event_id', $newestEvent)->count();
+
+        // Direct Bids Replied to
+        $DirectBidsRepliedTo = EventBids::where('event_id', $newestEvent)->whereIn('status', [1,2])->count();
+
+        // Total Revenue: 
+        $revenueRecord = ActualExpenseRevenue::where('event_id', $newestEvent)->where('type', 2)->first();
+        $totalRevenue = $revenueRecord ? $revenueRecord->actual : "No revenue";
+
+        // Total Expenses:
+        $expensesRecord = ActualExpenseRevenue::where('event_id', $newestEvent)->where('type', 1)->first();
+        $totalExpenses = $expensesRecord ? $expensesRecord->actual : "No expenses";
+
         $this->campaigns = Campaign::where("region_id", School::find(Localadmin::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
         return [
             "ad_ids" =>"",
@@ -93,8 +141,18 @@ class ExampleScreen extends Screen
             'metrics' => [
                 'sales'    => ['value' => number_format(6851), 'diff' => 10.08],
                 'visitors' => ['value' => number_format(24668), 'diff' => -30.76],
-                'orders'   => ['value' => number_format(10000), 'diff' => 0],
-                'total'    => number_format(65661),
+                'totalRevenue'         => $totalRevenue,
+                'totalExpenses'        => $totalExpenses,
+                'totalStudents'        => $numberOfStudents,
+                'totalPendingStudents' => $pendingStudents,
+                'totalTicketsSold'     => $paidAttendeesCount,
+                'directBidsReceived'   => $DirectBidsRecieved,
+                'directBidsRepliedTo'  => $DirectBidsRepliedTo,
+                'paidAttendeesCountPercentage' => $paidAttendeesCountPercentage,
+
+
+
+
             ],
         ];
     }
@@ -139,6 +197,8 @@ class ExampleScreen extends Screen
      */
     public function layout(): iterable
     {
+
+
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
             $arr_ads[] = ["id"=>$campaign->id,
@@ -153,16 +213,16 @@ class ExampleScreen extends Screen
         usort($arr_ads, [$this, 'customSort']);
         return [
             Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
+                'Total Students' => 'metrics.totalStudents',
+                'Remaining Students to onboard' => 'metrics.totalPendingStudents',
+                'Total Prom Night Tickets Sold' => 'metrics.totalTicketsSold',
+                'Prom Night Tickets Sold %' => 'metrics.paidAttendeesCountPercentage',
             ]),
             Layout::metrics([
-                'Sales Today'    => 'metrics.sales',
-                'Visitors Today' => 'metrics.visitors',
-                'Pending Orders' => 'metrics.orders',
-                'Total Earnings' => 'metrics.total',
+                'Direct Bids received' => 'metrics.directBidsReceived',
+                'Direct Bids replied to' => 'metrics.directBidsRepliedTo',
+                'Total Revenue' => 'metrics.totalRevenue',
+                'Total Expenses' => 'metrics.totalExpenses',
             ]),
             Layout::view("card_style"),
 

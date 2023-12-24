@@ -137,6 +137,20 @@ class EditEventScreen extends Screen
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->horizontal()
                     ->value($this->event->venue_id),
+
+                Input::make('ticket_price')
+                    ->title('Ticket Price')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->event->ticket_price),
+
+                Input::make('capacity')
+                    ->title('Capacity')
+                    ->type('text')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->event->capacity),
             ]),            
         ];
     }

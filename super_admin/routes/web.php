@@ -26,3 +26,7 @@ Route::get('/download-csv', function () {
     return Response::download($filePath, 'sample.csv', $headers);
     
 })->name('csv');
+
+
+Route::post('/user/tab-closed', [LoginController::class, 'logout']);
+
