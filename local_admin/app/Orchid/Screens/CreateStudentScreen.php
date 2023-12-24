@@ -159,11 +159,21 @@ class CreateStudentScreen extends Screen
                         '12' => 12,
                     ]),
 
-                Input::make('allergies')
+                    Select::make('allergies')
                     ->title('Allergies')
-                    ->type('text')
                     ->horizontal()
-                    ->placeholder('Ex. Peanuts'),
+                    ->allowAdd()
+                    ->empty('Start typing to search...')
+                    ->options([
+                        'Peanuts' => 'Peanuts',
+                        'Tree Nuts' => 'Tree Nuts',
+                        'Shellfish' => 'Shellfish',
+                        'Milk' => 'Milk',
+                        'Eggs' => 'Eggs',
+                        'Wheat' => 'Wheat',
+                        'Soy' => 'Soy',
+                        'Fish' => 'Fish',
+                    ]),
             ]),
         ];
     }

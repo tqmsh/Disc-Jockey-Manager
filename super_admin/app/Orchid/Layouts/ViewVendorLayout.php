@@ -54,7 +54,13 @@ class ViewVendorLayout extends Table
                 
             TD::make('email', 'Email')
                 ->render(function (Vendors $vendor) {
-                    return Link::make($vendor->email)
+                    $email = $vendor->email;
+
+                    if (strlen($email) > 10) {
+                        $email = substr($email, 0, 10) . '...';
+                    }
+
+                    return Link::make($email)
                         ->route('platform.vendor.edit', $vendor);
                 }),
 
@@ -70,30 +76,45 @@ class ViewVendorLayout extends Table
                         ->route('platform.vendor.edit', $vendor);
                 }),
                 
-            TD::make('website', 'Website')
+                TD::make('website', 'Website')
                 ->render(function (Vendors $vendor) {
-                    return Link::make($vendor->website)
+                    $website = $vendor->website;
+
+                    if (strpos($website, 'https://') === 0) {
+                        $website = substr($website, 8);
+                    }
+
+                    if (strpos($website, 'www.') === 0) {
+                        $website = substr($website, 4);
+                    }
+                    
+                    if (strlen($website) > 15) {
+                        $website = substr($website, 0, 15) . '...';
+                    }
+            
+                    return Link::make($website)
                         ->href(($vendor->website) == null ? '#' : $vendor->website);
                 }),
+            
                 
 
-            TD::make('country', 'Country')
-                ->render(function (Vendors $vendor) {
-                    return Link::make($vendor->country)
-                        ->route('platform.vendor.edit', $vendor);
-                }),
+            // TD::make('country', 'Country')
+            //     ->render(function (Vendors $vendor) {
+            //         return Link::make($vendor->country)
+            //             ->route('platform.vendor.edit', $vendor);
+            //     }),
 
-            TD::make('state_province', 'State/Province')
-                ->render(function (Vendors $vendor) {
-                    return Link::make($vendor->state_province)
-                        ->route('platform.vendor.edit', $vendor);
-                }),
+            // TD::make('state_province', 'State/Province')
+            //     ->render(function (Vendors $vendor) {
+            //         return Link::make($vendor->state_province)
+            //             ->route('platform.vendor.edit', $vendor);
+            //     }),
 
-            TD::make('city', 'City')
-                ->render(function (Vendors $vendor) {
-                    return Link::make($vendor->city)
-                        ->route('platform.vendor.edit', $vendor);
-                }),
+            // TD::make('city', 'City')
+            //     ->render(function (Vendors $vendor) {
+            //         return Link::make($vendor->city)
+            //             ->route('platform.vendor.edit', $vendor);
+            //     }),
 
             TD::make()
                 ->render(function (Vendors $vendor) {
