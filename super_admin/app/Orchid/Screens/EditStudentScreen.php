@@ -147,11 +147,22 @@ class EditStudentScreen extends Screen
                     ->placeholder('Ex. (613) 859-5863')
                     ->value($this->student->phonenumber),
 
-                Input::make('allergies')
+                Select::make('allergies')
                     ->title('Allergies')
-                    ->type('text')
                     ->horizontal()
-                    ->value($this->student->allergies),               
+                    ->allowAdd()
+                    ->empty('Start typing to Search...')
+                    ->value($this->student->allergies)
+                    ->options([
+                        'Peanuts' => 'Peanuts',
+                        'Tree Nuts' => 'Tree Nuts',
+                        'Shellfish' => 'Shellfish',
+                        'Milk' => 'Milk',
+                        'Eggs' => 'Eggs',
+                        'Wheat' => 'Wheat',
+                        'Soy' => 'Soy',
+                        'Fish' => 'Fish',
+                    ]),               
             ]),
         ];
     }
