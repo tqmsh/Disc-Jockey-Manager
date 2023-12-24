@@ -120,6 +120,7 @@ class EditStudentScreen extends Screen
                 Select::make('allergies')
                     ->title('Allergies')
                     ->horizontal()
+                    ->allowAdd()
                     ->value($this->student->allergies)
                     ->options([
                         'Peanuts' => 'Peanuts',

@@ -150,6 +150,7 @@ class EditStudentScreen extends Screen
                 Select::make('allergies')
                     ->title('Allergies')
                     ->horizontal()
+                    ->allowAdd()
                     ->empty('Start typing to Search...')
                     ->value($this->student->allergies)
                     ->options([

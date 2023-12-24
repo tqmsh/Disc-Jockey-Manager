@@ -193,6 +193,7 @@ class CreateStudentScreen extends Screen
                 Select::make('allergies')
                     ->title('Allergies')
                     ->horizontal()
+                    ->allowAdd()
                     ->empty('Start typing to search...')
                     ->options([
                         'Peanuts' => 'Peanuts',
