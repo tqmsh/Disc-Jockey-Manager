@@ -167,7 +167,7 @@ class PlatformProvider extends OrchidServiceProvider
                     ->route('platform.beauty-groups'),
                 ]),
 
-            Menu::make("Contracts")
+            Menu::make('Contracts')
                 ->icon('doc')
                 ->route('platform.contract.list'),
 
