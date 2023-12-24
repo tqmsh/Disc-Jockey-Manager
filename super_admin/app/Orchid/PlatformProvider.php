@@ -149,11 +149,11 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('List')
                     ->icon('list')
                     ->route('platform.event.list'),
-
-                    Menu::make('Songs')
-                    ->icon('music-tone-alt')
-                    ->route('platform.songs.list')
                 ]),
+
+            Menu::make('Songs')
+                ->icon('music-tone-alt')
+                ->route('platform.songs.list'),
 
             Menu::make("Groups")
                 ->icon('organization')

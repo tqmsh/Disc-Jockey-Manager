@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Models\School;
 use App\Models\Vendors;
+use Orchid\Support\Color;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use Illuminate\Http\Request;
@@ -47,10 +48,6 @@ class SuggestVendorScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Suggest')
-                ->icon('plus')
-                ->method('createVendor'),
-
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')
@@ -72,11 +69,11 @@ class SuggestVendorScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Disco Rockerz'),
+                    ->placeholder('please enter the Company Name of the Vendor'),
 
                 Select::make('category_id')
                     ->title('Category')
-                    ->empty('Start typing to Search...')
+                    ->empty('start typing to search, or click here to see the list of categories')
                     ->required()
                     ->horizontal()
                     ->fromQuery(Categories::query()->where('status', 1), 'name'),
@@ -138,6 +135,11 @@ class SuggestVendorScreen extends Screen
                     ->title('City')
                     ->horizontal()
                     ->placeholder('Ex. Ottawa'),
+                
+                Button::make('Suggest')
+                ->icon('plus')
+                ->type(Color::PRIMARY())
+                ->method('createVendor'),
 
             ])->title('Suggest a Vendor'),
         ];

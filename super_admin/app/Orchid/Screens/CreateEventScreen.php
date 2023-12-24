@@ -73,7 +73,7 @@ class CreateEventScreen extends Screen
                     ->title('Event Name')
                     ->type('text')
                     ->required()
-                    ->placeholder('Give a name to the event please')
+                    ->placeholder('give a name to the event please')
                     ->horizontal(),
 
                 DateTimer::make('event_start_time')
@@ -157,7 +157,8 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->placeholder('Ex. 29.99')
                     ->horizontal(), 
-                
+
+     
                 Input::make('capacity')
                     ->title('Event Capacity')
                     ->type('text')
