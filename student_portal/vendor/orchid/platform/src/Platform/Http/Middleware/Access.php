@@ -13,7 +13,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
-use Orchid\Access\Impersonation;
 use Orchid\Screen\Screen;
 
 /**
@@ -54,10 +53,6 @@ class Access
 
         if ($this->guard->user()->hasAccess($permission)) {
             return $next($request);
-        }
-
-        if (Impersonation::isSwitch()) {
-            return response()->view('platform::auth.impersonation');
         }
 
         // The current user is already signed in.

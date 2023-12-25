@@ -89,6 +89,16 @@ class SesTransport extends AbstractTransport
     }
 
     /**
+     * Get the string representation of the transport.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return 'ses';
+    }
+
+    /**
      * Get the Amazon SES client for the SesTransport instance.
      *
      * @return \Aws\Ses\SesClient
@@ -117,15 +127,5 @@ class SesTransport extends AbstractTransport
     public function setOptions(array $options)
     {
         return $this->options = $options;
-    }
-
-    /**
-     * Get the string representation of the transport.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return 'ses';
     }
 }

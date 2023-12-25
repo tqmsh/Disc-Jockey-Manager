@@ -27,6 +27,9 @@ abstract class GeneratorDumper implements GeneratorDumperInterface
         $this->routes = $routes;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRoutes(): RouteCollection
     {
         return $this->routes;

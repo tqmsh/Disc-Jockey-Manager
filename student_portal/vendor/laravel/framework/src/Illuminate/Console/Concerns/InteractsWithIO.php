@@ -364,18 +364,17 @@ trait InteractsWithIO
      * Write a string in an alert box.
      *
      * @param  string  $string
-     * @param  int|string|null  $verbosity
      * @return void
      */
-    public function alert($string, $verbosity = null)
+    public function alert($string)
     {
         $length = Str::length(strip_tags($string)) + 12;
 
-        $this->comment(str_repeat('*', $length), $verbosity);
-        $this->comment('*     '.$string.'     *', $verbosity);
-        $this->comment(str_repeat('*', $length), $verbosity);
+        $this->comment(str_repeat('*', $length));
+        $this->comment('*     '.$string.'     *');
+        $this->comment(str_repeat('*', $length));
 
-        $this->comment('', $verbosity);
+        $this->newLine();
     }
 
     /**

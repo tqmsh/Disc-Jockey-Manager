@@ -13,39 +13,33 @@ namespace Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\AbstractUid;
 
-final class UidValueResolver implements ArgumentValueResolverInterface, ValueResolverInterface
+final class UidValueResolver implements ArgumentValueResolverInterface
 {
     /**
-     * @deprecated since Symfony 6.2, use resolve() instead
+     * {@inheritdoc}
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        @trigger_deprecation('symfony/http-kernel', '6.2', 'The "%s()" method is deprecated, use "resolve()" instead.', __METHOD__);
-
         return !$argument->isVariadic()
             && \is_string($request->attributes->get($argument->getName()))
             && null !== $argument->getType()
             && is_subclass_of($argument->getType(), AbstractUid::class, true);
     }
 
-    public function resolve(Request $request, ArgumentMetadata $argument): array
+    /**
+     * {@inheritdoc}
+     */
+    public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        if ($argument->isVariadic()
-            || !\is_string($value = $request->attributes->get($argument->getName()))
-            || null === ($uidClass = $argument->getType())
-            || !is_subclass_of($argument->getType(), AbstractUid::class, true)
-        ) {
-            return [];
-        }
+        /** @var class-string<AbstractUid> $uidClass */
+        $uidClass = $argument->getType();
 
-        /* @var class-string<AbstractUid> $uidClass */
         try {
-            return [$uidClass::fromString($value)];
+            return [$uidClass::fromString($request->attributes->get($argument->getName()))];
         } catch (\InvalidArgumentException $e) {
             throw new NotFoundHttpException(sprintf('The uid for the "%s" parameter is invalid.', $argument->getName()), $e);
         }

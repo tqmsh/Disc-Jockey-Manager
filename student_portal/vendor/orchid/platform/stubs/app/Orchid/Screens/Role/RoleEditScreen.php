@@ -23,7 +23,7 @@ class RoleEditScreen extends Screen
     public $role;
 
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @param Role $role
      *
@@ -38,7 +38,7 @@ class RoleEditScreen extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Display header name.
      *
      * @return string|null
      */
@@ -68,7 +68,7 @@ class RoleEditScreen extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Button commands.
      *
      * @return Action[]
      */
@@ -87,7 +87,7 @@ class RoleEditScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @return string[]|\Orchid\Screen\Layout[]
      */
@@ -126,7 +126,9 @@ class RoleEditScreen extends Screen
         $role->fill($request->get('role'));
 
         $role->permissions = collect($request->get('permissions'))
-            ->map(fn ($value, $key) => [base64_decode($key) => $value])
+            ->map(function ($value, $key) {
+                return [base64_decode($key) => $value];
+            })
             ->collapse()
             ->toArray();
 

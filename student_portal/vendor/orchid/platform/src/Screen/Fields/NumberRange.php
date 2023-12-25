@@ -23,6 +23,7 @@ class NumberRange extends Field implements ComplexFieldConcern
      */
     protected $view = 'platform::fields.numberRange';
 
+
     protected $attributes = [
         'class'    => 'form-control',
         'type'     => 'number',

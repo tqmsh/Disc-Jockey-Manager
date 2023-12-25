@@ -7,7 +7,7 @@ use Orchid\Screen\Screen;
 class DummyClass extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @return array
      */
@@ -17,7 +17,7 @@ class DummyClass extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Display header name.
      *
      * @return string|null
      */
@@ -27,7 +27,7 @@ class DummyClass extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Button commands.
      *
      * @return \Orchid\Screen\Action[]
      */
@@ -37,7 +37,7 @@ class DummyClass extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @return \Orchid\Screen\Layout[]|string[]
      */

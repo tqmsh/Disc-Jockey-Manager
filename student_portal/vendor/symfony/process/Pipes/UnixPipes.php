@@ -50,6 +50,9 @@ class UnixPipes extends AbstractPipes
         $this->close();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDescriptors(): array
     {
         if (!$this->haveReadSupport) {
@@ -85,11 +88,17 @@ class UnixPipes extends AbstractPipes
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFiles(): array
     {
         return [];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function readAndWrite(bool $blocking, bool $close = false): array
     {
         $this->unblock();
@@ -136,11 +145,17 @@ class UnixPipes extends AbstractPipes
         return $read;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function haveReadSupport(): bool
     {
         return $this->haveReadSupport;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function areOpen(): bool
     {
         return (bool) $this->pipes;

@@ -20,6 +20,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ReflectionClass;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Migrator
@@ -65,13 +66,6 @@ class Migrator
      * @var array
      */
     protected $paths = [];
-
-    /**
-     * The paths that have already been required.
-     *
-     * @var array<string, \Illuminate\Database\Migrations\Migration|null>
-     */
-    protected static $requiredPathCache = [];
 
     /**
      * The output interface implementation.
@@ -518,15 +512,9 @@ class Migrator
             return new $class;
         }
 
-        $migration = static::$requiredPathCache[$path] ??= $this->files->getRequire($path);
+        $migration = $this->files->getRequire($path);
 
-        if (is_object($migration)) {
-            return method_exists($migration, '__construct')
-                    ? $this->files->getRequire($path)
-                    : clone $migration;
-        }
-
-        return new $class;
+        return is_object($migration) ? $migration : new $class;
     }
 
     /**
@@ -742,20 +730,14 @@ class Migrator
      * Write to the console's output.
      *
      * @param  string  $component
-     * @param  array<int, string>|string  ...$arguments
+     * @param  array<int, string>|string  $arguments
      * @return void
      */
     protected function write($component, ...$arguments)
     {
-        if ($this->output && class_exists($component)) {
-            (new $component($this->output))->render(...$arguments);
-        } else {
-            foreach ($arguments as $argument) {
-                if (is_callable($argument)) {
-                    $argument();
-                }
-            }
-        }
+        with(new $component(
+            $this->output ?: new NullOutput()
+        ))->render(...$arguments);
     }
 
     /**

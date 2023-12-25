@@ -133,8 +133,6 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise untagResourceAsync(array $args = [])
  * @method \Aws\Result updateCampaign(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateCampaignAsync(array $args = [])
- * @method \Aws\Result updateDataset(array $args = [])
- * @method \GuzzleHttp\Promise\Promise updateDatasetAsync(array $args = [])
  * @method \Aws\Result updateMetricAttribution(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateMetricAttributionAsync(array $args = [])
  * @method \Aws\Result updateRecommender(array $args = [])

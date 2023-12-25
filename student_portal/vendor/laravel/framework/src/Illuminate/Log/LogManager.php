@@ -19,9 +19,6 @@ use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-/**
- * @mixin \Illuminate\Log\Logger
- */
 class LogManager implements LoggerInterface
 {
     use ParsesLogConfiguration;
@@ -553,7 +550,7 @@ class LogManager implements LoggerInterface
      * Unset the given channel instance.
      *
      * @param  string|null  $driver
-     * @return void
+     * @return $this
      */
     public function forgetChannel($driver = null)
     {

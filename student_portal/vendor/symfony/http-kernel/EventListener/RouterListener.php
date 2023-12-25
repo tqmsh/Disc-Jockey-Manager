@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -67,7 +68,7 @@ class RouterListener implements EventSubscriberInterface
         $this->debug = $debug;
     }
 
-    private function setCurrentRequest(?Request $request): void
+    private function setCurrentRequest(Request $request = null)
     {
         if (null !== $request) {
             try {
@@ -82,12 +83,12 @@ class RouterListener implements EventSubscriberInterface
      * After a sub-request is done, we need to reset the routing context to the parent request so that the URL generator
      * operates on the correct context again.
      */
-    public function onKernelFinishRequest(): void
+    public function onKernelFinishRequest(FinishRequestEvent $event)
     {
         $this->setCurrentRequest($this->requestStack->getParentRequest());
     }
 
-    public function onKernelRequest(RequestEvent $event): void
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
 
@@ -132,7 +133,7 @@ class RouterListener implements EventSubscriberInterface
         }
     }
 
-    public function onKernelException(ExceptionEvent $event): void
+    public function onKernelException(ExceptionEvent $event)
     {
         if (!$this->debug || !($e = $event->getThrowable()) instanceof NotFoundHttpException) {
             return;

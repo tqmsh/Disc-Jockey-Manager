@@ -51,6 +51,7 @@ class ScreenDependencyResolver
             ? $parameter->getType()->getName()
             : null;
 
+
         if ($class === null) {
             return $httpQueryArguments->shift();
         }
@@ -67,7 +68,7 @@ class ScreenDependencyResolver
             return $instance;
         }
 
-        $model = is_a($value, $class) ? $value : $instance->resolveRouteBinding($value);
+        $model = $instance->resolveRouteBinding($value);
 
         throw_if(
             $model === null && ! $parameter->isDefaultValueAvailable(),

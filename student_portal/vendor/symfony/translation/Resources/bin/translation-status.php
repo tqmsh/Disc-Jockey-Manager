@@ -9,10 +9,6 @@
  * file that was distributed with this source code.
  */
 
-if ('cli' !== \PHP_SAPI) {
-    throw new Exception('This script must be run from the command line.');
-}
-
 $usageInstructions = <<<END
 
   Usage instructions
@@ -87,15 +83,19 @@ foreach ($config['original_files'] as $originalFilePath) {
     $translationFilePaths = findTranslationFiles($originalFilePath, $config['locale_to_analyze']);
     $translationStatus = calculateTranslationStatus($originalFilePath, $translationFilePaths);
 
-    $totalMissingTranslations += array_sum(array_map(fn ($translation) => count($translation['missingKeys']), array_values($translationStatus)));
-    $totalTranslationMismatches += array_sum(array_map(fn ($translation) => count($translation['mismatches']), array_values($translationStatus)));
+    $totalMissingTranslations += array_sum(array_map(function ($translation) {
+        return count($translation['missingKeys']);
+    }, array_values($translationStatus)));
+    $totalTranslationMismatches += array_sum(array_map(function ($translation) {
+        return count($translation['mismatches']);
+    }, array_values($translationStatus)));
 
     printTranslationStatus($originalFilePath, $translationStatus, $config['verbose_output'], $config['include_completed_languages']);
 }
 
 exit($totalTranslationMismatches > 0 ? 1 : 0);
 
-function findTranslationFiles($originalFilePath, $localeToAnalyze): array
+function findTranslationFiles($originalFilePath, $localeToAnalyze)
 {
     $translations = [];
 
@@ -118,7 +118,7 @@ function findTranslationFiles($originalFilePath, $localeToAnalyze): array
     return $translations;
 }
 
-function calculateTranslationStatus($originalFilePath, $translationFilePaths): array
+function calculateTranslationStatus($originalFilePath, $translationFilePaths)
 {
     $translationStatus = [];
     $allTranslationKeys = extractTranslationKeys($originalFilePath);
@@ -159,7 +159,7 @@ function extractLocaleFromFilePath($filePath)
     return $parts[count($parts) - 2];
 }
 
-function extractTranslationKeys($filePath): array
+function extractTranslationKeys($filePath)
 {
     $translationKeys = [];
     $contents = new \SimpleXMLElement(file_get_contents($filePath));

@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Orchid\Icons;
 
 use DOMDocument;
-use Illuminate\Container\Container;
-use Illuminate\Support\Arr;
 use Illuminate\View\Component;
 
 class IconComponent extends Component
 {
-
     /**
      * @var string|null
      */
@@ -43,15 +40,21 @@ class IconComponent extends Component
     public $id;
 
     /**
+     * @var IconFinder
+     */
+    private $finder;
+
+    /**
      * Icon tag
      *
      * @var string
      */
-    public $path;
+    private $path;
 
     /**
      * Create a new component instance.
      *
+     * @param IconFinder  $finder
      * @param string      $path
      * @param string|null $id
      * @param string|null $class
@@ -61,6 +64,7 @@ class IconComponent extends Component
      * @param string      $fill
      */
     public function __construct(
+        IconFinder $finder,
         string $path,
         string $id = null,
         string $class = null,
@@ -70,11 +74,12 @@ class IconComponent extends Component
         string $fill = 'currentColor'
     )
     {
+        $this->finder = $finder;
         $this->path = $path;
         $this->id = $id;
         $this->class = $class;
-        $this->width = $width;
-        $this->height = $height;
+        $this->width = $width ?? $finder->getDefaultWidth();
+        $this->height = $height ?? $finder->getDefaultHeight();
         $this->role = $role;
         $this->fill = $fill;
     }
@@ -82,46 +87,15 @@ class IconComponent extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return string
+     * @return Icon
      */
     public function render()
     {
-        $factory = $this->factory();
+        $icon = $this->finder->loadFile($this->path);
 
-        $factory->addNamespace(
-            '__components__orchid__icons',
-            $directory = Container::getInstance()['config']->get('view.compiled')
-        );
+        $content = $this->setAttributes($icon);
 
-        $hash = sha1(collect($this->extractPublicProperties())->implode('-'));
-
-        if (! is_file($viewFile = $directory.'/'.$hash.'.blade.php')) {
-            if (! is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
-
-            $contents = $this->renderIcon();
-
-            file_put_contents($viewFile, $contents);
-        }
-
-        return view('__components__orchid__icons::'.basename($viewFile, '.blade.php'));
-    }
-
-    /**
-     * @return string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    private function renderIcon(): string
-    {
-        $finder = app()->make(IconFinder::class);
-
-        $this->width = $this->width ?? $finder->getDefaultWidth();
-        $this->height = $this->width ?? $finder->getDefaultHeight();
-
-        $icon = $finder->loadFile($this->path);
-
-        return $this->setAttributes($icon);
+        return new Icon($content);
     }
 
     /**
@@ -139,12 +113,16 @@ class IconComponent extends Component
         $dom->loadXML($icon);
 
         /** @var \DOMElement $item */
-        $item = Arr::first($dom->getElementsByTagName('svg'));
+        $item = collect($dom->getElementsByTagName('svg'))->first();
 
-        collect($this->extractPublicProperties())
-            ->except(['attributes'])
-            ->filter(static fn($value) => is_string($value))
-            ->each(static fn(string $value, string $key) => $item->setAttribute($key, $value));
+        collect($this->data())
+            ->except('attributes')
+            ->filter(function ($value) {
+                return $value !== null && is_string($value);
+            })
+            ->each(function (string $value, string $key) use ($item) {
+                $item->setAttribute($key, $value);
+            });
 
         return $dom->saveHTML();
     }

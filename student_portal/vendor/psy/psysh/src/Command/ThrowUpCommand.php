@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2023 Justin Hileman
+ * (c) 2012-2022 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,6 +13,7 @@ namespace Psy\Command;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified as FullyQualifiedName;
 use PhpParser\Node\Scalar\String_;
@@ -22,6 +23,7 @@ use Psy\Context;
 use Psy\ContextAware;
 use Psy\Exception\ThrowUpException;
 use Psy\Input\CodeArgument;
+use Psy\ParserFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -38,7 +40,9 @@ class ThrowUpCommand extends Command implements ContextAware
      */
     public function __construct($name = null)
     {
-        $this->parser = new CodeArgumentParser();
+        $parserFactory = new ParserFactory();
+
+        $this->parser = $parserFactory->createParser();
         $this->printer = new Printer();
 
         parent::__construct($name);
@@ -83,14 +87,12 @@ HELP
     /**
      * {@inheritdoc}
      *
-     * @return int 0 if everything went fine, or an exit code
-     *
      * @throws \InvalidArgumentException if there is no exception to throw
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $args = $this->prepareArgs($input->getArgument('exception'));
-        $throwStmt = new Throw_(new New_(new FullyQualifiedName(ThrowUpException::class), $args));
+        $throwStmt = new Throw_(new StaticCall(new FullyQualifiedName(ThrowUpException::class), 'fromThrowable', $args));
         $throwCode = $this->printer->prettyPrint([$throwStmt]);
 
         $shell = $this->getApplication();
@@ -117,7 +119,11 @@ HELP
             return [new Arg(new Variable('_e'))];
         }
 
-        $nodes = $this->parser->parse($code);
+        if (\strpos($code, '<?') === false) {
+            $code = '<?php '.$code;
+        }
+
+        $nodes = $this->parse($code);
         if (\count($nodes) !== 1) {
             throw new \InvalidArgumentException('No idea how to throw this');
         }
@@ -135,5 +141,26 @@ HELP
         }
 
         return $args;
+    }
+
+    /**
+     * Lex and parse a string of code into statements.
+     *
+     * @param string $code
+     *
+     * @return array Statements
+     */
+    private function parse(string $code): array
+    {
+        try {
+            return $this->parser->parse($code);
+        } catch (\PhpParser\Error $e) {
+            if (\strpos($e->getMessage(), 'unexpected EOF') === false) {
+                throw $e;
+            }
+
+            // If we got an unexpected EOF, let's try it again with a semicolon.
+            return $this->parser->parse($code.';');
+        }
     }
 }

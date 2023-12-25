@@ -2,9 +2,6 @@
 
 namespace Spatie\FlareClient;
 
-use ErrorException;
-use Spatie\Backtrace\Arguments\ArgumentReducers;
-use Spatie\Backtrace\Arguments\Reducers\ArgumentReducer;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\Frame as SpatieFrame;
 use Spatie\FlareClient\Concerns\HasContext;
@@ -65,27 +62,19 @@ class Report
 
     public static ?string $fakeTrackingUuid = null;
 
-    /** @param array<class-string<ArgumentReducer>|ArgumentReducer>|ArgumentReducers|null $argumentReducers */
     public static function createForThrowable(
         Throwable $throwable,
         ContextProvider $context,
         ?string $applicationPath = null,
-        ?string $version = null,
-        null|array|ArgumentReducers $argumentReducers = null,
-        bool $withStackTraceArguments = true,
+        ?string $version = null
     ): self {
-        $stacktrace = Backtrace::createForThrowable($throwable)
-            ->withArguments($withStackTraceArguments)
-            ->reduceArguments($argumentReducers)
-            ->applicationPath($applicationPath ?? '');
-
         return (new self())
             ->setApplicationPath($applicationPath)
             ->throwable($throwable)
             ->useContext($context)
             ->exceptionClass(self::getClassForThrowable($throwable))
             ->message($throwable->getMessage())
-            ->stackTrace($stacktrace)
+            ->stackTrace(Backtrace::createForThrowable($throwable)->applicationPath($applicationPath ?? ''))
             ->exceptionContext($throwable)
             ->setApplicationVersion($version);
     }
@@ -94,6 +83,7 @@ class Report
     {
         /** @phpstan-ignore-next-line */
         if ($throwable::class === ViewException::class) {
+
             /** @phpstan-ignore-next-line */
             if ($previous = $throwable->getPrevious()) {
                 return get_class($previous);
@@ -103,19 +93,13 @@ class Report
         return get_class($throwable);
     }
 
-    /** @param array<class-string<ArgumentReducer>|ArgumentReducer>|ArgumentReducers|null $argumentReducers */
     public static function createForMessage(
         string $message,
         string $logLevel,
         ContextProvider $context,
-        ?string $applicationPath = null,
-        null|array|ArgumentReducers $argumentReducers = null,
-        bool $withStackTraceArguments = true,
+        ?string $applicationPath = null
     ): self {
-        $stacktrace = Backtrace::create()
-            ->withArguments($withStackTraceArguments)
-            ->reduceArguments($argumentReducers)
-            ->applicationPath($applicationPath ?? '');
+        $stacktrace = Backtrace::create()->applicationPath($applicationPath ?? '');
 
         return (new self())
             ->setApplicationPath($applicationPath)
@@ -290,7 +274,7 @@ class Report
 
     /**
      * @return array<int|string, mixed>
-     */
+    */
     public function allContext(): array
     {
         $context = $this->context->toArray();
@@ -316,40 +300,8 @@ class Report
     {
         return array_map(
             fn (SpatieFrame $frame) => Frame::fromSpatieFrame($frame)->toArray(),
-            $this->cleanupStackTraceForError($this->stacktrace->frames()),
+            $this->stacktrace->frames(),
         );
-    }
-
-    /**
-     * @param array<SpatieFrame> $frames
-     *
-     * @return array<SpatieFrame>
-     */
-    protected function cleanupStackTraceForError(array $frames): array
-    {
-        if ($this->throwable === null || get_class($this->throwable) !== ErrorException::class) {
-            return $frames;
-        }
-
-        $firstErrorFrameIndex = null;
-
-        $restructuredFrames = array_values(array_slice($frames, 1)); // remove the first frame where error was created
-
-        foreach ($restructuredFrames as $index => $frame) {
-            if ($frame->file === $this->throwable->getFile()) {
-                $firstErrorFrameIndex = $index;
-
-                break;
-            }
-        }
-
-        if ($firstErrorFrameIndex === null) {
-            return $frames;
-        }
-
-        $restructuredFrames[$firstErrorFrameIndex]->arguments = null; // Remove error arguments
-
-        return array_values(array_slice($restructuredFrames, $firstErrorFrameIndex));
     }
 
     /**

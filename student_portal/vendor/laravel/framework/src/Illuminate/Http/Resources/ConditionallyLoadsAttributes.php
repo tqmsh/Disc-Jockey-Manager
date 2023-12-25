@@ -93,7 +93,7 @@ trait ConditionallyLoadsAttributes
     }
 
     /**
-     * Retrieve a value if the given "condition" is truthy.
+     * Retrieve a value based on a given condition.
      *
      * @param  bool  $condition
      * @param  mixed  $value
@@ -107,21 +107,6 @@ trait ConditionallyLoadsAttributes
         }
 
         return func_num_args() === 3 ? value($default) : new MissingValue;
-    }
-
-    /**
-     * Retrieve a value if the given "condition" is falsy.
-     *
-     * @param  bool  $condition
-     * @param  mixed  $value
-     * @param  mixed  $default
-     * @return \Illuminate\Http\Resources\MissingValue|mixed
-     */
-    public function unless($condition, $value, $default = null)
-    {
-        $arguments = func_num_args() === 2 ? [$value] : [$value, $default];
-
-        return $this->when(! $condition, ...$arguments);
     }
 
     /**
@@ -170,29 +155,6 @@ trait ConditionallyLoadsAttributes
         return new MergeValue(
             Arr::only($this->resource->toArray(), $attributes)
         );
-    }
-
-    /**
-     * Retrieve an attribute if it exists on the resource.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @param  mixed  $default
-     * @return \Illuminate\Http\Resources\MissingValue|mixed
-     */
-    public function whenHas($attribute, $value = null, $default = null)
-    {
-        if (func_num_args() < 3) {
-            $default = new MissingValue;
-        }
-
-        if (! array_key_exists($attribute, $this->resource->getAttributes())) {
-            return value($default);
-        }
-
-        return func_num_args() === 1
-                ? $this->resource->{$attribute}
-                : value($value, $this->resource->{$attribute});
     }
 
     /**
@@ -280,7 +242,7 @@ trait ConditionallyLoadsAttributes
     public function whenCounted($relationship, $value = null, $default = null)
     {
         if (func_num_args() < 3) {
-            $default = new MissingValue;
+            $default = new MissingValue();
         }
 
         $attribute = (string) Str::of($relationship)->snake()->finish('_count');
@@ -329,7 +291,7 @@ trait ConditionallyLoadsAttributes
         }
 
         return $this->when(
-            isset($this->resource->$accessor) &&
+            $this->resource->$accessor &&
             ($this->resource->$accessor instanceof $table ||
             $this->resource->$accessor->getTable() === $table),
             ...[$value, $default]

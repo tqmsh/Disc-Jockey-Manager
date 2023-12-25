@@ -21,17 +21,13 @@
                     'table-bordered' => $bordered,
                     'table-hover'    => $hoverable,
                ])>
-
-            @if($showHeader)
-                <thead>
-                    <tr>
-                        @foreach($columns as $column)
-                            {!! $column->buildTh() !!}
-                        @endforeach
-                    </tr>
-                </thead>
-            @endif
-
+            <thead>
+                <tr>
+                    @foreach($columns as $column)
+                        {!! $column->buildTh() !!}
+                    @endforeach
+                </tr>
+            </thead>
             <tbody>
 
             @foreach($rows as $source)
@@ -55,21 +51,16 @@
     </div>
 
     @if($rows->isEmpty())
-        <div class="d-md-flex align-items-center px-md-0 px-2 pt-4 pb-5 w-100 text-md-start text-center">
+        <div class="text-center py-5 w-100">
+            <h3 class="fw-light">
+                @isset($iconNotFound)
+                    <x-orchid-icon :path="$iconNotFound" class="block m-b"/>
+                @endisset
 
-            @isset($iconNotFound)
-                <div class="col-auto mx-md-4 mb-3 mb-md-0">
-                    <x-orchid-icon :path="$iconNotFound" class="block h1"/>
-                </div>
-            @endisset
+                {!!  $textNotFound !!}
+            </h3>
 
-            <div>
-                <h3 class="fw-light">
-                    {!!  $textNotFound !!}
-                </h3>
-
-                 {!! $subNotFound !!}
-            </div>
+            {!! $subNotFound !!}
         </div>
     @else
 

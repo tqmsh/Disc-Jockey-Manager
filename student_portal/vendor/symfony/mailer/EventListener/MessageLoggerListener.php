@@ -31,7 +31,7 @@ class MessageLoggerListener implements EventSubscriberInterface, ResetInterface
     }
 
     /**
-     * @return void
+     * {@inheritdoc}
      */
     public function reset()
     {

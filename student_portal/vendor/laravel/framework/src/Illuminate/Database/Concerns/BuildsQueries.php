@@ -427,10 +427,10 @@ trait BuildsQueries
 
         if (! is_null($columns)) {
             foreach ($columns as $column) {
-                if (($position = strripos($column, ' as ')) !== false) {
-                    $original = substr($column, 0, $position);
+                if (($position = stripos($column, ' as ')) !== false) {
+                    $as = substr($column, $position, 4);
 
-                    $alias = substr($column, $position + 4);
+                    [$original, $alias] = explode($as, $column);
 
                     if ($parameter === $alias || $builder->getGrammar()->wrap($parameter) === $alias) {
                         return $original;

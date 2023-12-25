@@ -48,7 +48,7 @@ class PostgresBuilder extends Builder
 
         $table = $this->connection->getTablePrefix().$table;
 
-        return count($this->connection->selectFromWriteConnection(
+        return count($this->connection->select(
             $this->grammar->compileTableExists(), [$database, $schema, $table]
         )) > 0;
     }
@@ -187,7 +187,7 @@ class PostgresBuilder extends Builder
 
         $table = $this->connection->getTablePrefix().$table;
 
-        $results = $this->connection->selectFromWriteConnection(
+        $results = $this->connection->select(
             $this->grammar->compileColumnListing(), [$database, $schema, $table]
         );
 

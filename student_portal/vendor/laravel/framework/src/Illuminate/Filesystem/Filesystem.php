@@ -195,10 +195,9 @@ class Filesystem
      *
      * @param  string  $path
      * @param  string  $content
-     * @param  int|null  $mode
      * @return void
      */
-    public function replace($path, $content, $mode = null)
+    public function replace($path, $content)
     {
         // If the path already exists and is a symlink, get the real path...
         clearstatcache(true, $path);
@@ -208,11 +207,7 @@ class Filesystem
         $tempPath = tempnam(dirname($path), basename($path));
 
         // Fix permissions of tempPath because `tempnam()` creates it with permissions set to 0600...
-        if (! is_null($mode)) {
-            chmod($tempPath, $mode);
-        } else {
-            chmod($tempPath, 0777 - umask());
-        }
+        chmod($tempPath, 0777 - umask());
 
         file_put_contents($tempPath, $content);
 
@@ -364,7 +359,7 @@ class Filesystem
 
         $relativeTarget = (new SymfonyFilesystem)->makePathRelative($target, dirname($link));
 
-        $this->link($this->isFile($target) ? rtrim($relativeTarget, '/') : $relativeTarget, $link);
+        $this->link($relativeTarget, $link);
     }
 
     /**
