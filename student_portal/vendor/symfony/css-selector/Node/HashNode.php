@@ -42,6 +42,9 @@ class HashNode extends AbstractNode
         return $this->id;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSpecificity(): Specificity
     {
         return $this->selector->getSpecificity()->plus(new Specificity(1, 0, 0));

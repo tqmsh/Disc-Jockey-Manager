@@ -13,15 +13,19 @@ class GroupCollection extends Collection
      */
     public function toChart(\Closure $closure = null): array
     {
-        $closure = $closure ?? static fn ($label) => $label;
+        $closure = $closure ?? static function ($label) {
+            return $label;
+        };
 
         return $this
             ->sortByDesc('value')
             ->pluck('label')
-            ->map(fn (string $name) => [
-                'labels' => $this->pluck('label')->map($closure)->toArray(),
-                'values' => $this->getChartsValues($name),
-            ])
+            ->map(function (string $name) use ($closure) {
+                return [
+                    'labels' => $this->pluck('label')->map($closure)->toArray(),
+                    'values' => $this->getChartsValues($name),
+                ];
+            })
             ->toArray();
     }
 
@@ -33,7 +37,11 @@ class GroupCollection extends Collection
     private function getChartsValues(string $name): array
     {
         return $this
-            ->map(static fn ($item) => $item->label === $name ? (int) $item->value : 0)
+            ->map(static function ($item) use ($name) {
+                return $item->label === $name
+                    ? (int) $item->value
+                    : 0;
+            })
             ->toArray();
     }
 }

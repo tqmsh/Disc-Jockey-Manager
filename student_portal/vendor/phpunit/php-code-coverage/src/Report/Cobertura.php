@@ -9,14 +9,10 @@
  */
 namespace SebastianBergmann\CodeCoverage\Report;
 
-use function basename;
 use function count;
 use function dirname;
 use function file_put_contents;
-use function preg_match;
 use function range;
-use function str_replace;
-use function strpos;
 use function time;
 use DOMImplementation;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
@@ -29,7 +25,7 @@ final class Cobertura
     /**
      * @throws WriteOperationFailedException
      */
-    public function process(CodeCoverage $coverage, ?string $target = null): string
+    public function process(CodeCoverage $coverage, ?string $target = null, ?string $name = null): string
     {
         $time = (string) time();
 
@@ -88,8 +84,9 @@ final class Cobertura
 
             $packageElement    = $document->createElement('package');
             $packageComplexity = 0;
+            $packageName       = $name ?? '';
 
-            $packageElement->setAttribute('name', str_replace($report->pathAsString() . DIRECTORY_SEPARATOR, '', $item->pathAsString()));
+            $packageElement->setAttribute('name', $packageName);
 
             $linesValid   = $item->numberOfExecutableLines();
             $linesCovered = $item->numberOfExecutedLines();
@@ -194,7 +191,7 @@ final class Cobertura
                 }
             }
 
-            if ($item->numberOfFunctions() === 0) {
+            if ($report->numberOfFunctions() === 0) {
                 $packageElement->setAttribute('complexity', (string) $packageComplexity);
 
                 continue;
@@ -218,7 +215,7 @@ final class Cobertura
 
             $classElement->appendChild($classLinesElement);
 
-            $functions = $item->functions();
+            $functions = $report->functions();
 
             foreach ($functions as $functionName => $function) {
                 if ($function['executableLines'] === 0) {
@@ -295,9 +292,7 @@ final class Cobertura
         $buffer = $document->saveXML();
 
         if ($target !== null) {
-            if (!strpos($target, '://') !== false) {
-                Filesystem::createDirectory(dirname($target));
-            }
+            Filesystem::createDirectory(dirname($target));
 
             if (@file_put_contents($target, $buffer) === false) {
                 throw new WriteOperationFailedException($target);

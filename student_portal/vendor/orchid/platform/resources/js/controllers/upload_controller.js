@@ -407,7 +407,6 @@ export default class extends ApplicationController {
                 filter: {
                     disk: this.data.get('storage'),
                     original_name: this.searchTarget.value,
-                    group: this.data.get('groups'),
                 },
             }, {
                 cancelToken: new CancelToken(function executor(c) {

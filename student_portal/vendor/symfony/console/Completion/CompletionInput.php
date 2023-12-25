@@ -34,7 +34,7 @@ final class CompletionInput extends ArgvInput
     private $tokens;
     private $currentIndex;
     private $completionType;
-    private $completionName;
+    private $completionName = null;
     private $completionValue = '';
 
     /**
@@ -64,6 +64,9 @@ final class CompletionInput extends ArgvInput
         return $input;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function bind(InputDefinition $definition): void
     {
         parent::bind($definition);

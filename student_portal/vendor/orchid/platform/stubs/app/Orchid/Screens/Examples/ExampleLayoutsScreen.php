@@ -10,7 +10,7 @@ use Orchid\Support\Facades\Layout;
 class ExampleLayoutsScreen extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @return array
      */
@@ -20,7 +20,7 @@ class ExampleLayoutsScreen extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Display header name.
      *
      * @return string|null
      */
@@ -40,7 +40,7 @@ class ExampleLayoutsScreen extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Button commands.
      *
      * @return Action[]
      */
@@ -50,7 +50,7 @@ class ExampleLayoutsScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @throws \Throwable
      *

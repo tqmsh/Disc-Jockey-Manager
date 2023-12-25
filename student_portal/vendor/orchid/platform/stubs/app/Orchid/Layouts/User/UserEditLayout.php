@@ -11,7 +11,7 @@ use Orchid\Screen\Layouts\Rows;
 class UserEditLayout extends Rows
 {
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @return Field[]
      */

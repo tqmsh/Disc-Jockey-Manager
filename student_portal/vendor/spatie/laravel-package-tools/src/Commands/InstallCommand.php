@@ -13,7 +13,13 @@ class InstallCommand extends Command
 
     public ?Closure $startWith = null;
 
-    protected array $publishes = [];
+    protected bool $shouldPublishConfigFile = false;
+
+    protected bool $shouldPublishAssets = false;
+
+    protected bool $shouldPublishInertiaComponents = false;
+
+    protected bool $shouldPublishMigrations = false;
 
     protected bool $askToRunMigrations = false;
 
@@ -42,12 +48,35 @@ class InstallCommand extends Command
             ($this->startWith)($this);
         }
 
-        foreach ($this->publishes as $tag) {
-            $name = str_replace('-', ' ', $tag);
-            $this->comment("Publishing {$name}...");
+        if ($this->shouldPublishConfigFile) {
+            $this->comment('Publishing config file...');
 
             $this->callSilently("vendor:publish", [
-                '--tag' => "{$this->package->shortName()}-{$tag}",
+                '--tag' => "{$this->package->shortName()}-config",
+            ]);
+        }
+
+        if ($this->shouldPublishAssets) {
+            $this->comment('Publishing assets...');
+
+            $this->callSilently("vendor:publish", [
+                '--tag' => "{$this->package->shortName()}-assets",
+            ]);
+        }
+
+        if ($this->shouldPublishInertiaComponents) {
+            $this->comment('Publishing inertia components...');
+
+            $this->callSilently("vendor:publish", [
+                '--tag' => "{$this->package->shortName()}-inertia-components",
+            ]);
+        }
+
+        if ($this->shouldPublishMigrations) {
+            $this->comment('Publishing migration...');
+
+            $this->callSilently("vendor:publish", [
+                '--tag' => "{$this->package->shortName()}-migrations",
             ]);
         }
 
@@ -88,31 +117,32 @@ class InstallCommand extends Command
         }
     }
 
-    public function publish(string ...$tag): self
+    public function publishConfigFile(): self
     {
-        $this->publishes = array_merge($this->publishes, $tag);
+        $this->shouldPublishConfigFile = true;
 
         return $this;
     }
 
-    public function publishConfigFile(): self
-    {
-        return $this->publish('config');
-    }
-
     public function publishAssets(): self
     {
-        return $this->publish('assets');
+        $this->shouldPublishAssets = true;
+
+        return $this;
     }
 
     public function publishInertiaComponents(): self
     {
-        return $this->publish('inertia-components');
+        $this->shouldPublishInertiaComponents = true;
+
+        return $this;
     }
 
     public function publishMigrations(): self
     {
-        return $this->publish('migrations');
+        $this->shouldPublishMigrations = true;
+
+        return $this;
     }
 
     public function askToRunMigrations(): self

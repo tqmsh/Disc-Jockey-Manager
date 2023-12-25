@@ -5,13 +5,14 @@ namespace Illuminate\Foundation\Http\Middleware;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Routing\PrecognitionCallableDispatcher;
 use Illuminate\Foundation\Routing\PrecognitionControllerDispatcher;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
 use Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 
 class HandlePrecognitiveRequests
 {
     /**
-     * The container instance.
+     *The container instance.
      *
      * @var \Illuminate\Container\Container
      */
@@ -69,7 +70,7 @@ class HandlePrecognitiveRequests
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Http\Response  $response
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response $response
      */
     protected function appendVaryHeader($request, $response)
     {

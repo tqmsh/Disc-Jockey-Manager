@@ -5,6 +5,7 @@ namespace Laravel\Scout\Engines;
 use Illuminate\Support\LazyCollection;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Jobs\RemoveableScoutCollection;
+use MeiliSearch\Client as MeiliSearchClient;
 use MeiliSearch\MeiliSearch;
 use MeiliSearch\Search\SearchResult;
 
@@ -13,7 +14,7 @@ class MeiliSearchEngine extends Engine
     /**
      * The MeiliSearch client.
      *
-     * @var \MeiliSearch\Client|\Meilisearch\Client
+     * @var \MeiliSearch\Client
      */
     protected $meilisearch;
 
@@ -27,11 +28,11 @@ class MeiliSearchEngine extends Engine
     /**
      * Create a new MeiliSearchEngine instance.
      *
-     * @param  \MeiliSearch\Client|\Meilisearch\Client  $meilisearch
+     * @param  \MeiliSearch\Client  $meilisearch
      * @param  bool  $softDelete
      * @return void
      */
-    public function __construct($meilisearch, $softDelete = false)
+    public function __construct(MeiliSearchClient $meilisearch, $softDelete = false)
     {
         $this->meilisearch = $meilisearch;
         $this->softDelete = $softDelete;
@@ -43,7 +44,7 @@ class MeiliSearchEngine extends Engine
      * @param  \Illuminate\Database\Eloquent\Collection  $models
      * @return void
      *
-     * @throws \MeiliSearch\Exceptions\ApiException|\Meilisearch\Exceptions\ApiException
+     * @throws \MeiliSearch\Exceptions\ApiException
      */
     public function update($models)
     {
@@ -92,7 +93,7 @@ class MeiliSearchEngine extends Engine
             ? $models->pluck($models->first()->getUnqualifiedScoutKeyName())
             : $models->map->getScoutKey();
 
-        $index->deleteDocuments($keys->values()->all());
+        $index->deleteDocuments($keys->all());
     }
 
     /**
@@ -137,18 +138,12 @@ class MeiliSearchEngine extends Engine
     {
         $meilisearch = $this->meilisearch->index($builder->index ?: $builder->model->searchableAs());
 
-        $meilisearchVersionClassName = class_exists(MeiliSearch::class)
-            ? MeiliSearch::class
-            : \Meilisearch\Meilisearch::class;
-
         // meilisearch-php 0.19.0 is compatible with meilisearch server 0.21.0...
-        if (version_compare($meilisearchVersionClassName::VERSION, '0.19.0') >= 0 && isset($searchParams['filters'])) {
+        if (version_compare(MeiliSearch::VERSION, '0.19.0') >= 0 && isset($searchParams['filters'])) {
             $searchParams['filter'] = $searchParams['filters'];
 
             unset($searchParams['filters']);
         }
-
-        $searchParams = array_merge($builder->options, $searchParams);
 
         if ($builder->callback) {
             $result = call_user_func(
@@ -158,11 +153,7 @@ class MeiliSearchEngine extends Engine
                 $searchParams
             );
 
-            $searchResultClass = class_exists(SearchResult::class)
-                ? SearchResult::class
-                : \Meilisearch\Search\SearchResult;
-
-            return $result instanceof $searchResultClass ? $result->getRaw() : $result;
+            return $result instanceof SearchResult ? $result->getRaw() : $result;
         }
 
         return $meilisearch->rawSearch($builder->query, $searchParams);
@@ -346,25 +337,11 @@ class MeiliSearchEngine extends Engine
      * @param  array  $options
      * @return mixed
      *
-     * @throws \MeiliSearch\Exceptions\ApiException|\Meilisearch\Exceptions\ApiException
+     * @throws \MeiliSearch\Exceptions\ApiException
      */
     public function createIndex($name, array $options = [])
     {
         return $this->meilisearch->createIndex($name, $options);
-    }
-
-    /**
-     * Update an index's settings.
-     *
-     * @param  string  $name
-     * @param  array  $options
-     * @return array
-     *
-     * @throws \MeiliSearch\Exceptions\ApiException|\Meilisearch\Exceptions\ApiException
-     */
-    public function updateIndexSettings($name, array $options = [])
-    {
-        return $this->meilisearch->index($name)->updateSettings($options);
     }
 
     /**
@@ -373,21 +350,11 @@ class MeiliSearchEngine extends Engine
      * @param  string  $name
      * @return mixed
      *
-     * @throws \MeiliSearch\Exceptions\ApiException|\Meilisearch\Exceptions\ApiException
+     * @throws \MeiliSearch\Exceptions\ApiException
      */
     public function deleteIndex($name)
     {
         return $this->meilisearch->deleteIndex($name);
-    }
-
-    /**
-     * Delete all search indexes.
-     *
-     * @return mixed
-     */
-    public function deleteAllIndexes()
-    {
-        return $this->meilisearch->deleteAllIndexes();
     }
 
     /**

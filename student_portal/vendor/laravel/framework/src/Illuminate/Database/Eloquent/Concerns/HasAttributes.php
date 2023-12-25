@@ -3,9 +3,6 @@
 namespace Illuminate\Database\Eloquent\Concerns;
 
 use BackedEnum;
-use Brick\Math\BigDecimal;
-use Brick\Math\Exception\MathException as BrickMathException;
-use Brick\Math\RoundingMode;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use DateTimeImmutable;
@@ -20,13 +17,11 @@ use Illuminate\Database\Eloquent\Casts\AsEncryptedCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\InvalidCastException;
 use Illuminate\Database\Eloquent\JsonEncodingException;
-use Illuminate\Database\Eloquent\MissingAttributeException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\LazyLoadingViolationException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Exceptions\MathException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
@@ -181,7 +176,7 @@ trait HasAttributes
     /**
      * The encrypter instance that is used to encrypt attributes.
      *
-     * @var \Illuminate\Contracts\Encryption\Encrypter|null
+     * @var \Illuminate\Contracts\Encryption\Encrypter
      */
     public static $encrypter;
 
@@ -450,35 +445,10 @@ trait HasAttributes
         // since we don't want to treat any of those methods as relationships because
         // they are all intended as helper methods and none of these are relations.
         if (method_exists(self::class, $key)) {
-            return $this->throwMissingAttributeExceptionIfApplicable($key);
+            return;
         }
 
-        return $this->isRelation($key) || $this->relationLoaded($key)
-                    ? $this->getRelationValue($key)
-                    : $this->throwMissingAttributeExceptionIfApplicable($key);
-    }
-
-    /**
-     * Either throw a missing attribute exception or return null depending on Eloquent's configuration.
-     *
-     * @param  string  $key
-     * @return null
-     *
-     * @throws \Illuminate\Database\Eloquent\MissingAttributeException
-     */
-    protected function throwMissingAttributeExceptionIfApplicable($key)
-    {
-        if ($this->exists &&
-            ! $this->wasRecentlyCreated &&
-            static::preventsAccessingMissingAttributes()) {
-            if (isset(static::$missingAttributeViolationCallback)) {
-                return call_user_func(static::$missingAttributeViolationCallback, $this, $key);
-            }
-
-            throw new MissingAttributeException($this, $key);
-        }
-
-        return null;
+        return $this->getRelationValue($key);
     }
 
     /**
@@ -545,7 +515,7 @@ trait HasAttributes
         }
 
         return method_exists($this, $key) ||
-               $this->relationResolver(static::class, $key);
+            (static::$relationResolvers[get_class($this)][$key] ?? null);
     }
 
     /**
@@ -1072,8 +1042,6 @@ trait HasAttributes
         } else {
             unset($this->attributeCastCache[$key]);
         }
-
-        return $this;
     }
 
     /**
@@ -1125,7 +1093,7 @@ trait HasAttributes
     {
         $caster = $this->resolveCasterClass($key);
 
-        $this->attributes = array_replace(
+        $this->attributes = array_merge(
             $this->attributes,
             $this->normalizeCastClassResponse($key, $caster->set(
                 $this, $key, $value, $this->attributes
@@ -1291,7 +1259,7 @@ trait HasAttributes
     /**
      * Set the encrypter instance that will be used to encrypt attributes.
      *
-     * @param  \Illuminate\Contracts\Encryption\Encrypter|null  $encrypter
+     * @param  \Illuminate\Contracts\Encryption\Encrypter  $encrypter
      * @return void
      */
     public static function encryptUsing($encrypter)
@@ -1318,17 +1286,13 @@ trait HasAttributes
     /**
      * Return a decimal as string.
      *
-     * @param  float|string  $value
+     * @param  float  $value
      * @param  int  $decimals
      * @return string
      */
     protected function asDecimal($value, $decimals)
     {
-        try {
-            return (string) BigDecimal::of($value)->toScale($decimals, RoundingMode::HALF_UP);
-        } catch (BrickMathException $e) {
-            throw new MathException('Unable to cast value to a decimal.', previous: $e);
-        }
+        return number_format($value, $decimals, '.', '');
     }
 
     /**
@@ -1622,13 +1586,9 @@ trait HasAttributes
      */
     protected function isClassDeviable($key)
     {
-        if (! $this->isClassCastable($key)) {
-            return false;
-        }
-
-        $castType = $this->resolveCasterClass($key);
-
-        return method_exists($castType::class, 'increment') && method_exists($castType::class, 'decrement');
+        return $this->isClassCastable($key) &&
+            method_exists($castType = $this->parseCasterClass($this->getCasts()[$key]), 'increment') &&
+            method_exists($castType, 'decrement');
     }
 
     /**
@@ -2159,27 +2119,25 @@ trait HasAttributes
      */
     public function getMutatedAttributes()
     {
-        if (! isset(static::$mutatorCache[static::class])) {
-            static::cacheMutatedAttributes($this);
+        $class = static::class;
+
+        if (! isset(static::$mutatorCache[$class])) {
+            static::cacheMutatedAttributes($class);
         }
 
-        return static::$mutatorCache[static::class];
+        return static::$mutatorCache[$class];
     }
 
     /**
      * Extract and cache all the mutated attributes of a class.
      *
-     * @param  object|string  $classOrInstance
+     * @param  string  $class
      * @return void
      */
-    public static function cacheMutatedAttributes($classOrInstance)
+    public static function cacheMutatedAttributes($class)
     {
-        $reflection = new ReflectionClass($classOrInstance);
-
-        $class = $reflection->getName();
-
         static::$getAttributeMutatorCache[$class] =
-            collect($attributeMutatorMethods = static::getAttributeMarkedMutatorMethods($classOrInstance))
+            collect($attributeMutatorMethods = static::getAttributeMarkedMutatorMethods($class))
                     ->mapWithKeys(function ($match) {
                         return [lcfirst(static::$snakeAttributes ? Str::snake($match) : $match) => true];
                     })->all();

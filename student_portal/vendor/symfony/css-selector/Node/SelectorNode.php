@@ -42,6 +42,9 @@ class SelectorNode extends AbstractNode
         return $this->pseudoElement;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSpecificity(): Specificity
     {
         return $this->tree->getSpecificity()->plus(new Specificity(0, 0, $this->pseudoElement ? 1 : 0));

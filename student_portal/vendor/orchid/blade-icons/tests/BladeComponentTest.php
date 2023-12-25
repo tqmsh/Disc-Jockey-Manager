@@ -9,14 +9,6 @@ use Orchid\Icons\IconFinder;
 
 class BladeComponentTest extends TestUnitCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->artisan('view:clear');
-    }
-
-
     public function testWithPrefixComponent(): void
     {
         $this->app->make(IconFinder::class)
@@ -76,18 +68,5 @@ class BladeComponentTest extends TestUnitCase
 
         $this->assertStringContainsString('height="54px"', $view);
         $this->assertStringContainsString('width="54px"', $view);
-    }
-
-    public function testMixedIconWithoutPath():void
-    {
-        $this->app->make(IconFinder::class)
-            ->setSize('54px', '54px')
-            ->registerIconDirectory('foo', __DIR__ . '/stubs/foo');
-
-        $view = Blade::render('<x-orchid-icon path="foo.regular.address-book" />');
-        $this->assertNotEmpty($view);
-
-        $view = Blade::render('<x-orchid-icon path="regular.address-book" />');
-        $this->assertEmpty($view);
     }
 }

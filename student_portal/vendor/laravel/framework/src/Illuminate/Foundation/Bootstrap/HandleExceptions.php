@@ -17,7 +17,7 @@ class HandleExceptions
     /**
      * Reserved memory so that errors can be displayed properly on memory exhaustion.
      *
-     * @var string|null
+     * @var string
      */
     public static $reservedMemory;
 
@@ -68,8 +68,10 @@ class HandleExceptions
     public function handleError($level, $message, $file = '', $line = 0, $context = [])
     {
         if ($this->isDeprecation($level)) {
-            $this->handleDeprecationError($message, $file, $line, $level);
-        } elseif (error_reporting() & $level) {
+            return $this->handleDeprecationError($message, $file, $line, $level);
+        }
+
+        if (error_reporting() & $level) {
             throw new ErrorException($message, 0, $level, $file, $line);
         }
     }
@@ -100,7 +102,10 @@ class HandleExceptions
      */
     public function handleDeprecationError($message, $file, $line, $level = E_DEPRECATED)
     {
-        if ($this->shouldIgnoreDeprecationErrors()) {
+        if (! class_exists(LogManager::class)
+            || ! static::$app->hasBeenBootstrapped()
+            || static::$app->runningUnitTests()
+        ) {
             return;
         }
 
@@ -123,18 +128,6 @@ class HandleExceptions
                 ));
             }
         });
-    }
-
-    /**
-     * Determine if deprecation errors should be ignored.
-     *
-     * @return bool
-     */
-    protected function shouldIgnoreDeprecationErrors()
-    {
-        return ! class_exists(LogManager::class)
-            || ! static::$app->hasBeenBootstrapped()
-            || static::$app->runningUnitTests();
     }
 
     /**
@@ -197,15 +190,11 @@ class HandleExceptions
         try {
             $this->getExceptionHandler()->report($e);
         } catch (Exception $e) {
-            $exceptionHandlerFailed = true;
+            //
         }
 
         if (static::$app->runningInConsole()) {
             $this->renderForConsole($e);
-
-            if ($exceptionHandlerFailed ?? false) {
-                exit(1);
-            }
         } else {
             $this->renderHttpResponse($e);
         }

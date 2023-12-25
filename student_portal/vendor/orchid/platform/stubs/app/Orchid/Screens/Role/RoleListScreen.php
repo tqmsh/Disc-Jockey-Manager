@@ -13,7 +13,7 @@ use Orchid\Screen\Screen;
 class RoleListScreen extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @return array
      */
@@ -25,7 +25,7 @@ class RoleListScreen extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Display header name.
      *
      * @return string|null
      */
@@ -55,7 +55,7 @@ class RoleListScreen extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Button commands.
      *
      * @return Action[]
      */
@@ -69,7 +69,7 @@ class RoleListScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @return string[]|\Orchid\Screen\Layout[]
      */

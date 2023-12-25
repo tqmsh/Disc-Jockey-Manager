@@ -110,7 +110,6 @@ final class Node
 
             if ($node->isEmpty()) {
                 $node = $node->node;
-
                 continue;
             }
 
@@ -136,7 +135,6 @@ final class Node
 
             if ($node->isEmpty()) {
                 $node = $node->node;
-
                 continue;
             }
 

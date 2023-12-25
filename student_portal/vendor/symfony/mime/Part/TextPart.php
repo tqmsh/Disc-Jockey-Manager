@@ -40,7 +40,7 @@ class TextPart extends AbstractPart
     private $seekable;
 
     /**
-     * @param resource|string|File $body Use a File instance to defer loading the file until rendering
+     * @param resource|string $body
      */
     public function __construct($body, ?string $charset = 'utf-8', string $subtype = 'plain', string $encoding = null)
     {
@@ -48,15 +48,8 @@ class TextPart extends AbstractPart
 
         parent::__construct();
 
-        if (!\is_string($body) && !\is_resource($body) && !$body instanceof File) {
-            throw new \TypeError(sprintf('The body of "%s" must be a string, a resource, or an instance of "%s" (got "%s").', self::class, File::class, get_debug_type($body)));
-        }
-
-        if ($body instanceof File) {
-            $path = $body->getPath();
-            if ((is_file($path) && !is_readable($path)) || is_dir($path)) {
-                throw new InvalidArgumentException(sprintf('Path "%s" is not readable.', $path));
-            }
+        if (!\is_string($body) && !\is_resource($body)) {
+            throw new \TypeError(sprintf('The body of "%s" must be a string or a resource (got "%s").', self::class, get_debug_type($body)));
         }
 
         $this->body = $body;
@@ -97,14 +90,6 @@ class TextPart extends AbstractPart
     }
 
     /**
-     * @return ?string null or one of attachment, inline, or form-data
-     */
-    public function getDisposition(): ?string
-    {
-        return $this->disposition;
-    }
-
-    /**
      * Sets the name of the file (used by FormDataPart).
      *
      * @return $this
@@ -117,7 +102,7 @@ class TextPart extends AbstractPart
     }
 
     /**
-     * Gets the name of the file.
+     * Gets the name of the file (used by FormDataPart).
      */
     public function getName(): ?string
     {
@@ -126,10 +111,6 @@ class TextPart extends AbstractPart
 
     public function getBody(): string
     {
-        if ($this->body instanceof File) {
-            return file_get_contents($this->body->getPath());
-        }
-
         if (null === $this->seekable) {
             return $this->body;
         }
@@ -148,14 +129,7 @@ class TextPart extends AbstractPart
 
     public function bodyToIterable(): iterable
     {
-        if ($this->body instanceof File) {
-            $path = $this->body->getPath();
-            if (false === $handle = @fopen($path, 'r', false)) {
-                throw new InvalidArgumentException(sprintf('Unable to open path "%s".', $path));
-            }
-
-            yield from $this->getEncoder()->encodeByteStream($handle);
-        } elseif (null !== $this->seekable) {
+        if (null !== $this->seekable) {
             if ($this->seekable) {
                 rewind($this->body);
             }
@@ -204,14 +178,14 @@ class TextPart extends AbstractPart
     private function getEncoder(): ContentEncoderInterface
     {
         if ('8bit' === $this->encoding) {
-            return self::$encoders[$this->encoding] ??= new EightBitContentEncoder();
+            return self::$encoders[$this->encoding] ?? (self::$encoders[$this->encoding] = new EightBitContentEncoder());
         }
 
         if ('quoted-printable' === $this->encoding) {
-            return self::$encoders[$this->encoding] ??= new QpContentEncoder();
+            return self::$encoders[$this->encoding] ?? (self::$encoders[$this->encoding] = new QpContentEncoder());
         }
 
-        return self::$encoders[$this->encoding] ??= new Base64ContentEncoder();
+        return self::$encoders[$this->encoding] ?? (self::$encoders[$this->encoding] = new Base64ContentEncoder());
     }
 
     private function chooseEncoding(): string

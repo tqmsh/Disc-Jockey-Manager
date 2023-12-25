@@ -24,6 +24,9 @@ class CsvFileLoader extends FileLoader
     private string $enclosure = '"';
     private string $escape = '\\';
 
+    /**
+     * {@inheritdoc}
+     */
     protected function loadResource(string $resource): array
     {
         $messages = [];
@@ -52,8 +55,6 @@ class CsvFileLoader extends FileLoader
 
     /**
      * Sets the delimiter, enclosure, and escape character for CSV.
-     *
-     * @return void
      */
     public function setCsvControl(string $delimiter = ';', string $enclosure = '"', string $escape = '\\')
     {

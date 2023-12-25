@@ -278,9 +278,9 @@ abstract class FileGeneric extends Stream implements StreamPathable, StreamStata
         }
 
         if (StreamTouchable::MAKE_DIRECTORY === $mkdir) {
-            FileDirectory::create(
+            Directory::create(
                 \dirname($name),
-                FileDirectory::MODE_CREATE_RECURSIVE
+                Directory::MODE_CREATE_RECURSIVE
             );
         }
 

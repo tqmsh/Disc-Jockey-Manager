@@ -15,7 +15,6 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,9 +46,6 @@ final class LazyCommand extends Command
 
     public function setApplication(Application $application = null): void
     {
-        if (1 > \func_num_args()) {
-            trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
-        }
         if ($this->command instanceof parent) {
             $this->command->setApplication($application);
         }
@@ -114,6 +110,8 @@ final class LazyCommand extends Command
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      */
     public function addArgument(string $name, int $mode = null, string $description = '', mixed $default = null /* array|\Closure $suggestedValues = [] */): static
@@ -125,6 +123,8 @@ final class LazyCommand extends Command
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      */
     public function addOption(string $name, string|array $shortcut = null, int $mode = null, string $description = '', mixed $default = null /* array|\Closure $suggestedValues = [] */): static
@@ -176,7 +176,7 @@ final class LazyCommand extends Command
         return $this->getCommand()->getUsages();
     }
 
-    public function getHelper(string $name): HelperInterface
+    public function getHelper(string $name): mixed
     {
         return $this->getCommand()->getHelper($name);
     }

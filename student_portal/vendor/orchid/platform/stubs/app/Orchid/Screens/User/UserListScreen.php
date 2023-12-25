@@ -18,7 +18,7 @@ use Orchid\Support\Facades\Toast;
 class UserListScreen extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @return array
      */
@@ -33,7 +33,7 @@ class UserListScreen extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Display header name.
      *
      * @return string|null
      */
@@ -63,7 +63,7 @@ class UserListScreen extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Button commands.
      *
      * @return \Orchid\Screen\Action[]
      */
@@ -77,7 +77,7 @@ class UserListScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @return string[]|\Orchid\Screen\Layout[]
      */

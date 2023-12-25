@@ -27,6 +27,4 @@ Route::get('/download-csv', function () {
     
 })->name('csv');
 
-
 Route::post('/user/tab-closed', [LoginController::class, 'logout']);
-

@@ -26,6 +26,9 @@ trait ServiceSubscriberTrait
     /** @var ContainerInterface */
     protected $container;
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedServices(): array
     {
         $services = method_exists(get_parent_class(self::class) ?: '', __FUNCTION__) ? parent::getSubscribedServices() : [];
@@ -47,17 +50,13 @@ trait ServiceSubscriberTrait
                 throw new \LogicException(sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', SubscribedService::class, $method->name, self::class));
             }
 
-            /* @var SubscribedService $attribute */
-            $attribute = $attribute->newInstance();
-            $attribute->key ??= self::class.'::'.$method->name;
-            $attribute->type ??= $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
-            $attribute->nullable = $returnType->allowsNull();
+            $serviceId = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
 
-            if ($attribute->attributes) {
-                $services[] = $attribute;
-            } else {
-                $services[$attribute->key] = ($attribute->nullable ? '?' : '').$attribute->type;
+            if ($returnType->allowsNull()) {
+                $serviceId = '?'.$serviceId;
             }
+
+            $services[$attribute->newInstance()->key ?? self::class.'::'.$method->name] = $serviceId;
         }
 
         return $services;
@@ -66,13 +65,12 @@ trait ServiceSubscriberTrait
     #[Required]
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
-        $ret = null;
-        if (method_exists(get_parent_class(self::class) ?: '', __FUNCTION__)) {
-            $ret = parent::setContainer($container);
-        }
-
         $this->container = $container;
 
-        return $ret;
+        if (method_exists(get_parent_class(self::class) ?: '', __FUNCTION__)) {
+            return parent::setContainer($container);
+        }
+
+        return null;
     }
 }

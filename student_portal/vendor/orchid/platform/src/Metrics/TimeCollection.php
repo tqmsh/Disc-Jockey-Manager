@@ -16,7 +16,9 @@ class TimeCollection extends Collection
      */
     public function toChart(string $name, \Closure $closure = null): array
     {
-        $closure = $closure ?? static fn ($label) => $label;
+        $closure = $closure ?? static function ($label) {
+            return $label;
+        };
 
         return [
             'name'   => $name,

@@ -27,7 +27,7 @@ class ViewController extends Controller
     /**
      * Invoke the controller method.
      *
-     * @param  mixed  ...$args
+     * @param  array  $args
      * @return \Illuminate\Http\Response
      */
     public function __invoke(...$args)

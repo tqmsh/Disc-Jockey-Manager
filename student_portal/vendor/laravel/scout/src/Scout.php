@@ -8,13 +8,6 @@ use Laravel\Scout\Jobs\RemoveFromSearch;
 class Scout
 {
     /**
-     * The Scout library version.
-     *
-     * @var string
-     */
-    const VERSION = '9.8.1';
-
-    /**
      * The job class that should make models searchable.
      *
      * @var string

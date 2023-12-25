@@ -19,8 +19,7 @@ class PruneBatchesCommand extends Command
      */
     protected $signature = 'queue:prune-batches
                 {--hours=24 : The number of hours to retain batch data}
-                {--unfinished= : The number of hours to retain unfinished batch data }
-                {--cancelled= : The number of hours to retain cancelled batch data }';
+                {--unfinished= : The number of hours to retain unfinished batch data }';
 
     /**
      * The name of the console command.
@@ -65,16 +64,6 @@ class PruneBatchesCommand extends Command
             }
 
             $this->components->info("{$count} unfinished entries deleted.");
-        }
-
-        if ($this->option('cancelled')) {
-            $count = 0;
-
-            if ($repository instanceof DatabaseBatchRepository) {
-                $count = $repository->pruneCancelled(Carbon::now()->subHours($this->option('cancelled')));
-            }
-
-            $this->components->info("{$count} cancelled entries deleted.");
         }
     }
 }

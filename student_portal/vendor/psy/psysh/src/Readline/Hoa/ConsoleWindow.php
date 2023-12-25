@@ -71,7 +71,7 @@ class ConsoleWindow implements EventSource
     public static function getInstance(): self
     {
         if (null === static::$_instance) {
-            static::$_instance = new self();
+            static::$_instance = new static();
         }
 
         return static::$_instance;
@@ -120,7 +120,7 @@ class ConsoleWindow implements EventSource
         }
 
         $command = $term.'tput cols && '.$term.'tput lines';
-        $tput = ConsoleProcessus::execute($command, false);
+        $tput = Processus::execute($command, false);
 
         if (!empty($tput)) {
             list($x, $y) = \explode("\n", $tput);

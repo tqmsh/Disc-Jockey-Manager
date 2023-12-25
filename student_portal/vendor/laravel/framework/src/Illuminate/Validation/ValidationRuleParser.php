@@ -86,7 +86,9 @@ class ValidationRuleParser
     protected function explodeExplicitRule($rule, $attribute)
     {
         if (is_string($rule)) {
-            return explode('|', $rule);
+            [$name] = static::parseStringRule($rule);
+
+            return static::ruleIsRegex($name) ? [$rule] : explode('|', $rule);
         }
 
         if (is_object($rule)) {

@@ -41,10 +41,7 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
             return $this->getRouteForMethods($request, $others);
         }
 
-        throw new NotFoundHttpException(sprintf(
-            'The route %s could not be found.',
-            $request->path()
-        ));
+        throw new NotFoundHttpException;
     }
 
     /**
@@ -104,30 +101,7 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
             }))->bind($request);
         }
 
-        $this->requestMethodNotAllowed($request, $methods, $request->method());
-    }
-
-    /**
-     * Throw a method not allowed HTTP exception.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $others
-     * @param  string  $method
-     * @return void
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     */
-    protected function requestMethodNotAllowed($request, array $others, $method)
-    {
-        throw new MethodNotAllowedHttpException(
-            $others,
-            sprintf(
-                'The %s method is not supported for route %s. Supported methods: %s.',
-                $method,
-                $request->path(),
-                implode(', ', $others)
-            )
-        );
+        $this->methodNotAllowed($methods, $request->method());
     }
 
     /**
@@ -136,8 +110,6 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
      * @param  array  $others
      * @param  string  $method
      * @return void
-     *
-     * @deprecated use requestMethodNotAllowed
      *
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
