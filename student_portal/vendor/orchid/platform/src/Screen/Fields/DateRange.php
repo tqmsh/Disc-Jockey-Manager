@@ -33,18 +33,4 @@ class DateRange extends Field implements ComplexFieldConcern
         'form',
         'name',
     ];
-
-    /**
-     * Disable native mobile pickers in favour of calendar
-     *
-     * @param bool $disable
-     *
-     * @return $this
-     */
-    public function disableMobile(bool $disable = true): self
-    {
-        $this->set('data-datetime-disable-mobile', var_export($disable, true));
-
-        return $this;
-    }
 }

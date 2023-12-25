@@ -7,17 +7,56 @@ namespace League\Flysystem;
 class FileAttributes implements StorageAttributes
 {
     use ProxyArrayAccessToProperties;
-    private string $type = StorageAttributes::TYPE_FILE;
+
+    /**
+     * @var string
+     */
+    private $type = StorageAttributes::TYPE_FILE;
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var int|null
+     */
+    private $fileSize;
+
+    /**
+     * @var string|null
+     */
+    private $visibility;
+
+    /**
+     * @var int|null
+     */
+    private $lastModified;
+
+    /**
+     * @var string|null
+     */
+    private $mimeType;
+
+    /**
+     * @var array
+     */
+    private $extraMetadata;
 
     public function __construct(
-        private string $path,
-        private ?int $fileSize = null,
-        private ?string $visibility = null,
-        private ?int $lastModified = null,
-        private ?string $mimeType = null,
-        private array $extraMetadata = []
+        string $path,
+        ?int $fileSize = null,
+        ?string $visibility = null,
+        ?int $lastModified = null,
+        ?string $mimeType = null,
+        array $extraMetadata = []
     ) {
-        $this->path = ltrim($this->path, '/');
+        $this->path = ltrim($path, '/');
+        $this->fileSize = $fileSize;
+        $this->visibility = $visibility;
+        $this->lastModified = $lastModified;
+        $this->mimeType = $mimeType;
+        $this->extraMetadata = $extraMetadata;
     }
 
     public function type(): string

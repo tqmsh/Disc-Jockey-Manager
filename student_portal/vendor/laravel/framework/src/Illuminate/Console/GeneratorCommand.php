@@ -3,13 +3,11 @@
 namespace Illuminate\Console;
 
 use Illuminate\Console\Concerns\CreatesMatchingTest;
-use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Finder\Finder;
 
-abstract class GeneratorCommand extends Command implements PromptsForMissingInput
+abstract class GeneratorCommand extends Command
 {
     /**
      * The filesystem instance.
@@ -62,7 +60,6 @@ abstract class GeneratorCommand extends Command implements PromptsForMissingInpu
         'eval',
         'exit',
         'extends',
-        'false',
         'final',
         'finally',
         'fn',
@@ -92,12 +89,10 @@ abstract class GeneratorCommand extends Command implements PromptsForMissingInpu
         'require',
         'require_once',
         'return',
-        'self',
         'static',
         'switch',
         'throw',
         'trait',
-        'true',
         'try',
         'unset',
         'use',
@@ -234,40 +229,6 @@ abstract class GeneratorCommand extends Command implements PromptsForMissingInpu
         return is_dir(app_path('Models'))
                     ? $rootNamespace.'Models\\'.$model
                     : $rootNamespace.$model;
-    }
-
-    /**
-     * Get a list of possible model names.
-     *
-     * @return array<int, string>
-     */
-    protected function possibleModels()
-    {
-        $modelPath = is_dir(app_path('Models')) ? app_path('Models') : app_path();
-
-        return collect((new Finder)->files()->depth(0)->in($modelPath))
-            ->map(fn ($file) => $file->getBasename('.php'))
-            ->values()
-            ->all();
-    }
-
-    /**
-     * Get a list of possible event names.
-     *
-     * @return array<int, string>
-     */
-    protected function possibleEvents()
-    {
-        $eventPath = app_path('Events');
-
-        if (! is_dir($eventPath)) {
-            return [];
-        }
-
-        return collect((new Finder)->files()->depth(0)->in($eventPath))
-            ->map(fn ($file) => $file->getBasename('.php'))
-            ->values()
-            ->all();
     }
 
     /**
@@ -473,19 +434,7 @@ abstract class GeneratorCommand extends Command implements PromptsForMissingInpu
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the '.strtolower($this->type)],
-        ];
-    }
-
-    /**
-     * Prompt for missing input arguments using the returned questions.
-     *
-     * @return array
-     */
-    protected function promptForMissingArgumentsUsing()
-    {
-        return [
-            'name' => 'What should the '.strtolower($this->type).' be named?',
+            ['name', InputArgument::REQUIRED, 'The name of the class'],
         ];
     }
 }

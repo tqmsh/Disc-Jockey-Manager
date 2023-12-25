@@ -20,7 +20,7 @@ use Orchid\Support\Facades\Layout;
 class ExampleFieldsScreen extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @return array
      */
@@ -32,7 +32,7 @@ class ExampleFieldsScreen extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Display header name.
      *
      * @return string|null
      */
@@ -52,7 +52,7 @@ class ExampleFieldsScreen extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Button commands.
      *
      * @return Action[]
      */
@@ -62,7 +62,7 @@ class ExampleFieldsScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @return \Orchid\Screen\Layout[]
      */
@@ -271,6 +271,7 @@ class ExampleFieldsScreen extends Screen
                     ])
                     ->horizontal(),
 
+
                 Input::make('color')
                     ->type('color')
                     ->title('Color')
@@ -285,6 +286,9 @@ class ExampleFieldsScreen extends Screen
         ];
     }
 
+    /**
+     *
+     */
     public function buttonClickProcessing()
     {
         Alert::warning('Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.');

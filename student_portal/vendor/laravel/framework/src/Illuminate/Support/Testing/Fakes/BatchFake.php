@@ -79,9 +79,7 @@ class BatchFake extends Batch
      */
     public function add($jobs)
     {
-        foreach ($jobs as $job) {
-            $this->added[] = $job;
-        }
+        $this->added[] = array_merge($this->added, $jobs);
 
         return $this;
     }

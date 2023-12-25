@@ -169,7 +169,6 @@ class Readline
         $this->resetLine();
         $this->setPrefix($prefix);
         $read = [$input->getStream()->getStream()];
-        $write = $except = [];
         $output->writeAll($prefix);
 
         while (true) {
@@ -835,7 +834,6 @@ class Readline
             ++$mColumns;
             $input = Console::getInput();
             $read = [$input->getStream()->getStream()];
-            $write = $except = [];
             $mColumn = -1;
             $mLine = -1;
             $coord = -1;

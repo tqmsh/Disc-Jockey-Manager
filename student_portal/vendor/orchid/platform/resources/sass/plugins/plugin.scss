@@ -150,6 +150,12 @@
 }
 
 // Flatpickr
+.dropdown{
+  .flatpickr-calendar{
+    box-shadow: none;
+  }
+}
+
 .flatpickr-wrapper{
   width: 100%;
 }

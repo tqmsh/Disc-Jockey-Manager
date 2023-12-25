@@ -105,6 +105,9 @@ class YamlFileLoader extends FileLoader
         return $collection;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports(mixed $resource, string $type = null): bool
     {
         return \is_string($resource) && \in_array(pathinfo($resource, \PATHINFO_EXTENSION), ['yml', 'yaml'], true) && (!$type || 'yaml' === $type);
@@ -112,8 +115,6 @@ class YamlFileLoader extends FileLoader
 
     /**
      * Parses a route and adds it to the RouteCollection.
-     *
-     * @return void
      */
     protected function parseRoute(RouteCollection $collection, string $name, array $config, string $path)
     {
@@ -172,8 +173,6 @@ class YamlFileLoader extends FileLoader
 
     /**
      * Parses an import and adds the routes in the resource to the RouteCollection.
-     *
-     * @return void
      */
     protected function parseImport(RouteCollection $collection, array $config, string $path, string $file)
     {
@@ -242,8 +241,6 @@ class YamlFileLoader extends FileLoader
     }
 
     /**
-     * @return void
-     *
      * @throws \InvalidArgumentException If one of the provided config keys is not supported,
      *                                   something is missing or the combination is nonsense
      */

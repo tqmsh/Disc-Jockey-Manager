@@ -22,14 +22,13 @@ export default class extends ApplicationController {
         this.choices = new TomSelect(select, {
             allowEmptyOption: true,
             placeholder: select.getAttribute('placeholder') === 'false' ? '' : select.getAttribute('placeholder'),
-            preload: 'focus',
+            preload: true,
             plugins,
             maxOptions: this.data.get('chunk'),
             maxItems: select.getAttribute('maximumSelectionLength') || select.hasAttribute('multiple') ? null : 1,
             valueField: 'value',
             labelField: 'label',
-            searchField: [],
-            sortField: [{field:'$order'},{field:'$score'}],
+            searchField: 'label',
             render: {
                 option_create: (data, escape) => `<div class="create">${this.data.get('message-add')} <strong>${escape(data.input)}</strong>&hellip;</div>`,
                 no_results: () => `<div class="no-results">${this.data.get('message-notfound')}</div>`,
@@ -72,7 +71,6 @@ export default class extends ApplicationController {
                     options.push({ label, value });
                 });
 
-                this.choices.clearOptions();
                 callback(options);
             });
     }

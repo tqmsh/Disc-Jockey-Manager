@@ -97,20 +97,6 @@ class SqlServerGrammar extends Grammar
     }
 
     /**
-     * Compile the index hints for the query.
-     *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  \Illuminate\Database\Query\IndexHint  $indexHint
-     * @return string
-     */
-    protected function compileIndexHint(Builder $query, $indexHint)
-    {
-        return $indexHint->type === 'force'
-                    ? "with (index({$indexHint->index}))"
-                    : '';
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @param  \Illuminate\Database\Query\Builder  $query
@@ -389,7 +375,7 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the random statement into SQL.
      *
-     * @param  string|int  $seed
+     * @param  string  $seed
      * @return string
      */
     public function compileRandom($seed)

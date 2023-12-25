@@ -23,9 +23,7 @@ if (!class_exists(LazyMacro::class, false)) {
          */
         public function getFileName()
         {
-            $file = $this->reflectionFunction->getFileName();
-
-            return (($file ? realpath($file) : null) ?: $file) ?: null;
+            return $this->reflectionFunction->getFileName();
         }
 
         /**

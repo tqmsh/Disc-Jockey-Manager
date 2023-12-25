@@ -145,25 +145,6 @@ class SQLiteGrammar extends Grammar
     }
 
     /**
-     * Compile a rename column command.
-     *
-     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
-     * @param  \Illuminate\Support\Fluent  $command
-     * @param  \Illuminate\Database\Connection  $connection
-     * @return array|string
-     */
-    public function compileRenameColumn(Blueprint $blueprint, Fluent $command, Connection $connection)
-    {
-        return $connection->usingNativeSchemaOperations()
-            ? sprintf('alter table %s rename column %s to %s',
-                $this->wrapTable($blueprint),
-                $this->wrap($command->from),
-                $this->wrap($command->to)
-            )
-            : parent::compileRenameColumn($blueprint, $command, $connection);
-    }
-
-    /**
      * Compile a unique key command.
      *
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
@@ -305,26 +286,17 @@ class SQLiteGrammar extends Grammar
      */
     public function compileDropColumn(Blueprint $blueprint, Fluent $command, Connection $connection)
     {
-        if ($connection->usingNativeSchemaOperations()) {
-            $table = $this->wrapTable($blueprint);
+        $tableDiff = $this->getDoctrineTableDiff(
+            $blueprint, $schema = $connection->getDoctrineSchemaManager()
+        );
 
-            $columns = $this->prefixArray('drop column', $this->wrapArray($command->columns));
-
-            return collect($columns)->map(fn ($column) => 'alter table '.$table.' '.$column
-            )->all();
-        } else {
-            $tableDiff = $this->getDoctrineTableDiff(
-                $blueprint, $schema = $connection->getDoctrineSchemaManager()
+        foreach ($command->columns as $name) {
+            $tableDiff->removedColumns[$name] = $connection->getDoctrineColumn(
+                $this->getTablePrefix().$blueprint->getTable(), $name
             );
-
-            foreach ($command->columns as $name) {
-                $tableDiff->removedColumns[$name] = $connection->getDoctrineColumn(
-                    $this->getTablePrefix().$blueprint->getTable(), $name
-                );
-            }
-
-            return (array) $schema->getDatabasePlatform()->getAlterTableSQL($tableDiff);
         }
+
+        return (array) $schema->getDatabasePlatform()->getAlterTableSQL($tableDiff);
     }
 
     /**

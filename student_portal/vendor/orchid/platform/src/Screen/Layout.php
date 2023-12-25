@@ -106,8 +106,12 @@ abstract class Layout implements JsonSerializable
         }
 
         $build = collect($this->layouts)
-            ->map(fn ($layouts) => Arr::wrap($layouts))
-            ->map(fn (iterable $layouts, string $key) => $this->buildChild($layouts, $key, $repository))
+            ->map(function ($layouts) {
+                return Arr::wrap($layouts);
+            })
+            ->map(function (iterable $layouts, string $key) use ($repository) {
+                return $this->buildChild($layouts, $key, $repository);
+            })
             ->collapse()
             ->all();
 
@@ -152,8 +156,12 @@ abstract class Layout implements JsonSerializable
     {
         return collect($layouts)
             ->flatten()
-            ->map(fn ($layout) => is_object($layout) ? $layout : resolve($layout))
-            ->filter(fn () => $this->isSee())
+            ->map(function ($layout) {
+                return is_object($layout) ? $layout : resolve($layout);
+            })
+            ->filter(function () {
+                return $this->isSee();
+            })
             ->reduce(function ($build, self $layout) use ($key, $repository) {
                 $build[$key][] = $layout->build($repository);
 
@@ -183,8 +191,11 @@ abstract class Layout implements JsonSerializable
             return $this;
         }
 
-        // Trying to find the right layer inside
-        return collect($this->layouts)
+        $layouts = method_exists($this, 'layouts')
+            ? $this->layouts()
+            : $this->layouts;
+
+        return collect($layouts)
             ->flatten()
             ->map(static function ($layout) use ($slug) {
                 $layout = is_object($layout)
@@ -194,7 +205,9 @@ abstract class Layout implements JsonSerializable
                 return $layout->findBySlug($slug);
             })
             ->filter()
-            ->filter(static fn ($layout) => $layout->getSlug() === $slug)
+            ->filter(static function ($layout) use ($slug) {
+                return $layout->getSlug() === $slug;
+            })
             ->first();
     }
 

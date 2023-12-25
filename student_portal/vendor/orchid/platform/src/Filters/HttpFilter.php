@@ -47,9 +47,9 @@ class HttpFilter
     {
         $this->request = $request ?? request();
 
-        $this->filters = $this->request->collect('filter')
-            ->map(fn ($item) => $this->parseHttpValue($item))
-            ->filter(fn ($item) => $item !== null);
+        $this->filters = $this->request->collect('filter')->map(function ($item) {
+            return $this->parseHttpValue($item);
+        });
 
         $this->sorts = collect($this->request->get('sort', []));
     }
@@ -132,7 +132,7 @@ class HttpFilter
         $this->filters->each(function ($value, $property) use ($builder, $allowedAutomaticFilters) {
             $allowProperty = $property;
 
-            if (str_contains($property, '.')) {
+            if (strpos($property, '.') !== false) {
                 $allowProperty = strstr($property, '.', true);
             }
 
@@ -158,15 +158,23 @@ class HttpFilter
         $model = $query->getModel();
 
         if ($this->isDate($model, $property)) {
-            $query->when($value['start'] ?? null, fn (Builder $query) => $query->whereDate($property, '>=', $value['start']));
-            $query->when($value['end'] ?? null, fn (Builder $query) => $query->whereDate($property, '<=', $value['end']));
+            $query->when($value['start'] ?? null, function (Builder $query) use ($property, $value) {
+                return $query->whereDate($property, '>=', $value['start']);
+            });
+            $query->when($value['end'] ?? null, function (Builder $query) use ($property, $value) {
+                return $query->whereDate($property, '<=', $value['end']);
+            });
         } elseif (is_array($value) && (isset($value['min']) || isset($value['max']))) {
-            $query->when($value['min'] ?? null, fn (Builder $query) => $query->where($property, '>=', $value['min']));
-            $query->when($value['max'] ?? null, fn (Builder $query) => $query->where($property, '<=', $value['max']));
+            $query->when($value['min'] ?? null, function (Builder $query) use ($property, $value) {
+                return $query->where($property, '>=', $value['min']);
+            });
+            $query->when($value['max'] ?? null, function (Builder $query) use ($property, $value) {
+                return $query->where($property, '<=', $value['max']);
+            });
         } elseif (is_array($value)) {
             $query->whereIn($property, $value);
         } elseif ($model->hasCast($property, ['bool', 'boolean'])) {
-            $query->where($property, (bool) $value);
+            $query->where($property, (bool)$value);
         } elseif (is_numeric($value) && ! $model->hasCast($property, ['string'])) {
             $query->where($property, $value);
         } else {
@@ -185,7 +193,7 @@ class HttpFilter
 
         $this->sorts
             ->each(function (string $sort) use ($builder, $allowedSorts) {
-                $descending = str_starts_with($sort, '-');
+                $descending = strpos($sort, '-') === 0;
                 $key = ltrim($sort, '-');
                 $property = Str::before($key, '.');
                 $key = str_replace('.', '->', $key);
@@ -212,7 +220,7 @@ class HttpFilter
             return true;
         }
 
-        if ($this->sorts->search('-'.$property, true) !== false) {
+        if ($this->sorts->search('-' . $property, true) !== false) {
             return true;
         }
 
@@ -227,7 +235,7 @@ class HttpFilter
     public function revertSort(string $property): string
     {
         return $this->getSort($property) === 'asc'
-            ? '-'.$property
+            ? '-' . $property
             : $property;
     }
 
@@ -262,6 +270,6 @@ class HttpFilter
     private function isDate(Model $model, string $property): bool
     {
         return $model->hasCast($property, ['date', 'datetime', 'immutable_date', 'immutable_datetime'])
-            || in_array($property, [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()], true);
+            || in_array($property, [$model->getCreatedAtColumn(),$model->getUpdatedAtColumn()], true);
     }
 }

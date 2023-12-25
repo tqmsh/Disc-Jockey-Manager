@@ -3,14 +3,11 @@
 namespace Laravel\Scout;
 
 use Illuminate\Support\ServiceProvider;
-use Laravel\Scout\Console\DeleteAllIndexesCommand;
 use Laravel\Scout\Console\DeleteIndexCommand;
 use Laravel\Scout\Console\FlushCommand;
 use Laravel\Scout\Console\ImportCommand;
 use Laravel\Scout\Console\IndexCommand;
-use Laravel\Scout\Console\SyncIndexSettingsCommand;
-use MeiliSearch\Client as MeiliSearchClient;
-use MeiliSearch\MeiliSearch;
+use MeiliSearch\Client as MeiliSearch;
 
 class ScoutServiceProvider extends ServiceProvider
 {
@@ -23,27 +20,11 @@ class ScoutServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/scout.php', 'scout');
 
-        if (class_exists(MeiliSearchClient::class) || class_exists(\Meilisearch\Client::class)) {
-            $meilisearchClientClassName = class_exists(MeiliSearchClient::class)
-                ? MeiliSearchClient::class
-                : \Meilisearch\Client::class;
-            $this->app->singleton($meilisearchClientClassName, function ($app) use ($meilisearchClientClassName) {
+        if (class_exists(MeiliSearch::class)) {
+            $this->app->singleton(MeiliSearch::class, function ($app) {
                 $config = $app['config']->get('scout.meilisearch');
 
-                $meilisearchVersionClassName = class_exists(MeiliSearch::class)
-                    ? MeiliSearch::class
-                    : \Meilisearch\Meilisearch::class;
-                if (version_compare($meilisearchVersionClassName::VERSION, '0.24.2') >= 0) {
-                    return new MeiliSearchClient(
-                        $config['host'],
-                        $config['key'],
-                        null,
-                        null,
-                        [sprintf('Meilisearch Laravel Scout (v%s)', Scout::VERSION)],
-                    );
-                }
-
-                return new $meilisearchClientClassName($config['host'], $config['key']);
+                return new MeiliSearch($config['host'], $config['key']);
             });
         }
 
@@ -64,9 +45,7 @@ class ScoutServiceProvider extends ServiceProvider
                 FlushCommand::class,
                 ImportCommand::class,
                 IndexCommand::class,
-                SyncIndexSettingsCommand::class,
                 DeleteIndexCommand::class,
-                DeleteAllIndexesCommand::class,
             ]);
 
             $this->publishes([

@@ -59,13 +59,17 @@ class ViewStudentLayout extends Table
                     return Link::make($student->phonenumber)
                         ->route('platform.student.edit', $student);
                 }),
-
-            TD::make()
+                
+            TD::make('grade', 'Grade')
                 ->render(function (Student $student) {
-                    return Link::make('Edit')
-                        ->route('platform.student.edit', $student)
-                        ->class("blue");
+                    return Link::make($student->grade)
+                        ->route('platform.student.edit', $student);
+                }),
 
+            TD::make('allergies', 'Allergies')
+                ->render(function (Student $student) {
+                    return Link::make($student->allergies)
+                        ->route('platform.student.edit', $student);
                 }),
         ];
     }

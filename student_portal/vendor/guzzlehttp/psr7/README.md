@@ -8,24 +8,10 @@ functionality like query string parsing.
 ![Static analysis](https://github.com/guzzle/psr7/workflows/Static%20analysis/badge.svg)
 
 
-## Features
+# Stream implementation
 
 This package comes with a number of stream implementations and stream
 decorators.
-
-
-## Installation
-
-```shell
-composer require guzzlehttp/psr7
-```
-
-## Version Guidance
-
-| Version | Status              | PHP Version  |
-|---------|---------------------|--------------|
-| 1.x     | Security fixes only | >=5.4,<8.1   |
-| 2.x     | Latest              | >=7.2.5,<8.4 |
 
 
 ## AppendStream
@@ -259,8 +245,6 @@ class EofCallbackStream implements StreamInterface
 
     private $callback;
 
-    private $stream;
-
     public function __construct(StreamInterface $stream, callable $cb)
     {
         $this->stream = $stream;
@@ -396,27 +380,9 @@ of the header. When a parameter does not contain a value, but just
 contains a key, this function will inject a key with a '' string value.
 
 
-## `GuzzleHttp\Psr7\Header::splitList`
-
-`public static function splitList(string|string[] $header): string[]`
-
-Splits a HTTP header defined to contain a comma-separated list into
-each individual value:
-
-```
-$knownEtags = Header::splitList($request->getHeader('if-none-match'));
-```
-
-Example headers include `accept`, `cache-control` and `if-none-match`.
-
-
-## `GuzzleHttp\Psr7\Header::normalize` (deprecated)
+## `GuzzleHttp\Psr7\Header::normalize`
 
 `public static function normalize(string|array $header): array`
-
-`Header::normalize()` is deprecated in favor of [`Header::splitList()`](README.md#guzzlehttppsr7headersplitlist)
-which performs the same operation with a cleaned up API and improved
-documentation.
 
 Converts an array of header values that may contain comma separated
 headers into an array of headers with no comma separated values.
@@ -861,6 +827,14 @@ Whether two URIs can be considered equivalent. Both URIs are normalized automati
 `$normalizations` bitmask. The method also accepts relative URI references and returns true when they are equivalent.
 This of course assumes they will be resolved against the same base URI. If this is not the case, determination of
 equivalence or difference of relative references does not mean anything.
+
+
+## Version Guidance
+
+| Version | Status         | PHP Version      |
+|---------|----------------|------------------|
+| 1.x     | Security fixes | >=5.4,<8.1       |
+| 2.x     | Latest         | ^7.2.5 \|\| ^8.0 |
 
 
 ## Security

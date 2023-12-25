@@ -14,8 +14,6 @@ class QuestionHelper extends SymfonyQuestionHelper
 {
     /**
      * {@inheritdoc}
-     *
-     * @return void
      */
     protected function writePrompt(OutputInterface $output, Question $question)
     {
@@ -47,11 +45,6 @@ class QuestionHelper extends SymfonyQuestionHelper
             case $question instanceof ChoiceQuestion:
                 $choices = $question->getChoices();
                 $text = sprintf('<info>%s</info> [<comment>%s</comment>]', $text, OutputFormatter::escape($choices[$default] ?? $default));
-
-                break;
-
-            default:
-                $text = sprintf('<info>%s</info> [<comment>%s</comment>]', $text, OutputFormatter::escape($default));
 
                 break;
         }

@@ -35,7 +35,7 @@
     <?= $viewModel->customHtmlHead() ?>
 
 </head>
-<body class="scrollbar-lg antialiased bg-center bg-dots-darker dark:bg-dots-lighter">
+<body class="scrollbar-lg">
 
 <script>
     window.data = <?=
@@ -57,9 +57,7 @@
 <div id="app"></div>
 
 <script>
-    <!--
-    <?= $viewModel->getAssetContents('ignition.js') ?>
-    -->
+<?= $viewModel->getAssetContents('ignition.js') ?>
 </script>
 
 <script>

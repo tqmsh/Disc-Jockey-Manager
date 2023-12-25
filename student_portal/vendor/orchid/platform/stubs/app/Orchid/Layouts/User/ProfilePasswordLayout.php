@@ -11,7 +11,7 @@ use Orchid\Screen\Layouts\Rows;
 class ProfilePasswordLayout extends Rows
 {
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @return Field[]
      */

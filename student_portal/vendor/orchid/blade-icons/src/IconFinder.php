@@ -6,6 +6,9 @@ namespace Orchid\Icons;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\Iterator\PathFilterIterator;
+use Symfony\Component\Finder\SplFileInfo;
 
 class IconFinder
 {
@@ -13,6 +16,13 @@ class IconFinder
      * @var Collection
      */
     private Collection $directories;
+
+    /**
+     * Previously processed icons
+     *
+     * @var Collection
+     */
+    private Collection $cache;
 
     /**
      * @var string
@@ -30,6 +40,15 @@ class IconFinder
     public function __construct()
     {
         $this->directories = collect();
+        $this->cache = collect();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDirectories(): Collection
+    {
+        return $this->directories;
     }
 
     /**
@@ -54,41 +73,43 @@ class IconFinder
      */
     public function loadFile(string $name): ?string
     {
-        $prefix = Str::of($name)->before('.')->toString();
-        $dir = $this->directories->get($prefix);
-
-        if ($dir !== null) {
-            return $this->getContent($name, $prefix, $dir);
+        if ($this->cache->has($name)) {
+            return $this->cache->get($name);
         }
 
-        // Failed to find the icon
-        return $this->directories
-            ->map(fn($dir) => $this->getContent($name, $prefix, $dir))
-            ->filter()
-            ->first();
+        $prefix = Str::beforeLast($name, '.');
+        $nameIcon = Str::afterLast($name, '.') . '.svg';
+
+        $dirs = $this->directories->get($prefix, $this->directories->toArray());
+
+        $icons = $this->getFinder()->in($dirs);
+
+        /** @var PathFilterIterator $iterator */
+        $iterator = tap($icons->getIterator())
+            ->rewind();
+
+        /** @var SplFileInfo|null $file */
+        $file = collect($iterator)
+            ->filter(static function (SplFileInfo $file) use ($nameIcon) {
+                return $file->getFilename() === $nameIcon;
+            })->first();
+
+        $icon = optional($file)->getContents();
+
+        $this->cache->put($name, $icon);
+
+        return $icon;
     }
 
     /**
-     * @param string $name
-     * @param string $prefix
-     * @param string $dir
-     *
-     * @return string
+     * @return Finder
      */
-    protected function getContent(string $name, string $prefix, string $dir)
+    protected function getFinder(): Finder
     {
-        $file = Str::of($name)
-            ->when($prefix !== $name, fn($string) => $string->replaceFirst($prefix, ''))
-            ->replaceFirst('.', '')
-            ->replace('.', '/');
-
-        $path = $dir . '/' . $file . '.svg';
-
-        try {
-            return file_get_contents($path);
-        } catch (\Exception) {
-            return null;
-        }
+        return (new Finder())
+            ->ignoreUnreadableDirs()
+            ->followLinks()
+            ->ignoreDotFiles(true);
     }
 
     /**
