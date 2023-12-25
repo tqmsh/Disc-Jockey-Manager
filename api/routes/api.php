@@ -15,6 +15,7 @@ use App\Http\Controllers\LocaladminController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\EventAttendeesController;
 use App\Http\Controllers\SeatingController;
+use App\Http\Controllers\SchoolController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,6 +39,10 @@ Route::post('/register/student', [RegisterController::class, 'register']);
 Route::put("campaign_view/{id}", [AdController::class, "impression"]);
 // Click counter
 Route::put("campaign_click/{id}", [AdController::class, "click"]);
+
+
+// Get all schools
+Route::get('getAllSchools', [SchoolController::class, 'getAllSchools']);
 
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){

@@ -101,6 +101,7 @@ class BuyCreditsScreen extends Screen
         if(isset($response['id']) && $response['id']!=null) {
             foreach($response['links'] as $link) {
                 if($link['rel'] === 'approve') {
+                    // dd($link['href']);
                     return redirect()->away($link['href']);
                 }
             }
