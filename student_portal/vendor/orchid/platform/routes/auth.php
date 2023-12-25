@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Orchid\Platform\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
+use Orchid\Platform\Http\Controllers\LoginController;
 
 // Auth web routes
 if (config('platform.auth', true)) {
@@ -13,13 +13,7 @@ if (config('platform.auth', true)) {
         ->post('login', [LoginController::class, 'login'])
         ->name('login.auth');
 
-    Route::post('create', [LoginController::class, 'register'])->name('register');
-
     Route::get('lock', [LoginController::class, 'resetCookieLockMe'])->name('login.lock');
-
-    //show create account form
-    Route::get('register', [LoginController::class, 'showRegisterForm'])->name('register');
-
 }
 
 Route::get('switch-logout', [LoginController::class, 'switchLogout']);

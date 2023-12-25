@@ -27,7 +27,7 @@ class ExampleScreen extends Screen
     erat in luctus.';
 
     /**
-     * Query data.
+     * Fetch data to be displayed on the screen.
      *
      * @return array
      */
@@ -74,7 +74,7 @@ class ExampleScreen extends Screen
     }
 
     /**
-     * Display header name.
+     * The name of the screen displayed in the header.
      *
      * @return string|null
      */
@@ -94,7 +94,7 @@ class ExampleScreen extends Screen
     }
 
     /**
-     * Button commands.
+     * The screen's action buttons.
      *
      * @return \Orchid\Screen\Action[]
      */
@@ -145,7 +145,7 @@ class ExampleScreen extends Screen
     }
 
     /**
-     * Views.
+     * The screen's layout elements.
      *
      * @return string[]|\Orchid\Screen\Layout[]
      */
@@ -170,20 +170,18 @@ class ExampleScreen extends Screen
             Layout::table('table', [
                 TD::make('id', 'ID')
                     ->width('150')
-                    ->render(function (Repository $model) {
-                        // Please use view('path')
-                        return "<img src='https://loremflickr.com/500/300?random={$model->get('id')}'
+                    ->render(fn (Repository $model) => // Please use view('path')
+"<img src='https://loremflickr.com/500/300?random={$model->get('id')}'
                               alt='sample'
                               class='mw-100 d-block img-fluid rounded-1 w-100'>
-                            <span class='small text-muted mt-1 mb-0'># {$model->get('id')}</span>";
-                    }),
+                            <span class='small text-muted mt-1 mb-0'># {$model->get('id')}</span>"),
 
                 TD::make('name', 'Name')
                     ->width('450')
                     ->render(fn (Repository $model) => Str::limit($model->get('name'), 200)),
 
                 TD::make('price', 'Price')
-                    ->render(fn (Repository $model) => '$ ' . number_format($model->get('price'), 2)),
+                    ->render(fn (Repository $model) => '$ '.number_format($model->get('price'), 2)),
 
                 TD::make('created_at', 'Created'),
             ]),

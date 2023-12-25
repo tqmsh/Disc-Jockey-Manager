@@ -1,7 +1,7 @@
 @push('head')
     <meta name="robots" content="noindex" />
     <link
-          href="{{ asset('/vendor/orchid/favicon.ico') }}"
+          href="{{ asset('/vendor/orchid/favicon.svg') }}"
           sizes="any"
           type="image/svg+xml"
           id="favicon"
@@ -13,9 +13,10 @@
 @endpush
 
 <div class="h2 fw-light d-flex align-items-center">
-    <span class="thumb-sm">
-        <img src="{{ URL::asset('/image/Prom_VP_Line.png') }}" class=""> </span>
+   <x-orchid-icon path="orchid" width="1.2em" height="1.2em"/>
+
     <p class="ms-3 my-0 d-none d-sm-block">
-        PromPlanner
+        {{ config('app.name') }}
+        <small class="align-top opacity">Orchid</small>
     </p>
 </div>

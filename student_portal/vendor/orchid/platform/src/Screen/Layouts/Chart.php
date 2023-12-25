@@ -14,6 +14,12 @@ use Orchid\Screen\Repository;
  */
 abstract class Chart extends Layout
 {
+    public const TYPE_BAR = 'bar';
+    public const TYPE_LINE = 'line';
+    public const TYPE_PIE = 'pie';
+    public const TYPE_PERCENTAGE = 'percentage';
+    public const TYPE_AXIS_MIXED = 'axis-mixed';
+
     /**
      * Main template to display the layer
      * Represents the view() argument.
@@ -35,7 +41,6 @@ abstract class Chart extends Layout
     protected $description;
 
     /**
-     *
      * Add a title to the Chart.
      *
      * @var string
@@ -49,7 +54,7 @@ abstract class Chart extends Layout
      *
      * @var string
      */
-    protected $type = 'line';
+    protected $type = self::TYPE_LINE;
 
     /**
      * Height of the chart.
@@ -74,10 +79,10 @@ abstract class Chart extends Layout
      * @var array
      */
     protected $colors = [
-        '#2ec7c9','#b6a2de','#5ab1ef','#ffb980','#d87a80',
-        '#8d98b3','#e5cf0d','#97b552','#95706d','#dc69aa',
-        '#07a2a4','#9a7fd1','#588dd5','#f5994e','#c05050',
-        '#59678c','#c9ab00','#7eb00a','#6f5553','#c14089',
+        '#2ec7c9', '#b6a2de', '#5ab1ef', '#ffb980', '#d87a80',
+        '#8d98b3', '#e5cf0d', '#97b552', '#95706d', '#dc69aa',
+        '#07a2a4', '#9a7fd1', '#588dd5', '#f5994e', '#c05050',
+        '#59678c', '#c9ab00', '#7eb00a', '#6f5553', '#c14089',
     ];
 
     /**
@@ -196,7 +201,7 @@ abstract class Chart extends Layout
      *
      * @return $this
      */
-    public function description(string $description):static
+    public function description(string $description): static
     {
         $this->description = $description;
 
@@ -210,7 +215,7 @@ abstract class Chart extends Layout
      *
      * @return $this
      */
-    public function height(int $height):static
+    public function height(int $height): static
     {
         $this->height = $height;
 
@@ -231,9 +236,7 @@ abstract class Chart extends Layout
         }
 
         $labels = collect($repository->getContent($this->target))
-                ->map(function ($item) {
-                    return $item['labels'] ?? [];
-                })
+                ->map(fn ($item) => $item['labels'] ?? [])
                 ->flatten()
                 ->unique()
                 ->toJson(JSON_NUMERIC_CHECK);
