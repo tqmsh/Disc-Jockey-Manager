@@ -60,7 +60,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('fa.shirt')
                 ->route('platform.beauty-groups'),
             ]),
-
+            
             Menu::make('My Specs')
             ->icon('brush')
             ->route('platform.studentSpecs.list'),

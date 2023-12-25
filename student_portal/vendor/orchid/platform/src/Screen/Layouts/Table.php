@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Orchid\Screen\Layouts;
 
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Collection;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Repository;
 use Orchid\Screen\TD;
@@ -56,13 +58,9 @@ abstract class Table extends Layout
             return;
         }
 
-        $columns = collect($this->columns())->filter(static function (TD $column) {
-            return $column->isSee();
-        });
+        $columns = collect($this->columns())->filter(static fn (TD $column) => $column->isSee());
 
-        $total = collect($this->total())->filter(static function (TD $column) {
-            return $column->isSee();
-        });
+        $total = collect($this->total())->filter(static fn (TD $column) => $column->isSee());
 
         $rows = $repository->getContent($this->target);
         $rows = is_array($rows) ? collect($rows) : $rows;
@@ -81,6 +79,7 @@ abstract class Table extends Layout
             'hoverable'    => $this->hoverable(),
             'slug'         => $this->getSlug(),
             'onEachSide'   => $this->onEachSide(),
+            'showHeader'   => $this->hasHeader($columns, $rows),
             'title'        => $this->title,
         ]);
     }
@@ -102,7 +101,7 @@ abstract class Table extends Layout
      */
     protected function iconNotFound(): string
     {
-        return 'icon-table';
+        return 'table';
     }
 
     /**
@@ -110,7 +109,11 @@ abstract class Table extends Layout
      */
     protected function textNotFound(): string
     {
-        return __('There are no records in this view');
+        if (count(request()->query()) !== 0) {
+            return __('No results found for your current filters');
+        }
+
+        return __('There are no objects currently displayed');
     }
 
     /**
@@ -118,7 +121,11 @@ abstract class Table extends Layout
      */
     protected function subNotFound(): string
     {
-        return '';
+        if (count(request()->query()) !== 0) {
+            return __('Try adjusting your filter settings or removing it altogether to see more data');
+        }
+
+        return 'Import or create objects, or check back later for updates';
     }
 
     /**
@@ -169,6 +176,21 @@ abstract class Table extends Layout
     protected function onEachSide(): int
     {
         return 3;
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection                                  $columns
+     * @param \Illuminate\Support\Collection|\Illuminate\Pagination\Paginator $row
+     *
+     * @return bool
+     */
+    protected function hasHeader(Collection $columns, Collection|Paginator $row): bool
+    {
+        if ($columns->count() < 2) {
+            return false;
+        }
+
+        return ! empty(request()->query()) || $row->isNotEmpty();
     }
 
     /**

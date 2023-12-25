@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Orchid\Access\UserSwitch;
+use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
@@ -29,7 +29,7 @@ class UserEditScreen extends Screen
     public $user;
 
     /**
-     * Query data.
+     * Fetch data to be displayed on the screen.
      *
      * @param User $user
      *
@@ -46,7 +46,7 @@ class UserEditScreen extends Screen
     }
 
     /**
-     * Display header name.
+     * The name of the screen displayed in the header.
      *
      * @return string|null
      */
@@ -76,7 +76,7 @@ class UserEditScreen extends Screen
     }
 
     /**
-     * Button commands.
+     * The screen's action buttons.
      *
      * @return Action[]
      */
@@ -171,9 +171,7 @@ class UserEditScreen extends Screen
         ]);
 
         $permissions = collect($request->get('permissions'))
-            ->map(function ($value, $key) {
-                return [base64_decode($key) => $value];
-            })
+            ->map(fn ($value, $key) => [base64_decode($key) => $value])
             ->collapse()
             ->toArray();
 
@@ -199,7 +197,6 @@ class UserEditScreen extends Screen
      * @throws \Exception
      *
      * @return \Illuminate\Http\RedirectResponse
-     *
      */
     public function remove(User $user)
     {
@@ -217,7 +214,7 @@ class UserEditScreen extends Screen
      */
     public function loginAs(User $user)
     {
-        UserSwitch::loginAs($user);
+        Impersonation::loginAs($user);
 
         Toast::info(__('You are now impersonating this user'));
 

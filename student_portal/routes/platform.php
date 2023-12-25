@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
+
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
+use App\Orchid\Screens\EditSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewVotingScreen;
 use App\Orchid\Screens\ViewWinnersScreen;
+use App\Orchid\Screens\CreateSpecsScreen;
 use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
@@ -95,6 +98,11 @@ Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.
 
 //student specs
 Route::screen('/my-specs', ViewSpecsScreen::class)->name('platform.studentSpecs.list');
+
+// Create Specs
+Route::screen('/my-specs/create', CreateSpecsScreen::class)->name('platform.specs.create');
+
+Route::screen('/my-specs/{specs:user_id}/edit', EditSpecsScreen::class)->name('platform.specs.edit');
 
 //view limo groups
 Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');

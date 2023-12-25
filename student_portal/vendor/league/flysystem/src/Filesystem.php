@@ -4,34 +4,33 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use DateTimeInterface;
 use Generator;
+use League\Flysystem\UrlGeneration\PrefixPublicUrlGenerator;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\ShardedPrefixPublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use Throwable;
+
+use function array_key_exists;
+use function is_array;
 
 class Filesystem implements FilesystemOperator
 {
-    /**
-     * @var FilesystemAdapter
-     */
-    private $adapter;
+    use CalculateChecksumFromStream;
 
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var PathNormalizer
-     */
-    private $pathNormalizer;
+    private Config $config;
+    private PathNormalizer $pathNormalizer;
 
     public function __construct(
-        FilesystemAdapter $adapter,
+        private FilesystemAdapter $adapter,
         array $config = [],
-        PathNormalizer $pathNormalizer = null
+        PathNormalizer $pathNormalizer = null,
+        private ?PublicUrlGenerator $publicUrlGenerator = null,
+        private ?TemporaryUrlGenerator $temporaryUrlGenerator = null,
     ) {
-        $this->adapter = $adapter;
         $this->config = new Config($config);
-        $this->pathNormalizer = $pathNormalizer ?: new WhitespacePathNormalizer();
+        $this->pathNormalizer = $pathNormalizer ?? new WhitespacePathNormalizer();
     }
 
     public function fileExists(string $location): bool
@@ -121,20 +120,40 @@ class Filesystem implements FilesystemOperator
 
     public function move(string $source, string $destination, array $config = []): void
     {
-        $this->adapter->move(
-            $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination),
-            $this->config->extend($config)
-        );
+        $config = $this->resolveConfigForMoveAndCopy($config);
+        $from = $this->pathNormalizer->normalizePath($source);
+        $to = $this->pathNormalizer->normalizePath($destination);
+
+        if ($from === $to) {
+            $resolutionStrategy = $config->get(Config::OPTION_MOVE_IDENTICAL_PATH, ResolveIdenticalPathConflict::TRY);
+
+            if ($resolutionStrategy === ResolveIdenticalPathConflict::FAIL) {
+                throw UnableToMoveFile::sourceAndDestinationAreTheSame($source, $destination);
+            } elseif ($resolutionStrategy === ResolveIdenticalPathConflict::IGNORE) {
+                return;
+            }
+        }
+
+        $this->adapter->move($from, $to, $config);
     }
 
     public function copy(string $source, string $destination, array $config = []): void
     {
-        $this->adapter->copy(
-            $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination),
-            $this->config->extend($config)
-        );
+        $config = $this->resolveConfigForMoveAndCopy($config);
+        $from = $this->pathNormalizer->normalizePath($source);
+        $to = $this->pathNormalizer->normalizePath($destination);
+
+        if ($from === $to) {
+            $resolutionStrategy = $config->get(Config::OPTION_COPY_IDENTICAL_PATH, ResolveIdenticalPathConflict::TRY);
+
+            if ($resolutionStrategy === ResolveIdenticalPathConflict::FAIL) {
+                throw UnableToCopyFile::sourceAndDestinationAreTheSame($source, $destination);
+            } elseif ($resolutionStrategy === ResolveIdenticalPathConflict::IGNORE) {
+                return;
+            }
+        }
+
+        $this->adapter->copy($from, $to, $config);
     }
 
     public function lastModified(string $path): int
@@ -162,6 +181,57 @@ class Filesystem implements FilesystemOperator
         return $this->adapter->visibility($this->pathNormalizer->normalizePath($path))->visibility();
     }
 
+    public function publicUrl(string $path, array $config = []): string
+    {
+        $this->publicUrlGenerator ??= $this->resolvePublicUrlGenerator()
+            ?? throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
+        $config = $this->config->extend($config);
+
+        return $this->publicUrlGenerator->publicUrl($path, $config);
+    }
+
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, array $config = []): string
+    {
+        $generator = $this->temporaryUrlGenerator ?? $this->adapter;
+
+        if ($generator instanceof TemporaryUrlGenerator) {
+            return $generator->temporaryUrl($path, $expiresAt, $this->config->extend($config));
+        }
+
+        throw UnableToGenerateTemporaryUrl::noGeneratorConfigured($path);
+    }
+
+    public function checksum(string $path, array $config = []): string
+    {
+        $config = $this->config->extend($config);
+
+        if ( ! $this->adapter instanceof ChecksumProvider) {
+            return $this->calculateChecksumFromStream($path, $config);
+        }
+
+        try {
+            return $this->adapter->checksum($path, $config);
+        } catch (ChecksumAlgoIsNotSupported) {
+            return $this->calculateChecksumFromStream($path, $config);
+        }
+    }
+
+    private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
+    {
+        if ($publicUrl = $this->config->get('public_url')) {
+            return match (true) {
+                is_array($publicUrl) => new ShardedPrefixPublicUrlGenerator($publicUrl),
+                default => new PrefixPublicUrlGenerator($publicUrl),
+            };
+        }
+
+        if ($this->adapter instanceof PublicUrlGenerator) {
+            return $this->adapter;
+        }
+
+        return null;
+    }
+
     /**
      * @param mixed $contents
      */
@@ -186,5 +256,22 @@ class Filesystem implements FilesystemOperator
         if (ftell($resource) !== 0 && stream_get_meta_data($resource)['seekable']) {
             rewind($resource);
         }
+    }
+
+    private function resolveConfigForMoveAndCopy(array $config): Config
+    {
+        $retainVisibility = $this->config->get('retain_visibility', $config['retain_visibility'] ?? true);
+        $fullConfig = $this->config->extend($config);
+
+        /*
+         * By default, we retain visibility. When we do not retain visibility, the visibility setting
+         * from the default configuration is ignored. Only when it is set explicitly, we propagate the
+         * setting.
+         */
+        if ($retainVisibility && ! array_key_exists(Config::OPTION_VISIBILITY, $config)) {
+            $fullConfig = $fullConfig->withoutSettings(Config::OPTION_VISIBILITY)->extend($config);
+        }
+
+        return $fullConfig;
     }
 }

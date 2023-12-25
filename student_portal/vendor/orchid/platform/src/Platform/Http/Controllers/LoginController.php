@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Http\Controllers;
 
-use Exception;
-use App\Models\Session;
-use Illuminate\View\View;
+use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
 use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Auth\EloquentUserProvider;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Validation\ValidationException;
+use Exception;
+use App\Models\Session;
+
 
 class LoginController extends Controller
 {
@@ -68,42 +69,47 @@ class LoginController extends Controller
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function login(Request $request, CookieJar $cookieJar)
-    {
-        try {
-            $request->validate([
-                'email'    => 'required|string',
-                'password' => 'required|string',
-            ]);
-    
-            $auth = $this->guard->attempt(
-                $request->only(['email', 'password']),
-                $request->filled('remember')
-            );
-    
-            if ($auth) {
-                $user = User::where('email', $request->input('email'))->first();
-    
-                if ($user->role != 3 || $user->account_status == 0) {
-                    $this->guard->logout();
-                    $cookieJar->forget('lockUser');
-                    $request->session()->invalidate();
-                    $request->session()->regenerateToken();
-    
-                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.')]);
-                }
+public function login(Request $request, CookieJar $cookieJar)
+{
+    try {
+        $request->validate([
+            'email'    => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-                
-                $this->setStartTimeInSession();
+        $auth = $this->guard->attempt(
+            $request->only(['email', 'password']),
+            $request->filled('remember')
+        );
 
-                return $this->sendLoginResponse($request);
+        if ($auth) {
+            $user = User::where('email', $request->input('email'))->first();
+
+            if ($user->role != 3 || $user->account_status == 0) {
+                $this->guard->logout();
+                $cookieJar->forget('lockUser');
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.')]);
             }
-        } catch (Exception $e) {
-            Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
-    
-            return redirect('/admin/register');
+
+            $this->setStartTimeInSession();
+
+            return $this->sendLoginResponse($request);
         }
+    } catch (Exception $e) {
+        Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
+
+        return redirect('/admin/register');
     }
+
+    throw ValidationException::withMessages([
+        'email' => __('The details you entered did not match our records. Please double-check and try again.'),
+    ]);
+}
+
+
     
 
 
@@ -283,7 +289,7 @@ class LoginController extends Controller
      */
     public function switchLogout()
     {
-        UserSwitch::logout();
+        Impersonation::logout();
 
         return redirect()->route(config('platform.index'));
     }

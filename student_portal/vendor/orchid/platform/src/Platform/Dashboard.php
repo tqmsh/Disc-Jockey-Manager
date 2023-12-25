@@ -6,10 +6,12 @@ namespace Orchid\Platform;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Screen\Screen;
+use RuntimeException;
 
 class Dashboard
 {
@@ -18,7 +20,7 @@ class Dashboard
     /**
      * ORCHID Version.
      */
-    public const VERSION = '13.5.0';
+    public const VERSION = '13.10.0';
 
     /**
      * Slug for main menu.
@@ -91,6 +93,22 @@ class Dashboard
     public static function version(): string
     {
         return static::VERSION;
+    }
+
+    /**
+     * Determine published assets are up-to-date.
+     *
+     * @throws \RuntimeException
+     *
+     * @return bool
+     */
+    public static function assetsAreCurrent()
+    {
+        $publishedPath = public_path('vendor/orchid/mix-manifest.json');
+
+        throw_unless(File::exists($publishedPath), new RuntimeException('Orchid assets are not published. Please run: `php artisan orchid:publish`'));
+
+        return File::get($publishedPath) === File::get(__DIR__.'/../../public/mix-manifest.json');
     }
 
     /**
@@ -255,9 +273,7 @@ class Dashboard
      */
     public function getSearch(): Collection
     {
-        return $this->search->transform(static function ($model) {
-            return is_object($model) ? $model : resolve($model);
-        });
+        return $this->search->transform(static fn ($model) => is_object($model) ? $model : resolve($model));
     }
 
     /**
@@ -298,9 +314,7 @@ class Dashboard
     {
         return $this->getPermission($groups)
             ->collapse()
-            ->reduce(static function (Collection $permissions, array $item) {
-                return $permissions->put($item['slug'], true);
-            }, collect());
+            ->reduce(static fn (Collection $permissions, array $item) => $permissions->put($item['slug'], true), collect());
     }
 
     /**
@@ -343,7 +357,7 @@ class Dashboard
      *
      * @return $this
      */
-    public function registerMenuElement(string $location, \Orchid\Screen\Actions\Menu $menu): Dashboard
+    public function registerMenuElement(string $location, Menu $menu): Dashboard
     {
         if ($menu->get('sort', 0) === 0) {
             $menu->sort($this->menu->get($location)->count() + 1);
@@ -366,12 +380,8 @@ class Dashboard
     public function renderMenu(string $location): string
     {
         return $this->menu->get($location)
-            ->sort(function (Menu $current, Menu $next) {
-                return $current->get('sort', 0) <=> $next->get('sort', 0);
-            })
-            ->map(function (Menu $menu) {
-                return (string)$menu->render();
-            })
+            ->sort(fn (Menu $current, Menu $next) => $current->get('sort', 0) <=> $next->get('sort', 0))
+            ->map(fn (Menu $menu) => (string) $menu->render())
             ->implode('');
     }
 
@@ -380,7 +390,7 @@ class Dashboard
      *
      * @return bool
      */
-    public function isEmptyMenu(string $location):bool
+    public function isEmptyMenu(string $location): bool
     {
         return $this->menu->get($location)->isEmpty();
     }
@@ -395,11 +405,9 @@ class Dashboard
     public function addMenuSubElements(string $location, string $slug, array $list): Dashboard
     {
         $menu = $this->menu->get($location)
-            ->map(function (Menu $menu) use ($slug, $list) {
-                return $menu->get('slug') === $slug
-                    ? $menu->list($list)
-                    : $menu;
-            });
+            ->map(fn (Menu $menu) => $menu->get('slug') === $slug
+                ? $menu->list($list)
+                : $menu);
 
         $this->menu->put($location, $menu);
 

@@ -90,8 +90,6 @@ class Relation extends Field
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      *
      * @return Relation
-     *
-     *
      */
     public function fromModel(string $model, string $name, string $key = null): self
     {
@@ -121,12 +119,10 @@ class Relation extends Field
             }
 
             $value = collect($value)
-                ->map(static function ($item) use ($text, $key) {
-                    return [
-                        'id'   => $item->$key,
-                        'text' => $item->$text,
-                    ];
-                })->toArray();
+                ->map(static fn ($item) => [
+                    'id'   => $item->$key,
+                    'text' => $item->$text,
+                ])->toArray();
 
             $this->set('value', $value);
         });
