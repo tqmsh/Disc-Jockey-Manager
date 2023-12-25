@@ -7,6 +7,10 @@ use App\Models\Events;
 use Orchid\Support\Color;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
+use App\Models\EventAttendees;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class ViewRegisteredEventLayout extends Table
 {
@@ -66,6 +70,51 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
                 }), 
+
+            
+            // Buy tickets button
+            TD::make()
+                ->render(function (Events $event) {
+                    $eventAttendee = EventAttendees::where('user_id', Auth::user()->id)
+                    ->where('event_id', $event->id)
+                    ->first();
+
+                    if ($eventAttendee->ticketstatus == 'Unpaid') {
+                        return Button::make('Buy Tickets')
+                            ->icon('money')
+                            ->method('payment',['event_id' => $event->id])
+                            ->type(Color::PRIMARY());
+                    } else if ($eventAttendee->ticketstatus == 'paid'){
+                        return Button::make('Tickets Bought')
+                            ->icon('check')
+                            ->method('redirect', ['event_id' => $event->id, 'type' => 'ticketBought'])
+                            ->type(Color::SUCCESS());
+                    }
+                }),
+            
+
+            TD::make('event_start_time', 'Event Start Date')
+                ->render(function (Events $event) {
+                    return e($event->event_start_time);
+                }),
+            TD::make('event_address', 'Event Address')
+                ->render(function (Events $event) {
+                    return e($event->event_address);
+                }),
+            TD::make('event_zip_postal', 'Event Zip/Postal')
+                ->render(function (Events $event) {
+                    return e($event->event_zip_postal);
+                }),
+            TD::make('event_info', 'Event Info')
+                ->render(function (Events $event) {
+                    return e($event->event_info);
+                }),
+
+            TD::make('event_rules', 'Event Rules')
+                ->render(function (Events $event) {
+                    return e($event->event_rules);
+                }),
+
     
         ];    
     }
