@@ -18,6 +18,10 @@ use App\Orchid\Layouts\ViewEventLayout;
 use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewRegisteredEventLayout;
 use App\Orchid\Layouts\ViewEventInvitationsLayout;
+use App\Http\Controllers\EventAttendeesController;
+
+use Illuminate\Http\Request;
+use Srmklive\PayPal\Services\PayPal as PayPalclient;
 
 class ViewEventScreen extends Screen
 {
@@ -125,8 +129,12 @@ class ViewEventScreen extends Screen
         else if($type == 'songs'){
             return redirect()->route('platform.songs.list', $event_id);
         }
+        else if ($type == 'ticketBought') {
+            return redirect()->route('platform.event.list');
+        }
         else if ($type == 'eventInformation') {
             return redirect()->route('platform.event.information', $event_id);
+
         }
         else if($type == 'election'){
             $election = Election::where('event_id',$event_id)->first();
@@ -154,5 +162,83 @@ class ViewEventScreen extends Screen
         }
 
         return redirect()->route('platform.event.register', $event_id);   
+    }
+
+    public function payment(Request $request, Events $event, $event_id) {
+        $provider = new PaypalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                // Success function gets called here
+                "return_url" => route('paypal_success', ['event_id' => $event->id]),
+                "cancel_url" => route('paypal_cancel')
+            ],
+            "purchase_units" => [
+                [
+                    "amount" => [
+                        "currency_code" => "CAD",
+                        "value" => $event->ticket_price,
+                    ]
+                ]
+            ]
+        ]); 
+
+        if(isset($response['id']) && $response['id']!=null) {
+            foreach($response['links'] as $link) {
+                if($link['rel'] === 'approve') {
+                    return redirect()->away($link["href"]);
+                }
+            }
+        } else {
+            return redirect()->route('paypal_cancel');
+        }
+        
+    }
+
+    public function success(Request $request, $event_id) {
+
+        $provider = new PaypalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+        $response =  $provider->capturePaymentOrder($request->token);
+
+        // Last check to see if the Payment went trough successfully
+        if(isset($response['status']) && $response['status'] == 'COMPLETED') {
+
+            EventAttendees::where('user_id', Auth::user()->id)
+                                    ->where('event_id', $event_id)
+                                    ->update(array('ticketstatus' => 'paid'));
+                        
+
+            Toast::success('Tickets bought Successfully!');
+
+            $user = Auth::user();
+
+            $requestData = new Request();
+            $requestData->setUserResolver(function () use ($user) {
+                return $user;
+            });
+
+            $requestData->merge([
+                'attendee_id' => strval(Auth::user()->id),
+                'event_id' => $event_id
+            ]);
+
+            $eventAttendeesController = new EventAttendeesController();
+            $response_1 = $eventAttendeesController->createCode($requestData);
+
+            return redirect()->route('platform.event.list');
+
+        } else { 
+            return redirect()->route('paypal_cancel');
+
+        }
+    }
+
+    public function cancel() {
+        Toast::error('Error');
     }
 }

@@ -56,11 +56,10 @@ use App\Orchid\Screens\ViewSingleFoodScreen;
 Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show events screen
-// Route::middleware(['cors'])->group(function () {
-Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
-// });
+Route::middleware(['cors'])->group(function () {
+    Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
+});
 
-Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
 
 //show event registration screen
 Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platform.event.register');
