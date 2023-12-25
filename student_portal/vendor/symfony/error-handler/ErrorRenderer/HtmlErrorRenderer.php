@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Debug\FileLinkFormatter;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
@@ -52,7 +50,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface
     {
         $this->debug = \is_bool($debug) ? $debug : $debug(...);
         $this->charset = $charset ?: (\ini_get('default_charset') ?: 'UTF-8');
-        $fileLinkFormat ??= $_ENV['SYMFONY_IDE'] ?? $_SERVER['SYMFONY_IDE'] ?? null;
+        $fileLinkFormat ??= $_SERVER['SYMFONY_IDE'] ?? null;
         $this->fileLinkFormat = \is_string($fileLinkFormat)
             ? (ErrorRendererInterface::IDE_LINK_FORMATS[$fileLinkFormat] ?? $fileLinkFormat ?: false)
             : ($fileLinkFormat ?: \ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format') ?: false);
@@ -61,6 +59,9 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         $this->logger = $logger;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function render(\Throwable $exception): FlattenException
     {
         $headers = ['Content-Type' => 'text/html; charset='.$this->charset];
@@ -69,7 +70,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface
             $headers['X-Debug-Exception-File'] = rawurlencode($exception->getFile()).':'.$exception->getLine();
         }
 
-        $exception = FlattenException::createWithDataRepresentation($exception, null, $headers);
+        $exception = FlattenException::createFromThrowable($exception, null, $headers);
 
         return $exception->setAsString($this->renderException($exception));
     }
@@ -149,14 +150,6 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         ]);
     }
 
-    private function dumpValue(Data $value): string
-    {
-        $dumper = new HtmlDumper();
-        $dumper->setTheme('light');
-
-        return $dumper->dump($value, true);
-    }
-
     private function formatArgs(array $args): string
     {
         $result = [];
@@ -181,7 +174,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         return implode(', ', $result);
     }
 
-    private function formatArgsAsText(array $args): string
+    private function formatArgsAsText(array $args)
     {
         return strip_tags($this->formatArgs($args));
     }
@@ -262,21 +255,13 @@ class HtmlErrorRenderer implements ErrorRendererInterface
             // highlight_file could throw warnings
             // see https://bugs.php.net/25725
             $code = @highlight_file($file, true);
-            if (\PHP_VERSION_ID >= 80300) {
-                // remove main pre/code tags
-                $code = preg_replace('#^<pre.*?>\s*<code.*?>(.*)</code>\s*</pre>#s', '\\1', $code);
-                // split multiline code tags
-                $code = preg_replace_callback('#<code ([^>]++)>((?:[^<]*+\\n)++[^<]*+)</code>#', fn ($m) => "<code $m[1]>".str_replace("\n", "</code>\n<code $m[1]>", $m[2]).'</code>', $code);
-                // Convert spaces to html entities to preserve indentation when rendered
-                $code = str_replace(' ', '&nbsp;', $code);
-                $content = explode("\n", $code);
-            } else {
-                // remove main code/span tags
-                $code = preg_replace('#^<code.*?>\s*<span.*?>(.*)</span>\s*</code>#s', '\\1', $code);
-                // split multiline spans
-                $code = preg_replace_callback('#<span ([^>]++)>((?:[^<]*+<br \/>)++[^<]*+)</span>#', fn ($m) => "<span $m[1]>".str_replace('<br />', "</span><br /><span $m[1]>", $m[2]).'</span>', $code);
-                $content = explode('<br />', $code);
-            }
+            // remove main code/span tags
+            $code = preg_replace('#^<code.*?>\s*<span.*?>(.*)</span>\s*</code>#s', '\\1', $code);
+            // split multiline spans
+            $code = preg_replace_callback('#<span ([^>]++)>((?:[^<]*+<br \/>)++[^<]*+)</span>#', function ($m) {
+                return "<span $m[1]>".str_replace('<br />', "</span><br /><span $m[1]>", $m[2]).'</span>';
+            }, $code);
+            $content = explode('<br />', $code);
 
             $lines = [];
             if (0 > $srcContext) {
@@ -293,7 +278,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         return '';
     }
 
-    private function fixCodeMarkup(string $line): string
+    private function fixCodeMarkup(string $line)
     {
         // </span> ending tag from previous line
         $opening = strpos($line, '<span');
@@ -312,12 +297,14 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         return trim($line);
     }
 
-    private function formatFileFromText(string $text): string
+    private function formatFileFromText(string $text)
     {
-        return preg_replace_callback('/in ("|&quot;)?(.+?)\1(?: +(?:on|at))? +line (\d+)/s', fn ($match) => 'in '.$this->formatFile($match[2], $match[3]), $text);
+        return preg_replace_callback('/in ("|&quot;)?(.+?)\1(?: +(?:on|at))? +line (\d+)/s', function ($match) {
+            return 'in '.$this->formatFile($match[2], $match[3]);
+        }, $text);
     }
 
-    private function formatLogMessage(string $message, array $context): string
+    private function formatLogMessage(string $message, array $context)
     {
         if ($context && str_contains($message, '{')) {
             $replacements = [];

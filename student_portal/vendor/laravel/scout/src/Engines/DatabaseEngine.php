@@ -72,11 +72,6 @@ class DatabaseEngine extends Engine implements PaginatesEloquentModels
     public function paginate(Builder $builder, $perPage, $page)
     {
         return $this->buildSearchQuery($builder)
-                ->when($builder->orders, function ($query) use ($builder) {
-                    foreach ($builder->orders as $order) {
-                        $query->orderBy($order['column'], $order['direction']);
-                    }
-                })
                 ->when(! $this->getFullTextColumns($builder), function ($query) use ($builder) {
                     $query->orderBy($builder->model->getKeyName(), 'desc');
                 })
@@ -94,11 +89,6 @@ class DatabaseEngine extends Engine implements PaginatesEloquentModels
     public function simplePaginate(Builder $builder, $perPage, $page)
     {
         return $this->buildSearchQuery($builder)
-                ->when($builder->orders, function ($query) use ($builder) {
-                    foreach ($builder->orders as $order) {
-                        $query->orderBy($order['column'], $order['direction']);
-                    }
-                })
                 ->when(! $this->getFullTextColumns($builder), function ($query) use ($builder) {
                     $query->orderBy($builder->model->getKeyName(), 'desc');
                 })
@@ -119,11 +109,6 @@ class DatabaseEngine extends Engine implements PaginatesEloquentModels
             ->when(! is_null($page) && ! is_null($perPage), function ($query) use ($page, $perPage) {
                 $query->forPage($page, $perPage);
             })
-            ->when($builder->orders, function ($query) use ($builder) {
-                foreach ($builder->orders as $order) {
-                    $query->orderBy($order['column'], $order['direction']);
-                }
-            })
             ->when(! $this->getFullTextColumns($builder), function ($query) use ($builder) {
                 $query->orderBy($builder->model->getKeyName(), 'desc');
             })
@@ -140,7 +125,7 @@ class DatabaseEngine extends Engine implements PaginatesEloquentModels
     {
         $query = $this->initializeSearchQuery(
             $builder,
-            array_keys($builder->model->toSearchableArray()),
+            $columns = array_keys($builder->model->toSearchableArray()),
             $this->getPrefixColumns($builder),
             $this->getFullTextColumns($builder)
         );
@@ -231,8 +216,8 @@ class DatabaseEngine extends Engine implements PaginatesEloquentModels
      * Ensure that soft delete constraints are properly applied to the query.
      *
      * @param  \Laravel\Scout\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return \Illuminate\Database\Query\Builder
      */
     protected function constrainForSoftDeletes($builder, $query)
     {

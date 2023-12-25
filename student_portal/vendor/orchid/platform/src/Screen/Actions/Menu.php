@@ -89,7 +89,7 @@ class Menu extends Link
 
                 $this
                     ->set('data-bs-toggle', 'collapse')
-                    ->set('href', '#menu-'.$slug);
+                    ->set('href', '#menu-' . $slug);
             })
             ->addBeforeRender(function () {
                 if ($this->get('active') !== null) {
@@ -98,14 +98,18 @@ class Menu extends Link
 
                 $active = collect([])
                     ->merge($this->get('list'))
-                    ->map(fn (Menu $menu) => $menu->get('href'))
+                    ->map(function (Menu $menu) {
+                        return $menu->get('href');
+                    })
                     ->push($this->get('href'))
                     ->filter()
-                    ->map(fn ($href) => [
-                        $href,
-                        $href.'?*',
-                        $href.'/*',
-                    ])
+                    ->map(function ($href) {
+                        return [
+                            $href,
+                            $href . '?*',
+                            $href . '/*',
+                        ];
+                    })
                     ->flatten();
 
                 $this->set('active', $active->toArray());
@@ -132,7 +136,9 @@ class Menu extends Link
         $subMenu = collect()
             ->merge($default)
             ->merge($list)
-            ->sort(fn (Menu $menu) => $menu->get('sort', 0));
+            ->sort(function (Menu $menu) {
+                return $menu->get('sort', 0);
+            });
 
         return $this->set('list', $subMenu);
     }
@@ -143,6 +149,7 @@ class Menu extends Link
      * @throws \Throwable
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     *
      */
     public function build(Repository $repository = null)
     {

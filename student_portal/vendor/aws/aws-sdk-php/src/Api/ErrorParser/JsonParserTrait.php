@@ -16,7 +16,7 @@ trait JsonParserTrait
     {
         $code = (string) $response->getStatusCode();
         if ($this->api
-            && !is_null($this->api->getMetadata('awsQueryCompatible'))
+            && $this->api->getMetadata('awsQueryCompatible')
             && $response->getHeaderLine('x-amzn-query-error')
         ) {
             $queryError = $response->getHeaderLine('x-amzn-query-error');

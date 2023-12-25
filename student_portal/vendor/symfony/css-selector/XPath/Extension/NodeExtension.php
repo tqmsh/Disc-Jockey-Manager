@@ -59,6 +59,9 @@ class NodeExtension extends AbstractExtension
         return (bool) ($this->flags & $flag);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getNodeTranslators(): array
     {
         return [
@@ -179,6 +182,9 @@ class NodeExtension extends AbstractExtension
         return $xpath;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName(): string
     {
         return 'node';

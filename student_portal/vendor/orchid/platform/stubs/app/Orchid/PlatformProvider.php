@@ -32,7 +32,9 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('monitor')
                 ->route('platform.example')
                 ->title('Navigation')
-                ->badge(fn () => 6),
+                ->badge(function () {
+                    return 6;
+                }),
 
             Menu::make('Dropdown menu')
                 ->icon('code')
@@ -77,7 +79,9 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('shuffle')
                 ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
                 ->target('_blank')
-                ->badge(fn () => Dashboard::version(), Color::DARK()),
+                ->badge(function () {
+                    return Dashboard::version();
+                }, Color::DARK()),
 
             Menu::make(__('Users'))
                 ->icon('user')
@@ -98,7 +102,7 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerProfileMenu(): array
     {
         return [
-            Menu::make(__('Profile'))
+            Menu::make('Profile')
                 ->route('platform.profile')
                 ->icon('user'),
         ];

@@ -24,9 +24,11 @@ class NotificationTable extends Table
         return [
             TD::make('Message', __('Messages'))
                 ->cantHide()
-                ->render(static fn ($notification) => view('platform::partials.notification', [
-                    'notification' => $notification,
-                ])),
+                ->render(static function ($notification) {
+                    return view('platform::partials.notification', [
+                        'notification' => $notification,
+                    ]);
+                }),
         ];
     }
 
@@ -43,7 +45,7 @@ class NotificationTable extends Table
      */
     public function iconNotFound(): string
     {
-        return 'bell';
+        return 'icon-bell';
     }
 
     /**

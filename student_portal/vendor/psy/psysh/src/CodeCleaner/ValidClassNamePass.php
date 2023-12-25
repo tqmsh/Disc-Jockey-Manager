@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2023 Justin Hileman
+ * (c) 2012-2022 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -46,8 +46,6 @@ class ValidClassNamePass extends NamespaceAwarePass
      * trait methods.
      *
      * @param Node $node
-     *
-     * @return int|Node|null Replacement node (or special return value)
      */
     public function enterNode(Node $node)
     {
@@ -72,8 +70,6 @@ class ValidClassNamePass extends NamespaceAwarePass
 
     /**
      * @param Node $node
-     *
-     * @return int|Node|Node[]|null Replacement node (or special return value)
      */
     public function leaveNode(Node $node)
     {
@@ -265,12 +261,11 @@ class ValidClassNamePass extends NamespaceAwarePass
      * Get a symbol type key for storing in the scope name cache.
      *
      * @deprecated No longer used. Scope type should be passed into ensureCanDefine directly.
-     *
      * @codeCoverageIgnore
      *
-     * @throws FatalErrorException
-     *
      * @param Stmt $stmt
+     *
+     * @return string
      */
     protected function getScopeType(Stmt $stmt): string
     {
@@ -281,8 +276,6 @@ class ValidClassNamePass extends NamespaceAwarePass
         } elseif ($stmt instanceof Trait_) {
             return self::TRAIT_TYPE;
         }
-
-        throw $this->createError('Unsupported statement type', $stmt);
     }
 
     /**
@@ -291,6 +284,8 @@ class ValidClassNamePass extends NamespaceAwarePass
      * Gives `self`, `static` and `parent` a free pass.
      *
      * @param string $name
+     *
+     * @return bool
      */
     protected function classExists(string $name): bool
     {
@@ -308,6 +303,8 @@ class ValidClassNamePass extends NamespaceAwarePass
      * Check whether an interface exists, or has been defined in the current code snippet.
      *
      * @param string $name
+     *
+     * @return bool
      */
     protected function interfaceExists(string $name): bool
     {
@@ -318,6 +315,8 @@ class ValidClassNamePass extends NamespaceAwarePass
      * Check whether a trait exists, or has been defined in the current code snippet.
      *
      * @param string $name
+     *
+     * @return bool
      */
     protected function traitExists(string $name): bool
     {
@@ -344,6 +343,8 @@ class ValidClassNamePass extends NamespaceAwarePass
      *
      * @param string $msg
      * @param Stmt   $stmt
+     *
+     * @return FatalErrorException
      */
     protected function createError(string $msg, Stmt $stmt): FatalErrorException
     {

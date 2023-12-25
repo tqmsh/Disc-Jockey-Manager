@@ -8,7 +8,6 @@ use App\Models\School;
 use App\Models\Student;
 use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
-use Orchid\Support\Color;
 use App\Models\Localadmin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -56,6 +55,10 @@ class CreateStudentScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Button::make('Add')
+                ->icon('plus')
+                ->method('createStudent'),
+
             ModalToggle::make('Mass Import Students')
                 ->modal('massImportModal')
                 ->method('massImport')
@@ -171,12 +174,6 @@ class CreateStudentScreen extends Screen
                         'Soy' => 'Soy',
                         'Fish' => 'Fish',
                     ]),
-
-                Button::make('Add')
-                ->icon('plus')
-                ->type(Color::PRIMARY())
-                ->method('createStudent'),
-
             ]),
         ];
     }

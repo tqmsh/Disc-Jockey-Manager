@@ -110,18 +110,6 @@ trait MakesHttpRequests
     }
 
     /**
-     * Add a basic authentication header to the request with the given credentials.
-     *
-     * @param  string  $username
-     * @param  string  $password
-     * @return $this
-     */
-    public function withBasicAuth(string $username, string $password)
-    {
-        return $this->withToken(base64_encode("$username:$password"), 'Basic');
-    }
-
-    /**
      * Remove the authorization token from the request.
      *
      * @return $this

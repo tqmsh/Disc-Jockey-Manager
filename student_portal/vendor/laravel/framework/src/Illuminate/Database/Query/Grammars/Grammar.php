@@ -36,7 +36,6 @@ class Grammar extends BaseGrammar
         'aggregate',
         'columns',
         'from',
-        'indexHint',
         'joins',
         'wheres',
         'groups',
@@ -620,7 +619,7 @@ class Grammar extends BaseGrammar
      */
     public function prepareBindingForJsonContains($binding)
     {
-        return json_encode($binding, JSON_UNESCAPED_UNICODE);
+        return json_encode($binding);
     }
 
     /**
@@ -878,7 +877,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the random statement into SQL.
      *
-     * @param  string|int  $seed
+     * @param  string  $seed
      * @return string
      */
     public function compileRandom($seed)

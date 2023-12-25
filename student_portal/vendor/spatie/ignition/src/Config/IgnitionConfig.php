@@ -150,11 +150,6 @@ class IgnitionConfig implements Arrayable
             'theme' => 'light',
             'editor' => 'vscode',
             'editor_options' => [
-                'clipboard' => [
-                    'label' => 'Clipboard',
-                    'url' => '%path:%line',
-                    'clipboard' => true,
-                ],
                 'sublime' => [
                     'label' => 'Sublime',
                     'url' => 'subl://open?url=file://%path&line=%line',
@@ -174,10 +169,6 @@ class IgnitionConfig implements Arrayable
                 'phpstorm' => [
                     'label' => 'PhpStorm',
                     'url' => 'phpstorm://open?file=%path&line=%line',
-                ],
-                'phpstorm-remote' => [
-                    'label' => 'PHPStorm Remote',
-                    'url' => 'javascript:r = new XMLHttpRequest;r.open("get", "http://localhost:63342/api/file/%path:%line");r.send()',
                 ],
                 'idea' => [
                     'label' => 'Idea',
@@ -209,7 +200,7 @@ class IgnitionConfig implements Arrayable
                 ],
                 'nova' => [
                     'label' => 'Nova',
-                    'url' => 'nova://open?path=%path&line=%line',
+                    'url' => 'nova://core/open/file?filename=%path&line=%line',
                 ],
                 'netbeans' => [
                     'label' => 'NetBeans',

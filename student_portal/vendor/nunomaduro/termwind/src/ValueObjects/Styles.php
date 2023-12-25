@@ -416,15 +416,6 @@ final class Styles
     {
         $this->textModifiers[__METHOD__] = function ($text, $styles) use ($limit, $end): string {
             $width = $styles['width'] ?? 0;
-
-            if (is_string($width)) {
-                $width = self::calcWidthFromFraction(
-                    $width,
-                    $styles,
-                    $this->properties['parentStyles'] ?? []
-                );
-            }
-
             [, $paddingRight, , $paddingLeft] = $this->getPaddings();
             $width -= $paddingRight + $paddingLeft;
 
@@ -998,7 +989,6 @@ final class Styles
             throw new InvalidStyle(sprintf('Style [%s] is invalid.', "w-$fraction"));
         }
 
-        /** @@phpstan-ignore-next-line  */
         $width = (int) floor($width * $matches[1] / $matches[2]);
         $width -= ($styles['ml'] ?? 0) + ($styles['mr'] ?? 0);
 
@@ -1030,7 +1020,7 @@ final class Styles
 
             $width = count($matches) !== 3
                 ? (int) $parentWidth
-                : (int) floor($width * $matches[1] / $matches[2]); //@phpstan-ignore-line
+                : (int) floor($width * $matches[1] / $matches[2]);
 
             if ($maxWidth > 0) {
                 $width = min($maxWidth, $width);

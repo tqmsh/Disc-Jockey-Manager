@@ -80,7 +80,8 @@ class EloquentUserProvider implements UserProvider
 
         $rememberToken = $retrievedModel->getRememberToken();
 
-        return $rememberToken && hash_equals($rememberToken, $token) ? $retrievedModel : null;
+        return $rememberToken && hash_equals($rememberToken, $token)
+                        ? $retrievedModel : null;
     }
 
     /**
@@ -148,9 +149,7 @@ class EloquentUserProvider implements UserProvider
      */
     public function validateCredentials(UserContract $user, array $credentials)
     {
-        if (is_null($plain = $credentials['password'])) {
-            return false;
-        }
+        $plain = $credentials['password'];
 
         return $this->hasher->check($plain, $user->getAuthPassword());
     }

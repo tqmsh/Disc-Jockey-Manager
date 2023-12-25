@@ -35,7 +35,7 @@ class Envelope
 
     public static function create(RawMessage $message): self
     {
-        if (RawMessage::class === $message::class) {
+        if (RawMessage::class === \get_class($message)) {
             throw new LogicException('Cannot send a RawMessage instance without an explicit Envelope.');
         }
 

@@ -95,8 +95,6 @@ class UuidBuilder implements UuidBuilderInterface
                     return new UuidV6($fields, $this->numberConverter, $codec, $this->timeConverter);
                 case Uuid::UUID_TYPE_UNIX_TIME:
                     return new UuidV7($fields, $this->numberConverter, $codec, $this->unixTimeConverter);
-                case Uuid::UUID_TYPE_CUSTOM:
-                    return new UuidV8($fields, $this->numberConverter, $codec, $this->timeConverter);
             }
 
             throw new UnsupportedOperationException(

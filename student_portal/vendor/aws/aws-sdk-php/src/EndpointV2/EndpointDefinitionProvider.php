@@ -8,14 +8,14 @@ namespace Aws\EndpointV2;
  */
 class EndpointDefinitionProvider
 {
-    public static function getEndpointRuleset($service, $apiVersion, $baseDir = null)
+    public static function getEndpointRuleset($service, $apiVersion)
     {
-        return self::getData($service, $apiVersion, 'ruleset', $baseDir);
+        return self::getData($service, $apiVersion, 'ruleset');
     }
 
-    public static function getEndpointTests($service, $apiVersion, $baseDir = null)
+    public static function getEndpointTests($service, $apiVersion)
     {
-        return self::getData($service, $apiVersion, 'tests', $baseDir);
+        return self::getData($service, $apiVersion, 'tests');
     }
 
     public static function getPartitions()
@@ -30,9 +30,9 @@ class EndpointDefinitionProvider
         }
     }
 
-    private static function getData($service, $apiVersion, $type, $baseDir)
+    private static function getData($service, $apiVersion, $type)
     {
-        $basePath = $baseDir ? $baseDir :  __DIR__ . '/../data';
+        $basePath = __DIR__ . '/../data';
         $serviceDir = $basePath . "/{$service}";
         if (!is_dir($serviceDir)) {
             throw new \InvalidArgumentException(
@@ -54,12 +54,8 @@ class EndpointDefinitionProvider
 
         if (file_exists($rulesetPath . $fileName . '.json.php')) {
             return require($rulesetPath . $fileName . '.json.php');
-        } elseif (file_exists($rulesetPath . $fileName . '.json')) {
-            return json_decode(file_get_contents($rulesetPath . $fileName . '.json'), true);
         } else {
-            throw new \InvalidArgumentException(
-                'Specified ' . $type . ' endpoint file for ' . $service . ' with api version ' . $apiVersion . ' does not exist.'
-            );
+            return json_decode(file_get_contents($rulesetPath . $fileName . '.json'), true);
         }
     }
 

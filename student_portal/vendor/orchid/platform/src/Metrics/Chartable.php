@@ -24,10 +24,12 @@ trait Chartable
             ->groupBy($groupColumn)
             ->orderBy('value', 'desc')
             ->get()
-            ->map(fn (Model $model) => $model->forceFill([
-                'label' => (string) $model->label,
-                'value' => (int) $model->value,
-            ]));
+            ->map(function (Model $model) {
+                return $model->forceFill([
+                    'label' => (string) $model->label,
+                    'value' => (int) $model->value,
+                ]);
+            });
 
         return new GroupCollection($group);
     }

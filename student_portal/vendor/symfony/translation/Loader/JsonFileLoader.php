@@ -20,6 +20,9 @@ use Symfony\Component\Translation\Exception\InvalidResourceException;
  */
 class JsonFileLoader extends FileLoader
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function loadResource(string $resource): array
     {
         $messages = [];

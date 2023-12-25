@@ -31,10 +31,12 @@ class TimeDataCollector extends DataCollector implements LateDataCollectorInterf
     {
         $this->kernel = $kernel;
         $this->stopwatch = $stopwatch;
-        $this->data = ['events' => [], 'stopwatch_installed' => false, 'start_time' => 0];
     }
 
-    public function collect(Request $request, Response $response, \Throwable $exception = null): void
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         if (null !== $this->kernel) {
             $startTime = $this->kernel->getStartTime();
@@ -50,14 +52,20 @@ class TimeDataCollector extends DataCollector implements LateDataCollectorInterf
         ];
     }
 
-    public function reset(): void
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
     {
-        $this->data = ['events' => [], 'stopwatch_installed' => false, 'start_time' => 0];
+        $this->data = [];
 
         $this->stopwatch?->reset();
     }
 
-    public function lateCollect(): void
+    /**
+     * {@inheritdoc}
+     */
+    public function lateCollect()
     {
         if (null !== $this->stopwatch && isset($this->data['token'])) {
             $this->setEvents($this->stopwatch->getSectionEvents($this->data['token']));
@@ -68,7 +76,7 @@ class TimeDataCollector extends DataCollector implements LateDataCollectorInterf
     /**
      * @param StopwatchEvent[] $events The request events
      */
-    public function setEvents(array $events): void
+    public function setEvents(array $events)
     {
         foreach ($events as $event) {
             $event->ensureStopped();
@@ -123,6 +131,9 @@ class TimeDataCollector extends DataCollector implements LateDataCollectorInterf
         return $this->data['stopwatch_installed'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName(): string
     {
         return 'time';

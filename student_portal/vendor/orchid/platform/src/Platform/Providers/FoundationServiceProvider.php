@@ -214,7 +214,9 @@ class FoundationServiceProvider extends ServiceProvider
             ->registerProviders()
             ->commands($this->commands);
 
-        $this->app->singleton(Dashboard::class, static fn () => new Dashboard());
+        $this->app->singleton(Dashboard::class, static function () {
+            return new Dashboard();
+        });
 
         if (! Route::hasMacro('screen')) {
             Route::macro('screen', function ($url, $screen) {

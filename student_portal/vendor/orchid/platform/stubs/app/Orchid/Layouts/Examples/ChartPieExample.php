@@ -9,16 +9,26 @@ use Orchid\Screen\Layouts\Chart;
 class ChartPieExample extends Chart
 {
     /**
+     * @var string
+     */
+    protected $title = 'Pie Chart';
+
+    /**
+     * @var int
+     */
+    protected $height = 350;
+
+    /**
      * Available options:
      * 'bar', 'line',
      * 'pie', 'percentage'.
      *
      * @var string
      */
-    protected $type = self::TYPE_PIE;
+    protected $type = 'pie';
 
     /**
-     * @var int
+     * @var string
      */
-    protected $height = 350;
+    protected $target = 'charts';
 }

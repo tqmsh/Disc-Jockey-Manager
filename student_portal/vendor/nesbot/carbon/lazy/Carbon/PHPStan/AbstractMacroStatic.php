@@ -28,10 +28,6 @@ if (!class_exists(AbstractReflectionMacro::class, false)) {
                 return $this->reflectionFunction;
             }
 
-            if ($this->reflectionFunction instanceof Reflection\ReflectionMethod) {
-                return new Reflection\Adapter\ReflectionMethod($this->reflectionFunction);
-            }
-
             return $this->reflectionFunction instanceof ReflectionMethod
                 ? new Reflection\Adapter\ReflectionMethod(
                     Reflection\ReflectionMethod::createFromName(

@@ -86,7 +86,7 @@ class ControllerDispatcher implements ControllerDispatcherContract
      * @param  array  $options
      * @return bool
      */
-    public static function methodExcludedByOptions($method, array $options)
+    protected static function methodExcludedByOptions($method, array $options)
     {
         return (isset($options['only']) && ! in_array($method, (array) $options['only'])) ||
             (! empty($options['except']) && in_array($method, (array) $options['except']));

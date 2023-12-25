@@ -74,8 +74,6 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listStudioSessionMappingsAsync(array $args = [])
  * @method \Aws\Result listStudios(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listStudiosAsync(array $args = [])
- * @method \Aws\Result listSupportedInstanceTypes(array $args = [])
- * @method \GuzzleHttp\Promise\Promise listSupportedInstanceTypesAsync(array $args = [])
  * @method \Aws\Result modifyCluster(array $args = [])
  * @method \GuzzleHttp\Promise\Promise modifyClusterAsync(array $args = [])
  * @method \Aws\Result modifyInstanceFleet(array $args = [])

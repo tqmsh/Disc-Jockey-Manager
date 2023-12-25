@@ -23,6 +23,7 @@ use Ramsey\Uuid\Converter\Number\GenericNumberConverter;
 use Ramsey\Uuid\Converter\NumberConverterInterface;
 use Ramsey\Uuid\Converter\Time\GenericTimeConverter;
 use Ramsey\Uuid\Converter\Time\PhpTimeConverter;
+use Ramsey\Uuid\Converter\Time\UnixTimeConverter;
 use Ramsey\Uuid\Converter\TimeConverterInterface;
 use Ramsey\Uuid\Generator\DceSecurityGenerator;
 use Ramsey\Uuid\Generator\DceSecurityGeneratorInterface;
@@ -104,7 +105,7 @@ class FeatureSet
         $this->validator = new GenericValidator();
 
         assert($this->timeProvider !== null);
-        $this->unixTimeGenerator = $this->buildUnixTimeGenerator();
+        $this->unixTimeGenerator = $this->buildUnixTimeGenerator($this->timeProvider);
     }
 
     /**
@@ -338,10 +339,17 @@ class FeatureSet
 
     /**
      * Returns a Unix Epoch time generator configured for this environment
+     *
+     * @param TimeProviderInterface $timeProvider The time provider to use with
+     *     the time generator
      */
-    private function buildUnixTimeGenerator(): TimeGeneratorInterface
+    private function buildUnixTimeGenerator(TimeProviderInterface $timeProvider): TimeGeneratorInterface
     {
-        return new UnixTimeGenerator($this->randomGenerator);
+        return new UnixTimeGenerator(
+            new UnixTimeConverter(new BrickMathCalculator()),
+            $timeProvider,
+            $this->randomGenerator,
+        );
     }
 
     /**

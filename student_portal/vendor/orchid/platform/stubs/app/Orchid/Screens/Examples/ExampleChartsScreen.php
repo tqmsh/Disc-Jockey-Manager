@@ -12,7 +12,7 @@ use Orchid\Support\Facades\Layout;
 class ExampleChartsScreen extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @return array
      */
@@ -45,7 +45,7 @@ class ExampleChartsScreen extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Display header name.
      *
      * @return string|null
      */
@@ -55,7 +55,7 @@ class ExampleChartsScreen extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Button commands.
      *
      * @return \Orchid\Screen\Action[]
      */
@@ -65,11 +65,12 @@ class ExampleChartsScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
      * @throws \Throwable
      *
      * @return string[]|\Orchid\Screen\Layout[]
+     *
      */
     public function layout(): iterable
     {

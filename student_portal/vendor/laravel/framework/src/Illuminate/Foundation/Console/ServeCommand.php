@@ -9,7 +9,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-
 use function Termwind\terminal;
 
 #[AsCommand(name: 'serve')]
@@ -69,7 +68,6 @@ class ServeCommand extends Command
     public static $passthroughVariables = [
         'APP_ENV',
         'LARAVEL_SAIL',
-        'PATH',
         'PHP_CLI_SERVER_WORKERS',
         'PHP_IDE_CONFIG',
         'SYSTEMROOT',
@@ -302,10 +300,8 @@ class ServeCommand extends Command
     protected function getDateFromLine($line)
     {
         $regex = env('PHP_CLI_SERVER_WORKERS', 1) > 1
-            ? '/^\[\d+]\s\[([a-zA-Z0-9: ]+)\]/'
+            ? '/^\[\d+]\s\[(.*)]/'
             : '/^\[([^\]]+)\]/';
-
-        $line = str_replace('  ', ' ', $line);
 
         preg_match($regex, $line, $matches);
 

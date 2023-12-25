@@ -19,7 +19,7 @@ trait Batchable
     /**
      * The fake batch, if applicable.
      *
-     * @var \Illuminate\Support\Testing\Fakes\BatchFake
+     * @var \Illuminate\Support\Testing\BatchFake
      */
     private $fakeBatch;
 
@@ -74,10 +74,7 @@ trait Batchable
      * @param  int  $failedJobs
      * @param  array  $failedJobIds
      * @param  array  $options
-     * @param  \Carbon\CarbonImmutable  $createdAt
-     * @param  \Carbon\CarbonImmutable|null  $cancelledAt
-     * @param  \Carbon\CarbonImmutable|null  $finishedAt
-     * @return array{0: $this, 1: \Illuminate\Support\Testing\Fakes\BatchFake}
+     * @return array{0: $this, 1: \Illuminate\Support\Testing\BatchFake}
      */
     public function withFakeBatch(string $id = '',
                                   string $name = '',

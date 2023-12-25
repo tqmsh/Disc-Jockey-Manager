@@ -48,11 +48,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-0.11": "0.11.x-dev"
-        },
-        "bamarni-bin": {
-            "bin-links": false,
-            "forward-command": false
+            "dev-main": "0.11.x-dev"
         }
     },
     "conflict": {

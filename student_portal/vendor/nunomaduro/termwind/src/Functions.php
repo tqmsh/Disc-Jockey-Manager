@@ -55,11 +55,9 @@ if (! function_exists('Termwind\terminal')) {
 if (! function_exists('Termwind\ask')) {
     /**
      * Renders a prompt to the user.
-     *
-     * @param  iterable<array-key, string>|null  $autocomplete
      */
-    function ask(string $question, iterable $autocomplete = null): mixed
+    function ask(string $question): mixed
     {
-        return (new Question)->ask($question, $autocomplete);
+        return (new Question)->ask($question);
     }
 }

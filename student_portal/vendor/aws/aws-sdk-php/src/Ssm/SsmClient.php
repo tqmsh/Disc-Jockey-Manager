@@ -42,8 +42,6 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteInventoryAsync(array $args = [])
  * @method \Aws\Result deleteMaintenanceWindow(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteMaintenanceWindowAsync(array $args = [])
- * @method \Aws\Result deleteOpsItem(array $args = [])
- * @method \GuzzleHttp\Promise\Promise deleteOpsItemAsync(array $args = [])
  * @method \Aws\Result deleteOpsMetadata(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteOpsMetadataAsync(array $args = [])
  * @method \Aws\Result deleteParameter(array $args = [])
