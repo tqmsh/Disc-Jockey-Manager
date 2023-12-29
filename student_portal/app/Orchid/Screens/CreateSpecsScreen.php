@@ -10,6 +10,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\Group;
+use Illuminate\Support\Arr;
 
 
 
@@ -41,6 +42,10 @@ class CreateSpecsScreen extends Screen
     {
         return 'Add Specs';
     }
+    public function description(): ?string
+    {
+        return"All information provided for specs are public to vendors";
+    }
 
     /**
      * Button commands.
@@ -64,38 +69,23 @@ class CreateSpecsScreen extends Screen
     public function layout(): iterable
 {
     return [
-        Layout::tabs([
-            'Female' => [
+
                 Layout::rows([
-                    // Group::make([
-                    //     Select::make('height_feet')
-                    //         ->vertical()
-                    //         ->options([
-                    //             '4' => '4',
-                    //             '5' => '5',
-                    //             '6' => '6'
-                    //         ])
-                    //         ->title('Height')
-                    //         ->help('Feet'),
-                    //     Select::make('male_height_inches')
-                    //     ->vertical()
-                    //     ->options([
-                    //         '0' => '0',
-                    //         '1' => '1',
-                    //         '2' => '2',
-                    //         '3' => '3',
-                    //         '4' => '4',
-                    //         '5' => '5',
-                    //         '6' => '6',
-                    //         '7' => '7',
-                    //         '8' => '8',
-                    //         '9' => '9',
-                    //         '10' => '10',
-                    //         '11' => '11',
-                    //     ])
-                    //     ->help('Inches')->title('‎ '),
-                    // ])->autoWidth(),
-                    
+
+                    Select::make('gender')
+                        ->title('Gender')
+                        ->horizontal()
+                        ->allowAdd()
+                        ->options([
+                            'female' => 'Female',
+                            'male' => 'Male',
+                            'other' => 'other',
+                        ]),
+                    Input::make('age')
+                        ->title('Age')
+                        ->type('text')
+                        ->horizontal(),
+
                     Input::make('height')
                         ->title('Height (cm)')
                         ->type('text')
@@ -111,6 +101,7 @@ class CreateSpecsScreen extends Screen
                         ->title('Hair Color')
                         ->type('text')
                         ->horizontal()
+                        ->allowAdd()
                         ->options([
                             'black' => 'Black',
                             'brown' => 'Brown',
@@ -125,6 +116,7 @@ class CreateSpecsScreen extends Screen
                         ->title('Hair Style')
                         ->type('text')
                         ->horizontal()
+                        ->allowAdd()
                         ->options([
                             'straight' => 'Straight',
                             'wavy' => 'Wavy',
@@ -136,20 +128,10 @@ class CreateSpecsScreen extends Screen
                             'updo' => 'Updo',
                         ]),
 
-                    // Select::make('hair_length')
-                    //     ->title('Hair Length')
-                    //     ->type('text')
-                    //     ->horizontal()
-                    //     ->options([
-                    //         'short' => 'Short',
-                    //         'medium' => 'Medium',
-                    //         'long' => 'Long',
-                            
-                    //     ]),
-
                     Select::make('complexion')
                         ->title('Skin Complexion')
                         ->type('text')
+                        ->allowAdd()
                         ->horizontal()
                         ->options([
                             'fair' => 'Fair',
@@ -163,6 +145,7 @@ class CreateSpecsScreen extends Screen
                         ->title('Eye Colour')
                         ->type('text')
                         ->horizontal()
+                        ->allowAdd()
                         ->options([
                             'amber' => 'Amber',
                             'blue' => 'Blue',
@@ -175,6 +158,7 @@ class CreateSpecsScreen extends Screen
                     Select::make('lip_style')
                         ->title('Lip Style')
                         ->type('text')
+                        ->allowAdd()
                         ->horizontal()
                         ->options([
                             'full' => 'Full',
@@ -189,87 +173,103 @@ class CreateSpecsScreen extends Screen
 
                     Group::make([
 
-                    Select::make('bust')
-                        ->help('Bust')
-                        ->options([
-                            '32A' => '32A',
-                            '32B' => '32B',
-                            '32C' => '32C',
-                            '34A' => '34A',
-                            '34B' => '34B',
-                            '34C' => '34C',
-                            '36A' => '36A',
-                            '36B' => '36B',
-                            '36C' => '36C',
-                            '38A' => '38A',
-                            '38B' => '38B',
-                            '38C' => '38C',
-                            '40A' => '40A',
-                            '40B' => '40B',
-                            '40C' => '40C',
-                            '42A' => '42A',
-                            '42B' => '42B',
-                            '42C' => '42C',
-                        ])->title('Body‎')
-                        ->placeholder('Filter by title'),
+                        Select::make('bust')
+                            ->help('Bust (cm)')
+                            ->allowAdd()
+                            ->options([
+                                '32' => '32',
+                                '33' => '33',
+                                '34' => '34',
+                                '35' => '35',
+                                '36' => '36',
+                                '37' => '37',
+                                '38' => '38',
+                                '39' => '39',
+                                '40' => '40',
+                                '41' => '41',
+                                '42' => '42',
+                                '43' => '43',
+                                '44' => '44',
+                                '45' => '45',
+                                '46' => '46',
+                                '47' => '47',
+                                '48' => '48',
+                                '49' => '49',
+                            ])->title('Body‎')
+                            ->placeholder('Filter by title'),
 
-                        
+                            
 
-                    Select::make('waist')
-                        ->title('‎')
-                        ->help('Waist (Inches)')
-                        ->options(['24' => '24',
-                            '25' => '25',
-                            '26' => '26',
-                            '27' => '27',
-                            '28' => '28',
-                            '29' => '29',
-                            '30' => '30',
-                            '31' => '31',
-                            '32' => '32',
-                            '33' => '33',
-                            '34' => '34',
-                            '35' => '35',
-                            '36' => '36',
-                            '37' => '37',
-                            '38' => '38',
-                            '39' => '39',
-                            '40' => '40',
-                            '41' => '41',
-                            '42' => '42',
-                            '43' => '43',
-                            '44' => '44',
-                            '45' => '45',
-                            '46' => '46',
-                    ]),
-
-                    Select::make('hips')
-                        ->title('‎')
-                        ->help('Hips (Inches)')
-                        ->options([
-                            '32' => '32',
-                            '33' => '33',
-                            '34' => '34',
-                            '35' => '35',
-                            '36' => '36',
-                            '37' => '37',
-                            '38' => '38',
-                            '39' => '39',
-                            '40' => '40',
-                            '41' => '41',
-                            '42' => '42',
-                            '43' => '43',
-                            '44' => '44',
-                            '45' => '45',
-                            '46' => '46',
-                            '47' => '47',
-                            '48' => '48',
-                            '49' => '49',
-                            '50' => '50',
-                            '51' => '51',
-                            '52' => '52',
+                        Select::make('waist')
+                            ->title('‎')
+                            ->help('Waist (cm)')
+                            ->allowAdd()
+                            ->options(['24' => '24',
+                                '25' => '25',
+                                '26' => '26',
+                                '27' => '27',
+                                '28' => '28',
+                                '29' => '29',
+                                '30' => '30',
+                                '31' => '31',
+                                '32' => '32',
+                                '33' => '33',
+                                '34' => '34',
+                                '35' => '35',
+                                '36' => '36',
+                                '37' => '37',
+                                '38' => '38',
+                                '39' => '39',
+                                '40' => '40',
+                                '41' => '41',
+                                '42' => '42',
+                                '43' => '43',
+                                '44' => '44',
+                                '45' => '45',
+                                '46' => '46',
                         ]),
-                    ])->fullWidth(),
+
+                        Select::make('hips')
+                            ->title('‎')
+                            ->help('Hips (cm)')
+                            ->allowAdd()
+                            ->options([
+                                '32' => '32',
+                                '33' => '33',
+                                '34' => '34',
+                                '35' => '35',
+                                '36' => '36',
+                                '37' => '37',
+                                '38' => '38',
+                                '39' => '39',
+                                '40' => '40',
+                                '41' => '41',
+                                '42' => '42',
+                                '43' => '43',
+                                '44' => '44',
+                                '45' => '45',
+                                '46' => '46',
+                                '47' => '47',
+                                '48' => '48',
+                                '49' => '49',
+                                '50' => '50',
+                                '51' => '51',
+                                '52' => '52',
+                            ]),
+                        ])->fullWidth(),
+
+                    Select::make('body_type')
+                        ->title('Body Type')
+                        ->allowAdd()
+                        ->type('text')
+                        ->horizontal()
+                        ->options([
+                            'slim' => 'Slim',
+                            'athletic' => 'Athletic',
+                            'muscular' => 'Muscular',
+                            'average' => 'Average',
+                            'stocky' => 'Stocky',
+                        ]),
 
                     TextArea::make('notes')
                         ->title('Notes')
@@ -280,87 +280,10 @@ class CreateSpecsScreen extends Screen
                     Button::make('Submit')
                         ->icon('check')
                         ->method('createSpecs')
-                        // Add Parameters with Buttons!!!
-                        ->parameters(['gender' => '2'])
-                ]),
-            ],
-            'Male' => [
-                Layout::rows([
-                    // Group::make([
-                        //     Select::make('male_height_feet')
-                        //         ->options([
-                        //             '4' => '4',
-                        //             '5' => '5',
-                        //             '6' => '6'
-                        //         ])
-                        //         ->title('Height')
-                        //         ->help('Feet'),
-                        //     Select::make('male_height_inches')
-                        //     ->options([
-                        //         '0' => '0',
-                        //         '1' => '1',
-                        //         '2' => '2',
-                        //         '3' => '3',
-                        //         '4' => '4',
-                        //         '5' => '5',
-                        //         '6' => '6',
-                        //         '7' => '7',
-                        //         '8' => '8',
-                        //         '9' => '9',
-                        //         '10' => '10',
-                        //         '11' => '11',
-                        //     ])
-                        //     ->help('Inches')->title('‎ '),
-                        // ])->autoWidth(),
 
-                    Input::make('male_height')
-                        ->title('Height (cm)')
-                        ->type('text')
-                        ->horizontal(),
-
-
-                    Input::make('male_weight_pounds')
-                        ->title('Weight (Pounds)')
-                        ->type('text')
-                        ->horizontal(),
-
-                    Select::make('body_type')
-                        ->title('Body Type')
-                        ->type('text')
-                        ->horizontal()
-                        ->options([
-                            'slim' => 'Slim',
-                            'athletic' => 'Athletic',
-                            'muscular' => 'Muscular',
-                            'average' => 'Average',
-                            'stocky' => 'Stocky',
-                        ]),
-                    
-                    Select::make('male_skin_complexion')
-                        ->title('Skin Complection')
-                        ->type('text')
-                        ->horizontal()
-                        ->options([
-                            'fair' => 'Fair',
-                            'light' => 'Light',
-                            'medium' => 'Medium',
-                            'olive' => 'Olive',
-                            'dark' => 'Dark',
-                        ]),
-                    
-                    TextArea::make('male_notes')
-                        ->title('Notes')
-                        ->type('text')
-                        ->horizontal()
-                        ->rows(5),
-                    
-                    Button::make('Submit')
-                        ->icon('check')
-                        ->method('createSpecs')
-                        // Add Parameters with Buttons!!!
-                        ->parameters(['gender' => '1'])
-                ]),
-            ],
+                
+                
+            
         ]),
     ];
 }
@@ -372,25 +295,27 @@ class CreateSpecsScreen extends Screen
 
         try{
             $formFields = $request->all();
-            $formFields['student_user_id'] = auth()->id();
-            $formFields['gender'] = $gender;
+            $formFields['student_user_id'] = Auth()->id();
+            $formFields = Arr::except($formFields, ['_token']);
+            // $formFields['gender'] = $gender;
             // dd($formFields);
 
-            if ($gender == 1) {
-                // $formFields['height'] = ($request->get('male_height_feet') . "'" . $request->get('male_height_inches') . "\"");
-                $formFields['height'] = ($request->get('male_height'));
-                $formFields['weight'] = $request->get('male_weight_pounds');
-                $formFields['complexion'] = $request->get('male_skin_complexion');
-                $formFields['notes'] = $request->get('male_notes');
-            } else {
-                // $formFields['height'] = ($request->get('height_feet') . "'" . $request->get('height_inches') . "\"");
-                $formFields['height'] = ($request->get('height'));
-                $formFields['weight'] = $request->get('weight');
-                $formFields['complexion'] = $request->get('complexion');
-                $formFields['notes'] = $request->get('notes');
-            }
+            // if ($gender == 1) {
+            //     // $formFields['height'] = ($request->get('male_height_feet') . "'" . $request->get('male_height_inches') . "\"");
+            //     $formFields['height'] = ($request->get('male_height'));
+            //     $formFields['weight'] = $request->get('male_weight_pounds');
+            //     $formFields['complexion'] = $request->get('male_skin_complexion');
+            //     $formFields['notes'] = $request->get('male_notes');
+            // } else {
+            //     // $formFields['height'] = ($request->get('height_feet') . "'" . $request->get('height_inches') . "\"");
+            //     $formFields['height'] = ($request->get('height'));
+            //     $formFields['weight'] = $request->get('weight');
+            //     $formFields['complexion'] = $request->get('complexion');
+            //     $formFields['notes'] = $request->get('notes');
+            // }
+            // dd($formFields);
 
-            Specs::create($formFields);
+            Specs::updateOrCreate($formFields);
 
             Toast::success('Specs Added Succesfully');
             
