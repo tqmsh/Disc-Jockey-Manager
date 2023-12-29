@@ -57,6 +57,11 @@ class ViewSpecsScreen extends Screen
         return 'My Specs';
     }
 
+    public function description(): ?string
+    {
+        return"All information provided for specs are public to vendors";
+    }
+
     /**
      * Button commands.
      *
@@ -97,18 +102,23 @@ class ViewSpecsScreen extends Screen
         $user_specs = Specs::where('student_user_id', Auth::user()->id)->first();
 
         if ($user_specs !== null) {
-            if ($user_specs->gender == 2) {
+            
                 return [
                     Layout::legend($this->specs, [
-                        Sight::make('height', 'Height')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->height ?? " ";
-                        }),    
-
                         Sight::make('age', 'Age')
                             ->render(function (Specs $specs_1 = null) {
                                 return $specs_1->age ?? " ";
                             }),
+                        
+                        Sight::make('gender', 'Gender')
+                            ->render(function (Specs $specs_1 = null) {
+                                return $specs_1->gender ?? " ";
+                            }),
+
+                        Sight::make('height', 'Height')
+                            ->render(function (Specs $specs_1 = null) {
+                                return $specs_1->height ?? " ";
+                        }),    
                         
                         Sight::make('weight', 'Weight')
                             ->render(function (Specs $specs_1 = null) {
@@ -126,12 +136,6 @@ class ViewSpecsScreen extends Screen
                                 return $specs_1->hair_style ?? " ";
                             
                         }), 
-
-                        // Sight::make('hair_length', 'Hair Length')
-                        //     ->render(function (Specs $specs_1 = null) {
-                        //         return $specs_1->hair_length ?? " ";
-                            
-                        // }), 
 
                         Sight::make('complexion', 'Skin complexion')
                             ->render(function (Specs $specs_1 = null) {
@@ -169,50 +173,19 @@ class ViewSpecsScreen extends Screen
                             
                         }), 
 
+                        Sight::make('body_type', 'Body Type')
+                            ->render(function (Specs $specs_1 = null) {
+                                return $specs_1->body_type ?? " ";
+                        }), 
+
                         Sight::make('notes', 'Notes')
                             ->render(function (Specs $specs_1 = null) {
                                 return $specs_1->notes ?? " ";
                             
                         }), 
                     ]),
-                ];
-            } else {
-                return [
-                    Layout::legend($this->specs, [
-                        Sight::make('height', 'Height')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->height ?? " ";
-                        }),    
-
-                        Sight::make('age', 'Age')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->age ?? " ";
-                            }),
-
-                        Sight::make('weight_pounds', 'Weight')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->weight ?? " ";
-                        }),   
-
-                        Sight::make('body_type', 'Body Type')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->body_type ?? " ";
-                        }), 
-                        
-                        Sight::make('skin_complexion', 'Skin Complexion')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->complexion ?? " ";
-                        }), 
-
-                        Sight::make('notes', 'Notes')
-                            ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->notes ?? " ";
-                        }),
-                    ]),
-                ];
-            }    
+                ];        
         } else {
-            // If user hasn't added specs, return an empty array (no layout will be displayed)
             return [];
         }
     }

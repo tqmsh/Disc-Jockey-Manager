@@ -7,6 +7,9 @@ use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use App\Models\Specs;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\TextArea;
+
+
 
 
 use App\Models\User;
@@ -45,6 +48,11 @@ class EditSpecsScreen extends Screen
         return 'Edit Specs';
     }
 
+    public function description(): ?string
+    {
+        return"All information provided for specs are public to vendors";
+    }
+
     /**
      * The screen's action buttons.
      *
@@ -66,8 +74,8 @@ class EditSpecsScreen extends Screen
      */
     public function layout(): iterable
     {
-        if ($this->specs->gender == 2) {
-            return [
+        return [
+       
                 Layout::rows([
 
                     Input::make('age')
@@ -76,134 +84,149 @@ class EditSpecsScreen extends Screen
                         ->horizontal()
                         ->value($this->specs->age),
 
+                    Select::make('gender')
+                        ->title('Gender')
+                        ->value($this->specs->gender)
+                        ->horizontal()
+                        ->allowAdd()
+                        ->options([
+                            'female' => 'Female',
+                            'male' => 'Male',
+                            'other' => 'other',
+                        ]),
+
                     Input::make('height')
-                        ->title('Height')
+                        ->title('Height (cm)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->height),
                     
                     Input::make('weight')
-                        ->title('Weight')
+                        ->title('Weight (pounds)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->weight),
                     
-                    Input::make('hair_colour')
-                        ->title('Hair Colour')
+                    Select::make('hair_colour')
+                        ->title('Hair Color')
                         ->type('text')
+                        ->allowAdd()
                         ->horizontal()
-                        ->value($this->specs->hair_colour),
-                        
-                    Input::make('hair_style')
+                        ->value($this->specs->hair_colour)
+                        ->options([
+                            'black' => 'Black',
+                            'brown' => 'Brown',
+                            'blonde' => 'Blonde',
+                            'red' => 'Red',
+                            'gray' => 'Gray',
+                            'white' => 'White',
+                            'brunette' => 'Brunette',
+                        ]),
+
+                    Select::make('hair_style')
                         ->title('Hair Style')
                         ->type('text')
                         ->horizontal()
-                        ->value($this->specs->hair_style),
-                        
-                    // Input::make('hair_length')
-                    //     ->title('Hair Length')
-                    //     ->type('text')
-                    //     ->horizontal()
-                    //     ->value($this->specs->hair_length),
-                        
-                    Input::make('complexion')
-                        ->title('Skin Complection')
+                        ->allowAdd()
+                        ->value($this->specs->hair_style)
+                        ->options([
+                            'straight' => 'Straight',
+                            'wavy' => 'Wavy',
+                            'curly' => 'Curly',
+                            'pixie' => 'Pixie',
+                            'layered' => 'Layered',
+                            'braided' => 'Braided',
+                            'ponytail' => 'Ponytail',
+                            'updo' => 'Updo',
+                        ]),
+
+                    Select::make('complexion')
+                        ->title('Skin Complexion')
                         ->type('text')
+                        ->allowAdd()
                         ->horizontal()
-                        ->value($this->specs->complexion),
+                        ->value($this->specs->complexion)
+                        ->options([
+                            'fair' => 'Fair',
+                            'light' => 'Light',
+                            'medium' => 'Medium',
+                            'olive' => 'Olive',
+                            'dark' => 'Dark',
+                        ]),
                         
-                    Input::make('eye_color')
-                        ->title('Eye Color')
+                    Select::make('eye_colour')
+                        ->title('Eye Colour')
                         ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->eye_colour),
+                        ->allowAdd()
+                        ->horizontal()                        
+                        ->value($this->specs->eye_colour)
+                        ->options([
+                            'amber' => 'Amber',
+                            'blue' => 'Blue',
+                            'brown' => 'Brown',
+                            'gray' => 'Gray',
+                            'green' => 'Green',
+                            'hazel' => 'Hazel',
+                        ]),
                         
-                    Input::make('lip_style')
+                    Select::make('lip_style')
                         ->title('Lip Style')
                         ->type('text')
+                        ->allowAdd()
                         ->horizontal()
-                        ->value($this->specs->lip_style),
+                        ->value($this->specs->lip_style)
+                        ->options([
+                            'full' => 'Full',
+                            'thin' => 'Thin',
+                            'plump' => 'Plump',
+                            'cupids-bow' => "Cupid's Bow",
+                            'straight-across' => 'Straight Across',
+                            'rounded' => 'Rounded',
+                            'heart-shaped' => 'Heart-shaped',
+                        ]),
                         
                     Input::make('bust')
-                        ->title('Bust')
+                        ->title('Bust (cm)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->bust),
                         
                     Input::make('waist')
-                        ->title('Waist')
+                        ->title('Waist (cm)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->waist),
                         
                     Input::make('hips')
-                        ->title('Hips')
+                        ->title('Hips (cm)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->hips),
                         
-                    Input::make('notes')
+                    TextArea::make('notes')
                         ->title('Notes')
                         ->type('text')
                         ->horizontal()
+                        ->rows(5)
                         ->value($this->specs->notes),
 
-
-                    Button::make('Submit')
-                        ->icon('check')
-                        ->method('update'),
-
-
-                ]),
-            ];
-        } else {
-            // If gender is not equal to 2, return an empty array or any alternative layout/content you want.
-            return [
-                Layout::rows([
-                    Input::make('age')
-                        ->title('Age')
-                        ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->age),
-
-                    Input::make('height')
-                        ->title('Height')
-                        ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->height),
-                    
-                    Input::make('weight')
-                        ->title('Weight')
-                        ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->weight),
-                    
                     Input::make('body_type')
-                        ->title('Body Type')
-                        ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->body_type),
-                    
-                    Input::make('complexion')
-                        ->title('Skin Complection')
-                        ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->complexion),
-                    
-                    Input::make('notes')
-                        ->title('Notes')
-                        ->type('text')
-                        ->horizontal()
-                        ->value($this->specs->notes),
-                    
-                    
+                            ->title('Body Type')
+                            ->allowAdd()
+                            ->type('text')
+                            ->horizontal()
+                            ->value($this->specs->body_type),
+
                     Button::make('Submit')
                         ->icon('check')
                         ->method('update'),
+
+                    
+
                 ]),
             ];
-        }
     }
+    
 
     public function update(Specs $specs, Request $request)
     {
