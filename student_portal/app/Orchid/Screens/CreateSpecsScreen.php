@@ -76,6 +76,7 @@ class CreateSpecsScreen extends Screen
                         ->title('Gender')
                         ->horizontal()
                         ->allowAdd()
+                        ->empty("No Selection")
                         ->options([
                             'female' => 'Female',
                             'male' => 'Male',
@@ -99,6 +100,7 @@ class CreateSpecsScreen extends Screen
 
                     Select::make('hair_colour')
                         ->title('Hair Color')
+                        ->empty("No Selection")
                         ->type('text')
                         ->horizontal()
                         ->allowAdd()
@@ -116,6 +118,7 @@ class CreateSpecsScreen extends Screen
                         ->title('Hair Style')
                         ->type('text')
                         ->horizontal()
+                        ->empty("No Selection")
                         ->allowAdd()
                         ->options([
                             'straight' => 'Straight',
@@ -131,6 +134,7 @@ class CreateSpecsScreen extends Screen
                     Select::make('complexion')
                         ->title('Skin Complexion')
                         ->type('text')
+                        ->empty("No Selection")
                         ->allowAdd()
                         ->horizontal()
                         ->options([
@@ -145,6 +149,7 @@ class CreateSpecsScreen extends Screen
                         ->title('Eye Colour')
                         ->type('text')
                         ->horizontal()
+                        ->empty("No Selection")
                         ->allowAdd()
                         ->options([
                             'amber' => 'Amber',
@@ -158,6 +163,7 @@ class CreateSpecsScreen extends Screen
                     Select::make('lip_style')
                         ->title('Lip Style')
                         ->type('text')
+                        ->empty("No Selection")
                         ->allowAdd()
                         ->horizontal()
                         ->options([
@@ -171,96 +177,27 @@ class CreateSpecsScreen extends Screen
                         ]),
                     
 
-                    Group::make([
+                    
 
-                        Select::make('bust')
-                            ->help('Bust (cm)')
-                            ->allowAdd()
-                            ->options([
-                                '32' => '32',
-                                '33' => '33',
-                                '34' => '34',
-                                '35' => '35',
-                                '36' => '36',
-                                '37' => '37',
-                                '38' => '38',
-                                '39' => '39',
-                                '40' => '40',
-                                '41' => '41',
-                                '42' => '42',
-                                '43' => '43',
-                                '44' => '44',
-                                '45' => '45',
-                                '46' => '46',
-                                '47' => '47',
-                                '48' => '48',
-                                '49' => '49',
-                            ])->title('Body‎')
-                            ->placeholder('Filter by title'),
-
-                            
-
-                        Select::make('waist')
-                            ->title('‎')
-                            ->help('Waist (cm)')
-                            ->allowAdd()
-                            ->options(['24' => '24',
-                                '25' => '25',
-                                '26' => '26',
-                                '27' => '27',
-                                '28' => '28',
-                                '29' => '29',
-                                '30' => '30',
-                                '31' => '31',
-                                '32' => '32',
-                                '33' => '33',
-                                '34' => '34',
-                                '35' => '35',
-                                '36' => '36',
-                                '37' => '37',
-                                '38' => '38',
-                                '39' => '39',
-                                '40' => '40',
-                                '41' => '41',
-                                '42' => '42',
-                                '43' => '43',
-                                '44' => '44',
-                                '45' => '45',
-                                '46' => '46',
-                        ]),
-
-                        Select::make('hips')
-                            ->title('‎')
-                            ->help('Hips (cm)')
-                            ->allowAdd()
-                            ->options([
-                                '32' => '32',
-                                '33' => '33',
-                                '34' => '34',
-                                '35' => '35',
-                                '36' => '36',
-                                '37' => '37',
-                                '38' => '38',
-                                '39' => '39',
-                                '40' => '40',
-                                '41' => '41',
-                                '42' => '42',
-                                '43' => '43',
-                                '44' => '44',
-                                '45' => '45',
-                                '46' => '46',
-                                '47' => '47',
-                                '48' => '48',
-                                '49' => '49',
-                                '50' => '50',
-                                '51' => '51',
-                                '52' => '52',
-                            ]),
-                        ])->fullWidth(),
+                    Input::make('bust')
+                        ->title('Bust (cm)')
+                        ->type('text')
+                        ->horizontal(),
+                        
+                    Input::make('waist')
+                        ->title('Waist (cm)')
+                        ->type('text')
+                        ->horizontal(),
+                        
+                    Input::make('hips')
+                        ->title('Hips (cm)')
+                        ->type('text')
+                        ->horizontal(),
 
                     Select::make('body_type')
                         ->title('Body Type')
                         ->allowAdd()
+                        ->empty("No Selection")
                         ->type('text')
                         ->horizontal()
                         ->options([

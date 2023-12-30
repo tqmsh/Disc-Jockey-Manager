@@ -88,6 +88,7 @@ class EditSpecsScreen extends Screen
                         ->title('Gender')
                         ->value($this->specs->gender)
                         ->horizontal()
+                        ->empty("No Selection")
                         ->allowAdd()
                         ->options([
                             'female' => 'Female',
@@ -113,6 +114,7 @@ class EditSpecsScreen extends Screen
                         ->allowAdd()
                         ->horizontal()
                         ->value($this->specs->hair_colour)
+                        ->empty("No Selection")
                         ->options([
                             'black' => 'Black',
                             'brown' => 'Brown',
@@ -129,6 +131,7 @@ class EditSpecsScreen extends Screen
                         ->horizontal()
                         ->allowAdd()
                         ->value($this->specs->hair_style)
+                        ->empty("No Selection")
                         ->options([
                             'straight' => 'Straight',
                             'wavy' => 'Wavy',
@@ -146,6 +149,7 @@ class EditSpecsScreen extends Screen
                         ->allowAdd()
                         ->horizontal()
                         ->value($this->specs->complexion)
+                        ->empty("No Selection")
                         ->options([
                             'fair' => 'Fair',
                             'light' => 'Light',
@@ -160,6 +164,7 @@ class EditSpecsScreen extends Screen
                         ->allowAdd()
                         ->horizontal()                        
                         ->value($this->specs->eye_colour)
+                        ->empty("No Selection")
                         ->options([
                             'amber' => 'Amber',
                             'blue' => 'Blue',
@@ -175,6 +180,7 @@ class EditSpecsScreen extends Screen
                         ->allowAdd()
                         ->horizontal()
                         ->value($this->specs->lip_style)
+                        ->empty("No Selection")
                         ->options([
                             'full' => 'Full',
                             'thin' => 'Thin',
@@ -210,12 +216,19 @@ class EditSpecsScreen extends Screen
                         ->rows(5)
                         ->value($this->specs->notes),
 
-                    Input::make('body_type')
-                            ->title('Body Type')
-                            ->allowAdd()
-                            ->type('text')
-                            ->horizontal()
-                            ->value($this->specs->body_type),
+                    Select::make('body_type')
+                        ->title('Body Type')
+                        ->allowAdd()
+                        ->type('text')
+                        ->horizontal()
+                        ->empty("No Selection")
+                        ->value($this->specs->body_type)
+                        ->options([
+                            'slim' => 'Slim',
+                            'athletic' => 'Athletic',
+                            'muscular' => 'Muscular',                                'average' => 'Average',
+                                'stocky' => 'Stocky',
+                            ]),
 
                     Button::make('Submit')
                         ->icon('check')
