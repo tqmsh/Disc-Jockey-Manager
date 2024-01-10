@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Orchid\Platform\Http\Controllers;
 
 use Exception;
-use App\Models\Session;
+use App\Models\School;
+use App\Models\Student;
+use App\Models\Localadmin;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
+use Orchid\Access\UserSwitch;
 use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +22,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session;
+use App\Notifications\GeneralNotification;
 
 class LoginController extends Controller
 {
@@ -306,7 +311,7 @@ class LoginController extends Controller
 
         $sessionTime = $logoutTime->diffInSeconds($start_time);
 
-        Session::create([
+        \App\Models\Session::create([
             'user_id' => $user->id,
             'time' => $sessionTime,
             'role' => $user->role,
