@@ -212,7 +212,7 @@ class LoginController extends Controller
     
             if(is_null($school_id)){
 
-                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
+                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county/city/municipality, country and state/province.');
 
                 return redirect('/admin/register');
 
