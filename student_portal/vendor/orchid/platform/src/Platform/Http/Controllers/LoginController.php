@@ -8,6 +8,7 @@ use Exception;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Localadmin;
+use App\Models\Session as UserSession;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -310,7 +311,7 @@ class LoginController extends Controller
 
         $sessionTime = $logoutTime->diffInSeconds($start_time);
 
-        \App\Models\Session::create([
+        UserSession::create([
             'user_id' => $user->id,
             'time' => $sessionTime,
             'role' => $user->role,
