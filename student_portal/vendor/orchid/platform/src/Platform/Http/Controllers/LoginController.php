@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Orchid\Platform\Http\Controllers;
 
 use Exception;
-use App\Models\Session;
+use App\Models\School;
+use App\Models\Student;
+use App\Models\Localadmin;
+use App\Models\Session as UserSession;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
+use Orchid\Access\UserSwitch;
 use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +23,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session;
+use App\Notifications\GeneralNotification;
 
 class LoginController extends Controller
 {
@@ -189,8 +195,8 @@ class LoginController extends Controller
                                     ->where('state_province', $formFields['state_province'])
                                     ->where('country', $formFields['country']);
                                 
-                // Get school based off either county or city depending on which is present
-                if (array_key_exists('county', $formFields)) {
+                // Get school based off either county or city/municipality depending on the country field
+                if ($formFields['country'] == 'USA') {
                     $school_id = $school->where('county', $formFields['county'])->get()->value('id');
                 } else {
                     $school_id = $school->where('city_municipality', $formFields['city_municipality'])->get()->value('id');
@@ -206,14 +212,13 @@ class LoginController extends Controller
     
             if(is_null($school_id)){
 
-                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
+                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county/city/municipality, country and state/province.');
 
                 return redirect('/admin/register');
 
             }else{
 
                 try{
-
                     $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
                     $userTableFields['password'] = $formFields['password'];
                     $userTableFields['role'] = 3;
@@ -306,7 +311,7 @@ class LoginController extends Controller
 
         $sessionTime = $logoutTime->diffInSeconds($start_time);
 
-        Session::create([
+        UserSession::create([
             'user_id' => $user->id,
             'time' => $sessionTime,
             'role' => $user->role,
