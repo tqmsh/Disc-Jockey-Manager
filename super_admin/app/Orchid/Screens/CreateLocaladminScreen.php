@@ -164,6 +164,7 @@ class CreateLocaladminScreen extends Screen
                     ->title('State/Province')
                     ->horizontal()
                     ->empty('Start typing to Search...')
+                    ->required()
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
                 Select::make('county')
