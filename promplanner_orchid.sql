@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 29, 2023 at 11:08 PM
+-- Generation Time: Jan 13, 2024 at 12:34 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -365,6 +365,23 @@ INSERT INTO `categories` (`id`, `name`, `status`, `order_num`, `created_at`, `up
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contracts`
+--
+
+CREATE TABLE `contracts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state_province` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `couples`
 --
 
@@ -372,7 +389,25 @@ CREATE TABLE `couples` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `student_user_id_1` bigint(20) UNSIGNED NOT NULL,
   `student_user_id_2` bigint(20) UNSIGNED NOT NULL,
-  `school_id` bigint(20) UNSIGNED NOT NULL,
+  `event_id` bigint(20) UNSIGNED NOT NULL,
+  `couple_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `couple_requests`
+--
+
+CREATE TABLE `couple_requests` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `owner_user_id` bigint(20) UNSIGNED NOT NULL,
+  `receiver_user_id` bigint(20) UNSIGNED NOT NULL,
+  `event_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1779,13 +1814,29 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `contracts`
+--
+ALTER TABLE `contracts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id_contracts` (`user_id`);
+
+--
 -- Indexes for table `couples`
 --
 ALTER TABLE `couples`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `student_user_id_1` (`student_user_id_1`,`student_user_id_2`,`school_id`),
-  ADD KEY `school_id_foreign` (`school_id`),
-  ADD KEY `student_user_id_foreign_2` (`student_user_id_2`);
+  ADD KEY `student_user_id_1` (`student_user_id_1`,`student_user_id_2`),
+  ADD KEY `student_user_id_foreign_2` (`student_user_id_2`),
+  ADD KEY `event_id` (`event_id`);
+
+--
+-- Indexes for table `couple_requests`
+--
+ALTER TABLE `couple_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `owner_user_id` (`owner_user_id`,`receiver_user_id`,`event_id`),
+  ADD KEY `event` (`event_id`),
+  ADD KEY `receiver` (`receiver_user_id`);
 
 --
 -- Indexes for table `courses`
@@ -2217,9 +2268,21 @@ ALTER TABLE `categories`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
+-- AUTO_INCREMENT for table `contracts`
+--
+ALTER TABLE `contracts`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `couples`
 --
 ALTER TABLE `couples`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `couple_requests`
+--
+ALTER TABLE `couple_requests`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -2532,12 +2595,26 @@ ALTER TABLE `candidates`
   ADD CONSTRAINT `postion_id` FOREIGN KEY (`position_id`) REFERENCES `positions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `contracts`
+--
+ALTER TABLE `contracts`
+  ADD CONSTRAINT `user_id_contract_rel` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `couples`
 --
 ALTER TABLE `couples`
-  ADD CONSTRAINT `school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `event_id_foreign` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_user_id_foreign_1` FOREIGN KEY (`student_user_id_1`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_user_id_foreign_2` FOREIGN KEY (`student_user_id_2`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `couple_requests`
+--
+ALTER TABLE `couple_requests`
+  ADD CONSTRAINT `event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `owner` FOREIGN KEY (`owner_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `receiver` FOREIGN KEY (`receiver_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `dresses`
