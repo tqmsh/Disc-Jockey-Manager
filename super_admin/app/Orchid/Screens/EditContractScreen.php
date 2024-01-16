@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Contract;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -110,7 +111,7 @@ class EditContractScreen extends Screen
     public function save(Contract $contract, Request $request) {
         try {
             $contractFields = $request->validate([
-                'title' => 'required|max:255|unique:contracts',
+                'title' => ['required', 'max:255', Rule::unique('contracts')->ignore($contract),],
                 'url' => 'required|max:255|url',
                 'state_province' => 'required|max:255',
                 'description' => 'required|max:65535',
