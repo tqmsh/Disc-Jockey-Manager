@@ -134,10 +134,16 @@ class EditLocaladminScreen extends Screen
                 Select::make('county')
                     ->title('County')
                     ->empty('Start typing to Search...')
-                    ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county')
                     ->value($this->school->county),
+                
+                Select::make('city_municipality')
+                    ->title('City/Municipality')
+                    ->empty('Start typing to Search...')
+                    ->horizontal()
+                    ->fromModel(School::class, 'city_municipality', 'city_municipality')
+                    ->value($this->school->city_municipality),
             ]),
         ];
     }
@@ -198,15 +204,18 @@ class EditLocaladminScreen extends Screen
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getLocalAdminFields($request){
-        
+        $school_query = School::where('school_name', $request->input('school'))
+            ->where('state_province', $request->input('state_province'))
+            ->where('country', $request->input('country'));
 
-        $school_id = School::where('school_name', $request->input('school'))
-                            ->where('county', $request->input('county'))
-                            ->where('state_province', $request->input('state_province'))
-                            ->where('country', $request->input('country'))
-                            ->get('id')->value('id');
+        if ($request->input('country') == 'USA') {
+            $school_query = $school_query->where('county', $request->input('county'));
+        } else {
+            $school_query = $school_query->where('city_municipality', $request->input('city_municipality'));
+        }
+        $school = $school_query->first();
                             
-        if(is_null($school_id)){
+        if(is_null($school)){
             throw New Exception('You are trying to enter a invalid school');
         }
 
@@ -216,7 +225,7 @@ class EditLocaladminScreen extends Screen
             'email' => $request->input('email'),
             'phonenumber' => $request->input('phonenumber'),
             'school' => $request->input('school'),
-            'school_id' => $school_id
+            'school_id' => $school->id
         ];
         
         return $localadminTableFields;
