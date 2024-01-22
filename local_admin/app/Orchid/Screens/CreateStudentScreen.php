@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\Student;
 use App\Models\RoleUsers;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use App\Models\Localadmin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -55,10 +56,6 @@ class CreateStudentScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Add')
-                ->icon('plus')
-                ->method('createStudent'),
-
             ModalToggle::make('Mass Import Students')
                 ->modal('massImportModal')
                 ->method('massImport')
@@ -93,7 +90,10 @@ class CreateStudentScreen extends Screen
                             • phonenumber <br>
                             • email <br>
                             • password <br>
-                            • allergies <br>')
+                            • allergies <br>'),
+                    Link::make('Download Sample CSV')
+                        ->icon('download')
+                        ->href('/sample_vendors_upload.csv')
                 ]),
             ])
             ->title('Mass Import Students')
@@ -156,11 +156,27 @@ class CreateStudentScreen extends Screen
                         '12' => 12,
                     ]),
 
-                Input::make('allergies')
+                    Select::make('allergies')
                     ->title('Allergies')
-                    ->type('text')
                     ->horizontal()
-                    ->placeholder('Ex. Peanuts'),
+                    ->allowAdd()
+                    ->empty('Start typing to search...')
+                    ->options([
+                        'Peanuts' => 'Peanuts',
+                        'Tree Nuts' => 'Tree Nuts',
+                        'Shellfish' => 'Shellfish',
+                        'Milk' => 'Milk',
+                        'Eggs' => 'Eggs',
+                        'Wheat' => 'Wheat',
+                        'Soy' => 'Soy',
+                        'Fish' => 'Fish',
+                    ]),
+
+                Button::make('Add')
+                ->icon('plus')
+                ->type(Color::PRIMARY())
+                ->method('createStudent'),
+
             ]),
         ];
     }

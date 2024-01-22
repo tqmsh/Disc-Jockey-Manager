@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\School;
+
 class SchoolController extends Controller
 {
     /**
@@ -59,5 +61,16 @@ class SchoolController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Function to return all existing schools names.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllSchools()
+    {
+        $schools = School::all();
+        return response()->json($schools);
     }
 }

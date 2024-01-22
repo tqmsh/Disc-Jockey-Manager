@@ -7,6 +7,7 @@ use App\Models\Events;
 use App\Models\School;
 use App\Models\Vendors;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use App\Models\Categories;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,10 +52,6 @@ class CreateEventScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Add')
-                ->icon('plus')
-                ->method('createEvent'),
-
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')
@@ -91,23 +89,46 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->enableTime(),
 
-                Input::make('event_info')
+                TextArea::make('event_info')
                     ->title('Event Info')
                     ->type('text')
                     ->placeholder('Ex. Formal Attire')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->rows(5),
 
-                Input::make('event_rules')
+                TextArea::make('event_rules')
                     ->title('Event Rules')
                     ->type('text')
                     ->placeholder('Ex. No Violence')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->rows(5),
 
                 Select::make('venue_id')
                     ->title('Venue')
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->empty('Start typing to Search...')
                     ->horizontal(),
+                
+                Input::make('ticket_price')
+                    ->title('Ticket Price $')
+                    ->type('text')
+                    ->required()
+                    ->placeholder('29.99')
+                    ->horizontal(), 
+
+                
+                Input::make('capacity')
+                    ->title('Event Capacity')
+                    ->type('text')
+                    ->required()
+                    ->placeholder('Ex. 100')
+                    ->horizontal(), 
+                
+                Button::make('Submit')
+                // ->icon('plus')
+                ->type(Color::PRIMARY())
+                ->method('createEvent'),
+                
                     
             ])->title('Make your dream event'),
         ];

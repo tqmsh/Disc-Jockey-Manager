@@ -95,7 +95,10 @@ class CreateStudentScreen extends Screen
                             • school <br>
                             • state_province <br>
                             • country <br>
-                            • county <br>')
+                            • county <br>'),
+                    Link::make('Download Sample CSV')
+                        ->icon('download')
+                        ->href('/sample_students_upload.csv')
                 ]),
             ])
             ->title('Mass Import Students')
@@ -187,11 +190,21 @@ class CreateStudentScreen extends Screen
                         '12' => 12,
                     ]),
 
-                Input::make('allergies')
+                Select::make('allergies')
                     ->title('Allergies')
-                    ->type('text')
                     ->horizontal()
-                    ->placeholder('Ex. Peanuts'),
+                    ->allowAdd()
+                    ->empty('Start typing to search...')
+                    ->options([
+                        'Peanuts' => 'Peanuts',
+                        'Tree Nuts' => 'Tree Nuts',
+                        'Shellfish' => 'Shellfish',
+                        'Milk' => 'Milk',
+                        'Eggs' => 'Eggs',
+                        'Wheat' => 'Wheat',
+                        'Soy' => 'Soy',
+                        'Fish' => 'Fish',
+                    ]),
             ]),
         ];
     }

@@ -4,25 +4,27 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Http\Controllers;
 
-use App\Models\Localadmin;
 use Exception;
-use App\Models\User;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\Localadmin;
+use App\Models\Session as UserSession;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use Orchid\Access\UserSwitch;
 use Illuminate\Validation\Rule;
 use Illuminate\Cookie\CookieJar;
+use Orchid\Access\UserSwitch;
+use Orchid\Access\Impersonation;
+use Orchid\Platform\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\EloquentUserProvider;
-use App\Notifications\GeneralNotification;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session;
+use App\Notifications\GeneralNotification;
 
 class LoginController extends Controller
 {
@@ -59,6 +61,10 @@ class LoginController extends Controller
         ]);
     }
 
+    private function setStartTimeInSession(): void {
+        session(['login_start_time' => now()]);
+    }
+
     /**
      * Handle a login request to the application.
      *
@@ -70,44 +76,43 @@ class LoginController extends Controller
      */
     public function login(Request $request, CookieJar $cookieJar)
     {
-        try{
+        try {
             $request->validate([
                 'email'    => 'required|string',
                 'password' => 'required|string',
             ]);
-
+    
             $auth = $this->guard->attempt(
                 $request->only(['email', 'password']),
                 $request->filled('remember')
             );
-
+    
             if ($auth) {
-
                 $user = User::where('email', $request->input('email'))->first();
-
-                if($user->role != 3 || $user->account_status == 0){
-
+    
+                if ($user->role != 3 || $user->account_status == 0) {
                     $this->guard->logout();
-
                     $cookieJar->forget('lockUser');
-
                     $request->session()->invalidate();
-
                     $request->session()->regenerateToken();
-
-                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
+    
+                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.')]);
                 }
+
+                
+                $this->setStartTimeInSession();
 
                 return $this->sendLoginResponse($request);
             }
-
-            throw ValidationException::withMessages([
-                'email' => __('The details you entered did not match our records. Please double-check and try again.'),
-            ]);
-        }catch(Exception $e){
-            throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
+        } catch (Exception $e) {
+            Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
+    
+            return redirect('/admin/register');
         }
     }
+    
+
+
 
     /**
      * Send the response after the user was authenticated.
@@ -174,7 +179,8 @@ class LoginController extends Controller
                 'school' => ['required'],
                 'country' => ['required'],
                 'state_province' => ['required'],
-                'county' => ['required'],
+                'county' => ['required_if:country,USA', 'prohibited_if:country,Canada'],
+                'city_municipality' => ['required_if:country,Canada', 'prohibited_if:country,USA'],
                 'grade' => ['required'],
                 'allergies' => ['nullable'],
             ]);
@@ -185,11 +191,16 @@ class LoginController extends Controller
             try{
 
                 //check if the school the user entered is valid
-                $school_id = School::where('school_name', $formFields['school'])
-                                    ->where('county',  $formFields['county'])
+                $school = School::where('school_name', $formFields['school'])
                                     ->where('state_province', $formFields['state_province'])
-                                    ->where('country', $formFields['country'])
-                                    ->get('id')->value('id');
+                                    ->where('country', $formFields['country']);
+                                
+                // Get school based off either county or city/municipality depending on the country field
+                if ($formFields['country'] == 'USA') {
+                    $school_id = $school->where('county', $formFields['county'])->get()->value('id');
+                } else {
+                    $school_id = $school->where('city_municipality', $formFields['city_municipality'])->get()->value('id');
+                }
 
             }catch(Exception $e){
 
@@ -201,14 +212,13 @@ class LoginController extends Controller
     
             if(is_null($school_id)){
 
-                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
+                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county/city/municipality, country and state/province.');
 
                 return redirect('/admin/register');
 
             }else{
 
                 try{
-
                     $userTableFields = $request->only(['name', 'firstname', 'lastname', 'email', 'phonenumber', 'country']); 
                     $userTableFields['password'] = $formFields['password'];
                     $userTableFields['role'] = 3;
@@ -261,7 +271,6 @@ class LoginController extends Controller
                 }
             }
     }
-
     /**
      * @param CookieJar $cookieJar
      *
@@ -293,6 +302,22 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+
+        $user = $this->guard->user();
+
+        $start_time = $request->session()->get('login_start_time');
+
+        $logoutTime = now();
+
+        $sessionTime = $logoutTime->diffInSeconds($start_time);
+
+        UserSession::create([
+            'user_id' => $user->id,
+            'time' => $sessionTime,
+            'role' => $user->role,
+        ]);
+
+        $user->update(['start_time' => null]);
         $this->guard->logout();
 
         $request->session()->invalidate();

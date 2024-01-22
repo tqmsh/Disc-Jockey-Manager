@@ -14,8 +14,8 @@ class ActualExpenseRevenue extends Model
     use AsSource;
 
 
-    protected $table = 'actual_expense_revenues';
-    
+    protected $table = 'actual_expenses_revenues';
+
     protected $fillable = [
         'universal_id', 
         'event_id', 

@@ -92,7 +92,10 @@ class CreateLocaladminScreen extends Screen
                             • school <br>
                             • state_province <br>
                             • country <br>
-                            • county <br>')
+                            • county <br>'),
+                    Link::make('Download Sample CSV')
+                        ->icon('download')
+                        ->href('/sample_local_admins_upload.csv')
                 ]),
             ])
             ->title('Mass Import Local Admins')

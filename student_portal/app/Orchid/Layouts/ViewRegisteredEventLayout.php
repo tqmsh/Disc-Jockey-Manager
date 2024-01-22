@@ -7,6 +7,10 @@ use App\Models\Events;
 use Orchid\Support\Color;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
+use App\Models\EventAttendees;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class ViewRegisteredEventLayout extends Table
 {
@@ -31,7 +35,11 @@ class ViewRegisteredEventLayout extends Table
         return [
             TD::make('event_name', 'Event Name')
                 ->render(function (Events $event) {
-                    return e($event->event_name);
+                    // return e($event->event_name);
+
+                    return Button::make($event->event_name)
+                                ->type(Color::LIGHT())
+                                ->method('redirect', ['event_id' => $event->id, 'type' => 'eventInformation']);
                 }),
             TD::make()
                 ->width('100px')
@@ -62,6 +70,29 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
                 }), 
+
+            
+            // Buy tickets button
+            TD::make()
+                ->render(function (Events $event) {
+                    $eventAttendee = EventAttendees::where('user_id', Auth::user()->id)
+                    ->where('event_id', $event->id)
+                    ->first();
+
+                    if ($eventAttendee->ticketstatus == 'Unpaid') {
+                        return Button::make('Buy Tickets')
+                            ->icon('money')
+                            ->method('payment',['event_id' => $event->id])
+                            ->type(Color::PRIMARY());
+                    } else if ($eventAttendee->ticketstatus == 'paid'){
+                        return Button::make('Tickets Bought')
+                            ->icon('check')
+                            ->method('redirect', ['event_id' => $event->id, 'type' => 'ticketBought'])
+                            ->type(Color::SUCCESS());
+                    }
+                }),
+            
+
             TD::make('event_start_time', 'Event Start Date')
                 ->render(function (Events $event) {
                     return e($event->event_start_time);
@@ -83,6 +114,7 @@ class ViewRegisteredEventLayout extends Table
                 ->render(function (Events $event) {
                     return e($event->event_rules);
                 }),
+
     
         ];    
     }

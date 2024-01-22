@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
+
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
+use App\Orchid\Screens\EditSpecsScreen;
 use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewVotingScreen;
 use App\Orchid\Screens\ViewWinnersScreen;
+use App\Orchid\Screens\CreateSpecsScreen;
 use App\Orchid\Screens\ClaimedDressScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\EditLimoGroupScreen;
@@ -31,6 +34,7 @@ use App\Orchid\Screens\CreateSongRequestScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
+use App\Orchid\Screens\ViewEventInformationScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
@@ -55,10 +59,15 @@ use App\Orchid\Screens\ViewSingleFoodScreen;
 Route::screen('main', ExampleScreen::class)->name('platform.main');
 
 //show events screen
-Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
+Route::middleware(['cors'])->group(function () {
+    Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');
+});
+
 
 //show event registration screen
 Route::screen('/events/{event}/register', ViewEventScreen::class)->name('platform.event.register');
+
+Route::screen('/events/{event}/information', ViewEventInformationScreen::class)->name('platform.event.information');
 
 Route::screen('/events/{event}/tables', ViewEventTableScreen::class)->name('platform.event.tables');
 
@@ -89,6 +98,11 @@ Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.
 
 //student specs
 Route::screen('/my-specs', ViewSpecsScreen::class)->name('platform.studentSpecs.list');
+
+// Create Specs
+Route::screen('/my-specs/create', CreateSpecsScreen::class)->name('platform.specs.create');
+
+Route::screen('/my-specs/{specs:user_id}/edit', EditSpecsScreen::class)->name('platform.specs.edit');
 
 //view limo groups
 Route::screen('/limo-groups', ViewLimoGroupScreen::class)->name('platform.limo-groups');
