@@ -10,6 +10,8 @@ use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;
 
+use App\Models\HistoricalRecord;
+
 class ViewEventLayout extends Table
 {
     /**
@@ -67,33 +69,17 @@ class ViewEventLayout extends Table
                 ->render(function($event){
                     return Button::make('Food')->method('redirect', ['event_id' => $event->id, 'type' => 'food'])->icon('pizza-slice')->type(Color::SUCCESS());
                 }), 
-            // TD::make('event_start_time', 'Event Start Date')
-            //     ->render(function (Events $event) {
-            //         return Link::make($event->event_start_time)
-            //             ->route('platform.event.edit', $event);
-            //     }),
-            // TD::make('event_address', 'Event Address')
-            //     ->render(function (Events $event) {
-            //         return Link::make($event->event_address)
-            //             ->route('platform.event.edit', $event);
-            //     }),
-            // TD::make('event_zip_postal', 'Event Zip/Postal')
-            //     ->render(function (Events $event) {
-            //         return Link::make($event->event_zip_postal)
-            //             ->route('platform.event.edit', $event);
-            //     }),
-            // TD::make('event_info', 'Event Info')
-            //     ->render(function (Events $event) {
-            //         return Link::make($event->event_info)
-            //             ->route('platform.event.edit', $event);
-            //     }),
-
-            // TD::make('event_rules', 'Event Rules')
-            //     ->render(function (Events $event) {
-            //         return Link::make($event->event_rules)
-            //             ->route('platform.event.edit', $event);
-            //     }),
-
+            
+            TD::make()
+                ->render(function($event){
+                    $existingRecord = HistoricalRecord::where('event_id', $event->id)->first();
+                    if($existingRecord){
+                        return Button::make('Edit Historical Record')->method('redirect', ['event_id' => $event->id, 'type' => 'editHistory'])->icon('pencil')->type(Color::WARNING());
+                    } else {
+                        return Button::make('Add Historical Record')->method('redirect', ['event_id' => $event->id, 'type' => 'createHistory'])->icon('plus')->type(Color::ERROR());
+                    }
+                }), 
+                
             TD::make()
                 ->render(function (Events $event) {
                     return Button::make('Edit')-> type(Color::PRIMARY())-> method('redirect', ['event_id'=>$event->id, 'type'=>"edit"])->icon('pencil');
