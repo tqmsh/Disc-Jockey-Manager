@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\EditBudgetScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\EditEventScreen;
@@ -55,6 +56,7 @@ use App\Orchid\Screens\ViewPromBudgetScreen;
 use App\Orchid\Screens\ViewPromActualScreen;
 use App\Http\Controllers\BudgetPDFController;
 use App\Http\Controllers\ActualPDFController;
+use App\Orchid\Screens\EditActualScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -184,18 +186,31 @@ Route::screen('/profit', ViewPromProfitScreen::class)->name('platform.profit.lis
 //show budget screen
 Route::screen('/events/{event_id}/budget', ViewPromBudgetScreen::class)->name('platform.budget.list');
 
-//show budget screen
+//show budget edit screen
+Route::screen('/events/{event_id}/budget/edit/{id}', EditBudgetScreen::class)->name('platform.budget.edit');
+
+//show actual screen
 Route::screen('/events/{event_id}/actual', ViewPromActualScreen::class)->name('platform.actual.list');
+
+//show actual edit screen
+Route::screen('/events/{event_id}/actual/edit/{id}', EditActualScreen::class)->name('platform.actual.edit');
 
 //show budget income statement pdf screen
 Route::get('/events/{event_id}/budget/view-pdf', [BudgetPDFController::class, 'viewPDF'])->name('platform.budget.viewPDF');
 
+Route::screen('/events/{event_id}/budget/view-pdf', ViewPromBudgetScreen::class)->name('platform.budget.viewPDF.switch');
+
 //download budget income statement pdf
 Route::get('/events/{event_id}/budget/download-pdf', [BudgetPDFController::class, 'downloadPDF'])->name('platform.budget.downloadPDF');
+
+Route::screen('/events/{event_id}/budget/download-pdf', ViewPromBudgetScreen::class)->name('platform.budget.downloadPDF.switch');
 
 //show actual income statement pdf screen
 Route::get('/events/{event_id}/actual/view-pdf', [ActualPDFController::class, 'viewPDF'])->name('platform.actual.viewPDF');
 
+Route::screen('/events/{event_id}/actual/view-pdf', ViewPromBudgetScreen::class)->name('platform.actual.viewPDF.switch');
+
 //download actual income statement pdf
 Route::get('/events/{event_id}/actual/download-pdf', [ActualPDFController::class, 'downloadPDF'])->name('platform.actual.downloadPDF');
 
+Route::screen('/events/{event_id}/actual/download-pdf', ViewPromBudgetScreen::class)->name('platform.actual.downloadPDF.switch');

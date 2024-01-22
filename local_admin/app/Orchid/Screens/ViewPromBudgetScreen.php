@@ -3,22 +3,21 @@
 namespace App\Orchid\Screens;
 
 use Exception;
+use Orchid\Screen\TD;
 use App\Models\Events;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use Illuminate\Http\Request;
+use App\Models\Localadmin;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use App\Models\ActualExpenseRevenue;
-use App\Models\UniversalExpenseRevenue;
-use Orchid\Support\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use App\Models\UniversalExpenseRevenue;
 
 class ViewPromBudgetScreen extends Screen
 {
@@ -27,11 +26,17 @@ class ViewPromBudgetScreen extends Screen
 
     public $event;
 
-    public $table;
+    // UniversalExpenseRevenue
+    public $uniRevenues;
 
-    public $budget;
+    // UniversalExpenseRevenue
+    public $uniExpenses;
 
-    public $type; 
+    // ActualExpenseRevenue
+    public $accRevenues;
+
+    // ActualExpenseRevenue
+    public $accExpenses;
 
     public $open;
     /**
@@ -41,11 +46,16 @@ class ViewPromBudgetScreen extends Screen
      */
     public function query(Events $event): iterable
     {
+        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $event->school_id, 403, 'You are not authorized to view this page.');
         return [
             'event' => $event,
-            'table' => UniversalExpenseRevenue::all(),
-            'budget' => ActualExpenseRevenue::where('event_id', $event->id)->get(),
+            'uniRevenues' => UniversalExpenseRevenue::where('type', 2)->get(),
+            'uniExpenses' => UniversalExpenseRevenue::where('type', 1)->get(),
+            'accRevenues' => ActualExpenseRevenue::where('event_id', $event->id)->where('type', '2')->get(),
+            'accExpenses' => ActualExpenseRevenue::where('event_id', $event->id)->where('type', '1')->get(),
             'open' => $event->open,
+            $this->createView($event),
+            $this->createPDF($event),
         ];
     }
 
@@ -69,15 +79,18 @@ class ViewPromBudgetScreen extends Screen
         return [
             Link::make('Budget')
                 ->icon('book-open')
-                ->route('platform.budget.list', ['event_id' => $this->event]),
+                ->route('platform.budget.list', ['event_id' => $this->event])
+                ->type(Color::DARK()),
 
             Link::make('Actual')
                 ->icon('wallet')
-                ->route('platform.actual.list', ['event_id' => $this->event]),
+                ->route('platform.actual.list', ['event_id' => $this->event])
+                ->type(Color::PRIMARY()),
                 
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list')
+                ->route('platform.profit.list')
+                ->type(Color::DEFAULT()),
         ];
     }
 
@@ -95,82 +108,78 @@ class ViewPromBudgetScreen extends Screen
                     Input::make('attendees')
                         ->type('number')
                         ->title('Number of Attendees')
+                        ->mask([
+                            'mask' => '999999999999.99',
+                            'numericInput' => true
+                            ]) 
                         ->placeholder(0),
 
                     Input::make('price')
                         ->type('number')
-                        ->title('Price per ticket')  
+                        ->title('Price per ticket')
+                        ->mask([
+                            'mask' => '999999999999.99',
+                            'numericInput' => true
+                            ]) 
                         ->placeholder(0), 
                 ]),
                 
                 Button::make('Calculate')
                     ->icon('calculator-alt')
-                    ->method('calculate'),
+                    ->method('calculate')
+                    ->type(Color::SECONDARY()),
             ])->title('Calculator'),
 
-            Layout::rows([
-                /*DropDown::make('Type')
-                    ->title('Type of Entry')
-                    ->list([
-                        Button::make('Expense')
-                            ->method('expense')
-                            ->icon('pencil'),
-                        Button::make('Revenue')
-                            ->method('revenue')
-                            ->icon('trash'),
-                ]),*/
-                Select::make('type')
-                    ->title('Accounts')
-                    ->options([
-                        'expense'   => 'Expense',
-                        'revenue' => 'Revenue',
-                ]),
-
-                Select::make('name')
-                    ->title('Accounts')
-                    ->fromModel(UniversalExpenseRevenue::where('type', '2'), 'name'),
-
-                Input::make('amount')
-                    ->title('Dollar amount')
-                    ->type('number')
-                    ->placeholder('0')
-                    ->help('Enter the dollar amount of your entry'),
-
-                TextArea::make('notes')
-                    ->title('Extra notes')
-                    ->rows(5),  
-
-                Button::make('Add Entry')
-                    ->icon('plus')
-                    ->method('updateEntry')
-                    ->type(Color::DEFAULT()),
-            ])->title('Item entry')->canSee($this->open),
-            Layout::rows([
-                // Put in revenues here
-                // Follow below format
-                Input::make('ticketrevenue')
-                    ->title($this->table[0]->name)
-                    ->placeholder($this->budget->where('universal_id', $this->table[0]->id)[0]->budget)
-                    ->readonly()
-                    ->horizontal(),
-
-                Input::make('fundraising')
-                    ->title($this->table[1]->name)
-                    ->placeholder($this->budget->where('universal_id', $this->table[1]->id)[1]->budget)
-                    ->readonly()
-                    ->horizontal(),
-
-
+            Layout::table('uniRevenues', [
+                TD::make('account_name', 'Account Name')
+                    ->render(function (UniversalExpenseRevenue $revenue) {
+                        if($this->accRevenues !=null){
+                            return $revenue->name;
+                        }
+                    }),
+                TD::make('balance', 'Balance')
+                    ->render(function (UniversalExpenseRevenue $revenue) {
+                        $curRevenue = $this->accRevenues->where('universal_id', $revenue->id)->first();
+                        if($curRevenue !=null){
+                            return $curRevenue->budget;
+                        }
+                    }),
+                TD::make('edit_Rev', 'Edit Item')
+                    ->render(function(UniversalExpenseRevenue $revenue){
+                        $curRevenue = $this->accRevenues->where('universal_id', $revenue->id)->first();
+                        if($curRevenue !=null){
+                            return Link::make('Edit')->route('platform.budget.edit', ['event_id' => $this->event->id, 'id' => $curRevenue->id])->type(Color::PRIMARY())->icon('pencil');
+                        }
+                        else{
+                            return Button::make('Create')->method('createItem', ['itemID' => $revenue->id])->type(Color::PRIMARY())->icon('pencil');
+                        }
+                    })->canSee($this->event->open), 
             ])->title('Revenues'),
-            Layout::rows([
-                // Put in expenses here
-                // Follow below format
-                /*Input::make('expenses')
-                    ->title($this->table[expense_id]->name)
-                    ->placeholder($this->budget->where('universal_id', $this->table[expense_id]->id)[expense_id]->budget)
-                    ->readonly()
-                    ->horizontal(),*/
 
+            Layout::table('uniExpenses', [
+                TD::make('account_name', 'Account Name')
+                    ->render(function (UniversalExpenseRevenue $expense) {
+                        if($this->accExpenses !=null){
+                            return $expense->name;
+                        }
+                    }),
+                TD::make('balance', 'Balance')
+                    ->render(function (UniversalExpenseRevenue $expense) {
+                        $curExpense = $this->accExpenses->where('universal_id', $expense->id)->first();
+                        if($curExpense !=null){
+                            return $curExpense->budget;
+                        }
+                    }),
+                TD::make('edit_Exp', 'Edit Item')
+                    ->render(function(UniversalExpenseRevenue $expense){
+                        $curExpense = $this->accExpenses->where('universal_id', $expense->id)->first();
+                        if($curExpense !=null){
+                            return Link::make('Edit')->route('platform.budget.edit', ['event_id' => $this->event->id, 'id' => $curExpense->id])->type(Color::PRIMARY())->icon('pencil');
+                        }
+                        else{
+                            return Button::make('Create')->method('createItem', ['itemID' => $expense->id])->type(Color::PRIMARY())->icon('pencil');
+                        }
+                    })->canSee($this->event->open),
             ])->title('Expenses'),
 
             Layout::rows([
@@ -183,67 +192,55 @@ class ViewPromBudgetScreen extends Screen
 
             Layout::rows([
                 Group::make([
-                    Button::make('Save to PDF')
-                        ->method('save', ['event' => $this->event])
-                        ->icon('save-alt'),
+                    Link::make('Save to PDF')
+                        ->icon('save-alt')
+                        ->route('platform.budget.viewPDF.switch', ['event_id' => $this->event])
+                        ->type(Color::SECONDARY()),
 
-                    Button::make('Download PDF')
-                        ->method('download', ['event' => $this->event])
-                        ->icon('cloud-download'),
-                ]),
+                    Link::make('Download PDF')
+                        ->icon('cloud-download')
+                        ->route('platform.budget.downloadPDF.switch', ['event_id' => $this->event])
+                        ->type(Color::PRIMARY()),
+                ])->autoWidth(),
             ]),
         ];
+    }
+
+    public function createItem(Events $event): void{
+        $itemID = request()->query('itemID');
+        try{
+            //if the table id is not empty
+            if(!empty($itemID)){
+                $formFields = ['universal_id' => $itemID, 'event_id' => $event->id, 'type' => UniversalExpenseRevenue::where('id', $itemID)->first()->type];
+                ActualExpenseRevenue::create($formFields);
+                Toast::success('Item successfully created!');
+            }else{
+                Toast::warning('Please select an account in order to create it');
+            }
+
+        }catch(Exception $e){
+            Alert::error('There was a error trying to edit the account. Error Message: ' . $e->getMessage());
+        }
     }
 
     public function calculate(): void{
         $attendees =  intval(request('attendees'));
         $price =  intval(request('price'));
         $this->profit = $attendees * $price;
-        Toast::warning('Profit = ' . $this->profit);
+        Toast::info('Profit = ' . $this->profit);
     }
 
     public function calcNetIncome(): int{
-        $revenues = $this->budget->where('type', '2')->sum('budget');
-        $expenses = $this->budget->where('type', '1')->sum('budget');
+        $revenues = $this->accRevenues->sum('budget');
+        $expenses = $this->accExpenses->sum('budget');
         return $revenues-$expenses;
     }
 
-    public function save(Events $event){
+    public function createView(Events $event){
         return redirect()->route('platform.budget.viewPDF', ['event_id' => $event->id]);
     }
 
-    public function download(Events $event){
+    public function createPDF(Events $event){
         return redirect()->route('platform.budget.downloadPDF', ['event_id' => $event->id]);
-    }
-
-
-    public function updateEntry(Request $request, Events $event)
-    {
-        $entry_id = $request->get('name');
-
-        try{
-
-            //if the table id is not empty
-            if(!empty($entry_id)){
-
-                //get the table from the db
-                $account = ActualExpenseRevenue::where([['universal_id', $entry_id], ['event_id', $event->id]])->get();
-                $account[0]->last_updated_user_id = Auth::user()->id;
-
-                $account[0]->budget = ($request->get('amount') == null || $request->get('amount') <= 0) ? $account[0]->budget : ($account[0]->budget + $request->get('amount'));
-                
-                //save the table
-                $account[0]->save();
-
-                Toast::success('Account updated succesfully');
-
-
-            }else{
-                Toast::warning('Please select an account in order to edit it');
-            }
-
-        }catch(Exception $e){
-            Alert::error('There was a error trying to edit the account. Error Message: ' . $e->getMessage());
-        }
     }
 }

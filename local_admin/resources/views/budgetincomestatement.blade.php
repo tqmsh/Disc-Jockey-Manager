@@ -29,7 +29,7 @@
     <h3>Revenue</h3>
     <table>
         @php 
-           $totalRev = $budgets->where('type', '2')->sum('budget');
+            $totalRev = $budgets->where('type', '2')->sum('budget');
         @endphp
         @foreach ($budgets as $budget)
             @if ($budget->type == 2)
@@ -75,12 +75,12 @@
     <div style="clear: both">
         <h3 style="float: left">Net Profit (Loss)</h3>
         @php
-            $netP = $totalRev - $totalExp;  
+            $netP = $totalRev - $totalExp; 
         @endphp
         @if($netP >= 0)
             <h4 style="float: right; margin-right:130px">${{number_format($netP, 2, '.')}}</h4>
         @else
-            <h4 style="float: right">&#40;${{number_format($netP, 2, '.')}}&#41;</h4>
+            <h4 style="float: right">&#40;${{number_format(($netP * -1), 2, '.')}}&#41;</h4>
         @endif
     </div>
 </body>

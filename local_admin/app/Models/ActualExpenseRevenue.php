@@ -22,6 +22,7 @@ class ActualExpenseRevenue extends Model
         'type', 
         'budget', 
         'actual', 
+        'notes',
         'created_at', 
         'updated_at', 
         'last_updated_user_id'

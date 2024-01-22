@@ -56,9 +56,9 @@ class TypeListener extends Listener
     {
         [$minuend, $subtrahend] = $request->all();
         dd($repository);
-        return $repository
-            ->set('minuend', $minuend)
-            ->set('subtrahend', $subtrahend)
-            ->set('result', $minuend - $subtrahend);
+        return $repository;
+            //->set('minuend', $minuend)
+            //->set('subtrahend', $subtrahend)
+            //->set('result', $minuend - $subtrahend);
     }
 }
