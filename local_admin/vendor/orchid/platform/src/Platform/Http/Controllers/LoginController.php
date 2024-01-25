@@ -194,8 +194,8 @@ class LoginController extends Controller
                                     ->where('state_province', $formFields['state_province'])
                                     ->where('country', $formFields['country']);
                 
-                // Get school based off either county or city depending on which is present
-                if (array_key_exists('county', $formFields)) {
+                // Get school based off either county or city/municipality depending on the country field
+                if ($formFields['country'] == 'USA') {
                     $school_id = $school->where('county', $formFields['county'])->get()->value('id');
                 } else {
                     $school_id = $school->where('city_municipality', $formFields['city_municipality'])->get()->value('id');
@@ -211,7 +211,7 @@ class LoginController extends Controller
     
             if(is_null($school_id)){
 
-                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county, country and state/province.');
+                Session::flash('message', 'You are trying to enter a school that does not exist. Please review your, school name, county/city/municipality, country and state/province.');
     
                 return redirect('/admin/register');
 
