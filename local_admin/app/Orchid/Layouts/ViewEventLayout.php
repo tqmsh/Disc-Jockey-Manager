@@ -10,7 +10,7 @@ use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;
 
-use App\Models\HistoricalRecord;
+use App\Models\EventHistoricalRecord;
 
 class ViewEventLayout extends Table
 {
@@ -72,7 +72,7 @@ class ViewEventLayout extends Table
             
             TD::make()
                 ->render(function($event){
-                    $existingRecord = HistoricalRecord::where('event_id', $event->id)->first();
+                    $existingRecord = EventHistoricalRecord::where('event_id', $event->id)->first();
                     if($existingRecord){
                         return Button::make('Edit Historical Record')->method('redirect', ['event_id' => $event->id, 'type' => 'editHistory'])->icon('pencil')->type(Color::WARNING());
                     } else {
