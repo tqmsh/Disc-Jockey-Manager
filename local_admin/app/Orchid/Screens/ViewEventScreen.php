@@ -177,6 +177,8 @@ class ViewEventScreen extends Screen
                 return redirect()->route('platform.eventHistory.create', $event);
             case 'editHistory':
                 return redirect()->route('platform.eventHistory.edit', $event);
+            case 'profit':
+                return redirect()->route('platform.budget.list', $event);
         }
     }
 }
