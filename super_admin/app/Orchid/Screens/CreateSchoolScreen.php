@@ -97,7 +97,8 @@ class CreateSchoolScreen extends Screen
                             • fax <br>
                             • website <br>
                             • total_students <br>
-                            • school_data <br>'),
+                            • school_data 
+                            • region<br>'),
                         Link::make('Download Sample CSV')
                             ->icon('download')
                             ->href('/sample_schools_upload.csv')
@@ -309,6 +310,7 @@ class CreateSchoolScreen extends Screen
             //loop through the array of schools and re-write the keys to insert in db
             for ($i = 0; $i < count($schools); $i ++){
 
+                $region_id = Region::firstOrCreate(['name' => $schools[$i]['region']])->id;
                 $data[] = [
                     'nces_id' => ($schools[$i]['nces_id']),
                     'school_name' => $schools[$i]['school_name'],
@@ -321,6 +323,7 @@ class CreateSchoolScreen extends Screen
                     'metropolitan_region' => $schools[$i]['metropolitan_region'],
                     'phone_number' => $schools[$i]['phone_number'],
                     'fax' => $schools[$i]['fax'],
+                    'region_id' => $region_id,
                     'country' => $schools[$i]['country'],
                     'website' => $schools[$i]['website'],
                     'total_students' => $schools[$i]['total_students'],
