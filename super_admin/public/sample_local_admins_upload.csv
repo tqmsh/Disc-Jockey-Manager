@@ -1,4 +1,4 @@
-firstname,lastname,phonenumber,email,password,school,state_province,country,county
-Tom,York,(199) 705-2112,ok@computer.com,subterraneanhomesickalien,The Radio Academy,Alberta,Canada,Ed County
-Johnny,Greeenwood,(200) 710-1010,in@rainbows.uk,weirdfishesslasharpeggi,Heads Public School,Kentucky,USA,Oh County
-Thomas,Skinner,(202) 205-1313,alightforattracting@attention.ca,skrtingonthesurface,Smile Conservatory,Tennessee,USA,Brien County
+firstname,lastname,phonenumber,email,password,school,state_province,country,county,city_municipality
+Tom,York,(199) 705-2112,ok@computer.com,subterraneanhomesickalien,The Radio Academy,Alberta,Canada,,Calgary
+Johnny,Greeenwood,(200) 710-1010,in@rainbows.uk,weirdfishesslasharpeggi,Heads Public School,Kentucky,USA,Pike County,
+Thomas,Skinner,(202) 205-1313,alightforattracting@attention.ca,skrtingonthesurface,Smile Conservatory,Tennessee,USA,Hamilton County,
