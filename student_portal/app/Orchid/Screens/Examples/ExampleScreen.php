@@ -56,14 +56,18 @@ class ExampleScreen extends Screen
 
         // Remaining Days Until Prom
         $newestPromInvitation = EventAttendees::where('user_id', $user->id)->latest('created_at')->first();
-        $newestEventId =  $newestPromInvitation->event_id;
-        $newestEventForUser = Events::find($newestEventId);
-        $eventStartTime = $newestEventForUser->event_start_time;
-        $eventStartTime = Carbon::parse($eventStartTime);
-        $daysLeftUntilEvent = $now->diffInDays($eventStartTime, false);
+        $newestEventId =  $newestPromInvitation?->event_id;
 
-        if ($daysLeftUntilEvent < 0) {
-            $daysLeftUntilEvent =  "No Upcoming Events";
+        // Check if an event has been found
+        if($newestEventId !== null) {
+            $newestEventForUser = Events::find($newestEventId);
+            $eventStartTime = $newestEventForUser->event_start_time;
+            $eventStartTime = Carbon::parse($eventStartTime);
+            $daysLeftUntilEvent = $now->diffInDays($eventStartTime, false);
+        }
+
+        if (!isset($daysLeftUntilEvent) || $daysLeftUntilEvent < 0) {
+            $daysLeftUntilEvent = "No Upcoming Events";
         }
 
         // Add no upencoming event
