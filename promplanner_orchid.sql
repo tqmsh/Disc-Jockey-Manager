@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 13, 2024 at 12:34 AM
+-- Generation Time: Jan 27, 2024 at 05:26 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -531,8 +531,9 @@ CREATE TABLE `election_winners` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `candidate_id` bigint(20) UNSIGNED NOT NULL,
   `position_id` bigint(20) UNSIGNED NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `regional_experience` tinyint(4) NOT NULL COMMENT '1 = Yes 0 = No',
+  `created_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -571,6 +572,29 @@ INSERT INTO `events` (`id`, `event_creator`, `school_id`, `region_id`, `venue_id
 (13, 13, 53, 1, NULL, 'Colonel By\'s Main Event', '2022-11-21 12:00:00', '2022-11-22 12:00:00', 'Colonel By Secondary School', '2381 Ogilvie Rd', 'K1J 7N4', 'Formal Attire', 'No Violence', 1, 100, 10.5, '2022-11-20 11:16:51', '2022-11-20 11:16:51'),
 (14, 13, 51, 1, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', 1, 100, 10.5, '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
 (15, 151, 51, 1, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', 1, 100, 10.5, '2022-12-02 01:03:59', '2022-12-02 01:03:59');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `events_historical_records`
+--
+
+CREATE TABLE `events_historical_records` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `event_id` bigint(20) UNSIGNED NOT NULL,
+  `venue_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `venue_notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `disc_jockey_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `disc_jockey_notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photobooth_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photobooth_notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photographer_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photographer_notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `videographer_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `videographer_notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -850,7 +874,8 @@ INSERT INTO `localadmins` (`id`, `user_id`, `school_id`, `account_status`, `firs
 (52, 193, 53, 1, 'Local admin Import 1', 'efwefwef', '12345678910', 'import111@gmail.com', 'Colonel By Secondary School', '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (53, 194, 53, 1, 'Local admin Import 2', 'wefwef', '9632587459', 'import222@gmail.com', 'Colonel By Secondary School', '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
 (54, 195, 53, 1, 'Local admin Import 3', 'wefwef', '3698745236', 'import333@gmail.com', 'Colonel By Secondary School', '2023-01-13 02:05:53', '2023-01-13 02:05:53'),
-(55, 208, 53, 1, 'Farhan', 'Khan', '(123) 456-7890', 'farhan.k2005@gmail.com', 'Colonel By Secondary School', '2023-07-19 21:00:54', '2023-07-19 21:00:54');
+(55, 208, 53, 1, 'Farhan', 'Khan', '(123) 456-7890', 'farhan.k2005@gmail.com', 'Colonel By Secondary School', '2023-07-19 21:00:54', '2023-07-19 21:00:54'),
+(56, 214, 51, 0, 'zdasd', 'asdasdasd', '(544) 564-5465', 'faasdasdasdnasdasd05@gmail.com', 'Digitera School of Digital Marketing & Software', '2024-01-13 04:44:05', '2024-01-13 04:44:05');
 
 --
 -- Triggers `localadmins`
@@ -900,6 +925,83 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `national_candidates`
+--
+
+CREATE TABLE `national_candidates` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `candidate_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `candidate_bio` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `position_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `national_elections`
+--
+
+CREATE TABLE `national_elections` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `election_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `national_election_votes`
+--
+
+CREATE TABLE `national_election_votes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `position_id` bigint(20) UNSIGNED NOT NULL,
+  `candidate_id` bigint(20) UNSIGNED NOT NULL,
+  `voter_user_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `national_election_winners`
+--
+
+CREATE TABLE `national_election_winners` (
+  `id` bigint(20) NOT NULL,
+  `candidate_id` bigint(20) UNSIGNED NOT NULL,
+  `position_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `national_positions`
+--
+
+CREATE TABLE `national_positions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `position_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `notifications`
 --
 
@@ -920,21 +1022,37 @@ CREATE TABLE `notifications` (
 
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
 ('0296cb67-2af0-46bf-bac3-1c63b651bd16', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 148, '{\"time\":\"2023-08-19T01:12:19.572227Z\",\"type\":\"info\",\"title\":\"New Vendor Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingvendors\"}', NULL, '2023-08-19 05:12:19', '2023-08-19 05:12:19'),
+('0561f6ab-9745-4251-a4aa-3651145f8a50', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 193, '{\"time\":\"2024-01-12T23:48:11.312637Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
+('05c8ff35-afc0-45fa-aafd-9040b9895767', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 144, '{\"time\":\"2024-01-12T23:48:11.305711Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
 ('0a27b85a-0658-4b38-88fe-af729d634867', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-08-05T18:28:46.999825Z\",\"type\":\"info\",\"title\":\"Student Bid Declined!\",\"message\":\"Your bid for Student 1Student 1 has been declined!\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bids\\/history\"}', '2023-08-05 22:32:34', '2023-08-05 22:28:47', '2023-08-05 22:32:34'),
 ('0ea810c2-fa23-4234-8aa1-a0ec5f06436c', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-24T21:01:35.715283Z\",\"type\":\"info\",\"title\":\"Event Invitation Accepted\",\"message\":\"Hi Hi has accepted your invitation to Digitera\'s Main DJ Event.\",\"action\":\"\\/admin\\/events\\/students\\/14\"}', '2023-08-26 01:16:26', '2023-08-25 01:01:35', '2023-08-26 01:16:26'),
+('1ee9658e-c159-41a0-befc-7af88d95e93b', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2024-01-12T23:44:06.211089Z\",\"type\":\"info\",\"title\":\"New Local Admin Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingvendors\"}', NULL, '2024-01-13 04:44:06', '2024-01-13 04:44:06'),
 ('1ffca082-acc1-4dc9-810d-f3234b16668a', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 150, '{\"time\":\"2023-08-19T01:12:19.580661Z\",\"type\":\"info\",\"title\":\"New Vendor Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingvendors\"}', NULL, '2023-08-19 05:12:19', '2023-08-19 05:12:19'),
+('2f9a6b32-9c9d-4403-8765-0d7d0c2a8a48', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 108, '{\"time\":\"2024-01-12T23:48:11.303021Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
+('3343ca3e-7498-48fd-a7ca-e7af75302c9e', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 148, '{\"time\":\"2024-01-12T23:48:11.293661Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
+('4386ac9b-aac4-479c-80e9-f839c7c6f907', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 149, '{\"time\":\"2024-01-12T23:44:06.261009Z\",\"type\":\"info\",\"title\":\"New Local Admin Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingvendors\"}', NULL, '2024-01-13 04:44:06', '2024-01-13 04:44:06'),
+('524e57bf-30ae-4e4d-8e6c-655f07a134de', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 194, '{\"time\":\"2024-01-12T23:48:11.314627Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
+('580fb7f9-5f9f-4dbf-9a8b-dfb78b2e04de', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 185, '{\"time\":\"2024-01-12T23:48:11.307642Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
+('69c0120a-85e1-47de-b511-206bf3509568', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 13, '{\"time\":\"2024-01-12T23:48:11.271550Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
 ('7af33cc6-8454-4f1e-beef-347f5f0d33b6', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-19T01:51:11.001733Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingstudents\"}', '2023-08-26 01:16:03', '2023-08-19 05:51:11', '2023-08-26 01:16:03'),
+('7dddd16a-2b2f-4ea5-9bde-8886dc289f45', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 148, '{\"time\":\"2024-01-12T23:44:06.258043Z\",\"type\":\"info\",\"title\":\"New Local Admin Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingvendors\"}', NULL, '2024-01-13 04:44:06', '2024-01-13 04:44:06'),
 ('7f8cce26-a9f8-4e16-b88d-ada05a569239', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-07-29T20:03:09.477733Z\",\"type\":\"info\",\"title\":\"Limo Group Bid Changed\",\"message\":\"Your bid for theBest Limo Group Editedlimo group has been chnaged. Please contact the limo group owner for more information.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bids\\/history\"}', '2023-07-30 00:08:45', '2023-07-30 00:03:09', '2023-07-30 00:08:45'),
 ('8bb08253-3a9d-48eb-a3e1-ea1a5da58ffd', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-19T01:12:19.499838Z\",\"type\":\"info\",\"title\":\"New Vendor Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingvendors\"}', '2023-08-19 05:13:09', '2023-08-19 05:12:19', '2023-08-19 05:13:09'),
 ('93c76c20-7678-4720-80a5-541c23abf6b9', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 197, '{\"time\":\"2023-08-19T02:15:53.972713Z\",\"type\":\"info\",\"title\":\"Event Bid Rejected\",\"message\":\"Your bid for Digitera\'s Main DJ Event has been rejected!\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/bid\\/history\"}', '2023-10-01 02:48:19', '2023-08-19 06:15:53', '2023-10-01 02:48:19'),
 ('968a6138-ab6f-48df-9eeb-676dac91e051', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-25T21:40:46.311698Z\",\"type\":\"info\",\"title\":\"Event Invitation Accepted\",\"message\":\"Farhan Work has accepted your invitation to The Perfect Event For You!.\",\"action\":\"\\/admin\\/events\\/students\\/15\"}', '2023-08-26 01:41:33', '2023-08-26 01:40:46', '2023-08-26 01:41:33'),
+('9bc268da-dec1-4a8a-85c4-c4bbc9de71ba', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 150, '{\"time\":\"2024-01-12T23:48:11.299733Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
+('a28b63cf-ec8c-4ba7-906e-32f2bc00fe68', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 195, '{\"time\":\"2024-01-12T23:48:11.317272Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
 ('a44c7f6a-ef30-4db4-928c-803a5d99080d', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 213, '{\"time\":\"2023-08-25T21:36:24.565712Z\",\"type\":\"info\",\"title\":\"You have been invited to an event\",\"message\":\"You have been invited to the event by the Prom Committee. Please check the event page for more details.\",\"action\":\"\\/admin\\/events\"}', '2023-08-26 01:37:06', '2023-08-26 01:36:24', '2023-08-26 01:37:06'),
 ('ac1963fc-e445-4ab2-9e46-cd44297ee761', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 155, '{\"time\":\"2023-08-22T16:40:06.483151Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Hi Hi. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-08-22 20:44:00', '2023-08-22 20:40:06', '2023-08-22 20:44:00'),
 ('ae038fc6-0248-49e8-ac35-c4408e08d911', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 150, '{\"time\":\"2023-08-19T01:51:11.025434Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingstudents\"}', NULL, '2023-08-19 05:51:11', '2023-08-19 05:51:11'),
+('bf0ddfa9-9355-40a1-ad2a-03ca3a89546e', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 150, '{\"time\":\"2024-01-12T23:44:06.265266Z\",\"type\":\"info\",\"title\":\"New Local Admin Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingvendors\"}', NULL, '2024-01-13 04:44:06', '2024-01-13 04:44:06'),
 ('c01fd227-e853-4ae1-9728-6f164e6fba0b', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 13, '{\"time\":\"2023-08-09T22:13:02.217038Z\",\"type\":\"info\",\"title\":\"Event Invitation Accepted\",\"message\":\"Student 1 Student 1 has accepted your invitation to Digitera\'s Main DJ Event.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/events\\/students\\/14\"}', '2023-08-10 02:14:50', '2023-08-10 02:13:02', '2023-08-10 02:14:50'),
+('c3ae3a46-1a60-42ef-990a-02f5bc9bba25', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 149, '{\"time\":\"2024-01-12T23:48:11.297035Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
 ('ca7ccec5-91d3-4117-8977-18f9b4fdde87', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 149, '{\"time\":\"2023-08-19T01:12:19.576583Z\",\"type\":\"info\",\"title\":\"New Vendor Registered\",\"message\":\"A new vendor has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingvendors\"}', NULL, '2023-08-19 05:12:19', '2023-08-19 05:12:19'),
 ('dcb154ce-e0ad-478e-b510-628de52943a3', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 148, '{\"time\":\"2023-08-19T01:51:11.019033Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingstudents\"}', NULL, '2023-08-19 05:51:11', '2023-08-19 05:51:11'),
+('e9f09d93-843b-44f4-a2c7-3908250576ec', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 208, '{\"time\":\"2024-01-12T23:48:11.319349Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
 ('eb2721ee-faca-4183-861d-ebbadbb68844', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 213, '{\"time\":\"2023-08-22T16:47:55.122415Z\",\"type\":\"info\",\"title\":\"You have been invited to join a limo group!\",\"message\":\"You have been invited to join a limo group by Student 1 Student 1. Please check your limo group invitations page to accept or reject the invitation.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/limo-groups\"}', '2023-08-22 20:48:24', '2023-08-22 20:47:55', '2023-08-22 20:48:24'),
+('f24ce8e3-bf71-4271-9290-af13a7d9aa40', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'Orchid\\Platform\\Models\\User', 192, '{\"time\":\"2024-01-12T23:48:11.310237Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"\\/admin\\/pendingstudents\"}', NULL, '2024-01-13 04:48:11', '2024-01-13 04:48:11'),
 ('f77c6856-9f8d-4765-a4c2-5ef5caa3f00b', 'Orchid\\Platform\\Notifications\\DashboardMessage', 'App\\Models\\User', 149, '{\"time\":\"2023-08-19T01:51:11.022380Z\",\"type\":\"info\",\"title\":\"New Student Registered\",\"message\":\"A new student has registered. Please approve or deny their account.\",\"action\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/pendingstudents\"}', NULL, '2023-08-19 05:51:11', '2023-08-19 05:51:11');
 
 -- --------------------------------------------------------
@@ -1076,6 +1194,84 @@ INSERT INTO `positions` (`id`, `position_name`, `election_id`, `created_at`, `up
 (1, 'Test', 1, '2023-04-27 02:49:40', '2023-04-27 02:49:40'),
 (2, 'Test', 1, '2023-04-27 02:49:51', '2023-04-27 02:49:51'),
 (5, 'King', 4, '2023-06-04 19:22:53', '2023-06-26 21:07:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regional_candidates`
+--
+
+CREATE TABLE `regional_candidates` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `candidate_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `candidate_bio` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `position_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regional_elections`
+--
+
+CREATE TABLE `regional_elections` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `election_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `region_id` bigint(20) UNSIGNED NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regional_election_votes`
+--
+
+CREATE TABLE `regional_election_votes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `position_id` bigint(20) UNSIGNED NOT NULL,
+  `candidate_id` bigint(20) UNSIGNED NOT NULL,
+  `voter_user_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regional_election_winners`
+--
+
+CREATE TABLE `regional_election_winners` (
+  `id` int(11) NOT NULL,
+  `candidate_id` bigint(20) UNSIGNED NOT NULL,
+  `position_id` bigint(20) UNSIGNED NOT NULL,
+  `national_experience` tinyint(4) DEFAULT NULL COMMENT '1 = Yes 0 = No',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regional_positions`
+--
+
+CREATE TABLE `regional_positions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `position_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `election_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1446,7 +1642,8 @@ INSERT INTO `students` (`id`, `user_id`, `school_id`, `firstname`, `lastname`, `
 (127, 206, 51, 'dfgdfg', 'dfgdfg', 12, '(123) 456-1234', 'johnsmith@hotmales.com', 1, 'Digitera School of Digital Marketing & Software', NULL, '2023-06-15 23:55:18', '2023-06-15 23:55:18'),
 (128, 207, 51, 'Hi', 'Hi', 12, '(554) 654-6546', 'Hi@Hi.com', 1, 'Digitera School of Digital Marketing & Software', NULL, '2023-06-15 23:59:27', '2023-07-19 02:49:26'),
 (129, 212, 51, 'fgdfg', 'dfgdfg', 12, '(546) 456-4656', 'dfgdfg@ffssdfsd.com', 1, 'Digitera School of Digital Marketing & Software', 'None', '2023-08-19 05:51:10', '2023-08-19 05:51:55'),
-(130, 213, 51, 'Farhan', 'Work', 12, '(546) 464-5645', 'farhan.work435@gmail.com', 1, 'Digitera School of Digital Marketing & Software', NULL, '2023-08-22 20:46:58', '2023-08-22 20:46:58');
+(130, 213, 51, 'Farhan', 'Work', 12, '(546) 464-5645', 'farhan.work435@gmail.com', 1, 'Digitera School of Digital Marketing & Software', NULL, '2023-08-22 20:46:58', '2023-08-22 20:46:58'),
+(131, 215, 53, 'dsasda', 'sdasd', 9, '(544) 564-5465', 'aasdasd@gmail.com', 0, 'Colonel By Secondary School', NULL, '2024-01-13 04:48:10', '2024-01-13 04:48:10');
 
 --
 -- Triggers `students`
@@ -1626,7 +1823,9 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (210, 'superadmin@gmail.com', 'Salon', 'Vendor', 'salonpros@gmail.com', '(456) 123-7895', 4, 'Canada', NULL, 1, NULL, '$2y$10$k7pH5bi6iDDKhV9//RgJ8uDE3tlV5sLq14xvU7L.hPt0WtVLDGzJm', NULL, 'UkpxEz9xP81CMT1eErL9v8xuKzzcbERXqpUHtgcSFeeBDWAg5i0n2Wmh1of5', '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
 (211, 'NewMan', 'New', 'Man', 'NewManInc@gmail.com', '(445) 454-5454', 4, 'Canada', NULL, 0, NULL, '$2y$10$4shSu7Li3eH649d9Rn63TeuQm7wDdJQa0F4KsR7YVZbMeuqtLKdrm', NULL, NULL, '2023-08-19 05:12:18', '2023-08-19 05:12:18'),
 (212, 'dfgdfg', 'fgdfg', 'dfgdfg', 'dfgdfg@ffssdfsd.com', '(546) 456-4656', 3, 'Canada', NULL, 1, NULL, '$2y$10$ZqnBQ2Oww4Yd2EBtivzcu.gGYnRou17XNQOYVaAyb8E2SbWYJba8S', NULL, NULL, '2023-08-19 05:51:10', '2023-08-19 05:51:55'),
-(213, 'FWork', 'Farhan', 'Work', 'farhan.work435@gmail.com', '(546) 464-5645', 3, 'Canada', NULL, 1, NULL, '$2y$10$pmDpTtDHAF42eokADMX4P.fChup.NEK55lBc7PWJBfLGXobySEcKK', NULL, '3fhWZMjHuPjpLD1mzldKDEUlQZHhw0IBZiNDqOpgRSVk8diUGxwLS0AtwpdP', '2023-08-22 20:46:58', '2023-08-22 20:46:58');
+(213, 'FWork', 'Farhan', 'Work', 'farhan.work435@gmail.com', '(546) 464-5645', 3, 'Canada', NULL, 1, NULL, '$2y$10$pmDpTtDHAF42eokADMX4P.fChup.NEK55lBc7PWJBfLGXobySEcKK', NULL, '3fhWZMjHuPjpLD1mzldKDEUlQZHhw0IBZiNDqOpgRSVk8diUGxwLS0AtwpdP', '2023-08-22 20:46:58', '2023-08-22 20:46:58'),
+(214, 'asdasd', 'zdasd', 'asdasdasd', 'faasdasdasdnasdasd05@gmail.com', '(544) 564-5465', 2, 'Canada', NULL, 0, NULL, '$2y$10$DzF3pHPg0gO48QjjVP/ime8W8GzskUF1161SjJ9K5/EznrlY.3fpK', NULL, NULL, '2024-01-13 04:44:05', '2024-01-13 04:44:05'),
+(215, 'asdasd', 'dsasda', 'sdasd', 'aasdasd@gmail.com', '(544) 564-5465', 3, 'Canada', NULL, 0, NULL, '$2y$10$prWDa4qLkTV26Iaux0QITOtqKGCo6869y355lfkmcKWfgJFL8RQXO', NULL, NULL, '2024-01-13 04:48:10', '2024-01-13 04:48:10');
 
 -- --------------------------------------------------------
 
@@ -1902,6 +2101,13 @@ ALTER TABLE `events`
   ADD KEY `region_id` (`region_id`);
 
 --
+-- Indexes for table `events_historical_records`
+--
+ALTER TABLE `events_historical_records`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`);
+
+--
 -- Indexes for table `event_attendees`
 --
 ALTER TABLE `event_attendees`
@@ -1995,6 +2201,46 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `national_candidates`
+--
+ALTER TABLE `national_candidates`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`election_id`,`position_id`),
+  ADD KEY `election_id_nat_cand` (`election_id`),
+  ADD KEY `position_id_nat_cad` (`position_id`);
+
+--
+-- Indexes for table `national_elections`
+--
+ALTER TABLE `national_elections`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `national_election_votes`
+--
+ALTER TABLE `national_election_votes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `election_id` (`election_id`,`position_id`,`candidate_id`,`voter_user_id`),
+  ADD KEY `position_id_nat_votes` (`position_id`),
+  ADD KEY `candidate_id_nat_votes` (`candidate_id`),
+  ADD KEY `voter_user_id_nat_votes` (`voter_user_id`);
+
+--
+-- Indexes for table `national_election_winners`
+--
+ALTER TABLE `national_election_winners`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `candidate_id` (`candidate_id`,`position_id`),
+  ADD KEY `position_id_nat_winners` (`position_id`);
+
+--
+-- Indexes for table `national_positions`
+--
+ALTER TABLE `national_positions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `election_id` (`election_id`);
+
+--
 -- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -2050,6 +2296,47 @@ ALTER TABLE `poll_options`
 -- Indexes for table `positions`
 --
 ALTER TABLE `positions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `election_id` (`election_id`);
+
+--
+-- Indexes for table `regional_candidates`
+--
+ALTER TABLE `regional_candidates`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`election_id`,`position_id`),
+  ADD KEY `election_id_reg_can` (`election_id`),
+  ADD KEY `position_id_reg_can` (`position_id`);
+
+--
+-- Indexes for table `regional_elections`
+--
+ALTER TABLE `regional_elections`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `region_id` (`region_id`);
+
+--
+-- Indexes for table `regional_election_votes`
+--
+ALTER TABLE `regional_election_votes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `election_id` (`election_id`,`position_id`,`candidate_id`,`voter_user_id`),
+  ADD KEY `position_id_reg_votes` (`position_id`),
+  ADD KEY `candidate_id_reg_votes` (`candidate_id`),
+  ADD KEY `voter_user_id_reg_votes` (`voter_user_id`);
+
+--
+-- Indexes for table `regional_election_winners`
+--
+ALTER TABLE `regional_election_winners`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `candidate_id` (`candidate_id`,`position_id`),
+  ADD KEY `position_id_reg_winners` (`position_id`);
+
+--
+-- Indexes for table `regional_positions`
+--
+ALTER TABLE `regional_positions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `election_id` (`election_id`);
 
@@ -2328,6 +2615,12 @@ ALTER TABLE `events`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT for table `events_historical_records`
+--
+ALTER TABLE `events_historical_records`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `event_attendees`
 --
 ALTER TABLE `event_attendees`
@@ -2385,13 +2678,43 @@ ALTER TABLE `limo_group_members`
 -- AUTO_INCREMENT for table `localadmins`
 --
 ALTER TABLE `localadmins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `national_candidates`
+--
+ALTER TABLE `national_candidates`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `national_elections`
+--
+ALTER TABLE `national_elections`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `national_election_votes`
+--
+ALTER TABLE `national_election_votes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `national_election_winners`
+--
+ALTER TABLE `national_election_winners`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `national_positions`
+--
+ALTER TABLE `national_positions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `no_play_songs`
@@ -2428,6 +2751,36 @@ ALTER TABLE `poll_options`
 --
 ALTER TABLE `positions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `regional_candidates`
+--
+ALTER TABLE `regional_candidates`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `regional_elections`
+--
+ALTER TABLE `regional_elections`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `regional_election_votes`
+--
+ALTER TABLE `regional_election_votes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `regional_election_winners`
+--
+ALTER TABLE `regional_election_winners`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `regional_positions`
+--
+ALTER TABLE `regional_positions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `regions`
@@ -2481,7 +2834,7 @@ ALTER TABLE `song_requests`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `student_bids`
@@ -2511,7 +2864,7 @@ ALTER TABLE `universal_expenses_revenues`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=214;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=216;
 
 --
 -- AUTO_INCREMENT for table `vendors`
@@ -2662,6 +3015,12 @@ ALTER TABLE `events`
   ADD CONSTRAINT `venue_id` FOREIGN KEY (`venue_id`) REFERENCES `vendors` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
+-- Constraints for table `events_historical_records`
+--
+ALTER TABLE `events_historical_records`
+  ADD CONSTRAINT `event_id_hist_rec` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `event_attendees`
 --
 ALTER TABLE `event_attendees`
@@ -2732,6 +3091,36 @@ ALTER TABLE `localadmins`
   ADD CONSTRAINT `localadmins_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `national_candidates`
+--
+ALTER TABLE `national_candidates`
+  ADD CONSTRAINT `election_id_nat_cand` FOREIGN KEY (`election_id`) REFERENCES `national_elections` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `position_id_nat_cad` FOREIGN KEY (`position_id`) REFERENCES `national_positions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_id_nat_cand` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `national_election_votes`
+--
+ALTER TABLE `national_election_votes`
+  ADD CONSTRAINT `candidate_id_nat_votes` FOREIGN KEY (`candidate_id`) REFERENCES `national_candidates` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `election_id_nat_votes` FOREIGN KEY (`election_id`) REFERENCES `national_elections` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `position_id_nat_votes` FOREIGN KEY (`position_id`) REFERENCES `national_positions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `voter_user_id_nat_votes` FOREIGN KEY (`voter_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `national_election_winners`
+--
+ALTER TABLE `national_election_winners`
+  ADD CONSTRAINT `candidate_id_nat_winners` FOREIGN KEY (`candidate_id`) REFERENCES `national_candidates` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `position_id_nat_winners` FOREIGN KEY (`position_id`) REFERENCES `national_positions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `national_positions`
+--
+ALTER TABLE `national_positions`
+  ADD CONSTRAINT `election_id_nat_pos` FOREIGN KEY (`election_id`) REFERENCES `national_elections` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `no_play_songs`
 --
 ALTER TABLE `no_play_songs`
@@ -2762,6 +3151,42 @@ ALTER TABLE `poll_options`
 --
 ALTER TABLE `positions`
   ADD CONSTRAINT `positions_ibfk_1` FOREIGN KEY (`election_id`) REFERENCES `elections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `regional_candidates`
+--
+ALTER TABLE `regional_candidates`
+  ADD CONSTRAINT `election_id_reg_can` FOREIGN KEY (`election_id`) REFERENCES `regional_elections` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `position_id_reg_can` FOREIGN KEY (`position_id`) REFERENCES `regional_positions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_id_reg_can` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `regional_elections`
+--
+ALTER TABLE `regional_elections`
+  ADD CONSTRAINT `region_id_reg_elec` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `regional_election_votes`
+--
+ALTER TABLE `regional_election_votes`
+  ADD CONSTRAINT `candidate_id_reg_votes` FOREIGN KEY (`candidate_id`) REFERENCES `regional_candidates` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `election_id_reg_votes` FOREIGN KEY (`election_id`) REFERENCES `regional_elections` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `position_id_reg_votes` FOREIGN KEY (`position_id`) REFERENCES `regional_positions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `voter_user_id_reg_votes` FOREIGN KEY (`voter_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `regional_election_winners`
+--
+ALTER TABLE `regional_election_winners`
+  ADD CONSTRAINT `candidate_id_reg_winners` FOREIGN KEY (`candidate_id`) REFERENCES `regional_candidates` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `position_id_reg_winners` FOREIGN KEY (`position_id`) REFERENCES `regional_positions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `regional_positions`
+--
+ALTER TABLE `regional_positions`
+  ADD CONSTRAINT `election_id_reg_elec` FOREIGN KEY (`election_id`) REFERENCES `regional_elections` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `role_users`

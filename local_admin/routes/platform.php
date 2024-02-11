@@ -57,6 +57,11 @@ use App\Orchid\Screens\ViewPromActualScreen;
 use App\Http\Controllers\BudgetPDFController;
 use App\Http\Controllers\ActualPDFController;
 use App\Orchid\Screens\EditActualScreen;
+use App\Orchid\Screens\ViewContractScreen;
+
+
+use App\Orchid\Screens\CreatePromHistoryScreen;
+use App\Orchid\Screens\EditPromHistoryScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +107,10 @@ Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platf
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
 Route::screen('/events/suggestVendor', SuggestVendorScreen::class)->name('platform.suggestVendor.create');
+
+Route::screen('/events/prom-history/create/{event_id}', CreatePromHistoryScreen::class)->name('platform.eventHistory.create');
+
+Route::screen('/events/prom-history/edit/{event_id}', EditPromHistoryScreen::class)->name('platform.eventHistory.edit');
 
 Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
 
@@ -153,7 +162,8 @@ Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembers
 
 Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.contact-students');
 
-
+// Contracts
+Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
