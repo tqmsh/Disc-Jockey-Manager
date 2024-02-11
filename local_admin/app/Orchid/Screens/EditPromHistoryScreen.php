@@ -98,17 +98,17 @@ class EditPromHistoryScreen extends Screen
 
             Layout::rows([
 
-                Input::make('disk_jockey_name')
+                Input::make('disc_jockey_name')
                     ->title('Name')
                     ->type('text')
                     ->horizontal()
-                    ->value($this->record->disk_jockey_name),
+                    ->value($this->record->disc_jockey_name),
                     // ->placeholder('Ex. John'),
-                TextArea::make('disk_jockey_notes')
+                TextArea::make('disc_jockey_notes')
                     ->title('Notes')
                     ->rows(5)
                     ->horizontal()
-                    ->value($this->record->disk_jockey_notes),
+                    ->value($this->record->disc_jockey_notes),
                     // ->placeholder('Ex. Doe'),
 
             ])->title('Disc Jockey'),
@@ -172,7 +172,7 @@ class EditPromHistoryScreen extends Screen
         try{
             $sections = [
             'Venue' => ['venue_name', 'venue_notes'],
-            'Disc Jockey' => ['disk_jockey_name', 'disk_jockey_notes'],
+            'Disc Jockey' => ['disc_jockey_name', 'disc_jockey_notes'],
             'Photobooth' => ['photobooth_name', 'photobooth_notes'],
             'Photographer' => ['photographer_name', 'photographer_notes'],
             'Videographer' => ['videographer_name', 'videographer_notes'],
