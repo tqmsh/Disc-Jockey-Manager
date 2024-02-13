@@ -95,7 +95,8 @@ class CreateStudentScreen extends Screen
                             • school <br>
                             • state_province <br>
                             • country <br>
-                            • county <br>'),
+                            • county (include column but leave blank for Canadian schools) <br>
+                            • city_municipality (include column but leave blank for American schools) <br>'),
                     Link::make('Download Sample CSV')
                         ->icon('download')
                         ->href('/sample_students_upload.csv')
@@ -172,11 +173,16 @@ class CreateStudentScreen extends Screen
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
                 Select::make('county')
-                    ->title('County')
+                    ->title('County (USA Only)')
                     ->horizontal()
-                    ->required()
                     ->empty('Start typing to search...')
                     ->fromModel(School::class, 'county', 'county'),
+
+                Select::make('city_municipality')
+                    ->title('City/Municipality (Canada Only)')
+                    ->horizontal()
+                    ->empty('Start typing to search...')
+                    ->fromModel(School::class, 'city_municipality', 'city_municipality'),
 
                 Select::make('grade')
                     ->title('Grade')
@@ -283,7 +289,7 @@ class CreateStudentScreen extends Screen
 
                     if($this->validEmail($students[$i]['email'])){
                         
-                        $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['state_province']);
+                        $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['city_municipality'], $students[$i]['state_province']);
                         
                         $student = [
                             'firstname' => $students[$i]['firstname'],
@@ -434,36 +440,46 @@ class CreateStudentScreen extends Screen
     }
 
     private function getSchoolIDByReq($request){
-        $school_id = School::where('school_name', $request->input('school'))
-                            ->where('county', $request->input('county'))
-                            ->where('state_province', $request->input('state_province'))
-                            ->where('country', $request->input('country'))
-                            ->get('id')->value('id');
+        $school_query = School::where('school_name', $request->input('school'))
+            ->where('state_province', $request->input('state_province'))
+            ->where('country', $request->input('country'));
 
-        if(is_null($school_id)){
+        if ($request->input('country') == 'USA') {
+            $school_query = $school_query->where('county', $request->input('county'));
+        } else {
+            $school_query = $school_query->where('city_municipality', $request->input('city_municipality'));
+        }
+        $school = $school_query->first();
+
+        if(is_null($school)){
 
             throw New Exception('You are trying to enter a invalid school');
 
         } else{
 
-            return $school_id;
+            return $school->value('id');
         }
     }
 
-    private function getSchoolID($country, $school, $county, $state_province){
-        $school_id = School::where('school_name', $school)
-                            ->where('county', $county)
-                            ->where('state_province', $state_province)
-                            ->where('country', $country)
-                            ->get('id')->value('id');
+    private function getSchoolID($country, $school, $county, $city_municipality, $state_province){
+        $school_query = School::where('school_name', $school)
+            ->where('state_province', $state_province)
+            ->where('country', $country);
 
-        if(is_null($school_id)){
+        if ($country == 'USA') {
+            $school_query = $school_query->where('county', $county);
+        } else {
+            $school_query = $school_query->where('city_municipality', $city_municipality);
+        }
+        $school = $school_query->first();
+
+        if(is_null($school)){
 
             throw New Exception('You are trying to enter a invalid school');
 
         } else{
 
-            return $school_id;
+            return $school->value('id');
         }
     }
 

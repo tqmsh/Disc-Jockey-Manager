@@ -57,6 +57,8 @@ use App\Orchid\Screens\ViewPromActualScreen;
 use App\Http\Controllers\BudgetPDFController;
 use App\Http\Controllers\ActualPDFController;
 use App\Orchid\Screens\EditActualScreen;
+use App\Orchid\Screens\ViewContractScreen;
+
 
 use App\Orchid\Screens\CreatePromHistoryScreen;
 use App\Orchid\Screens\EditPromHistoryScreen;
@@ -160,7 +162,8 @@ Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembers
 
 Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.contact-students');
 
-
+// Contracts
+Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
