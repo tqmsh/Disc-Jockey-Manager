@@ -83,7 +83,9 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateContractScreen;
+use App\Orchid\Screens\EditBugReportScreen;
 use App\Orchid\Screens\EditContractScreen;
+use App\Orchid\Screens\ViewBugReportScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -267,6 +269,10 @@ Route::screen('/beauty-groups/{beautyGroup}/members', ViewBeautyGroupMembersScre
 Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 Route::screen('/contracts/create', CreateContractScreen::class)->name('platform.contract.create');
 Route::screen('/contracts/{contract}/edit', EditContractScreen::class)->name('platform.contract.edit');
+
+// Bug Reports
+Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
+Route::screen('/bug-reports/{bug_report}/edit', EditBugReportScreen::class)->name('platform.bug-reports.edit');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

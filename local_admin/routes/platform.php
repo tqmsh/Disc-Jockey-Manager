@@ -58,6 +58,7 @@ use App\Http\Controllers\BudgetPDFController;
 use App\Http\Controllers\ActualPDFController;
 use App\Orchid\Screens\EditActualScreen;
 use App\Orchid\Screens\ViewContractScreen;
+use App\Orchid\Screens\CreateBugReportScreen;
 
 
 use App\Orchid\Screens\CreatePromHistoryScreen;
@@ -164,6 +165,9 @@ Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.
 
 // Contracts
 Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+
+// create bug report
+Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

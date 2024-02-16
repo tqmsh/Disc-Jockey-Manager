@@ -282,6 +282,31 @@ INSERT INTO `beauty_group_members` (`id`, `beauty_group_id`, `invitee_user_id`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bug_reports`
+--
+
+CREATE TABLE `bug_reports` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `reporter_user_id` bigint(20) UNSIGNED NOT NULL,
+  `reporter_role` int(10) UNSIGNED DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `severity` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bug_reports`
+--
+
+INSERT INTO `bug_reports` (`id`, `reporter_user_id`, `reporter_role`, `title`, `description`, `module`, `severity`, `created_at`, `updated_at`) VALUES
+(1, 155, 3, 'Create limo group button broken', 'The button in the create limo group form is broken', 'student_portal.groups', 3, '2024-02-15 05:49:50', '2024-02-15 05:49:50');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `campaigns`
 --
 
@@ -1990,6 +2015,14 @@ ALTER TABLE `beauty_group_members`
   ADD KEY `invitee_user_id2` (`invitee_user_id`);
 
 --
+-- Indexes for table `bug_reports`
+--
+ALTER TABLE `bug_reports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reporter_user_id` (`reporter_user_id`),
+  ADD KEY `reporter_role` (`reporter_role`);
+
+--
 -- Indexes for table `campaigns`
 --
 ALTER TABLE `campaigns`
@@ -2537,6 +2570,12 @@ ALTER TABLE `beauty_group_members`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `bug_reports`
+--
+ALTER TABLE `bug_reports`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `campaigns`
 --
 ALTER TABLE `campaigns`
@@ -2931,6 +2970,13 @@ ALTER TABLE `beauty_group_bids`
 ALTER TABLE `beauty_group_members`
   ADD CONSTRAINT `beauty_group_id` FOREIGN KEY (`beauty_group_id`) REFERENCES `beauty_groups` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `invitee_user_id2` FOREIGN KEY (`invitee_user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `bug_reports`
+--
+ALTER TABLE `bug_reports`
+  ADD CONSTRAINT `reporter_user_id` FOREIGN KEY (`reporter_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reporter_role` FOREIGN KEY (`reporter_role`) REFERENCES `roles` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `campaigns`

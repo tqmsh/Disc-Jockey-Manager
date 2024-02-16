@@ -30,6 +30,7 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ContactLocalAdminScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
+use App\Orchid\Screens\CreateBugReportScreen;
 use App\Orchid\Screens\CreateSongRequestScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
@@ -124,6 +125,8 @@ Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)
 
 Route::screen('/contact-prom-committees', ContactLocalAdminScreen::class)->name('platform.contact-prom-committees');
 
+// create bug report
+Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
