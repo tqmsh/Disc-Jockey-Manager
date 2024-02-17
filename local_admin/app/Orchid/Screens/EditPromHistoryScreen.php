@@ -9,7 +9,7 @@ use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
-use App\Models\EventHistoricalRecord;
+use App\Models\EventsHistoricalRecord;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -30,7 +30,7 @@ class EditPromHistoryScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $existingRecord = EventHistoricalRecord::where('event_id', $event->id)->first();
+        $existingRecord = EventsHistoricalRecord::where('event_id', $event->id)->first();
         abort_if(!$existingRecord, 403, 'A historical record does not exist for this event.');
 
         $localAdminSchoolId = Localadmin::where('user_id', Auth::id())->first()->school_id;
@@ -206,7 +206,7 @@ class EditPromHistoryScreen extends Screen
             return redirect()->back();
         }
 
-        $historicalRecord = EventHistoricalRecord::where('event_id', $record)->first();
+        $historicalRecord = EventsHistoricalRecord::where('event_id', $record)->first();
         $historicalRecord->update($request->all());
 
         Toast::success('You have successfully updated this Historical Record.');
