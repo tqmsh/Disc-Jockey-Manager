@@ -9,7 +9,7 @@ use Orchid\Support\Color;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
-use App\Models\EventHistoricalRecord;
+use App\Models\EventsHistoricalRecord;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -29,7 +29,7 @@ class CreatePromHistoryScreen extends Screen
      */
     public function query(Events $event): iterable
     {
-        $existingRecord = EventHistoricalRecord::where('event_id', $event->id)->first();
+        $existingRecord = EventsHistoricalRecord::where('event_id', $event->id)->first();
         abort_if($existingRecord, 403, 'A historical record already exists for this event.');
 
         $localAdminSchoolId = Localadmin::where('user_id', Auth::id())->first()->school_id;
@@ -199,7 +199,7 @@ class CreatePromHistoryScreen extends Screen
             $positionField = $request->all();
             $positionField['event_id'] = $event->id;
 
-            EventHistoricalRecord::create($positionField);
+            EventsHistoricalRecord::create($positionField);
             Toast::success('Record Created Successfully');
             return redirect()->route('platform.event.list');
         } catch (Exception $e) {
