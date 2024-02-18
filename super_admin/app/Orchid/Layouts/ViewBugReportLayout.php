@@ -3,11 +3,8 @@
 namespace App\Orchid\Layouts;
 
 use App\Models\BugReport;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
@@ -39,6 +36,7 @@ class ViewBugReportLayout extends Table
                 }),
             
             TD::make('description', 'Description')
+                ->width("100px")
                 ->render(function(BugReport $bug_report) {
                     return Link::make($bug_report->description)
                         ->route('platform.bug-reports.edit', $bug_report->id);

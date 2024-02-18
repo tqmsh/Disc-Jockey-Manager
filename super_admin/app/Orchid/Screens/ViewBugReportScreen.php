@@ -17,7 +17,7 @@ class ViewBugReportScreen extends Screen
     public function query(): iterable
     {
         return [
-            'bug_reports' => BugReport::all()
+            'bug_reports' => BugReport::latest()->get()
         ];
     }
 
