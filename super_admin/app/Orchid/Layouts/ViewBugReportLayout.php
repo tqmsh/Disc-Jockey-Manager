@@ -84,7 +84,7 @@ class ViewBugReportLayout extends Table
             
             TD::make('creation_at', 'Creation Date')
                 ->render(function(BugReport $bug_report) {
-                    return Link::make(date('F d, Y'))
+                    return Link::make(date('F d, Y', $bug_report->created_at->timestamp))
                         ->route('platform.bug-reports.edit', $bug_report->id);
                 })
             
