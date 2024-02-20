@@ -106,7 +106,7 @@ class ViewAllBidScreen extends Screen
     
     public function filter(Events $event)
     {
-        return redirect()->route('platform.eventBids.list', [$event->id, 'category_id' => request('category_id')]);
+        return redirect()->route('platform.bid.list', [$event->id, 'category_id' => request('category_id')]);
     }
 
     public function updateBid()
