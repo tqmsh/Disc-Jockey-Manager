@@ -293,6 +293,7 @@ CREATE TABLE `bug_reports` (
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `module` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `severity` tinyint(1) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -302,7 +303,7 @@ CREATE TABLE `bug_reports` (
 --
 
 INSERT INTO `bug_reports` (`id`, `reporter_user_id`, `reporter_role`, `title`, `description`, `module`, `severity`, `created_at`, `updated_at`) VALUES
-(1, 155, 3, 'Create limo group button broken', 'The button in the create limo group form is broken', 'student_portal.groups', 3, '2024-02-15 05:49:50', '2024-02-15 05:49:50');
+(1, 155, 3, 'Create limo group button broken', 'The button in the create limo group form is broken', 'student_portal.groups', 3, 0, '2024-02-15 05:49:50', '2024-02-15 05:49:50');
 
 -- --------------------------------------------------------
 

@@ -85,6 +85,7 @@ use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateContractScreen;
 use App\Orchid\Screens\EditBugReportScreen;
 use App\Orchid\Screens\EditContractScreen;
+use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 
 /*
@@ -273,6 +274,7 @@ Route::screen('/contracts/{contract}/edit', EditContractScreen::class)->name('pl
 // Bug Reports
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
 Route::screen('/bug-reports/{bug_report}/edit', EditBugReportScreen::class)->name('platform.bug-reports.edit');
+Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

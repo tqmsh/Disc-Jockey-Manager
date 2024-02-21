@@ -8,6 +8,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
+use Orchid\Screen\Fields\CheckBox;
 
 class ViewBugReportLayout extends Table
 {
@@ -29,24 +30,24 @@ class ViewBugReportLayout extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make()
+                ->render(function (BugReport $bug_report){
+                    return CheckBox::make('bug_reports[]')
+                        ->value($bug_report->id)
+                        ->checked(false);
+            }),
+            
             TD::make('title', 'Title')
                 ->render(function(BugReport $bug_report) {
                     return Link::make($bug_report->title)
                         ->route('platform.bug-reports.edit', $bug_report->id);
-                }),
-            
-            TD::make('description', 'Description')
-                ->width("100px")
-                ->render(function(BugReport $bug_report) {
-                    return Link::make($bug_report->description)
-                        ->route('platform.bug-reports.edit', $bug_report->id);
-                }),
+            }),
             
             TD::make('module', 'Module')
                 ->render(function(BugReport $bug_report) {
                     return Link::make($bug_report->module)
                         ->route('platform.bug-reports.edit', $bug_report->id);
-                }),
+            }),
             
             TD::make('severity', "Severity")
                 ->render(function(BugReport $bug_report) {
@@ -59,32 +60,19 @@ class ViewBugReportLayout extends Table
                     return Button::make($bug_report->toSeverityString())
                         ->type($button_color)
                         ->method('to_route', ['route' => 'platform.bug-reports.edit', 'bug_report_id' => $bug_report->id]);
-                }),
-            
-            TD::make('reporter', 'Reporter Role')
-                ->render(function(BugReport $bug_report) {
-                    // There's no teacher portal yet, we'll pass them off as a local admin
-                    $reporter_role = match($bug_report->reporter_role) {
-                        2, 5 => "Local Admin",
-                        3 => "Student",
-                        4 => "Vendor"
-                    };
-
-                    return Link::make($reporter_role)
-                            ->route('platform.bug-reports.edit', $bug_report->id);
-                }),
-            
-            TD::make('reporter', 'Reporter')
-                ->render(function(BugReport $bug_report) {
-                    return Button::make('Go To User')
-                            ->method('redirectToUserEdit', ['bug_report' => $bug_report->id]);
-                }),
+            }),
             
             TD::make('creation_at', 'Creation Date')
                 ->render(function(BugReport $bug_report) {
                     return Link::make(date('F d, Y', $bug_report->created_at->timestamp))
                         ->route('platform.bug-reports.edit', $bug_report->id);
-                })
+            }),
+            
+            TD::make('View')
+                ->render(function(BugReport $bug_report) {
+                    return Link::make('View')
+                        ->route('platform.bug-reports.view', $bug_report->id);
+            })
             
         ];
     }
