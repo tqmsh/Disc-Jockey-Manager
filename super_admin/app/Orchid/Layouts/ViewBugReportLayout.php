@@ -45,7 +45,7 @@ class ViewBugReportLayout extends Table
             
             TD::make('module', 'Module')
                 ->render(function(BugReport $bug_report) {
-                    return Link::make($bug_report->module)
+                    return Link::make($bug_report->toCleanModuleString())
                         ->route('platform.bug-reports.edit', $bug_report->id);
             }),
             
@@ -58,6 +58,18 @@ class ViewBugReportLayout extends Table
                     };
 
                     return Button::make($bug_report->toSeverityString())
+                        ->type($button_color)
+                        ->method('to_route', ['route' => 'platform.bug-reports.edit', 'bug_report_id' => $bug_report->id]);
+            }),
+
+            TD::make('status', "Status")
+                ->render(function(BugReport $bug_report) {
+                    $button_color = match($bug_report->status) {
+                        0, 2 => Color::SUCCESS(),
+                        1 => Color::WARNING(),  
+                    };
+
+                    return Button::make($bug_report->toStatusString())
                         ->type($button_color)
                         ->method('to_route', ['route' => 'platform.bug-reports.edit', 'bug_report_id' => $bug_report->id]);
             }),

@@ -302,7 +302,7 @@ CREATE TABLE `bug_reports` (
 -- Dumping data for table `bug_reports`
 --
 
-INSERT INTO `bug_reports` (`id`, `reporter_user_id`, `reporter_role`, `title`, `description`, `module`, `severity`, `created_at`, `updated_at`) VALUES
+INSERT INTO `bug_reports` (`id`, `reporter_user_id`, `reporter_role`, `title`, `description`, `module`, `severity`, `status`, `created_at`, `updated_at`) VALUES
 (1, 155, 3, 'Create limo group button broken', 'The button in the create limo group form is broken', 'student_portal.groups', 3, 0, '2024-02-15 05:49:50', '2024-02-15 05:49:50');
 
 -- --------------------------------------------------------

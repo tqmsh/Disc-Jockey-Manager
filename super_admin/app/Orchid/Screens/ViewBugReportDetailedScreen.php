@@ -5,9 +5,12 @@ namespace App\Orchid\Screens;
 use App\Models\BugReport;
 use App\Models\User;
 use Orchid\Platform\Models\Role;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Sight;
+use Orchid\Support\Facades\Toast;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 
 class ViewBugReportDetailedScreen extends Screen
@@ -44,6 +47,10 @@ class ViewBugReportDetailedScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Button::make('Delete Bug Report')
+                ->icon('trash')
+                ->method('deleteBugReport'),
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.bug-reports.list')
@@ -68,6 +75,9 @@ class ViewBugReportDetailedScreen extends Screen
                 Sight::make('severity')
                     ->render(fn(BugReport $bug_report) => $bug_report->toSeverityString()),
 
+                Sight::make('status')
+                    ->render(fn(BugReport $bug_report) => $bug_report->toStatusString()),
+
                 Sight::make('module')
                     ->render(fn(BugReport $bug_report) => $bug_report->toCleanModuleString()),
 
@@ -91,5 +101,18 @@ class ViewBugReportDetailedScreen extends Screen
                     ->render(fn(BugReport $bug_report) => User::find($bug_report->reporter_user_id)->phone_number ?? "None")
             ])
         ];
+    }
+
+    public function deleteBugReport(BugReport $bug_report) {
+        try {
+            // delete bug report
+            $bug_report->delete();
+
+            Toast::info('You have successfully deleted the bug report.');
+
+            return to_route('platform.bug-reports.list');
+        } catch(\Exception $e) {
+            Alert::error('There was an error deleting this bug report. Error Code: ' . $e->getMessage());
+        }
     }
 }

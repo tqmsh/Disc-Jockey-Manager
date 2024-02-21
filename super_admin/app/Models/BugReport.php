@@ -32,6 +32,14 @@ class BugReport extends Model
         };
     }
 
+    public function toStatusString() : string {
+        return match($this->status) {
+            0 => 'New',
+            1 => 'Under Review',
+            2 => 'Fixed'
+        };
+    }
+
     public function toCleanModuleString() : string{
         $module = $this->module;
 
