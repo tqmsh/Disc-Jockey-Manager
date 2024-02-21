@@ -46,7 +46,7 @@ class Student extends Model
             }
 
             if(isset($filters['country'])){
-                $query->where('country', 'like', '%' . request('country') . '%');
+                $query->where('users.country', 'like', '%' . request('country') . '%');
             }
 
             if(!empty($filters['name'])){
