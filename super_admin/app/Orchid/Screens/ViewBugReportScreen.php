@@ -101,8 +101,8 @@ class ViewBugReportScreen extends Screen
                 Toast::warning('Please select bug reports in order to delete them.');
             }
 
-        }catch(\Exception $e) {
-            Toast::error('There was a error trying to deleted the selected events. Error Message: ' . $e->getMessage());
+        } catch(\Exception $e) {
+            Toast::error('There was a error trying to deleted the selected bug reports. Error Message: ' . $e->getMessage());
         }
     }
 
