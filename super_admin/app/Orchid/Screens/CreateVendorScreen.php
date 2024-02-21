@@ -202,6 +202,7 @@ class CreateVendorScreen extends Screen
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
+                    ->required()
                     ->empty('Start typing to Search...')
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
@@ -434,7 +435,7 @@ class CreateVendorScreen extends Screen
 
     private function getCategoryId($category_name){
             
-            $category = Categories::where('name', 'LIKE', '$'.$category_name.'%')->get();
+            $category = Categories::where('name', 'LIKE', '%'.$category_name.'%')->get();
     
             if(count($category) == 0){
                 return null;
