@@ -116,7 +116,7 @@ class ViewAllBidScreen extends Screen
             return redirect()-> route('platform.studentBid.edit', $bid);
         }
     }
-
+    
     public function updateBid()
     {
         $bid_type = request('bid_type');
