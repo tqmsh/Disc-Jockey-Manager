@@ -87,6 +87,11 @@ class ViewStudentBidsLayout extends Table
                 ->render(function($bid){
                        return e($bid->contact_instructions);
                 }),
+
+            TD::make()
+                ->render(function ($bid) {
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['bid'=>$bid->id, 'bid_type' => 'student']) ->icon('pencil');
+                }),
         ];    
     }
 }
