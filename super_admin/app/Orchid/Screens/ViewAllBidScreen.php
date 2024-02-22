@@ -109,10 +109,6 @@ class ViewAllBidScreen extends Screen
         return redirect()->route('platform.bid.list', [$event->id, 'category_id' => request('category_id')]);
     }
 
-    public function redirect($bid){
-        return redirect()-> route('platform.bid.edit', $bid);
-    }
-
     public function redirect($bid, $bid_type){
         if ($bid_type == 'event') {
             return redirect()-> route('platform.eventBid.edit', $bid);
