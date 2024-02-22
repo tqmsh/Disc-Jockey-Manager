@@ -109,6 +109,10 @@ class ViewAllBidScreen extends Screen
         return redirect()->route('platform.bid.list', [$event->id, 'category_id' => request('category_id')]);
     }
 
+    public function redirect($bid){
+        return redirect()-> route('platform.bid.edit', $bid);
+    }
+
     public function updateBid()
     {
         $bid = StudentBids::find(request('bid_id'));
