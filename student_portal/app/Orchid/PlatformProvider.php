@@ -69,9 +69,17 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('fa.person-dress')
                 ->route('platform.dresses'),
             
-            Menu::make('Report a Bug')
+            Menu::make('Bug Reports')
                 ->icon('bug')
-                ->route('platform.bug-reports.create'),
+                ->list([
+                    Menu::make('List')
+                        ->icon('list')
+                        ->route('platform.bug-reports.list'),
+                    
+                    Menu::make('Create')
+                        ->icon('plus')
+                        ->route('platform.bug-reports.create')
+                ]),
 
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')

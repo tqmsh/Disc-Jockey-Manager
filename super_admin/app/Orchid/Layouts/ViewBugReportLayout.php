@@ -59,7 +59,7 @@ class ViewBugReportLayout extends Table
 
                     return Button::make($bug_report->toSeverityString())
                         ->type($button_color)
-                        ->method('to_route', ['route' => 'platform.bug-reports.edit', 'bug_report_id' => $bug_report->id]);
+                        ->method('redirect', ['bug_report_id' => $bug_report->id, 'type' => 'edit']);
             }),
 
             TD::make('status', "Status")
@@ -71,7 +71,7 @@ class ViewBugReportLayout extends Table
 
                     return Button::make($bug_report->toStatusString())
                         ->type($button_color)
-                        ->method('to_route', ['route' => 'platform.bug-reports.edit', 'bug_report_id' => $bug_report->id]);
+                        ->method('redirect', ['bug_report_id' => $bug_report->id, 'type' => 'edit']);
             }),
             
             TD::make('creation_at', 'Creation Date')
@@ -80,11 +80,21 @@ class ViewBugReportLayout extends Table
                         ->route('platform.bug-reports.edit', $bug_report->id);
             }),
             
-            TD::make('View')
+            TD::make()
                 ->render(function(BugReport $bug_report) {
-                    return Link::make('View')
-                        ->route('platform.bug-reports.view', $bug_report->id);
-            })
+                    return Button::make('View')
+                            ->type(Color::DARK())
+                            ->method('redirect', ['bug_report_id' => $bug_report->id, 'type' => 'view']) 
+                            ->icon('eye');
+            }),
+
+            TD::make()
+                ->render(function(BugReport $bug_report) {
+                    return Button::make('Edit')
+                            ->type(Color::PRIMARY())
+                            ->method('redirect', ['bug_report_id' => $bug_report->id, 'type' => 'edit']) 
+                            ->icon('pencil');
+                })
             
         ];
     }

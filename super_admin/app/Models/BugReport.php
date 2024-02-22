@@ -20,6 +20,7 @@ class BugReport extends Model
         'description',
         'module',
         'severity',
+        'status',
         'created_at',
         'updated_at'
     ];
@@ -57,6 +58,10 @@ class BugReport extends Model
         try {
             if(isset($filters['severity'])) {
                 $query->where('severity', $filters['severity']);
+            }
+
+            if(isset($filters['status'])) {
+                $query->where('status', $filters['status']);
             }
         } catch(\Exception $e) {
             Alert::error('There was an error processing the filter. Error Message: ' . $e->getMessage());

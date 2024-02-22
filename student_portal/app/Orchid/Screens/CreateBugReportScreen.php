@@ -119,7 +119,7 @@ class CreateBugReportScreen extends Screen
 
             Toast::success('Thank you for reporting a bug! We always appreciate your feedback and efforts to help us improve Prom Planner.');
 
-            return to_route('platform.main');
+            return to_route('platform.bug-reports.list');
         } catch(Exception $e) {
             Toast::error('There was an error creating the bug report. Error code: ' . $e->getMessage());
         }

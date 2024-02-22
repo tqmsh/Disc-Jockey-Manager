@@ -60,10 +60,6 @@ class EditBugReportScreen extends Screen
                 ->icon('trash')
                 ->method('delete')
                 ->confirm('Are you sure you want to delete this bug report?'),
-            
-            Button::make('Go To Reporter')
-                ->icon('user')
-                ->method('redirectToUserEdit', ['bug_report' => $this->bug_report->id]),
 
             Link::make('Back')
                 ->icon('arrow-left')
@@ -110,7 +106,18 @@ class EditBugReportScreen extends Screen
                     ])
                     ->horizontal()
                     ->required()
-                    ->value($this->bug_report->severity)
+                    ->value($this->bug_report->severity),
+                
+                Select::make('status')
+                    ->title('Status')
+                    ->options([
+                        0 => 'New',
+                        1 => 'Under Review',
+                        2 => 'Fixed',
+                    ])
+                    ->horizontal()
+                    ->required()
+                    ->value($this->bug_report->status)
             ])
         ];
     }
@@ -121,7 +128,8 @@ class EditBugReportScreen extends Screen
                 'title' => 'required',
                 'description' => 'required',
                 'module' => 'required',
-                'severity' => 'required'
+                'severity' => 'required',
+                'status' => 'required'
             ]);
 
             // update bug report
@@ -146,28 +154,6 @@ class EditBugReportScreen extends Screen
         } catch(\Exception $e) {
             Alert::error('There was an error deleting this bug report. Error Code: ' . $e->getMessage());
         }
-    }
-
-    // Redirects the admin the to user's respective edit page (e.g local admin edit page or student edit page)
-    public function redirectToUserEdit(BugReport $bug_report) {
-        // There's no teacher portal yet, we'll pass them off as a local admin
-        $reporter_role = match($bug_report->reporter_role) {
-            2, 5 => "Local Admin",
-            3 => "Student",
-            4 => "Vendor"
-        };
-
-        $safe_role = str_replace(' ', '', strtolower($reporter_role));
-
-        $id = DB::table($safe_role . 's')
-            ->where('user_id', $bug_report->reporter_user_id)
-            ->get('id')
-            ->first()
-            ->id;
-        
-        $route = 'platform.' . $safe_role . '.edit';
-
-        return to_route($route, $id);
     }
 
     public function getModuleOptions() : array {

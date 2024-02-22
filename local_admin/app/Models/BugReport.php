@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
+use Orchid\Support\Facades\Alert;
 
 class BugReport extends Model
 {
@@ -19,6 +20,7 @@ class BugReport extends Model
         'description',
         'module',
         'severity',
+        'status',
         'created_at',
         'updated_at'
     ];
@@ -29,5 +31,35 @@ class BugReport extends Model
             2 => "Moderate",
             3 => "Minor"
         };
+    }
+
+    public function toStatusString() : string {
+        return match($this->status) {
+            0 => 'New',
+            1 => 'Under Review',
+            2 => 'Fixed'
+        };
+    }
+
+    public function toCleanModuleString() : string{
+        $module = $this->module;
+
+        $module = explode('.', $module);
+        
+        return ucfirst($module[1]);
+    }
+
+    public function scopeFilter($query, array $filters) {
+        try {
+            if(isset($filters['severity'])) {
+                $query->where('severity', $filters['severity']);
+            }
+
+            if(isset($filters['status'])) {
+                $query->where('status', $filters['status']);
+            }
+        } catch(\Exception $e) {
+            Alert::error('There was an error processing the filter. Error Message: ' . $e->getMessage());
+        }
     }
 }

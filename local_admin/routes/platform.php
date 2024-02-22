@@ -63,6 +63,8 @@ use App\Orchid\Screens\CreateBugReportScreen;
 
 use App\Orchid\Screens\CreatePromHistoryScreen;
 use App\Orchid\Screens\EditPromHistoryScreen;
+use App\Orchid\Screens\ViewBugReportDetailedScreen;
+use App\Orchid\Screens\ViewBugReportScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -166,8 +168,10 @@ Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.
 // Contracts
 Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 
-// create bug report
+// Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
+Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
+Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

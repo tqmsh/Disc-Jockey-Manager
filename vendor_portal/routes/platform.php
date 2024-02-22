@@ -39,6 +39,8 @@ use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\CreateBugReportScreen;
+use App\Orchid\Screens\ViewBugReportDetailedScreen;
+use App\Orchid\Screens\ViewBugReportScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,8 +98,10 @@ Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonS
 
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
-// create bug report
+// Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
+Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
+Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
 // $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
