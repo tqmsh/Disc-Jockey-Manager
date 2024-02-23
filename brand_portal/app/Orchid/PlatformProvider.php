@@ -51,57 +51,57 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('book-open')
                 ->route('platform.course.list'),
 
-            Menu::make('Examples Layouts')
-                ->title('PLACEHOLDERS')
-                ->icon('arrow-down')
-                ->size()
-                ->list([
+            // Menu::make('Examples Layouts')
+            //     ->title('PLACEHOLDERS')
+            //     ->icon('arrow-down')
+            //     ->size()
+            //     ->list([
 
-                    Menu::make('Basic Elements')
-                        ->title('Form controls')
-                        ->icon('note')
-                        ->route('platform.dashboard.fields'),
+            //         Menu::make('Basic Elements')
+            //             ->title('Form controls')
+            //             ->icon('note')
+            //             ->route('platform.dashboard.fields'),
 
-                    Menu::make('Advanced Elements')
-                        ->icon('briefcase')
-                        ->route('platform.dashboard.advanced'),
+            //         Menu::make('Advanced Elements')
+            //             ->icon('briefcase')
+            //             ->route('platform.dashboard.advanced'),
 
-                    Menu::make('Text Editors')
-                        ->icon('list')
-                        ->route('platform.dashboard.editors'),
+            //         Menu::make('Text Editors')
+            //             ->icon('list')
+            //             ->route('platform.dashboard.editors'),
 
-                    Menu::make('Overview layouts')
-                        ->title('Layouts')
-                        ->icon('layers')
-                        ->route('platform.dashboard.layouts'),
+            //         Menu::make('Overview layouts')
+            //             ->title('Layouts')
+            //             ->icon('layers')
+            //             ->route('platform.dashboard.layouts'),
 
-                    Menu::make('Chart tools')
-                        ->icon('bar-chart')
-                        ->route('platform.dashboard.charts'),
+            //         Menu::make('Chart tools')
+            //             ->icon('bar-chart')
+            //             ->route('platform.dashboard.charts'),
 
-                    Menu::make('Cards')
-                        ->icon('grid')
-                        ->route('platform.dashboard.cards')
-                        ->divider(),
+            //         Menu::make('Cards')
+            //             ->icon('grid')
+            //             ->route('platform.dashboard.cards')
+            //             ->divider(),
 
-                    Menu::make('Documentation')
-                        ->title('Docs')
-                        ->icon('docs')
-                        ->url('https://orchid.software/en/docs'),
+            //         Menu::make('Documentation')
+            //             ->title('Docs')
+            //             ->icon('docs')
+            //             ->url('https://orchid.software/en/docs'),
 
-                    Menu::make('Changelog')
-                        ->icon('shuffle')
-                        ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
-                        ->target('_blank')
-                        ->badge(function () {
-                            return Dashboard::version();
-                        }, Color::DARK()),
+            //         Menu::make('Changelog')
+            //             ->icon('shuffle')
+            //             ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
+            //             ->target('_blank')
+            //             ->badge(function () {
+            //                 return Dashboard::version();
+            //             }, Color::DARK()),
 
-                    Menu::make(__('Roles'))
-                        ->icon('lock')
-                        ->route('platform.systems.roles')
-                        ->permission('platform.systems.roles'),
-                ]),
+            //         Menu::make(__('Roles'))
+            //             ->icon('lock')
+            //             ->route('platform.systems.roles')
+            //             ->permission('platform.systems.roles'),
+            //     ]),
         ];
     }
 

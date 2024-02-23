@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -99,6 +100,12 @@ class EditStudentScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->student->email),
+
+                Password::make('password')
+                    ->title('New Password')
+                    ->type('password')
+                    ->required()
+                    ->horizontal(),
                 
                 Select::make('school')
                     ->title('School')
@@ -265,6 +272,7 @@ class EditStudentScreen extends Screen
             'email' => $request->input('email'),
             'country' => $request->input('country'),
             'phonenumber' => $request->input('phonenumber'),
+            'password' => bcrypt($request->input('password')),
         ];
         
         return $userTableFields;
