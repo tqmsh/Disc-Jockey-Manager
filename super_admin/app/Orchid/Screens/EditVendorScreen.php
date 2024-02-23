@@ -130,11 +130,10 @@ class EditVendorScreen extends Screen
                     ->value($this->vendor->email),
 
                 Password::make('password')
-                    ->title('Password')
+                    ->title('New Password')
                     ->type('password')
                     ->required()
-                    ->horizontal()
-                    ->value($this->user->password),
+                    ->horizontal(),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')
@@ -184,6 +183,7 @@ class EditVendorScreen extends Screen
         ];
     }
     
+    //! fix passowrd update
     public function update(Vendors $vendor, Request $request)
     {
         try{
@@ -193,8 +193,12 @@ class EditVendorScreen extends Screen
 
                 //email not changed
                 $vendor->update($request->except(['firstname', 'lastname', 'name', '_token']));
+
+                $userFields = $request->except(['website', '_token', 'city', 'state_province', 'zip_postal', 'address', 'category_id', 'company_name']);
+                $userFields['password'] = bcrypt($request->input('password'));
+
                 
-                User::where('id', $vendor->user_id)->update($request->except(['website', '_token', 'city', 'state_province', 'zip_postal', 'address', 'category_id', 'company_name']));
+                User::where('id', $vendor->user_id)->update($userFields);
                 
                 Toast::success('You have successfully updated ' . $request->input('company_name'));
 
