@@ -107,7 +107,7 @@ class UserProfileScreen extends Screen
         ]);
 
         //use str_ends_with() to check if the user.pfp ends with .png, .jpg, .jpeg, .gif, .svg, or .webp
-        if (!(str_ends_with(request('user.pfp'), ".png") || str_ends_with(request('user.pfp'), ".jpg") || str_ends_with(request('user.pfp'), ".jpeg") || str_ends_with(request('user.pfp'), ".gif") || str_ends_with(request('user.pfp'), ".svg") || str_ends_with(request('user.pfp'), ".webp"))) {
+        if (!(request('user.pfp') == null) && !(str_ends_with(request('user.pfp'), ".png") || str_ends_with(request('user.pfp'), ".jpg") || str_ends_with(request('user.pfp'), ".jpeg") || str_ends_with(request('user.pfp'), ".gif") || str_ends_with(request('user.pfp'), ".svg") || str_ends_with(request('user.pfp'), ".webp"))) {
 
             Toast::error(__('Invalid file type. Accepted file: .png, .jpg, .jpeg, .gif, .svg, .webp'));
 
