@@ -35,7 +35,7 @@ class CreateBugReportScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Create a bug report';
+        return 'Create a Bug Report';
     }
 
     /**

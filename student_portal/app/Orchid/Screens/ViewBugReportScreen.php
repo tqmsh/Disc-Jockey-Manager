@@ -9,6 +9,7 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Color;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 
@@ -33,7 +34,7 @@ class ViewBugReportScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'View Your Bug Reports';
+        return 'Report a Bug';
     }
 
     /**
@@ -43,7 +44,11 @@ class ViewBugReportScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Create Bug Report')
+                ->icon('plus')
+                ->route('platform.bug-reports.create')
+        ];
     }
 
     /**

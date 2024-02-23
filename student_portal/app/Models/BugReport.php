@@ -42,11 +42,18 @@ class BugReport extends Model
     }
 
     public function toCleanModuleString() : string{
+        $moduleString = '';
         $module = $this->module;
 
         $module = explode('.', $module);
+        $moduleString = ucfirst($module[1]);
         
-        return ucfirst($module[1]);
+        if(str_contains($moduleString, '-')) {
+            $seperatedModuleString = explode('-', $moduleString);
+            $moduleString = $seperatedModuleString[0] . ' ' . ucfirst($seperatedModuleString[1]);
+        }
+
+        return $moduleString;
     }
 
     public function scopeFilter($query, array $filters) {
