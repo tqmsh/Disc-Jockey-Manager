@@ -86,10 +86,10 @@ class ExampleScreen extends Screen
 
         // Total tickets Sold
         $newestEvent = Events::where('event_creator', $user->id)->latest('created_at')->first();
-        $newestEventId = $newestEvent->id;
+        $newestEventId = !is_null($newestEvent) ? $newestEvent->id : 0;
         $paidAttendeesCount = EventAttendees::where('event_id', $newestEventId)->where('ticketstatus', 'paid')->count();
 
-        $paidAttendeesCountPercentage = $newestEvent->capacity !== null && $newestEvent->capacity > 0 ? number_format(($paidAttendeesCount / $newestEvent->capacity) * 100, 2) . " %" : "Capacity Not Set";
+        $paidAttendeesCountPercentage = (!is_null($newestEvent) && $newestEvent->capacity > 0) ? number_format(($paidAttendeesCount / $newestEvent->capacity) * 100, 2) . " %" : "Capacity Not Set";
     
         // Direct Bids recieved
         $DirectBidsRecieved = EventBids::where('event_id', $newestEvent)->count();
