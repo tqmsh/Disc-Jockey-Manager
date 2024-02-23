@@ -292,6 +292,7 @@ class CreateStudentScreen extends Screen
                         $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['city_municipality'], $students[$i]['state_province']);
                         
                         $student = [
+                            'name' => $students[$i]['firstname'], //this is the username for the student
                             'firstname' => $students[$i]['firstname'],
                             'lastname' => $students[$i]['lastname'],
                             'phonenumber' => $students[$i]['phonenumber'],
