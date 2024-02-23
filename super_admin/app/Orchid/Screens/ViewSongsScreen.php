@@ -33,6 +33,11 @@ class ViewSongsScreen extends Screen
             Link::make('Add New Song')
                 ->icon('plus')
                 ->route('platform.songs.edit'),
+
+            Button::make('Approve Selected Songs')
+                ->icon('check')
+                ->method('approve'),
+
             Button::make('Delete Selected Songs')
                 ->icon('trash')
                 ->confirm('Are you sure you want to delete the selected songs?')
@@ -45,6 +50,22 @@ class ViewSongsScreen extends Screen
         return [
             ViewSongsLayout::class,
         ];
+    }
+
+    //this method will mass approve selected songs
+    public function approve(Request $request)
+    {
+        $songs = $request->get('selectedSongs');
+        try {
+            if (!empty($songs)) {
+                Song::whereIn('id', $songs)->update(['status' => 1]);
+                Toast::success('Selected songs approved successfully');
+            } else {
+                Toast::warning('Please select the songs to approve');
+            }
+        } catch (Exception $e) {
+            Alert::error('There was an error trying to approve the selected songs. Error Message: ' . $e->getMessage());
+        }
     }
 
 
