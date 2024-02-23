@@ -93,7 +93,7 @@ class CreateStudentScreen extends Screen
                             • allergies <br>'),
                     Link::make('Download Sample CSV')
                         ->icon('download')
-                        ->href('/sample_vendors_upload.csv')
+                        ->href('/sample_students_upload.csv')
                 ]),
             ])
             ->title('Mass Import Students')
