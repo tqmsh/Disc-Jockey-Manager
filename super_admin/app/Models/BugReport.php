@@ -49,7 +49,13 @@ class BugReport extends Model
         $module = explode('.', $module);
 
         $module[0] = ucfirst($module[0]);
+
         $module[1] = ucfirst($module[1]);
+
+        if(str_contains($module[1], '-')) {
+            $seperatedModuleString = explode('-', $module[1]);
+            $module[1] = $seperatedModuleString[0] . ' ' . ucfirst($seperatedModuleString[1]);
+        }
         
         return implode(" - ", $module);
     }
