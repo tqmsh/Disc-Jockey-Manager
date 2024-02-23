@@ -14,6 +14,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Orchid\Screen\Fields\Password;
 use Orchid\Support\Facades\Layout;
 
 class EditLocaladminScreen extends Screen
@@ -98,6 +99,12 @@ class EditLocaladminScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->localadmin->email),
+
+                Password::make('password')
+                    ->title('New Password')
+                    ->type('password')
+                    ->required()
+                    ->horizontal(),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')
@@ -239,6 +246,7 @@ class EditLocaladminScreen extends Screen
             'email' => $request->input('email'),
             'country' => $request->input('country'),
             'phonenumber' => $request->input('phonenumber'),
+            'password' => bcrypt($request->input('password'))
         ];
         
         return $userTableFields;
