@@ -173,7 +173,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles'),
             
-            Menu::make('Bug Reports')
+            Menu::make('Report a Bug')
                 ->icon('bug')
                 ->route('platform.bug-reports.list'),
 
