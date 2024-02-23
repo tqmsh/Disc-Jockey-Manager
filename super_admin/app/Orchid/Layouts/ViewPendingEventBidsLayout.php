@@ -37,14 +37,14 @@ class ViewPendingEventBidsLayout extends Table
                 ->align(TD::ALIGN_LEFT)
                 ->width('100px')
                 ->render(function(EventBids $bid){
-                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1, 'bid_type' => 'event'])->icon('check')->type(Color::SUCCESS()); 
                     }), 
 
             TD::make()
                 ->align(TD::ALIGN_LEFT)
                 ->width('100px')
                 ->render(function(EventBids $bid){
-                    return Button::make('Reject')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                    return Button::make('Reject')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2, 'bid_type' => 'event'])->icon('close')->type(Color::DANGER()); 
                     }), 
 
             TD::make('company_name', 'Company')

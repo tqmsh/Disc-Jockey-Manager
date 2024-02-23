@@ -115,7 +115,12 @@ class ViewAllBidScreen extends Screen
 
     public function updateBid()
     {
-        $bid = StudentBids::find(request('bid_id'));
+        $bid_type = request('bid_type');
+        if ($bid_type == 'student') {
+            $bid = StudentBids::find(request('bid_id'));
+        } else if ($bid_type == 'event') {
+            $bid = EventBids::find(request('bid_id'));
+        }
         $bid->status = request('choice');
         $bid->save();
 
