@@ -74,6 +74,7 @@ class EditRegionScreen extends Screen
 
                 Input::make('region_name')
                     ->title('Region Name')
+                    ->required()
                     ->placeholder('Enter the name of the region')
                     ->help('This is the name of the category that will be displayed to the user.')
                     ->value($this->region->name),
@@ -86,6 +87,12 @@ class EditRegionScreen extends Screen
         try{
 
             $region->name = request('region_name');
+
+            //check for duplicate region
+            if (Region::where('name', $region->name)->whereNot('id', $region->id)->exists()) {
+                Toast::error('A region with this name already exists.');
+                return redirect()->back();
+            }
     
             $region->save();
     
