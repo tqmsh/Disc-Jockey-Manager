@@ -90,19 +90,20 @@ class ExampleScreen extends Screen
         $paidAttendeesCount = EventAttendees::where('event_id', $newestEventId)->where('ticketstatus', 'paid')->count();
 
         $paidAttendeesCountPercentage = (!is_null($newestEvent) && $newestEvent->capacity > 0) ? number_format(($paidAttendeesCount / $newestEvent->capacity) * 100, 2) . " %" : "Capacity Not Set";
-    
+        
         // Direct Bids recieved
-        $DirectBidsRecieved = EventBids::where('event_id', $newestEvent)->count();
+        //get the count of all bids placed on all events at the currently authenticated user's school
+        $DirectBidsRecieved = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->count();
 
         // Direct Bids Replied to
-        $DirectBidsRepliedTo = EventBids::where('event_id', $newestEvent)->whereIn('status', [1,2])->count();
+        $DirectBidsRepliedTo = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->whereIn('status', [1,2])->count();
 
         // Total Revenue: 
-        $revenueRecord = ActualExpenseRevenue::where('event_id', $newestEvent)->where('type', 2)->first();
+        $revenueRecord = ActualExpenseRevenue::where('event_id', $newestEventId)->where('type', 2)->first();
         $totalRevenue = $revenueRecord ? $revenueRecord->actual : "No revenue";
 
         // Total Expenses:
-        $expensesRecord = ActualExpenseRevenue::where('event_id', $newestEvent)->where('type', 1)->first();
+        $expensesRecord = ActualExpenseRevenue::where('event_id', $newestEventId)->where('type', 1)->first();
         $totalExpenses = $expensesRecord ? $expensesRecord->actual : "No expenses";
 
         $this->campaigns = Campaign::where("region_id", School::find(Localadmin::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
@@ -149,9 +150,6 @@ class ExampleScreen extends Screen
                 'directBidsReceived'   => $DirectBidsRecieved,
                 'directBidsRepliedTo'  => $DirectBidsRepliedTo,
                 'paidAttendeesCountPercentage' => $paidAttendeesCountPercentage,
-
-
-
 
             ],
         ];
@@ -220,7 +218,7 @@ class ExampleScreen extends Screen
             ]),
             Layout::metrics([
                 'Direct Bids received' => 'metrics.directBidsReceived',
-                'Direct Bids replied to' => 'metrics.directBidsRepliedTo',
+                'Direct Bids replied' => 'metrics.directBidsRepliedTo',
                 'Total Revenue' => 'metrics.totalRevenue',
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
