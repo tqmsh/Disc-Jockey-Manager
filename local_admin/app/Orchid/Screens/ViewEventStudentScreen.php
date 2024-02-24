@@ -536,10 +536,12 @@ class ViewEventStudentScreen extends Screen
         //get the student id from the post request
         $user_id = $request->get('user_id');
 
+        $current_table_id = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->where('table_approved', 1)->pluck('table_id')->first();
+
         try{
 
             //if the table id is not empty
-            if(!empty($table_id)){
+            if(!empty($table_id) && $table_id != $current_table_id){
 
                 if($table_id == 'remove'){
                     
@@ -551,17 +553,25 @@ class ViewEventStudentScreen extends Screen
                     Toast::success('Student seating removed succesfully');
                 } else{        
 
+                    //update the student seating in the db
                     EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->update([
                         'table_id' => $table_id,
                     ]);
 
+                    //decrement the capacity of the new table
                     Seating::find($table_id)->decrement('capacity');
+
+                    //increment the capacity of the old table
+                    if($current_table_id != null){
+                        Seating::find($current_table_id)->increment('capacity');
+                    }
+
 
                     Toast::success('Student seating updated succesfully');
                 }
 
             }else{
-                Toast::warning('Please select a table in order to add/update the student seating');
+                Toast::warning('Please select a valid table in order to add/update the student seating');
             }
 
         }catch(Exception $e){
