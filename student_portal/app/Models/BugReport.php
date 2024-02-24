@@ -26,7 +26,7 @@ class BugReport extends Model
     ];
 
     public function toSeverityString() : string {
-        return match($this->severity) {
+        return match((int)$this->severity) {
             1 => "Critical",
             2 => "Moderate",
             3 => "Minor"
@@ -34,7 +34,7 @@ class BugReport extends Model
     }
 
     public function toStatusString() : string {
-        return match($this->status) {
+        return match((int)$this->status) {
             0 => 'New',
             1 => 'Under Review',
             2 => 'Fixed'

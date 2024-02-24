@@ -3,7 +3,10 @@
 namespace App\Orchid\Screens;
 
 use App\Models\BugReport;
+use App\Models\User;
+use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
@@ -11,7 +14,6 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\Select;
-use Illuminate\Support\Facades\DB;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 
@@ -132,8 +134,22 @@ class EditBugReportScreen extends Screen
                 'status' => 'required'
             ]);
 
+            $old_title = $bug_report->title;
+            $old_status = $bug_report->status;
+
             // update bug report
             $bug_report->update($fields);
+
+            // send notification to user when update bug report status
+            if($bug_report->status !== $old_status) {
+                $notification = new GeneralNotification([
+                    'title' => 'Bug Report Status Updated',
+                    'message' => Auth::user()->name . " has updated the status to {$bug_report->toStatusString()} on your bug report: {$old_title}",
+                    'action' => "/admin/bug-reports/{$bug_report->id}"
+                ]);
+
+                User::find($bug_report->reporter_user_id)->notify($notification);
+            }
 
             Toast::success('You have successfully updated ' . $bug_report->title . '.');
 
