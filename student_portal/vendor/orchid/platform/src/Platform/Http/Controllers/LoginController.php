@@ -175,7 +175,7 @@ class LoginController extends Controller
             $formFields = $request->validate([
                 'name' => ['required'],
                 'firstname' => ['required'],
-                'lastname' => ['required', 'min:3'],
+                'lastname' => ['required'],
                 'email' => ['required', 'email', Rule::unique('users', 'email')],
                 'password' => 'required|confirmed|min:6',
                 'password_confirmation' => ['required'],
