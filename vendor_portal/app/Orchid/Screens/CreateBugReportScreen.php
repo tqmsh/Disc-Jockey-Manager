@@ -3,16 +3,19 @@
 namespace App\Orchid\Screens;
 
 use App\Models\BugReport;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Orchid\Screen\Screen;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Mail\Message;
 
 class CreateBugReportScreen extends Screen
 {
@@ -113,7 +116,10 @@ class CreateBugReportScreen extends Screen
             $fields['reporter_role'] = Auth::user()->role;
 
             // create new bug report
-            BugReport::create($fields);
+            $bug_report = BugReport::create($fields);          
+
+            // send email to user
+            $this->sendEmail($bug_report);
 
             Toast::success('Thank you for reporting a bug! We always appreciate your feedback and efforts to help us improve Prom Planner.');
 
@@ -121,5 +127,39 @@ class CreateBugReportScreen extends Screen
         } catch(Exception $e) {
             Toast::error('There was an error creating the bug report. Error code: ' . $e->getMessage());
         }
+    }
+
+    public function sendEmail(BugReport $bug_report) {
+        $name = Auth::user()->name;
+
+        $emailContent = "Dear {$name},
+
+        We are sending this email to notify you that we have successfully received your bug report: {$bug_report->title}.
+
+        Thank you for taking the time to submit a bug report for Prom Planner. Your contribution helps us improve our app for all users.
+
+        An administrator will be reviewing your bug report shortly. If you have any further information or details to add, please do not hesitate to contact us at info@promplanner.app.
+        
+        We appreciate your support in making Prom Planner better.
+        
+        Best regards,
+        
+        Prom Planner Team";
+
+        // For now this uses the super admin account as the sender
+        $sender = User::find(13);
+
+        $emailData = [
+            'sender' => $sender,
+            'subject' => 'Thank you for submitting a bug report!',
+            'content' => $emailContent
+        ];
+
+        Mail::send(
+            'emails.generalEmail', $emailData, 
+            function (Message $message) use ($emailData) {
+                $message->subject($emailData['subject']);
+                $message->to(Auth::user()->email);
+        });
     }
 }
