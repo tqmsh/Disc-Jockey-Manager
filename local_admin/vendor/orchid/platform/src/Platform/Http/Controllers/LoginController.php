@@ -90,11 +90,10 @@ class LoginController extends Controller
                 $user = User::where('email', $request->input('email'))->first();
 
                 if ($user->role != 2 || $user->account_status == 0){
-
+                    
                     $this->guard->logout();
-
+                    $cookieJar->forget('lockUser');
                     $request->session()->invalidate();
-
                     $request->session()->regenerateToken();
 
                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
@@ -309,7 +308,8 @@ class LoginController extends Controller
             'role' => $user->role,
         ]);
 
-        $user->update(['start_time' => null]);
+
+        User::find($user->id)->update(['start_time' => null]);
         
         $this->guard->logout();
 

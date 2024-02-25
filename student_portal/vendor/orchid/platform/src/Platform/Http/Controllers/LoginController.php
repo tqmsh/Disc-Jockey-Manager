@@ -104,10 +104,14 @@ class LoginController extends Controller
 
                 return $this->sendLoginResponse($request);
             }
+
+            throw ValidationException::withMessages([
+                'email' => __('The details you entered did not match our records. Please double-check and try again.'),
+            ]);
+
         } catch (Exception $e) {
-            Session::flash('message', 'There was an internal server error. Please contact one of the admins of Prom Planner.');
-    
-            return redirect('/admin/register');
+
+            throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
         }
     }
     
@@ -317,7 +321,7 @@ class LoginController extends Controller
             'role' => $user->role,
         ]);
 
-        $user->update(['start_time' => null]);
+        User::find($user->id)->update(['start_time' => null]);
         $this->guard->logout();
 
         $request->session()->invalidate();
