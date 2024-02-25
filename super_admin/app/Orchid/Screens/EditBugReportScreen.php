@@ -140,11 +140,11 @@ class EditBugReportScreen extends Screen
             // update bug report
             $bug_report->update($fields);
 
-            // send notification to user when update bug report status
-            if($bug_report->status !== $old_status) {
+            // send notification to user when status gets changed to fixed
+            if($bug_report->status !== $old_status && $bug_report->toStatusString() == 'Fixed') {
                 $notification = new GeneralNotification([
                     'title' => 'Bug Report Status Updated',
-                    'message' => Auth::user()->name . " has updated the status to {$bug_report->toStatusString()} on your bug report: {$old_title}",
+                    'message' => "The status of your bug report: {$old_title}, has been set to Fixed by " . Auth::user()->name,
                     'action' => "/admin/bug-reports/{$bug_report->id}"
                 ]);
 
