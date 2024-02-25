@@ -243,7 +243,7 @@ class LoginController extends Controller
                                 $admin->notify(new GeneralNotification([
                                     'title' => 'New Local Admin Registered',
                                     'message' => 'A new vendor has registered. Please approve or deny their account.',
-                                    'action' => '/admin/pendingvendors',
+                                    'action' => '/admin/pendinglocaladmins',
 
                                 ]));
                             }
