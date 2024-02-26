@@ -205,7 +205,7 @@ class EditBugReportScreen extends Screen
     }
 
     public function sendEmail(BugReport $bug_report) {
-        $bug_reporter = User::find($bug_report->reporter_id);
+        $bug_reporter = User::find($bug_report->reporter_user_id);
         $name = $bug_reporter->name;
 
         $emailContent = "Dear {$name},
