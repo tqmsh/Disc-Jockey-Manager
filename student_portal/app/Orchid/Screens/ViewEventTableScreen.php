@@ -168,8 +168,11 @@ class ViewEventTableScreen extends Screen
             EventAttendees::create([
                 'user_id' => Auth::user()->id,
                 'event_id' => $event->id,
+                'inviter_user_id' =>  EventAttendees::where('user_id', Auth::id())->where('event_id', $event->id)->where('table_approved', 1)
+                                        ->where('invitation_status', 1)->get('inviter_user_id')->value('inviter_user_id'),
                 'table_id' => $table->id,
-                'ticketstatus' => EventAttendees::where('event_id', $event->id)->where('user_id', Auth::user()->id)->whereNot('table_id', $table->id)->get('ticketstatus')->value('ticketstatus'),
+                'ticketstatus' =>  EventAttendees::where('user_id', Auth::id())->where('event_id', $event->id)->where('table_approved', 1)
+                                        ->where('invitation_status', 1)->get('ticketstatus')->value('ticketstatus'),
             ]);
 
             Toast::success('Your request to be seated at this table has been sent to the admin. Please wait till they approve or reject your request.');
