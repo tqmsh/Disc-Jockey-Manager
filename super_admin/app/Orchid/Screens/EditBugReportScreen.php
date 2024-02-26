@@ -16,6 +16,8 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\Select;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Message;
 
 class EditBugReportScreen extends Screen
 {
@@ -144,11 +146,14 @@ class EditBugReportScreen extends Screen
             if($bug_report->status !== $old_status && $bug_report->toStatusString() == 'Fixed') {
                 $notification = new GeneralNotification([
                     'title' => 'Bug Report Status Updated',
-                    'message' => "The status of your bug report: {$old_title}, has been set to Fixed by " . Auth::user()->name,
+                    'message' => "The status of your bug report: {$old_title}, has been set to Fixed.",
                     'action' => "/admin/bug-reports/{$bug_report->id}"
                 ]);
 
                 User::find($bug_report->reporter_user_id)->notify($notification);
+
+                // send email to user to tell them the bug report has been fixed
+                $this->sendEmail($bug_report);
             }
 
             Toast::success('You have successfully updated ' . $bug_report->title . '.');
@@ -197,5 +202,36 @@ class EditBugReportScreen extends Screen
                 'vendor_portal.campaigns' => 'Campaigns'
             ]
         };
+    }
+
+    public function sendEmail(BugReport $bug_report) {
+        $bug_reporter = User::find($bug_report->reporter_id);
+        $name = $bug_reporter->name;
+
+        $emailContent = "Dear {$name},
+
+        We are sending this email to notify you that the status of your bug report: {$bug_report->title} has been set to Fixed.
+
+        Thank you for submitting a bug report that allows us to improve Prom Planner for better user experience.
+        
+        Best regards,
+        
+        Prom Planner Team";
+
+        // For now this uses the super admin account as the sender
+        $sender = User::find(13);
+
+        $emailData = [
+            'sender' => $sender,
+            'subject' => 'Thank you for submitting a bug report!',
+            'content' => $emailContent
+        ];
+
+        Mail::send(
+            'emails.generalEmail', $emailData, 
+            function (Message $message) use ($bug_reporter, $emailData) {
+                $message->subject($emailData['subject']);
+                $message->to($bug_reporter->email);
+        });
     }
 }
