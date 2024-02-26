@@ -117,7 +117,7 @@ class CreateLimoGroupScreen extends Screen
             $fields = $request->validate([
                 'name' => 'required',
                 'date' => 'required',
-                'capacity' => 'nullable',
+                'capacity' => 'required|numeric|min:2',
                 'pickup_location' => 'required',
                 'dropoff_location' => 'required',
                 'depart_time' => 'required',
