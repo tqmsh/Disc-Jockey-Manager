@@ -111,7 +111,7 @@ class ViewEventTableScreen extends Screen
                             return $table->tablename;
                         }),
                         Sight::make('seated_students', 'Seated Students')->render(function($table){
-                            
+
                             if(is_null($table)){
                                 return 'You are not seated at any table for this event.';
                             }
@@ -158,8 +158,8 @@ class ViewEventTableScreen extends Screen
             }
 
             //check if the student has already requested to be seated at this table
-            if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('table_id', $table->id)->where('table_approved', 0)->exists()){
-                Toast::info('You have already requested to be seated at this table. Please wait for a admin to approve your request.');
+            if(EventAttendees::where('user_id', Auth::user()->id)->where('event_id', $event->id)->where('table_id', $table->id)->exists()){
+                Toast::info('You have already requested to be seated at this table or are already seated here.');
                 return redirect()->route('platform.event.tables', $event);
             }
 
