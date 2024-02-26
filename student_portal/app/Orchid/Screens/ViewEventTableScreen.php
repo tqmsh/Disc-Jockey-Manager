@@ -32,7 +32,7 @@ class ViewEventTableScreen extends Screen
     {
         return [
             'event' => $event,
-            'tables' => Seating::where('event_id', $event->id)->paginate(10) ?? null,
+            'tables' => Seating::where('event_id', $event->id)->paginate(10),
             'student_table' => Seating::find(
                                         EventAttendees::where('user_id', Auth::id())->where('event_id', $event->id)->where('table_approved', 1)
                                         ->where('invitation_status', 1)->value('table_id') ?? 0) ?? null,
@@ -102,8 +102,19 @@ class ViewEventTableScreen extends Screen
 
                     Layout::legend('student_table',[
 
-                        Sight::make('tablename', 'Table Name'),
+                        Sight::make('tablename', 'Table Name')->render(function($table){
+
+                            if(is_null($table)){
+                                return 'You are not seated at any table for this event.';
+                            }
+
+                            return $table->tablename;
+                        }),
                         Sight::make('seated_students', 'Seated Students')->render(function($table){
+                            
+                            if(is_null($table)){
+                                return 'You are not seated at any table for this event.';
+                            }
                             return $this->getNames($table->id);
                         }),
 
