@@ -90,11 +90,10 @@ class LoginController extends Controller
                 $user = User::where('email', $request->input('email'))->first();
 
                 if ($user->role != 2 || $user->account_status == 0){
-
+                    
                     $this->guard->logout();
-
+                    $cookieJar->forget('lockUser');
                     $request->session()->invalidate();
-
                     $request->session()->regenerateToken();
 
                    throw ValidationException::withMessages(['email' => __('The details you entered did not match our records. Please double-check and try again.'),]);
@@ -172,7 +171,7 @@ class LoginController extends Controller
             $formFields = $request->validate([
                 'name' => ['required'],
                 'firstname' => ['required'],
-                'lastname' => ['required', 'min:3'],
+                'lastname' => ['required'],
                 'email' => ['required', 'email', Rule::unique('users', 'email')],
                 'password' => 'required|confirmed|min:6',
                 'password_confirmation' => ['required'],
@@ -244,7 +243,7 @@ class LoginController extends Controller
                                 $admin->notify(new GeneralNotification([
                                     'title' => 'New Local Admin Registered',
                                     'message' => 'A new vendor has registered. Please approve or deny their account.',
-                                    'action' => '/admin/pendingvendors',
+                                    'action' => '/admin/pendinglocaladmins',
 
                                 ]));
                             }
@@ -309,7 +308,8 @@ class LoginController extends Controller
             'role' => $user->role,
         ]);
 
-        $user->update(['start_time' => null]);
+
+        User::find($user->id)->update(['start_time' => null]);
         
         $this->guard->logout();
 

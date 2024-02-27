@@ -87,6 +87,7 @@ use App\Orchid\Screens\EditBugReportScreen;
 use App\Orchid\Screens\EditContractScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
+use App\Orchid\Screens\EditStudentBidScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -191,7 +192,8 @@ Route::screen('/regions/{regions}/edit', EditRegionScreen::class)->name('platfor
 Route::screen('/bids', ViewAllBidScreen::class)->name('platform.bid.list');
 
 //edit bid screen
-Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid.edit');
+Route::screen('/bids/events/{bid}/edit', EditEventBidScreen::class)->name('platform.eventBid.edit');
+Route::screen('/bids/students/{bid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
 
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 

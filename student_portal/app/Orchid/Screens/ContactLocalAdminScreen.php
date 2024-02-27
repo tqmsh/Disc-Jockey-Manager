@@ -29,7 +29,7 @@ class ContactLocalAdminScreen extends Screen
     public function query(): iterable
     {
         return [
-            'localadmins' => User::whereIn('id', Localadmin::where('school_id', Auth::user()->student->school_id)->get('user_id'))->get()
+            'localadmins' => User::whereIn('id', Localadmin::where('school_id', Auth::user()->student->school_id)->get('user_id'))->where('account_status', 1)->get()
         ];
     }
 

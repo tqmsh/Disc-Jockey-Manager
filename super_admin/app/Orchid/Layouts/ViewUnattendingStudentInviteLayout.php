@@ -39,7 +39,7 @@ class ViewUnattendingStudentInviteLayout extends Table
             TD::make('status', 'Status')
                 ->render(function($student){
                     return 
-                        (EventAttendees::where('user_id', $student->user_id)->where('invitation_status', 0)->value('invited') == 1) ? '<i class="text-success">●</i> Invited' 
+                        (EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->query->get('event')->id)->where('invitation_status', 0)->value('invited') == 1) ? '<i class="text-success">●</i> Invited' 
                         : (($student->invitation_status == 0) ? '<i class="text-warning">●</i> Pending' 
                         : '<i class="text-danger">●</i> Rejected');
                 }), 

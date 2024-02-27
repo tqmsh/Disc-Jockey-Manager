@@ -12,6 +12,6 @@ class UniversalExpenseRevenue extends Model
     use HasFactory;
     use AsSource;
 
-    protected $table = 'universal_expense_revenues';
+    protected $table = 'universal_expenses_revenues';
     protected $fillable = ['name', 'created_at', 'type', 'updated_at', 'last_updated_user_id'];
 }

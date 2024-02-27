@@ -263,10 +263,9 @@ class CreateStudentScreen extends Screen
                             'email' => $students[$i]['email'], 
                             'password' => bcrypt($students[$i]['password']), 
                             'country' => Auth::user()->country, 
-                            'role' => 'student', 
+                            'role' => 3, 
                             'name' => $students[$i]['firstname'], 
                             'account_status' => 1, 
-                            'permissions' => Dashboard::getAllowAllPermission(),
                         ]);
                         
                         $students[$i]['user_id'] = $user->id;
