@@ -95,7 +95,7 @@ class ViewEventBidsLayout extends Table
 
             TD::make()
                 ->render(function ($bid) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['bid'=>$bid->id]) ->icon('pencil');
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['bid'=>$bid->id, 'bid_type' => 'event']) ->icon('pencil');
                 }),
         ];    
     }
