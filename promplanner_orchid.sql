@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2024 at 02:08 AM
+-- Generation Time: Feb 29, 2024 at 04:04 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -279,6 +279,25 @@ CREATE TABLE `beauty_group_members` (
 INSERT INTO `beauty_group_members` (`id`, `beauty_group_id`, `invitee_user_id`, `status`, `paid`, `created_at`, `updated_at`) VALUES
 (2, 2, 207, 1, 0, '2023-08-01 21:29:30', '2023-08-01 21:30:46'),
 (3, 2, 155, 1, 0, '2023-08-22 20:32:02', '2023-08-22 20:32:27');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bug_reports`
+--
+
+CREATE TABLE `bug_reports` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `reporter_user_id` bigint(20) UNSIGNED NOT NULL,
+  `reporter_role` int(10) UNSIGNED DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `severity` tinyint(4) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2007,6 +2026,14 @@ ALTER TABLE `beauty_group_members`
   ADD KEY `invitee_user_id2` (`invitee_user_id`);
 
 --
+-- Indexes for table `bug_reports`
+--
+ALTER TABLE `bug_reports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reporter_user_id` (`reporter_user_id`,`reporter_role`),
+  ADD KEY `reporter_role` (`reporter_role`);
+
+--
 -- Indexes for table `campaigns`
 --
 ALTER TABLE `campaigns`
@@ -2554,6 +2581,12 @@ ALTER TABLE `beauty_group_members`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `bug_reports`
+--
+ALTER TABLE `bug_reports`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `campaigns`
 --
 ALTER TABLE `campaigns`
@@ -2948,6 +2981,13 @@ ALTER TABLE `beauty_group_bids`
 ALTER TABLE `beauty_group_members`
   ADD CONSTRAINT `beauty_group_id` FOREIGN KEY (`beauty_group_id`) REFERENCES `beauty_groups` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `invitee_user_id2` FOREIGN KEY (`invitee_user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `bug_reports`
+--
+ALTER TABLE `bug_reports`
+  ADD CONSTRAINT `reporter_role` FOREIGN KEY (`reporter_role`) REFERENCES `roles` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `reporter_user_id` FOREIGN KEY (`reporter_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `campaigns`
