@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Notifications\GroupInvitation;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Notifications\GeneralNotification;
+use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Fields\SimpleMDE;
 
 class ViewLimoGroupScreen extends Screen
@@ -80,33 +81,41 @@ class ViewLimoGroupScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create a New Limo Group')
-                ->icon('plus')
-                ->route('platform.limo-groups.create'),
-            
-            Button::make('Leave Limo Group')
-                ->icon('logout')
-                ->method('leaveLimoGroup', 
-                    ['current_limo_group' => ($this->query()['current_limo_group'] != null) ? $this->query()['current_limo_group']->id : null,
-                    'owned_limo_group' => $this->query()['owned_limo_group'] != null ? $this->query()['owned_limo_group']->id : null]
-                )
-                ->confirm('WARNING: If you are the owner of the limo group, the entire group will be deleted. Are you sure you want to leave this limo group?'),
-            
-            Button::make('Deleted Selected Invitations')
-                    ->icon('trash')
-                    ->method('deletedSelectedInvitations')
-                    ->confirm('Are you sure you want to delete the selected invitations?'),
-            
-            ($this->owned_limo_group != null && $this->owned_limo_group->creator_user_id == Auth::user()->id) ? 
-                
-            ModalToggle::make('Invite Members')
-                ->modal('inviteMembersModal')
-                ->method('inviteMembers')
-                ->icon('user-follow')
-                : 
-            Link::make('Back')
-            ->icon('arrow-left')
-            ->route('platform.limo-groups'),
+            DropDown::make('Actions')
+                ->icon('arrow-down')
+                ->list([
+                    Link::make('Create a New Limo Group')
+                    ->icon('plus')
+                    ->route('platform.limo-groups.create'),
+                    
+                    Button::make('Leave Limo Group')
+                        ->icon('logout')
+                        ->method('leaveLimoGroup', 
+                            ['current_limo_group' => ($this->query()['current_limo_group'] != null) ? $this->query()['current_limo_group']->id : null,
+                            'owned_limo_group' => $this->query()['owned_limo_group'] != null ? $this->query()['owned_limo_group']->id : null]
+                        )
+                        ->confirm('WARNING: If you are the owner of the limo group, the entire group will be deleted. Are you sure you want to leave this limo group?'),
+                    
+                    ModalToggle::make('Invite Members')
+                        ->modal('inviteMembersModal')
+                        ->method('inviteMembers')
+                        ->icon('user-follow')
+                        ->canSee($this->owned_limo_group != null),
+
+                    Button::Make('Remove Selected Members')
+                        ->icon('unfollow')
+                        ->method('removeSelectedMembers')
+                        ->confirm('Are you sure you want to remove the selected members?')
+                        ->canSee($this->owned_limo_group != null),
+
+                    Button::make('Delete Selected Received Invitations')
+                        ->icon('trash')
+                        ->method('deleteSelectedInvitations')
+                        ->confirm('Are you sure you want to delete the selected invitations?'),
+                ]),
+                Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.limo-groups'),
         ];
     }
 
@@ -313,7 +322,7 @@ class ViewLimoGroupScreen extends Screen
 
                     ])
                 ],
-                'Limo Group Invitations' => [
+                'Received Limo Group Invitations' => [
                     Layout::table('limo_group_invitations', [
 
                         TD::make('actions', 'Actions')
@@ -531,7 +540,7 @@ class ViewLimoGroupScreen extends Screen
         }
     }
 
-    public function deletedSelectedInvitations(){
+    public function deleteSelectedInvitations(){
         $invitations = request('invitations');
 
         if($invitations != null){
@@ -650,5 +659,43 @@ class ViewLimoGroupScreen extends Screen
             } catch(\Exception $e){
                 Toast::error('Something went wrong. Error Code:' . $e->getMessage());
             } 
+    }
+
+    public function removeSelectedMembers() {
+        $ownedGroup = LimoGroup::where('creator_user_id', Auth::user()->id)->first();
+        if ($ownedGroup == null) {
+            abort(403);
+        }
+        $ownedGroupMembers = LimoGroupMember::where('limo_group_id', $ownedGroup->id);
+        $memberIDs = request('members');
+        if ($memberIDs != null) {
+            $removedSelf = $removedMember = false;
+            $membersModels = $ownedGroupMembers->find($memberIDs);
+            $removeMembers = [];
+            foreach($membersModels as $member) {
+                if ($member == null) {
+                    abort(403);
+                }
+                if ($member->invitee_user_id == Auth::id()) {
+                    $removedSelf = true;
+                    continue;
+                }
+                $removeMembers[] = $member;
+                $removedMember = true;
+            }
+            foreach($removeMembers as $member) {
+                $member->delete();
+            }
+            if ($removedSelf && $removedMember) {
+                Toast::success('You have removed the selected members successfully, but you can\'t remove yourself');
+            } else if ($removedMember) {
+                Toast::success('You have removed the selected members successfully');
+            } else {
+                Toast::error('You can\'t remove yourself from the group');
+            }
+            
+        } else {
+            Toast::error('You have not selected any members to remove');
+        }
     }
 }
