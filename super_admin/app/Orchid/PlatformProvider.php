@@ -167,12 +167,6 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('doc')
                 ->route('platform.contract.list'),
             
-            
-            Menu::make(__('Roles'))
-                ->icon('lock')
-                ->route('platform.systems.roles')
-                ->permission('platform.systems.roles'),
-            
             Menu::make('Report a Bug')
                 ->icon('bug')
                 ->route('platform.bug-reports.list'),
@@ -180,6 +174,11 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
+
+            Menu::make(__('Roles'))
+                ->icon('lock')
+                ->route('platform.systems.roles')
+                ->permission('platform.systems.roles'),
 
             Menu::make('Prom Planner Sites')
                 ->icon('arrow-down')
