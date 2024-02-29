@@ -24,6 +24,9 @@ use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
+use App\Orchid\Screens\CreateBugReportScreen;
+use App\Orchid\Screens\ViewBugReportDetailedScreen;
+use App\Orchid\Screens\ViewBugReportScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +50,11 @@ Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->nam
 Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
 Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+
+// Bug Reports
+Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
+Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
+Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
