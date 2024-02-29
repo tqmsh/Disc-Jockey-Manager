@@ -30,6 +30,7 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ContactLocalAdminScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
+use App\Orchid\Screens\CreateBugReportScreen;
 use App\Orchid\Screens\CreateSongRequestScreen;
 use App\Orchid\Screens\ViewCourseSectionScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
@@ -42,6 +43,8 @@ use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewSingleFoodScreen;
+use App\Orchid\Screens\ViewBugReportDetailedScreen;
+use App\Orchid\Screens\ViewBugReportScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,6 +127,10 @@ Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)
 
 Route::screen('/contact-prom-committees', ContactLocalAdminScreen::class)->name('platform.contact-prom-committees');
 
+// Bug Reports
+Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
+Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
+Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
