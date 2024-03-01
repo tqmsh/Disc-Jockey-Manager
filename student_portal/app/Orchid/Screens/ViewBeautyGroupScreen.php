@@ -314,7 +314,7 @@ class ViewBeautyGroupScreen extends Screen
 
                     ])
                 ],
-                'Beauty Group Invitations' => [
+                'Received Beauty Group Invitations' => [
                     Layout::table('beauty_group_invitations', [
 
                         TD::make('actions', 'Actions')
