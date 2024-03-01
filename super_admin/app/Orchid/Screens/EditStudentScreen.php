@@ -8,7 +8,7 @@ use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
+use Orchid\Screen\Fields\Password;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;

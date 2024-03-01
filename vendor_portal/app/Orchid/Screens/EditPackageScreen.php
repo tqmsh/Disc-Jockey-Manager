@@ -56,6 +56,7 @@ class EditPackageScreen extends Screen
 
             Button::make('Delete Package')
                 ->icon('trash')
+                ->confirm('Are you sure you want to delete this package?')
                 ->method('delete'),
 
             Link::make('Back')
