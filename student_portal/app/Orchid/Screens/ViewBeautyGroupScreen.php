@@ -89,9 +89,9 @@ class ViewBeautyGroupScreen extends Screen
                 )
                 ->confirm('WARNING: If you are the owner of the beauty group, the entire group will be deleted. Are you sure you want to leave this beauty group?'),
             
-            Button::make('Deleted Selected Invitations')
+            Button::make('Delete Selected Invitations')
                     ->icon('trash')
-                    ->method('deletedSelectedInvitations')
+                    ->method('deleteSelectedInvitations')
                     ->confirm('Are you sure you want to delete the selected invitations?'),
             
             ($this->owned_beauty_group != null && $this->owned_beauty_group->creator_user_id == Auth::user()->id) ? 
@@ -521,7 +521,7 @@ class ViewBeautyGroupScreen extends Screen
         }
     }
 
-    public function deletedSelectedInvitations(){
+    public function deleteSelectedInvitations(){
         $invitations = request('invitations');
 
         if($invitations != null){
