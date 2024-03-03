@@ -9,6 +9,8 @@ use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
 use App\Models\EventAttendees;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Actions\Link;
+
 
 
 
@@ -80,9 +82,9 @@ class ViewRegisteredEventLayout extends Table
                     ->first();
 
                     if ($eventAttendee->ticketstatus == 'Unpaid') {
-                        return Button::make('Buy Tickets')
+                        return Link::make('Buy Tickets')
                             ->icon('money')
-                            ->method('payment',['event_id' => $event->id])
+                            ->route('paypal', ['event_id' => $event->id])
                             ->type(Color::PRIMARY());
                     } else if ($eventAttendee->ticketstatus == 'paid'){
                         return Button::make('Tickets Bought')
