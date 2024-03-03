@@ -168,12 +168,13 @@ class ViewEventScreen extends Screen
         $provider = new PaypalClient;
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
+        $event = Events::find($event_id);
 
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [
                 // Success function gets called here
-                "return_url" => route('paypal_success', ['event_id' => $event->id]),
+                "return_url" => route('paypal_success', ['event_id' => $event_id]),
                 "cancel_url" => route('paypal_cancel')
             ],
             "purchase_units" => [
@@ -189,7 +190,7 @@ class ViewEventScreen extends Screen
         if(isset($response['id']) && $response['id']!=null) {
             foreach($response['links'] as $link) {
                 if($link['rel'] === 'approve') {
-                    return redirect()->away($link["href"]);
+                    return redirect($link["href"]);
                 }
             }
         } else {
