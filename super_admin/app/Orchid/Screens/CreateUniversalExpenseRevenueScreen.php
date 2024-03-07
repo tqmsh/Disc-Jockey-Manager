@@ -2,7 +2,15 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\UniversalExpenseRevenue;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class CreateUniversalExpenseRevenueScreen extends Screen
 {
@@ -23,7 +31,7 @@ class CreateUniversalExpenseRevenueScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'CreateUniversalExpensesRevenuesScreen';
+        return 'Add a New Expense or Revenue';
     }
 
     /**
@@ -33,7 +41,14 @@ class CreateUniversalExpenseRevenueScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Add')
+                ->icon('plus')
+                ->method('createExpenseRevenue'),
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.universal-expense-revenue.list'),
+        ];
     }
 
     /**
@@ -43,6 +58,30 @@ class CreateUniversalExpenseRevenueScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::rows([
+                Input::make('name')
+                    ->title('Name')
+                    ->type('text')
+                    ->required(),
+                Select::make('type')
+                    ->title('Type')
+                    ->options([
+                        1 => 'Expense',
+                        2 => 'Revenue',
+                    ])
+                    ->required(),
+            ])
+        ];
+    }
+
+    public function createExpenseRevenue(Request $request) {
+        $validated = $request->validate([
+            'name' => 'required|unique:universal_expenses_revenues|max:255',
+            'type' => 'required|integer|in:1,2',
+        ]);
+        $createdModel = UniversalExpenseRevenue::create($validated);
+        $expense_revenue_str = $createdModel->type == 1 ? 'Expense' : 'Revenue';
+        Toast::success($expense_revenue_str . ' \'' . $createdModel->name . '\' added succesfully');
     }
 }
