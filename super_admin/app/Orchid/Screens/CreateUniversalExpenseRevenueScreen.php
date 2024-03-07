@@ -81,7 +81,8 @@ class CreateUniversalExpenseRevenueScreen extends Screen
             'type' => 'required|integer|in:1,2',
         ]);
         $createdModel = UniversalExpenseRevenue::create($validated);
-        $expense_revenue_str = $createdModel->type == 1 ? 'Expense' : 'Revenue';
-        Toast::success("$expense_revenue_str '$createdModel->name' added succesfully");
+        $typeStr = $createdModel->type == 1 ? 'Expense' : 'Revenue';
+        Toast::success("$typeStr '$createdModel->name' added succesfully");
+        return redirect()->route('platform.universal-expense-revenue.list');
     }
 }
