@@ -148,17 +148,13 @@ class CreateBugReportScreen extends Screen
         
         Prom Planner Team";
 
-        // For now this uses the super admin account as the sender
-        $sender = User::find(13);
-
         $emailData = [
-            'sender' => $sender,
             'subject' => 'Thank you for submitting a bug report!',
             'content' => $emailContent
         ];
 
         Mail::send(
-            'emails.generalEmail', $emailData, 
+            'emails.bugReportEmail', $emailData, 
             function (Message $message) use ($emailData) {
                 $message->subject($emailData['subject']);
                 $message->to(Auth::user()->email);
