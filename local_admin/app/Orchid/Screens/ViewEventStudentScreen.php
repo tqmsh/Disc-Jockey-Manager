@@ -435,8 +435,11 @@ class ViewEventStudentScreen extends Screen
 
             } else{
                 
-                $old_entry = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->whereNot('table_id', $requested_table_id)->first();
-                Seating::find($old_entry->table_id)->increment('capacity');
+                $old_entry = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->whereNot('table_id', '<=>', $requested_table_id)->first();
+                $old_seating = Seating::find($old_entry->table_id);
+                if (!is_null($old_seating)) {
+                    $old_seating->increment('capacity');
+                }
                 $old_entry->delete();
                 EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update(['table_approved' => 1]);
                 $requested_table->decrement('capacity');
