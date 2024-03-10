@@ -441,7 +441,10 @@ class ViewEventStudentScreen extends Screen
                     $old_seating->increment('capacity');
                 }
                 $old_entry->delete();
-                EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update(['table_approved' => 1]);
+                EventAttendees::where('user_id', $user_id)->where('table_id', $requested_table_id)->update([
+                    'table_approved' => 1,
+                    'invitation_status' => 1,
+                ]);
                 $requested_table->decrement('capacity');
 
                 Toast::success('Table change request accepted');
