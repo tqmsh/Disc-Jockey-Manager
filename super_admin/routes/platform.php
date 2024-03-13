@@ -83,11 +83,14 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateContractScreen;
+use App\Orchid\Screens\CreateUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\EditBugReportScreen;
 use App\Orchid\Screens\EditContractScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\EditStudentBidScreen;
+use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -272,6 +275,11 @@ Route::screen('/beauty-groups/{beautyGroup}/members', ViewBeautyGroupMembersScre
 Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 Route::screen('/contracts/create', CreateContractScreen::class)->name('platform.contract.create');
 Route::screen('/contracts/{contract}/edit', EditContractScreen::class)->name('platform.contract.edit');
+
+// Universal Expenses/Revenues
+Route::screen('/expenses-revenues', ViewUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.list');
+Route::screen('/expenses-revenues/create', CreateUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.create');
+Route::screen('/expenses-revenues/{expenseRevenue}/edit', EditUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.edit');
 
 // Bug Reports
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');

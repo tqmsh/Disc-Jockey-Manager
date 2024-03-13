@@ -37,9 +37,14 @@ Route::post('/register/student', [RegisterController::class, 'register']);
 
 // Impression counter
 Route::put("campaign_view/{id}", [AdController::class, "impression"]);
+
 // Click counter
 Route::put("campaign_click/{id}", [AdController::class, "click"]);
 
+// Health Check
+Route::get('/health', function () {
+    return response()->json(['status' => 'OK'], 200);
+});
 
 // Get all schools
 Route::get('getAllSchools', [SchoolController::class, 'getAllSchools']);
