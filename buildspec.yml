@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr describe-repositories --repository-names promplanner_prod
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Pulling baseline Docker Image
+      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/promplanner_prod:latest
+      - echo Building the Docker image...
+      - docker build --build-arg source_folder=$PORTAL --build-arg aws_default_region=$AWS_DEFAULT_REGION --build-arg source_container=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/promplanner_prod:latest --build-arg app_url=$APP_URL --build-arg app_key=$APP_KEY --build-arg db_host=$DB_HOST --build-arg db_username=$DB_USERNAME --build-arg db_password=$DB_PASSWORD -t promplanner_prod:latest_$PORTAL --progress=plain --no-cache . 
+      - docker tag promplanner_prod:latest_$PORTAL $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/promplanner_prod:latest_$PORTAL
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/promplanner_prod:latest_$PORTAL
