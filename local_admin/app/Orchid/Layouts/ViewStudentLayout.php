@@ -62,10 +62,7 @@ class ViewStudentLayout extends Table
 
             TD::make()
                 ->render(function (Student $student) {
-                    return Link::make('Edit')
-                        ->route('platform.student.edit', $student)
-                        ->class("blue");
-
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['student'=> $student-> id]) ->icon('pencil');
                 }),
         ];
     }

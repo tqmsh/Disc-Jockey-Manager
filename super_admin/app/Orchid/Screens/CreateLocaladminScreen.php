@@ -92,7 +92,8 @@ class CreateLocaladminScreen extends Screen
                             • school <br>
                             • state_province <br>
                             • country <br>
-                            • county <br>'),
+                            • county (include column but leave blank for Canadian schools) <br>
+                            • city_municipality (include column but leave blank for American schools) <br>'),
                     Link::make('Download Sample CSV')
                         ->icon('download')
                         ->href('/sample_local_admins_upload.csv')
@@ -164,14 +165,20 @@ class CreateLocaladminScreen extends Screen
                     ->title('State/Province')
                     ->horizontal()
                     ->empty('Start typing to Search...')
+                    ->required()
                     ->fromModel(School::class, 'state_province', 'state_province'),
 
                 Select::make('county')
                     ->title('County')
                     ->empty('Start typing to Search...')
-                    ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county'),
+
+                Select::make('city_municipality')
+                    ->title('City/Municipality')
+                    ->empty('Start typing to Search...')
+                    ->horizontal()
+                    ->fromModel(School::class, 'city_municipality', 'city_municipality'),
             ]),
         ];
     }
@@ -240,9 +247,10 @@ class CreateLocaladminScreen extends Screen
 
                     if($this->validEmail($localadmins[$i]['email'])){
                         
-                        $localadmins[$i]['school_id'] = $this->getSchoolID($localadmins[$i]['country'], $localadmins[$i]['school'], $localadmins[$i]['county'], $localadmins[$i]['state_province']);
+                        $localadmins[$i]['school_id'] = $this->getSchoolID($localadmins[$i]['country'], $localadmins[$i]['school'], $localadmins[$i]['county'], $localadmins[$i]['city_municipality'], $localadmins[$i]['state_province']);
 
                         $user = User::create([
+                           'name' => $localadmins[$i]['firstname'],
                            'firstname' => $localadmins[$i]['firstname'],
                            'lastname' => $localadmins[$i]['lastname'],
                            'phonenumber' => $localadmins[$i]['phonenumber'],
@@ -364,26 +372,20 @@ class CreateLocaladminScreen extends Screen
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getLocalAdminFields($request){
+        $school_id = $this->getSchoolIDByReq($request);
 
-        try{
-            $school_id = $this->getSchoolIDByReq($request);
-
-            $localadminTableFields = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'phonenumber' => $request->input('phonenumber'),
-                'school' => $request->input('school'),
-                'account_status' => 1,
-                'user_id' => null,
-                'school_id' => $school_id
-            ];
-            
-            return $localadminTableFields;
-
-        }catch(Exception $e){
-            Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage());
-        }
+        $localadminTableFields = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'phonenumber' => $request->input('phonenumber'),
+            'school' => $request->input('school'),
+            'account_status' => 1,
+            'user_id' => null,
+            'school_id' => $school_id
+        ];
+        
+        return $localadminTableFields;
     }
 
     //this functions returns the values that need to be inserted in the user table in the db
@@ -406,36 +408,46 @@ class CreateLocaladminScreen extends Screen
     }
 
     private function getSchoolIDByReq($request){
-        $school_id = School::where('school_name', $request->input('school'))
-                            ->where('county', $request->input('county'))
-                            ->where('state_province', $request->input('state_province'))
-                            ->where('country', $request->input('country'))
-                            ->get('id')->value('id');
+        $school_query = School::where('school_name', $request->input('school'))
+            ->where('state_province', $request->input('state_province'))
+            ->where('country', $request->input('country'));
 
-        if(is_null($school_id)){
+        if ($request->input('country') == 'USA') {
+            $school_query = $school_query->where('county', $request->input('county'));
+        } else {
+            $school_query = $school_query->where('city_municipality', $request->input('city_municipality'));
+        }
+        $school = $school_query->first();
+
+        if(is_null($school)){
 
             throw New Exception('You are trying to enter a invalid school');
 
         } else{
 
-            return $school_id;
+            return $school->value('id');
         }
     }
 
-    private function getSchoolID($country, $school, $county, $state_province){
-        $school_id = School::where('school_name', $school)
-                            ->where('county', $county)
-                            ->where('state_province', $state_province)
-                            ->where('country', $country)
-                            ->get('id')->value('id');
+    private function getSchoolID($country, $school, $county, $city_municipality, $state_province){
+        $school_query = School::where('school_name', $school)
+            ->where('state_province', $state_province)
+            ->where('country', $country);
 
-        if(is_null($school_id)){
+        if ($country == 'USA') {
+            $school_query = $school_query->where('county', $county);
+        } else {
+            $school_query = $school_query->where('city_municipality', $city_municipality);
+        }
+        $school = $school_query->first();
+
+        if(is_null($school)){
 
             throw New Exception('You are trying to enter a invalid school');
 
         } else{
 
-            return $school_id;
+            return $school->value('id');
         }
     }
 }

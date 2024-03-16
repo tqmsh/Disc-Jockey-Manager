@@ -149,11 +149,7 @@ class PlatformProvider extends OrchidServiceProvider
             //event nav option
             Menu::make('Events')
                 ->icon('diamond')
-                ->list([
-                    Menu::make('List')
-                    ->icon('list')
-                    ->route('platform.event.list'),
-                ]),
+                ->route('platform.event.list'),
 
             Menu::make('Songs')
                 ->icon('music-tone-alt')
@@ -170,6 +166,18 @@ class PlatformProvider extends OrchidServiceProvider
                     ->icon('fa.shirt')
                     ->route('platform.beauty-groups'),
                 ]),
+
+            Menu::make('Contracts')
+                ->icon('doc')
+                ->route('platform.contract.list'),
+
+            Menu::make('Prom Profit')
+                ->icon('money')
+                ->route('platform.universal-expense-revenue.list'),
+            
+            Menu::make('Report a Bug')
+                ->icon('bug')
+                ->route('platform.bug-reports.list'),
 
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
@@ -200,56 +208,56 @@ class PlatformProvider extends OrchidServiceProvider
                         ->url('https://promvendors.com/'),
                 ]),
 
-            Menu::make('Examples Layouts')
-                ->title('PLACEHOLDERS')
-                ->icon('arrow-down')
-                ->size()
-                ->list([
-                        Menu::make('Email sender')
-                            ->icon('envelope-letter')
-                            ->route('platform.email')
-                            ->title('Tools'),
+            // Menu::make('Examples Layouts')
+            //     ->title('PLACEHOLDERS')
+            //     ->icon('arrow-down')
+            //     ->size()
+            //     ->list([
+            //             Menu::make('Email sender')
+            //                 ->icon('envelope-letter')
+            //                 ->route('platform.email')
+            //                 ->title('Tools'),
 
-                        Menu::make('Basic Elements')
-                            ->title('Form controls')
-                            ->icon('note')
-                            ->route('platform.example.fields'),
+            //             Menu::make('Basic Elements')
+            //                 ->title('Form controls')
+            //                 ->icon('note')
+            //                 ->route('platform.example.fields'),
 
-                        Menu::make('Advanced Elements')
-                            ->icon('briefcase')
-                            ->route('platform.example.advanced'),
+            //             Menu::make('Advanced Elements')
+            //                 ->icon('briefcase')
+            //                 ->route('platform.example.advanced'),
 
-                        Menu::make('Text Editors')
-                            ->icon('list')
-                            ->route('platform.example.editors'),
+            //             Menu::make('Text Editors')
+            //                 ->icon('list')
+            //                 ->route('platform.example.editors'),
 
-                        Menu::make('Overview layouts')
-                            ->title('Layouts')
-                            ->icon('layers')
-                            ->route('platform.example.layouts'),
+            //             Menu::make('Overview layouts')
+            //                 ->title('Layouts')
+            //                 ->icon('layers')
+            //                 ->route('platform.example.layouts'),
 
-                        Menu::make('Chart tools')
-                            ->icon('bar-chart')
-                            ->route('platform.example.charts'),
+            //             Menu::make('Chart tools')
+            //                 ->icon('bar-chart')
+            //                 ->route('platform.example.charts'),
 
-                        Menu::make('Cards')
-                            ->icon('grid')
-                            ->route('platform.example.cards')
-                            ->divider(),
+            //             Menu::make('Cards')
+            //                 ->icon('grid')
+            //                 ->route('platform.example.cards')
+            //                 ->divider(),
 
-                        Menu::make('Documentation')
-                            ->title('Docs')
-                            ->icon('docs')
-                            ->url('https://orchid.software/en/docs'),
+            //             Menu::make('Documentation')
+            //                 ->title('Docs')
+            //                 ->icon('docs')
+            //                 ->url('https://orchid.software/en/docs'),
 
-                        Menu::make('Changelog')
-                            ->icon('shuffle')
-                            ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
-                            ->target('_blank')
-                            ->badge(function () {
-                                return Dashboard::version();
-                            }, Color::DARK()),
-                ]),
+            //             Menu::make('Changelog')
+            //                 ->icon('shuffle')
+            //                 ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
+            //                 ->target('_blank')
+            //                 ->badge(function () {
+            //                     return Dashboard::version();
+            //                 }, Color::DARK()),
+            //     ]),
         ];
     }
 

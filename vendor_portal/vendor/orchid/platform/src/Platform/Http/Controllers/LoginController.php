@@ -280,7 +280,8 @@ class LoginController extends Controller
             'role' => $user->role,
         ]);
 
-        $user->update(['start_time' => null]);
+        User::find($user->id)->update(['start_time' => null]);
+
 
         $this->guard->logout();
 

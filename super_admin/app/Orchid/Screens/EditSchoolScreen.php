@@ -31,7 +31,8 @@ class EditSchoolScreen extends Screen
     public function query(School $school): iterable
     {
         return [
-            'school' => $school
+            'school' => $school,
+            'user' => User::where('id', $school->teacher_id)->first(),
         ];
     }
 
@@ -76,7 +77,6 @@ class EditSchoolScreen extends Screen
      */
     public function layout(): iterable
     {
-        $this->user = User::where('id', $this->school->teacher_id)->first();
 
         return [
             Layout::rows([
@@ -199,7 +199,7 @@ class EditSchoolScreen extends Screen
                     ->title('Teacher Email')
                     ->type('email')
                     ->horizontal()
-                    ->value((is_null($this->user)) ? 'NA@NA.com' : $this->user->teacher_email)
+                    ->value((is_null($this->user)) ? 'NA@NA.com' : $this->user->email)
                     ->placeholder('Ex. johndoe@gmail.com'),
 
                 Input::make('teacher_cell')
@@ -207,7 +207,7 @@ class EditSchoolScreen extends Screen
                     ->type('text')
                     ->mask('(999) 999-9999')
                     ->horizontal()
-                    ->value((is_null($this->user)) ? '' : $this->user->teacher_cell)
+                    ->value((is_null($this->user)) ? '' : $this->user->phonenumber)
                     ->placeholder('Ex. (613) 852-4563'), 
 
                 Input::make('total_students')
@@ -232,9 +232,36 @@ class EditSchoolScreen extends Screen
             //check for duplicate schools
             if($this->validSchool($request, $school) && $this->validEmail($request, $school)){
 
-                //email not changed
-                $school->fill($request->all())->save();
-
+                $school->fill($request->except([
+                    'firstname',
+                    'lastname',
+                    'teacher_email',
+                    'teacher_cell',
+                ]))->save();
+                
+                $user = User::where('id', $school->teacher_id)->first();
+                if (!is_null($user)) {
+                    $user->fill([
+                        'name' => $request['firstname'] . $request['lastname'],
+                        'firstname' => $request['firstname'],
+                        'lastname' => $request['lastname'],
+                        'email' => $request['teacher_email'],
+                        'phonenumber' => $request['teacher_cell'],
+                        'country' => $request['country'],
+                    ])->save();
+                } else {
+                    $user = User::create([
+                        'name' => $request['firstname'] . $request['lastname'],
+                        'firstname' => $request['firstname'],
+                        'lastname' => $request['lastname'],
+                        'email' => $request['teacher_email'],
+                        'phonenumber' => $request['teacher_cell'],
+                        'country' => $request['country'],
+                        'role' => 5,
+                    ]);
+                    $school->teacher_id = $user->id;
+                } 
+                
                 Toast::success('You have successfully updated ' . $request->input('school_name') . '.');
 
                 return redirect()->route('platform.school.list');

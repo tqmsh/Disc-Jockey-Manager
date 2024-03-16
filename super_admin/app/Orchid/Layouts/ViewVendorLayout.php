@@ -39,6 +39,12 @@ class ViewVendorLayout extends Table
                         ->value($vendor->user_id)
                         ->checked(false);
                 }),
+
+            TD::make('company_name', 'Company')
+                ->render(function (Vendors $vendor) {
+                    return Link::make($vendor->company_name)
+                        ->route('platform.vendor.edit', $vendor);
+                }),
                 
             TD::make('firstname', 'First Name')
                 ->render(function (Vendors $vendor) {

@@ -55,13 +55,12 @@ class ExampleScreen extends Screen
         $now = Carbon::now();
 
         // Remaining Days Until Prom
-        $newestPromInvitation = EventAttendees::where('user_id', $user->id)->latest('created_at')->first();
-        $newestEventId =  $newestPromInvitation?->event_id;
-
+        $closestAttendingEvent = Events::whereIn('id',
+            EventAttendees::where('user_id', $user->id)->pluck('event_id')
+        )->where('event_start_time', '>', $now)->oldest('event_start_time')->first();
         // Check if an event has been found
-        if($newestEventId !== null) {
-            $newestEventForUser = Events::find($newestEventId);
-            $eventStartTime = $newestEventForUser->event_start_time;
+        if($closestAttendingEvent !== null) {
+            $eventStartTime = $closestAttendingEvent->event_start_time;
             $eventStartTime = Carbon::parse($eventStartTime);
             $daysLeftUntilEvent = $now->diffInDays($eventStartTime, false);
         }

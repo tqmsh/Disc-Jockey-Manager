@@ -42,32 +42,34 @@ class Student extends Model
             }       
 
             if(isset($filters['school'])){
-                $query ->where('school', 'like', '%' . request('school') . '%');
+                $query ->where('students.school', 'like', '%' . request('school') . '%');
             }
 
             if(isset($filters['country'])){
-                $query->where('country', 'like', '%' . request('country') . '%');
+                $query->where('users.country', 'like', '%' . request('country') . '%');
             }
 
             if(!empty($filters['name'])){
-                $query->where('firstname', 'like', '%' . $filters['name'] . '%')
-                    ->orWhere('lastname', 'like', '%' . $filters['name'] . '%');
+                $query->where(function($q) use ($filters) {
+                    $q->where('users.firstname', 'like', '%' . $filters['name'] . '%')
+                    ->orWhere('users.lastname', 'like', '%' . $filters['name'] . '%');
+                });
             }
 
             if(!empty($filters['email'])){
-                $query->where('email', 'like', '%' . $filters['email'] . '%');
+                $query->where('users.email', 'like', '%' . $filters['email'] . '%');
             }
 
             if(!empty($filters['grade'])){
-                $query->where('grade', 'like', '%' . $filters['grade'] . '%');
+                $query->where('students.grade', 'like', '%' . $filters['grade'] . '%');
             }
 
             if(isset($filters['school_board'])){
-                $query->where('school_board', 'like', '%' . request('school_board') . '%');
+                $query->where('schools.school_board', 'like', '%' . request('school_board') . '%');
             }
 
             if(isset($filters['state_province'])){
-                $query->where('state_province', 'like', '%' . request('state_province') . '%');
+                $query->where('schools.state_province', 'like', '%' . request('state_province') . '%');
             }
 
 

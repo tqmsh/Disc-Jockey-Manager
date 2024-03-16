@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\Student;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
+use Orchid\Screen\Fields\Password;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -99,6 +100,12 @@ class EditStudentScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->student->email),
+
+                Password::make('password')
+                    ->title('New Password')
+                    ->type('password')
+                    ->required()
+                    ->horizontal(),
                 
                 Select::make('school')
                     ->title('School')
@@ -126,10 +133,16 @@ class EditStudentScreen extends Screen
                 Select::make('county')
                     ->title('County')
                     ->empty('Start typing to Search...')
-                    ->required()
                     ->horizontal()
                     ->fromModel(School::class, 'county', 'county')
                     ->value($this->school->county),
+
+                Select::make('city_municipality')
+                    ->title('City/Municipality')
+                    ->empty('Start typing to Search...')
+                    ->horizontal()
+                    ->fromModel(School::class, 'city_municipality', 'city_municipality')
+                    ->value($this->school->city_municipality),
                    
                 Input::make('grade')
                     ->title('Grade')
@@ -221,14 +234,18 @@ class EditStudentScreen extends Screen
 
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
+        $school_query = School::where('school_name', $request->input('school'))
+            ->where('state_province', $request->input('state_province'))
+            ->where('country', $request->input('country'));
 
-        $school_id = School::where('school_name', $request->input('school'))
-                            ->where('county', $request->input('county'))
-                            ->where('state_province', $request->input('state_province'))
-                            ->where('country', $request->input('country'))
-                            ->get('id')->value('id');
+        if ($request->input('country') == 'USA') {
+            $school_query = $school_query->where('county', $request->input('county'));
+        } else {
+            $school_query = $school_query->where('city_municipality', $request->input('city_municipality'));
+        }
+        $school = $school_query->first();
 
-        if(is_null($school_id)){
+        if(is_null($school)){
             throw New Exception('You are trying to enter a invalid school');
         }
 
@@ -239,7 +256,7 @@ class EditStudentScreen extends Screen
             'grade' => $request->input('grade'),
             'phonenumber' => $request->input('phonenumber'),
             'school' => $request->input('school'),
-            'school_id' =>$school_id,
+            'school_id' =>$school->id,
             'allergies' => $request->input('allergies'),
         ];
         
@@ -255,6 +272,7 @@ class EditStudentScreen extends Screen
             'email' => $request->input('email'),
             'country' => $request->input('country'),
             'phonenumber' => $request->input('phonenumber'),
+            'password' => bcrypt($request->input('password')),
         ];
         
         return $userTableFields;

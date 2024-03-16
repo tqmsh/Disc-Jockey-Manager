@@ -83,6 +83,16 @@ use App\Orchid\Screens\ViewBeautyGroupMembersScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewContractScreen;
+use App\Orchid\Screens\CreateContractScreen;
+use App\Orchid\Screens\CreateUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\EditBugReportScreen;
+use App\Orchid\Screens\EditContractScreen;
+use App\Orchid\Screens\ViewBugReportDetailedScreen;
+use App\Orchid\Screens\ViewBugReportScreen;
+use App\Orchid\Screens\EditStudentBidScreen;
+use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -187,7 +197,8 @@ Route::screen('/regions/{regions}/edit', EditRegionScreen::class)->name('platfor
 Route::screen('/bids', ViewAllBidScreen::class)->name('platform.bid.list');
 
 //edit bid screen
-Route::screen('/bids/{bid}/edit', EditEventBidScreen::class)->name('platform.bid.edit');
+Route::screen('/bids/events/{bid}/edit', EditEventBidScreen::class)->name('platform.eventBid.edit');
+Route::screen('/bids/students/{bid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
 
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 
@@ -264,6 +275,21 @@ Route::screen('/beauty-groups/create', CreateBeautyGroupScreen::class)->name('pl
 Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)->name('platform.beauty-groups.edit');
 //view beauty group members
 Route::screen('/beauty-groups/{beautyGroup}/members', ViewBeautyGroupMembersScreen::class)->name('platform.beauty-groups.members');
+
+// Contracts
+Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+Route::screen('/contracts/create', CreateContractScreen::class)->name('platform.contract.create');
+Route::screen('/contracts/{contract}/edit', EditContractScreen::class)->name('platform.contract.edit');
+
+// Universal Expenses/Revenues
+Route::screen('/expenses-revenues', ViewUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.list');
+Route::screen('/expenses-revenues/create', CreateUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.create');
+Route::screen('/expenses-revenues/{expenseRevenue}/edit', EditUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.edit');
+
+// Bug Reports
+Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
+Route::screen('/bug-reports/{bug_report}/edit', EditBugReportScreen::class)->name('platform.bug-reports.edit');
+Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

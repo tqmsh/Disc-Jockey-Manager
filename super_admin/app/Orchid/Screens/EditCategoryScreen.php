@@ -5,6 +5,8 @@ namespace App\Orchid\Screens;
 use Orchid\Screen\Screen;
 use App\Models\Categories;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
@@ -80,11 +82,13 @@ class EditCategoryScreen extends Screen
         ];
     }
 
-    public function update(Categories $category){
+    public function update(Request $request, Categories $category){
 
         try{
-
-            $category->name = request('category_name');
+            $validated = $request->validate([
+                'category_name' => Rule::unique('categories', 'name')->ignore($category->id)
+            ]);
+            $category->name = $validated['category_name'];
     
             $category->save();
     

@@ -73,7 +73,7 @@ class CreateEventScreen extends Screen
                     ->title('Event Name')
                     ->type('text')
                     ->required()
-                    ->placeholder('give a name to the event please')
+                    ->placeholder('Ex. Prom 2022')
                     ->horizontal(),
 
                 DateTimer::make('event_start_time')
@@ -103,21 +103,6 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->placeholder('Ex. K1J 7N4')
                     ->horizontal(),
-
-                TextArea::make('event_info')
-                    ->title('Event Info')
-                    ->type('text')
-                    ->required()
-                    ->placeholder('Ex. Formal Attire')
-                    ->horizontal()
-                    ->rows(5),
-
-                TextArea::make('event_rules')
-                    ->title('Event Rules')
-                    ->required()
-                    ->placeholder('Ex. No Violence')
-                    ->horizontal()
-                    ->rows(5),
                     
                 Select::make('venue_id')
                     ->title('Venue')
@@ -150,6 +135,21 @@ class CreateEventScreen extends Screen
                     ->empty('Start typing to Search...')
                     ->horizontal()
                     ->fromModel(School::class, 'state_province', 'state_province'),
+
+                TextArea::make('event_info')
+                    ->title('Event Info')
+                    ->type('text')
+                    ->required()
+                    ->placeholder('Ex. Formal Attire')
+                    ->horizontal()
+                    ->rows(5),
+
+                TextArea::make('event_rules')
+                    ->title('Event Rules')
+                    ->required()
+                    ->placeholder('Ex. No Violence')
+                    ->horizontal()
+                    ->rows(5),
                 
                 Input::make('ticket_price')
                     ->title('Ticket Price $')

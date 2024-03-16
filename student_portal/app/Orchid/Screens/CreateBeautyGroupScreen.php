@@ -117,7 +117,7 @@ class CreateBeautyGroupScreen extends Screen
             $fields = $request->validate([
                 'name' => 'required',
                 'date' => 'required',
-                'capacity' => 'nullable',
+                'capacity' => 'required|numeric|:min2',
                 'pickup_location' => 'required',
                 'dropoff_location' => 'required',
                 'depart_time' => 'required',
