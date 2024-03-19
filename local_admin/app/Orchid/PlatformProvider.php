@@ -38,7 +38,7 @@ class PlatformProvider extends OrchidServiceProvider
 
         return [
             //FARHAN AND ANDY WAS HERE 😉
-            
+
             //MONEY MAKER
             Menu::make('Dashboard')
             ->icon('home')
@@ -58,7 +58,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('List')
                         ->icon('list')
                         ->route('platform.student.list'),
-                        
+
                     //pending student nav option
                     Menu::make('Pending Students')
                         ->icon('user-follow')
@@ -66,6 +66,10 @@ class PlatformProvider extends OrchidServiceProvider
                                     return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
                                 })
                         ->route('platform.pendingstudent.list'),
+
+                    Menu::make('List of Couples')
+                        ->icon('fa.children')
+                        ->route('platform.couples.list'),
                 ]),
 
             Menu::make("Groups")
@@ -95,7 +99,7 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
-            
+
             Menu::make('Prom Planner Sites')
                 ->icon('arrow-down')
                 ->list([
@@ -113,7 +117,6 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('ps.prom-vendor')
                         ->url('https://promvendors.com/'),
                 ]),
-
             // Menu::make('Examples Layouts')
             //     ->title('PLACEHOLDERS')
             //     ->icon('arrow-down')

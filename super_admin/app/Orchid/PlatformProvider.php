@@ -139,6 +139,10 @@ class PlatformProvider extends OrchidServiceProvider
                                     return count(Student::where('account_status', 0)->get());
                                 })
                         ->route('platform.pendingstudent.list'),
+
+                    Menu::make('Couples')
+                        ->icon('fa.children')
+                        ->route('platform.couples.list'),
                 ]),
 
 
@@ -157,7 +161,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Limo Groups')
                     ->icon('fa.car')
                     ->route('platform.limo-groups'),
-                    
+
                     Menu::make('Beauty Groups')
                     ->icon('fa.shirt')
                     ->route('platform.beauty-groups'),

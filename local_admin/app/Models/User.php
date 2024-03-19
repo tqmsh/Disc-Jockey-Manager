@@ -88,4 +88,9 @@ class User extends Authenticatable
     public function localadmin(){
         return $this->hasOne(Localadmin::class, 'user_id', 'id');
     }
+
+    public function fullName()
+    {
+        return $this->firstname." ".$this->lastname;
+    }
 }
