@@ -15,6 +15,8 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\ModalToggle;
 use App\Orchid\Layouts\ViewRegionLayout;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Select;
 
 class ViewRegionScreen extends Screen
 {
@@ -29,7 +31,7 @@ class ViewRegionScreen extends Screen
     public function query(): iterable
     {
         return [
-            'regions' => Region::latest()->paginate(10),
+            'regions' => Region::latest()->filter(request(['region_name',]))->paginate(10),
         ];
     }
 
@@ -61,6 +63,10 @@ class ViewRegionScreen extends Screen
                 ->icon('trash')
                 ->method('deleteRegions')
                 ->confirm(__('Are you sure you want to delete the selected regions?')),
+
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.region.list'),
         ];
     }
 
@@ -102,10 +108,28 @@ class ViewRegionScreen extends Screen
                 ->icon('plus')
                 ->type(Color::DEFAULT())
                 ->method('createRegion'),
-            ]),
+            ])->title('Add Regions'),
+
+            Layout::rows([
+                Group::make([
+                    Select::make('region_name')
+                        ->title('Region Name')
+                        ->empty('No Selection')
+                        ->fromModel(Region::class, 'name', 'name')
+                        ->help('Type in boxes to search'),
+                ]),
+                Button::make('Filter')
+                    ->icon('filter')
+                    ->method('filter')
+                    ->type(Color::DEFAULT()),
+            ])->title('View Regions'),
 
             ViewRegionLayout::class,
         ];
+    }
+
+    public function filter() {
+        return redirect()->route('platform.region.list', request(['region_name',]));
     }
 
     //this method will mass import schools from a csv file
