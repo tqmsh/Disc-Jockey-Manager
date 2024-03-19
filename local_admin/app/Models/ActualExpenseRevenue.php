@@ -28,6 +28,11 @@ class ActualExpenseRevenue extends Model
         'last_updated_user_id'
     ];
 
+    public $attributes = [
+        'budget' => 0,
+        'actual' => 0,
+    ];
+
     /*public function event(): BelongsTo
     {
         return $this->belongsTo(Events::class);
