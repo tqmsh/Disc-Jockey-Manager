@@ -2,10 +2,19 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Notice;
+use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Screen;
+use Orchid\Screen\TD;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class ViewNoticeScreen extends Screen
 {
+    public $notices;
     /**
      * Query data.
      *
@@ -13,7 +22,9 @@ class ViewNoticeScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'notices' => Notice::all(),
+        ];
     }
 
     /**
@@ -23,7 +34,7 @@ class ViewNoticeScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewNoticeScreen';
+        return 'Notices';
     }
 
     /**
@@ -33,7 +44,15 @@ class ViewNoticeScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Add New Notices')
+                ->icon('plus')
+                ->route('platform.notice.create'),
+            Button::make('Delete Selected Notices')
+                ->icon('trash')
+                ->method('deleteNotices')
+                ->confirm(__('Are you sure you want to delete the selected notices?')),
+        ];
     }
 
     /**
@@ -43,6 +62,36 @@ class ViewNoticeScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::table('notices', [
+                TD::make()
+                    ->render(function (Notice $notice) {
+                        return CheckBox::make('notices[]')
+                            ->value($notice->id)
+                            ->checked(false);
+                    }),
+                TD::make('dashboard', 'Dashboard')
+                    ->render(function (Notice $notice) {
+                        return Link::make($notice->getDashboardName())
+                            ->route('platform.notice.edit', $notice);
+                    }),
+                TD::make('content', 'Content')
+                    ->render(function (Notice $notice) {
+                        return Link::make($notice->content)
+                            ->route('platform.notice.edit', $notice);
+                    }),
+            ]),
+        ];
+    }
+
+    public function deleteExpensesRevenues(Request $request)
+    {
+        $notices = $request->get('notices');
+        if (!empty($notices)) {
+            Notice::whereIn('id', $notices)->delete();
+            Toast::success('Selected notices deleted succesfully');
+        } else {
+            TOast::warning('You must select notices in order to delete them');
+        }
     }
 }
