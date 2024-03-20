@@ -21,7 +21,7 @@ Route::get('/', function(){
 });
 
 // Route::middleware(['cors'])->group(function () {
-Route::get('paypal/payment', [ViewEventScreen::class, 'payment'])->name('paypal');
+Route::get('paypal/payment/{event_id}', [ViewEventScreen::class, 'payment'])->name('paypal');
 // });
 
 Route::get('success/success/{event_id}', [ViewEventScreen::class, 'success'])->name('paypal_success');

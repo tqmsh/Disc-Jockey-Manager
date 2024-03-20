@@ -210,7 +210,7 @@ class EditBugReportScreen extends Screen
 
         $emailContent = "Dear {$name},
 
-        We are sending this email to notify you that the status of your bug report: {$bug_report->title} has been set to Fixed.
+        We are sending this email to notify you that the status of your bug report: {$bug_report->title}, has been set to Fixed.
 
         Thank you for submitting a bug report that allows us to improve Prom Planner for better user experience.
         
@@ -218,17 +218,13 @@ class EditBugReportScreen extends Screen
         
         Prom Planner Team";
 
-        // For now this uses the super admin account as the sender
-        $sender = User::find(13);
-
         $emailData = [
-            'sender' => $sender,
-            'subject' => 'Thank you for submitting a bug report!',
+            'subject' => 'Your bug report has been fixed!',
             'content' => $emailContent
         ];
 
         Mail::send(
-            'emails.generalEmail', $emailData, 
+            'emails.bugReportEmail', $emailData, 
             function (Message $message) use ($bug_reporter, $emailData) {
                 $message->subject($emailData['subject']);
                 $message->to($bug_reporter->email);

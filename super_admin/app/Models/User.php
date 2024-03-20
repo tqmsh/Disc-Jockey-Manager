@@ -108,4 +108,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(StudentBids::class, 'user_id');
     }
+
+    public function fullName()
+    {
+        return $this->firstname." ".$this->lastname;
+    }
 }

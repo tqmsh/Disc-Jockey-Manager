@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Orchid\Screens\CreateBannedSongsScreen;
 use App\Orchid\Screens\EditSongScreen;
 use App\Orchid\Screens\ViewBannedSongsScreen;
+use App\Orchid\Screens\ViewCoupleDetailsScreen;
+use App\Orchid\Screens\ViewCouplesScreen;
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
@@ -83,11 +85,14 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateContractScreen;
+use App\Orchid\Screens\CreateUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\EditBugReportScreen;
 use App\Orchid\Screens\EditContractScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\EditStudentBidScreen;
+use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -231,6 +236,9 @@ Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSecti
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
+Route::screen('/couples', ViewCouplesScreen::class)->name('platform.couples.list');
+Route::screen('/couples/{couple}', ViewCoupleDetailsScreen::class)->name('platform.couples.info');
+
 //Election
 Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');
 
@@ -272,6 +280,11 @@ Route::screen('/beauty-groups/{beautyGroup}/members', ViewBeautyGroupMembersScre
 Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 Route::screen('/contracts/create', CreateContractScreen::class)->name('platform.contract.create');
 Route::screen('/contracts/{contract}/edit', EditContractScreen::class)->name('platform.contract.edit');
+
+// Universal Expenses/Revenues
+Route::screen('/expenses-revenues', ViewUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.list');
+Route::screen('/expenses-revenues/create', CreateUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.create');
+Route::screen('/expenses-revenues/{expenseRevenue}/edit', EditUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.edit');
 
 // Bug Reports
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
