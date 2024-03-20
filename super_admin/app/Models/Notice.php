@@ -13,4 +13,13 @@ class Notice extends Model
         'content',
         'dashboard',
     ];
+    public static $dashboard_names = [
+        2 => 'Local Admin',
+        3 => 'Student Portal',
+        4 => 'Vendor Portal',
+    ];
+    public function getDashboardName()
+    {
+        return $this->dashboard_names[$this->dashboard];
+    }
 }
