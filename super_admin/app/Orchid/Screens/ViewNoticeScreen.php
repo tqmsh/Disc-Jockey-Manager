@@ -84,7 +84,7 @@ class ViewNoticeScreen extends Screen
         ];
     }
 
-    public function deleteExpensesRevenues(Request $request)
+    public function deleteNotices(Request $request)
     {
         $notices = $request->get('notices');
         if (!empty($notices)) {
