@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts;
 use Orchid\Screen\TD;
 use App\Models\Candidate;
 use App\Models\Position;
+use App\Models\User;
 use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -49,6 +50,15 @@ class ViewCandidateLayout extends Table
             TD::make('candidate_bio', 'Candidate Bio')
                 ->render(function (Candidate $candidate) {
                     return e($candidate->candidate_bio);
+            }),
+            TD::make('candidate_video_url', 'Candidate Video')
+                ->render(function (Candidate $candidate) {
+                    $first_name = User::find($candidate->user_id)->firstname;
+                    $hasSubmittedVideo = !is_null($candidate->candidate_video_url);
+
+                    return Link::make($hasSubmittedVideo ? "{$first_name}'s Video" : 'No Video Submitted')
+                            ->href($candidate->candidate_video_url ?? url()->full())
+                            ->target($hasSubmittedVideo ? '_blank' : '');
             }),
             TD::make('candidate_votes', 'Candidate Votes')
                 ->render(function (Candidate $candidate) {
