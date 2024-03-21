@@ -20,6 +20,6 @@ class Notice extends Model
     ];
     public function getDashboardName()
     {
-        return $this->dashboard_names[$this->dashboard];
+        return self::$dashboard_names[$this->dashboard];
     }
 }
