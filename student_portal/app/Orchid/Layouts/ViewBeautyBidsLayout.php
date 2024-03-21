@@ -35,8 +35,8 @@ class ViewBeautyBidsLayout extends Table
                 ->width('125px')
                 ->render(function(BeautyGroupBid $bid){
                     return 
-                        (($bid->status == 1) ? '<i class="text-success">●</i> Accepted' 
-                        : '<i class="text-danger">●</i> Rejected');
+                        (($bid->status == 1) ? '<i class="text-success">●</i> Interested' 
+                        : '<i class="text-danger">●</i> Not Interested');
                     }),  
 
             TD::make('company_name', 'Company')
