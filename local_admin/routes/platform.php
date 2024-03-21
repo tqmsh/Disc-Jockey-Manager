@@ -167,7 +167,7 @@ Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembers
 Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.contact-students');
 
 // Contracts
-Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+//Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
