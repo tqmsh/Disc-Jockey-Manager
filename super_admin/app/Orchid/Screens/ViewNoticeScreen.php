@@ -9,6 +9,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
+use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
@@ -79,6 +80,13 @@ class ViewNoticeScreen extends Screen
                     ->render(function (Notice $notice) {
                         return Link::make($notice->content)
                             ->route('platform.notice.edit', $notice);
+                    }),
+                TD::make()
+                    ->render(function (Notice $notice) {
+                        return Link::make('Edit')
+                            ->type(Color::PRIMARY())
+                            ->route('platform.notice.edit', $notice)
+                            ->icon('pencil');
                     }),
             ]),
         ];
