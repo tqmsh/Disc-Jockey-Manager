@@ -16,6 +16,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\EventAttendeesController;
 use App\Http\Controllers\SeatingController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SongController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -79,4 +81,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/tokenIsValid', [AuthController::class, 'tokenIsValid']);
 
     Route::patch('/createCode', [EventAttendeesController::class, 'createCode']);
+
+    Route::get('/songs', [SongController::class, 'index']);
 });
