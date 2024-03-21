@@ -458,7 +458,7 @@ class CreateStudentScreen extends Screen
 
         } else{
 
-            return $school->value('id');
+            return $school->id;
         }
     }
 
@@ -480,7 +480,7 @@ class CreateStudentScreen extends Screen
 
         } else{
 
-            return $school->value('id');
+            return $school->id;
         }
     }
 

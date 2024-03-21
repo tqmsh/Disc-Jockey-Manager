@@ -425,7 +425,7 @@ class CreateLocaladminScreen extends Screen
 
         } else{
 
-            return $school->value('id');
+            return $school->id;
         }
     }
 
@@ -447,7 +447,7 @@ class CreateLocaladminScreen extends Screen
 
         } else{
 
-            return $school->value('id');
+            return $school->id;
         }
     }
 }
