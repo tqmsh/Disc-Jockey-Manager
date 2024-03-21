@@ -61,6 +61,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.beauty-groups'),
             ]),
 
+            Menu::make("PromDate")
+                ->icon('fa.children')
+                ->route('platform.promdate'),
+
             Menu::make('My Specs')
             ->icon('brush')
             ->route('platform.studentSpecs.list'),
@@ -76,7 +80,7 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.course.list'),
-            
+
             Menu::make('Prom Planner Sites')
                 ->icon('arrow-down')
                 ->list([

@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Orchid\Screens\CreateBannedSongsScreen;
 use App\Orchid\Screens\EditSongScreen;
 use App\Orchid\Screens\ViewBannedSongsScreen;
+use App\Orchid\Screens\ViewCoupleDetailsScreen;
+use App\Orchid\Screens\ViewCouplesScreen;
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
@@ -233,6 +235,9 @@ Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSecti
 
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+
+Route::screen('/couples', ViewCouplesScreen::class)->name('platform.couples.list');
+Route::screen('/couples/{couple}', ViewCoupleDetailsScreen::class)->name('platform.couples.info');
 
 //Election
 Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');
