@@ -43,7 +43,8 @@ class ViewStudentBidsLayout extends Table
             TD::make('company_name', 'Company')
                 ->render(function($bid){
                     return Link::make($bid->company_name)
-                        ->href($bid->url);
+                        ->href($bid->url)
+                        ->target('_blank');
                 }),
 
             TD::make('category_id', 'Category')
@@ -72,7 +73,9 @@ class ViewStudentBidsLayout extends Table
             TD::make('package_id', 'Package URL')
                 ->width('200')
                 ->render(function($bid){
-                    return Link::make(VendorPackage::find($bid->package_id)->url)->href(VendorPackage::find($bid->package_id)->url);
+                    return Link::make(VendorPackage::find($bid->package_id)->url)
+                        ->href(VendorPackage::find($bid->package_id)->url)
+                        ->target('_blank');
                 }),
 
           TD::make('notes', 'Vendor Notes')
