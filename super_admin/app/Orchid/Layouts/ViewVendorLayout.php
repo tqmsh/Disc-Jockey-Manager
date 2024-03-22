@@ -46,17 +46,17 @@ class ViewVendorLayout extends Table
                         ->route('platform.vendor.edit', $vendor);
                 }),
                 
-            TD::make('firstname', 'First Name')
-                ->render(function (Vendors $vendor) {
-                    return Link::make(User::find($vendor->user_id)->firstname)
-                        ->route('platform.vendor.edit', $vendor);
-                }),
+            // TD::make('firstname', 'First Name')
+            //     ->render(function (Vendors $vendor) {
+            //         return Link::make(User::find($vendor->user_id)->firstname)
+            //             ->route('platform.vendor.edit', $vendor);
+            //     }),
                 
-            TD::make('lastname', 'Last Name')
-                ->render(function (Vendors $vendor) {
-                    return Link::make(User::find($vendor->user_id)->lastname)
-                        ->route('platform.vendor.edit', $vendor);
-                }),
+            // TD::make('lastname', 'Last Name')
+            //     ->render(function (Vendors $vendor) {
+            //         return Link::make(User::find($vendor->user_id)->lastname)
+            //             ->route('platform.vendor.edit', $vendor);
+            //     }),
                 
             TD::make('email', 'Email')
                 ->render(function (Vendors $vendor) {
@@ -82,25 +82,25 @@ class ViewVendorLayout extends Table
                         ->route('platform.vendor.edit', $vendor);
                 }),
                 
-                TD::make('website', 'Website')
-                ->render(function (Vendors $vendor) {
-                    $website = $vendor->website;
+                // TD::make('website', 'Website')
+                // ->render(function (Vendors $vendor) {
+                //     $website = $vendor->website;
 
-                    if (strpos($website, 'https://') === 0) {
-                        $website = substr($website, 8);
-                    }
+                //     if (strpos($website, 'https://') === 0) {
+                //         $website = substr($website, 8);
+                //     }
 
-                    if (strpos($website, 'www.') === 0) {
-                        $website = substr($website, 4);
-                    }
+                //     if (strpos($website, 'www.') === 0) {
+                //         $website = substr($website, 4);
+                //     }
                     
-                    if (strlen($website) > 15) {
-                        $website = substr($website, 0, 15) . '...';
-                    }
+                //     if (strlen($website) > 15) {
+                //         $website = substr($website, 0, 15) . '...';
+                //     }
             
-                    return Link::make($website)
-                        ->href(($vendor->website) == null ? '#' : $vendor->website);
-                }),
+                //     return Link::make($website)
+                //         ->href(($vendor->website) == null ? '#' : $vendor->website);
+                // }),
             
                 
 
@@ -121,10 +121,14 @@ class ViewVendorLayout extends Table
             //         return Link::make($vendor->city)
             //             ->route('platform.vendor.edit', $vendor);
             //     }),
+            TD::make()
+                ->render(function (Vendors $vendor) {
+                    return Button::make('View')-> type(Color::SUCCESS())->method('redirect', ['vendor'=> $vendor->id, 'type' => 'view'])->icon('eye');
+                })->width('100px'),
 
             TD::make()
                 ->render(function (Vendors $vendor) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['vendor'=>$vendor->id]) ->icon('pencil');
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['vendor'=>$vendor->id, 'type' => 'edit']) ->icon('pencil');
                 }),
         ];
     }
