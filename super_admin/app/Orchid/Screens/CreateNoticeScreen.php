@@ -70,6 +70,9 @@ class CreateNoticeScreen extends Screen
                     ->title('Content')
                     ->type('text')
                     ->required(),
+                Input::make('url')
+                    ->title('URL')
+                    ->type('text'),
             ])
         ];
     }
@@ -85,6 +88,11 @@ class CreateNoticeScreen extends Screen
             ],
             'content' => [
                 'required',
+                'max:255',
+            ],
+            'url' => [
+                'nullable',
+                'url',
                 'max:255',
             ]
         ],

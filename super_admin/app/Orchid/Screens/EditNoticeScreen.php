@@ -79,6 +79,10 @@ class EditNoticeScreen extends Screen
                     ->type('text')
                     ->required()
                     ->value($this->notice->content),
+                Input::make('url')
+                    ->title('URL')
+                    ->type('text')
+                    ->value($this->notice->url),
             ])
         ];
     }
@@ -95,7 +99,12 @@ class EditNoticeScreen extends Screen
             'content' => [
                 'required',
                 'max:255',
-            ]
+            ],
+            'url' => [
+                'nullable',
+                'url',
+                'max:255',
+            ],
         ],
         $messages = [
             'dashboard.unique' => 'A notice already exists for this dashboard.'

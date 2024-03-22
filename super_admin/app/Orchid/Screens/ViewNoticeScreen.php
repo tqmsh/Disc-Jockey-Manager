@@ -81,6 +81,13 @@ class ViewNoticeScreen extends Screen
                         return Link::make($notice->content)
                             ->route('platform.notice.edit', $notice);
                     }),
+                TD::make('url', 'URL')
+                    ->render(function (Notice $notice) {
+                        if (!is_null($notice->url)) {
+                            return Link::make($notice->url)
+                                ->href($notice->url)->set('target', '_blank');
+                        }
+                    }),
                 TD::make()
                     ->render(function (Notice $notice) {
                         return Link::make('Edit')

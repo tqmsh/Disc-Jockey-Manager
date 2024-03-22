@@ -10,8 +10,9 @@ class Notice extends Model
 {
     use HasFactory, AsSource;
     protected $fillable = [
-        'content',
         'dashboard',
+        'content',
+        'url',
     ];
     public static $dashboard_names = [
         2 => 'Local Admin',
