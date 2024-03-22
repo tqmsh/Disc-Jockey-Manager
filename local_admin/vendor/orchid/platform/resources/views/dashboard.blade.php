@@ -55,6 +55,12 @@
 
     <div class="mt-3 mt-md-4">
         @include('platform::socialsTopBar')
+
+        @if($notice)
+            <div class="layout">
+                <h2 class="h3 fw-light text-black">{{ $notice->content }}</h2>
+            </div>
+        @endif
         
         @if(Breadcrumbs::has())
             <nav aria-label="breadcrumb">
