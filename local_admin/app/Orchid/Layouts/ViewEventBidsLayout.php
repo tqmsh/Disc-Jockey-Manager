@@ -6,6 +6,7 @@ use Orchid\Screen\TD;
 use App\Models\EventBids;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\Events;
 use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -38,14 +39,15 @@ class ViewEventBidsLayout extends Table
                 ->width('125px')
                 ->render(function(EventBids $bid){
                     return 
-                        (($bid->status == 1) ? '<i class="text-success">●</i> Accepted' 
-                        : '<i class="text-danger">●</i> Rejected');
+                        (($bid->status == 1) ? '<i class="text-success">●</i> Interested' 
+                        : '<i class="text-danger">●</i> Not Interested');
                     }),  
 
             TD::make('company_name', 'Company')
                 ->render(function($bid){
                     return Link::make($bid->company_name)
-                        ->href($bid->url);
+                        ->route('platform.eventBids.view', ['event' => Events::find($bid->event_id), 'eventBid' => $bid])
+                        ->target('_blank');
                 }),
 
             TD::make('category_id', 'Category')
@@ -74,7 +76,9 @@ class ViewEventBidsLayout extends Table
             TD::make('package_id', 'Package URL')
                 ->width('200')
                 ->render(function($bid){
-                    return Link::make(VendorPackage::find($bid->package_id)->url)->href(VendorPackage::find($bid->package_id)->url);
+                    return Link::make(VendorPackage::find($bid->package_id)->url)
+                        ->route('platform.eventBids.view', ['event' => Events::find($bid->event_id), 'eventBid' => $bid])
+                        ->target('_blank');
                 }),
 
           TD::make('notes', 'Vendor Notes')
