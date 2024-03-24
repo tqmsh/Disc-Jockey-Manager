@@ -19,6 +19,7 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Fields\Input;
 
 class CreateCandidateScreen extends Screen
 {
@@ -102,6 +103,12 @@ class CreateCandidateScreen extends Screen
                     ->type('text')
                     ->placeholder('Something about yourself')
                     ->rows(5)
+                    ->horizontal(),
+                
+                Input::make('candidate_video_url')
+                    ->title('Candidate Video URL')
+                    ->type('text')
+                    ->placeholder('A video about yourself')
                     ->horizontal()
 
             ])->title('Make a Candidate'),
@@ -116,10 +123,12 @@ class CreateCandidateScreen extends Screen
             $candidate = Candidate::where('user_id',$student->user_id)->first();
             if($candidate == null || $candidate->election_id != $election->id){
                 $candidateField['candidate_bio'] = $request->input('candidate_bio');
+                $candidateField['candidate_video_url'] = $request->input('candidate_video_url');
                 $candidateField['user_id'] = $student->user_id;
                 $candidateField['candidate_name'] = $student->firstname.' '. $student->lastname;
                 $candidateField['position_id'] = $position->id;
                 $candidateField['election_id'] = $position->election_id;
+                
 
                 Candidate::create($candidateField);
 
