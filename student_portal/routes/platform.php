@@ -43,9 +43,12 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewBeautyGroupDetailedBidScreen;
 use App\Orchid\Screens\ViewSingleFoodScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
+use App\Orchid\Screens\ViewLimoGroupDetailedBidScreen;
+use App\Orchid\Screens\ViewStudentBidDetailedBidScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +107,11 @@ Route::screen('/couple/{couple}', ViewCoupleDetailsScreen::class)->name("platfor
 
 //view student bid screen
 Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.list');
+
+// detailed bid screens
+Route::screen('/bids/beauty-group/{beautyGroupBid}', ViewBeautyGroupDetailedBidScreen::class)->name('platform.studentBids.beautyGroup.view');
+Route::screen('/bids/limo-group/{limoGroupBid}', ViewLimoGroupDetailedBidScreen::class)->name('platform.studentBids.limoGroup.view');
+Route::screen('/bids/student-bids/{studentBid}', ViewStudentBidDetailedBidScreen::class)->name('platform.studentBids.studentBid.view');
 
 //student specs
 Route::screen('/my-specs', ViewSpecsScreen::class)->name('platform.studentSpecs.list');

@@ -450,7 +450,7 @@ class CreateStudentScreen extends Screen
         } else {
             $school_query = $school_query->where('city_municipality', $request->input('city_municipality'));
         }
-        $school = $school_query->first();
+        $school = $school_query->get();
 
         if(is_null($school)){
 
@@ -472,7 +472,7 @@ class CreateStudentScreen extends Screen
         } else {
             $school_query = $school_query->where('city_municipality', $city_municipality);
         }
-        $school = $school_query->first();
+        $school = $school_query->get();
 
         if(is_null($school)){
 

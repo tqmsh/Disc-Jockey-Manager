@@ -8,6 +8,7 @@ use App\Models\EventBids;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\Vendors;
 use App\Notifications\GeneralNotification;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
@@ -106,10 +107,12 @@ class ViewEventBidScreen extends Screen
     public function updateBid(Events $event)
     {
         try{
+            
             $bid = EventBids::find(request('bid_id'));
             $bid->status = request('choice');
             $bid->save();
-            $vendor = User::find($bid->user_id);
+            $vendor = Vendors::where('user_id', $bid->user_id)->first();
+            $vendor_user = User::find($bid->user_id);
 
             $adPrice = 50;
 
@@ -117,14 +120,14 @@ class ViewEventBidScreen extends Screen
 
                 $vendor->decrement('credits', $adPrice);
 
-                $vendor->notify(new GeneralNotification([
+                $vendor_user->notify(new GeneralNotification([
                     'title' => 'Event Bid Accepted',
                     'message' => 'Your bid for ' . $event->event_name . ' has been accepted!',
                     'action' => '/admin/bid/history'
                 ]));
                 
             } else {
-                $vendor->notify(new GeneralNotification([
+                $vendor_user->notify(new GeneralNotification([
                     'title' => 'Event Bid Rejected',
                     'message' => 'Your bid for ' . $event->event_name . ' has been rejected!',
                     'action' => '/admin/bid/history'

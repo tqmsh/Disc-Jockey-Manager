@@ -68,6 +68,7 @@ use App\Orchid\Screens\CreatePromHistoryScreen;
 use App\Orchid\Screens\EditPromHistoryScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
+use App\Orchid\Screens\ViewEventDetailedBidScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +110,9 @@ Route::screen('/events/create', CreateEventScreen::class)->name('platform.event.
 Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platform.pendingstudent.list');
 
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
+
+// detailed bid screen
+Route::screen('/events/bids/{event}/{eventBid}', ViewEventDetailedBidScreen::class)->name('platform.eventBids.view');
 
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
@@ -167,7 +171,7 @@ Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembers
 Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.contact-students');
 
 // Contracts
-Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+//Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
