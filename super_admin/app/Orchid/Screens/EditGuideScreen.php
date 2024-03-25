@@ -3,7 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\Course;
+use App\Models\Guide;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -12,18 +12,18 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
-class EditCourseScreen extends Screen
+class EditGuideScreen extends Screen
 {
-    public $course;
+    public $guide;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Course $course): iterable
+    public function query(Guide $guide): iterable
     {
         return [
-            'course' => $course
+            'guide' => $guide
         ];
     }
 
@@ -34,7 +34,7 @@ class EditCourseScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Course: ' . $this->course->course_name;
+        return 'Edit Guide: ' . $this->guide->guide_name;
     }
 
     /**
@@ -49,14 +49,14 @@ class EditCourseScreen extends Screen
                 ->icon('check')
                 ->method('update'),
 
-            Button::make('Delete Course')
+            Button::make('Delete Guide')
                 ->icon('trash')
                 ->method('delete')
-                ->confirm('Are you sure you want to delete this course?'),
+                ->confirm('Are you sure you want to delete this guide?'),
             
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.course.list'),
+                ->route('platform.guide.list'),
         ];
     }
 
@@ -74,14 +74,14 @@ class EditCourseScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->value($this->course->ordering),
+                    ->value($this->guide->ordering),
                     
-                Input::make('course_name')
-                    ->title('Course Name')
+                Input::make('guide_name')
+                    ->title('Guide Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->value($this->course->course_name),
+                    ->value($this->guide->guide_name),
 
                 Select::make('category')
                 ->title('Category')
@@ -96,41 +96,41 @@ class EditCourseScreen extends Screen
         ];
     }
 
-    public function update(Course $course)
+    public function update(Guide $guide)
     {
         
         try{
             $fields = request()->validate([
                 'ordering' => 'required',
-                'course_name' => 'required',
+                'guide_name' => 'required',
                 'category' => 'required',
             ]);
 
 
-            if ( ! empty( Course::where( 'course_name', $fields['course_name'] )->whereNot('id', $course->id)->first() ) 
-                    || ! empty( Course::where( 'ordering', $fields['ordering'] )->whereNot('id', $course->id)->first() ) 
+            if ( ! empty( Guide::where( 'guide_name', $fields['guide_name'] )->whereNot('id', $guide->id)->first() ) 
+                    || ! empty( Guide::where( 'ordering', $fields['ordering'] )->whereNot('id', $guide->id)->first() ) 
                 ) {
-                Toast::error( 'Course or ordering already exists' );
+                Toast::error( 'Guide or ordering already exists' );
             } else {
-                $course->update( $fields );
-                Toast::success( 'Course updated successfully' );
-                return redirect()->route( 'platform.course.list' );
+                $guide->update( $fields );
+                Toast::success( 'Guide updated successfully' );
+                return redirect()->route( 'platform.guide.list' );
             }
 
         }catch(Exception $e){
-            return redirect()->route('platform.course.list' . $e->getMessage());
+            return redirect()->route('platform.guide.list' . $e->getMessage());
         }
     }
 
-    public function delete(Course $course)
+    public function delete(Guide $guide)
     {
         try{
-            $course->delete();
-            Toast::success('Course deleted successfully');
-            return redirect()->route('platform.course.list');
+            $guide->delete();
+            Toast::success('Guide deleted successfully');
+            return redirect()->route('platform.guide.list');
         }catch(Exception $e){
-            Toast::error('Error deleting course' . $e->getMessage());
-            return redirect()->route('platform.course.list');
+            Toast::error('Error deleting guide' . $e->getMessage());
+            return redirect()->route('platform.guide.list');
         }
     }
 }
