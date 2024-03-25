@@ -61,7 +61,12 @@
                 <span class="text-info d-flex align-items-center me-3">
                     <x-orchid-icon path="circle"/>
                 </span>
-                <h2 class="h3 fw-light text-black d-inline">{{ $notice->content }}</h2>
+                <div>
+                    <h2 class="h3 fw-light text-black">{{ $notice->title }}</h2>
+                    @if(!is_null($notice->subtitle))
+                        <small class="text-muted">{{ $notice->subtitle }}</small>
+                    @endif
+                </div>
                 @if(!is_null($notice->url))
                     <div class="nav command-bar ms-auto d-inline-flex">
                         <a class="btn btn-line" data-turbo="true" href="{{ $notice->url }}" target="_blank">

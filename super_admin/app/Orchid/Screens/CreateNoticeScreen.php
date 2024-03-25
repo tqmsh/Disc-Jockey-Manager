@@ -66,10 +66,13 @@ class CreateNoticeScreen extends Screen
                     ->title('Type')
                     ->options(Notice::$dashboard_names)
                     ->required(),
-                Input::make('content')
-                    ->title('Content')
+                Input::make('title')
+                    ->title('Title')
                     ->type('text')
                     ->required(),
+                Input::make('subtitle')
+                    ->title('Subtitle')
+                    ->type('text'),
                 Input::make('url')
                     ->title('URL')
                     ->type('text'),
@@ -86,8 +89,11 @@ class CreateNoticeScreen extends Screen
                 'integer',
                 Rule::in(array_keys(Notice::$dashboard_names)),
             ],
-            'content' => [
+            'title' => [
                 'required',
+                'max:255',
+            ],
+            'subtitle' => [
                 'max:255',
             ],
             'url' => [

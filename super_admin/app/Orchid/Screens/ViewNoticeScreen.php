@@ -76,9 +76,14 @@ class ViewNoticeScreen extends Screen
                         return Link::make($notice->getDashboardName())
                             ->route('platform.notice.edit', $notice);
                     }),
-                TD::make('content', 'Content')
+                TD::make('title', 'Title')
                     ->render(function (Notice $notice) {
-                        return Link::make($notice->content)
+                        return Link::make($notice->title)
+                            ->route('platform.notice.edit', $notice);
+                    }),
+                TD::make('subtitle', 'Subtitle')
+                    ->render(function (Notice $notice) {
+                        return Link::make($notice->subtitle)
                             ->route('platform.notice.edit', $notice);
                     }),
                 TD::make('url', 'URL')

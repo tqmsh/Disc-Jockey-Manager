@@ -74,11 +74,15 @@ class EditNoticeScreen extends Screen
                     ->options(Notice::$dashboard_names)
                     ->required()
                     ->value($this->notice->dashboard),
-                Input::make('content')
-                    ->title('Content')
+                Input::make('title')
+                    ->title('Title')
                     ->type('text')
                     ->required()
-                    ->value($this->notice->content),
+                    ->value($this->notice->title),
+                Input::make('subtitle')
+                    ->title('Subtitle')
+                    ->type('text')
+                    ->value($this->notice->subtitle),
                 Input::make('url')
                     ->title('URL')
                     ->type('text')
@@ -96,8 +100,11 @@ class EditNoticeScreen extends Screen
                 'integer',
                 Rule::in(array_keys(Notice::$dashboard_names)),
             ],
-            'content' => [
+            'title' => [
                 'required',
+                'max:255',
+            ],
+            'subtitle' => [
                 'max:255',
             ],
             'url' => [

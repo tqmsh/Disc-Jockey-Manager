@@ -11,7 +11,8 @@ class Notice extends Model
     use HasFactory, AsSource;
     protected $fillable = [
         'dashboard',
-        'content',
+        'title',
+        'subtitle',
         'url',
     ];
     public static $dashboard_names = [
