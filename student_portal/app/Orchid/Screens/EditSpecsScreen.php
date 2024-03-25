@@ -226,9 +226,11 @@ class EditSpecsScreen extends Screen
                         ->options([
                             'slim' => 'Slim',
                             'athletic' => 'Athletic',
-                            'muscular' => 'Muscular',                                'average' => 'Average',
-                                'stocky' => 'Stocky',
-                            ]),
+                            'muscular' => 'Muscular',                                
+                            'average' => 'Average',
+                            'stocky' => 'Stocky',
+                            'curvy' => 'Curvy'
+                        ]),
 
                     Button::make('Submit')
                         ->icon('check')
