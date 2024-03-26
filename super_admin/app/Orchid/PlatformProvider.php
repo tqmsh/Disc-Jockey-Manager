@@ -174,6 +174,10 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Prom Profit')
                 ->icon('money')
                 ->route('platform.universal-expense-revenue.list'),
+
+            Menu::make('Notices')
+                ->icon('directions')
+                ->route('platform.notice.list'),
             
             Menu::make('Report a Bug')
                 ->icon('bug')
