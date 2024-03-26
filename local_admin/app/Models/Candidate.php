@@ -13,6 +13,7 @@ class Candidate extends Model
         'user_id',
         'candidate_name',
         'candidate_bio',
+        'candidate_video_url',
         'election_id',
         'position_id',
         'created_at',

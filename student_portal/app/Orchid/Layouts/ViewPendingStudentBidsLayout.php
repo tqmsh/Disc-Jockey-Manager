@@ -37,20 +37,21 @@ class ViewPendingStudentBidsLayout extends Table
                 ->align(TD::ALIGN_LEFT)
                 ->width('100px')
                 ->render(function(StudentBids $bid){
-                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                    return Button::make('Interested')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
                     }), 
 
             TD::make()
                 ->align(TD::ALIGN_LEFT)
                 ->width('100px')
                 ->render(function(StudentBids $bid){
-                    return Button::make('Reject')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                    return Button::make('Not Interested')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
                     }), 
 
             TD::make('company_name', 'Company')
                 ->render(function($bid){
                     return Link::make($bid->company_name)
-                        ->href($bid->url);
+                        ->route('platform.studentBids.studentBid.view', $bid)
+                        ->target('_blank');
                 }),
                 
             TD::make('category_id', 'Category')
@@ -79,7 +80,9 @@ class ViewPendingStudentBidsLayout extends Table
             TD::make('package_id', 'Package URL')
                 ->width('200')
                 ->render(function($bid){
-                    return Link::make(VendorPackage::find($bid->package_id)->url)->href(VendorPackage::find($bid->package_id)->url);
+                    return Link::make(VendorPackage::find($bid->package_id)->url)
+                        ->route('platform.studentBids.studentBid.view', $bid)
+                        ->target('_blank');
                 }),
 
           TD::make('notes', 'Vendor Notes')

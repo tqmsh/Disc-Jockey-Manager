@@ -98,7 +98,7 @@ class ViewBugReportDetailedScreen extends Screen
                     }),
 
                 Sight::make('reporter_phone_number', 'Reporter Phone Number')
-                    ->render(fn(BugReport $bug_report) => User::find($bug_report->reporter_user_id)->phone_number ?? "None")
+                    ->render(fn(BugReport $bug_report) => User::find($bug_report->reporter_user_id)->phonenumber ?? "None")
             ])
         ];
     }
