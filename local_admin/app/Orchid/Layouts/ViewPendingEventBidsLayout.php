@@ -6,6 +6,7 @@ use Orchid\Screen\TD;
 use App\Models\EventBids;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\Events;
 use App\Models\VendorPackage;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -37,20 +38,21 @@ class ViewPendingEventBidsLayout extends Table
                 ->align(TD::ALIGN_LEFT)
                 ->width('100px')
                 ->render(function(EventBids $bid){
-                    return Button::make('Accept')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
+                    return Button::make('Interested')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 1])->icon('check')->type(Color::SUCCESS()); 
                     }), 
 
             TD::make()
                 ->align(TD::ALIGN_LEFT)
                 ->width('100px')
                 ->render(function(EventBids $bid){
-                    return Button::make('Reject')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
+                    return Button::make('Not Interested')->method('updateBid', ['bid_id' => $bid->id, 'choice' => 2])->icon('close')->type(Color::DANGER()); 
                     }), 
 
             TD::make('company_name', 'Company')
                 ->render(function($bid){
                     return Link::make($bid->company_name)
-                        ->href($bid->url);
+                        ->route('platform.eventBids.view', ['event' => Events::find($bid->event_id), 'eventBid' => $bid])
+                        ->target('_blank');
                 }),
                 
             TD::make('category_id', 'Category')
@@ -79,7 +81,9 @@ class ViewPendingEventBidsLayout extends Table
             TD::make('package_id', 'Package URL')
                 ->width('200')
                 ->render(function($bid){
-                    return Link::make(VendorPackage::find($bid->package_id)->url)->href(VendorPackage::find($bid->package_id)->url);
+                    return Link::make(VendorPackage::find($bid->package_id)->url)
+                        ->route('platform.eventBids.view', ['event' => Events::find($bid->event_id), 'eventBid' => $bid])
+                        ->target('_blank');
                 }),
 
           TD::make('notes', 'Vendor Notes')

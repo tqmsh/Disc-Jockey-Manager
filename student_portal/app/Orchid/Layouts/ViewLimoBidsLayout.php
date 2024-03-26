@@ -34,14 +34,15 @@ class ViewLimoBidsLayout extends Table
                 ->width('125px')
                 ->render(function(LimoGroupBid $bid){
                     return 
-                        (($bid->status == 1) ? '<i class="text-success">●</i> Accepted' 
-                        : '<i class="text-danger">●</i> Rejected');
+                        (($bid->status == 1) ? '<i class="text-success">●</i> Interested' 
+                        : '<i class="text-danger">●</i> Not Interested');
                     }),  
 
             TD::make('company_name', 'Company')
                 ->render(function($bid){
                     return Link::make($bid->company_name)
-                        ->href($bid->url);
+                        ->route('platform.studentBids.limoGroup.view', $bid)
+                        ->target('_blank');
                 }),
 
             TD::make('category_id', 'Category')
@@ -70,7 +71,9 @@ class ViewLimoBidsLayout extends Table
             TD::make('package_id', 'Package URL')
                 ->width('200')
                 ->render(function($bid){
-                    return Link::make(VendorPackage::find($bid->package_id)->url)->href(VendorPackage::find($bid->package_id)->url);
+                    return Link::make(VendorPackage::find($bid->package_id)->url)
+                        ->route('platform.studentBids.limoGroup.view', $bid)
+                        ->target('_blank');
                 }),
 
           TD::make('notes', 'Vendor Notes')

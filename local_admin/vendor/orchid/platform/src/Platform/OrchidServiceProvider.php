@@ -6,6 +6,7 @@ namespace Orchid\Platform;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Models\Notice;
 
 abstract class OrchidServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,8 @@ abstract class OrchidServiceProvider extends ServiceProvider
                 $dashboard->registerMenuElement(Dashboard::MENU_PROFILE, $element);
             }
         });
+
+        View::share('notice', Notice::where('dashboard', 2)->first());
 
         foreach ($this->registerPermissions() as $permission) {
             $dashboard->registerPermissions($permission);
