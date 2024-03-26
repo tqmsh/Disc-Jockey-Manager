@@ -38,7 +38,7 @@ class ViewRegionLayout extends Table
                         ->checked(false);
                 }),
 
-            TD::make('name', 'Category Name')
+            TD::make('name', 'Region Name')
                 ->render(function (Region $region) {
                     return Link::make($region->name)
                         ->route('platform.region.edit', $region);
