@@ -173,7 +173,13 @@ class ViewVendorScreen extends Screen
     }
 
     public function redirect($vendor){
-        return redirect()-> route('platform.vendor.edit', $vendor);
+
+        if(request('type') == "view"){
+            return redirect()->route('platform.vendor.detailed', $vendor);
+        }
+        else if(request('type') == "edit"){
+            return redirect()-> route('platform.vendor.edit', $vendor);
+        }
     }
 
     public function deleteVendors(Request $request){  

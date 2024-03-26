@@ -23,6 +23,7 @@ use App\Orchid\Screens\ViewCourseScreen;
 use App\Orchid\Screens\ViewRegionScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\ViewVendorScreen;
+use App\Orchid\Screens\ViewDetailedVendorScreen;
 use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
@@ -126,6 +127,9 @@ Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platf
 
 //show vendors screen
 Route::screen('/vendors', ViewVendorScreen::class)->name('platform.vendor.list');
+
+// Show paid regions of venders
+Route::screen('/vendors/{vendor}/paid', ViewDetailedVendorScreen::class)->name('platform.vendor.detailed');
 
 //show create vendors screen
 Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');
