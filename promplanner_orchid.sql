@@ -388,6 +388,50 @@ INSERT INTO `categories` (`id`, `name`, `status`, `order_num`, `created_at`, `up
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `checklists`
+--
+
+CREATE TABLE `checklists` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` tinyint(4) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `checklist_items`
+--
+
+CREATE TABLE `checklist_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `checklist_id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `checklist_users`
+--
+
+CREATE TABLE `checklist_users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `checklist_id` bigint(20) UNSIGNED NOT NULL,
+  `checklist_item_id` bigint(20) UNSIGNED NOT NULL,
+  `checklist_user_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `contracts`
 --
 
@@ -2069,6 +2113,29 @@ ALTER TABLE `candidates`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `checklists`
+--
+ALTER TABLE `checklists`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `type` (`type`);
+
+--
+-- Indexes for table `checklist_items`
+--
+ALTER TABLE `checklist_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `checklist_id` (`checklist_id`);
+
+--
+-- Indexes for table `checklist_users`
+--
+ALTER TABLE `checklist_users`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `checklist_id` (`checklist_id`),
+  ADD KEY `checklist_item_id` (`checklist_item_id`),
+  ADD KEY `checklist_user_id` (`checklist_user_id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -2623,6 +2690,24 @@ ALTER TABLE `candidates`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `checklists`
+--
+ALTER TABLE `checklists`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `checklist_items`
+--
+ALTER TABLE `checklist_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `checklist_users`
+--
+ALTER TABLE `checklist_users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -3034,6 +3119,20 @@ ALTER TABLE `candidates`
   ADD CONSTRAINT `candidates_ibfk_1` FOREIGN KEY (`election_id`) REFERENCES `elections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `postion_id` FOREIGN KEY (`position_id`) REFERENCES `positions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Constraints for table `checklist_items`
+--
+ALTER TABLE `checklist_items`
+  ADD CONSTRAINT `checklist_id` FOREIGN KEY (`checklist_id`) REFERENCES `checklists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `checklist_users`
+--
+ALTER TABLE `checklist_users`
+  ADD CONSTRAINT `checklist_id_users` FOREIGN KEY (`checklist_id`) REFERENCES `checklists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `checklist_item_id` FOREIGN KEY (`checklist_item_id`) REFERENCES `checklist_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `checklist_user_id` FOREIGN KEY (`checklist_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  
 --
 -- Constraints for table `contracts`
 --
