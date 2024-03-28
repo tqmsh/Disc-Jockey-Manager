@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 29, 2024 at 04:04 AM
+-- Generation Time: Mar 26, 2024 at 05:05 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -34,8 +34,9 @@ CREATE TABLE `actual_expenses_revenues` (
   `type` tinyint(4) NOT NULL COMMENT '1=Expense 2=Revenue',
   `budget` int(11) NOT NULL,
   `actual` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   `last_updated_user_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -338,6 +339,7 @@ CREATE TABLE `candidates` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `candidate_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `candidate_bio` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `candidate_video_url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `election_id` bigint(20) UNSIGNED NOT NULL,
   `position_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -348,8 +350,8 @@ CREATE TABLE `candidates` (
 -- Dumping data for table `candidates`
 --
 
-INSERT INTO `candidates` (`id`, `user_id`, `candidate_name`, `candidate_bio`, `election_id`, `position_id`, `created_at`, `updated_at`) VALUES
-(4, 146, 'Jane Doe', 'gdfgdfgdfgdg', 4, 5, '2023-06-26 21:07:20', '2023-06-26 21:07:20');
+INSERT INTO `candidates` (`id`, `user_id`, `candidate_name`, `candidate_bio`, `candidate_video_url`, `election_id`, `position_id`, `created_at`, `updated_at`) VALUES
+(4, 146, 'Jane Doe', 'gdfgdfgdfgdg', NULL, 4, 5, '2023-06-26 21:07:20', '2023-06-26 21:07:20');
 
 -- --------------------------------------------------------
 
@@ -1017,6 +1019,22 @@ CREATE TABLE `national_positions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `position_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `election_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notices`
+--
+
+CREATE TABLE `notices` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `dashboard` tinyint(3) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subtitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2285,6 +2303,12 @@ ALTER TABLE `national_positions`
   ADD KEY `election_id` (`election_id`);
 
 --
+-- Indexes for table `notices`
+--
+ALTER TABLE `notices`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -2764,6 +2788,12 @@ ALTER TABLE `national_election_winners`
 -- AUTO_INCREMENT for table `national_positions`
 --
 ALTER TABLE `national_positions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notices`
+--
+ALTER TABLE `notices`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
