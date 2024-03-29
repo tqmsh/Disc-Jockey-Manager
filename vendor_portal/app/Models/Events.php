@@ -45,8 +45,8 @@ class Events extends Model
     public function interestedVendorCategories(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => json_decode($value, true),
-            set: fn (array $value) => json_encode(array_map('intval', $value)),
+            get: fn (string|null $value) => !is_null($value) ? json_decode($value, true) : null,
+            set: fn (array|null $value) => !is_null($value) ? json_encode(array_map('intval', $value)) : null,
         );
     }
 
