@@ -23,6 +23,7 @@ use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\ViewRegionScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\ViewVendorScreen;
+use App\Orchid\Screens\ViewDetailedVendorScreen;
 use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
@@ -85,13 +86,16 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateContractScreen;
+use App\Orchid\Screens\CreateNoticeScreen;
 use App\Orchid\Screens\CreateUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\EditBugReportScreen;
 use App\Orchid\Screens\EditContractScreen;
+use App\Orchid\Screens\EditNoticeScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\EditStudentBidScreen;
 use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewNoticeScreen;
 use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 
 /*
@@ -123,6 +127,9 @@ Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platf
 
 //show vendors screen
 Route::screen('/vendors', ViewVendorScreen::class)->name('platform.vendor.list');
+
+// Show paid regions of venders
+Route::screen('/vendors/{vendor}/paid', ViewDetailedVendorScreen::class)->name('platform.vendor.detailed');
 
 //show create vendors screen
 Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');
@@ -285,6 +292,11 @@ Route::screen('/contracts/{contract}/edit', EditContractScreen::class)->name('pl
 Route::screen('/expenses-revenues', ViewUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.list');
 Route::screen('/expenses-revenues/create', CreateUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.create');
 Route::screen('/expenses-revenues/{expenseRevenue}/edit', EditUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.edit');
+
+// Notices
+Route::screen('/notices', ViewNoticeScreen::class)->name('platform.notice.list');
+Route::screen('/notices/create', CreateNoticeScreen::class)->name('platform.notice.create');
+Route::screen('/notices/{notice}/edit', EditNoticeScreen::class)->name('platform.notice.edit');
 
 // Bug Reports
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');

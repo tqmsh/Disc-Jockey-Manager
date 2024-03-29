@@ -56,6 +56,28 @@
     <div class="mt-3 mt-md-4">
         @include("platform::socialsTopBar")
         
+        @if(!is_null($notice))
+            <div class="layout d-flex">
+                <span class="text-info d-flex align-items-center me-3">
+                    <x-orchid-icon path="circle"/>
+                </span>
+                <div>
+                    <h2 class="h3 fw-light text-black">{{ $notice->title }}</h2>
+                    @if(!is_null($notice->subtitle))
+                        <small class="text-muted">{{ $notice->subtitle }}</small>
+                    @endif
+                </div>
+                @if(!is_null($notice->url))
+                    <div class="nav command-bar ms-auto d-inline-flex">
+                        <a class="btn btn-line" data-turbo="true" href="{{ $notice->url }}" target="_blank">
+                            Read More
+                            <x-orchid-icon path="arrow-right" class="ms-2"/>
+                        </a>
+                    </div>
+                @endif
+            </div>
+        @endif
+        
         @if(Breadcrumbs::has())
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb px-4 mb-2">

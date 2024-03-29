@@ -100,8 +100,8 @@ class ViewBidOpportunitiesScreen extends Screen
             ]),
 
             Layout::tabs([
-                'Events' => ViewEventLayout::class,
-                'Students' => ViewStudentBidLayout::class,
+                'Events (B2B)' => ViewEventLayout::class,
+                'Students (B2C)' => ViewStudentBidLayout::class,
                 'Limo Groups' => (stripos(Auth::user()->vendor->category->name, 'limo') !== false) ? ViewLimoGroupBidLayout::class : null, 
                 'Beauty Groups' => (stripos(Auth::user()->vendor->category->name, 'salon') !== false) ? ViewBeautyGroupBidLayout::class : null, 
             ]),

@@ -144,7 +144,13 @@ class CreateLimoGroupBidScreen extends Screen
                     ->rows(5)
                     ->help('Enter any instructions you would like.')
 
-            ])->title('Your Bid')
+            ])->title('Your Bid'),
+
+            Layout::rows([
+                Button::make('Send Bid (50 credits)')
+                ->icon('plus')
+                ->method('createBid'),
+                ])
         ];
     }
 
