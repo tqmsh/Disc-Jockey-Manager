@@ -15,9 +15,6 @@ class Events extends Model
     use AsSource;
 
     protected $fillable = ['event_name', 'venue_id', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'region_id', 'school', 'event_zip_postal', 'event_rules', 'ticket_price', 'capacity', 'interested_vendor_categories',];
-    protected $casts = [
-        'interested_vendor_categories' => 'array',
-    ];
 
     public function scopeFilter($query, array $filters){
 
