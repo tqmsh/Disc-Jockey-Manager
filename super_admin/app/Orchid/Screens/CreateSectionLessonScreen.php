@@ -3,7 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\Course;
+use App\Models\Guide;
 use App\Models\Section;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
@@ -15,17 +15,17 @@ use Orchid\Support\Facades\Toast;
 
 class CreateSectionLessonScreen extends Screen
 {
-    public $course;
+    public $guide;
     public $section;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Course $course, Section $section): iterable
+    public function query(Guide $guide, Section $section): iterable
     {
         return [
-            'course' => $course,
+            'guide' => $guide,
             'section' => $section,
         ];
     }
@@ -55,7 +55,7 @@ class CreateSectionLessonScreen extends Screen
             Link::make('Cancel')
                 ->icon('close')
                 ->route('platform.sectionLesson.list', [
-                    'course' => $this->course->id,
+                    'guide' => $this->guide->id,
                     'section' => $this->section->id,
                 ]),
         ];
@@ -93,7 +93,7 @@ class CreateSectionLessonScreen extends Screen
         ];
     }
 
-    public function createLesson(Course $course, Section $section)
+    public function createLesson(Guide $guide, Section $section)
     {
         $fields = request()->validate([
             'ordering' => 'required|numeric',
@@ -103,7 +103,7 @@ class CreateSectionLessonScreen extends Screen
         ]);
 
         $fields['section_id'] = $section->id;
-        $fields['course_id'] = $course->id;
+        $fields['guide_id'] = $guide->id;
 
         try {
             if($section->lessons()->where('ordering', $fields['ordering'])->exists()) {
@@ -114,7 +114,7 @@ class CreateSectionLessonScreen extends Screen
                 $section->lessons()->create($fields);
 
                 Toast::success('Lesson added successfully');
-                return redirect()->route('platform.sectionLesson.list',  ['course' => $course, 'section' => $section]);
+                return redirect()->route('platform.sectionLesson.list',  ['guide' => $guide, 'section' => $section]);
             }
         } catch(Exception $e) {
             Toast::error($e->getMessage());

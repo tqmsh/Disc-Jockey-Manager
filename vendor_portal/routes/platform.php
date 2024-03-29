@@ -11,7 +11,7 @@ use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\EditLimoBidScreen;
 use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\ViewPackageScreen;
@@ -27,7 +27,7 @@ use App\Orchid\Screens\CreateStudentBidScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\CreateLimoGroupBidScreen;
 use App\Orchid\Screens\CreateBeautyGroupBidScreen;
@@ -90,13 +90,13 @@ Route::screen('/event-bid/{eventBid}/edit', EditEventBidScreen::class)->name('pl
 
 Route::screen('/studen-tbid/{studentBid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
 
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');

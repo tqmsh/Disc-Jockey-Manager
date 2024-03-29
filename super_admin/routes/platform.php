@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSongsScreen;
-use App\Orchid\Screens\EditCourseScreen;
+use App\Orchid\Screens\EditGuideScreen;
 use App\Orchid\Screens\EditRegionScreen;
 use App\Orchid\Screens\EditSchoolScreen;
 use App\Orchid\Screens\EditVendorScreen;
 use App\Orchid\Screens\ViewAllBidScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\ViewRegionScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\ViewVendorScreen;
@@ -68,9 +68,9 @@ use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
-use App\Orchid\Screens\EditCourseSectionScreen;
+use App\Orchid\Screens\EditGuideSectionScreen;
 use App\Orchid\Screens\EditSectionLessonScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
@@ -216,29 +216,29 @@ Route::screen('/events/{event_id}/banned-songs', ViewBannedSongsScreen::class)->
 Route::screen('/events/{event_id}/banned-songs/add', CreateBannedSongsScreen::class)->name('platform.bannedSongs.create');
 Route::screen('/events/{song_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
-//view courses screen route
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+//view guides screen route
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-//edit course screen route
-Route::screen('/courses/{course}/edit', EditCourseScreen::class)->name('platform.course.edit');
+//edit guide screen route
+Route::screen('/guides/{guide}/edit', EditGuideScreen::class)->name('platform.guide.edit');
 
-//view course section screen route
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+//view guide section screen route
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-//edit course section screen route
-Route::screen('/courses/{course}/sections/{section}/edit', EditCourseSectionScreen::class)->name('platform.courseSection.edit');
+//edit guide section screen route
+Route::screen('/guides/{guide}/sections/{section}/edit', EditGuideSectionScreen::class)->name('platform.guideSection.edit');
 
-//view lessons in a course section screen route
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+//view lessons in a guide section screen route
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-//edit lesson in a course section screen route
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/edit', EditSectionLessonScreen::class)->name('platform.sectionLesson.edit');
+//edit lesson in a guide section screen route
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/edit', EditSectionLessonScreen::class)->name('platform.sectionLesson.edit');
 
 //view a single section lesson screen route
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 //create a section lesson screen route
-Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
+Route::screen('/guides/{guide}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
 
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');

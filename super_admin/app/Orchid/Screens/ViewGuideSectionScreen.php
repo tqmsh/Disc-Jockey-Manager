@@ -3,7 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Exception;
-use App\Models\Course;
+use App\Models\Guide;
 use App\Models\Section;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
@@ -12,21 +12,21 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewCourseSectionLayout;
+use App\Orchid\Layouts\ViewGuideSectionLayout;
 
-class ViewCourseSectionScreen extends Screen
+class ViewGuideSectionScreen extends Screen
 {
-    public $course;
+    public $guide;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Course $course): iterable
+    public function query(Guide $guide): iterable
     {
         return [
-            'course' => $course,
-            'sections' => $course->sections()->orderBy('ordering', 'asc')->paginate(10),
+            'guide' => $guide,
+            'sections' => $guide->sections()->orderBy('ordering', 'asc')->paginate(10),
         ];
     }
 
@@ -37,7 +37,7 @@ class ViewCourseSectionScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Sections for Course: ' . $this->course->course_name;
+        return 'Sections for Guide: ' . $this->guide->guide_name;
     }
 
     /**
@@ -54,8 +54,8 @@ class ViewCourseSectionScreen extends Screen
                 ->method('delete')
                 ->confirm('Are you sure you want to delete the selected sections?'),
             
-            Link::make('Back to Course List')
-                ->route('platform.course.list')
+            Link::make('Back to Guide List')
+                ->route('platform.guide.list')
                 ->icon('arrow-left')
         ];
     }
@@ -68,7 +68,7 @@ class ViewCourseSectionScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewCourseSectionLayout::class,
+            ViewGuideSectionLayout::class,
 
             Layout::rows([
                 
@@ -90,16 +90,16 @@ class ViewCourseSectionScreen extends Screen
         
     }
 
-    public function redirect(Course $course){
+    public function redirect(Guide $guide){
         if(request('type') == "lesson"){
-            return redirect()->route('platform.sectionLesson.list',  ['course' => $course, 'section' => request('section_id')]);
+            return redirect()->route('platform.sectionLesson.list',  ['guide' => $guide, 'section' => request('section_id')]);
         }
         else if(request('type') == "edit"){
-            return redirect()->route('platform.courseSection.edit',  ['course' => $course, 'section' => request('section_id')]);
+            return redirect()->route('platform.guideSection.edit',  ['guide' => $guide, 'section' => request('section_id')]);
         }
     }
 
-    public function createSection(Course $course){
+    public function createSection(Guide $guide){
 
         try{
             
@@ -108,14 +108,14 @@ class ViewCourseSectionScreen extends Screen
                 'ordering' => 'required|numeric',
             ]);
 
-            if($course->sections()->where('ordering', $fields['ordering'])->exists()){
+            if($guide->sections()->where('ordering', $fields['ordering'])->exists()){
                 throw new Exception('Ordering already exists');
 
-            } else if($course->sections()->where('section_name', $fields['section_name'])->exists()){
+            } else if($guide->sections()->where('section_name', $fields['section_name'])->exists()){
                 throw new Exception('Section name already exists');
 
             } else{
-                $course->sections()->create([
+                $guide->sections()->create([
                     'section_name' => $fields['section_name'],
                     'ordering' => $fields['ordering'],
                 ]);
@@ -127,12 +127,12 @@ class ViewCourseSectionScreen extends Screen
         }
 
 
-        return redirect()->route('platform.courseSection.list', $course);
+        return redirect()->route('platform.guideSection.list', $guide);
     }
 
     public function delete(){
 
-        //get all courses from post request
+        //get all guides from post request
         $sections = request('sections');
 
         

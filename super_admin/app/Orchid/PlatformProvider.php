@@ -185,7 +185,7 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
-                ->route('platform.course.list'),
+                ->route('platform.guide.list'),
 
             Menu::make(__('Roles'))
                 ->icon('lock')
