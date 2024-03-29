@@ -194,8 +194,9 @@ class EditEventScreen extends Screen
             $messages = [
                 'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
             ]);
-
-            $event->update($validator->validated());
+            $validated = $validator->validated();
+            $validated['interested_vendor_categories'] = $validated['interested_vendor_categories'] ?? null;
+            $event->update($validated);
 
             Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
 
