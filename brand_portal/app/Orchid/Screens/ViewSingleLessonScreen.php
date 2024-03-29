@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Course;
+use App\Models\Guide;
 use App\Models\Lesson;
 use App\Models\Section;
 use Orchid\Screen\Sight;
@@ -12,7 +12,7 @@ use Orchid\Support\Facades\Layout;
 
 class ViewSingleLessonScreen extends Screen
 {
-    public $course;
+    public $guide;
     public $lesson;
     public $section;
     /**
@@ -20,11 +20,11 @@ class ViewSingleLessonScreen extends Screen
      *
      * @return array
      */
-    public function query(Course $course, Section $section, Lesson $lesson): iterable
+    public function query(Guide $guide, Section $section, Lesson $lesson): iterable
     {
-        abort_if($course->category != 4, 403, 'You are not authorized to view this page.');
+        abort_if($guide->category != 4, 403, 'You are not authorized to view this page.');
         return [
-            'course' => $course,
+            'guide' => $guide,
             'section' => $section,
             'lesson' => $lesson,
         ];
@@ -42,7 +42,7 @@ class ViewSingleLessonScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Course: ' . $this->course->course_name . ' | Section: ' . $this->section->section_name;
+        return 'Guide: ' . $this->guide->guide_name . ' | Section: ' . $this->section->section_name;
     }
 
     /**
@@ -56,7 +56,7 @@ class ViewSingleLessonScreen extends Screen
             Link::make('Back to Section Lessons')
                 ->icon('arrow-left')
                 ->route('platform.sectionLesson.list', [
-                    'course' => $this->course->id,
+                    'guide' => $this->guide->id,
                     'section' => $this->section->id,
                 ]),
         ];
