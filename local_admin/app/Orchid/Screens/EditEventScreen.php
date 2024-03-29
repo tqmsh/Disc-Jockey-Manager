@@ -160,7 +160,7 @@ class EditEventScreen extends Screen
                     ->horizontal()
                     ->multiple()
                     ->help('Vendors from this category will be able to place bids on the event.')
-                    ->value(array_map('intval', $this->event->interested_vendor_categories ?? [])),
+                    ->value($this->event->interested_vendor_categories),
             ]),            
         ];
     }

@@ -5,9 +5,8 @@ namespace App\Models;
 use Exception;
 use Orchid\Screen\AsSource;
 use Orchid\Support\Facades\Alert;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Events extends Model
@@ -98,5 +97,13 @@ class Events extends Model
 
     public function couple_requests(){
         return $this->hasMany(CoupleRequest::class, 'event_id', 'id');
+    }
+
+    public function interestedVendorCategories(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => json_decode($value, true),
+            set: fn (array $value) => json_encode(array_map('intval', $value)),
+        );
     }
 }
