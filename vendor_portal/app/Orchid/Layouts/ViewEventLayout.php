@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
+use App\Models\Categories;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Region;
@@ -48,6 +49,11 @@ class ViewEventLayout extends Table
             TD::make('event_start_time', 'Event Start')
                 ->render(function($event){
                     return e($event->event_start_time);
+                }),
+            
+            TD::make('interested_vendor_categories', 'Interested Vendor Categories')
+                ->render(function($event){
+                    return e($event->getInterestedCategoriesNames());
                 }),
         ];    
     }

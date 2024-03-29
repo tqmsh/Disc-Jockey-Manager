@@ -8,6 +8,7 @@ use Orchid\Support\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Events extends Model
@@ -39,5 +40,18 @@ class Events extends Model
     {
         $school = School::find($this->attributes['school_id']);
         return $this->attributes['event_name'] . ' (' . $this->attributes['school'] . ' | ' . $school->county . ') ';
+    }
+    
+    public function interestedVendorCategories(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => json_decode($value, true),
+            set: fn (array $value) => json_encode(array_map('intval', $value)),
+        );
+    }
+
+    public function getInterestedCategoriesNames(): string
+    {
+        return implode(', ', array_map(fn ($category_id) => Categories::find($category_id)->name, $this->interested_vendor_categories));
     }
 }
