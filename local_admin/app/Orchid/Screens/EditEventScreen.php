@@ -19,6 +19,8 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class EditEventScreen extends Screen
 {
@@ -151,6 +153,14 @@ class EditEventScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->event->capacity),
+
+                Select::make('interested_vendor_categories')
+                    ->title('Interested Vendor Categories')
+                    ->fromModel(Categories::class, 'name')
+                    ->horizontal()
+                    ->multiple()
+                    ->help('Vendors from this category will be able to place bids on the event.')
+                    ->value(array_map('intval', $this->event->interested_vendor_categories ?? [])),
             ]),            
         ];
     }
@@ -158,10 +168,34 @@ class EditEventScreen extends Screen
     public function update(Events $event, Request $request)
     {
         try{
+            $validator = Validator::make($request->all(), [
+                'event_name' => 'required|max:255',
+                'event_start_time' => 'required|date',
+                'event_finish_time' => 'required|date|after_or_equal:event_start_time',
+                'event_address' => 'nullable|max:429496729',
+                'event_zip_postal' => 'nullable|max:2147483647',
+                'event_info' => 'nullable|max:429496729',
+                'event_rules' => 'nullable|max:429496729',
+                'venue_id' => [
+                    'nullable',
+                    'int',
+                    Rule::in(
+                        Vendors::where(
+                            'category_id',
+                            Categories::where('name', 'Venue')->first()->id
+                        )->pluck('id')
+                    )
+                ],
+                'ticket_price' => 'required|numeric|gte:0',
+                'capacity' => 'required|integer|max:4294967295|gte:0',
+                'interested_vendor_categories' => 'nullable|array',
+                'interested_vendor_categories.*' => Rule::in(Categories::all()->pluck('id')),
+            ],
+            $messages = [
+                'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
+            ]);
 
-            $eventsFields = $request->all();
-
-            $event->update($eventsFields);
+            $event->update($validator->validated());
 
             Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
 
