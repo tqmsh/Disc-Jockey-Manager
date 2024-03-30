@@ -103,4 +103,9 @@ class Events extends Model
             set: fn (array|null $value) => !is_null($value) ? json_encode(array_map('intval', $value)) : null,
         );
     }
+
+    public function getInterestedCategoriesNames(): string|null
+    {
+        return $this->interested_vendor_categories ? implode(', ', array_map(fn ($category_id) => Categories::find($category_id)->name, $this->interested_vendor_categories)) : null;
+    }
 }
