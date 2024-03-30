@@ -47,10 +47,10 @@ class ViewBidOpportunitiesScreen extends Screen
         return [
             'events' => Events::filter(request(['region_id']))
                 ->whereIn('region_id', $this->paidRegionIds)
-                ->whereJsonContains('interested_vendor_categories', Vendors::firstWhere('user_id', Auth::id())->category_id)
+                ->whereJsonContains('interested_vendor_categories', Auth::user()->vendor->category_id)
                 ->paginate(10),
             'students' => Student::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))
-                ->whereJsonContains('interested_vendor_categories', Vendors::firstWhere('user_id', Auth::id())->category_id)
+                ->whereJsonContains('interested_vendor_categories', Auth::user()->vendor->category_id)
                 ->paginate(10),
             'limo_groups' => (stripos(Auth::user()->vendor->category->name, 'limo') !== false) ? LimoGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
             'beauty_groups' => (stripos(Auth::user()->vendor->category->name, 'salon') !== false) ? BeautyGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
