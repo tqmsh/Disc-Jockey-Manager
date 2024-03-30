@@ -53,7 +53,6 @@ class ViewEventLayout extends Table
             
             TD::make('interested_vendor_categories', 'Interested Categories')
                 ->render(function($event){
-                    $interestedCategories = $event->getInterestedCategoriesNames();
                     return e($event->getInterestedCategoriesNames());
                 })->defaultHidden(),
         ];    
