@@ -50,8 +50,8 @@ class Events extends Model
         );
     }
 
-    public function getInterestedCategoriesNames(): string
+    public function getInterestedCategoriesNames(): string|null
     {
-        return implode(', ', array_map(fn ($category_id) => Categories::find($category_id)->name, $this->interested_vendor_categories));
+        return $this->interested_vendor_categories ? implode(', ', array_map(fn ($category_id) => Categories::find($category_id)->name, $this->interested_vendor_categories)) : null;
     }
 }
