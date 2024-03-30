@@ -21,6 +21,7 @@ use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Orchid\Screen\Actions\ModalToggle;
 
 class EditEventScreen extends Screen
 {
@@ -84,7 +85,17 @@ class EditEventScreen extends Screen
         abort_if($this->event->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'), 403);
 
         return [
-            
+            Layout::modal('suggestCategoryModal', [
+                Layout::rows([
+                    Input::make('category_name')
+                        ->title('Suggest Category')
+                        ->placeholder('Enter the name of the category')
+                        ->help('Suggest a category to be reviewed and approved by an admin')
+                        ->required(),
+                ])
+            ])->title('Suggest Category')
+                ->applyButton('Suggest'),
+                
             Layout::rows([
 
                 Input::make('event_name')
@@ -161,6 +172,12 @@ class EditEventScreen extends Screen
                     ->multiple()
                     ->help('Vendors from this category will be able to place bids on the event.')
                     ->value($this->event->interested_vendor_categories),
+                
+                ModalToggle::make('Suggest Categories')
+                    ->modal('suggestCategoryModal')
+                    ->method('suggestCategory')
+                    ->icon('plus')
+                    ->class('btn btn-default'),
             ]),            
         ];
     }
@@ -222,5 +239,14 @@ class EditEventScreen extends Screen
 
             Alert::error('There was an error deleting this event. Error Code: ' . $e->getMessage());
         }     
+    }
+
+    public function suggestCategory()
+    {
+        $validator = Validator::make(request()->all(), [
+            'category_name' => 'required|max:255|unique:categories,name',
+        ]);
+        Categories::create(['name' => $validator->validated()['category_name']]);
+        Toast::success('Category suggested succesfully');
     }
 }
