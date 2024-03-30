@@ -59,6 +59,9 @@ class ViewEventBidScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Edit Interested Categories')
+                ->icon('pencil')
+                ->route('platform.event.edit', $this->event),
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')
