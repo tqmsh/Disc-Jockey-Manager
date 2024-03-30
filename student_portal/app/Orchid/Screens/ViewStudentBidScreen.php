@@ -54,6 +54,11 @@ class ViewStudentBidScreen extends Screen
         return 'Bids Placed on You';
     }
 
+    public function description(): ?string
+    {
+        return 'Interested Categories: ' . ($this->event->getInterestedCategoriesNames() ?? 'None');
+    }
+
     /**
      * Button commands.
      *

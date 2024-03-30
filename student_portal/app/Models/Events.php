@@ -16,7 +16,7 @@ class Events extends Model
     use HasFactory;
     use AsSource;
 
-    protected $fillable = ['event_name', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'school', 'event_zip_postal', 'event_rules', 'ticket_price', 'capacity', 'interested_vendor_categories',];
+    protected $fillable = ['event_name', 'updated_at', 'created_at', 'school_id', 'event_creator', 'event_start_time', 'event_info', 'event_address', 'event_finish_time', 'school', 'event_zip_postal', 'event_rules', 'ticket_price', 'capacity'];
 
 
     public function scopeFilter($query, array $filters){
@@ -83,18 +83,5 @@ class Events extends Model
 
     public function couple_requests(){
         return $this->hasMany(CoupleRequest::class, 'event_id', 'id');
-    }
-
-    public function interestedVendorCategories(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string|null $value) => !is_null($value) ? json_decode($value, true) : null,
-            set: fn (array|null $value) => !is_null($value) ? json_encode(array_map('intval', $value)) : null,
-        );
-    }
-
-    public function getInterestedCategoriesNames(): string|null
-    {
-        return $this->interested_vendor_categories ? implode(', ', array_map(fn ($category_id) => Categories::find($category_id)->name, $this->interested_vendor_categories)) : null;
     }
 }
