@@ -70,7 +70,7 @@ class ViewStudentBidScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            ModalToggle::make('Suggest Categories')
+            ModalToggle::make('Suggest Category')
                 ->modal('suggestCategoryModal')
                 ->method('suggestCategory')
                 ->icon('plus'),
@@ -104,7 +104,7 @@ class ViewStudentBidScreen extends Screen
             Layout::modal('suggestCategoryModal', [
                 Layout::rows([
                     Input::make('category_name')
-                        ->title('Suggest Category')
+                        ->title('Category Name')
                         ->placeholder('Enter the name of the category')
                         ->help('Suggest a category to be reviewed and approved by an admin')
                         ->required(),

@@ -72,14 +72,14 @@ class CreateEventScreen extends Screen
             Layout::modal('suggestCategoryModal', [
                 Layout::rows([
                     Input::make('category_name')
-                        ->title('Suggest Category')
+                        ->title('Category Name')
                         ->placeholder('Enter the name of the category')
                         ->help('Suggest a category to be reviewed and approved by an admin')
                         ->required(),
                 ])
             ])->title('Suggest Category')
                 ->applyButton('Suggest'),
-                
+
             Layout::rows([
 
                 Input::make('event_name')
@@ -145,7 +145,7 @@ class CreateEventScreen extends Screen
                     ->multiple()
                     ->help('Vendors from this category will be able to place bids on the event.'),
 
-                ModalToggle::make('Suggest Categories')
+                ModalToggle::make('Suggest Category')
                     ->modal('suggestCategoryModal')
                     ->method('suggestCategory')
                     ->icon('plus')

@@ -88,7 +88,7 @@ class EditEventScreen extends Screen
             Layout::modal('suggestCategoryModal', [
                 Layout::rows([
                     Input::make('category_name')
-                        ->title('Suggest Category')
+                        ->title('Category Name')
                         ->placeholder('Enter the name of the category')
                         ->help('Suggest a category to be reviewed and approved by an admin')
                         ->required(),
@@ -173,7 +173,7 @@ class EditEventScreen extends Screen
                     ->help('Vendors from this category will be able to place bids on the event.')
                     ->value($this->event->interested_vendor_categories),
                 
-                ModalToggle::make('Suggest Categories')
+                ModalToggle::make('Suggest Category')
                     ->modal('suggestCategoryModal')
                     ->method('suggestCategory')
                     ->icon('plus')
