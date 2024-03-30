@@ -26,7 +26,7 @@ class ViewChecklistItemScreen extends Screen
      */
     public function query(Checklist $checklist): iterable
     {
-        abort_if($checklist->type !== 1, 404, 'You do not have access to this checklist\'s items.');
+        abort_if($checklist->type !== 0, 404, 'You do not have access to this checklist\'s items.');
 
         $completedChecklistItems = ChecklistUser::where('checklist_user_id', Auth::user()->id)->where('checklist_id', $checklist->id);
 
