@@ -66,6 +66,11 @@ class Student extends Model
         return $this->belongsTo(School::class, 'school_id', 'id');
     }
 
+    public function specs()
+    {
+        return $this->hasOne(Specs::class, 'student_user_id', 'user_id');
+    }
+
     public function interestedVendorCategories(): Attribute
     {
         return Attribute::make(

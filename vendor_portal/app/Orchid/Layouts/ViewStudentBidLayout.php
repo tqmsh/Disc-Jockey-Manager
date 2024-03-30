@@ -45,26 +45,18 @@ class ViewStudentBidLayout extends Table
                 ->render(function (Student $student) {
                     return e($student->lastname);
                 }),
-            TD::make('email', 'Email')
-                ->render(function (Student $student) {
-                    return e($student->email);
-                }),
-            TD::make('region', 'Region')
-                ->render(function (Student $student) {
-                    return e(Region::find($student->school()->first()->region_id)->name);
-                }),
             TD::make('school', 'School')
                 ->render(function (Student $student) {
                     return e($student->school);
                 })->width('225px'),
-            TD::make('grade', 'Grade')
+            TD::make('gender', 'Gender')
                 ->render(function (Student $student) {
-                    return e($student->grade);
+                    return e(ucwords($student->specs->gender));
                 }),
-            TD::make('allergies', 'Allergies')
-                ->render(function (Student $student) {
-                    return e($student->allergies);
-                }),
+            TD::make('interested_vendor_categories', 'Interested Categories')
+                ->render(function($event){
+                    return e($event->getInterestedCategoriesNames());
+                })->defaultHidden(),
         ];
     }
 }
