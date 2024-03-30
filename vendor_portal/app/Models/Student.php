@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use App\Models\Localadmin;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Orchid\Screen\AsSource;
 use Orchid\Support\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -63,5 +64,18 @@ class Student extends Model
 
     public function school(){
         return $this->belongsTo(School::class, 'school_id', 'id');
+    }
+
+    public function interestedVendorCategories(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string|null $value) => !is_null($value) ? json_decode($value, true) : null,
+            set: fn (array|null $value) => !is_null($value) ? json_encode(array_map('intval', $value)) : null,
+        );
+    }
+
+    public function getInterestedCategoriesNames(): string|null
+    {
+        return $this->interested_vendor_categories ? implode(', ', array_map(fn ($category_id) => Categories::find($category_id)->name, $this->interested_vendor_categories)) : null;
     }
 }

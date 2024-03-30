@@ -23,7 +23,9 @@ use App\Orchid\Layouts\ViewStudentBidsLayout;
 use App\Orchid\Layouts\ViewBeautyGroupBidLayout;
 use App\Orchid\Layouts\ViewPendingStudentBidsLayout;
 use App\Models\Vendors;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Orchid\Screen\Actions\ModalToggle;
 
 class ViewStudentBidScreen extends Screen
 {
@@ -56,7 +58,7 @@ class ViewStudentBidScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Interested Categories: ' . ($this->event->getInterestedCategoriesNames() ?? 'None');
+        return 'Interested Categories: ' . (Auth::user()->student->getInterestedCategoriesNames() ?? 'None');
     }
 
     /**
@@ -67,7 +69,10 @@ class ViewStudentBidScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-
+            ModalToggle::make('Edit Interested Categories')
+                ->modal('editInterestedCategoriesModal')
+                ->method('updateInterestedCategories')
+                ->icon('pencil'),
         ];
     }
 
@@ -79,6 +84,18 @@ class ViewStudentBidScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('editInterestedCategoriesModal', [
+                Layout::rows([
+                    Select::make('interested_vendor_categories')
+                        ->title('Interested Vendor Categories')
+                        ->fromModel(Categories::class, 'name')
+                        ->multiple()
+                        ->help('Vendors from this category will be able to place bids on the event.')
+                        ->value(Auth::user()->student->interested_vendor_categories),
+                ])
+            ])->title('Edit Interested Categories')
+                ->applyButton('Save'),
+
             Layout::rows([
                 Group::make([
                     
@@ -157,5 +174,20 @@ class ViewStudentBidScreen extends Screen
         } catch (\Exception $e) {
             Toast::error('Something went wrong. Error: ' . $e->getMessage());
         }
+    }
+
+    public function updateInterestedCategories()
+    {
+        $validator = Validator::make(request(['interested_vendor_categories',]), [
+            'interested_vendor_categories' => 'nullable|array',
+            'interested_vendor_categories.*' => Rule::in(Categories::all()->pluck('id')),
+        ],
+        $messages = [
+            'interested_vendor_categories.*.in' => 'The interested categories are invalid.'
+        ]);
+        $validated = $validator->validated();
+        $validated['interested_vendor_categories'] = $validated['interested_vendor_categories'] ?? null;
+        Auth::user()->student->update($validated);
+        Toast::success('Interested categories updated successfully');
     }
 }
