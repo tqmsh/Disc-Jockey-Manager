@@ -48,7 +48,7 @@ class ViewEventBidScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Interested Vendor Categories: ' . ($this->event->getInterestedCategoriesNames() ?? 'None');
+        return 'Interested Categories: ' . ($this->event->getInterestedCategoriesNames() ?? 'None');
     }
 
     /**
