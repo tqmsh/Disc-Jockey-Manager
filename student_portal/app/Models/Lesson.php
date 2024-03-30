@@ -11,9 +11,9 @@ class Lesson extends Model
     use HasFactory;
     use AsSource;
 
-    public function course()
+    public function guide()
     {
-        return $this->belongsTo(Course::class, 'course_id', 'id');
+        return $this->belongsTo(Guide::class, 'guide_id', 'id');
     }
 
     public function section()

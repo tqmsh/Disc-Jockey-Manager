@@ -9,7 +9,7 @@ use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;
 
-class ViewCourseSectionLayout extends Table
+class ViewGuideSectionLayout extends Table
 {
     /**
      * Data source.
