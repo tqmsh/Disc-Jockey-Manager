@@ -26,6 +26,7 @@ use App\Models\Vendors;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 
 class ViewStudentBidScreen extends Screen
 {
@@ -69,6 +70,10 @@ class ViewStudentBidScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            ModalToggle::make('Suggest Categories')
+                ->modal('suggestCategoryModal')
+                ->method('suggestCategory')
+                ->icon('plus'),
             ModalToggle::make('Edit Interested Categories')
                 ->modal('editInterestedCategoriesModal')
                 ->method('updateInterestedCategories')
@@ -95,6 +100,17 @@ class ViewStudentBidScreen extends Screen
                 ])
             ])->title('Edit Interested Categories')
                 ->applyButton('Save'),
+            
+            Layout::modal('suggestCategoryModal', [
+                Layout::rows([
+                    Input::make('category_name')
+                        ->title('Suggest Category')
+                        ->placeholder('Enter the name of the category')
+                        ->help('Suggest a category to be reviewed and approved by an admin')
+                        ->required(),
+                ])
+            ])->title('Suggest Category')
+                ->applyButton('Suggest'),
 
             Layout::rows([
                 Group::make([
@@ -189,5 +205,14 @@ class ViewStudentBidScreen extends Screen
         $validated['interested_vendor_categories'] = $validated['interested_vendor_categories'] ?? null;
         Auth::user()->student->update($validated);
         Toast::success('Interested categories updated successfully');
+    }
+
+    public function suggestCategory()
+    {
+        $validator = Validator::make(request()->all(), [
+            'category_name' => 'required|max:255|unique:categories,name',
+        ]);
+        Categories::create(['name' => $validator->validated()['category_name']]);
+        Toast::success('Category suggested succesfully');
     }
 }
