@@ -51,12 +51,12 @@ class ViewPackageLayout extends Table
                 ->render(function (VendorPackage $package) {
                     return Link::make('$' . number_format($package->price))
                         ->route('platform.package.edit', $package);
-                })->defaultHidden(),
+                }),
             TD::make('url', 'Package Site')
                 ->render(function (VendorPackage $package) {
                     return Link::make($package->url)
                         ->href($package->url == null ? '#' : $package->url);
-                })->defaultHidden(),
+                }),
             
             TD::make()
                 ->width('80')
