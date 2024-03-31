@@ -107,7 +107,8 @@ class ViewChecklistScreen extends Screen
     public function redirect($checklist_id, string $redirect_type) {
         return match(strtolower($redirect_type)) {
             'edit' => to_route('platform.checklist.edit', $checklist_id),
-            'view' => to_route('platform.checklist-items.list', $checklist_id)
+            'view' => to_route('platform.checklist-items.list', $checklist_id),
+            'users' => to_route('platform.checklist.users', $checklist_id)
         };
     }
 

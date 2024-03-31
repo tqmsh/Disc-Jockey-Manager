@@ -74,6 +74,14 @@ class ViewChecklistLayout extends Table
 
             TD::make()
                 ->render(function(Checklist $checklist) {
+                    return Button::make('Users')
+                            ->type(Color::INFO())
+                            ->method('redirect', ['checklist_id' => $checklist->id, 'type' => 'users']) 
+                            ->icon('user');
+                }),
+
+            TD::make()
+                ->render(function(Checklist $checklist) {
                     return Button::make('Edit')
                             ->type(Color::PRIMARY())
                             ->method('redirect', ['checklist_id' => $checklist->id, 'type' => 'edit']) 

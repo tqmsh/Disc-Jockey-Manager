@@ -100,8 +100,11 @@ use App\Orchid\Screens\EditStudentBidScreen;
 use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewChecklistItemScreen;
 use App\Orchid\Screens\ViewChecklistScreen;
+use App\Orchid\Screens\ViewChecklistUsersScreen;
+use App\Orchid\Screens\ViewCompletedChecklistScreen;
 use App\Orchid\Screens\ViewNoticeScreen;
 use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewUserChecklistItemsScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -307,6 +310,8 @@ Route::screen('/notices/{notice}/edit', EditNoticeScreen::class)->name('platform
 Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
 Route::screen('/checklists/create', CreateChecklistScreen::class)->name('platform.checklist.create');
 Route::screen('/checklists/{checklist}/edit', EditChecklistScreen::class)->name('platform.checklist.edit');
+Route::screen('/checklists/{checklist}/users', ViewChecklistUsersScreen::class)->name('platform.checklist.users');
+Route::screen('/checklists/{checklist}/users/{user}/items', ViewUserChecklistItemsScreen::class)->name('platform.checklist.users.view');
 
 // Checklist Items
 Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
