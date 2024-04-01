@@ -40,13 +40,9 @@ class ViewStudentBidLayout extends Table
                     return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['student_id' => $event->id, 'type' => 'student'])->icon('plus');
                 }), 
 
-            TD::make('firstname', 'First Name')
+            TD::make('username', 'Username')
                 ->render(function (Student $student) {
-                    return e($student->firstname);
-                }),
-            TD::make('lastname', 'Last Name')
-                ->render(function (Student $student) {
-                    return e($student->lastname);
+                    return e($student->user->name);
                 }),
             TD::make('school', 'School')
                 ->render(function (Student $student) {

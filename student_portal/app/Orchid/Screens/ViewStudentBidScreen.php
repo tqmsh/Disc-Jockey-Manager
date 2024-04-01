@@ -173,14 +173,14 @@ class ViewStudentBidScreen extends Screen
 
                 $vendor->notify(new GeneralNotification([
                     'title' => 'Student Bid Accepted!',
-                    'message' => 'Your bid for ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has been accepted!',
+                    'message' => 'Your bid for ' . Auth::user()->name . ' has been accepted!',
                     'action' => '/admin/bids/history'
                 ]));
             } else{
 
                 $vendor->notify(new GeneralNotification([
                     'title' => 'Student Bid Declined!',
-                    'message' => 'Your bid for ' . Auth::user()->firstname . ' ' . Auth::user()->lastname . ' has been declined!',
+                    'message' => 'Your bid for ' . Auth::user()->name . ' has been declined!',
                     'action' => '/admin/bids/history'
                 ]));
             }

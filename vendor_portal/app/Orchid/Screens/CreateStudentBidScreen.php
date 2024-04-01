@@ -47,7 +47,7 @@ class CreateStudentBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Create Bid For: ' . $this->student->firstname . ' ' . $this->student->lastname ;
+        return 'Create Bid For: ' . $this->student->user->name;
     }
 
     /**
@@ -78,8 +78,7 @@ class CreateStudentBidScreen extends Screen
     {
         return [
             Layout::legend('student',[
-                Sight::make('firstname', 'First Name'),
-                Sight::make('lastname', 'Last Name'),
+                Sight::make('username', 'Username')->render(fn ($student) => $student->user->name),
                 Sight::make('email', 'Email'),
                 Sight::make('region', 'Region')->render(function(){
 
