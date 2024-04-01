@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Screen\AsSource;
 
-class Categories extends Model
+class EventAttendees extends Model
 {
     use HasFactory;
-    protected $fillable = ['name',];
+    use AsSource;
 }
