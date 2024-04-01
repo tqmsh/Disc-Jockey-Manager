@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Orchid\Layouts\ViewCompletedChecklistUsersLayout;
 use App\Orchid\Layouts\ViewIncompleteChecklistUsersLayout;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
@@ -35,8 +36,8 @@ class ViewChecklistUsersScreen extends Screen
 
         return [
             'checklist' => $checklist,
-            'completed' => new LengthAwarePaginator($completed, count($completed), 10, 1),
-            'incomplete' => new LengthAwarePaginator($incomplete, count($incomplete), 10, 1)
+            'completed' => $this->paginate($completed, 10, options: ['path' => "/admin/checklists/{$checklist->id}/users"]),
+            'incomplete' => $this->paginate($incomplete, 10, options: ['path' => "/admin/checklists/{$checklist->id}/users"])
         ];
     }
 
@@ -129,5 +130,13 @@ class ViewChecklistUsersScreen extends Screen
         return array_map(function($id) {
             return User::find($id);
         }, $users->whereNotIn('user_id', $this->getCompletedChecklistUsers($checklist)->pluck('id'))->pluck('user_id')->toArray());
+    }
+
+    // from https://laracasts.com/discuss/channels/laravel/how-to-paginate-laravel-collection
+    public function paginate($items, $perPage = 15, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }

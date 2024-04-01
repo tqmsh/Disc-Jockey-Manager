@@ -58,6 +58,12 @@ class ViewUserChecklistItemsLayout extends Table
                 }),
             
             TD::make('created_at', 'Completed At')
+                ->render(function(ChecklistItem $checklist_item){
+                    $query = ChecklistUser::where('checklist_item_id', $checklist_item->id)->where('checklist_user_id', request('user')->id);
+                    $completed = $query->exists();
+
+                    return $completed ? $query->first()->created_at : 'N/A';
+                })
         ];
     }
 }
