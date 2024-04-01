@@ -91,6 +91,10 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Prom Profit')
                 ->icon('money')
                 ->route('platform.profit.list'),
+
+            Menu::make('Checklists')
+                ->icon('list-check')
+                ->route('platform.checklist.list'),
             
             Menu::make('Report a Bug')
                 ->icon('bug')

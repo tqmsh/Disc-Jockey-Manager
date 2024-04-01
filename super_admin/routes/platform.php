@@ -68,7 +68,6 @@ use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
-use App\Orchid\Screens\EditGuideSectionScreen;
 use App\Orchid\Screens\EditSectionLessonScreen;
 use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
@@ -89,14 +88,25 @@ use App\Orchid\Screens\CreateContractScreen;
 use App\Orchid\Screens\CreateNoticeScreen;
 use App\Orchid\Screens\CreateUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\EditBugReportScreen;
+use App\Orchid\Screens\EditChecklistItemScreen;
+use App\Orchid\Screens\EditChecklistScreen;
 use App\Orchid\Screens\EditContractScreen;
 use App\Orchid\Screens\EditNoticeScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\EditStudentBidScreen;
 use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewChecklistItemScreen;
+use App\Orchid\Screens\ViewChecklistScreen;
+use App\Orchid\Screens\ViewChecklistUsersScreen;
+use App\Orchid\Screens\ViewCompletedChecklistScreen;
 use App\Orchid\Screens\ViewNoticeScreen;
 use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewUserChecklistItemsScreen;
+use App\Orchid\Screens\CreateChecklistScreen;
+use App\Orchid\Screens\EditCourseSectionScreen;
+use App\Orchid\Screens\EditGuideSectionScreen;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -297,6 +307,17 @@ Route::screen('/expenses-revenues/{expenseRevenue}/edit', EditUniversalExpenseRe
 Route::screen('/notices', ViewNoticeScreen::class)->name('platform.notice.list');
 Route::screen('/notices/create', CreateNoticeScreen::class)->name('platform.notice.create');
 Route::screen('/notices/{notice}/edit', EditNoticeScreen::class)->name('platform.notice.edit');
+
+// Checklists
+Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
+Route::screen('/checklists/create', CreateChecklistScreen::class)->name('platform.checklist.create');
+Route::screen('/checklists/{checklist}/edit', EditChecklistScreen::class)->name('platform.checklist.edit');
+Route::screen('/checklists/{checklist}/users', ViewChecklistUsersScreen::class)->name('platform.checklist.users');
+Route::screen('/checklists/{checklist}/users/{user}/items', ViewUserChecklistItemsScreen::class)->name('platform.checklist.users.view');
+
+// Checklist Items
+Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
+Route::screen('/checklists/{checklist}/items/{checklist_item}/edit', EditChecklistItemScreen::class)->name('platform.checklist-items.edit');
 
 // Bug Reports
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
