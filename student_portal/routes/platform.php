@@ -47,6 +47,8 @@ use App\Orchid\Screens\ViewBeautyGroupDetailedBidScreen;
 use App\Orchid\Screens\ViewSingleFoodScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
+use App\Orchid\Screens\ViewChecklistItemScreen;
+use App\Orchid\Screens\ViewChecklistScreen;
 use App\Orchid\Screens\ViewLimoGroupDetailedBidScreen;
 use App\Orchid\Screens\ViewStudentBidDetailedBidScreen;
 
@@ -140,6 +142,12 @@ Route::screen('/beauty-groups/create', CreateBeautyGroupScreen::class)->name('pl
 Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)->name('platform.beauty-groups.edit');
 
 Route::screen('/contact-prom-committees', ContactLocalAdminScreen::class)->name('platform.contact-prom-committees');
+
+// Checklists
+Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
+
+// Checklist Items
+Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');

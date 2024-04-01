@@ -39,20 +39,20 @@ class ViewEventLayout extends Table
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {
                     return e($event->event_address);
-                }),
+                })->defaultHidden(),
             TD::make('event_zip_postal', 'Event Zip/Postal')
                 ->render(function (Events $event) {
                     return e($event->event_zip_postal);
-                }),
+                })->defaultHidden(),
             TD::make('event_info', 'Event Info')
                 ->render(function (Events $event) {
                     return e($event->event_info);
-                }),
+                })->defaultHidden(),
 
             TD::make('event_rules', 'Event Rules')
                 ->render(function (Events $event) {
                     return e($event->event_rules);
-                }),
+                })->defaultHidden(),
 
         ];    
     }

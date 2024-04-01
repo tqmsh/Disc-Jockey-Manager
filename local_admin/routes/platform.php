@@ -62,13 +62,15 @@ use App\Orchid\Screens\ViewCoupleDetailsScreen;
 use App\Orchid\Screens\ViewCouplesScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateBugReportScreen;
-
+use App\Orchid\Screens\ViewChecklistItemScreen;
+use App\Orchid\Screens\ViewChecklistScreen;
 
 use App\Orchid\Screens\CreatePromHistoryScreen;
 use App\Orchid\Screens\EditPromHistoryScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\ViewEventDetailedBidScreen;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -172,6 +174,12 @@ Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.
 
 // Contracts
 //Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+
+// Checklists
+Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
+
+// Checklist Items
+Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
