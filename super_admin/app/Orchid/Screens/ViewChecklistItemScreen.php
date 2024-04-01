@@ -12,6 +12,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
@@ -101,6 +102,11 @@ class ViewChecklistItemScreen extends Screen
                 'title' => 'required',
                 'description' => 'required'
             ]);
+
+            if(ChecklistItem::where('title', $fields['title'])->where('checklist_id', $checklist->id)->exists()) {
+                Alert::error('That checklist item already exists for this checklist.');
+                return;
+            }
 
             $fields['checklist_id'] = $checklist->id;
 
