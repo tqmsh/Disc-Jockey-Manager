@@ -11,6 +11,7 @@ use App\Models\LimoGroup;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
+use App\Models\Vendors;
 use App\Orchid\Layouts\ViewBeautyGroupBidLayout;
 use Illuminate\Support\Arr;
 use Orchid\Screen\Actions\Link;
@@ -44,8 +45,13 @@ class ViewBidOpportunitiesScreen extends Screen
 
         //get all events with the region_id matching an id in the array
         return [
-            'events' => Events::filter(request(['region_id']))->whereIn('region_id', $this->paidRegionIds)->paginate(10),
-            'students' => Student::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10),
+            'events' => Events::filter(request(['region_id']))
+                ->whereIn('region_id', $this->paidRegionIds)
+                ->whereJsonContains('interested_vendor_categories', Auth::user()->vendor->category_id)
+                ->paginate(10),
+            'students' => Student::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))
+                ->whereJsonContains('interested_vendor_categories', Auth::user()->vendor->category_id)
+                ->paginate(10),
             'limo_groups' => (stripos(Auth::user()->vendor->category->name, 'limo') !== false) ? LimoGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
             'beauty_groups' => (stripos(Auth::user()->vendor->category->name, 'salon') !== false) ? BeautyGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
         ];
