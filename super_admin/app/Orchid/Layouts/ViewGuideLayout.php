@@ -61,13 +61,13 @@ class ViewGuideLayout extends Table
                 ->render(function (Guide $guide) {
                     return Link::make($guide->created_at)
                         ->route('platform.guideSection.list', $guide);
-                }),
+                })->defaultHidden(),
 
             TD::make('updated_at', 'Updated At')
                 ->render(function (Guide $guide) {
                     return Link::make($guide->updated_at)
                         ->route('platform.guideSection.list', $guide);
-                }),
+                })->defaultHidden(),
 
             TD::make()
                 ->render(function (Guide $guide) {

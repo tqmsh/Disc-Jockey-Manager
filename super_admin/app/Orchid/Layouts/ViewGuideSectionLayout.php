@@ -48,12 +48,12 @@ class ViewGuideSectionLayout extends Table
             TD::make('created_at', 'Created At')
                 ->render(function (Section $section) {
                     return e($section->created_at);
-                }),
+                })->defaultHidden(),
 
             TD::make('updated_at', 'Updated At')
                 ->render(function (Section $section) {
                     return e($section->updated_at);
-                }),
+                })->defaultHidden(),
 
             TD::make()
                 ->render(function (Section $section) {
