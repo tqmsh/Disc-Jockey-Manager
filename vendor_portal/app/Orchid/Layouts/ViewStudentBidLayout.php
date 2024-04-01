@@ -2,9 +2,12 @@
 
 namespace App\Orchid\Layouts;
 
+use App\Models\EventAttendees;
+use App\Models\Events;
 use Orchid\Screen\TD;
 use App\Models\Region;
 use App\Models\Student;
+use Carbon\Carbon;
 use Orchid\Support\Color;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -45,26 +48,26 @@ class ViewStudentBidLayout extends Table
                 ->render(function (Student $student) {
                     return e($student->lastname);
                 }),
-            TD::make('email', 'Email')
-                ->render(function (Student $student) {
-                    return e($student->email);
-                }),
-            TD::make('region', 'Region')
-                ->render(function (Student $student) {
-                    return e(Region::find($student->school()->first()->region_id)->name);
-                }),
             TD::make('school', 'School')
                 ->render(function (Student $student) {
                     return e($student->school);
                 })->width('225px'),
-            TD::make('grade', 'Grade')
+            TD::make('gender', 'Gender')
                 ->render(function (Student $student) {
-                    return e($student->grade);
+                    return e(ucwords($student->specs->gender));
                 }),
-            TD::make('allergies', 'Allergies')
+            TD::make('next_event_start', 'Next Attending Event Start')
                 ->render(function (Student $student) {
-                    return e($student->allergies);
+                    $now = Carbon::now();
+                    $closestAttendingEvent = Events::whereIn('id',
+                        EventAttendees::where('user_id', $student->user_id)->pluck('event_id')
+                    )->where('event_start_time', '>', $now)->oldest('event_start_time')->first();
+                    return !is_null($closestAttendingEvent) ? $closestAttendingEvent->event_start_time : 'N/A';
                 }),
+            TD::make('interested_vendor_categories', 'Interested Categories')
+                ->render(function($event){
+                    return e($event->getInterestedCategoriesNames());
+                })->defaultHidden(),
         ];
     }
 }
