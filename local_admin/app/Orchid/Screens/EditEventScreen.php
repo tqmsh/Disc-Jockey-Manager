@@ -19,6 +19,9 @@ use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Orchid\Screen\Actions\ModalToggle;
 
 class EditEventScreen extends Screen
 {
@@ -82,7 +85,17 @@ class EditEventScreen extends Screen
         abort_if($this->event->school_id != Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'), 403);
 
         return [
-            
+            Layout::modal('suggestCategoryModal', [
+                Layout::rows([
+                    Input::make('category_name')
+                        ->title('Category Name')
+                        ->placeholder('Enter the name of the category')
+                        ->help('Suggest a category to be reviewed and approved by an admin')
+                        ->required(),
+                ])
+            ])->title('Suggest Category')
+                ->applyButton('Suggest'),
+                
             Layout::rows([
 
                 Input::make('event_name')
@@ -151,6 +164,20 @@ class EditEventScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->event->capacity),
+
+                Select::make('interested_vendor_categories')
+                    ->title('Interested Vendor Categories')
+                    ->fromModel(Categories::class, 'name')
+                    ->horizontal()
+                    ->multiple()
+                    ->help('Vendors from this category will be able to place bids on the event.')
+                    ->value($this->event->interested_vendor_categories),
+                
+                ModalToggle::make('Suggest Category')
+                    ->modal('suggestCategoryModal')
+                    ->method('suggestCategory')
+                    ->icon('plus')
+                    ->class('btn btn-default'),
             ]),            
         ];
     }
@@ -158,10 +185,35 @@ class EditEventScreen extends Screen
     public function update(Events $event, Request $request)
     {
         try{
-
-            $eventsFields = $request->all();
-
-            $event->update($eventsFields);
+            $validator = Validator::make($request->all(), [
+                'event_name' => 'required|max:255',
+                'event_start_time' => 'required|date',
+                'event_finish_time' => 'required|date|after_or_equal:event_start_time',
+                'event_address' => 'nullable|max:429496729',
+                'event_zip_postal' => 'nullable|max:2147483647',
+                'event_info' => 'nullable|max:429496729',
+                'event_rules' => 'nullable|max:429496729',
+                'venue_id' => [
+                    'nullable',
+                    'int',
+                    Rule::in(
+                        Vendors::where(
+                            'category_id',
+                            Categories::where('name', 'Venue')->first()->id
+                        )->pluck('id')
+                    )
+                ],
+                'ticket_price' => 'required|numeric|gte:0',
+                'capacity' => 'required|integer|max:4294967295|gte:0',
+                'interested_vendor_categories' => 'nullable|array',
+                'interested_vendor_categories.*' => Rule::in(Categories::all()->pluck('id')),
+            ],
+            $messages = [
+                'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
+            ]);
+            $validated = $validator->validated();
+            $validated['interested_vendor_categories'] = $validated['interested_vendor_categories'] ?? null;
+            $event->update($validated);
 
             Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
 
@@ -187,5 +239,14 @@ class EditEventScreen extends Screen
 
             Alert::error('There was an error deleting this event. Error Code: ' . $e->getMessage());
         }     
+    }
+
+    public function suggestCategory()
+    {
+        $validator = Validator::make(request()->all(), [
+            'category_name' => 'required|max:255|unique:categories,name',
+        ]);
+        Categories::create(['name' => $validator->validated()['category_name']]);
+        Toast::success('Category suggested succesfully');
     }
 }

@@ -59,14 +59,14 @@ class ViewLimoBidsLayout extends Table
                 ->width('300')
                 ->render(function($bid){
                     return e(VendorPackage::find($bid->package_id)->description);
-                }),
+                })->defaultHidden(),
 
             TD::make('package_id', 'Price - $USD')
                 ->width('110')
                 ->align(TD::ALIGN_CENTER)
                 ->render(function($bid){
                     return e('$' . number_format(VendorPackage::find($bid->package_id)->price));
-                }),
+                })->defaultHidden(),
 
             TD::make('package_id', 'Package URL')
                 ->width('200')
@@ -74,20 +74,20 @@ class ViewLimoBidsLayout extends Table
                     return Link::make(VendorPackage::find($bid->package_id)->url)
                         ->route('platform.studentBids.limoGroup.view', $bid)
                         ->target('_blank');
-                }),
+                })->defaultHidden(),
 
           TD::make('notes', 'Vendor Notes')
                 ->width('300')
                 ->render(function($bid){
                     return e($bid->notes);
-                }),
+                })->defaultHidden(),
 
           TD::make('contact_instructions', 'Contact Info')
                 ->width('300')
                 ->render(function($bid){
                        return e($bid->contact_instructions);
 
-                }),
+                })->defaultHidden(),
         ];    
     }
 }
