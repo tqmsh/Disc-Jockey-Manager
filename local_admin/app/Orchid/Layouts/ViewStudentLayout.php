@@ -50,7 +50,10 @@ class ViewStudentLayout extends Table
                 }),
             TD::make('email', 'Email')->width('105')
                 ->render(function (Student $student) {
-                    return Link::make($student->email)
+                    // add three dots after 25 characters (which is the average email length).
+                    $email = strlen($student->email) <= 25 ? $student->email : substr($student->email, 0, 25) . '...';
+
+                    return Link::make($email)
                         ->route('platform.student.edit', $student);
                 }),
                 
