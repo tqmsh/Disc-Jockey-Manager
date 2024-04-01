@@ -2,24 +2,25 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Course;
+use App\Models\Guide;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
-use App\Orchid\Layouts\ViewCourseSectionLayout;
+use App\Orchid\Layouts\ViewGuideSectionLayout;
 
-class ViewCourseSectionScreen extends Screen
+class ViewGuideSectionScreen extends Screen
 {
-    public $course;
+    public $guide;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Course $course): iterable
+    public function query(Guide $guide): iterable
     {
+        abort_if($guide->category != 4, 403, 'You are not authorized to view this page.');
         return [
-            'course' => $course,
-            'sections' => $course->sections()->orderBy('ordering', 'asc')->paginate(20),
+            'guide' => $guide,
+            'sections' => $guide->sections()->orderBy('ordering', 'asc')->paginate(20),
         ];
     }
 
@@ -30,7 +31,7 @@ class ViewCourseSectionScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Sections for Course: ' . $this->course->course_name;
+        return 'Sections for Guide: ' . $this->guide->guide_name;
     }
 
     /**
@@ -42,8 +43,8 @@ class ViewCourseSectionScreen extends Screen
     {
         return [
             
-            Link::make('Back to Course List')
-                ->route('platform.course.list')
+            Link::make('Back to Guide List')
+                ->route('platform.guide.list')
                 ->icon('arrow-left')
         ];
     }
@@ -56,14 +57,14 @@ class ViewCourseSectionScreen extends Screen
     public function layout(): iterable
     {
         return [
-            ViewCourseSectionLayout::class,
+            ViewGuideSectionLayout::class,
         ];
         
     }
 
-    public function redirect(Course $course){
+    public function redirect(Guide $guide){
         if(request('type') == "lesson"){
-            return redirect()->route('platform.sectionLesson.list',  ['course' => $course, 'section' => request('section_id')]);
+            return redirect()->route('platform.sectionLesson.list',  ['guide' => $guide, 'section' => request('section_id')]);
         }
     }
 }

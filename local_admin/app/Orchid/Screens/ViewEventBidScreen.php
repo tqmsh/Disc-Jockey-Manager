@@ -46,6 +46,11 @@ class ViewEventBidScreen extends Screen
         return 'Bids on: ' . $this->event->event_name;
     }
 
+    public function description(): ?string
+    {
+        return 'Interested Categories: ' . ($this->event->getInterestedCategoriesNames() ?? 'None');
+    }
+
     /**
      * Button commands.
      *
@@ -54,6 +59,9 @@ class ViewEventBidScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Edit Interested Categories')
+                ->icon('pencil')
+                ->route('platform.event.edit', $this->event),
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.event.list')

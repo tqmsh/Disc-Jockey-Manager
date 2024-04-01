@@ -83,4 +83,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::patch('/createCode', [EventAttendeesController::class, 'createCode']);
 
     Route::get('/songs', [SongController::class, 'index']);
+
+    Route::get('/songRequests', [SongController::class, 'getAllSongRequests']);
+
+    Route::post('/requestSong', [SongController::class, 'requestSong']);
 });

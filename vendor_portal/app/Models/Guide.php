@@ -5,8 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Categories extends Model
+class Guide extends Model
 {
     use HasFactory;
-    protected $fillable = ['name',];
+
+    public function sections()
+    {
+        return $this->hasMany(Section::class, 'guide_id', 'id');
+    }
 }

@@ -13,7 +13,7 @@ class Lesson extends Model
     use AsSource;
 
     protected $fillable = [
-        'course_id',
+        'guide_id',
         'lesson_name',
         'ordering',
         'section_id',
@@ -23,9 +23,9 @@ class Lesson extends Model
         'created_at'
     ];
 
-    public function course()
+    public function guide()
     {
-        return $this->belongsTo(Course::class, 'course_id', 'id');
+        return $this->belongsTo(Guide::class, 'guide_id', 'id');
     }
 
     public function section()

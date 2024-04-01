@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Course;
+use App\Models\Guide;
 use App\Models\Lesson;
 use App\Models\Section;
 use Orchid\Screen\Screen;
@@ -15,7 +15,7 @@ use Orchid\Support\Facades\Layout;
 
 class EditSectionLessonScreen extends Screen
 {
-    public $course;
+    public $guide;
     public $lesson;
     public $section;
 
@@ -24,10 +24,10 @@ class EditSectionLessonScreen extends Screen
      *
      * @return array
      */
-    public function query(Course $course, Section $section, Lesson $lesson): iterable
+    public function query(Guide $guide, Section $section, Lesson $lesson): iterable
     {
         return [
-            'course' => $course,
+            'guide' => $guide,
             'section' => $section,
             'lesson' => $lesson,
         ];
@@ -45,7 +45,7 @@ class EditSectionLessonScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Course: ' . $this->course->course_name . ' | Section: ' . $this->section->section_name;
+        return 'Guide: ' . $this->guide->guide_name . ' | Section: ' . $this->section->section_name;
     }
 
     /**
@@ -68,7 +68,7 @@ class EditSectionLessonScreen extends Screen
             Link::make('Cancel')
                 ->icon('close')
                 ->route('platform.sectionLesson.list', [
-                    'course' => $this->course->id,
+                    'guide' => $this->guide->id,
                     'section' => $this->section->id,
                 ]),
         ];
@@ -110,7 +110,7 @@ class EditSectionLessonScreen extends Screen
         ];
     }
 
-    public function saveLesson(Course $course, Section $section, Lesson $lesson)
+    public function saveLesson(Guide $guide, Section $section, Lesson $lesson)
     {
         try {
 
@@ -132,32 +132,32 @@ class EditSectionLessonScreen extends Screen
                 Toast::success('Lesson updated successfully');
 
                 return redirect()->route('platform.sectionLesson.list', [
-                    'course' => $course->id,
+                    'guide' => $guide->id,
                     'section' => $section->id,
                 ]);
             }
 
         } catch (\Exception $e) {
             return redirect()->route('platform.sectionLesson.list', [
-                'course' => $course->id,
+                'guide' => $guide->id,
                 'section' => $section->id,
             ])->with('error', 'There was an error updating the lesson');
         }
     }
 
-    public function deleteLesson(Course $course, Section $section, Lesson $lesson)
+    public function deleteLesson(Guide $guide, Section $section, Lesson $lesson)
     {
         try {
             $lesson->delete();
             Toast::success('Lesson deleted successfully');
             return redirect()->route('platform.sectionLesson.list', [
-                'course' => $course->id,
+                'guide' => $guide->id,
                 'section' => $section->id,
             ]);
         } catch (\Exception $e) {
             Toast::error('Error deleting lesson');
             return redirect()->route('platform.sectionLesson.list', [
-                'course' => $course->id,
+                'guide' => $guide->id,
                 'section' => $section->id,
             ]);
         }
