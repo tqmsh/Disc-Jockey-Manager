@@ -34,7 +34,7 @@ class CreateStudentBidScreen extends Screen
     public function query(Student $student): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-
+        abort_if(is_null($student->interested_vendor_categories) or !in_array($this->vendor->category_id, $student->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');   
         return [
             'student' => $student
         ];
