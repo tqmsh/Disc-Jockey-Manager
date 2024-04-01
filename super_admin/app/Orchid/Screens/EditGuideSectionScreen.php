@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Course;
+use App\Models\Guide;
 use App\Models\Section;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
@@ -11,19 +11,19 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
-class EditCourseSectionScreen extends Screen
+class EditGuideSectionScreen extends Screen
 {
-    public $course;
+    public $guide;
     public $section;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(Course $course, Section $section): iterable
+    public function query(Guide $guide, Section $section): iterable
     {
         return [
-            'course' => $course,
+            'guide' => $guide,
             'section' => $section,
         ];
     }
@@ -40,7 +40,7 @@ class EditCourseSectionScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Course: ' . $this->course->course_name;
+        return 'Guide: ' . $this->guide->guide_name;
     }
 
     /**
@@ -63,7 +63,7 @@ class EditCourseSectionScreen extends Screen
             
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.courseSection.list', ['course' => $this->course]),
+                ->route('platform.guideSection.list', ['guide' => $this->guide]),
         ];
     }
 
@@ -93,7 +93,7 @@ class EditCourseSectionScreen extends Screen
         ];
     }
 
-    public function update(Course $course, Section $section)
+    public function update(Guide $guide, Section $section)
     {
         try {
 
@@ -102,15 +102,15 @@ class EditCourseSectionScreen extends Screen
                 'section_name' => 'required',
             ]);
 
-            if(Section::where('ordering',$fields['ordering'])->where('course_id', $course->id)->whereNot('id',$section->id)->exists()) {
+            if(Section::where('ordering',$fields['ordering'])->where('guide_id', $guide->id)->whereNot('id',$section->id)->exists()) {
 
                 Toast::error('Ordering already exists');
-                return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+                return redirect()->route('platform.guideSection.edit', ['guide' => $guide, 'section' => $section]);
 
-            } else if(Section::where('section_name', $fields['section_name'])->where('course_id', $course->id)->whereNot('id',$section->id)->exists()) {
+            } else if(Section::where('section_name', $fields['section_name'])->where('guide_id', $guide->id)->whereNot('id',$section->id)->exists()) {
 
                 Toast::error('Section name already exists');
-                return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+                return redirect()->route('platform.guideSection.edit', ['guide' => $guide, 'section' => $section]);
             }
 
             $section->update([
@@ -119,25 +119,25 @@ class EditCourseSectionScreen extends Screen
             ]);
         } catch (\Exception $e) {
             Toast::error('Something went wrong');
-            return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+            return redirect()->route('platform.guideSection.edit', ['guide' => $guide, 'section' => $section]);
         }
 
         Toast::success('Section updated successfully.');
 
-        return redirect()->route('platform.courseSection.list', ['course' => $course]);
+        return redirect()->route('platform.guideSection.list', ['guide' => $guide]);
     }
 
-    public function delete(Course $course, Section $section)
+    public function delete(Guide $guide, Section $section)
     {
         try {
             $section->delete();
         } catch (\Exception $e) {
             Toast::error('Something went wrong');
-            return redirect()->route('platform.courseSection.edit', ['course' => $course, 'section' => $section]);
+            return redirect()->route('platform.guideSection.edit', ['guide' => $guide, 'section' => $section]);
         }
 
         Toast::success('Section deleted successfully.');
 
-        return redirect()->route('platform.courseSection.list', ['course' => $course]);
+        return redirect()->route('platform.guideSection.list', ['guide' => $guide]);
     }
 }

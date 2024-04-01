@@ -206,6 +206,7 @@ class CreateSpecsScreen extends Screen
                             'muscular' => 'Muscular',
                             'average' => 'Average',
                             'stocky' => 'Stocky',
+                            'curvy' => 'Curvy'
                         ]),
 
                     TextArea::make('notes')

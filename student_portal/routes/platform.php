@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\EditSpecsScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\ViewVotingScreen;
 use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\CreateSpecsScreen;
@@ -33,7 +33,7 @@ use App\Orchid\Screens\ContactLocalAdminScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
 use App\Orchid\Screens\CreateBugReportScreen;
 use App\Orchid\Screens\CreateSongRequestScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewEventInformationScreen;
@@ -94,13 +94,13 @@ Route::screen('/events/election/vote/{position}', ViewVotingScreen::class)->name
 
 Route::screen('/events/election/winners/{election}', ViewWinnersScreen::class)->name('platform.election.winners');
 
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 // View PromDate
 Route::screen('/promdate', PromDateScreen::class)->name('platform.promdate');
