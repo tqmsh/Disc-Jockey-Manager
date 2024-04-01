@@ -21,6 +21,9 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Orchid\Screen\Actions\ModalToggle;
 
 class CreateEventScreen extends Screen
 {
@@ -66,6 +69,17 @@ class CreateEventScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('suggestCategoryModal', [
+                Layout::rows([
+                    Input::make('category_name')
+                        ->title('Category Name')
+                        ->placeholder('Enter the name of the category')
+                        ->help('Suggest a category to be reviewed and approved by an admin')
+                        ->required(),
+                ])
+            ])->title('Suggest Category')
+                ->applyButton('Suggest'),
+
             Layout::rows([
 
                 Input::make('event_name')
@@ -123,8 +137,21 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->placeholder('Ex. 100')
                     ->horizontal(), 
+
+                Select::make('interested_vendor_categories')
+                    ->title('Interested Vendor Categories')
+                    ->fromModel(Categories::class, 'name')
+                    ->horizontal()
+                    ->multiple()
+                    ->help('Vendors from this category will be able to place bids on the event.'),
+
+                ModalToggle::make('Suggest Category')
+                    ->modal('suggestCategoryModal')
+                    ->method('suggestCategory')
+                    ->icon('plus')
+                    ->class('btn btn-default mb-3'),
                 
-                Button::make('Submit')
+                Button::make('Create Event')
                 // ->icon('plus')
                 ->type(Color::PRIMARY())
                 ->method('createEvent'),
@@ -139,8 +166,32 @@ class CreateEventScreen extends Screen
         $school = School::where('id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->first();
 
         try{
-
-            $formFields = $request->all();
+            $validator = Validator::make($request->all(), [
+                'event_name' => 'required|max:255',
+                'event_start_time' => 'required|date',
+                'event_finish_time' => 'required|date|after_or_equal:event_start_time',
+                'event_info' => 'nullable|max:429496729',
+                'event_rules' => 'nullable|max:429496729',
+                'venue_id' => [
+                    'nullable',
+                    'int',
+                    Rule::in(
+                        Vendors::where(
+                            'category_id',
+                            Categories::where('name', 'Venue')->first()->id
+                        )->pluck('id')
+                    )
+                ],
+                'ticket_price' => 'required|numeric|gte:0',
+                'capacity' => 'required|integer|max:4294967295|gte:0',
+                'interested_vendor_categories' => 'nullable|array',
+                'interested_vendor_categories.*' => Rule::in(Categories::all()->pluck('id')),
+            ],
+            $messages = [
+                'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
+            ]);
+            
+            $formFields = $validator->validated();
             $formFields['event_creator'] = auth()->id();
             $formFields['school_id'] = $school->id;
             $formFields['school'] = $school->school_name;
@@ -156,5 +207,14 @@ class CreateEventScreen extends Screen
             
             Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
         }
+    }
+
+    public function suggestCategory()
+    {
+        $validator = Validator::make(request()->all(), [
+            'category_name' => 'required|max:255|unique:categories,name',
+        ]);
+        Categories::create(['name' => $validator->validated()['category_name']]);
+        Toast::success('Category suggested succesfully');
     }
 }
