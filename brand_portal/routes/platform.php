@@ -17,8 +17,8 @@ use App\Orchid\Screens\RoadmapScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
-use App\Orchid\Screens\ViewCourseScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewSingleDressScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
@@ -43,13 +43,13 @@ use App\Orchid\Screens\ViewBugReportScreen;
 // Orchid main menu
 Route::screen('main', DashboardScreen::class)->name('platform.main');
 
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');

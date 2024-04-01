@@ -43,6 +43,12 @@ class ViewRegisteredEventLayout extends Table
                                 ->type(Color::LIGHT())
                                 ->method('redirect', ['event_id' => $event->id, 'type' => 'eventInformation']);
                 }),
+
+            TD::make('event_start_time', 'Event Start Date')
+                ->render(function (Events $event) {
+                    return e($event->event_start_time);
+                }),
+
             TD::make()
                 ->width('100px')
                 ->align(TD::ALIGN_RIGHT)
@@ -94,28 +100,23 @@ class ViewRegisteredEventLayout extends Table
                     }
                 }),
             
-
-            TD::make('event_start_time', 'Event Start Date')
-                ->render(function (Events $event) {
-                    return e($event->event_start_time);
-                }),
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {
                     return e($event->event_address);
-                }),
+                })->defaultHidden(),
             TD::make('event_zip_postal', 'Event Zip/Postal')
                 ->render(function (Events $event) {
                     return e($event->event_zip_postal);
-                }),
+                })->defaultHidden(),
             TD::make('event_info', 'Event Info')
                 ->render(function (Events $event) {
                     return e($event->event_info);
-                }),
+                })->defaultHidden(),
 
             TD::make('event_rules', 'Event Rules')
                 ->render(function (Events $event) {
                     return e($event->event_rules);
-                }),
+                })->defaultHidden(),
 
     
         ];    

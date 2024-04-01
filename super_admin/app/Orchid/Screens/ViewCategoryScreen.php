@@ -53,12 +53,12 @@ class ViewCategoryScreen extends Screen
                 ->icon('pencil')
                 ->route("platform.category.order"),
 
-            Button::make('Approve Selected Pending Categories')
+            Button::make('Approve Selected')
                 ->icon('check')
                 ->method('approveCats')
                 ->confirm(__('Are you sure you want to approve the selected categories?')),
 
-            Button::make('Delete Selected Categories')
+            Button::make('Delete Selected')
                 ->icon('trash')
                 ->method('deleteCats')
                 ->confirm(__('Are you sure you want to delete the selected categories?')),

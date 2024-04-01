@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
+use App\Models\Categories;
 use Orchid\Screen\TD;
 use App\Models\Events;
 use App\Models\Region;
@@ -40,30 +41,20 @@ class ViewEventLayout extends Table
                     return Button::make('Place Bid')->type(Color::PRIMARY())->method('redirect', ['event_id' => $event->id, 'type' => 'event'])->icon('plus');
                 }), 
 
-            TD::make('event_name', 'Event Name')
-                ->render(function($event){
-                    return e($event->event_name);
-                }), 
-
             TD::make('school', 'School Name')
                 ->render(function($event){
                     return e($event->school);
                 }),    
 
-            TD::make('region_id', 'Region')
+            TD::make('event_start_time', 'Event Start')
                 ->render(function($event){
-                    return e(Region::find($event->region_id)->name);
-                }), 
-
-            TD::make('event_info', 'Event Info')
+                    return e($event->event_start_time);
+                }),
+            
+            TD::make('interested_vendor_categories', 'Interested Categories')
                 ->render(function($event){
-                    return e($event->event_info);
-                }), 
-
-            TD::make('event_rules', 'Event Rules')
-                ->render(function($event){
-                    return e($event->event_rules);
-                }), 
+                    return e($event->getInterestedCategoriesNames());
+                })->defaultHidden(),
         ];    
     }
 }
