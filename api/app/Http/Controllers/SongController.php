@@ -49,10 +49,23 @@ class SongController extends Controller
             'song_id' => 'required|string',
             'event_id' => 'required|string',
         ]);
-
-        // Check if the user is part of the event
         $user = $request->user();
-            
+        // Check if the song request already exists
+        if (SongRequests::where('song_id', $validatedData['song_id'])
+            ->where('event_id', $validatedData['event_id'])
+            ->where('user_id', $user->id)
+            ->exists()) {
+            return response()->json(
+                ['alreadyRequested' => true]
+            , 400);
+        }
+        // Check if the user is part of the event
+        
+        if (!Songs::where('id', $validatedData['song_id'])->exists()) {
+            return response()->json([
+                'message' => 'Song does not exist.'
+            ], 400);
+        }
         if(!EventAttendees::where('user_id', $user->id)->where('event_id', $validatedData['event_id'])->exists())
         {
             return response()->json([
