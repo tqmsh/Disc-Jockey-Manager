@@ -94,8 +94,11 @@ class SongController extends Controller
             'event_id' => 'required|string',
         ]);
 
-        
-        $allSongRequests = SongRequests::where('event_id', $validatedData['event_id'])->get();
+        $allSongRequests = SongRequests::where('event_id', $validatedData['event_id'])
+            ->join('songs', 'song_requests.song_id', '=', 'songs.id')
+            ->select('song_requests.*', 'songs.title', 'songs.artists', 'songs.explicit', 'songs.status')
+            ->get();
+       
         return response()->json($allSongRequests);
     }
 }
