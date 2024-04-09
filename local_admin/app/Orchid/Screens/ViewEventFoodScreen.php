@@ -62,7 +62,7 @@ class ViewEventFoodScreen extends Screen
             
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.event.list', $this->event->id),
+                ->route('platform.event.list'),
         ];
     }
 
