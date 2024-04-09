@@ -103,7 +103,6 @@ class EditLocaladminScreen extends Screen
                 Password::make('password')
                     ->title('New Password')
                     ->type('password')
-                    ->required()
                     ->horizontal(),
 
                 Input::make('phonenumber')
@@ -246,9 +245,10 @@ class EditLocaladminScreen extends Screen
             'email' => $request->input('email'),
             'country' => $request->input('country'),
             'phonenumber' => $request->input('phonenumber'),
-            'password' => bcrypt($request->input('password'))
         ];
-        
+        if ($request->input('password')) {
+            $userTableFields['password'] = bcrypt($request->input('password'));
+        }
         return $userTableFields;
     }
 }
