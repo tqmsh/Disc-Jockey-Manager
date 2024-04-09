@@ -78,24 +78,28 @@ class EditLimoGroupScreen extends Screen
                 Input::make('name')
                     ->title('Limo Group Name')
                     ->placeholder('Enter a name for your limo group')
+                    ->required()
                     ->horizontal()
                     ->value($this->limoGroup->name),
 
                 DateTimer::make('date')
                     ->title('Date')
                     ->placeholder('Enter the date for your limo group')
+                    ->required()
                     ->horizontal()
                     ->value($this->limoGroup->date),
                 
                 Input::make('pickup_location')
                     ->title('Pickup Location')
                     ->placeholder('Enter the pickup location for your limo group')
+                    ->required()
                     ->horizontal()
                     ->value($this->limoGroup->pickup_location),
                 
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
                     ->placeholder('Enter the dropoff location for your limo group')
+                    ->required()
                     ->horizontal()
                     ->value($this->limoGroup->dropoff_location),
                 
@@ -103,6 +107,7 @@ class EditLimoGroupScreen extends Screen
                     ->title('Depart Time')
                     ->placeholder('Enter the depart time for your limo group')
                     ->enableTime()
+                    ->required()
                     ->horizontal()
                     ->value($this->limoGroup->depart_time),
                 
@@ -111,6 +116,7 @@ class EditLimoGroupScreen extends Screen
                     ->placeholder('Enter the dropoff time for your limo group')
                     ->enableTime()
                     ->horizontal()
+                    ->required()
                     ->value($this->limoGroup->dropoff_time),
                 
                 Input::make('capacity')
