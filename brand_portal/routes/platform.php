@@ -41,7 +41,11 @@ use App\Orchid\Screens\ViewBugReportScreen;
 
 
 // Orchid main menu
-Route::screen('main', DashboardScreen::class)->name('platform.main');
+Route::screen('main', DashboardScreen::class)->name('platform.main')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Main Menu');
+    });
 
 Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
