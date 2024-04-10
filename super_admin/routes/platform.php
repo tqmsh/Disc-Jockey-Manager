@@ -121,7 +121,11 @@ use App\Orchid\Screens\EditGuideSectionScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main')
+->breadcrumbs(function (Trail $trail) {
+    return $trail
+        ->push('Main Menu');
+});
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
