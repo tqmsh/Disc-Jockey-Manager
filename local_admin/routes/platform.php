@@ -7,7 +7,7 @@ use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
@@ -40,7 +40,7 @@ use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\CreateBannedSongsScreen;
 use App\Orchid\Screens\CreateFoodScreen;
 use App\Orchid\Screens\EditFoodScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\ViewLimoGroupMembersScreen;
@@ -62,13 +62,15 @@ use App\Orchid\Screens\ViewCoupleDetailsScreen;
 use App\Orchid\Screens\ViewCouplesScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateBugReportScreen;
-
+use App\Orchid\Screens\ViewChecklistItemScreen;
+use App\Orchid\Screens\ViewChecklistScreen;
 
 use App\Orchid\Screens\CreatePromHistoryScreen;
 use App\Orchid\Screens\EditPromHistoryScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\ViewEventDetailedBidScreen;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -83,7 +85,11 @@ use App\Orchid\Screens\ViewEventDetailedBidScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Main Menu');
+    });
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
@@ -122,13 +128,13 @@ Route::screen('/events/prom-history/create/{event_id}', CreatePromHistoryScreen:
 
 Route::screen('/events/prom-history/edit/{event_id}', EditPromHistoryScreen::class)->name('platform.eventHistory.edit');
 
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 Route::screen('/events/{event_id}/song-requests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
 Route::screen('/events/{event_id}/banned-songs', ViewBannedSongsScreen::class)->name('platform.bannedSongs.list');
@@ -172,6 +178,12 @@ Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.
 
 // Contracts
 //Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+
+// Checklists
+Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
+
+// Checklist Items
+Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');

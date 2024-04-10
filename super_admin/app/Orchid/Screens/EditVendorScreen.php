@@ -132,7 +132,6 @@ class EditVendorScreen extends Screen
                 Password::make('password')
                     ->title('New Password')
                     ->type('password')
-                    ->required()
                     ->horizontal(),
 
                 Input::make('phonenumber')
@@ -194,8 +193,10 @@ class EditVendorScreen extends Screen
                 //email not changed
                 $vendor->update($request->except(['firstname', 'lastname', 'name', '_token']));
 
-                $userFields = $request->except(['website', '_token', 'city', 'state_province', 'zip_postal', 'address', 'category_id', 'company_name']);
-                $userFields['password'] = bcrypt($request->input('password'));
+                $userFields = $request->except(['website', '_token', 'city', 'state_province', 'zip_postal', 'address', 'category_id', 'company_name', 'password',]);
+                if ($request->input('password')) {
+                    $userFields['password'] = bcrypt($request->input('password'));
+                }
 
                 
                 User::where('id', $vendor->user_id)->update($userFields);

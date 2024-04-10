@@ -35,7 +35,7 @@ class CreateEventBidScreen extends Screen
     public function query(Events $event): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-        
+        abort_if(is_null($event->interested_vendor_categories) or !in_array($this->vendor->category_id, $event->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');   
         return [
             'event' => $event
         ];

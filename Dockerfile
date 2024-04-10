@@ -18,6 +18,11 @@ ARG aws_default_region=""
 ARG aws_bucket=""
 ARG aws_use_path_style_endpoint=""
 
+ARG $mail_username=""
+ARG $mail_password=""
+ARG $paypal_sandbox_client_id=""
+ARG $paypal_sandbox_client_secret=""
+
 # Set important variables
 ENV APP_URL=$app_url
 ENV APP_KEY=$app_key
@@ -31,6 +36,11 @@ ENV AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
 ENV AWS_DEFAULT_REGION=$aws_default_region
 ENV AWS_BUCKET=$aws_bucket
 ENV AWS_USE_PATH_STYLE_ENDPOINT=$aws_use_path_style_endpoint
+
+ENV MAIL_USERNAME=$mail_username
+ENV MAIL_PASSWORD=$mail_password
+ENV PAYPAL_SANDBOX_CLIENT_ID=$paypal_sandbox_client_id
+ENV PAYPAL_SANDBOX_CLIENT_SECRET=$paypal_sandbox_client_secret
 
 ARG source_folder="super_admin"
 # Command to copy a specific portal's contents

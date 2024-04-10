@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Course;
+use App\Models\Guide;
 use App\Models\Section;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
@@ -12,7 +12,7 @@ use App\Orchid\Layouts\ViewSectionLessonLayout;
 
 class ViewSectionLessonScreen extends Screen
 {
-    public $course;
+    public $guide;
     public $section;
     public $lessons;
     /**
@@ -20,10 +20,10 @@ class ViewSectionLessonScreen extends Screen
      *
      * @return array
      */
-    public function query(Course $course, Section $section): iterable
+    public function query(Guide $guide, Section $section): iterable
     {
         return [
-            'course' => $course,
+            'guide' => $guide,
             'section' => $section,
             'lessons' => $section->lessons()->orderBy('ordering', 'asc')->paginate(10),
         ];
@@ -41,7 +41,7 @@ class ViewSectionLessonScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Course: ' . $this->course->course_name . ' | Section: ' . $this->section->section_name;
+        return 'Guide: ' . $this->guide->guide_name . ' | Section: ' . $this->section->section_name;
     }
 
     /**
@@ -55,7 +55,7 @@ class ViewSectionLessonScreen extends Screen
 
             Link::make('Add New Lesson')
                 ->icon('plus')
-                ->route('platform.sectionLesson.create', ['course' => $this->course, 'section' => $this->section]),
+                ->route('platform.sectionLesson.create', ['guide' => $this->guide, 'section' => $this->section]),
 
             Button::make('Delete Selected Lessons')
                 ->icon('trash')
@@ -63,7 +63,7 @@ class ViewSectionLessonScreen extends Screen
                 ->confirm('Are you sure you want to delete the selected lessons?'),
             
             Link::make('Back to Section List')
-                ->route('platform.courseSection.list', ['course' => $this->course])
+                ->route('platform.guideSection.list', ['guide' => $this->guide])
                 ->icon('arrow-left')
         ];
     }
@@ -80,16 +80,16 @@ class ViewSectionLessonScreen extends Screen
         ];
     }
 
-    public function redirect(Course $course, Section $section){
+    public function redirect(Guide $guide, Section $section){
         if(request('type') == "view"){
-            return redirect()->route('platform.singleLesson.list',  ['course' => $course, 'section' => $section, 'lesson' => request('lesson_id')]);
+            return redirect()->route('platform.singleLesson.list',  ['guide' => $guide, 'section' => $section, 'lesson' => request('lesson_id')]);
         }
         else if(request('type') == "edit"){
-            return redirect()->route('platform.sectionLesson.edit',  ['course' => $course, 'section' => $section, 'lesson' => request('lesson_id')]);
+            return redirect()->route('platform.sectionLesson.edit',  ['guide' => $guide, 'section' => $section, 'lesson' => request('lesson_id')]);
         }
     }
 
-    public function delete(Course $course, Section $section){
+    public function delete(Guide $guide, Section $section){
         $lessons = request('lessons');
         if($lessons){
             foreach($lessons as $lesson){
@@ -101,6 +101,6 @@ class ViewSectionLessonScreen extends Screen
         else{
             Toast::info('No lessons selected');
         }
-        return redirect()->route('platform.sectionLesson.list', ['course' => $course, 'section' => $section]);
+        return redirect()->route('platform.sectionLesson.list', ['guide' => $guide, 'section' => $section]);
     }
 }

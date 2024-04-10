@@ -179,13 +179,17 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('directions')
                 ->route('platform.notice.list'),
             
+            Menu::make('Checklists')
+                ->icon('list-check')
+                ->route('platform.checklist.list'),
+            
             Menu::make('Report a Bug')
                 ->icon('bug')
                 ->route('platform.bug-reports.list'),
 
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
-                ->route('platform.course.list'),
+                ->route('platform.guide.list'),
 
             Menu::make(__('Roles'))
                 ->icon('lock')
