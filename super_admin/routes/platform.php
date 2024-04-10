@@ -99,12 +99,10 @@ use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewChecklistItemScreen;
 use App\Orchid\Screens\ViewChecklistScreen;
 use App\Orchid\Screens\ViewChecklistUsersScreen;
-use App\Orchid\Screens\ViewCompletedChecklistScreen;
 use App\Orchid\Screens\ViewNoticeScreen;
 use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewUserChecklistItemsScreen;
 use App\Orchid\Screens\CreateChecklistScreen;
-use App\Orchid\Screens\EditCourseSectionScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
 
 
@@ -121,7 +119,11 @@ use App\Orchid\Screens\EditGuideSectionScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main')
+->breadcrumbs(function (Trail $trail) {
+    return $trail
+        ->push('Main Menu');
+});
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');

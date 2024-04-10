@@ -65,41 +65,48 @@ class CreateLimoGroupScreen extends Screen
                 Input::make('name')
                     ->title('Limo Group Name')
                     ->placeholder('Enter a name for your limo group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
 
                 DateTimer::make('date')
                     ->title('Date')
                     ->placeholder('Enter the date for your limo group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Input::make('pickup_location')
                     ->title('Pickup Location')
                     ->placeholder('Enter the pickup location for your limo group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
                     ->placeholder('Enter the dropoff location for your limo group')
-                    ->horizontal(),
-                
+                    ->horizontal()
+                    ->required(),       
+
                 DateTimer::make('depart_time')
                     ->title('Depart Time')
                     ->placeholder('Enter the depart time for your limo group')
                     ->enableTime()
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Datetimer::make('dropoff_time')
                     ->title('Dropoff Time')
                     ->placeholder('Enter the dropoff time for your limo group')
                     ->enableTime()
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Input::make('capacity')
                     ->title('Capacity')
                     ->type('number')
                     ->placeholder('Enter the capacity for your limo group')
                     ->help('Including youself')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 TextArea::make('notes')
                     ->title('Notes')
