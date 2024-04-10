@@ -99,12 +99,10 @@ use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewChecklistItemScreen;
 use App\Orchid\Screens\ViewChecklistScreen;
 use App\Orchid\Screens\ViewChecklistUsersScreen;
-use App\Orchid\Screens\ViewCompletedChecklistScreen;
 use App\Orchid\Screens\ViewNoticeScreen;
 use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewUserChecklistItemsScreen;
 use App\Orchid\Screens\CreateChecklistScreen;
-use App\Orchid\Screens\EditCourseSectionScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
 
 
