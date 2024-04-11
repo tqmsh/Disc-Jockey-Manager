@@ -76,6 +76,7 @@ class CreateBeautyGroupScreen extends Screen
                     ->placeholder('Select the owner of this beauty group')
                     ->options(Student::pluck('email', 'user_id'))
                     ->horizontal()
+                    ->required()
                     ->empty('Start typing to search...'),
 
                 Select::make('school')
@@ -83,54 +84,64 @@ class CreateBeautyGroupScreen extends Screen
                     ->placeholder('Select the school for this beauty group')
                     ->options(School::pluck('school_name', 'school_name'))
                     ->horizontal()
+                    ->required()
                     ->empty('Start typing to search...'),
 
                 Input::make('country')
                     ->title('Country')
                     ->placeholder('Enter the country for this beauty group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
 
                 Input::make('state_province')
                     ->title('State/Province')
                     ->placeholder('Enter the state/province for this beauty group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
 
                 Input::make('county')
                     ->title('County')
                     ->placeholder('Enter the county for this beauty group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
 
                 Input::make('name')
                     ->title('Beauty Group Name')
                     ->placeholder('Enter a name for your beauty group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
 
                 DateTimer::make('date')
                     ->title('Date')
                     ->placeholder('Enter the date for your beauty group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Input::make('pickup_location')
                     ->title('Pickup Location')
                     ->placeholder('Enter the pickup location for your beauty group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
                     ->placeholder('Enter the dropoff location for your beauty group')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 DateTimer::make('depart_time')
                     ->title('Depart Time')
                     ->placeholder('Enter the depart time for your beauty group')
                     ->enableTime()
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Datetimer::make('dropoff_time')
                     ->title('Dropoff Time')
                     ->placeholder('Enter the dropoff time for your beauty group')
                     ->enableTime()
-                    ->horizontal(),
+                    ->horizontal()
+                    ->required(),
                 
                 Input::make('capacity')
                     ->title('Capacity')
