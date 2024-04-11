@@ -184,42 +184,46 @@ class CreateStudentScreen extends Screen
 
     public function createStudent(Request $request){
         try{
+            
+            $request->validate([
+                'firstname' => 'required|max:255',
+                'lastname' => 'required|max:255',
+                'name' => 'required|max:255',
+                'phonenumber' => 'required|max:20',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required',
+                'grade' => 'required|integer|in:9,10,11,12',
+                'allergies' => 'nullable|max:255',
+            ]);
+
             //get the student table fields
             $studentTableFields = $this->getStudentFields($request);
 
             //get the user table fields
             $userTableFields = $this->getUserFields($request);
 
-            //check for duplicate email
-            if($this->validEmail($request->input('email'))){
 
-                //no duplicates found
-                //create user
-                $user = User::create($userTableFields);
+            //no duplicates found
+            //create user
+            $user = User::create($userTableFields);
 
-                //add the user id to the student table fields
-                $studentTableFields['user_id'] = $user->id;
-                
-                //create student
-                Student::create($studentTableFields);
-
-                //attach the student to the role of student
-                RoleUsers::create([
-                    'user_id' => $user->id,
-                    'role_id' => 3,
-                ]);
-                
-                //notify the user
-                Toast::success('Student Added Succesfully');
-
-                //redirect to the student list
-                return redirect()->route('platform.student.list');
+            //add the user id to the student table fields
+            $studentTableFields['user_id'] = $user->id;
             
-            }else{
-                //duplicate email found
-                //notify the user
-                Toast::error('Email already exists.');
-            }
+            //create student
+            Student::create($studentTableFields);
+
+            //attach the student to the role of student
+            RoleUsers::create([
+                'user_id' => $user->id,
+                'role_id' => 3,
+            ]);
+            
+            //notify the user
+            Toast::success('Student Added Succesfully');
+
+            //redirect to the student list
+            return redirect()->route('platform.student.list');
 
         }catch(Exception $e){
 

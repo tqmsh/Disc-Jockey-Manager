@@ -86,30 +86,35 @@ class EditBeautyGroupScreen extends Screen
                     ->placeholder('Select the owner of this beauty group')
                     ->options(Student::where('school_id', $this->beautyGroup->school_id)->pluck('email', 'user_id'))
                     ->horizontal()
+                    ->required()
                     ->value($this->beautyGroup->creator_user_id),
 
                 Input::make('name')
                     ->title('Beauty Group Name')
                     ->placeholder('Enter a name for your beauty group')
                     ->horizontal()
+                    ->required()
                     ->value($this->beautyGroup->name),
 
                 DateTimer::make('date')
                     ->title('Date')
                     ->placeholder('Enter the date for your beauty group')
                     ->horizontal()
+                    ->required()
                     ->value($this->beautyGroup->date),
                 
                 Input::make('pickup_location')
                     ->title('Pickup Location')
                     ->placeholder('Enter the pickup location for your beauty group')
                     ->horizontal()
+                    ->required()
                     ->value($this->beautyGroup->pickup_location),
                 
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
                     ->placeholder('Enter the dropoff location for your beauty group')
                     ->horizontal()
+                    ->required()
                     ->value($this->beautyGroup->dropoff_location),
                 
                 DateTimer::make('depart_time')
@@ -117,6 +122,7 @@ class EditBeautyGroupScreen extends Screen
                     ->placeholder('Enter the depart time for your beauty group')
                     ->enableTime()
                     ->horizontal()
+                    ->required()
                     ->value($this->beautyGroup->depart_time),
                 
                 Datetimer::make('dropoff_time')
@@ -124,6 +130,7 @@ class EditBeautyGroupScreen extends Screen
                     ->placeholder('Enter the dropoff time for your beauty group')
                     ->enableTime()
                     ->horizontal()
+                    ->required()
                     ->value($this->beautyGroup->dropoff_time),
                 
                 Input::make('capacity')

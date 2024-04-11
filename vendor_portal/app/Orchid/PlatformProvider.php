@@ -66,9 +66,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.package.list'),
             ]),
 
-            Menu::make('Campaigns')
-                ->icon('picture')
-                ->route('platform.ad.list'),
+            //!Un-comment when the feature is good to go
+            // Menu::make('Campaigns')
+            //     ->icon('picture')
+            //     ->route('platform.ad.list'),
 
             Menu::make('Report a Bug')
                 ->icon('bug')
