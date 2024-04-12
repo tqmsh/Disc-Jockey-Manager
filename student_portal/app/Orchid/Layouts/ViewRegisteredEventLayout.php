@@ -80,25 +80,25 @@ class ViewRegisteredEventLayout extends Table
                 }), 
 
             
-            // Buy tickets button
-            TD::make()
-                ->render(function (Events $event) {
-                    $eventAttendee = EventAttendees::where('user_id', Auth::user()->id)
-                    ->where('event_id', $event->id)
-                    ->first();
+            //! Buy tickets button un-comment when good to go
+            // TD::make()
+            //     ->render(function (Events $event) {
+            //         $eventAttendee = EventAttendees::where('user_id', Auth::user()->id)
+            //         ->where('event_id', $event->id)
+            //         ->first();
 
-                    if ($eventAttendee->ticketstatus == 'Unpaid') {
-                        return Link::make('Buy Tickets')
-                            ->icon('money')
-                            ->route('paypal', ['event_id' => $event->id])
-                            ->type(Color::PRIMARY());
-                    } else if ($eventAttendee->ticketstatus == 'paid'){
-                        return Button::make('Tickets Bought')
-                            ->icon('check')
-                            ->method('redirect', ['event_id' => $event->id, 'type' => 'ticketBought'])
-                            ->type(Color::SUCCESS());
-                    }
-                }),
+            //         if ($eventAttendee->ticketstatus == 'Unpaid') {
+            //             return Link::make('Buy Tickets')
+            //                 ->icon('money')
+            //                 ->route('paypal', ['event_id' => $event->id])
+            //                 ->type(Color::PRIMARY());
+            //         } else if ($eventAttendee->ticketstatus == 'paid'){
+            //             return Button::make('Tickets Bought')
+            //                 ->icon('check')
+            //                 ->method('redirect', ['event_id' => $event->id, 'type' => 'ticketBought'])
+            //                 ->type(Color::SUCCESS());
+            //         }
+            //     }),
             
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {

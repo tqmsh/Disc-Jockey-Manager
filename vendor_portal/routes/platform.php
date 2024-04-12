@@ -70,11 +70,13 @@ Route::screen('/packages/create', CreatePackageScreen::class)->name('platform.pa
 
 Route::screen('/packages/{package}/edit', EditPackageScreen::class)->name('platform.package.edit');
 
-Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
+//!Un-comment when the feature is good to go
 
-Route::screen('/campaigns/create', CreateAdScreen::class)->name('platform.ad.create');
+// Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 
-Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+// Route::screen('/campaigns/create', CreateAdScreen::class)->name('platform.ad.create');
+
+// Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
 Route::screen('/event-bid/{event}/create', CreateEventBidScreen::class)->name('platform.bid.create');
 
