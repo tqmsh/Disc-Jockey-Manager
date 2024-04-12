@@ -15,11 +15,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Schools</small>
 
         <!-- Toggle Buttons -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 mb-3 mt-2 mb-2">
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="24">24hr</button>
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
@@ -33,11 +33,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Students</small>
 
         <!-- Toggle Buttons -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 mb-3 mt-2 mb-2">
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24hr</button>
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
@@ -51,11 +51,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Vendors</small>
 
         <!-- Toggle Buttons -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 mb-3 mt-2 mb-2">
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24hr</button>
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
@@ -69,11 +69,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Brands</small>
 
         <!-- Toggle Buttons -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 mb-3 mt-2 mb-2">
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24hr</button>
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
