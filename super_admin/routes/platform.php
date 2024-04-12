@@ -104,7 +104,9 @@ use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewUserChecklistItemsScreen;
 use App\Orchid\Screens\CreateChecklistScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
-
+use App\Orchid\Screens\ViewLocaladminVideoTutorialScreen;
+use App\Orchid\Screens\ViewStudentVideoTutorialScreen;
+use App\Orchid\Screens\ViewVendorVideoTutorialScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -325,6 +327,11 @@ Route::screen('/checklists/{checklist}/items/{checklist_item}/edit', EditCheckli
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
 Route::screen('/bug-reports/{bug_report}/edit', EditBugReportScreen::class)->name('platform.bug-reports.edit');
 Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
+
+// Video Tutorials
+Route::screen('/video-tutorials/local-admin', ViewLocaladminVideoTutorialScreen::class)->name('platform.video-tutorials.localadmin');
+Route::screen('/video-tutorials/student', ViewStudentVideoTutorialScreen::class)->name('platform.video-tutorials.student');
+Route::screen('/video-tutorials/vendor', ViewVendorVideoTutorialScreen::class)->name('platform.video-tutorials.vendor');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

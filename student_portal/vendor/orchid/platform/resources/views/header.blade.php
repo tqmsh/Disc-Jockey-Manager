@@ -14,7 +14,7 @@
 
 <div class="h2 fw-light d-flex align-items-center">
     <span class="thumb-sm">
-        <img src="{{ URL::asset('/image/Prom_VP_Line.png') }}" class=""> </span>
+        <img src="{{ URL::asset('/image/Prom_VP_Line.png') }}" style="height: 29.59px; width:40px;"> </span>
     <p class="ms-3 my-0 d-none d-sm-block">
         PromPlanner
     </p>
