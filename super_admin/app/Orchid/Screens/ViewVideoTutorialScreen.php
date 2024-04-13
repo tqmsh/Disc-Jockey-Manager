@@ -45,6 +45,7 @@ class ViewVideoTutorialScreen extends Screen
             'platform.eventFood.list' => 'Event Food',
             //'' => 'Event Buy Tickets', this doesn't exist yet
             'platform.studentBids.list' => 'Bids',
+            'platform.studentBids.list_modal-suggestcategory' => 'Bids Suggest Category',
             'platform.limo-groups' => 'Limo Groups',
             'platform.beauty-groups' => 'Beauty Groups',
             'platform.promdate' => 'Prom Date',
