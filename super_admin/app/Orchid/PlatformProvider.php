@@ -193,17 +193,7 @@ class PlatformProvider extends OrchidServiceProvider
             
             Menu::make('Video Tutorials')
                 ->icon('video')
-                ->list([
-                    Menu::make('Local Admins')
-                        ->icon('people')
-                        ->route('platform.video-tutorials.localadmin'),
-                    Menu::make('Students')
-                        ->icon('graduation')
-                        ->route('platform.video-tutorials.student'),   
-                    Menu::make('Vendors')
-                        ->icon('dollar')
-                        ->route('platform.video-tutorials.vendor'),   
-                ]),
+                ->route('platform.video-tutorials.view'),
 
             Menu::make(__('Roles'))
                 ->icon('lock')

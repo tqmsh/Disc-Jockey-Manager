@@ -19,11 +19,12 @@ class VideoTutorial extends Model
         'updated_at'
     ];
 
-    public function portalToString(int $portal) : ?string {
-        return match($portal){
-            0 => "Local Admin",
-            1 => "Student",
-            2 => "Vendor"
+    public static function portalToPrefix(int $portal) : ?string {
+        return match($portal) {
+            0 => 'localadmin_',
+            1 => 'student_',
+            2 => 'vendor_',
+            default => null
         };
     }
 }
