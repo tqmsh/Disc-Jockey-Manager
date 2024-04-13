@@ -126,14 +126,16 @@ class ViewVideoTutorialScreen extends Screen
                 foreach($this->video_tutorial_routes[$i] as $route_name => $title) {
                     $query = VideoTutorial::where('portal', $i)->where('route_name', $route_name);
                     $value = $request->input(VideoTutorial::portalToPrefix($i) . $route_name);
+                    
 
                     // update video tutorial
-                    if($query->exists() && ($video_tutorial = $query->first())->url !== $value) {
+                    if($query->exists()) {
                         // Link has been removed, delete row
                         if($value == null) {
                             $query->delete();
                         } else {
                             //update
+                            $video_tutorial = $query->first();
                             $video_tutorial->url = $value;
                             $video_tutorial->save();
                         }
