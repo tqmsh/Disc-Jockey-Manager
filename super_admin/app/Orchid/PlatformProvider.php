@@ -190,6 +190,10 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.guide.list'),
+            
+            Menu::make('Video Tutorials')
+                ->icon('video')
+                ->route('platform.video-tutorials.view'),
 
             Menu::make(__('Roles'))
                 ->icon('lock')
