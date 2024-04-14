@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2024 at 10:14 PM
+-- Generation Time: Apr 14, 2024 at 08:28 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -2027,6 +2027,21 @@ INSERT INTO `vendor_paid_regions` (`id`, `user_id`, `region_id`, `created_at`, `
 (14, 210, 1, '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
 (15, 210, 7, '2023-08-01 22:31:18', '2023-08-01 22:31:18');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `video_tutorials`
+--
+
+CREATE TABLE `video_tutorials` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `route_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `portal` tinyint(4) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -2629,6 +2644,12 @@ ALTER TABLE `vendor_paid_regions`
   ADD KEY `region_id` (`region_id`);
 
 --
+-- Indexes for table `video_tutorials`
+--
+ALTER TABLE `video_tutorials`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -3051,6 +3072,12 @@ ALTER TABLE `vendor_packages`
 --
 ALTER TABLE `vendor_paid_regions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `video_tutorials`
+--
+ALTER TABLE `video_tutorials`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
