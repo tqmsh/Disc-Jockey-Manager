@@ -5,7 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
     <title>
-        @yield('title', config('app.name'))
+        @php
+            // Remove video tutorial url HTML from title.
+            $title = app()->view->getSections()['title'] ?? config('app.name');
+            echo strip_tags($title);
+        @endphp
+
         @hasSection('title')
             - {{ config('app.name') }}
         @endif
