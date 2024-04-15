@@ -79,7 +79,7 @@ class PlatformProvider extends OrchidServiceProvider
             
             Menu::make('Promfluence')
                 ->icon('feed')
-                ->route('platform.promfluence.view'),
+                ->route('platform.promfluencer.view'),
             
             Menu::make('Report a Bug')
                 ->icon('bug')

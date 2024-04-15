@@ -33,6 +33,7 @@ use App\Orchid\Screens\ContactLocalAdminScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
 use App\Orchid\Screens\CreateBugReportScreen;
 use App\Orchid\Screens\CreateSongRequestScreen;
+use App\Orchid\Screens\EditPromfluencerScreen;
 use App\Orchid\Screens\EditPromfluenceScreen;
 use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
@@ -51,6 +52,7 @@ use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\ViewChecklistItemScreen;
 use App\Orchid\Screens\ViewChecklistScreen;
 use App\Orchid\Screens\ViewLimoGroupDetailedBidScreen;
+use App\Orchid\Screens\ViewPromfluencerScreen;
 use App\Orchid\Screens\ViewPromfluenceScreen;
 use App\Orchid\Screens\ViewStudentBidDetailedBidScreen;
 
@@ -156,8 +158,8 @@ Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checkli
 Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
 
 // Promfluence
-Route::screen('/promfluence', ViewPromfluenceScreen::class)->name('platform.promfluence.view');
-Route::screen('/promfluence/edit', EditPromfluenceScreen::class)->name('platform.promfluence.edit');
+Route::screen('/promfluence', ViewPromfluencerScreen::class)->name('platform.promfluencer.view');
+Route::screen('/promfluence/edit', EditPromfluencerScreen::class)->name('platform.promfluencer.edit');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
