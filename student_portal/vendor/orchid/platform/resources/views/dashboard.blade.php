@@ -80,9 +80,9 @@
                     <x-orchid-icon path="circle"/>
                 </span>
                 <div>
-                    <h2 class="h3 fw-light text-black">{{ $notice->title }}</h2>
+                    <h2 class="h3 text-black font-bold">{{ $notice->title }}</h2>
                     @if(!is_null($notice->subtitle))
-                        <small class="text-muted">{{ $notice->subtitle }}</small>
+                        <small class="text-muted fw-bold">{{ $notice->subtitle }}</small>
                     @endif
                 </div>
                 @if(!is_null($notice->url))
