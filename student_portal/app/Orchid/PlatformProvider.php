@@ -77,6 +77,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('list-check')
                 ->route('platform.checklist.list'),
             
+            Menu::make('Promfluence')
+                ->icon('feed')
+                ->route('platform.promfluence.view'),
+            
             Menu::make('Report a Bug')
                 ->icon('bug')
                 ->route('platform.bug-reports.list'),
