@@ -105,6 +105,10 @@ class User extends Authenticatable
         return $this->hasOne(BeautyGroup::class, 'creator_user_id');
     }
 
+    public function promfluencer(){
+        return $this->hasOne(Promfluencer::class);
+    }
+
     public function fullName()
     {
         return $this->firstname." ".$this->lastname;
