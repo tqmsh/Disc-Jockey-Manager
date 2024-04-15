@@ -43,9 +43,10 @@ class PlatformProvider extends OrchidServiceProvider
             ->route('platform.example'),
 
             // SHOP
-            Menu::make('Shop')
-            ->icon('bag')
-            ->route('platform.shop'),
+            //!Un-comment when the feature is good to go
+            // Menu::make('Shop')
+            // ->icon('bag')
+            // ->route('platform.shop'),
 
 
             //MONEYYY MAKER

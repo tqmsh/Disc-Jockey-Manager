@@ -109,15 +109,14 @@ Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platfo
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
 Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
-// $vendor = Vendors::where('user_id', Auth::user()->id)->first();
-
-Route::screen('/shop', BuyCreditsScreen::class)
-    ->name('platform.shop')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->parent('platform.index')
-            ->push(__('Shop'), route('platform.shop'));
-    });
+//!Un-comment when the feature is good to go
+// Route::screen('/shop', BuyCreditsScreen::class)
+//     ->name('platform.shop')
+//     ->breadcrumbs(function (Trail $trail) {
+//         return $trail
+//             ->parent('platform.index')
+//             ->push(__('Shop'), route('platform.shop'));
+//     });
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
