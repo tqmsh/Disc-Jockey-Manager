@@ -2,10 +2,14 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Promfluencer;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
 
 class ViewPromfluenceScreen extends Screen
 {
+    public $promfluencer;
+
     /**
      * Query data.
      *
@@ -13,7 +17,9 @@ class ViewPromfluenceScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'promfluencer' => Promfluencer::firstWhere('user_id', Auth::id()),
+        ];
     }
 
     /**
@@ -23,7 +29,7 @@ class ViewPromfluenceScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewPromfluenceScreen';
+        return 'Promfluence';
     }
 
     /**
