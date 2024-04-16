@@ -86,17 +86,21 @@
                 $campaign->save();
 
                 // styles
-                $display_ad_square = $display_ads_query->first()->square;
+                $display_ad_square = boolval($display_ads_query->first()->square);
                 $display_ad_image_url = $campaign->image;
                 $display_ad_min_width = $display_ad_square ? "" : "min-width:40%;";
                 $display_ad_margin = $display_ad_square ? "" : "margin: 0 auto;";
                 $display_ad_max_width = $display_ad_square ? "" : "max-width:485px; max-height:60px;";
                 $display_ad_width = $display_ad_square ? "width: 311.51px; height: 311.51px;" : "width: 100%; height:auto;";
-                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%" : "";
+                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%;" : "";
             @endphp
 
+            <style>
+                @media only screen and (max-width: 767px){ #promplanner-propoganda { justify-content: center; }}
+            </style>
+
             @if($display_ad_image_url !== null)
-                <div style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
+                <div id="promplanner-propoganda" style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
                     <a target="_blank" href="{{$campaign->website}}">
                         <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 90}}px;" src="{{$display_ad_image_url}}" alt="">
                     </a>
@@ -138,13 +142,13 @@
                 $campaign->save();
 
                 // styles
-                $display_ad_square = $display_ads_query->first()->square;
+                $display_ad_square = boolval($display_ads_query->first()->square);
                 $display_ad_image_url = $campaign->image;
                 $display_ad_min_width = $display_ad_square ? "" : "min-width:40%;";
                 $display_ad_margin = $display_ad_square ? "" : "margin: 0 auto;";
                 $display_ad_max_width = $display_ad_square ? "" : "max-width:485px; max-height:60px;";
                 $display_ad_width = $display_ad_square ? "width: 311.51px; height: 311.51px;" : "width: 100%; height:auto;";
-                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%" : "";
+                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%;" : "";
             @endphp
 
             @if($display_ad_image_url !== null)

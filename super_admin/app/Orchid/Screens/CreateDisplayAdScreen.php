@@ -9,6 +9,7 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -120,7 +121,11 @@ class CreateDisplayAdScreen extends Screen
                     ->title('Campaign Image')
                     ->placeholder('https://example.com/image.png')
                     ->horizontal()
-                    ->required()
+                    ->required(),
+
+                CheckBox::make('square')
+                    ->title('Is Square?')
+                    ->horizontal(),
             ])
         ];
     }
@@ -147,7 +152,8 @@ class CreateDisplayAdScreen extends Screen
                     'route_name' => $request->input('route_name'),
                     'ad_index' => $request->input('ad_index'),
                     'portal' => $request->input('portal'),
-                    'campaign_id' => $campaign->id
+                    'campaign_id' => $campaign->id,
+                    'square' => intval($request->boolean('square'))
                 ]);
 
                 Toast::success("Successfully created an ad.");

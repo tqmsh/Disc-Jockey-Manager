@@ -17,13 +17,13 @@
                 $campaign->save();
 
                 // styles
-                $display_ad_square = $display_ads_query->first()->square;
+                $display_ad_square = boolval($display_ads_query->first()->square);
                 $display_ad_image_url = $campaign->image;
                 $display_ad_min_width = $display_ad_square ? "" : "min-width:40%;";
                 $display_ad_margin = $display_ad_square ? "" : "margin: 0 auto;";
                 $display_ad_max_width = $display_ad_square ? "" : "max-width:485px; max-height:60px;";
                 $display_ad_width = $display_ad_square ? "width: 311.51px; height: 311.51px;" : "width: 100%; height:auto;";
-                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%" : "";
+                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%;" : "";
             @endphp
 
             @if($display_ad_image_url !== null)
@@ -52,13 +52,13 @@
                 $campaign->save();
 
                 // styles
-                $display_ad_square = $display_ads_query->first()->square;
+                $display_ad_square = boolval($display_ads_query->first()->square);
                 $display_ad_image_url = $campaign->image;
                 $display_ad_min_width = $display_ad_square ? "" : "min-width:40%;";
                 $display_ad_margin = $display_ad_square ? "" : "margin: 0 auto;";
                 $display_ad_max_width = $display_ad_square ? "" : "max-width:485px; max-height:60px;";
                 $display_ad_width = $display_ad_square ? "width: 311.51px; height: 311.51px;" : "width: 100%; height:auto;";
-                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%" : "";
+                $display_ad_display = $display_ad_square ? "display: flex; justify-content: flex-end; width:100%;" : "";
             @endphp
 
             @if($display_ad_image_url !== null)

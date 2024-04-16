@@ -15,7 +15,8 @@ class DisplayAds extends Model
         'route_name',
         'ad_index',
         'campaign_id',
-        'portal'
+        'portal',
+        'square'
     ];
 
     public function campaign() : BelongsTo {

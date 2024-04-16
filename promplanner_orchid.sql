@@ -412,6 +412,7 @@ CREATE TABLE `display_ads` (
   `portal` tinyint(4) NOT NULL,
   `ad_index` tinyint(4) NOT NULL,
   `campaign_id` bigint(20) UNSIGNED NOT NULL,
+  `square` tinyint(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2242,6 +2243,7 @@ ALTER TABLE `display_ads`
   ADD KEY `display_ad_route_name` (`route_name`),
   ADD KEY `display_ad_portal` (`portal`),
   ADD KEY `display_ad_ad_index` (`ad_index`),
+  ADD KEY `display_ad_square` (`square`),
   ADD KEY `display_ad_campaign_id` (`campaign_id`);
 
 --

@@ -8,6 +8,7 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
@@ -130,7 +131,12 @@ class EditDisplayAdScreen extends Screen
                     ->placeholder('https://example.com/image.png')
                     ->horizontal()
                     ->required()
-                    ->value($this->display_ad->campaign->image)
+                    ->value($this->display_ad->campaign->image),
+
+                CheckBox::make('square')
+                    ->title('Is Square?')
+                    ->horizontal()
+                    ->value($this->display_ad->square),
             ])
         ];
     }
@@ -140,7 +146,8 @@ class EditDisplayAdScreen extends Screen
             $display_ad->update([
                 'route_name' => $request->input('route_name'),
                 'ad_index' => $request->input('ad_index'),
-                'portal' => $request->input('portal')
+                'portal' => $request->input('portal'),
+                'square' => intval($request->boolean('square'))
             ]);
 
             $display_ad->campaign->update([

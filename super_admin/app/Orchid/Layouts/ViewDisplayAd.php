@@ -60,6 +60,11 @@ class ViewDisplayAd extends Table
                 ->render(function(DisplayAds $display_ad){
                     return e($display_ad->ad_index);
                 }),
+            
+            TD::make('square', 'Square')
+                ->render(function(DisplayAds $display_ad){
+                    return e(boolval($display_ad->square) ? "Yes" : "No");
+                }),
 
             TD::make('campaign_name', 'Campaign Name')
                 ->render(function(DisplayAds $display_ad){
