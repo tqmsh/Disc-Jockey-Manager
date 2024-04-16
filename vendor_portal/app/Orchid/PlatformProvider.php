@@ -97,12 +97,12 @@ class PlatformProvider extends OrchidServiceProvider
 
                     Menu::make('Prom Committee Expo')
                         ->icon('ps.prom-committee-expo')
-                        ->url('https://promcommitteeexpo.com'),+
+                        ->url('https://promcommitteeexpo.com'),
 
                     Menu::make('Prom Show')
                         ->icon('ps.prom-show')
                         ->url('https://promshow.com'),
-                        
+
                     Menu::make('Prom Vendors')
                         ->icon('ps.prom-vendor')
                         ->url('https://promvendors.com/'),
