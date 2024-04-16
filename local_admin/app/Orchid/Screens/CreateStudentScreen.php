@@ -241,7 +241,7 @@ class CreateStudentScreen extends Screen
 
             $postdata = http_build_query(
                 array(
-                'name' => $request->firstname,
+                'name' => $request->firstname . ' ' . $request->lastname,
                 'email' => $request->email,
                 'list' => $list,
                 'api_key' => $api_key,
@@ -332,7 +332,7 @@ class CreateStudentScreen extends Screen
 
                         $postdata = http_build_query(
                             array(
-                            'name' => $students[$i]['firstname'],
+                            'name' => $students[$i]['firstname'] . ' ' . $students[$i]['lastname'],
                             'email' => $students[$i]['email'],
                             'list' => $list,
                             'api_key' => $api_key,
