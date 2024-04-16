@@ -403,6 +403,22 @@ CREATE TABLE `checklists` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `display_ads`
+--
+
+CREATE TABLE `display_ads` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `route_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `portal` tinyint(4) NOT NULL,
+  `ad_index` tinyint(4) NOT NULL,
+  `campaign_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `checklist_items`
 --
 
@@ -2219,6 +2235,16 @@ ALTER TABLE `election_votes`
   ADD KEY `voter_user_id` (`voter_user_id`);
 
 --
+-- Indexes for table `display_ads`
+--
+ALTER TABLE `display_ads`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `display_ad_route_name` (`route_name`),
+  ADD KEY `display_ad_portal` (`portal`),
+  ADD KEY `display_ad_ad_index` (`ad_index`),
+  ADD KEY `display_ad_campaign_id` (`campaign_id`);
+
+--
 -- Indexes for table `election_winners`
 --
 ALTER TABLE `election_winners`
@@ -2714,6 +2740,12 @@ ALTER TABLE `candidates`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `display_ads`
+--
+ALTER TABLE `display_ads`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -3168,6 +3200,12 @@ ALTER TABLE `checklist_users`
 --
 ALTER TABLE `contracts`
   ADD CONSTRAINT `user_id_contract_rel` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `display_ads`
+--
+ALTER TABLE `display_ads`
+  ADD CONSTRAINT `display_ads_camp_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `couples`
