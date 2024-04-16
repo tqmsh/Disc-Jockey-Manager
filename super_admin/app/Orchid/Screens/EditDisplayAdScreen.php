@@ -5,7 +5,10 @@ namespace App\Orchid\Screens;
 use App\Models\Categories;
 use App\Models\DisplayAds;
 use App\Models\Region;
+use App\Models\User;
+use App\Models\Vendors;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
@@ -98,6 +101,13 @@ class EditDisplayAdScreen extends Screen
                     ])
                     ->value($this->display_ad->portal),
 
+                Select::make('vendor_user_id')
+                    ->empty('Choose a vendor (optional)')
+                    ->title('Vendor (optional)')
+                    ->horizontal()
+                    ->fromQuery(User::whereIn('id', Vendors::all()->pluck('user_id')), 'name')
+                    ->value($this->display_ad->campaign->user_id),
+
                 Input::make('campaign_name')
                     ->title('Campaign Name')
                     ->placeholder('Enter your campaign name')
@@ -153,6 +163,7 @@ class EditDisplayAdScreen extends Screen
             ]);
 
             $display_ad->campaign->update([
+                "user_id" => $request->input('vendor_user_id') ?? Auth::user()->id,
                 "category_id" => $request->input("category_id"),
                 "region_id" => $request->input("campaign_region"),
                 "title" => $request->input("campaign_name"),

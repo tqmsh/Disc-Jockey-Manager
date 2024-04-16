@@ -6,6 +6,8 @@ use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\DisplayAds;
 use App\Models\Region;
+use App\Models\User;
+use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +32,6 @@ class CreateDisplayAdScreen extends Screen
      */
     public function query(): iterable
     {
-        dd(Route::current()->uri());
         return [];
     }
 
@@ -97,6 +98,12 @@ class CreateDisplayAdScreen extends Screen
                         1 => 'Student',
                         2 => 'Vendor'
                     ]),
+                
+                Select::make('vendor_user_id')
+                    ->empty('Choose a vendor (optional)')
+                    ->title('Vendor (optional)')
+                    ->horizontal()
+                    ->fromQuery(User::whereIn('id', Vendors::all()->pluck('user_id')), 'name'),
 
                 Input::make('campaign_name')
                     ->title('Campaign Name')
@@ -144,7 +151,7 @@ class CreateDisplayAdScreen extends Screen
             if($this->validAd($request)) {
                 // Create the campaign
                 $campaign = Campaign::create([
-                    "user_id" => Auth::user()->id,
+                    "user_id" => $request->input('vendor_user_id') ?? Auth::user()->id,
                     "category_id" => $request->input("category_id"),
                     "region_id" => $request->input("campaign_region"),
                     "title" => $request->input("campaign_name"),

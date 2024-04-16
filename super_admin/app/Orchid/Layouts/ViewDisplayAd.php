@@ -48,7 +48,7 @@ class ViewDisplayAd extends Table
 
             TD::make('route_name', 'Route')
                 ->render(function(DisplayAds $display_ad){
-                    return e($display_ad->route_name);
+                    return e($display_ad->route_uri);
                 }),
 
             TD::make('portal', 'Portal')

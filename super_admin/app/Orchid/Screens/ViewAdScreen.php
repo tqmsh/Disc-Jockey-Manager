@@ -28,9 +28,9 @@ class ViewAdScreen extends Screen
     public function query(): iterable
     {
         return [
-            "campaignsActive"=>Campaign::where("active", 1)->whereNotIn('id', DisplayAds::all()->pluck('campaign_id'))->paginate(10),
-            "campaignsInactive"=>Campaign::where("active", 2)->whereNotIn('id', DisplayAds::all()->pluck('campaign_id'))->paginate(10),
-            "campaignsPending"=>Campaign::where("active", 0)->whereNotIn('id', DisplayAds::all()->pluck('campaign_id'))->paginate(10),
+            "campaignsActive"=>Campaign::where("active", 1)->paginate(10),
+            "campaignsInactive"=>Campaign::where("active", 2)->paginate(10),
+            "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
             "campaignsDisplayAds" =>  DisplayAds::paginate(10),
 
             'metrics' => [
