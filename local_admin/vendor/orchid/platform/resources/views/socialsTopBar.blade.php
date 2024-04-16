@@ -6,7 +6,7 @@
     <nav class="col-xs-12 col-md-auto ms-auto p-0">
         <ul class="nav command-bar d-flex align-items-center">
             <li class="mx-2">
-                <a class="btn btn-lg btn-link fw-bold" href="https://promplanner.productlift.dev/" target="_blank"> 
+                <a class="btn btn-lg btn-link fw-bold" href="https://trello.com/b/QXQ87ydM/prom-planner-schools" target="_blank"> 
                     Roadmap
                 </a>
             </li>
