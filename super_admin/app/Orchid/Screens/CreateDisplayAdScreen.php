@@ -9,6 +9,7 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
@@ -49,7 +50,11 @@ class CreateDisplayAdScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Create Ad')
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.ad.list'),
+
+            Button::make('Create Display Ad')
                 ->icon('plus')
                 ->method('createAd')
         ];
@@ -72,6 +77,7 @@ class CreateDisplayAdScreen extends Screen
             
                 Input::make('ad_index')
                     ->title('Ad Index')
+                    ->type('number')
                     ->mask([
                         'numericInput' => true
                     ])
@@ -153,6 +159,7 @@ class CreateDisplayAdScreen extends Screen
                     'ad_index' => $request->input('ad_index'),
                     'portal' => $request->input('portal'),
                     'campaign_id' => $campaign->id,
+                    'region_id' => $request->input("campaign_region"),
                     'square' => intval($request->boolean('square'))
                 ]);
 
@@ -171,6 +178,7 @@ class CreateDisplayAdScreen extends Screen
         return !(DisplayAds::where('portal', $request->input('portal'))
                             ->where('route_name', $request->input('route_name'))
                             ->where('ad_index', $request->input('ad_index'))
+                            ->where('region_id', $request->input("campaign_region"))
                             ->exists()
                 );
     }

@@ -7,7 +7,8 @@
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 0)
                                     ->where('route_name', request()->route()->getName())
-                                    ->where('ad_index', $current_ad_index);
+                                    ->where('ad_index', $current_ad_index)
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Localadmin::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
         @endphp
 
         @if($item->getName() !== "platform::layouts.modal" && $display_ads_query->exists())
@@ -39,9 +40,10 @@
         {!! $item ?? '' !!}
 
         @php
-            $display_ads_query = \App\Models\DisplayAds::where('portal', 1)
+            $display_ads_query = \App\Models\DisplayAds::where('portal', 0)
                                     ->where('route_name', request()->route()->getName())
-                                    ->where('ad_index', $current_ad_index + 1);
+                                    ->where('ad_index', $current_ad_index + 1)
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Localadmin::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
         @endphp
 
         @if($i == array_key_last(array_keys($column)) && $display_ads_query->exists())

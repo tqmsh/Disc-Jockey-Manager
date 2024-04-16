@@ -16,11 +16,16 @@ class DisplayAds extends Model
         'ad_index',
         'campaign_id',
         'portal',
+        'region_id',
         'square'
     ];
 
     public function campaign() : BelongsTo {
         return $this->belongsTo(Campaign::class, 'campaign_id');
+    }
+
+    public function region() : BelongsTo {
+        return $this->belongsTo(Region::class, 'region_id');
     }
 
     public function portalToName() : string {

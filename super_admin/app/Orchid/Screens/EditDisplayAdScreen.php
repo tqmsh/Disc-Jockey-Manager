@@ -147,7 +147,8 @@ class EditDisplayAdScreen extends Screen
                 'route_name' => $request->input('route_name'),
                 'ad_index' => $request->input('ad_index'),
                 'portal' => $request->input('portal'),
-                'square' => intval($request->boolean('square'))
+                'square' => intval($request->boolean('square')),
+                'region_id' => $request->input("campaign_region")
             ]);
 
             $display_ad->campaign->update([
@@ -155,7 +156,7 @@ class EditDisplayAdScreen extends Screen
                 "region_id" => $request->input("campaign_region"),
                 "title" => $request->input("campaign_name"),
                 "image" => $request->input("campaign_image"),
-                "website" => $request->input("campaign_link")
+                "website" => $request->input("campaign_link"),
             ]);
 
             Toast::success('Successfully updated the display ad.');

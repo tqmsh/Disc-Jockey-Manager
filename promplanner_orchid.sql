@@ -412,6 +412,7 @@ CREATE TABLE `display_ads` (
   `portal` tinyint(4) NOT NULL,
   `ad_index` tinyint(4) NOT NULL,
   `campaign_id` bigint(20) UNSIGNED NOT NULL,
+  `region_id` bigint(20) UNSIGNED NOT NULL,
   `square` tinyint(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -2243,8 +2244,8 @@ ALTER TABLE `display_ads`
   ADD KEY `display_ad_route_name` (`route_name`),
   ADD KEY `display_ad_portal` (`portal`),
   ADD KEY `display_ad_ad_index` (`ad_index`),
-  ADD KEY `display_ad_square` (`square`),
-  ADD KEY `display_ad_campaign_id` (`campaign_id`);
+  ADD KEY `display_ad_campaign_id` (`campaign_id`),
+  ADD KEY `display_ad_region_id` (`region_id`);
 
 --
 -- Indexes for table `election_winners`
@@ -3207,7 +3208,8 @@ ALTER TABLE `contracts`
 -- Constraints for table `display_ads`
 --
 ALTER TABLE `display_ads`
-  ADD CONSTRAINT `display_ads_camp_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `display_ads_camp_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `display_ads_reg_id` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `couples`

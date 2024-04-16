@@ -77,7 +77,8 @@
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 0)
                                     ->where('route_name', request()->route()->getName())
-                                    ->where('ad_index', 0);
+                                    ->where('ad_index', 0)
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Localadmin::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
         @endphp
         @if($display_ads_query->exists())
             @php
@@ -133,7 +134,8 @@
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 0)
                                     ->where('route_name', request()->route()->getName())
-                                    ->where('ad_index', 1);
+                                    ->where('ad_index', 1)
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Localadmin::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
         @endphp
         @if($display_ads_query->exists())
             @php
