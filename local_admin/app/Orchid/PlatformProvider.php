@@ -104,7 +104,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('book-open')
                 ->route('platform.guide.list'),
 
-            Menu::make('Prom Planner Sites')
+            Menu::make('National Prom Sites')
                 ->icon('arrow-down')
                 ->list([
                     Menu::make('National Proms')

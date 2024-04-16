@@ -200,7 +200,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles'),
 
-            Menu::make('Prom Planner Sites')
+            Menu::make('National Prom Sites')
                 ->icon('arrow-down')
                 ->list([
                     Menu::make('National Proms')
