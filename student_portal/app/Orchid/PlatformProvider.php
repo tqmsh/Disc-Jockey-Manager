@@ -89,7 +89,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('arrow-down')
                 ->list([
                     Menu::make('National Proms')
-                        ->icon('ps.national-proms')
+                        ->icon('ps.prom-planner')
                         ->url('https://nationalproms.com'),
 
                     Menu::make('Prom Planner')
@@ -97,11 +97,11 @@ class PlatformProvider extends OrchidServiceProvider
                         ->url('https://promplanner.app/'),
 
                     Menu::make('Prom Committee Expo')
-                        ->icon('ps.prom-committee-expo')
+                        ->icon('ps.prom-planner')
                         ->url('https://promcommitteeexpo.com'),
 
                     Menu::make('Prom Show')
-                        ->icon('ps.prom-show')
+                        ->icon('ps.prom-planner')
                         ->url('https://promshow.com'),
 
                     Menu::make('Prom Vendors')
