@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Examples;
 
 use App\Models\Campaign;
 use App\Models\Categories;
+use App\Models\DisplayAds;
 use App\Models\Vendors;
 use App\Models\EventBids;
 use App\Models\StudentBids;
@@ -177,6 +178,8 @@ class ExampleScreen extends Screen
     {
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
+            if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
+            
             $arr_ads[] = ["id"=>$campaign->id,
                 "forward_url"=>$campaign->website,
                 "image_url"=>$campaign->image,
