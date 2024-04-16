@@ -39,8 +39,7 @@
         {!! $item ?? '' !!}
 
         @php
-            $display_ads_query = DB::table('display_ads')
-                                    ->where('portal', 1)
+            $display_ads_query = \App\Models\DisplayAds::where('portal', 1)
                                     ->where('route_name', request()->route()->getName())
                                     ->where('ad_index', $current_ad_index + 1);
         @endphp
