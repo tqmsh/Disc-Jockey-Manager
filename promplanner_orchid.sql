@@ -408,7 +408,7 @@ CREATE TABLE `checklists` (
 
 CREATE TABLE `display_ads` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `route_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `route_uri` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `portal` tinyint(4) NOT NULL,
   `ad_index` tinyint(4) NOT NULL,
   `campaign_id` bigint(20) UNSIGNED NOT NULL,
@@ -2241,7 +2241,7 @@ ALTER TABLE `election_votes`
 --
 ALTER TABLE `display_ads`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `display_ad_route_name` (`route_name`),
+  ADD KEY `display_ad_route_uri` (`route_uri`),
   ADD KEY `display_ad_portal` (`portal`),
   ADD KEY `display_ad_ad_index` (`ad_index`),
   ADD KEY `display_ad_campaign_id` (`campaign_id`),

@@ -8,6 +8,7 @@ use App\Models\DisplayAds;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\CheckBox;
@@ -29,6 +30,7 @@ class CreateDisplayAdScreen extends Screen
      */
     public function query(): iterable
     {
+        dd(Route::current()->uri());
         return [];
     }
 
@@ -69,11 +71,11 @@ class CreateDisplayAdScreen extends Screen
     {
         return [
             Layout::rows([
-                Input::make('route_name')
-                    ->title('Route Name')
+                Input::make('route_uri')
+                    ->title('Route URI')
                     ->required()
                     ->horizontal()
-                    ->placeholder('What route would you like this to be in?'),
+                    ->placeholder('e.g., admin/events/campaigns/{display_ad}'),
             
                 Input::make('ad_index')
                     ->title('Ad Index')
@@ -155,7 +157,7 @@ class CreateDisplayAdScreen extends Screen
 
                 // Create the display ad
                 DisplayAds::create([
-                    'route_name' => $request->input('route_name'),
+                    'route_uri' => $request->input('route_uri'),
                     'ad_index' => $request->input('ad_index'),
                     'portal' => $request->input('portal'),
                     'campaign_id' => $campaign->id,
@@ -176,7 +178,7 @@ class CreateDisplayAdScreen extends Screen
 
     private function validAd(Request $request) : bool {
         return !(DisplayAds::where('portal', $request->input('portal'))
-                            ->where('route_name', $request->input('route_name'))
+                            ->where('route_uri', $request->input('route_uri'))
                             ->where('ad_index', $request->input('ad_index'))
                             ->where('region_id', $request->input("campaign_region"))
                             ->exists()

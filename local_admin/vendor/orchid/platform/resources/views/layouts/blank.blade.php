@@ -6,7 +6,7 @@
     @foreach(\Illuminate\Support\Arr::wrap($column) as $i => $item)
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 0)
-                                    ->where('route_name', request()->route()->getName())
+                                    ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
                                     ->where('ad_index', $current_ad_index)
                                     ->where('region_id', \App\Models\School::where('id', \App\Models\Localadmin::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
         @endphp
@@ -41,7 +41,7 @@
 
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 0)
-                                    ->where('route_name', request()->route()->getName())
+                                    ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
                                     ->where('ad_index', $current_ad_index + 1)
                                     ->where('region_id', \App\Models\School::where('id', \App\Models\Localadmin::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
         @endphp

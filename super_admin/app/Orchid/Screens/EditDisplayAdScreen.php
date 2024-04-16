@@ -6,6 +6,7 @@ use App\Models\Categories;
 use App\Models\DisplayAds;
 use App\Models\Region;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\CheckBox;
@@ -69,12 +70,12 @@ class EditDisplayAdScreen extends Screen
     {
         return [
             Layout::rows([
-                Input::make('route_name')
-                    ->title('Route Name')
+                Input::make('route_uri')
+                    ->title('Route URI')
                     ->required()
                     ->horizontal()
-                    ->placeholder('What route would you like this to be in?')
-                    ->value($this->display_ad->route_name),
+                    ->placeholder('/events/campaigns/{display_ad}')
+                    ->value($this->display_ad->route_uri),
             
                 Input::make('ad_index')
                     ->title('Ad Index')
@@ -144,7 +145,7 @@ class EditDisplayAdScreen extends Screen
     public function updateDisplayAd(DisplayAds $display_ad, Request $request) {
         try {
             $display_ad->update([
-                'route_name' => $request->input('route_name'),
+                'route_uri' => $request->input('route_uri'),
                 'ad_index' => $request->input('ad_index'),
                 'portal' => $request->input('portal'),
                 'square' => intval($request->boolean('square')),

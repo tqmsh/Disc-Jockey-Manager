@@ -12,7 +12,7 @@ class DisplayAds extends Model
     use HasFactory, AsSource;
 
     protected $fillable = [
-        'route_name',
+        'route_uri',
         'ad_index',
         'campaign_id',
         'portal',

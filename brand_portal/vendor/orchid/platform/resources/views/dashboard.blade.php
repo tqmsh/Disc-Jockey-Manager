@@ -75,7 +75,7 @@
 
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 2)
-                                    ->where('route_name', request()->route()->getName())
+                                    ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
                                     ->where('ad_index', 0);
         @endphp
         @if($display_ads_query->exists())
