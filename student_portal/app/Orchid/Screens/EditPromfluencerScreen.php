@@ -2,10 +2,13 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Promfluencer;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
 
 class EditPromfluencerScreen extends Screen
 {
+    public $promfluencer;
     /**
      * Query data.
      *
@@ -13,7 +16,9 @@ class EditPromfluencerScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'promfluencer' => Promfluencer::firstWhere('user_id', Auth::id()),
+        ];
     }
 
     /**
