@@ -112,4 +112,15 @@ class ViewPromfluencerScreen extends Screen
         Promfluencer::create(['user_id' => Auth::id(),]);
         Toast::success('Promfluence created successfully');
     }
+
+    public function deletePromfluencer()
+    {
+        $promfluencer = Promfluencer::firstWhere('user_id', Auth::id());
+        if ($promfluencer === NULL) {
+            Toast::error('Promfluence does not exist');
+            return;
+        }
+        $promfluencer->delete();
+        Toast::success('Promfluence deleted successfully');
+    }
 }
