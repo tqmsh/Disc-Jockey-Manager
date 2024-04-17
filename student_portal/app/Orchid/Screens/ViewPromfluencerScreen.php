@@ -35,6 +35,16 @@ class ViewPromfluencerScreen extends Screen
     }
 
     /**
+     * Display description.
+     *
+     * @return string|null
+     */
+    public function description(): ?string
+    {
+        return 'Instructional/Disclaimer Text Placeholder';
+    }
+
+    /**
      * Button commands.
      *
      * @return \Orchid\Screen\Action[]
