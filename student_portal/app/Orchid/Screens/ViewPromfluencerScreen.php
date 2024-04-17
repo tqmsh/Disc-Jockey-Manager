@@ -9,6 +9,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Sight;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class ViewPromfluencerScreen extends Screen
 {
@@ -100,5 +101,15 @@ class ViewPromfluencerScreen extends Screen
                     ->render(fn () => $this->promfluencer->youtube ?? ''),
             ]),
         ] : [];
+    }
+
+    public function createPromfluencer()
+    {
+        if (Promfluencer::firstWhere('user_id', Auth::id()) !== NULL) {
+            Toast::error('Promfluence already exists');
+            return;
+        }
+        Promfluencer::create(['user_id' => Auth::id(),]);
+        Toast::success('Promfluence created successfully');
     }
 }
