@@ -66,7 +66,8 @@ class ViewPromfluencerScreen extends Screen
             Button::make('Delete Promfluence')
                 ->icon('trash')
                 ->method('deletePromfluencer')
-                ->canSee($this->promfluencer !== NULL),
+                ->canSee($this->promfluencer !== NULL)
+                ->confirm('Are you sure you would like to delete your Promfluence?'),
         ];
     }
 
