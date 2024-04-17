@@ -23,7 +23,7 @@ class EditPromfluencerScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'EditPromfluenceScreen';
+        return 'Edit Promfluence';
     }
 
     /**
