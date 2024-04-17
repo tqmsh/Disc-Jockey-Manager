@@ -4,6 +4,8 @@ namespace App\Orchid\Screens;
 
 use App\Models\Promfluencer;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class ViewPromfluencerScreen extends Screen
@@ -39,7 +41,20 @@ class ViewPromfluencerScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Create Promfluence')
+                ->icon('plus')
+                ->method('createPromfluencer')
+                ->canSee($this->promfluencer === NULL),
+            Link::make('Edit Promfluence')
+                ->icon('pencil')
+                ->route('platform.promfluencer.edit')
+                ->canSee($this->promfluencer !== NULL),
+            Button::make('Delete Promfluence')
+                ->icon('trash')
+                ->method('deletePromfluencer')
+                ->canSee($this->promfluencer !== NULL),
+        ];
     }
 
     /**
