@@ -28,8 +28,8 @@
             @endphp
 
             @if($display_ad_image_url !== null)
-                <div style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
-                    <a target="_blank" href="{{$campaign->website}}">
+                <div id="promplanner-propoganda" style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
+                    <a target="_blank" href="{{$campaign->website}}" onclick="incrementCampaignClick({{$campaign->id}})">
                         <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 90}}px;" src="{{$display_ad_image_url}}" alt="">
                     </a>
                 </div>
@@ -63,8 +63,8 @@
             @endphp
 
             @if($display_ad_image_url !== null)
-                <div style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
-                    <a target="_blank" href="{{$campaign->website}}">
+                <div id="promplanner-propoganda" style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
+                    <a target="_blank" href="{{$campaign->website}}" onclick="incrementCampaignClick({{$campaign->id}})">
                         <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 90}}px;" src="{{$display_ad_image_url}}" alt="">
                     </a>
                 </div>
@@ -78,3 +78,10 @@
         @endphp
     @endforeach
 @endforeach
+<script type="text/javascript">
+    function incrementCampaignClick(campaign_id) {
+        var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent(campaign_id);
+        console.log(url);
+        axios.put(url)
+    };
+</script>
