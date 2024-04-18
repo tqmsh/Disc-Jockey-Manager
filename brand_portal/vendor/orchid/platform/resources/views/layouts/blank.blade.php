@@ -29,7 +29,7 @@
             @if($display_ad_image_url !== null)
                 <div id="promplanner-propoganda" style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
                     <a target="_blank" href="{{$campaign->website}}" onclick="incrementCampaignClick({{$campaign->id}})">
-                        <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 90}}px;" src="{{$display_ad_image_url}}" alt="">
+                        <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 60}}px;" src="{{$display_ad_image_url}}" alt="">
                     </a>
                 </div>
             @endif
@@ -63,7 +63,7 @@
             @if($display_ad_image_url !== null)
                 <div id="promplanner-propoganda" style="{{$display_ad_min_width}} {{$display_ad_margin}} {{$display_ad_max_width}} margin-bottom: 0.75rem; {{$display_ad_display}}">
                     <a target="_blank" href="{{$campaign->website}}" onclick="incrementCampaignClick({{$campaign->id}})">
-                        <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 90}}px;" src="{{$display_ad_image_url}}" alt="">
+                        <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 60}}px;" src="{{$display_ad_image_url}}" alt="">
                     </a>
                 </div>
             @endif
