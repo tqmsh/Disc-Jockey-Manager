@@ -72,13 +72,14 @@ class PlatformProvider extends OrchidServiceProvider
             //     ->icon('picture')
             //     ->route('platform.ad.list'),
 
-            Menu::make('Report a Bug')
-                ->icon('bug')
-                ->route('platform.bug-reports.list'),
     
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.guide.list'),
+                
+            Menu::make('Report a Bug')
+                ->icon('bug')
+                ->route('platform.bug-reports.list'),
 
             Menu::make('National Prom Sites')
                 ->icon('arrow-down')
