@@ -33,21 +33,25 @@ class PlatformProvider extends OrchidServiceProvider
         abort_if(Auth::user()->role != 3, 403, 'You are not authorized to view this page.');
 
         return [
-
+            
             //MONEY MAKER
             Menu::make('Dashboard')
-            ->icon('home')
-            ->title('CORE')
-            ->route('platform.example'),
+                ->icon('home')
+                ->title('CORE')
+                ->route('platform.example'),
+            
+            Menu::make('My Specs')
+                ->icon('brush')
+                ->route('platform.studentSpecs.list'),
 
             //student nav option
             Menu::make('Events')
-            ->icon('diamond')
-            ->route('platform.event.list'),
+                ->icon('diamond')
+                ->route('platform.event.list'),
 
             Menu::make('Bids')
-            ->icon('dollar')
-            ->route('platform.studentBids.list'),
+                ->icon('dollar')
+                ->route('platform.studentBids.list'),
 
             Menu::make("Groups")
             ->icon('organization')
@@ -65,9 +69,6 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('fa.children')
                 ->route('platform.promdate'),
 
-            Menu::make('My Specs')
-            ->icon('brush')
-            ->route('platform.studentSpecs.list'),
 
             Menu::make('Dresses')
                 ->icon('fa.person-dress')
@@ -77,13 +78,14 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('list-check')
                 ->route('platform.checklist.list'),
             
-            Menu::make('Report a Bug')
-                ->icon('bug')
-                ->route('platform.bug-reports.list'),
-
+                
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.guide.list'),
+
+            Menu::make('Report a Bug')
+                ->icon('bug')
+                ->route('platform.bug-reports.list'),
 
             Menu::make('National Prom Sites')
                 ->icon('arrow-down')
