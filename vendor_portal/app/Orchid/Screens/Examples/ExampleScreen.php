@@ -200,7 +200,7 @@ class ExampleScreen extends Screen
 
             Layout::view("card_style"),
 
-            Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
+            //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];
     }
 
