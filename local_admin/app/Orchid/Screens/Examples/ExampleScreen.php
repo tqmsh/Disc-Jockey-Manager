@@ -12,6 +12,7 @@ use App\Models\Events;
 use App\Models\EventAttendees;
 use App\Models\EventBids;
 use App\Models\ActualExpenseRevenue;
+use App\Models\DisplayAds;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Illuminate\Http\Request;
@@ -199,6 +200,8 @@ class ExampleScreen extends Screen
 
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
+            if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
+
             $arr_ads[] = ["id"=>$campaign->id,
                 "forward_url"=>$campaign->website,
                 "image_url"=>$campaign->image,
@@ -224,7 +227,7 @@ class ExampleScreen extends Screen
             ]),
             Layout::view("card_style"),
 
-            Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
+            //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];
     }
 

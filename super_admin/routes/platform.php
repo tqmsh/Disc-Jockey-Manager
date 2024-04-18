@@ -103,6 +103,8 @@ use App\Orchid\Screens\ViewNoticeScreen;
 use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewUserChecklistItemsScreen;
 use App\Orchid\Screens\CreateChecklistScreen;
+use App\Orchid\Screens\CreateDisplayAdScreen;
+use App\Orchid\Screens\EditDisplayAdScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
 use App\Orchid\Screens\ViewVideoTutorialScreen;
 
@@ -252,8 +254,13 @@ Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSi
 //create a section lesson screen route
 Route::screen('/guides/{guide}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
 
+// Campaigns
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+
+// Display Ads (ad blockers block routes with "display ads" in it, so we go with propoganda)
+Route::screen('/campaigns/propoganda/create', CreateDisplayAdScreen::class)->name('platform.ad.create.display-ad');
+Route::screen('/campaigns/propoganda/{display_ad}/edit', EditDisplayAdScreen::class)->name('platform.ad.edit.display-ad');
 
 Route::screen('/couples', ViewCouplesScreen::class)->name('platform.couples.list');
 Route::screen('/couples/{couple}', ViewCoupleDetailsScreen::class)->name('platform.couples.info');
