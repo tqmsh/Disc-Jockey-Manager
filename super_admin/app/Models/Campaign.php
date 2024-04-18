@@ -16,6 +16,7 @@ class Campaign extends Model
         'image',
         'website',
         'clicks',
-        'impressions'
+        'impressions',
+        'active'
     ];
 }
