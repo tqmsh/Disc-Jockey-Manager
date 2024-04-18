@@ -101,6 +101,18 @@
                         <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 60}}px;" src="{{$display_ad_image_url}}" alt="">
                     </a>
                 </div>
+
+                @if($display_ads_query->first()->square)
+                    <style>
+
+                        @media only screen and (max-width: 770px) {
+                            #promplanner-propoganda {
+                                justify-content: center !important; 
+                                align-items: center !important;
+                            }    
+                        }
+                    </style>
+                @endif
             @endif
         @endif
         
@@ -153,6 +165,18 @@
                         <img style="{{$display_ad_width}} max-height:{{boolval($display_ads_query->first()->square) ? 311.51 : 60}}px;" src="{{$display_ad_image_url}}" alt="">
                     </a>
                 </div>
+
+                @if($display_ads_query->first()->square)
+                    <style>
+
+                        @media only screen and (max-width: 770px) {
+                            #promplanner-propoganda {
+                                justify-content: center !important; 
+                                align-items: center !important;
+                            }    
+                        }
+                    </style>
+                @endif
             @endif
         @endif
         
