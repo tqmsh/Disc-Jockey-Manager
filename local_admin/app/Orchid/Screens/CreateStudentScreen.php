@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Auth;
 use Orchid\Support\Facades\Dashboard;
 use Orchid\Screen\Actions\ModalToggle;
 
+
+
+
 class CreateStudentScreen extends Screen
 {
     public $requiredFields = ['firstname', 'lastname', 'email', 'password', 'phonenumber', 'allergies', 'grade'];
@@ -195,6 +198,8 @@ class CreateStudentScreen extends Screen
                 'grade' => 'required|integer|in:9,10,11,12',
                 'allergies' => 'nullable|max:255',
             ]);
+            
+
 
             //get the student table fields
             $studentTableFields = $this->getStudentFields($request);
@@ -206,6 +211,9 @@ class CreateStudentScreen extends Screen
             //no duplicates found
             //create user
             $user = User::create($userTableFields);
+
+            
+
 
             //add the user id to the student table fields
             $studentTableFields['user_id'] = $user->id;
@@ -221,6 +229,29 @@ class CreateStudentScreen extends Screen
             
             //notify the user
             Toast::success('Student Added Succesfully');
+
+
+            // SENDY API
+
+            $your_installation_url = 'https://pod01.growthmail.net'; //Your Sendy installation (without the trailing slash)
+            $list = 'cbSDy4cjl2iW4epIArqbfg'; //Can be retrieved from "View all lists" page
+            $api_key = $_ENV['SENDY_API_KEY']; //Can be retrieved from your Sendy's main settings
+            $success_url = 'http://google.com'; //URL user will be redirected to if successfully subscribed
+            $fail_url = 'http://yahoo.com'; //URL user will be redirected to if subscribing fails
+
+            $postdata = http_build_query(
+                array(
+                'name' => $request->firstname . ' ' . $request->lastname,
+                'email' => $request->email,
+                'list' => $list,
+                'api_key' => $api_key,
+                'boolean' => 'true'
+                )
+            );
+            
+            $opts = array('http' => array('method'  => 'POST', 'header'  => 'Content-type: application/x-www-form-urlencoded', 'content' => $postdata));
+            $context  = stream_context_create($opts);
+            $result = file_get_contents($your_installation_url.'/subscribe', false, $context);
 
             //redirect to the student list
             return redirect()->route('platform.student.list');
@@ -291,6 +322,27 @@ class CreateStudentScreen extends Screen
                             'user_id' => $user->id,
                             'role_id' => 3,
                         ]);
+                            
+                        // SENDY API
+                        $your_installation_url = 'https://pod01.growthmail.net'; //Your Sendy installation (without the trailing slash)
+                        $list = 'cbSDy4cjl2iW4epIArqbfg'; //Can be retrieved from "View all lists" page
+                        $api_key = $_ENV['SENDY_API_KEY']; //Can be retrieved from your Sendy's main settings
+                        $success_url = 'http://google.com'; //URL user will be redirected to if successfully subscribed
+                        $fail_url = 'http://yahoo.com'; //URL user will be redirected to if subscribing fails
+
+                        $postdata = http_build_query(
+                            array(
+                            'name' => $students[$i]['firstname'] . ' ' . $students[$i]['lastname'],
+                            'email' => $students[$i]['email'],
+                            'list' => $list,
+                            'api_key' => $api_key,
+                            'boolean' => 'true'
+                            )
+                        );
+                        
+                        $opts = array('http' => array('method'  => 'POST', 'header'  => 'Content-type: application/x-www-form-urlencoded', 'content' => $postdata));
+                        $context  = stream_context_create($opts);
+                        $result = file_get_contents($your_installation_url.'/subscribe', false, $context);
 
                     }else{
                         array_push($this->dupes, $students[$i]['email']);                    
