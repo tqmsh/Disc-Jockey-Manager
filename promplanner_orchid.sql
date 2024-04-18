@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2024 at 08:28 AM
+-- Generation Time: Apr 19, 2024 at 01:36 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -478,6 +478,24 @@ CREATE TABLE `couple_requests` (
   `event_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `display_ads`
+--
+
+CREATE TABLE `display_ads` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `route_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `portal` tinyint(4) NOT NULL,
+  `ad_index` tinyint(4) NOT NULL,
+  `campaign_id` bigint(20) UNSIGNED NOT NULL,
+  `region_id` bigint(20) UNSIGNED NOT NULL,
+  `square` tinyint(4) NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1084,6 +1102,13 @@ CREATE TABLE `notices` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `notices`
+--
+
+INSERT INTO `notices` (`id`, `dashboard`, `title`, `subtitle`, `url`, `created_at`, `updated_at`) VALUES
+(1, 2, 'This is a Test BOY', 'This is a test test test test test test test', 'https://www.youtube.com/watch?v=KNuoGeD9Qeo&t=122s', '2024-04-15 05:26:28', '2024-04-15 05:26:28');
+
 -- --------------------------------------------------------
 
 --
@@ -1649,7 +1674,9 @@ INSERT INTO `sessions` (`id`, `user_id`, `time`, `role`, `created_at`, `updated_
 (7, 155, 49, '3', '2024-02-26 04:23:01', '2024-02-26 04:23:01'),
 (8, 155, 775, '3', '2024-02-26 05:21:36', '2024-02-26 05:21:36'),
 (9, 151, 24, '2', '2024-02-26 05:22:28', '2024-02-26 05:22:28'),
-(10, 155, 2146, '3', '2024-02-26 05:58:35', '2024-02-26 05:58:35');
+(10, 155, 2146, '3', '2024-02-26 05:58:35', '2024-02-26 05:58:35'),
+(11, 13, 58, '1', '2024-04-15 05:26:44', '2024-04-15 05:26:44'),
+(12, 13, 0, '1', '2024-04-19 03:14:37', '2024-04-19 03:14:37');
 
 -- --------------------------------------------------------
 
@@ -1875,7 +1902,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumber`, `role`, `country`, `currentPlan`, `account_status`, `email_verified_at`, `password`, `pfp`, `remember_token`, `created_at`, `updated_at`) VALUES
-(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'https://promplanner.s3.amazonaws.com/2024/02/21/222f05cc2d7902d9851e5f78b7c23ddca6f79af8.png', 'vZ9N6JNxSZzbB8NHRFf4GtaDRfUXNaFTYrsvxi2HUZ2xf9U2ecois8JFA1Vp', '2022-10-16 21:27:25', '2024-02-22 00:49:30'),
+(13, 'Big Man Admin 🔥', '', '', 'superadmin@gmail.com', NULL, 1, NULL, NULL, 1, NULL, '$2y$10$kShmCgweW1ieZg4S6Lf.dOwDT0xhVN9Gb62l8doUSo56qcsWoR9Ee', 'https://promplanner.s3.amazonaws.com/2024/02/21/222f05cc2d7902d9851e5f78b7c23ddca6f79af8.png', 'OJHLpexlTPspnwGjX5sdD9NCQJ5fChRF6nJXgPJxZAzZPQKncRoTTN9Tc2X7', '2022-10-16 21:27:25', '2024-02-22 00:49:30'),
 (52, 'Kavon Reinger', 'This is another test for the user', 'test', 'test@example.net', NULL, 3, 'Zimbabwe', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'xekMstwSjQ', '2022-10-17 20:39:55', '2022-10-18 00:15:02'),
 (67, 'Prof. Clare Turcotte', 'Ellis', 'Huels', 'williamson@example.net', NULL, 3, 'Germany', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'EFxEkuvIMI', '2022-10-17 20:39:55', '2022-11-13 01:28:54'),
 (68, 'Jude Nicolas', 'Gabriel', 'Prosacco', 'koss.gerald@example.com', NULL, 3, 'Philippines', NULL, 0, '2022-10-17 20:39:55', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, 'mOY699FaIx', '2022-10-17 20:39:55', '2022-11-15 00:18:28'),
@@ -2181,6 +2208,15 @@ ALTER TABLE `couple_requests`
   ADD KEY `owner_user_id` (`owner_user_id`,`receiver_user_id`,`event_id`),
   ADD KEY `event` (`event_id`),
   ADD KEY `receiver` (`receiver_user_id`);
+
+--
+-- Indexes for table `display_ads`
+--
+ALTER TABLE `display_ads`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `route_name` (`route_name`,`portal`,`ad_index`,`campaign_id`,`region_id`),
+  ADD KEY `display_ads_camp_id` (`campaign_id`),
+  ADD KEY `display_ads_reg_id` (`region_id`);
 
 --
 -- Indexes for table `dresses`
@@ -2756,6 +2792,12 @@ ALTER TABLE `couple_requests`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `display_ads`
+--
+ALTER TABLE `display_ads`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `dresses`
 --
 ALTER TABLE `dresses`
@@ -2903,7 +2945,7 @@ ALTER TABLE `national_positions`
 -- AUTO_INCREMENT for table `notices`
 --
 ALTER TABLE `notices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `no_play_songs`
@@ -3005,7 +3047,7 @@ ALTER TABLE `sections`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `songs`
@@ -3184,6 +3226,13 @@ ALTER TABLE `couple_requests`
   ADD CONSTRAINT `event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `owner` FOREIGN KEY (`owner_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `receiver` FOREIGN KEY (`receiver_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `display_ads`
+--
+ALTER TABLE `display_ads`
+  ADD CONSTRAINT `display_ads_camp_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `display_ads_reg_id` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `dresses`
