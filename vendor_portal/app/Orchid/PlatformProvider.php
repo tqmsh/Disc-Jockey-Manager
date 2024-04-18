@@ -43,9 +43,10 @@ class PlatformProvider extends OrchidServiceProvider
             ->route('platform.example'),
 
             // SHOP
-            Menu::make('Shop')
-            ->icon('bag')
-            ->route('platform.shop'),
+            //!Un-comment when the feature is good to go
+            // Menu::make('Shop')
+            // ->icon('bag')
+            // ->route('platform.shop'),
 
 
             //MONEYYY MAKER
@@ -71,32 +72,45 @@ class PlatformProvider extends OrchidServiceProvider
             //     ->icon('picture')
             //     ->route('platform.ad.list'),
 
-            Menu::make('Report a Bug')
-                ->icon('bug')
-                ->route('platform.bug-reports.list'),
     
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.guide.list'),
+                
+            Menu::make('Report a Bug')
+                ->icon('bug')
+                ->route('platform.bug-reports.list'),
 
-            Menu::make('Prom Planner Sites')
+            Menu::make('National Prom Sites')
                 ->icon('arrow-down')
                 ->list([
+                    Menu::make('National Proms')
+                        ->icon('ps.national-proms')
+                        ->url('https://nationalproms.com'),
+
                     Menu::make('Prom Planner')
                         ->icon('ps.prom-planner')
                         ->url('https://promplanner.app/'),
+
                     Menu::make('Prom Marketing')
                         ->icon('ps.prom-marketing')
                         ->url('https://prommarketing.com/'),
-                    Menu::make('Prom Radio')
-                        ->icon('ps.prom-radio')
-                        ->url('https://promradio.com/'),
-                    Menu::make('Prom Teen')
-                        ->icon('ps.prom-teen')
-                        ->url('https://promteen.com/'),
+
+                    Menu::make('Prom Committee Expo')
+                        ->icon('ps.prom-committee-expo')
+                        ->url('https://promcommitteeexpo.com'),
+
+                    Menu::make('Prom Show')
+                        ->icon('ps.prom-show')
+                        ->url('https://promshow.com'),
+
                     Menu::make('Prom Vendors')
                         ->icon('ps.prom-vendor')
                         ->url('https://promvendors.com/'),
+
+                    Menu::make('Prom Teen')
+                        ->icon('ps.prom-teen')
+                        ->url('https://promteen.com/'),
                 ]),
                 
             // Menu::make('Examples Layouts')

@@ -169,11 +169,7 @@ Route::screen('profile', UserProfileScreen::class)
 
 // Example...
 Route::screen('dashboard', ExampleScreen::class)
-    ->name('platform.example')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->push('Main Menu');
-    });
+    ->name('platform.example');
 
 Route::screen('dresses', ViewDressListScreen::class)
     ->name('platform.dresses')
