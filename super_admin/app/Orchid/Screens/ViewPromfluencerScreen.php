@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use App\Models\Promfluencer;
 use App\Models\School;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
@@ -87,6 +88,13 @@ class ViewPromfluencerScreen extends Screen
                     ->render(fn (Promfluencer $promfluencer) => $promfluencer->user->student->school),
                 TD::make('grade')
                     ->render(fn (Promfluencer $promfluencer) => $promfluencer->user->student->grade),
+                TD::make()
+                    ->render(function (Promfluencer $promfluencer) {
+                        return Link::make('View')
+                            ->type(Color::PRIMARY())
+                            ->icon('eye')
+                            ->route('platform.promfluencer.view', $promfluencer->id);
+                    }),
             ]),
         ];
     }
