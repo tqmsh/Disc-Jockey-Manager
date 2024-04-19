@@ -3,8 +3,13 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Promfluencer;
+use App\Models\School;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
+use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 
 class ViewPromfluencerScreen extends Screen
@@ -51,6 +56,28 @@ class ViewPromfluencerScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::rows([
+                Group::make([
+                    Select::make('school')
+                        ->title('School')
+                        ->empty('No Selection')
+                        ->fromModel(School::class, 'school_name')
+                        ->help('Type in boxes to search'),
+                    Select::make('grade')
+                        ->title('Grade')
+                        ->empty('No Selection')
+                        ->options([
+                            9 => 9,
+                            10 => 10,
+                            11 => 11,
+                            12 => 12,
+                        ]),
+                ]),
+                Button::make('Filter')
+                    ->icon('filter')
+                    ->method('filter')
+                    ->type(Color::DEFAULT()),
+            ]),
             Layout::table('promfluencers', [
                 TD::make('name')
                     ->render(function (Promfluencer $promfluencer) {
