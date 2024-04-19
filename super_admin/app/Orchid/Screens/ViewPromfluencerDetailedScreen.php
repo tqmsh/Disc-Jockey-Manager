@@ -28,7 +28,7 @@ class ViewPromfluencerDetailedScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewPromfluencerDetailedScreen';
+        return 'Promfluencer: ' . $this->promfluencer->user->firstname . ' ' . $this->promfluencer->user->lastname;
     }
 
     /**
