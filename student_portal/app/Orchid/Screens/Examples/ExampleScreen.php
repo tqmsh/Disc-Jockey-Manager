@@ -181,7 +181,7 @@ class ExampleScreen extends Screen
                 'Total Direct Bids Received' => 'metrics.totalDirectBidsReceived',
                 'Total Direct Bids Replied To' => 'metrics.totalDirectBidsRepliedTo',
             ]),
-            Layout::view("card_style"),
+            //Layout::view("card_style"),
 
             //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];

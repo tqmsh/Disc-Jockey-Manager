@@ -198,7 +198,7 @@ class ExampleScreen extends Screen
                 'Wishlist mentions' => 'metrics.wishlistMentions',
             ]),
 
-            Layout::view("card_style"),
+            //Layout::view("card_style"),
 
             //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];

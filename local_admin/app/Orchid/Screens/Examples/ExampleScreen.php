@@ -225,7 +225,7 @@ class ExampleScreen extends Screen
                 'Total Revenue' => 'metrics.totalRevenue',
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
-            Layout::view("card_style"),
+            //Layout::view("card_style"),
 
             //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];
