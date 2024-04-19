@@ -104,6 +104,9 @@ use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\ViewUserChecklistItemsScreen;
 use App\Orchid\Screens\CreateChecklistScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
+use App\Orchid\Screens\ViewAllPromfluencerScreen;
+use App\Orchid\Screens\ViewPromfluencerDetailedScreen;
+use App\Orchid\Screens\ViewPromfluencerScreen;
 use App\Orchid\Screens\ViewVideoTutorialScreen;
 
 /*
@@ -320,6 +323,10 @@ Route::screen('/checklists/{checklist}/users/{user}/items', ViewUserChecklistIte
 // Checklist Items
 Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
 Route::screen('/checklists/{checklist}/items/{checklist_item}/edit', EditChecklistItemScreen::class)->name('platform.checklist-items.edit');
+
+// Promfluence
+Route::screen('/promfluence', ViewPromfluencerScreen::class)->name('platform.promfluencer.list');
+Route::screen('/promfluence/{promfluencer_id}', ViewPromfluencerDetailedScreen::class)->name('platform.promfluencer.view');
 
 // Bug Reports
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
