@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Promfluencer;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class ViewPromfluencerDetailedScreen extends Screen
@@ -38,7 +39,11 @@ class ViewPromfluencerDetailedScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Back')
+                ->icon('arrow-left')
+                ->route('platform.promfluencer.list'),
+        ];
     }
 
     /**
