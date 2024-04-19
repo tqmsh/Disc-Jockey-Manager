@@ -185,7 +185,7 @@ class ExampleScreen extends Screen
                 "image_url"=>$campaign->image,
                 "title"=>$campaign->title,
                 "category"=>Categories::where("id", $campaign->category_id)->first()->name,
-                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name ?? "N/A",
                 "order"=>Categories::where("id", $campaign->category_id)->first()->order_num
             ];
         }

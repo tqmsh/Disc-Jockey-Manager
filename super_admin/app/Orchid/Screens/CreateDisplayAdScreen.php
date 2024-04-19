@@ -151,7 +151,7 @@ class CreateDisplayAdScreen extends Screen
             if($this->validAd($request)) {
                 // Create the campaign
                 $campaign = Campaign::create([
-                    "user_id" => $request->input('vendor_user_id') ?? Auth::user()->id,
+                    "user_id" => $request->input('vendor_user_id') ?? 197, //!NEED TO OPTIMIZE THIS LATER
                     "category_id" => $request->input("category_id"),
                     "region_id" => $request->input("campaign_region"),
                     "title" => $request->input("campaign_name"),
