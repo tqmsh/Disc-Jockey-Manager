@@ -265,9 +265,9 @@ class ExampleScreen extends Screen
             //     'Total Earnings' => 'metrics.total',
             // ]),
 
-            Layout::view("card_style"),
+            //Layout::view("card_style"),
 
-            Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
+            //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
 
         ];
     }
