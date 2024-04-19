@@ -44,6 +44,7 @@ class PlatformProvider extends OrchidServiceProvider
             ->title('CORE')
             ->route('platform.example'),
 
+
             //MONEYYY MAKER
             Menu::make('Vendors')
             ->icon('dollar')
@@ -151,9 +152,6 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('diamond')
                 ->route('platform.event.list'),
 
-            Menu::make('Songs')
-                ->icon('music-tone-alt')
-                ->route('platform.songs.list'),
 
             Menu::make("Groups")
                 ->icon('organization')
@@ -167,58 +165,90 @@ class PlatformProvider extends OrchidServiceProvider
                     ->route('platform.beauty-groups'),
                 ]),
 
-            Menu::make('Contracts')
-                ->icon('doc')
-                ->route('platform.contract.list'),
-
-            Menu::make('Prom Profit')
-                ->icon('money')
-                ->route('platform.universal-expense-revenue.list'),
-
-            Menu::make('Notices')
-                ->icon('directions')
-                ->route('platform.notice.list'),
-            
-            Menu::make('Checklists')
-                ->icon('list-check')
-                ->route('platform.checklist.list'),
-            
-            Menu::make('Report a Bug')
-                ->icon('bug')
-                ->route('platform.bug-reports.list'),
-
-            Menu::make('Prom Planner Guide')
-                ->icon('book-open')
-                ->route('platform.guide.list'),
-            
-            Menu::make('Video Tutorials')
-                ->icon('video')
-                ->route('platform.video-tutorials.view'),
-
-            Menu::make(__('Roles'))
-                ->icon('lock')
-                ->route('platform.systems.roles')
-                ->permission('platform.systems.roles'),
-
-            Menu::make('Prom Planner Sites')
+            Menu::make('National Prom Sites')
                 ->icon('arrow-down')
                 ->list([
+                    Menu::make('National Proms')
+                        ->icon('ps.national-proms')
+                        ->url('https://nationalproms.com'),
+
                     Menu::make('Prom Planner')
                         ->icon('ps.prom-planner')
                         ->url('https://promplanner.app/'),
+
                     Menu::make('Prom Marketing')
                         ->icon('ps.prom-marketing')
                         ->url('https://prommarketing.com/'),
+
+                    Menu::make('Prom Committee Expo')
+                        ->icon('ps.prom-committee-expo')
+                        ->url('https://promcommitteeexpo.com'),
+
+                    Menu::make('Prom Show')
+                        ->icon('ps.prom-show')
+                        ->url('https://promshow.com'),
+
                     Menu::make('Prom Radio')
                         ->icon('ps.prom-radio')
                         ->url('https://promradio.com/'),
+
                     Menu::make('Prom Teen')
                         ->icon('ps.prom-teen')
                         ->url('https://promteen.com/'),
+
                     Menu::make('Prom Vendors')
                         ->icon('ps.prom-vendor')
                         ->url('https://promvendors.com/'),
                 ]),
+
+            Menu::make('Content')
+            ->icon('arrow-down')
+            ->list([
+
+                Menu::make('Songs')
+                    ->icon('music-tone-alt')
+                    ->route('platform.songs.list'),
+
+                Menu::make('Contracts')
+                    ->icon('doc')
+                    ->route('platform.contract.list'),
+
+                Menu::make('Prom Profit')
+                    ->icon('money')
+                    ->route('platform.universal-expense-revenue.list'),
+
+                Menu::make('Checklists')
+                    ->icon('list-check')
+                    ->route('platform.checklist.list'),
+
+                Menu::make('Prom Planner Guide')
+                    ->icon('book-open')
+                    ->route('platform.guide.list'),
+
+            ]),
+        
+            Menu::make('Maintenance')
+            ->icon('arrow-down')
+            ->list([
+
+                Menu::make('Notices')
+                    ->icon('directions')
+                    ->route('platform.notice.list'),
+
+                Menu::make('Video Tutorials')
+                    ->icon('video')
+                    ->route('platform.video-tutorials.view'),
+
+                Menu::make('Report a Bug')
+                    ->icon('bug')
+                    ->route('platform.bug-reports.list'),
+
+                Menu::make(__('Roles'))
+                    ->icon('lock')
+                    ->route('platform.systems.roles')
+                    ->permission('platform.systems.roles'),
+
+            ]),
 
             // Menu::make('Examples Layouts')
             //     ->title('PLACEHOLDERS')
