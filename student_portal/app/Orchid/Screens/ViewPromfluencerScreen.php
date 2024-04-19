@@ -79,27 +79,19 @@ class ViewPromfluencerScreen extends Screen
     public function layout(): iterable
     {
         return $this->promfluencer !== null ? [
-            Layout::legend($this->promfluencer, [
+            Layout::legend('promfluencer', [
                 Sight::make('name', 'Name')
                     ->render(function () {
                         return ($this->promfluencer->user->firstname . ' ' . $this->promfluencer->user->lastname) ?? '';
                     }),
-                Sight::make('email', 'Email')
-                    ->render(fn () => $this->promfluencer->user->email ?? ''),
-                Sight::make('phonenumber', 'Phone Number')
-                    ->render(fn () => $this->promfluencer->user->phonenumber ?? ''),
-                Sight::make('school', 'School')
-                    ->render(fn () => $this->promfluencer->user->student->school ?? ''),
-                Sight::make('grade', 'Grade')
-                    ->render(fn () => $this->promfluencer->user->student->grade ?? ''),
-                Sight::make('instagram', 'Instagram')
-                    ->render(fn () => $this->promfluencer->instagram ?? ''),
-                Sight::make('tiktok', 'TikTok')
-                    ->render(fn () => $this->promfluencer->tiktok ?? ''),
-                Sight::make('snapchat', 'Snapchat')
-                    ->render(fn () => $this->promfluencer->snapchat ?? ''),
-                Sight::make('YouTube', 'YouTube')
-                    ->render(fn () => $this->promfluencer->youtube ?? ''),
+                Sight::make('user.email', 'Email'),
+                Sight::make('user.phonenumber', 'Phone Number'),
+                Sight::make('user.student.school', 'School'),
+                Sight::make('user.student.grade', 'Grade'),
+                Sight::make('instagram', 'Instagram'),
+                Sight::make('tiktok', 'TikTok'),
+                Sight::make('snapchat', 'Snapchat'),
+                Sight::make('youtube', 'YouTube'),
             ]),
         ] : [];
     }
