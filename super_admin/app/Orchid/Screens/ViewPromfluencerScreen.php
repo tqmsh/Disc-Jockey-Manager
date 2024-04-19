@@ -2,10 +2,15 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Promfluencer;
 use Orchid\Screen\Screen;
+use Orchid\Screen\TD;
+use Orchid\Support\Facades\Layout;
 
 class ViewPromfluencerScreen extends Screen
 {
+    public $promfluencers;
+
     /**
      * Query data.
      *
@@ -13,7 +18,9 @@ class ViewPromfluencerScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'promfluencers' => Promfluencer::all(),
+        ];
     }
 
     /**
@@ -23,7 +30,7 @@ class ViewPromfluencerScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewPromfluencerScreen';
+        return 'Promfluence';
     }
 
     /**
@@ -43,6 +50,17 @@ class ViewPromfluencerScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::table('promfluencers', [
+                TD::make('name')
+                    ->render(function (Promfluencer $promfluencer) {
+                        return $promfluencer->user->firstname . ' ' . $promfluencer->user->lastname;
+                    }),
+                TD::make('school')
+                    ->render(fn (Promfluencer $promfluencer) => $promfluencer->user->student->school),
+                TD::make('grade')
+                    ->render(fn (Promfluencer $promfluencer) => $promfluencer->user->student->grade),
+            ]),
+        ];
     }
 }
