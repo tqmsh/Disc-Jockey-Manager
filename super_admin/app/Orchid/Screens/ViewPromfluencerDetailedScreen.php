@@ -2,18 +2,23 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\Promfluencer;
 use Orchid\Screen\Screen;
 
 class ViewPromfluencerDetailedScreen extends Screen
 {
+    public $promfluencer;
+
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Promfluencer $promfluencer): iterable
     {
-        return [];
+        return [
+            'promfluencer' => $promfluencer
+        ];
     }
 
     /**
