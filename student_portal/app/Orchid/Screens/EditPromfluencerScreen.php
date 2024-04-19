@@ -6,7 +6,9 @@ use App\Models\Promfluencer;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 
 class EditPromfluencerScreen extends Screen
 {
@@ -71,6 +73,60 @@ class EditPromfluencerScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::rows([
+                Input::make('name')
+                    ->title('Name')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->user->firstname . ' ' . $this->promfluencer->user->lastname)
+                    ->disabled(),
+                Input::make('email')
+                    ->title('Email')
+                    ->type('email')
+                    ->horizontal()
+                    ->value($this->promfluencer->user->email)
+                    ->disabled(),
+                Input::make('phonenumber')
+                    ->title('Phone Number')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->user->phonenumber)
+                    ->disabled(),
+                Input::make('school')
+                    ->title('School')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->user->student->school)
+                    ->disabled(),
+                Input::make('grade')
+                    ->title('Grade')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->user->student->grade)
+                    ->disabled(),
+                
+                Input::make('instagram')
+                    ->title('Instagram')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->instagram),
+                Input::make('tiktok')
+                    ->title('TikTok')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->tiktok),
+                Input::make('snapchat')
+                    ->title('Snapchat')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->snapchat),
+                Input::make('youtube')
+                    ->title('YouTube')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->promfluencer->youtube),
+            ])
+        ];
     }
 }
