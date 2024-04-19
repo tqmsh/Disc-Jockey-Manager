@@ -140,10 +140,10 @@ class EditPromfluencerScreen extends Screen
             return;
         }
         $validated = $request->validate([
-            'instagram' => 'present|max:255',
-            'tiktok' => 'present|max:255',
-            'snapchat' => 'present|max:255',
-            'youtube' => 'present|max:255',
+            'instagram' => 'nullable|max:255',
+            'tiktok' => 'nullable|max:255',
+            'snapchat' => 'nullable|max:255',
+            'youtube' => 'nullable|max:255',
         ]);
         $promfluencer->update($validated);
         Toast::success('Promfluence updated succesfully');
