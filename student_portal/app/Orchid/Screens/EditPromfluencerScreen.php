@@ -3,12 +3,14 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Promfluencer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class EditPromfluencerScreen extends Screen
 {
@@ -128,5 +130,22 @@ class EditPromfluencerScreen extends Screen
                     ->value($this->promfluencer->youtube),
             ])
         ];
+    }
+
+    function updatePromfluencer(Request $request)
+    {
+        $promfluencer = Promfluencer::firstWhere('user_id', Auth::id());
+        if ($promfluencer === NULL) {
+            Toast::error('Promfluence does not exist');
+            return;
+        }
+        $validated = $request->validate([
+            'instagram' => 'present|max:255',
+            'tiktok' => 'present|max:255',
+            'snapchat' => 'present|max:255',
+            'youtube' => 'present|max:255',
+        ]);
+        $promfluencer->update($validated);
+        Toast::success('Promfluence updated succesfully');
     }
 }
