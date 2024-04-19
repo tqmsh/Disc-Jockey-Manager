@@ -5,6 +5,8 @@ namespace App\Orchid\Screens;
 use App\Models\Promfluencer;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Sight;
+use Orchid\Support\Facades\Layout;
 
 class ViewPromfluencerDetailedScreen extends Screen
 {
@@ -53,6 +55,21 @@ class ViewPromfluencerDetailedScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::legend('promfluencer', [
+                Sight::make('name', 'Name')
+                    ->render(function () {
+                        return ($this->promfluencer->user->firstname . ' ' . $this->promfluencer->user->lastname) ?? '';
+                    }),
+                Sight::make('user.email', 'Email'),
+                Sight::make('user.phonenumber', 'Phone Number'),
+                Sight::make('user.student.school', 'School'),
+                Sight::make('user.student.grade', 'Grade'),
+                Sight::make('instagram', 'Instagram'),
+                Sight::make('tiktok', 'TikTok'),
+                Sight::make('snapchat', 'Snapchat'),
+                Sight::make('youtube', 'YouTube'),
+            ]),
+        ];
     }
 }
