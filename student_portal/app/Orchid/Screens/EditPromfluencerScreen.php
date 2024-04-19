@@ -23,7 +23,7 @@ class EditPromfluencerScreen extends Screen
     public function query(): iterable
     {
         return [
-            'promfluencer' => Promfluencer::firstWhere('user_id', Auth::id()),
+            'promfluencer' => Promfluencer::where('user_id', Auth::id())->firstOrFail(),
         ];
     }
 
@@ -147,5 +147,17 @@ class EditPromfluencerScreen extends Screen
         ]);
         $promfluencer->update($validated);
         Toast::success('Promfluence updated succesfully');
+    }
+
+    function deletePromfluencer()
+    {
+        $promfluencer = Promfluencer::firstWhere('user_id', Auth::id());
+        if ($promfluencer === NULL) {
+            Toast::error('Promfluence does not exist');
+            return;
+        }
+        $promfluencer->delete();
+        Toast::success('Promfluence deleted succesfully');
+        return redirect()->route('platform.promfluencer.view');
     }
 }
