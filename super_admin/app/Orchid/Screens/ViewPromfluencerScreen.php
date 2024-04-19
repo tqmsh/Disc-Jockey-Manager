@@ -24,7 +24,7 @@ class ViewPromfluencerScreen extends Screen
     public function query(): iterable
     {
         return [
-            'promfluencers' => Promfluencer::all(),
+            'promfluencers' => Promfluencer::filter(request(['school', 'grade',]))->paginate(10),
         ];
     }
 
@@ -89,5 +89,10 @@ class ViewPromfluencerScreen extends Screen
                     ->render(fn (Promfluencer $promfluencer) => $promfluencer->user->student->grade),
             ]),
         ];
+    }
+
+    public function filter()
+    {
+        return redirect()->route('platform.promfluencer.list', request(['school', 'grade',]));
     }
 }
