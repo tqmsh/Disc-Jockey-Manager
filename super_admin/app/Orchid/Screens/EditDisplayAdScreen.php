@@ -147,7 +147,7 @@ class EditDisplayAdScreen extends Screen
                 CheckBox::make('square')
                     ->title('Is Square?')
                     ->horizontal()
-                    ->value($this->display_ad->square),
+                    ->value((bool)$this->display_ad->square),
             ])
         ];
     }
