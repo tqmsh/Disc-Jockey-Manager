@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2024 at 01:36 AM
+-- Generation Time: Apr 21, 2024 at 09:24 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -488,7 +488,7 @@ CREATE TABLE `couple_requests` (
 
 CREATE TABLE `display_ads` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `route_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `route_uri` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `portal` tinyint(4) NOT NULL,
   `ad_index` tinyint(4) NOT NULL,
   `campaign_id` bigint(20) UNSIGNED NOT NULL,
@@ -2214,7 +2214,7 @@ ALTER TABLE `couple_requests`
 --
 ALTER TABLE `display_ads`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `route_name` (`route_name`,`portal`,`ad_index`,`campaign_id`,`region_id`),
+  ADD KEY `route_name` (`route_uri`,`portal`,`ad_index`,`campaign_id`,`region_id`),
   ADD KEY `display_ads_camp_id` (`campaign_id`),
   ADD KEY `display_ads_reg_id` (`region_id`);
 
