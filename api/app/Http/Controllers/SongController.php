@@ -40,6 +40,37 @@ class SongController extends Controller
     public function destroy($id)
     {
         // Logic to delete a specific song by its ID from the database
+    }   
+
+    public function deleteSongRequest(Request $request){
+        // Validate the request data
+        $validatedData = $request->validate([
+            'request_id' => 'required|integer',
+        ]);
+
+        $user = $request->user();
+        $songRequest = SongRequests::find($validatedData['request_id']);
+
+        // Check if the song request exists
+        if (!$songRequest) {
+            return response()->json([
+                'message' => 'Song request not found.'
+            ], 404);
+        }
+
+        // Check if the user is the one who made the song request
+        if ($songRequest->user_id !== $user->id) {
+            return response()->json([
+                'message' => 'You are not authorized to delete this song request.'
+            ], 403);
+        }
+
+        // Delete the song request
+        $songRequest->delete();
+
+        return response()->json([
+            'message' => 'Song request deleted successfully.'
+        ]);
     }
 
     public function requestSong(Request $request)
