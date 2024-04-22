@@ -87,4 +87,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/songRequests', [SongController::class, 'getAllSongRequests']);
 
     Route::post('/requestSong', [SongController::class, 'requestSong']);
+
+    Route::delete('/deleteSongRequest', [SongController::class, 'deleteSongRequest']);
 });
