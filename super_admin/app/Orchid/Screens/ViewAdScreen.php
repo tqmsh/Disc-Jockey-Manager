@@ -16,6 +16,7 @@ use App\Orchid\Layouts\ViewAdLayoutActive;
 use App\Orchid\Layouts\ViewAdLayoutPending;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Models\Vendors;
+use App\Orchid\Layouts\FilterDisplayAd;
 use App\Orchid\Layouts\ViewDisplayAd;
 
 class ViewAdScreen extends Screen
@@ -91,7 +92,7 @@ class ViewAdScreen extends Screen
                 "Pending Campaigns" => [ViewAdLayoutPending::class],
                 "Active Campaigns" => [ViewAdLayoutActive::class],
                 "Inactive Campaigns" => [ViewAdLayoutInactive::class],
-                "Display Ads" => [ViewDisplayAd::class]
+                "Display Ads" => [FilterDisplayAd::class, ViewDisplayAd::class]
             ])
         ];
     }
