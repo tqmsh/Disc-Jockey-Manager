@@ -32,7 +32,7 @@ class ViewAdScreen extends Screen
             "campaignsActive"=>Campaign::where("active", 1)->paginate(10),
             "campaignsInactive"=>Campaign::where("active", 2)->paginate(10),
             "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
-            "campaignsDisplayAds" =>  DisplayAds::paginate(10),
+            "campaignsDisplayAds" =>  DisplayAds::filter(request(['route', 'portal', 'region',]))->paginate(10),
 
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('active', 1)->get()))],
@@ -144,5 +144,10 @@ class ViewAdScreen extends Screen
 
     public function redirectDisplayAd($display_ad_id) {
         return to_route('platform.ad.edit.display-ad', $display_ad_id);
+    }
+
+    public function filterDisplayAds()
+    {
+        return redirect()->route('platform.ad.list', request(['route', 'portal', 'region',]));
     }
 }
