@@ -93,7 +93,7 @@ class ViewAdScreen extends Screen
                 "Active Campaigns" => [ViewAdLayoutActive::class],
                 "Inactive Campaigns" => [ViewAdLayoutInactive::class],
                 "Display Ads" => [FilterDisplayAd::class, ViewDisplayAd::class]
-            ])
+            ])->activeTab(request('active_tab') ?? 'Pending Campaigns')
         ];
     }
 
