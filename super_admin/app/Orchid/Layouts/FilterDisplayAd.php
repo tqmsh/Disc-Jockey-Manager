@@ -37,11 +37,11 @@ class FilterDisplayAd extends Rows
                 Select::make('portal')
                     ->title('Portal')
                     ->empty('No Selection')
-                    ->options([
+                    ->options(array_filter([
                         0 => 'Local Admin',
                         1 => 'Student',
                         2 => 'Vendor'
-                    ]),
+                    ], fn ($value) => DisplayAds::pluck('portal')->containsStrict($value), ARRAY_FILTER_USE_KEY)),
                 Select::make('region')
                     ->title('Region')
                     ->empty('No Selection')
