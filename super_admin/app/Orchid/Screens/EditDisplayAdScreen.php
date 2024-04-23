@@ -147,7 +147,8 @@ class EditDisplayAdScreen extends Screen
                 CheckBox::make('square')
                     ->title('Is Square?')
                     ->horizontal()
-                    ->value((bool)$this->display_ad->square),
+                    ->value($this->display_ad->square)
+                    ->sendTrueOrFalse(),
             ])
         ];
     }
@@ -170,6 +171,8 @@ class EditDisplayAdScreen extends Screen
                 "image" => $request->input("campaign_image"),
                 "website" => $request->input("campaign_link"),
             ]);
+
+            
 
             Toast::success('Successfully updated the display ad.');
 
