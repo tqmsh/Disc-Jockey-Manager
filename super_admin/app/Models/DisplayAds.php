@@ -35,4 +35,28 @@ class DisplayAds extends Model
             2 => 'Vendor'
         };
     }
+
+    public function scopeFilter($query, array $filters){
+
+        try{
+            if(isset($filters['route'])){
+                $query ->where('route_uri', $filters['route']);
+            }
+
+            if(isset($filters['portal'])){
+                $query ->where('portal', $filters['portal']);
+            }
+            
+            if(isset($filters['region'])){
+                $query ->where('region_id', $filters['region']);
+            }
+
+            $query->select('display_ads.*');
+
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error processing the filter. Error Message: ' . $e->getMessage());
+        }
+    }
 }
