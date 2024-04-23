@@ -144,6 +144,10 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Couples')
                         ->icon('fa.children')
                         ->route('platform.couples.list'),
+                    
+                    Menu::make('Promfluence')
+                        ->icon('feed')
+                        ->route('platform.promfluencer.list'),
                 ]),
 
 

@@ -85,6 +85,11 @@ class User extends Authenticatable
         'created_at',
     ];
 
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'user_id');
+    }
+
     //relationsip with packages
     public function packages()
     {
