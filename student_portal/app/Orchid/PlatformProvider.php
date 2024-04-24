@@ -78,6 +78,9 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('list-check')
                 ->route('platform.checklist.list'),
             
+            Menu::make('Promfluence')
+                ->icon('feed')
+                ->route('platform.promfluencer.view'),
                 
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
