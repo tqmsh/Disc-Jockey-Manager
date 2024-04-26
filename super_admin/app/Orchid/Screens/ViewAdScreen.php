@@ -30,7 +30,7 @@ class ViewAdScreen extends Screen
     public function query(): iterable
     {
         return [
-            "campaignsActive"=>Campaign::where("active", 1)->paginate(10),
+            "campaignsActive"=>Campaign::where("active", 1)->filter(request()['active_campaigns_filters'] ?? [])->paginate(10),
             "campaignsInactive"=>Campaign::where("active", 2)->paginate(10),
             "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
             "campaignsDisplayAds" =>  DisplayAds::filter(request()['display_ads_filters'] ?? [])->paginate(10),
@@ -150,5 +150,10 @@ class ViewAdScreen extends Screen
     public function filterDisplayAds()
     {
         return redirect()->route('platform.ad.list', ['display_ads_filters' => request(['route_uri', 'portal', 'region_id',]), 'active_tab' => 'Display Ads',]);
+    }
+
+    public function filterActiveCampaigns()
+    {
+        return redirect()->Route('platform.ad.list', ['active_campaigns_filters' => request(['title', 'category_id', 'region_id',]), 'active_tab' => 'Active Campaigns',]);
     }
 }
