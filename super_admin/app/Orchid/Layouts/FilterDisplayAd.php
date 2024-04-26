@@ -45,7 +45,7 @@ class FilterDisplayAd extends Rows
                 Select::make('region_id')
                     ->title('Region')
                     ->empty('No Selection')
-                    ->fromQuery(Region::whereIn('id', DisplayAds::pluck('region_id')), 'name')
+                    ->fromQuery(Region::whereIn('id', DisplayAds::pluck('region_id')), 'name'),
             ]),
             Button::make('Filter')
                 ->icon('filter')
