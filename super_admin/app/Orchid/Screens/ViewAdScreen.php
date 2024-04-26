@@ -32,7 +32,7 @@ class ViewAdScreen extends Screen
             "campaignsActive"=>Campaign::where("active", 1)->paginate(10),
             "campaignsInactive"=>Campaign::where("active", 2)->paginate(10),
             "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
-            "campaignsDisplayAds" =>  DisplayAds::filter(request()['display_ads_filters'])->paginate(10),
+            "campaignsDisplayAds" =>  DisplayAds::filter(request()['display_ads_filters'] ?? [])->paginate(10),
 
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('active', 1)->get()))],
