@@ -162,7 +162,7 @@ class ViewAdScreen extends Screen
     public function filterActiveCampaigns()
     {
         return redirect()->route('platform.ad.list', [
-            'display_ads_filters' => [
+            'active_campaigns_filters' => [
                 'title' => request('active_campaigns_title'),
                 'category_id' => request('active_campaigns_category_id'),
                 'region_id' => request('active_campaigns_region_id'),
