@@ -30,16 +30,16 @@ class FilterAdActive extends Rows
     {
         return [
             Group::make([
-                Select::make('active_campaign_title')
+                Select::make('active_campaigns_title')
                     ->title('Campaign Name')
                     ->empty('No Selection')
                     ->fromModel(Campaign::class, 'title', 'title')
                     ->help('Type in boxes to search'),
-                Select::make('active_campaign_category_id')
+                Select::make('active_campaigns_category_id')
                     ->title('Category')
                     ->empty('No Selection')
                     ->fromQuery(Categories::whereIn('id', Campaign::pluck('category_id')), 'name'),
-                Select::make('active_campaign_region_id')
+                Select::make('active_campaigns_region_id')
                     ->title('Region')
                     ->empty('No Selection')
                     ->fromQuery(Region::whereIn('id', Campaign::pluck('region_id')), 'name'),

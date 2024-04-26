@@ -151,9 +151,9 @@ class ViewAdScreen extends Screen
     {
         return redirect()->route('platform.ad.list', [
             'display_ads_filters' => [
-                'route_uri' => request('display_ad_route_uri'),
-                'portal' => request('display_ad_portal'),
-                'region_id' => request('display_ad_region_id'),
+                'route_uri' => request('display_ads_route_uri'),
+                'portal' => request('display_ads_portal'),
+                'region_id' => request('display_ads_region_id'),
             ], 
             'active_tab' => 'Display Ads',
         ]);
@@ -163,9 +163,9 @@ class ViewAdScreen extends Screen
     {
         return redirect()->route('platform.ad.list', [
             'display_ads_filters' => [
-                'title' => request('active_campaign_title'),
-                'category_id' => request('active_campaign_category_id'),
-                'region_id' => request('active_campaign_region_id'),
+                'title' => request('active_campaigns_title'),
+                'category_id' => request('active_campaigns_category_id'),
+                'region_id' => request('active_campaigns_region_id'),
             ], 
             'active_tab' => 'Active Campaigns',
         ]);
