@@ -29,7 +29,7 @@ class FilterDisplayAd extends Rows
     {
         return [
             Group::make([
-                Select::make('route')
+                Select::make('route_uri')
                     ->title('Route')
                     ->empty('No Selection')
                     ->fromModel(DisplayAds::class, 'route_uri', 'route_uri')
@@ -42,7 +42,7 @@ class FilterDisplayAd extends Rows
                         1 => 'Student',
                         2 => 'Vendor'
                     ], fn ($value) => DisplayAds::pluck('portal')->containsStrict($value), ARRAY_FILTER_USE_KEY)),
-                Select::make('region')
+                Select::make('region_id')
                     ->title('Region')
                     ->empty('No Selection')
                     ->fromQuery(Region::whereIn('id', DisplayAds::pluck('region_id')), 'name')

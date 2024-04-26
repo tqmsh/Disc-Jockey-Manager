@@ -41,16 +41,16 @@ class DisplayAds extends Model
     public function scopeFilter($query, array $filters){
 
         try{
-            if(isset($filters['route'])){
-                $query ->where('route_uri', $filters['route']);
+            if(isset($filters['route_uri'])){
+                $query ->where('route_uri', $filters['route_uri']);
             }
 
             if(isset($filters['portal'])){
                 $query ->where('portal', $filters['portal']);
             }
             
-            if(isset($filters['region'])){
-                $query ->where('region_id', $filters['region']);
+            if(isset($filters['region_id'])){
+                $query ->where('region_id', $filters['region_id']);
             }
 
             $query->select('display_ads.*');
