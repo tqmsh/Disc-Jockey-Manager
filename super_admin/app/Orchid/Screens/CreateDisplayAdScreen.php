@@ -233,7 +233,7 @@ class CreateDisplayAdScreen extends Screen
 
                 $region_id = Region::firstOrCreate(['name' => $row['campaign_region']])->id;
 
-                if(!in_array('vendor_user_id', array_keys($row))) {
+                if(!in_array('vendor_user_id', array_keys($row)) || $row['vendor_user_id'] == "") {
                     $row['vendor_user_id'] = 197; //!NEED TO OPTIMIZE THIS LATER
                 }
 
