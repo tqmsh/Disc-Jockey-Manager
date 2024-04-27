@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
@@ -20,11 +21,15 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Sight;
 use Orchid\Support\Color;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
 class CreateDisplayAdScreen extends Screen
 {
+
+    private array $required_fields = ['route_uri', 'ad_index', 'portal', 'campaign_name', 'campaign_link', 'campaign_region', 'category_id', 'campaign_image', 'square'];
+    
     /**
      * Query data.
      *
@@ -56,6 +61,11 @@ class CreateDisplayAdScreen extends Screen
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.ad.list'),
+
+            ModalToggle::make('Mass Import Display Ads')
+                ->modal('massImportModal')
+                ->method('massImportDisplayAds')
+                ->icon('plus'),
 
             Button::make('Create Display Ad')
                 ->icon('plus')
@@ -141,7 +151,32 @@ class CreateDisplayAdScreen extends Screen
                 CheckBox::make('square')
                     ->title('Is Square?')
                     ->horizontal(),
-            ])
+                ]),
+
+                Layout::modal('massImportModal', [
+                    Layout::rows([
+                        Input::make('display_ads_csv')
+                            ->type('file')
+                            ->title('File must be in csv format. Ex. display_ads.csv')
+                            ->help('The csv file MUST HAVE these fields and they need to be named accordingly to successfully import the display ads: <br>
+                                • route_uri <br>
+                                • ad_index <br>
+                                • portal <br>
+                                • campaign_name <br>
+                                • campaign_link <br>
+                                • campaign_region <br>
+                                • category_id <br>
+                                • campaign_image <br>
+                                • square (0 for false, 1 for true) <br>
+                                • vendor_user_id (optional) <br>'),
+                            Link::make('Download Sample CSV')
+                                ->icon('download')
+                                ->href('/sample_display_ads_upload.csv')
+                    ]),
+                ])
+                ->title('Mass Import Display Ads')
+                ->applyButton('Import')
+                ->withoutCloseButton()
         ];
     }
 
@@ -183,6 +218,62 @@ class CreateDisplayAdScreen extends Screen
         }
     }
 
+    public function massImportDisplayAds(Request $request) {
+        try {
+            $path = $this->validCSVFile($request);
+            $display_ads = $this->csvToArray($path);
+
+            foreach($display_ads as $i => $row) {
+                $missing_rows = $this->findMissingRows($row);
+
+                // Check for missing rows
+                if(!empty($missing_rows)) {
+                    throw new \Exception("Missing key(s) found at index {$i}: " . implode(', ', $missing_rows));
+                }
+
+                $region_id = Region::firstOrCreate(['name' => $row['campaign_region']])->id;
+
+                if(!in_array('vendor_user_id', array_keys($row)) || $row['vendor_user_id'] == "") {
+                    $row['vendor_user_id'] = 197; //!NEED TO OPTIMIZE THIS LATER
+                }
+
+                $c_query = Campaign::where('title', $row['campaign_name'])->where('region_id', $region_id);
+
+                if(!$c_query->exists()) {
+                    $campaign = Campaign::create([
+                        'user_id' => $row['vendor_user_id'],
+                        'title' => $row['campaign_name'],
+                        'website' => $row['campaign_link'],
+                        'region_id' => $region_id,
+                        'category_id' => $row['category_id'],
+                        'image' => $row['campaign_image'],
+                        'clicks' => 0,
+                        'impressions' => 0,
+                        'active' => 1
+                    ]);
+                }
+                
+                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->exists()) {
+                    DisplayAds::create([
+                        'route_uri' => $row['route_uri'],
+                        'ad_index' => $row['ad_index'],
+                        'portal' => $row['portal'],
+                        'campaign_id' => isset($campaign) ? $campaign->id : $c_query->first()->id,
+                        'region_id' => $region_id,
+                        'square' => $row['square']
+                    ]);
+                }
+                
+            }
+
+            Toast::success("Successfully mass imported ads.");
+
+            return to_route('platform.ad.list');
+        } catch(\Exception $e) {
+            Alert::error("There's been an error trying to mass import display ads. Error message: {$e->getMessage()}");
+        }
+    }
+
     private function validAd(Request $request) : bool {
         return !(DisplayAds::where('portal', $request->input('portal'))
                             ->where('route_uri', $request->input('route_uri'))
@@ -190,5 +281,62 @@ class CreateDisplayAdScreen extends Screen
                             ->where('region_id', $request->input("campaign_region"))
                             ->exists()
                 );
+    }
+
+    private function findMissingRows(array $row) : array {
+        return array_diff($this->required_fields, array_keys($row));
+    }
+
+    /**
+     * Validates the uploaded file. Returns the file's real/absolute path.
+     * @throws \Exception
+     */
+    private function validCSVFile(Request $request) : string {
+        // No file uploaded
+        if(is_null($request->file('display_ads_csv'))) {
+            throw new \Exception('No file has been uploaded.');
+        }
+
+        $path = $request->file('display_ads_csv')->getRealPath();
+
+        // Could not get file path because file doesn't exist.
+        if($path == false) {
+            throw new \Exception('An error has occured.');
+        }
+
+        $extension = $request->file('display_ads_csv')->extension();
+
+        // Invalid file extension
+        if(!in_array(strtolower($extension), ['csv', 'txt'])) {
+            throw new \Exception('Invalid file extension has been uploaded. Please upload a .csv or .txt file.');
+        }
+
+        return $path;
+    }
+
+    //this function will convert the csv file to an array
+    private function csvToArray($filename = '', $delimiter = ','){
+
+        if (!file_exists($filename) || !is_readable($filename)){
+            Alert::error('There has been an error finding this file.');
+            return;
+        }
+
+        $header = null;
+        $data = array();
+
+        if (($handle = fopen($filename, 'r')) !== false){
+
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false){
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $data;
     }
 }
