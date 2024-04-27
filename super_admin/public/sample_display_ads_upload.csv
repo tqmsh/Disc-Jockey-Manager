@@ -1,0 +1,7 @@
+portal,campaign_name,route_uri,ad_index,square,campaign_link,campaign_region,category_id,vendor_user_id,campaign_image
+0,Local Admin Dashboard 1,admin/dashboard,0,0,https://promcommitteeexpo.com,Greater Toronto Area,9,,https://promplanner.s3.amazonaws.com/banners/schools-pcx-728x90.webp
+0,Local Admin Profile 1,admin/profile,3,1,https://promshow.com,Greater Toronto Area,9,,https://promplanner.s3.amazonaws.com/banners/schools-prom-show-728x90.webp
+1,Student Dashboard 1,admin/dashboard,1,0,https://promcommitteeexpo.com,Greater Toronto Area,9,,https://promplanner.s3.amazonaws.com/banners/schools-pcx-728x90.webp
+1,Student Profile 1,admin/profile,3,1,https://promshow.com,Greater Toronto Area,9,,https://promplanner.s3.amazonaws.com/banners/schools-prom-show-728x90.webp
+2,Vendor Dashboard 1,admin/dashboard,0,0,https://promcommitteeexpo.com,Greater Toronto Area,9,,https://promplanner.s3.amazonaws.com/banners/schools-pcx-728x90.webp
+2,Vendor Profile 1,admin/profile,3,1,https://promshow.com,Greater Toronto Area,9,190,https://promplanner.s3.amazonaws.com/banners/schools-prom-show-728x90.webp
