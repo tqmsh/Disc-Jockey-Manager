@@ -17,6 +17,7 @@ use App\Orchid\Layouts\ViewAdLayoutPending;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Models\Vendors;
 use App\Orchid\Layouts\FilterAdActive;
+use App\Orchid\Layouts\FilterAdInactive;
 use App\Orchid\Layouts\FilterDisplayAd;
 use App\Orchid\Layouts\ViewDisplayAd;
 
@@ -31,7 +32,7 @@ class ViewAdScreen extends Screen
     {
         return [
             "campaignsActive"=>Campaign::where("active", 1)->filter(request('active_campaigns_filters') ?? [])->paginate(10),
-            "campaignsInactive"=>Campaign::where("active", 2)->paginate(10),
+            "campaignsInactive"=>Campaign::where("active", 2)->filter(request('inactive_campaigns_filters') ?? [])->paginate(10),
             "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
             "campaignsDisplayAds" =>  DisplayAds::filter(request('display_ads_filters') ?? [])->paginate(10),
 
@@ -92,7 +93,7 @@ class ViewAdScreen extends Screen
             Layout::tabs([
                 "Pending Campaigns" => [ViewAdLayoutPending::class],
                 "Active Campaigns" => [FilterAdActive::class, ViewAdLayoutActive::class],
-                "Inactive Campaigns" => [ViewAdLayoutInactive::class],
+                "Inactive Campaigns" => [FilterAdInactive::class, ViewAdLayoutInactive::class],
                 "Display Ads" => [FilterDisplayAd::class, ViewDisplayAd::class]
             ])->activeTab(request('active_tab') ?? 'Pending Campaigns')
         ];
@@ -168,6 +169,18 @@ class ViewAdScreen extends Screen
                 'region_id' => request('active_campaigns_region_id'),
             ], 
             'active_tab' => 'Active Campaigns',
+        ]);
+    }
+
+    public function filterInactiveCampaigns()
+    {
+        return redirect()->route('platform.ad.list', [
+            'inactive_campaigns_filters' => [
+                'title' => request('inactive_campaigns_title'),
+                'category_id' => request('inactive_campaigns_category_id'),
+                'region_id' => request('inactive_campaigns_region_id'),
+            ], 
+            'active_tab' => 'Inactive Campaigns',
         ]);
     }
 }
