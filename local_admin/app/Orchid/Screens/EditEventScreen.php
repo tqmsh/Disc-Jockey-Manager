@@ -149,7 +149,8 @@ class EditEventScreen extends Screen
                     ->title('Venue')
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->horizontal()
-                    ->value($this->event->venue_id),
+                    ->value($this->event->venue_id)
+                    ->empty('Start typing to search...'),
 
                 Input::make('ticket_price')
                     ->title('Ticket Price')
