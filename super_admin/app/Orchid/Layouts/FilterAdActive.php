@@ -34,7 +34,7 @@ class FilterAdActive extends Rows
                 Select::make('active_campaigns_title')
                     ->title('Campaign Name')
                     ->empty('No Selection')
-                    ->fromModel(Campaign::class, 'title', 'title')
+                    ->fromQuery($activeCampaigns, 'title', 'title')
                     ->help('Type in boxes to search'),
                 Select::make('active_campaigns_category_id')
                     ->title('Category')

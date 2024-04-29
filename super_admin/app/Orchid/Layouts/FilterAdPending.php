@@ -34,7 +34,7 @@ class FilterAdPending extends Rows
                 Select::make('pending_campaigns_title')
                     ->title('Campaign Name')
                     ->empty('No Selection')
-                    ->fromModel(Campaign::class, 'title', 'title')
+                    ->fromQuery($pendingCampaigns, 'title', 'title')
                     ->help('Type in boxes to search'),
                 Select::make('pending_campaigns_category_id')
                     ->title('Category')

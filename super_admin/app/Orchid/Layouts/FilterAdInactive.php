@@ -34,7 +34,7 @@ class FilterAdInactive extends Rows
                 Select::make('inactive_campaigns_title')
                     ->title('Campaign Name')
                     ->empty('No Selection')
-                    ->fromModel(Campaign::class, 'title', 'title')
+                    ->fromQuery($inactiveCampaigns, 'title', 'title')
                     ->help('Type in boxes to search'),
                 Select::make('inactive_campaigns_category_id')
                     ->title('Category')
