@@ -28,6 +28,7 @@ class FilterAdActive extends Rows
      */
     protected function fields(): iterable
     {
+        $activeCampaigns = Campaign::where('active', 1);
         return [
             Group::make([
                 Select::make('active_campaigns_title')
@@ -38,11 +39,11 @@ class FilterAdActive extends Rows
                 Select::make('active_campaigns_category_id')
                     ->title('Category')
                     ->empty('No Selection')
-                    ->fromQuery(Categories::whereIn('id', Campaign::pluck('category_id')), 'name'),
+                    ->fromQuery(Categories::whereIn('id', $activeCampaigns->pluck('category_id')), 'name'),
                 Select::make('active_campaigns_region_id')
                     ->title('Region')
                     ->empty('No Selection')
-                    ->fromQuery(Region::whereIn('id', Campaign::pluck('region_id')), 'name'),
+                    ->fromQuery(Region::whereIn('id', $activeCampaigns->pluck('region_id')), 'name'),
             ]),
             Button::make('Filter')
                 ->icon('filter')
