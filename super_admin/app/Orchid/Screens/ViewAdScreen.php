@@ -149,15 +149,15 @@ class ViewAdScreen extends Screen
         return to_route('platform.ad.edit.display-ad', $display_ad_id);
     }
 
-    public function filterDisplayAds()
+    public function filterPendingCampaigns()
     {
         return redirect()->route('platform.ad.list', [
-            'display_ads_filters' => [
-                'route_uri' => request('display_ads_route_uri'),
-                'portal' => request('display_ads_portal'),
-                'region_id' => request('display_ads_region_id'),
+            'pending_campaigns_filters' => [
+                'title' => request('pending_campaigns_title'),
+                'category_id' => request('pending_campaigns_category_id'),
+                'region_id' => request('pending_campaigns_region_id'),
             ], 
-            'active_tab' => 'Display Ads',
+            'active_tab' => 'Pending Campaigns',
         ]);
     }
 
@@ -185,15 +185,15 @@ class ViewAdScreen extends Screen
         ]);
     }
 
-    public function filterPendingCampaigns()
+    public function filterDisplayAds()
     {
         return redirect()->route('platform.ad.list', [
-            'pending_campaigns_filters' => [
-                'title' => request('pending_campaigns_title'),
-                'category_id' => request('pending_campaigns_category_id'),
-                'region_id' => request('pending_campaigns_region_id'),
+            'display_ads_filters' => [
+                'route_uri' => request('display_ads_route_uri'),
+                'portal' => request('display_ads_portal'),
+                'region_id' => request('display_ads_region_id'),
             ], 
-            'active_tab' => 'Pending Campaigns',
+            'active_tab' => 'Display Ads',
         ]);
     }
 }
