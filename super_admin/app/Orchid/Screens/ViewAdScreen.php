@@ -18,6 +18,7 @@ use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Models\Vendors;
 use App\Orchid\Layouts\FilterAdActive;
 use App\Orchid\Layouts\FilterAdInactive;
+use App\Orchid\Layouts\FilterAdPending;
 use App\Orchid\Layouts\FilterDisplayAd;
 use App\Orchid\Layouts\ViewDisplayAd;
 
@@ -33,7 +34,7 @@ class ViewAdScreen extends Screen
         return [
             "campaignsActive"=>Campaign::where("active", 1)->filter(request('active_campaigns_filters') ?? [])->paginate(10),
             "campaignsInactive"=>Campaign::where("active", 2)->filter(request('inactive_campaigns_filters') ?? [])->paginate(10),
-            "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
+            "campaignsPending"=>Campaign::where("active", 0)->filter(request('pending_campaigns_filters') ?? [])->paginate(10),
             "campaignsDisplayAds" =>  DisplayAds::filter(request('display_ads_filters') ?? [])->paginate(10),
 
             'metrics' => [
@@ -91,7 +92,7 @@ class ViewAdScreen extends Screen
                 'Total Campaigns' => 'metrics.total',
             ]),
             Layout::tabs([
-                "Pending Campaigns" => [ViewAdLayoutPending::class],
+                "Pending Campaigns" => [FilterAdPending::class, ViewAdLayoutPending::class],
                 "Active Campaigns" => [FilterAdActive::class, ViewAdLayoutActive::class],
                 "Inactive Campaigns" => [FilterAdInactive::class, ViewAdLayoutInactive::class],
                 "Display Ads" => [FilterDisplayAd::class, ViewDisplayAd::class]
@@ -181,6 +182,18 @@ class ViewAdScreen extends Screen
                 'region_id' => request('inactive_campaigns_region_id'),
             ], 
             'active_tab' => 'Inactive Campaigns',
+        ]);
+    }
+
+    public function filterPendingCampaigns()
+    {
+        return redirect()->route('platform.ad.list', [
+            'pending_campaigns_filters' => [
+                'title' => request('pending_campaigns_title'),
+                'category_id' => request('pending_campaigns_category_id'),
+                'region_id' => request('pending_campaigns_region_id'),
+            ], 
+            'active_tab' => 'Pending Campaigns',
         ]);
     }
 }
