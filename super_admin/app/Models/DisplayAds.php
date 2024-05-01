@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Orchid\Screen\AsSource;
+use Orchid\Support\Facades\Alert;
 
 class DisplayAds extends Model
 {
@@ -34,5 +36,29 @@ class DisplayAds extends Model
             1 => 'Student',
             2 => 'Vendor'
         };
+    }
+
+    public function scopeFilter($query, array $filters){
+
+        try{
+            if(isset($filters['route_uri'])){
+                $query ->where('route_uri', $filters['route_uri']);
+            }
+
+            if(isset($filters['portal'])){
+                $query ->where('portal', $filters['portal']);
+            }
+            
+            if(isset($filters['region_id'])){
+                $query ->where('region_id', $filters['region_id']);
+            }
+
+            $query->select('display_ads.*');
+
+
+        }catch(Exception $e){
+
+            Alert::error('There was an error processing the filter. Error Message: ' . $e->getMessage());
+        }
     }
 }
