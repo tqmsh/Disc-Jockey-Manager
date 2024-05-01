@@ -27,8 +27,9 @@ class PromDateScreen extends Screen
     public function query(): iterable
     {
         $now = now()->format("Y-m-d H:i:s");
-        $events = Events::where('school_id', Auth::user()->student->school_id)
-            ->where('event_finish_time', '>=', $now)->get("id")->toArray();
+        $attended_events = EventAttendees::where("user_id", Auth::id())->get("event_id")->toArray();
+        $events = array_unique(Events::whereIn('id', $attended_events)
+            ->where('event_finish_time', '>=', $now)->get("id")->toArray());
         // List of everyone in events
         $attendees = EventAttendees::whereIn("event_id", $events)
             ->pluck("user_id")
