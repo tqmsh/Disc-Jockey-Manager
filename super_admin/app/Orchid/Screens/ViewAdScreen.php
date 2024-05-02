@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Classes\DisplayAdData;
 use Exception;
 use App\Models\Campaign;
 use App\Models\DisplayAds;
@@ -16,6 +17,7 @@ use App\Orchid\Layouts\ViewAdLayoutActive;
 use App\Orchid\Layouts\ViewAdLayoutPending;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Models\Vendors;
+use App\Orchid\Layouts\ViewAdSpots;
 use App\Orchid\Layouts\ViewDisplayAd;
 
 class ViewAdScreen extends Screen
@@ -32,6 +34,7 @@ class ViewAdScreen extends Screen
             "campaignsInactive"=>Campaign::where("active", 2)->paginate(10),
             "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
             "campaignsDisplayAds" =>  DisplayAds::paginate(10),
+            "campaignsAdSpots" => app(DisplayAdData::class)->getAllAdSpots(),
 
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('active', 1)->get()))],
@@ -91,7 +94,8 @@ class ViewAdScreen extends Screen
                 "Pending Campaigns" => [ViewAdLayoutPending::class],
                 "Active Campaigns" => [ViewAdLayoutActive::class],
                 "Inactive Campaigns" => [ViewAdLayoutInactive::class],
-                "Display Ads" => [ViewDisplayAd::class]
+                "Active Display Ads" => [ViewDisplayAd::class],
+                "Ad Spots" => [ViewAdSpots::class]
             ])
         ];
     }
@@ -143,5 +147,9 @@ class ViewAdScreen extends Screen
 
     public function redirectDisplayAd($display_ad_id) {
         return to_route('platform.ad.edit.display-ad', $display_ad_id);
+    }
+
+    public function redirectSamePage() {
+        return to_route('platform.ad.list');
     }
 }
