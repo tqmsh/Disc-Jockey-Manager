@@ -10,7 +10,7 @@ class DisplayAdServiceProvider extends ServiceProvider
 {
 
     const DISPLAY_ADS_FILE_NAME = 'display_ads_data.csv';
-    
+
     /**
      * Register services.
      *
@@ -40,7 +40,7 @@ class DisplayAdServiceProvider extends ServiceProvider
         $delimiter = ',';
 
         if (!Storage::disk('local')->exists(self::DISPLAY_ADS_FILE_NAME)){
-            ddd('There has been an error finding the display ads data file.');
+            throw new \Exception('There has been an error finding the display ads data file.');
         }
 
         $header = null;
