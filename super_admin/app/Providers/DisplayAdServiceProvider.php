@@ -9,7 +9,8 @@ use Illuminate\Support\ServiceProvider;
 class DisplayAdServiceProvider extends ServiceProvider
 {
 
-    const DISPLAY_ADS_FILE_PATH = 'storage/app/display_ads_data.csv';
+    const DISPLAY_ADS_FILE_NAME = 'display_ads_data.csv';
+    
     /**
      * Register services.
      *
@@ -38,14 +39,14 @@ class DisplayAdServiceProvider extends ServiceProvider
     private function getDisplayAdData(){
         $delimiter = ',';
 
-        if (!Storage::disk('local')->exists('display_ads_data.csv')){
+        if (!Storage::disk('local')->exists(self::DISPLAY_ADS_FILE_NAME)){
             ddd('There has been an error finding the display ads data file.');
         }
 
         $header = null;
         $data = array();
 
-        if (($handle = Storage::disk('local')->readStream('display_ads_data.csv')) !== false){
+        if (($handle = Storage::disk('local')->readStream(self::DISPLAY_ADS_FILE_NAME)) !== false){
             while (($row = fgetcsv($handle, 1000, $delimiter)) !== false){
                 if (!$header)
                     $header = $row;
