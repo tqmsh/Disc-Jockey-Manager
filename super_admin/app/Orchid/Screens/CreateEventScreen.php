@@ -206,7 +206,7 @@ class CreateEventScreen extends Screen
                     Rule::in(
                         Vendors::where(
                             'category_id',
-                            Categories::where('name', 'Venues')->first()->id
+                            Categories::where('name', 'Venue')->first()->id
                         )->pluck('id')
                     )
                 ],
