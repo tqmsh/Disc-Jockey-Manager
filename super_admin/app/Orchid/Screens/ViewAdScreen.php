@@ -22,6 +22,7 @@ use App\Orchid\Layouts\FilterAdInactive;
 use App\Orchid\Layouts\FilterAdPending;
 use App\Orchid\Layouts\FilterDisplayAd;
 use App\Orchid\Layouts\ViewDisplayAd;
+use App\Orchid\Layouts\ViewAdSpots;
 
 class ViewAdScreen extends Screen
 {
