@@ -254,7 +254,7 @@ class CreateDisplayAdScreen extends Screen
                     ]);
                 }
                 
-                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->exists()) {
+                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->where('region_id', $region_id)->exists()) {
                     DisplayAds::create([
                         'route_uri' => $row['route_uri'],
                         'ad_index' => $row['ad_index'],
