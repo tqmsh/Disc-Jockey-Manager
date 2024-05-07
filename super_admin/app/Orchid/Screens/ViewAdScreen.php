@@ -20,6 +20,7 @@ use App\Models\Vendors;
 use App\Orchid\Layouts\FilterAdActive;
 use App\Orchid\Layouts\FilterAdInactive;
 use App\Orchid\Layouts\FilterAdPending;
+use App\Orchid\Layouts\FilterAdSpots;
 use App\Orchid\Layouts\FilterDisplayAd;
 use App\Orchid\Layouts\ViewDisplayAd;
 use App\Orchid\Layouts\ViewAdSpots;
@@ -38,7 +39,7 @@ class ViewAdScreen extends Screen
           "campaignsInactive"=>Campaign::where("active", 2)->filter(request('inactive_campaigns_filters') ?? [])->paginate(10),
           "campaignsPending"=>Campaign::where("active", 0)->filter(request('pending_campaigns_filters') ?? [])->paginate(10),
           "campaignsDisplayAds" =>  DisplayAds::filter(request('display_ads_filters') ?? [])->paginate(10),
-          "campaignsAdSpots" => app(DisplayAdData::class)->getAllAdSpots(),
+          "campaignsAdSpots" => request('ad_spots_filters') == null ? [] : app(DisplayAdData::class)->getAllAdSpots(),
 
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('active', 1)->get()))],
@@ -100,7 +101,7 @@ class ViewAdScreen extends Screen
               "Active Campaigns" => [FilterAdActive::class, ViewAdLayoutActive::class],
               "Inactive Campaigns" => [FilterAdInactive::class, ViewAdLayoutInactive::class],
               "Display Ads" => [FilterDisplayAd::class, ViewDisplayAd::class],
-              "Ad Spots" => [ViewAdSpots::class]
+              "Ad Spots" => [FilterAdSpots::class, ViewAdSpots::class]
             ])->activeTab(request('active_tab') ?? 'Pending Campaigns')
           
         ];
@@ -204,6 +205,15 @@ class ViewAdScreen extends Screen
                 'region_id' => request('display_ads_region_id'),
             ], 
             'active_tab' => 'Display Ads',
+        ]);
+    }
+
+    public function filterAdSpots() {
+        return redirect()->route('platform.ad.list', [
+            'ad_spots_filters' => [
+                'region_id' => request('ad_spots_region_id')
+            ],
+            'active_tab' => 'Ad Spots'
         ]);
     }
 }

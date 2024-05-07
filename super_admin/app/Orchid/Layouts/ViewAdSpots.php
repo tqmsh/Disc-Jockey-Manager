@@ -31,7 +31,7 @@ class ViewAdSpots extends Table
         return [
             TD::make('Active Ad', 'Active Ad')
                 ->render(function(array $display_ad){
-                    $regionId = Region::where('name', $display_ad['campaign_region'])->first()->id;
+                    $regionId = request('ad_spots_filters')['region_id'];
 
                     $active = app(DisplayAdData::class)->isDisplayAdSpotUsed($display_ad['portal'], $display_ad['route_uri'], $display_ad['ad_index'], $regionId);
                     return Button::make($active ? 'Yes' : 'No')
@@ -61,12 +61,7 @@ class ViewAdSpots extends Table
             TD::make('Is Square', 'Is Sqaure')
                 ->render(function(array $display_ad){
                     return $display_ad['square'] == 0 ? 'No' : 'Yes';
-                }),
-            
-            TD::make('Region', 'Region')
-                ->render(function(array $display_ad) {
-                    return $display_ad['campaign_region'];
-                }),
+                })
         ];
     }
 }
