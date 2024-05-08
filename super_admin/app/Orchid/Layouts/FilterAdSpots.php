@@ -46,9 +46,13 @@ class FilterAdSpots extends Rows
                     ->empty('No Selection')
                     ->fromModel(Region::class, 'name')
                     ->help('Type in box to search'),
-                CheckBox::make('ad_spots_view_open_spots')
-                    ->title('View open ad spots?')
-                    ->sendTrueOrFalse()
+                Select::make('ad_spots_view_open_spots')
+                    ->title("Viewing Options")
+                    ->empty('No Selection')
+                    ->options([
+                        0 => "Open",
+                        1 => "Used"
+                    ])
             ]),
             
 
