@@ -24,7 +24,18 @@ class DisplayAdData {
         });
     }
 
-    public function getAllAdSpots() : array {
-        return $this->display_ad_data;
+    public function getAllAdSpots(array $filters = []) : array {
+        $data = $this->display_ad_data;
+
+        if(!empty($filters)) {
+
+            if(isset($filters['view_open_spots'])) {
+                $data = array_filter($data, function(array $ad_spot) use($filters) {
+                    return $this->isDisplayAdSpotUsed($ad_spot['portal'], $ad_spot['route_uri'], $ad_spot['ad_index'], $filters['region_id']) == boolval($filters['view_open_spots']);
+                });
+            }
+        }
+
+        return $data;
     }
 }
