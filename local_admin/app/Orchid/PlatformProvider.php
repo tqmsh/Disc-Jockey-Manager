@@ -100,9 +100,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('book-open')
                 ->route('platform.guide.list'),
 
-            Menu::make('Report a Bug')
-                ->icon('bug')
-                ->route('platform.bug-reports.list'),
+            // Moved to How To Contact Us top bar
+            // Menu::make('Report a Bug')
+            //     ->icon('bug')
+            //     ->route('platform.bug-reports.list'),
 
             Menu::make('National Prom Sites')
                 ->icon('arrow-down')
