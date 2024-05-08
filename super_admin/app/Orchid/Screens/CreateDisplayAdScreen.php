@@ -28,7 +28,7 @@ use Orchid\Support\Facades\Toast;
 class CreateDisplayAdScreen extends Screen
 {
 
-    private array $required_fields = ['route_uri', 'ad_index', 'portal', 'campaign_name', 'campaign_link', 'campaign_region', 'category_id', 'campaign_image', 'square'];
+    private array $required_fields = ['route_uri', 'ad_index', 'portal', 'campaign_name', 'campaign_link', 'campaign_region', 'campaign_category', 'campaign_image', 'square'];
     
     /**
      * Query data.
@@ -165,7 +165,7 @@ class CreateDisplayAdScreen extends Screen
                                 • campaign_name <br>
                                 • campaign_link <br>
                                 • campaign_region <br>
-                                • category_id <br>
+                                • campaign_category <br>
                                 • campaign_image <br>
                                 • square (0 for false, 1 for true) <br>
                                 • vendor_user_id (optional) <br>'),
@@ -232,6 +232,7 @@ class CreateDisplayAdScreen extends Screen
                 }
 
                 $region_id = Region::firstOrCreate(['name' => $row['campaign_region']])->id;
+                $category_id = Categories::firstOrCreate(['name' => $row['campaign_category']])->id;
 
                 if(!in_array('vendor_user_id', array_keys($row)) || $row['vendor_user_id'] == "") {
                     $row['vendor_user_id'] = 197; //!NEED TO OPTIMIZE THIS LATER
@@ -245,7 +246,7 @@ class CreateDisplayAdScreen extends Screen
                         'title' => $row['campaign_name'],
                         'website' => $row['campaign_link'],
                         'region_id' => $region_id,
-                        'category_id' => $row['category_id'],
+                        'category_id' => $category_id,
                         'image' => $row['campaign_image'],
                         'clicks' => 0,
                         'impressions' => 0,
@@ -253,7 +254,7 @@ class CreateDisplayAdScreen extends Screen
                     ]);
                 }
                 
-                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->exists()) {
+                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->where('region_id', $region_id)->exists()) {
                     DisplayAds::create([
                         'route_uri' => $row['route_uri'],
                         'ad_index' => $row['ad_index'],
