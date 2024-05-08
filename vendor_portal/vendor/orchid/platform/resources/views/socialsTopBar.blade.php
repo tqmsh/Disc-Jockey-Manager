@@ -6,6 +6,11 @@
     <nav class="col-xs-12 col-md-auto ms-auto p-0">
         <ul class="nav command-bar d-flex align-items-center">
             <li class="mx-2">
+                <a class="btn btn-lg btn-link fw-bold" href="{{ route('platform.bug-reports.list') }}"> 
+                    Report a Bug
+                </a>
+            </li>
+            <li class="mx-2">
                 <a class="btn btn-lg btn-link fw-bold" href="https://trello.com/b/mhuu7J9C/prom-marketing" target="_blank"> 
                     Roadmap
                 </a>
