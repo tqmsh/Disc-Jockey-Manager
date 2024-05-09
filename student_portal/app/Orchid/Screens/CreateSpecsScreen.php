@@ -73,7 +73,7 @@ class CreateSpecsScreen extends Screen
                 Layout::rows([
 
                     Select::make('gender')
-                        ->title('Gender')
+                        ->title('Interested Prom Purchases')
                         ->horizontal()
                         ->allowAdd()
                         ->empty("No Selection")
