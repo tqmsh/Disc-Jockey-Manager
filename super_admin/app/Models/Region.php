@@ -11,7 +11,7 @@ class Region extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'created_at', 'updated_at'];
+    protected $fillable = ['name'];
 
     public function scopeFilter($query, array $filters) {
         try {
