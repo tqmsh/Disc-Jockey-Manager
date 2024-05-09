@@ -93,7 +93,6 @@ class EditSpecsScreen extends Screen
                         ->options([
                             'female' => 'Female',
                             'male' => 'Male',
-                            'other' => 'other',
                         ]),
 
                     Input::make('height')

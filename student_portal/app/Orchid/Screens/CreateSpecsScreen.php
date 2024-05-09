@@ -80,7 +80,6 @@ class CreateSpecsScreen extends Screen
                         ->options([
                             'female' => 'Female',
                             'male' => 'Male',
-                            'other' => 'other',
                         ]),
                     Input::make('age')
                         ->title('Age')
