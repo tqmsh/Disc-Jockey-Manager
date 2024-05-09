@@ -58,7 +58,7 @@ class ViewRegionScreen extends Screen
                 ->modal('massImportModal')
                 ->method('massImport')
                 ->icon('plus'),
-                
+
             Button::make('Delete Selected Regions')
                 ->icon('trash')
                 ->method('deleteRegions')
@@ -97,13 +97,13 @@ class ViewRegionScreen extends Screen
             ->applyButton('Import')
             ->withoutCloseButton(),
 
-            
+
             Layout::rows([
-                
-                Input::make('region_name')
+
+                Input::make('region_name_create')
                 ->title('Region Name')
                 ->placeholder('Enter the name of the region'),
-                
+
                 Button::make('Add')
                 ->icon('plus')
                 ->type(Color::DEFAULT())
@@ -155,14 +155,14 @@ class ViewRegionScreen extends Screen
 
                 //loop through the array of regions and re-write the keys to insert in db
                 for ($i = 0; $i < count($regions); $i ++){
-                    
+
                     //check for duplicate regions
                     if(count(Region::where('name', $regions[$i]['name'])->get()) == 0){
-                        
+
                         Region::create(['name' => $regions[$i]['name']]);
 
                     }else{
-                        array_push($this->dupes, $regions[$i]['name']);                    
+                        array_push($this->dupes, $regions[$i]['name']);
                     }
                 }
 
@@ -184,7 +184,7 @@ class ViewRegionScreen extends Screen
                 return redirect()->route('platform.region.list');
             }
         }catch(Exception $e){
-            
+
             Alert::error('There was an error mass importing the regions. Error Code: ' . $e->getMessage());
         }
     }
@@ -193,16 +193,16 @@ class ViewRegionScreen extends Screen
     public function createRegion()
     {
         //take region from request then check for duplicate
-        $region = request('region_name');
+        $region = request('region_name_create');
 
         if(is_null($region)){
-            
+
             Toast::error('Region name cannot be empty');
 
         }else if(!empty(Region::where('name', $region)->first())){
-            
+
             Toast::error('Region already exists');
-            
+
         }else{
 
             //update the region if it already exists or create it if it doesnt
@@ -224,17 +224,17 @@ class ViewRegionScreen extends Screen
     }
 
     public function deleteRegions(Request $request)
-    {   
+    {
         //get all regions from post request
         $regions = $request->get('regions');
-        
+
         try{
             //if the array is not empty
             if(!empty($regions)){
-                
+
                 //delete all regions in the array
                 Region::whereIn('id', $regions)->delete();
-                
+
                 Toast::success('Selected regions deleted succesfully');
 
             }else{
@@ -267,7 +267,7 @@ class ViewRegionScreen extends Screen
                 }
 
             } else{
-                
+
                 Toast::error('An error has occured.'); return;
             }
 
@@ -279,7 +279,7 @@ class ViewRegionScreen extends Screen
 
     //this function will convert the csv file to an array
     private function csvToArray($filename = '', $delimiter = ','){
-        
+
         if (!file_exists($filename) || !is_readable($filename)){
             Alert::error('There has been an error finding this file.');
             return;
