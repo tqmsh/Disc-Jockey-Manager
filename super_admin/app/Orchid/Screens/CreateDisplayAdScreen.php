@@ -204,6 +204,7 @@ class CreateDisplayAdScreen extends Screen
                     'portal' => $request->input('portal'),
                     'campaign_id' => $campaign->id,
                     'region_id' => $request->input("campaign_region"),
+                    "category_id" => $request->input("category_id"),
                     'square' => intval($request->boolean('square'))
                 ]);
 
@@ -238,7 +239,7 @@ class CreateDisplayAdScreen extends Screen
                     $row['vendor_user_id'] = 197; //!NEED TO OPTIMIZE THIS LATER
                 }
 
-                $c_query = Campaign::where('title', $row['campaign_name'])->where('region_id', $region_id);
+                $c_query = Campaign::where('title', $row['campaign_name'])->where('region_id', $region_id)->where('category_id', $category_id);
 
                 if(!$c_query->exists()) {
                     $campaign = Campaign::create([
@@ -254,13 +255,14 @@ class CreateDisplayAdScreen extends Screen
                     ]);
                 }
                 
-                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->where('region_id', $region_id)->exists()) {
+                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->where('region_id', $region_id)->where('category_id', $category_id)->exists()) {
                     DisplayAds::create([
                         'route_uri' => $row['route_uri'],
                         'ad_index' => $row['ad_index'],
                         'portal' => $row['portal'],
                         'campaign_id' => isset($campaign) ? $campaign->id : $c_query->first()->id,
                         'region_id' => $region_id,
+                        'category_id' => $category_id,
                         'square' => $row['square']
                     ]);
                 }
@@ -280,6 +282,7 @@ class CreateDisplayAdScreen extends Screen
                             ->where('route_uri', $request->input('route_uri'))
                             ->where('ad_index', $request->input('ad_index'))
                             ->where('region_id', $request->input("campaign_region"))
+                            ->where('category_id', $request->input("category_id"))
                             ->exists()
                 );
     }
