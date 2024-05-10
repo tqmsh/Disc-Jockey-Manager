@@ -83,12 +83,12 @@ class EditSectionLessonScreen extends Screen
     {
         return [
             Layout::rows([
-                
+
                 Input::make('ordering')
                 ->title('Ordering')
                 ->placeholder('Enter the ordering of the lesson')
                 ->value($this->lesson->ordering),
-                
+
                 Input::make('lesson_name')
                 ->title('Lesson Name')
                 ->placeholder('Enter the name of the lesson')
@@ -138,9 +138,11 @@ class EditSectionLessonScreen extends Screen
             }
 
         } catch (\Exception $e) {
-            return redirect()->route('platform.sectionLesson.list', [
+            Toast::error($e->getMessage());
+            return redirect()->route('platform.sectionLesson.edit', [
                 'guide' => $guide->id,
                 'section' => $section->id,
+                'lesson' => $lesson->id,
             ])->with('error', 'There was an error updating the lesson');
         }
     }
