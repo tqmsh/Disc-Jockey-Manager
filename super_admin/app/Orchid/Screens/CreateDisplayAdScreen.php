@@ -28,7 +28,7 @@ use Orchid\Support\Facades\Toast;
 class CreateDisplayAdScreen extends Screen
 {
 
-    private array $required_fields = ['route_uri', 'ad_index', 'portal', 'campaign_name', 'campaign_link', 'campaign_region', 'campaign_category', 'campaign_image', 'square'];
+    private array $required_fields = ['route_uri', 'ad_index', 'portal', 'campaign_name', 'campaign_link', 'campaign_region', 'campaign_category', 'campaign_image', 'square', 'gender'];
     
     /**
      * Query data.
@@ -148,6 +148,16 @@ class CreateDisplayAdScreen extends Screen
                     ->horizontal()
                     ->required(),
 
+                Select::make('gender')
+                    ->title('Gender')
+                    ->required()
+                    ->horizontal()
+                    ->options([
+                        'all' => 'All',
+                        'male' => 'Male',
+                        'female' => 'Female'
+                    ]),
+
                 CheckBox::make('square')
                     ->title('Is Square?')
                     ->horizontal(),
@@ -167,6 +177,7 @@ class CreateDisplayAdScreen extends Screen
                                 • campaign_region <br>
                                 • campaign_category <br>
                                 • campaign_image <br>
+                                • gender (all, male or female) <br>
                                 • square (0 for false, 1 for true) <br>
                                 • vendor_user_id (optional) <br>'),
                             Link::make('Download Sample CSV')
@@ -205,6 +216,7 @@ class CreateDisplayAdScreen extends Screen
                     'campaign_id' => $campaign->id,
                     'region_id' => $request->input("campaign_region"),
                     "category_id" => $request->input("category_id"),
+                    'gender' => $request->input('gender'),
                     'square' => intval($request->boolean('square'))
                 ]);
 
@@ -239,7 +251,10 @@ class CreateDisplayAdScreen extends Screen
                     $row['vendor_user_id'] = 197; //!NEED TO OPTIMIZE THIS LATER
                 }
 
-                $c_query = Campaign::where('title', $row['campaign_name'])->where('region_id', $region_id)->where('category_id', $category_id);
+                $c_query = Campaign::where('title', $row['campaign_name'])
+                    ->where('region_id', $region_id)
+                    ->where('category_id', $category_id)
+                    ->where('gender', $row['gender']);
 
                 if(!$c_query->exists()) {
                     $campaign = Campaign::create([
@@ -249,13 +264,22 @@ class CreateDisplayAdScreen extends Screen
                         'region_id' => $region_id,
                         'category_id' => $category_id,
                         'image' => $row['campaign_image'],
+                        'gender' => $row['gender'],
                         'clicks' => 0,
                         'impressions' => 0,
                         'active' => 1
                     ]);
                 }
+
+                $da_query = DisplayAds::where('route_uri', $row['route_uri'])
+                    ->where('ad_index', $row['ad_index'])
+                    ->where('portal', $row['portal'])
+                    ->where('region_id', $region_id)
+                    ->where('category_id', $category_id)
+                    ->where('gender', $row['gender']);
+
                 
-                if(!DisplayAds::where('route_uri', $row['route_uri'])->where('ad_index', $row['ad_index'])->where('portal', $row['portal'])->where('region_id', $region_id)->where('category_id', $category_id)->exists()) {
+                if(!$da_query->exists()) {
                     DisplayAds::create([
                         'route_uri' => $row['route_uri'],
                         'ad_index' => $row['ad_index'],
@@ -263,6 +287,7 @@ class CreateDisplayAdScreen extends Screen
                         'campaign_id' => isset($campaign) ? $campaign->id : $c_query->first()->id,
                         'region_id' => $region_id,
                         'category_id' => $category_id,
+                        'gender' => $row['gender'],
                         'square' => $row['square']
                     ]);
                 }
@@ -283,6 +308,7 @@ class CreateDisplayAdScreen extends Screen
                             ->where('ad_index', $request->input('ad_index'))
                             ->where('region_id', $request->input("campaign_region"))
                             ->where('category_id', $request->input("category_id"))
+                            ->where('gender', $request->input('gender'))
                             ->exists()
                 );
     }

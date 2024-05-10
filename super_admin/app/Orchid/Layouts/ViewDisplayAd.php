@@ -60,6 +60,11 @@ class ViewDisplayAd extends Table
                 ->render(function(DisplayAds $display_ad){
                     return e($display_ad->ad_index);
                 }),
+
+            TD::make('gender', 'Gender')
+                ->render(function(DisplayAds $display_ad){
+                    return e(ucfirst($display_ad->gender));
+                })->defaultHidden(),
             
             TD::make('square', 'Square')
                 ->render(function(DisplayAds $display_ad){

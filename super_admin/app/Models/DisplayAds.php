@@ -20,6 +20,7 @@ class DisplayAds extends Model
         'portal',
         'region_id',
         'category_id',
+        'gender',
         'square'
     ];
 
