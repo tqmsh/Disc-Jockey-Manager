@@ -205,7 +205,7 @@ class CreateSchoolScreen extends Screen
                     ->title('Website')
                     ->type('url')
                     ->horizontal()
-                    ->placeholder('Ex. www.colonelby.com'),
+                    ->placeholder('Ex. https://colonelby.com'),
 
                 Input::make('school_data')
                     ->title('School Data')
