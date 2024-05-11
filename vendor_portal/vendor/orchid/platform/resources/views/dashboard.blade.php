@@ -77,7 +77,8 @@
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 2)
                                     ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
-                                    ->where('ad_index', 0);
+                                    ->where('ad_index', 0)
+                                    ->where('category_id', \App\Models\Vendors::where('user_id', auth()->user()->id)->first()->category_id);
         @endphp
         @if($display_ads_query->exists())
             @php
@@ -155,7 +156,8 @@
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 2)
                                     ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
-                                    ->where('ad_index', 1);
+                                    ->where('ad_index', 1)
+                                    ->where('category_id', \App\Models\Vendors::where('user_id', auth()->user()->id)->first()->category_id);
         @endphp
         @if($display_ads_query->exists())
             @php
