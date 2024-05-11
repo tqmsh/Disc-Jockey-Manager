@@ -25,6 +25,7 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Session;
 use App\Notifications\GeneralNotification;
+use App\Models\Specs;
 
 class LoginController extends Controller
 {
@@ -187,6 +188,7 @@ class LoginController extends Controller
                 'city_municipality' => ['required_if:country,Canada', 'prohibited_if:country,USA'],
                 'grade' => ['required'],
                 'allergies' => ['nullable'],
+                'interested_prom_purchases' => ['required']
             ]);
     
             // Hash Password
@@ -238,7 +240,12 @@ class LoginController extends Controller
 
                         $studentCreateSuccess = Student::create($studentTableFields);
 
-                        if($studentCreateSuccess){
+                        $specsCreateSuccess = Specs::create([
+                            'student_user_id' => $user->id,
+                            'gender' => $formFields['interested_prom_purchases']
+                        ]);
+
+                        if($studentCreateSuccess && $specsCreateSuccess){
                             Session::flash('message', 'Your account has been created successfully! Please wait until an admin approves your account. You will not be able to log in until then.');
 
                             //notify all admins that a new vendor has registered
