@@ -63,7 +63,7 @@ class ViewGuideScreen extends Screen
             ViewGuideLayout::class,
 
             Layout::rows([
-                
+
                 Input::make('guide_name')
                 ->title('Guide Name')
                 ->placeholder('Enter the name of the guide'),
@@ -91,34 +91,38 @@ class ViewGuideScreen extends Screen
     public function createGuide(){
 
         try{
-            $fields = request()->all();
+            $fields = request()->validate([
+                'ordering' => 'required|numeric',
+                'guide_name' => 'required',
+                'category' => 'required',
+            ]);
 
             if(is_null($fields['guide_name']) || is_null($fields['ordering'])){
-                
+
                 Toast::error('Guide name and ordering cannot be empty');
-    
+
             }else if(!empty(Guide::where('guide_name',  $fields['guide_name'])->first()) || !empty(Guide::where('ordering',  $fields['ordering'])->first())){
-                
+
                 Toast::error('Guide or ordering already exists');
-                
+
             }else{
-    
+
                 $check = Guide::create($fields);
-    
+
                 if($check){
-    
+
                     Toast::success('Guide created successfully');
-    
+
                 }else{
-    
+
                     Toast::error('Guide could not be created for an unknown reason');
                 }
             }
         }catch(Exception $e){
-            Toast::error('Guide could not be created for an unknown reason' . $e->getMessage());
+            Toast::error($e->getMessage());
         }
     }
-    
+
     public function redirect( $guide, $type){
 
         if($type == "edit"){
@@ -133,7 +137,7 @@ class ViewGuideScreen extends Screen
 
         //get all guides from post request
         $guides = request('guides');
-        
+
         try{
 
             //if the array is not empty

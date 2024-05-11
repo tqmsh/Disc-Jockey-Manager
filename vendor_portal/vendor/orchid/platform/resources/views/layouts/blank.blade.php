@@ -7,7 +7,8 @@
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 2)
                                     ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
-                                    ->where('ad_index', $current_ad_index);
+                                    ->where('ad_index', $current_ad_index)
+                                    ->where('category_id', \App\Models\Vendors::where('user_id', auth()->user()->id)->first()->category_id);
         @endphp
 
         @if($item->getName() !== "platform::layouts.modal" && $display_ads_query->exists())
@@ -67,7 +68,8 @@
         @php
             $display_ads_query = \App\Models\DisplayAds::where('portal', 2)
                                     ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
-                                    ->where('ad_index', $current_ad_index + 1);
+                                    ->where('ad_index', $current_ad_index + 1)
+                                    ->where('category_id', \App\Models\Vendors::where('user_id', auth()->user()->id)->first()->category_id);
         @endphp
 
         @if($i == array_key_last(array_keys($column)) && $display_ads_query->exists())

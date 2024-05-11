@@ -8,7 +8,16 @@
             $display_ads_query = \App\Models\DisplayAds::where('portal', 1)
                                     ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
                                     ->where('ad_index', $current_ad_index)
-                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Student::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Student::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id)
+                                    ->where('gender', \App\Models\Specs::where('student_user_id', auth()->user()->id)->first()?->gender);
+
+            if(!$display_ads_query->exists()) {
+                $display_ads_query = \App\Models\DisplayAds::where('portal', 1)
+                                    ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
+                                    ->where('ad_index', $current_ad_index)
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Student::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id)
+                                    ->where('gender', 'all');
+            }
         @endphp
 
         @if($item->getName() !== "platform::layouts.modal" && $display_ads_query->exists())
@@ -69,7 +78,16 @@
             $display_ads_query = \App\Models\DisplayAds::where('portal', 1)
                                     ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
                                     ->where('ad_index', $current_ad_index + 1)
-                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Student::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id);
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Student::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id)
+                                    ->where('gender', \App\Models\Specs::where('student_user_id', auth()->user()->id)->first()?->gender);
+
+            if(!$display_ads_query->exists()) {
+                $display_ads_query = \App\Models\DisplayAds::where('portal', 1)
+                                    ->where('route_uri', str_replace('/{method?}', '', Illuminate\Support\Facades\Route::current()->uri()))
+                                    ->where('ad_index', $current_ad_index + 1)
+                                    ->where('region_id', \App\Models\School::where('id', \App\Models\Student::where('user_id', auth()->user()->id)->first()->school_id)->first()->region_id)
+                                    ->where('gender', 'all');
+            }
         @endphp
 
         @if($i == array_key_last(array_keys($column)) && $display_ads_query->exists())

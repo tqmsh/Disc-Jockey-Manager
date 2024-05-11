@@ -29,6 +29,21 @@ class FilterAdPending extends Rows
     protected function fields(): iterable
     {
         $pendingCampaigns = Campaign::where('active', 0);
+
+        $sortedCategories = Categories::whereIn('id', $pendingCampaigns->pluck('category_id'))
+                        ->get()
+                        ->sortBy('name', SORT_NATURAL)
+                        ->mapWithKeys(function(Categories $category, int $key) {
+                            return [$category->id => $category->name];
+                        })->toArray();
+        
+        $sortedRegions = Region::whereIn('id', $pendingCampaigns->pluck('region_id'))
+                        ->get()
+                        ->sortBy('name', SORT_NATURAL)
+                        ->mapWithKeys(function(Region $region, int $key) {
+                            return [$region->id => $region->name];
+                        })->toArray();
+
         return [
             Group::make([
                 Select::make('pending_campaigns_title')
@@ -39,11 +54,11 @@ class FilterAdPending extends Rows
                 Select::make('pending_campaigns_category_id')
                     ->title('Category')
                     ->empty('No Selection')
-                    ->fromQuery(Categories::whereIn('id', $pendingCampaigns->pluck('category_id')), 'name'),
+                    ->options($sortedCategories),
                 Select::make('pending_campaigns_region_id')
                     ->title('Region')
                     ->empty('No Selection')
-                    ->fromQuery(Region::whereIn('id', $pendingCampaigns->pluck('region_id')), 'name'),
+                    ->options($sortedRegions),
             ]),
             Button::make('Filter')
                 ->icon('filter')
