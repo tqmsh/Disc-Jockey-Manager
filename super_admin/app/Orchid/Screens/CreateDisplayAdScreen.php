@@ -254,7 +254,7 @@ class CreateDisplayAdScreen extends Screen
                 $c_query = Campaign::where('title', $row['campaign_name'])
                     ->where('region_id', $region_id)
                     ->where('category_id', $category_id)
-                    ->where('gender', $row['gender']);
+                    ->where('gender', strtolower($row['gender']));
 
                 if(!$c_query->exists()) {
                     $campaign = Campaign::create([
@@ -264,7 +264,7 @@ class CreateDisplayAdScreen extends Screen
                         'region_id' => $region_id,
                         'category_id' => $category_id,
                         'image' => $row['campaign_image'],
-                        'gender' => $row['gender'],
+                        'gender' => strtolower($row['gender']),
                         'clicks' => 0,
                         'impressions' => 0,
                         'active' => 1
@@ -276,7 +276,7 @@ class CreateDisplayAdScreen extends Screen
                     ->where('portal', $row['portal'])
                     ->where('region_id', $region_id)
                     ->where('category_id', $category_id)
-                    ->where('gender', $row['gender']);
+                    ->where('gender', strtolower($row['gender']));
 
                 
                 if(!$da_query->exists()) {
@@ -287,7 +287,7 @@ class CreateDisplayAdScreen extends Screen
                         'campaign_id' => isset($campaign) ? $campaign->id : $c_query->first()->id,
                         'region_id' => $region_id,
                         'category_id' => $category_id,
-                        'gender' => $row['gender'],
+                        'gender' => strtolower($row['gender']),
                         'square' => $row['square']
                     ]);
                 }
