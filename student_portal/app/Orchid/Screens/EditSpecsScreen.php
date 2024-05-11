@@ -88,8 +88,6 @@ class EditSpecsScreen extends Screen
                         ->title('Interested Prom Purchases')
                         ->value($this->specs->gender)
                         ->horizontal()
-                        ->empty("No Selection")
-                        ->allowAdd()
                         ->options([
                             'female' => 'Female',
                             'male' => 'Male',

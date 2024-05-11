@@ -75,12 +75,11 @@ class CreateSpecsScreen extends Screen
                     Select::make('gender')
                         ->title('Interested Prom Purchases')
                         ->horizontal()
-                        ->allowAdd()
-                        ->empty("No Selection")
                         ->options([
                             'female' => 'Female',
                             'male' => 'Male',
-                        ]),
+                        ])
+                        ->value(Specs::where('student_user_id', auth()->user()->id)->first()->gender ?? ""),
                     Input::make('age')
                         ->title('Age')
                         ->type('text')
