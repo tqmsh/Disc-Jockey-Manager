@@ -266,7 +266,7 @@ class CreateVendorScreen extends Screen
                 }
 
                 //toast success message
-                Toast::success('Vendor Added Succesfully');
+                Toast::success('Vendor Added Successfully');
 
                 //redirect to vendor list
                 return redirect()->route('platform.vendor.list');
