@@ -19,6 +19,7 @@ class Campaign extends Model
         'website',
         'clicks',
         'impressions',
+        'gender',
         'active'
     ];
 
