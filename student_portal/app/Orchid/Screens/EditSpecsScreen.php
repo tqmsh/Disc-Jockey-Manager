@@ -85,15 +85,12 @@ class EditSpecsScreen extends Screen
                         ->value($this->specs->age),
 
                     Select::make('gender')
-                        ->title('Gender')
+                        ->title('Interested Prom Purchases')
                         ->value($this->specs->gender)
                         ->horizontal()
-                        ->empty("No Selection")
-                        ->allowAdd()
                         ->options([
                             'female' => 'Female',
                             'male' => 'Male',
-                            'other' => 'other',
                         ]),
 
                     Input::make('height')

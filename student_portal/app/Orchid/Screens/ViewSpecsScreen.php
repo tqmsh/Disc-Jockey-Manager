@@ -110,9 +110,9 @@ class ViewSpecsScreen extends Screen
                                 return $specs_1->age ?? " ";
                             }),
                         
-                        Sight::make('gender', 'Gender')
+                        Sight::make('gender', 'Interested Prom Purchases')
                             ->render(function (Specs $specs_1 = null) {
-                                return $specs_1->gender ?? " ";
+                                return !is_null($specs_1->gender) ? ucfirst($specs_1->gender) : " ";
                             }),
 
                         Sight::make('height', 'Height')

@@ -34,20 +34,29 @@ class FilterAdSpots extends Rows
             if($rgIdSet) {
                 $region = Region::find(request('ad_spots_filters')['region_id'])->name;
                 $str .= " (Currently seeing ad spots for: {$region})";
+            } else {
+                $str .= " (Required)";
             }
 
             return $str;
         };
+
+        $sortedRegions = Region::whereIn('id', DisplayAds::pluck('region_id'))
+                        ->get()
+                        ->sortBy('name', SORT_NATURAL)
+                        ->mapWithKeys(function(Region $region, int $key) {
+                            return [$region->id => $region->name];
+                        })->toArray();
 
         return [
             Group::make([
                 Select::make('ad_spots_region_id')
                     ->title($title(isset(request('ad_spots_filters')['region_id'])))
                     ->empty('No Selection')
-                    ->fromModel(Region::class, 'name')
-                    ->help('Type in box to search'),
+                    ->help('Type in box to search')
+                    ->options($sortedRegions),
                 Select::make('ad_spots_view_open_spots')
-                    ->title("Viewing Options")
+                    ->title("Viewing Options (Optional)")
                     ->empty('No Selection')
                     ->options([
                         0 => "Open",
