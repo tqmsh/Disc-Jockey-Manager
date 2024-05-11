@@ -60,7 +60,7 @@ class CreateVendorScreen extends Screen
             Button::make('Add')
                 ->icon('plus')
                 ->method('createVendor'),
-                
+
             ModalToggle::make('Mass Import Vendors')
                 ->modal('massImportModal')
                 ->method('massImport')
@@ -141,21 +141,21 @@ class CreateVendorScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->placeholder('Disco Rockerz'),
-                
+
                 Input::make('website')
                     ->title('Company Website')
                     ->type('url')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. www.disco.com'),
-                
+                    ->placeholder('Ex. https://disco.com'),
+
                 Select::make('category_id')
                     ->title('Category')
                     ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
                     ->fromQuery(Categories::query()->where('status', 1), 'name'),
-                    
+
                 Input::make('email')
                     ->title('Company Email')
                     ->type('email')
@@ -225,7 +225,7 @@ class CreateVendorScreen extends Screen
     public function createVendor(Request $request){
 
         try{
-            
+
             //get vendor fields
             $vendorTableFields = $this->getVendorFields($request);
 
@@ -237,7 +237,7 @@ class CreateVendorScreen extends Screen
 
             //check for duplicate email
             if($this->validEmail($request->input('email'))){
-                
+
                 //no duplicates found
                 //create user
                 $user = User::create($userTableFields);
@@ -279,7 +279,7 @@ class CreateVendorScreen extends Screen
             }
 
         }catch(Exception $e){
-            
+
             //toast error message
             Alert::error('There was an error creating this vendor Error Code: ' . $e->getMessage());
         }
@@ -309,7 +309,7 @@ class CreateVendorScreen extends Screen
                 for ($i = 0; $i < count($vendors); $i ++){
 
                     if($this->validEmail($vendors[$i]['email'])){
-                        
+
                         $vendor = [
                             'firstname' => $vendors[$i]['firstname'],
                             'lastname' => $vendors[$i]['lastname'],
@@ -323,7 +323,7 @@ class CreateVendorScreen extends Screen
                         ];
 
                         $user = User::create($vendor);
-                        
+
                         $vendor['user_id'] = $user->id;
 
                         $vendor = [
@@ -340,7 +340,7 @@ class CreateVendorScreen extends Screen
                             'state_province' => $vendors[$i]['state_province'],
                             'zip_postal' => $vendors[$i]['zip_postal'],
                         ];
-                        
+
                         Vendors::create($vendor);
 
                         RoleUsers::create([
@@ -349,7 +349,7 @@ class CreateVendorScreen extends Screen
                         ]);
 
                     }else{
-                        array_push($this->dupes, $vendors[$i]['email']);                    
+                        array_push($this->dupes, $vendors[$i]['email']);
                     }
                 }
 
@@ -371,14 +371,14 @@ class CreateVendorScreen extends Screen
                 return redirect()->route('platform.vendor.list');
             }
         }catch(Exception $e){
-            
+
             Alert::error('There was an error mass importing the Vendors. Error Code: ' . $e->getMessage());
         }
     }
 
     //this function will convert the csv file to an array
     private function csvToArray($filename = '', $delimiter = ','){
-        
+
         if (!file_exists($filename) || !is_readable($filename)){
             Alert::error('There has been an error finding this file.');
             return;
@@ -423,7 +423,7 @@ class CreateVendorScreen extends Screen
                 }
 
             } else{
-                
+
                 Toast::error('An error has occured.'); return;
             }
 
@@ -434,9 +434,9 @@ class CreateVendorScreen extends Screen
     }
 
     private function getCategoryId($category_name){
-            
+
             $category = Categories::where('name', 'LIKE', '%'.$category_name.'%')->get();
-    
+
             if(count($category) == 0){
                 return null;
             }else{
@@ -469,7 +469,7 @@ class CreateVendorScreen extends Screen
                 'phonenumber' => $request->input('phonenumber'),
                 'account_status' => 1,
             ];
-            
+
             return $vendorTableFields;
 
         }catch(Exception $e){
@@ -480,7 +480,7 @@ class CreateVendorScreen extends Screen
     private function getUserFields($request){
 
         $userTableFields = [
-            
+
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
@@ -491,7 +491,7 @@ class CreateVendorScreen extends Screen
             'phonenumber' => $request->input('phonenumber'),
             'role' =>4,
         ];
-        
+
         return $userTableFields;
     }
 }

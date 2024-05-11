@@ -60,7 +60,7 @@ class EditGuideSectionScreen extends Screen
                 ->icon('trash')
                 ->method('delete')
                 ->confirm('Are you sure you want to delete this section?'),
-            
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.guideSection.list', ['guide' => $this->guide]),
@@ -82,7 +82,7 @@ class EditGuideSectionScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->section->ordering),
-                    
+
                 Input::make('section_name')
                     ->title('Section Name')
                     ->type('text')
@@ -118,7 +118,7 @@ class EditGuideSectionScreen extends Screen
                 'section_name' => $fields['section_name'],
             ]);
         } catch (\Exception $e) {
-            Toast::error('Something went wrong');
+            Toast::error($e->getMessage());
             return redirect()->route('platform.guideSection.edit', ['guide' => $guide, 'section' => $section]);
         }
 

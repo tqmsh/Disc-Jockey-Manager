@@ -53,7 +53,7 @@ class EditGuideScreen extends Screen
                 ->icon('trash')
                 ->method('delete')
                 ->confirm('Are you sure you want to delete this guide?'),
-            
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.guide.list'),
@@ -75,7 +75,7 @@ class EditGuideScreen extends Screen
                     ->required()
                     ->horizontal()
                     ->value($this->guide->ordering),
-                    
+
                 Input::make('guide_name')
                     ->title('Guide Name')
                     ->type('text')
@@ -98,19 +98,20 @@ class EditGuideScreen extends Screen
 
     public function update(Guide $guide)
     {
-        
+
         try{
             $fields = request()->validate([
-                'ordering' => 'required',
+                'ordering' => 'required|numeric',
                 'guide_name' => 'required',
                 'category' => 'required',
             ]);
 
 
-            if ( ! empty( Guide::where( 'guide_name', $fields['guide_name'] )->whereNot('id', $guide->id)->first() ) 
-                    || ! empty( Guide::where( 'ordering', $fields['ordering'] )->whereNot('id', $guide->id)->first() ) 
+            if ( ! empty( Guide::where( 'guide_name', $fields['guide_name'] )->whereNot('id', $guide->id)->first() )
+                    || ! empty( Guide::where( 'ordering', $fields['ordering'] )->whereNot('id', $guide->id)->first() )
                 ) {
                 Toast::error( 'Guide or ordering already exists' );
+                return redirect()->route('platform.guide.edit', ['guide' => $guide]);
             } else {
                 $guide->update( $fields );
                 Toast::success( 'Guide updated successfully' );
@@ -118,7 +119,8 @@ class EditGuideScreen extends Screen
             }
 
         }catch(Exception $e){
-            return redirect()->route('platform.guide.list' . $e->getMessage());
+            Toast::error($e->getMessage());
+            return redirect()->route('platform.guide.edit', ['guide' => $guide]);
         }
     }
 
