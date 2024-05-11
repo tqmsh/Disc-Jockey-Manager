@@ -29,6 +29,21 @@ class FilterAdInactive extends Rows
     protected function fields(): iterable
     {
         $inactiveCampaigns = Campaign::where('active', 2);
+
+        $sortedCategories = Categories::whereIn('id', $inactiveCampaigns->pluck('category_id'))
+                        ->get()
+                        ->sortBy('name', SORT_NATURAL)
+                        ->mapWithKeys(function(Categories $category, int $key) {
+                            return [$category->id => $category->name];
+                        })->toArray();
+        
+        $sortedRegions = Region::whereIn('id', $inactiveCampaigns->pluck('region_id'))
+                        ->get()
+                        ->sortBy('name', SORT_NATURAL)
+                        ->mapWithKeys(function(Region $region, int $key) {
+                            return [$region->id => $region->name];
+                        })->toArray();
+
         return [
             Group::make([
                 Select::make('inactive_campaigns_title')
@@ -39,11 +54,11 @@ class FilterAdInactive extends Rows
                 Select::make('inactive_campaigns_category_id')
                     ->title('Category')
                     ->empty('No Selection')
-                    ->fromQuery(Categories::whereIn('id', $inactiveCampaigns->pluck('category_id')), 'name'),
+                    ->options($sortedCategories),
                 Select::make('inactive_campaigns_region_id')
                     ->title('Region')
                     ->empty('No Selection')
-                    ->fromQuery(Region::whereIn('id', $inactiveCampaigns->pluck('region_id')), 'name'),
+                    ->options($sortedRegions),
             ]),
             Button::make('Filter')
                 ->icon('filter')
