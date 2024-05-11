@@ -104,15 +104,15 @@ class EditVendorScreen extends Screen
                     ->horizontal()
                     ->placeholder('Disco Rockerz')
                     ->value($this->vendor->company_name),
-                
+
                 Input::make('website')
                     ->title('Company Website')
                     ->type('url')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. www.disco.com')
+                    ->placeholder('Ex. https://disco.com')
                     ->value($this->vendor->website),
-                
+
                 Select::make('category_id')
                     ->title('Category')
                     ->empty('Start typing to Search...')
@@ -120,7 +120,7 @@ class EditVendorScreen extends Screen
                     ->horizontal()
                     ->fromQuery(Categories::query(), 'name')
                     ->value($this->vendor->category_id),
-                    
+
                 Input::make('email')
                     ->title('Company Email')
                     ->type('email')
@@ -181,7 +181,7 @@ class EditVendorScreen extends Screen
             ]),
         ];
     }
-    
+
     //! fix passowrd update
     public function update(Vendors $vendor, Request $request)
     {
@@ -198,13 +198,13 @@ class EditVendorScreen extends Screen
                     $userFields['password'] = bcrypt($request->input('password'));
                 }
 
-                
+
                 User::where('id', $vendor->user_id)->update($userFields);
-                
+
                 Toast::success('You have successfully updated ' . $request->input('company_name'));
 
                 return redirect()->route('platform.vendor.list');
-            
+
             }else{
 
                 //duplicate email found
@@ -215,7 +215,7 @@ class EditVendorScreen extends Screen
 
             Alert::error('There was an error editing this vendor. Error Code: ' . $e->getMessage());
         }
-    } 
+    }
 
     public function delete(Vendors $vendor)
     {

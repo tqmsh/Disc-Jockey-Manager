@@ -106,7 +106,7 @@ class EditSchoolScreen extends Screen
                     ->title('State/Province')
                     ->horizontal()
                     ->value($this->school->state_province),
-                
+
                 Input::make('city_municipality')
                     ->title('City/Municipality')
                     ->type('text')
@@ -150,7 +150,7 @@ class EditSchoolScreen extends Screen
                     ->type('number')
                     ->horizontal()
                     ->value($this->school->fax)
-                    ->placeholder('Ex. 546879123'),   
+                    ->placeholder('Ex. 546879123'),
 
 
                 Input::make('metropolitan_region')
@@ -172,7 +172,7 @@ class EditSchoolScreen extends Screen
                     ->type('text')
                     ->horizontal()
                     ->value($this->school->website)
-                    ->placeholder('Ex. www.colonelby.com'),
+                    ->placeholder('Ex. https://colonelby.com'),
 
                 Input::make('school_data')
                     ->title('School Data')
@@ -208,7 +208,7 @@ class EditSchoolScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->horizontal()
                     ->value((is_null($this->user)) ? '' : $this->user->phonenumber)
-                    ->placeholder('Ex. (613) 852-4563'), 
+                    ->placeholder('Ex. (613) 852-4563'),
 
                 Input::make('total_students')
                     ->title('Total Students')
@@ -216,7 +216,7 @@ class EditSchoolScreen extends Screen
                     ->horizontal()
                     ->value($this->school->total_students)
                     ->placeholder('Ex. 1024'),
-                    
+
                 Button::make('Update')
                     ->icon('check')
                     ->method('update')
@@ -224,7 +224,7 @@ class EditSchoolScreen extends Screen
             ]),
         ];
     }
-    
+
     public function update(School $school, Request $request)
     {
         try{
@@ -238,7 +238,7 @@ class EditSchoolScreen extends Screen
                     'teacher_email',
                     'teacher_cell',
                 ]))->save();
-                
+
                 $user = User::where('id', $school->teacher_id)->first();
                 if (!is_null($user)) {
                     $user->fill([
@@ -260,12 +260,12 @@ class EditSchoolScreen extends Screen
                         'role' => 5,
                     ]);
                     $school->teacher_id = $user->id;
-                } 
-                
+                }
+
                 Toast::success('You have successfully updated ' . $request->input('school_name') . '.');
 
                 return redirect()->route('platform.school.list');
-            
+
             }else{
 
                 //duplicate school found
@@ -281,13 +281,13 @@ class EditSchoolScreen extends Screen
     public function delete(School $school)
     {
         try{
-            
+
             $school->delete();
-            
+
             User::where('id', $school->teacher_id)->delete();
 
             Toast::info('You have successfully deleted the school.');
-    
+
             return redirect()->route('platform.school.list');
 
         }catch(Exception $e){
