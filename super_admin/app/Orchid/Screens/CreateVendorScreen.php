@@ -107,9 +107,9 @@ class CreateVendorScreen extends Screen
                         ->href('/sample_vendors_upload.csv')
                 ]),
             ])
-            ->title('Mass Import Vendors')
-            ->applyButton('Import')
-            ->withoutCloseButton(),
+                ->title('Mass Import Vendors')
+                ->applyButton('Import')
+                ->withoutCloseButton(),
 
 
             Layout::rows([
@@ -236,7 +236,7 @@ class CreateVendorScreen extends Screen
 
 
             //check for duplicate email
-            if($this->validEmail($request->input('email'))){
+            if($this->validEmail($request->input('email')) && $this->validUserName($request->input('name'))){
 
                 //no duplicates found
                 //create user
@@ -275,7 +275,7 @@ class CreateVendorScreen extends Screen
 
                 //duplicate email found
                 //toast error message
-                Toast::error('Email already exists.');
+                Toast::error('Email or Username already exists.');
             }
 
         }catch(Exception $e){
@@ -435,18 +435,22 @@ class CreateVendorScreen extends Screen
 
     private function getCategoryId($category_name){
 
-            $category = Categories::where('name', 'LIKE', '%'.$category_name.'%')->get();
+        $category = Categories::where('name', 'LIKE', '%'.$category_name.'%')->get();
 
-            if(count($category) == 0){
-                return null;
-            }else{
-                return $category->value('id');
-            }
+        if(count($category) == 0){
+            return null;
+        }else{
+            return $category->value('id');
+        }
     }
 
     //check for duplicate emails
     private function validEmail($email){
         return count(User::where('email', $email)->get()) == 0;
+    }
+
+    private function validUserName($username){
+        return count(User::where('name', $username)->get()) == 0;
     }
 
     //this functions returns the values that need to be inserted in the localadmin table in the db

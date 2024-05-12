@@ -56,7 +56,7 @@ class CreateStudentScreen extends Screen
             Button::make('Add')
                 ->icon('plus')
                 ->method('createStudent'),
-                
+
             ModalToggle::make('Mass Import Students')
                 ->modal('massImportModal')
                 ->method('massImport')
@@ -226,15 +226,15 @@ class CreateStudentScreen extends Screen
             $userTableFields = $this->getUserFields($request);
 
             //check for duplicate email
-            if($this->validEmail($request->input('email'))){
-                
+            if($this->validEmail($request->input('email')) && $this->validUserName($request->input('name'))){
+
                 //no duplicates found
                 //create the user
                 $user = User::create($userTableFields);
 
                 //add the user id to the student table fields
                 $studentTableFields['user_id'] = $user->id;
-                
+
                 //create the student
                 Student::create($studentTableFields);
 
@@ -249,11 +249,11 @@ class CreateStudentScreen extends Screen
 
                 //redirect to the student index
                 return redirect()->route('platform.student.list');
-            
+
             }else{
                 //duplicate email found
                 //show an error toast
-                Toast::error('Email already exists.');
+                Toast::error('Email or Username already exists.');
             }
 
         }catch(Exception $e){
@@ -262,7 +262,7 @@ class CreateStudentScreen extends Screen
             Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
 }
-    
+
     //this method will mass import schools from a csv file
     public function massImport(Request $request){
 
@@ -288,9 +288,9 @@ class CreateStudentScreen extends Screen
                 for ($i = 0; $i < count($students); $i ++){
 
                     if($this->validEmail($students[$i]['email'])){
-                        
+
                         $students[$i]['school_id'] = $this->getSchoolID($students[$i]['country'], $students[$i]['school'], $students[$i]['county'], $students[$i]['city_municipality'], $students[$i]['state_province']);
-                        
+
                         $student = [
                             'name' => $students[$i]['firstname'], //this is the username for the student
                             'firstname' => $students[$i]['firstname'],
@@ -305,7 +305,7 @@ class CreateStudentScreen extends Screen
                         ];
 
                         $user = User::create($student);
-                        
+
                         $student['user_id'] = $user->id;
 
                         $student = [
@@ -329,7 +329,7 @@ class CreateStudentScreen extends Screen
                         ]);
 
                     }else{
-                        array_push($this->dupes, $students[$i]['email']);                    
+                        array_push($this->dupes, $students[$i]['email']);
                     }
                 }
 
@@ -351,7 +351,7 @@ class CreateStudentScreen extends Screen
                 return redirect()->route('platform.student.list');
             }
         }catch(Exception $e){
-            
+
             Alert::error('There was an error mass importing the students. Error Code: ' . $e->getMessage());
         }
     }
@@ -377,7 +377,7 @@ class CreateStudentScreen extends Screen
                 }
 
             } else{
-                
+
                 Toast::error('An error has occured.'); return;
             }
 
@@ -386,10 +386,10 @@ class CreateStudentScreen extends Screen
             Toast::error('Upload a csv file to import students.'); return false;
         }
     }
-    
+
     //this function will convert the csv file to an array
     private function csvToArray($filename = '', $delimiter = ','){
-        
+
         if (!file_exists($filename) || !is_readable($filename)){
             Alert::error('There has been an error finding this file.');
             return;
@@ -418,6 +418,10 @@ class CreateStudentScreen extends Screen
         return count(User::where('email', $email)->get()) == 0;
     }
 
+    private function validUserName($username){
+        return count(User::where('name', $username)->get()) == 0;
+    }
+
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
 
@@ -436,7 +440,7 @@ class CreateStudentScreen extends Screen
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
         ];
-        
+
         return $studentTableFields;
     }
 
@@ -499,7 +503,7 @@ class CreateStudentScreen extends Screen
             'remember_token' => Str::random(10),
             'role' =>3,
         ];
-        
+
         return $userTableFields;
     }
 }
