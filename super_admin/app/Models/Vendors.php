@@ -30,7 +30,7 @@ class Vendors extends Model
             }
 
             if(isset($filters['name_filter']) && isset($filters['search_input_by'])){
-                $query->where($filters['search_input_by'], request('name_filter'));
+                $query->where($filters['search_input_by'], 'like', '%' . request('name_filter') . '%');
             }
 
             $query->select('vendors.*');

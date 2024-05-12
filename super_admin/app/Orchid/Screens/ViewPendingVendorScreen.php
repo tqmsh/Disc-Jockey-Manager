@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Models\Vendors;
 use App\Models\RoleUsers;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
@@ -29,7 +30,7 @@ class ViewPendingVendorScreen extends Screen
     public function query(): iterable
     {
         return [
-            'pending_vendors' => Vendors::latest('vendors.created_at')->where('vendors.account_status', 0)->filter(request(['country', 'category_id', 'state_province']))->paginate(10),
+            'pending_vendors' => Vendors::latest('vendors.created_at')->where('vendors.account_status', 0)->filter(request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']))->paginate(10),
         ];
     }
 
@@ -61,7 +62,7 @@ class ViewPendingVendorScreen extends Screen
                 ->icon('trash')
                 ->method('deleteVendors')
                 ->confirm(__('Are you sure you want to delete the selected vendors?')),
-                
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.vendor.list')
@@ -90,14 +91,27 @@ class ViewPendingVendorScreen extends Screen
                         ->title('Category')
                         ->empty('No Selection')
                         ->fromQuery(Categories::query(), 'name'),
-                    
+
                     Select::make('state_province')
                         ->title('State/Province')
                         ->empty('No Selection')
                         ->fromModel(Vendors::class, 'state_province', 'state_province'),
 
-                ]),
-                
+                    Select::make('search_input_by')
+                        ->title('Search By:')
+                        ->options([
+                            'company_name'   => 'Company Name',
+                            'email' => 'Email',
+
+                        ]),
+
+
+                    Input::make('name_filter')
+                        ->title('Enter:')
+                        ->placeholder('No input')
+
+            ]),
+
                 Button::make('Filter')
                     ->icon('filter')
                     ->method('filter')
@@ -109,7 +123,7 @@ class ViewPendingVendorScreen extends Screen
     }
 
     public function filter(){
-        return redirect()->route('platform.pendingvendor.list', request(['country', 'category_id', 'state_province']));
+        return redirect()->route('platform.pendingvendor.list', request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']));
 
     }
 
@@ -117,7 +131,7 @@ class ViewPendingVendorScreen extends Screen
 
         //get all vendors from post request
         $vendors = $request->get('vendors');
-        
+
         try{
             //if the array is not empty
             if(!empty($vendors)){
@@ -146,11 +160,11 @@ class ViewPendingVendorScreen extends Screen
         }
     }
 
-    public function deleteVendors(Request $request){  
+    public function deleteVendors(Request $request){
 
         //get all vendors from post request
         $vendor_ids = $request->get('vendors');
-        
+
         try{
 
             //if the array is not empty
@@ -172,7 +186,7 @@ class ViewPendingVendorScreen extends Screen
     public function deleteVendor($vendor_id){
         // delete vendor from the vendors table
         Vendors::where('user_id', $vendor_id)->delete();
-        
+
         // delete vendor from the users table
         User::where('id', $vendor_id)->delete();
     }
