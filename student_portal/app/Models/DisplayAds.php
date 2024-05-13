@@ -17,6 +17,7 @@ class DisplayAds extends Model
         'campaign_id',
         'portal',
         'region_id',
+        'gender',
         'square'
     ];
 

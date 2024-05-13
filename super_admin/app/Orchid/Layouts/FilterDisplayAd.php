@@ -27,6 +27,14 @@ class FilterDisplayAd extends Rows
      */
     protected function fields(): iterable
     {
+
+        $sortedRegions = Region::whereIn('id', DisplayAds::pluck('region_id'))
+                        ->get()
+                        ->sortBy('name', SORT_NATURAL)
+                        ->mapWithKeys(function(Region $region, int $key) {
+                            return [$region->id => $region->name];
+                        })->toArray();
+
         return [
             Group::make([
                 Select::make('display_ads_route_uri')
@@ -45,7 +53,7 @@ class FilterDisplayAd extends Rows
                 Select::make('display_ads_region_id')
                     ->title('Region')
                     ->empty('No Selection')
-                    ->fromQuery(Region::whereIn('id', DisplayAds::pluck('region_id')), 'name'),
+                    ->options($sortedRegions)
             ]),
             Button::make('Filter')
                 ->icon('filter')

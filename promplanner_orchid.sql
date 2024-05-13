@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2024 at 12:14 AM
+-- Generation Time: May 11, 2024 at 09:51 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -317,6 +317,7 @@ CREATE TABLE `campaigns` (
   `clicks` bigint(20) UNSIGNED NOT NULL,
   `impressions` bigint(20) UNSIGNED NOT NULL,
   `active` int(11) NOT NULL DEFAULT 0,
+  `gender` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'all',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -325,8 +326,8 @@ CREATE TABLE `campaigns` (
 -- Dumping data for table `campaigns`
 --
 
-INSERT INTO `campaigns` (`id`, `user_id`, `category_id`, `region_id`, `title`, `image`, `website`, `clicks`, `impressions`, `active`, `created_at`, `updated_at`) VALUES
-(8, 197, 11, 1, 'Best campaign ever', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/10/0dea34232d3627e5b0696b6981ece68f0a04180a.png', 'https://orchid.software/en/docs/table/', 0, 0, 1, '2023-05-10 05:49:50', '2023-05-10 05:49:50');
+INSERT INTO `campaigns` (`id`, `user_id`, `category_id`, `region_id`, `title`, `image`, `website`, `clicks`, `impressions`, `active`, `gender`, `created_at`, `updated_at`) VALUES
+(8, 197, 11, 1, 'Best campaign ever', 'https://test-promplanner.s3.ca-central-1.amazonaws.com/2023/05/10/0dea34232d3627e5b0696b6981ece68f0a04180a.png', 'https://orchid.software/en/docs/table/', 0, 0, 1, 'all', '2023-05-10 05:49:50', '2023-05-10 05:49:50');
 
 -- --------------------------------------------------------
 
@@ -492,6 +493,8 @@ CREATE TABLE `display_ads` (
   `ad_index` tinyint(4) NOT NULL,
   `campaign_id` bigint(20) UNSIGNED NOT NULL,
   `region_id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) UNSIGNED NOT NULL,
+  `gender` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `square` tinyint(4) NOT NULL,
   `route_uri` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,

@@ -122,6 +122,15 @@
         <div class="mb-3">
 
             <label class="form-label">
+                {{ __("Are you interested in prom purchases for Males or Females?") }}
+            </label>
+
+            {!! \Orchid\Screen\Fields\Select::make('interested_prom_purchases')->options(['male' => 'Male', 'female' => 'Female'])->autofocus()->empty('Select "Male" or "Female"...') !!}
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
                 {{ __('Allergies') }}
             </label>
 
