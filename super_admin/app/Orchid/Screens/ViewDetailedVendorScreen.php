@@ -81,9 +81,14 @@ class ViewDetailedVendorScreen extends Screen
                     return $vendors_1->company_name ?? " ";
                 }),
 
-                Sight::make('name', 'First Name')
+                Sight::make('name', 'Username')
+                    ->render(function (Vendors $vendors_1 = null) {
+                        return User::find($vendors_1->user_id)->name ?? " ";
+                    }),
+
+                Sight::make('firstname', 'First Name')
                 ->render(function (Vendors $vendors_1 = null) {
-                    return User::find($vendors_1->user_id)->name ?? " ";
+                    return User::find($vendors_1->user_id)->firstname ?? " ";
                 }),
 
                 Sight::make('lastname', 'Last Name')
