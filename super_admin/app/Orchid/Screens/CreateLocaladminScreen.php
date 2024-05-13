@@ -56,7 +56,7 @@ class CreateLocaladminScreen extends Screen
             Button::make('Add')
                 ->icon('plus')
                 ->method('createLocaladmin'),
-                
+
             ModalToggle::make('Mass Import Local Admins')
                 ->modal('massImportModal')
                 ->method('massImport')
@@ -193,8 +193,8 @@ class CreateLocaladminScreen extends Screen
 
 
             //check for duplicate email
-            if($this->validEmail($request->input('email'))){
-                
+            if($this->validEmail($request->input('email')) && $this->validUserName($request->input('name'))){
+
                 //no duplicates found
                 $user = User::create($userTableFields);
 
@@ -206,17 +206,17 @@ class CreateLocaladminScreen extends Screen
                     'user_id' => $user->id,
                     'role_id' => 2
                 ]);
-                
+
                 Toast::success('Local Admin Added Succesfully');
 
                 return redirect()->route('platform.localadmin.list');
             }else{
                 //duplicate email found
-                Toast::error('Email already exists.');
+                Toast::error('Email or Username already exists.');
             }
 
         }catch(Exception $e){
-            
+
             Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage());
         }
     }
@@ -245,8 +245,8 @@ class CreateLocaladminScreen extends Screen
                 //loop through the array of local admins and re-write the keys to insert in db
                 for ($i = 0; $i < count($localadmins); $i ++){
 
-                    if($this->validEmail($localadmins[$i]['email'])){
-                        
+                    if($this->validEmail($localadmins[$i]['email'])) {
+
                         $localadmins[$i]['school_id'] = $this->getSchoolID($localadmins[$i]['country'], $localadmins[$i]['school'], $localadmins[$i]['county'], $localadmins[$i]['city_municipality'], $localadmins[$i]['state_province']);
 
                         $user = User::create([
@@ -281,7 +281,7 @@ class CreateLocaladminScreen extends Screen
                         ]);
 
                     }else{
-                        array_push($this->dupes, $localadmins[$i]['email']);                    
+                        array_push($this->dupes, $localadmins[$i]['email']);
                     }
                 }
 
@@ -303,7 +303,7 @@ class CreateLocaladminScreen extends Screen
                 return redirect()->route('platform.localadmin.list');
             }
         }catch(Exception $e){
-            
+
             Alert::error('There was an error mass importing the local admins. Error Code: ' . $e->getMessage());
         }
     }
@@ -329,7 +329,7 @@ class CreateLocaladminScreen extends Screen
                 }
 
             } else{
-                
+
                 Toast::error('An error has occured.'); return;
             }
 
@@ -338,10 +338,10 @@ class CreateLocaladminScreen extends Screen
             Toast::error('Upload a csv file to import local admins.'); return false;
         }
     }
-    
+
     //this function will convert the csv file to an array
     private function csvToArray($filename = '', $delimiter = ','){
-        
+
         if (!file_exists($filename) || !is_readable($filename)){
             Alert::error('There has been an error finding this file.');
             return;
@@ -370,6 +370,10 @@ class CreateLocaladminScreen extends Screen
         return count(User::where('email', $email)->get()) == 0;
     }
 
+    private function validUserName($username){
+        return count(User::where('name', $username)->get()) == 0;
+    }
+
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getLocalAdminFields($request){
         $school_id = $this->getSchoolIDByReq($request);
@@ -384,7 +388,7 @@ class CreateLocaladminScreen extends Screen
             'user_id' => null,
             'school_id' => $school_id
         ];
-        
+
         return $localadminTableFields;
     }
 
@@ -403,7 +407,7 @@ class CreateLocaladminScreen extends Screen
             'remember_token' => Str::random(10),
             'role' =>2,
         ];
-        
+
         return $userTableFields;
     }
 

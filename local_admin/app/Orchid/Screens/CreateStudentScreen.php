@@ -63,7 +63,7 @@ class CreateStudentScreen extends Screen
                 ->modal('massImportModal')
                 ->method('massImport')
                 ->icon('plus'),
-                
+
             Link::make('Back')
                 ->icon('arrow-left')
                 ->route('platform.student.list')
@@ -102,7 +102,7 @@ class CreateStudentScreen extends Screen
             ->title('Mass Import Students')
             ->applyButton('Import')
             ->withoutCloseButton(),
-            
+
             Layout::rows([
 
                 Input::make('firstname')
@@ -187,7 +187,7 @@ class CreateStudentScreen extends Screen
 
     public function createStudent(Request $request){
         try{
-            
+
             $request->validate([
                 'firstname' => 'required|max:255',
                 'lastname' => 'required|max:255',
@@ -198,7 +198,7 @@ class CreateStudentScreen extends Screen
                 'grade' => 'required|integer|in:9,10,11,12',
                 'allergies' => 'nullable|max:255',
             ]);
-            
+
 
 
             //get the student table fields
@@ -212,12 +212,12 @@ class CreateStudentScreen extends Screen
             //create user
             $user = User::create($userTableFields);
 
-            
+
 
 
             //add the user id to the student table fields
             $studentTableFields['user_id'] = $user->id;
-            
+
             //create student
             Student::create($studentTableFields);
 
@@ -226,7 +226,7 @@ class CreateStudentScreen extends Screen
                 'user_id' => $user->id,
                 'role_id' => 3,
             ]);
-            
+
             //notify the user
             Toast::success('Student Added Succesfully');
 
@@ -248,7 +248,7 @@ class CreateStudentScreen extends Screen
                 'boolean' => 'true'
                 )
             );
-            
+
             $opts = array('http' => array('method'  => 'POST', 'header'  => 'Content-type: application/x-www-form-urlencoded', 'content' => $postdata));
             $context  = stream_context_create($opts);
             $result = file_get_contents($your_installation_url.'/subscribe', false, $context);
@@ -287,34 +287,34 @@ class CreateStudentScreen extends Screen
                 //loop through the array of schools and re-write the keys to insert in db
                 for ($i = 0; $i < count($students); $i ++){
 
-                    if($this->validEmail($students[$i]['email'])){
-                        
+                    if($this->validEmail($students[$i]['email']) && $this->validUserName($request->input('name'))){
+
                         $students[$i]['school_id'] = Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id');
-                        
+
                         $user = User::create([
-                            'firstname' => $students[$i]['firstname'], 
-                            'lastname' => $students[$i]['lastname'], 
-                            'phonenumber' => $students[$i]['phonenumber'], 
-                            'email' => $students[$i]['email'], 
-                            'password' => bcrypt($students[$i]['password']), 
-                            'country' => Auth::user()->country, 
-                            'role' => 3, 
-                            'name' => $students[$i]['firstname'], 
-                            'account_status' => 1, 
+                            'firstname' => $students[$i]['firstname'],
+                            'lastname' => $students[$i]['lastname'],
+                            'phonenumber' => $students[$i]['phonenumber'],
+                            'email' => $students[$i]['email'],
+                            'password' => bcrypt($students[$i]['password']),
+                            'country' => Auth::user()->country,
+                            'role' => 3,
+                            'name' => $students[$i]['firstname'],
+                            'account_status' => 1,
                         ]);
-                        
+
                         $students[$i]['user_id'] = $user->id;
 
                         Student::create([
-                            'firstname' => $students[$i]['firstname'], 
-                            'lastname' => $students[$i]['lastname'], 
-                            'phonenumber' => $students[$i]['phonenumber'], 
-                            'email' => $students[$i]['email'], 
-                            'grade' => $students[$i]['grade'], 
-                            'school_id' => $students[$i]['school_id'], 
-                            'allergies' => $students[$i]['allergies'], 
-                            'user_id' => $students[$i]['user_id'], 
-                            'account_status' => 1, 
+                            'firstname' => $students[$i]['firstname'],
+                            'lastname' => $students[$i]['lastname'],
+                            'phonenumber' => $students[$i]['phonenumber'],
+                            'email' => $students[$i]['email'],
+                            'grade' => $students[$i]['grade'],
+                            'school_id' => $students[$i]['school_id'],
+                            'allergies' => $students[$i]['allergies'],
+                            'user_id' => $students[$i]['user_id'],
+                            'account_status' => 1,
                             'school' => Localadmin::where('user_id', Auth::user()->id)->get('school')->value('school'),
                         ]);
 
@@ -322,7 +322,7 @@ class CreateStudentScreen extends Screen
                             'user_id' => $user->id,
                             'role_id' => 3,
                         ]);
-                            
+
                         // SENDY API
                         $your_installation_url = 'https://pod01.growthmail.net'; //Your Sendy installation (without the trailing slash)
                         $list = 'cbSDy4cjl2iW4epIArqbfg'; //Can be retrieved from "View all lists" page
@@ -339,13 +339,13 @@ class CreateStudentScreen extends Screen
                             'boolean' => 'true'
                             )
                         );
-                        
+
                         $opts = array('http' => array('method'  => 'POST', 'header'  => 'Content-type: application/x-www-form-urlencoded', 'content' => $postdata));
                         $context  = stream_context_create($opts);
                         $result = file_get_contents($your_installation_url.'/subscribe', false, $context);
 
                     }else{
-                        array_push($this->dupes, $students[$i]['email']);                    
+                        array_push($this->dupes, $students[$i]['email']);
                     }
                 }
 
@@ -367,7 +367,7 @@ class CreateStudentScreen extends Screen
                 return redirect()->route('platform.student.list');
             }
         }catch(Exception $e){
-            
+
             Alert::error('There was an error mass importing the students. Error Code: ' . $e->getMessage());
         }
     }
@@ -398,7 +398,7 @@ class CreateStudentScreen extends Screen
                 }
 
             } else{
-                
+
                 // If the path is null, display an error message
                 Toast::error('An error has occured.'); return;
             }
@@ -409,10 +409,10 @@ class CreateStudentScreen extends Screen
             Toast::error('Upload a csv file to import students.'); return false;
         }
     }
-    
+
     //this function will convert the csv file to an array
     private function csvToArray($filename = '', $delimiter = ','){
-        
+
         if (!file_exists($filename) || !is_readable($filename)){
             Alert::error('There has been an error finding this file.');
             return;
@@ -441,6 +441,10 @@ class CreateStudentScreen extends Screen
         return count(User::where('email', $email)->get()) == 0;
     }
 
+    private function validUserName($username){
+        return count(User::where('name', $username)->get()) == 0;
+    }
+
     //this functions returns the values that need to be inserted in the localadmin table in the db
     private function getStudentFields($request){
 
@@ -459,7 +463,7 @@ class CreateStudentScreen extends Screen
             'allergies' => $request->input('allergies'),
             'ticketstatus'=> $request->input('ticketstatus'),
         ];
-        
+
         return $studentTableFields;
     }
 
@@ -478,7 +482,7 @@ class CreateStudentScreen extends Screen
             'remember_token' => Str::random(10),
             'role' =>3,
         ];
-        
+
         return $userTableFields;
     }
 }

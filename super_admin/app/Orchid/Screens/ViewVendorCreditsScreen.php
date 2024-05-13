@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
 
 use App\Models\User;
@@ -31,7 +32,7 @@ class ViewVendorCreditsScreen extends Screen
     public function query(): iterable
     {
         return [
-            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province']))->where('vendors.account_status', 1)->paginate(10)
+            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']))->where('vendors.account_status', 1)->paginate(10)
         ];
     }
 
@@ -78,14 +79,27 @@ class ViewVendorCreditsScreen extends Screen
                         ->empty('No Selection')
                         ->fromQuery(Categories::query(), 'name')
                         ->placeholder('Select Category'),
-                    
+
                     Select::make('state_province')
                         ->title('State/Province')
                         ->empty('No Selection')
                         ->fromModel(Vendors::class, 'state_province', 'state_province'),
 
+                    Select::make('search_input_by')
+                        ->title('Search By:')
+                        ->options([
+                            'company_name'   => 'Company Name',
+                            'email' => 'Email',
+
+                        ]),
+
+
+                    Input::make('name_filter')
+                        ->title('Enter:')
+                        ->placeholder('No input')
+
                 ]),
-                
+
                 Button::make('Filter')
                     ->icon('filter')
                     ->method('filter')
@@ -101,6 +115,6 @@ class ViewVendorCreditsScreen extends Screen
 
     public function filter(){
 
-        return redirect()->route('platform.vendor.credits', request(['country', 'category_id', 'state_province']));
+        return redirect()->route('platform.vendor.credits', request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']));
     }
 }
