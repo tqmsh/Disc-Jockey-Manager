@@ -24,15 +24,29 @@ class CreateLocaladminScreen extends Screen
 {
     public $requiredFields = ['firstname', 'lastname', 'email', 'county', 'password', 'phonenumber', 'school', 'state_province', 'country'];
     public $dupes =[];
-
+    public $localadmin;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Localadmin $localadmin, Request $request): iterable
     {
-        return [];
+        $localadmin->firstname = $request->input('firstname') ?? "";
+        $localadmin->lastname = $request->input('lastname') ?? "";
+        $localadmin->name = $request->input('name') ?? "";
+        $localadmin->phonenumber = $request->input('phonenumber') ?? "";
+        $localadmin->email = $request->input('email') ?? "";
+        $localadmin->password = $request->input('password') ?? "";
+        $localadmin->school = $request->input('school') ?? "";
+        $localadmin->country = $request->input('country') ?? "";
+        $localadmin->state_province = $request->input('state_province') ?? "";
+        $localadmin->county = $request->input('county') ?? "";
+        $localadmin->city_municipality = $request->input('city_municipality') ?? "";
+
+        return [
+            'localadmin'=>$localadmin
+        ];
     }
 
     /**
@@ -110,21 +124,24 @@ class CreateLocaladminScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. John'),
+                    ->placeholder('Ex. John')
+                    ->value($this->localadmin->firstname),
 
                 Input::make('lastname')
                     ->title('Last Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Doe'),
+                    ->placeholder('Ex. Doe')
+                    ->value($this->localadmin->lastname),
 
                 Input::make('name')
                     ->title('Username')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. KingKhan435'),
+                    ->placeholder('Ex. KingKhan435')
+                    ->value($this->localadmin->name),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')
@@ -132,53 +149,61 @@ class CreateLocaladminScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 859-5863'),
+                    ->placeholder('Ex. (613) 859-5863')
+                    ->value($this->localadmin->phonenumber),
 
                 Input::make('email')
                     ->title('Email')
                     ->type('email')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
+                    ->placeholder('Ex. johndoe@gmail.com')
+                    ->value($this->localadmin->email),
 
                 Password::make('password')
                     ->title('Password')
                     ->type('password')
                     ->required()
-                    ->horizontal(),
+                    ->horizontal()
+                    ->value($this->localadmin->password),
 
                 Select::make('school')
                     ->title('School')
                     ->required()
                     ->empty('Start typing to Search...')
                     ->horizontal()
-                    ->fromModel(School::class, 'school_name', 'school_name'),
+                    ->fromModel(School::class, 'school_name', 'school_name')
+                    ->value($this->localadmin->school),
 
                 Select::make('country')
                     ->title('Country')
                     ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->fromModel(School::class, 'country', 'country')
+                    ->value($this->localadmin->country),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->empty('Start typing to Search...')
                     ->required()
-                    ->fromModel(School::class, 'state_province', 'state_province'),
+                    ->fromModel(School::class, 'state_province', 'state_province')
+                    ->value($this->localadmin->state_province),
 
                 Select::make('county')
                     ->title('County')
                     ->empty('Start typing to Search...')
                     ->horizontal()
-                    ->fromModel(School::class, 'county', 'county'),
+                    ->fromModel(School::class, 'county', 'county')
+                    ->value($this->localadmin->county),
 
                 Select::make('city_municipality')
                     ->title('City/Municipality')
                     ->empty('Start typing to Search...')
                     ->horizontal()
-                    ->fromModel(School::class, 'city_municipality', 'city_municipality'),
+                    ->fromModel(School::class, 'city_municipality', 'city_municipality')
+                    ->value($this->localadmin->city_municipality),
             ]),
         ];
     }
@@ -213,11 +238,14 @@ class CreateLocaladminScreen extends Screen
             }else{
                 //duplicate email found
                 Toast::error('Email or Username already exists.');
+                return redirect()->route('platform.localadmin.create', request(['firstname', 'lastname', 'name', 'phonenumber', 'email', 'password', 'school', 'country', 'state_province', 'county', 'city_municipality']));
+
             }
 
         }catch(Exception $e){
 
             Alert::error('There was an error creating this local admin Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.localadmin.create', request(['firstname', 'lastname', 'name', 'phonenumber', 'email', 'password', 'school', 'country', 'state_province', 'county', 'city_municipality']));
         }
     }
 

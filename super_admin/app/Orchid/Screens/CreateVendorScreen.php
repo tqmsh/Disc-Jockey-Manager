@@ -324,6 +324,8 @@ class CreateVendorScreen extends Screen
 
             //toast error message
             Alert::error('There was an error creating this vendor Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.vendor.create', request(['firstname', 'lastname', 'name', 'company_name', 'website', 'category_id', 'email', 'password', 'phonenumber', 'region_ids', 'address', 'country', 'state_province', 'zip_postal', 'city']));
+
         }
     }
 
