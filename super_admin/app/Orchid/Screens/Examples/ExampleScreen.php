@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\Student;
 use App\Models\Vendors;
 use App\Models\Session;
+use App\Orchid\Layouts\Examples\ChartPieExample;
 use Carbon\Carbon;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
@@ -65,7 +66,19 @@ class ExampleScreen extends Screen
     public function query(): iterable
     {
         $this->campaigns = Campaign::where("active", 1)->get();
-        return [
+        $prov_arr = School::select(['state_province', 'count(*)'])->groupBy('province');
+        $prov_keys = array();
+        $prov_counts = array();
+        foreach ($prov_arr as $p=>$val) {
+            $vals = explode(",", $val);
+            $secondvals = explode(":", $vals[0]);
+            $thirdvals = explode(":", $vals[1]);
+            $thirdvals[1] = str_replace("}", "", $thirdvals[1]);
+            array_push($prov_keys, $secondvals[1]);
+            array_push($prov_counts, $thirdvals[1]);
+        }
+        dd($prov_keys);
+            return [
             "ad_ids" =>"",
             'charts'  => [
                 [
@@ -113,6 +126,13 @@ class ExampleScreen extends Screen
 
 
             ],
+                'RegionChart'  => [
+                    [
+                        'name'   => 'Agreements Broken Down By Province',
+                        'values' => $prov_counts,
+                        'labels' => $prov_keys
+                    ]
+                ],
         ];
     }
 
@@ -158,26 +178,26 @@ class ExampleScreen extends Screen
     {
 
         $now = new DateTime(); // Create a DateTime object representing the current date and time
-        
+
         // Calculate the date and time 30 days ago
         $oneDayAgo = clone $now;
         $oneDayAgo->sub(new DateInterval('P1D'));
-        
+
         $sevenDaysAgo = clone $now;
         $sevenDaysAgo->sub(new DateInterval('P7D'));
-        
+
         $thirtyDaysAgo = clone $now;
         $thirtyDaysAgo->sub(new DateInterval('P30D'));
-        
+
         $ninetyDaysAgo = clone $now;
         $ninetyDaysAgo->sub(new DateInterval('P90D'));
-        
+
         // Count the number of schools created in the last 30 days
         $numberOfSchoolsLastDay    = School::where('created_at', '>=', $oneDayAgo->format('Y-m-d H:i:s'))->count();
         $numberOfSchoolsLast7Days  = School::where('created_at', '>=', $sevenDaysAgo->format('Y-m-d H:i:s'))->count();
         $numberOfSchoolsLast30Days = School::where('created_at', '>=', $thirtyDaysAgo->format('Y-m-d H:i:s'))->count();
         $numberOfSchoolsLast90Days = School::where('created_at', '>=', $ninetyDaysAgo->format('Y-m-d H:i:s'))->count();
-        
+
         $numberOfStudentsLastDay    = Student::where('created_at', '>=', $oneDayAgo->format('Y-m-d H:i:s'))->count();
         $numberOfStudentsLast7Days  = Student::where('created_at', '>=', $sevenDaysAgo->format('Y-m-d H:i:s'))->count();
         $numberOfStudentsLast30Days = Student::where('created_at', '>=', $thirtyDaysAgo->format('Y-m-d H:i:s'))->count();
@@ -192,14 +212,14 @@ class ExampleScreen extends Screen
         $numberOfBrandsLast7Days  = Vendors::where('created_at', '>=', $sevenDaysAgo->format('Y-m-d H:i:s'))->count();
         $numberOfBrandsLast30Days = Vendors::where('created_at', '>=', $thirtyDaysAgo->format('Y-m-d H:i:s'))->count();
         $numberOfBrandsLast90Days = Vendors::where('created_at', '>=', $ninetyDaysAgo->format('Y-m-d H:i:s'))->count();
-        
+
 
         // dd($numberOfStudentsLast90Days);
-        
+
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
             if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
-            
+
             $arr_ads[] = ["id"=>$campaign->id,
                 "forward_url"=>$campaign->website,
                 "image_url"=>$campaign->image,
@@ -251,7 +271,11 @@ class ExampleScreen extends Screen
 
 
             ]),
-                                        
+
+            ChartPieExample::make('RegionChart', 'Pie Chart')
+                ->description('Simple, responsive, modern SVG Charts with zero dependencies'),
+
+
             // Layout::metrics([
             //     'Sales Today'    => 'metrics.sales',
             //     'Visitors Today' => 'metrics.visitors',
