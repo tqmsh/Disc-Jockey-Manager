@@ -80,7 +80,7 @@ class ExampleScreen extends Screen
 
         $user = Auth::user();
         $localAdmin = LocalAdmin::where('user_id', $user->id)->first();
-        
+
         $now = Carbon::now();
 
         // Remaining Days Until Next Event
@@ -108,15 +108,15 @@ class ExampleScreen extends Screen
         $paidAttendeesCount = EventAttendees::where('event_id', $newestEventId)->where('ticketstatus', 'paid')->count();
 
         $paidAttendeesCountPercentage = (!is_null($newestEvent) && $newestEvent->capacity > 0) ? number_format(($paidAttendeesCount / $newestEvent->capacity) * 100, 2) . " %" : "Capacity Not Set";
-        
+
         // Direct Bids recieved
         //get the count of all bids placed on all events at the currently authenticated user's school
         $DirectBidsRecieved = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->count();
 
-        // Direct Bids Replied to
+        // Direct Bids Replied tolar
         $DirectBidsRepliedTo = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->whereIn('status', [1,2])->count();
 
-        // Total Revenue: 
+        // Total Revenue:
         $revenueRecord = ActualExpenseRevenue::where('event_id', $newestEventId)->where('type', 2)->first();
         $totalRevenue = $revenueRecord ? $revenueRecord->actual : "No revenue";
 
@@ -232,6 +232,7 @@ class ExampleScreen extends Screen
         }
         usort($arr_ads, [$this, 'customSort']);
         return [
+
             Layout::metrics([
                 'Total Students' => 'metrics.totalStudents',
                 // Replaced pending students with days until next event
@@ -240,12 +241,14 @@ class ExampleScreen extends Screen
                 'Total Prom Night Tickets Sold' => 'metrics.totalTicketsSold',
                 'Prom Night Tickets Sold %' => 'metrics.paidAttendeesCountPercentage',
             ]),
+
             Layout::metrics([
                 'Direct Bids received' => 'metrics.directBidsReceived',
                 'Direct Bids replied' => 'metrics.directBidsRepliedTo',
                 'Total Revenue' => 'metrics.totalRevenue',
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
+            Layout::view("tooltip_editor"),
             //Layout::view("card_style"),
 
             //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),

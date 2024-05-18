@@ -7,8 +7,39 @@
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     @stack('scripts')
+    @push('scripts')
+    <!--- Tooltip player -->
+        <!--- Tooltip player -->
+        <script type='text/javascript'>
+            window.Tooltip||function(t,e){var o={
+                url:"https://cdn.tooltip.io/static/player.js",
+                key:"3cfc9c1e-65bb-489f-b8a1-9e09978b56a7",
+                async:true
+            };
+
+                window.Tooltip={cs:[],_apiKey:o.key};for(
+                    var r=["identify","goal","updateUserData","start","stop","refresh","show","hide","on"],
+                        i={},n=0;n<r.length;n++){var a=r[n];i[a]=function(t){return function(){var e=Array.prototype.slice.call(arguments);
+                    window.Tooltip.cs.push({method:t,args:e})}}(a)}window.Tooltip.API=i;var n=t.createElement(e),s=t.getElementsByTagName(e)[0];
+                n.type="text/javascript",n.async=o.async,s.parentNode.insertBefore(n,s),n.src=o.url}(document,"script");
+        </script>
+        <!--- Tooltip player -->    <!--- Tooltip player -->
+        @endpush
 </head>
 <body class="bg-gray-200 h-screen flex items-center justify-center">
+
+<input type="button"
+       class="button" value="Button"
+       onclick="myGeeks()">
+
+<script>
+    function myGeeks() {
+        document.querySelector(".button").
+            onclick = function () {
+            Tooltip.API.show('6644e55252149c0019169f7a');
+        }
+    }
+</script>
 
 <div class="flex space-x-4 mb-3">
     <div class="bg-white p-4 rounded shadow-md w-25">
