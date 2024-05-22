@@ -37,7 +37,7 @@ class RegionFilter extends Filter
      */
     public function run(Builder $builder): Builder
     {
-        return $builder->selectRaw('regions.name, count(region_id)')
+        return $builder->selectRaw('regions.name, count(region_id) as cnt')
             ->join('regions', 'schools.region_id', '=', 'regions.id')
             ->groupBy('regions.name');
     }

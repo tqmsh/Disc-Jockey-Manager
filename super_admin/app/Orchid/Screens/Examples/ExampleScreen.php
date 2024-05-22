@@ -104,7 +104,7 @@ class ExampleScreen extends Screen
         $reg=array();
         foreach ($region_arr as $p=>$val) {
             array_push($region_keys, $val["name"]);
-            array_push($region_counts, $val["count(region_id)"]);
+            array_push($region_counts, $val["cnt"]);
 
         }
         $reg = [$region_keys, $region_counts];
@@ -400,7 +400,7 @@ class ExampleScreen extends Screen
 
             Layout::rows([
                 Select::make('pieType')
-                    ->title('Pick')
+                    ->title('Pick how you want to breakdown schools. ')
                     ->empty('No Selection')
                     ->options(['RegionChart'=>'Region', 'CountryChart'=>'Country', 'ProvinceChart'=>'Province'])
                     ->value($this->pieType),
@@ -410,13 +410,13 @@ class ExampleScreen extends Screen
 
         ]),
 
-            ChartPieExample::make($this->pieType, 'Pie Chart')
+            ChartPieExample::make($this->pieType, 'School Breakdown')
                 ->description('Pie chart relating schools by province, country, region'),
 
 
             Layout::rows([
                 Select::make('vpieType')
-                    ->title('Pick')
+                    ->title('Pick how you want to breakdown vendors.')
                     ->empty('No Selection')
                     ->options(['VCategoryChart'=>'Category', 'VCountryChart'=>'Country', 'VProvinceChart'=>'Province'])
                     ->value($this->vpieType),
@@ -426,7 +426,7 @@ class ExampleScreen extends Screen
 
             ]),
 
-            ChartPieExample::make($this->vpieType, 'Pie Chart')
+            ChartPieExample::make($this->vpieType, 'Vendor Breakdown')
                 ->description('Pie chart relating vendors by province, country, category'),
 
 

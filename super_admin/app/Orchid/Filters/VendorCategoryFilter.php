@@ -37,7 +37,7 @@ class VendorCategoryFilter extends Filter
      */
     public function run(Builder $builder): Builder
     {
-        return $builder->selectRaw('categories.name, count(vendors.id)')
+        return $builder->selectRaw('categories.name, count(vendors.id) as cnt')
             ->join('categories', 'vendors.category_id', '=', 'categories.id')
             ->groupBy('categories.name');
     }
