@@ -43,10 +43,10 @@ class ViewBidHistoryScreen extends Screen
         $this->paidRegionIds =  Arr::pluck($array, ['region_id']);
          
         return [
-            'eventBids' => EventBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
-            'studentBids' => StudentBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
-            'limoBids' => LimoGroupBid::where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
-            'beautyBids' => BeautyGroupBid::where('user_id', Auth::user()->id)->orderBy('status')->paginate(10),
+            'eventBids' => EventBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(request()->query('pagesize', 10)),
+            'studentBids' => StudentBids::filter(request(['region_id']))->where('user_id', Auth::user()->id)->orderBy('status')->paginate(request()->query('pagesize', 10)),
+            'limoBids' => LimoGroupBid::where('user_id', Auth::user()->id)->orderBy('status')->paginate(request()->query('pagesize', 10)),
+            'beautyBids' => BeautyGroupBid::where('user_id', Auth::user()->id)->orderBy('status')->paginate(request()->query('pagesize', 10)),
 
             'metrics' => [
                 'bidsAccepted'    => ['value' => number_format(count(EventBids::where('user_id', Auth::user()->id)->where('status', 1)->get()) + count(StudentBids::where('user_id', Auth::user()->id)->where('status', 1)->get()) + count(LimoGroupBid::where('user_id', Auth::user()->id)->where('status', 1)->get()) + count(BeautyGroupBid::where('user_id', Auth::user()->id)->where('status', 1)->get()))],

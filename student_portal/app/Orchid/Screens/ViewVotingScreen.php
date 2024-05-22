@@ -29,7 +29,7 @@ class ViewVotingScreen extends Screen
      */
     public function query(Position $position): iterable
     {
-        $candidate = Candidate::where('position_id', $position->id)->paginate(10);
+        $candidate = Candidate::where('position_id', $position->id)->paginate(request()->query('pagesize', 10));
         $election = Election::where('id', $position->election_id)->first();
 
         // Election hasnt started yet

@@ -30,7 +30,7 @@ class ViewPendingStudentScreen extends Screen
         return [
             'pending_students' => Student::latest('students.created_at')
                                     ->filter(request(['country', 'state_province', 'school', 'school_board']))
-                                    ->where('students.account_status', 0)->paginate(10)
+                                    ->where('students.account_status', 0)->paginate(request()->query('pagesize', 10))
         ];
     }
 

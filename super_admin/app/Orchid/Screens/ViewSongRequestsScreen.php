@@ -35,7 +35,7 @@ class ViewSongRequestsScreen extends Screen
             ->select('song_requests.song_id', 'song_requests.event_id', DB::raw('COUNT(song_requests.user_id) as num_requesters'))
             ->groupBy('song_requests.song_id', 'song_requests.event_id')
             ->orderBy('num_requesters', 'desc')
-            ->paginate(10);
+            ->paginate(request()->query('pagesize', 10));
 
         return [
             'event' => $event,

@@ -22,7 +22,7 @@ class ViewLimoGroupMembersScreen extends Screen
 
         return [
             'limoGroup' => $limoGroup,
-            'members' => $limoGroup->members()->paginate(10)
+            'members' => $limoGroup->members()->paginate(request()->query('pagesize', 10))
         ];
     }
 

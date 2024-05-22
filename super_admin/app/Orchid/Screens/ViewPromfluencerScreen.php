@@ -25,7 +25,7 @@ class ViewPromfluencerScreen extends Screen
     public function query(): iterable
     {
         return [
-            'promfluencers' => Promfluencer::filter(request(['school', 'grade',]))->paginate(10),
+            'promfluencers' => Promfluencer::filter(request(['school', 'grade',]))->paginate(request()->query('pagesize', 10)),
         ];
     }
 

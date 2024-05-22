@@ -44,7 +44,7 @@ class ViewEventInformationScreen extends Screen {
     {
         // dd($event_id);
         return [
-            'events' => Events::where('school_id', Auth::user()->student->school_id)->latest('events.created_at')->paginate(10),
+            'events' => Events::where('school_id', Auth::user()->student->school_id)->latest('events.created_at')->paginate(request()->query('pagesize', 10)),
             'event' => $event
         ];
     }

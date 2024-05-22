@@ -19,7 +19,7 @@ class ViewBeautyGroupScreen extends Screen
     public function query(): iterable
     {
         return [
-            'beautyGroups' => BeautyGroup::latest()->paginate(10)
+            'beautyGroups' => BeautyGroup::latest()->paginate(request()->query('pagesize', 10))
         ];
     }
 

@@ -19,7 +19,7 @@ class ViewLimoGroupScreen extends Screen
     public function query(): iterable
     {
         return [
-            'limoGroups' => LimoGroup::latest()->paginate(10)
+            'limoGroups' => LimoGroup::latest()->paginate(request()->query('pagesize', 10))
         ];
     }
 

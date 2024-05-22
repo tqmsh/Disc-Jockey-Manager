@@ -32,7 +32,7 @@ class ViewEventFoodScreen extends Screen
         return [
             'event' => $event,
             'allergies' => $event->allergies(),
-            'food' => $event->food()->filter($filters)->paginate(10),
+            'food' => $event->food()->filter($filters)->paginate(request()->query('pagesize', 10)),
         ];
     }
 

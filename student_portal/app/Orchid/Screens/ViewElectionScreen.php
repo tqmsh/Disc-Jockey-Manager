@@ -28,7 +28,7 @@ class ViewElectionScreen extends Screen
 
         return [
             'election' => $election,
-            'position' => Position::where('election_id',$election->id)->paginate(10),
+            'position' => Position::where('election_id',$election->id)->paginate(request()->query('pagesize', 10)),
             'event' => $event,
         ];
     }

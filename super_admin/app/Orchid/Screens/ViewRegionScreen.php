@@ -31,7 +31,7 @@ class ViewRegionScreen extends Screen
     public function query(): iterable
     {
         return [
-            'regions' => Region::latest()->filter(request(['region_name',]))->paginate(10),
+            'regions' => Region::latest()->filter(request(['region_name',]))->paginate(request()->query('pagesize', 10)),
         ];
     }
 

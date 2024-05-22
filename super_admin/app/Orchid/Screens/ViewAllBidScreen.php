@@ -31,10 +31,10 @@ class ViewAllBidScreen extends Screen
     public function query(): iterable
     {
         return [
-            'pendingBids' => EventBids::filter(request(['category_id']))->where('status', 0)->latest()->paginate(10),
-            'previousBids' => EventBids::filter(request(['category_id']))->whereNot('status', 0)->orderBy('status')->latest()->paginate(10),
-            'pendingStudentBids' => StudentBids::filter(request(['category_id']))->where('status', 0)->latest()->paginate(10),
-            'previousStudentBids' => StudentBids::filter(request(['category_id']))->whereNot('status', 0)->orderBy('status')->latest()->paginate(10)
+            'pendingBids' => EventBids::filter(request(['category_id']))->where('status', 0)->latest()->paginate(request()->query('pagesize', 10)),
+            'previousBids' => EventBids::filter(request(['category_id']))->whereNot('status', 0)->orderBy('status')->latest()->paginate(request()->query('pagesize', 10)),
+            'pendingStudentBids' => StudentBids::filter(request(['category_id']))->where('status', 0)->latest()->paginate(request()->query('pagesize', 10)),
+            'previousStudentBids' => StudentBids::filter(request(['category_id']))->whereNot('status', 0)->orderBy('status')->latest()->paginate(request()->query('pagesize', 10))
         ];
     }
 

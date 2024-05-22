@@ -35,10 +35,10 @@ class ViewAdScreen extends Screen
     public function query(): iterable
     {
         return [
-          "campaignsActive"=>Campaign::where("active", 1)->filter(request('active_campaigns_filters') ?? [])->paginate(10),
-          "campaignsInactive"=>Campaign::where("active", 2)->filter(request('inactive_campaigns_filters') ?? [])->paginate(10),
-          "campaignsPending"=>Campaign::where("active", 0)->filter(request('pending_campaigns_filters') ?? [])->paginate(10),
-          "campaignsDisplayAds" =>  DisplayAds::filter(request('display_ads_filters') ?? [])->paginate(10),
+          "campaignsActive"=>Campaign::where("active", 1)->filter(request('active_campaigns_filters') ?? [])->paginate(request()->query('pagesize', 10)),
+          "campaignsInactive"=>Campaign::where("active", 2)->filter(request('inactive_campaigns_filters') ?? [])->paginate(request()->query('pagesize', 10)),
+          "campaignsPending"=>Campaign::where("active", 0)->filter(request('pending_campaigns_filters') ?? [])->paginate(request()->query('pagesize', 10)),
+          "campaignsDisplayAds" =>  DisplayAds::filter(request('display_ads_filters') ?? [])->paginate(request()->query('pagesize', 10)),
           "campaignsAdSpots" => request('ad_spots_filters') == null ? [] : app(DisplayAdData::class)->getAllAdSpots(request('ad_spots_filters')),
 
             'metrics' => [

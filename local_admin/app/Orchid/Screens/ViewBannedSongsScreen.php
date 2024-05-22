@@ -29,7 +29,7 @@ class ViewBannedSongsScreen extends Screen
     {
         $filters = $request->get('filter');
         $songIds = NoPlaySong::where('event_id', $event->id)->pluck('song_id');
-        $songs = Song::filter($filters)->whereIn('id', $songIds)->paginate(10);
+        $songs = Song::filter($filters)->whereIn('id', $songIds)->paginate(request()->query('pagesize', 10));
 
         return [
             'event' => $event,

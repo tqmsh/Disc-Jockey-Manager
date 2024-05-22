@@ -29,7 +29,7 @@ class ViewDressListScreen extends Screen
             'dresses' => Dress::with('user')
                 ->filter(request(['sort', 'filter']))
                 ->latest('dresses.created_at')
-                ->paginate(),
+                ->paginate(request()->query('pagesize', 10)),
             'claimedDress' => SchoolDresses::where('user_id', Auth::id())->first()
         ];
     }

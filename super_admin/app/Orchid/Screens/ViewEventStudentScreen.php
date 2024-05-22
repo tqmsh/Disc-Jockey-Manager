@@ -44,12 +44,12 @@ class ViewEventStudentScreen extends Screen
         $filters = $request->get('filter') ?? [];
         return [
             'event' => $event,
-            'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter($filters)->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(20),
-            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))->filter($filters)->paginate(20),
-            'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(20),
-            'tables' => Seating::where('event_id', $event->id)->paginate(10),
-            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(20),
+            'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'tables' => Seating::where('event_id', $event->id)->paginate(request()->query('pagesize', 10)),
+            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(request()->query('pagesize', 20)),
         ];
     }
 

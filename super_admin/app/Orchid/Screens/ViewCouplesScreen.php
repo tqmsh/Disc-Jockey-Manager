@@ -26,7 +26,7 @@ class ViewCouplesScreen extends Screen
     {
         return [
             'couples' => Couple::filter(request(['event_id']))->latest('couples.created_at')
-                ->paginate(20)
+                ->paginate(request()->query('pagesize', 20))
         ];
     }
 

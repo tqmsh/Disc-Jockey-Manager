@@ -29,7 +29,7 @@ class ViewStudentScreen extends Screen
     {
         return [
             'students' => Student::filter(request(['country', 'state_province', 'school', 'sort_option', 'school_board', 'event_id', 'ticketstatus']))->latest('students.created_at')
-            ->where('students.account_status', 1)->paginate(10)
+            ->where('students.account_status', 1)->paginate(request()->query('pagesize', 10))
         ];
     }
 

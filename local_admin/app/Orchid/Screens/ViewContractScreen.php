@@ -33,7 +33,7 @@ class ViewContractScreen extends Screen
                     School::find(
                         Localadmin::where('user_id', Auth::id())->first()->school_id
                     )->state_province)
-                ->filter(request(['title',]))->paginate(10),
+                ->filter(request(['title',]))->paginate(request()->query('pagesize', 10)),
         ];
     }
 

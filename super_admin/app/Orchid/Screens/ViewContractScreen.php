@@ -26,7 +26,7 @@ class ViewContractScreen extends Screen
     public function query(): iterable
     {
         return [
-            'contracts' => Contract::latest()->filter(request(['title', 'state_province',]))->paginate(10),
+            'contracts' => Contract::latest()->filter(request(['title', 'state_province',]))->paginate(request()->query('pagesize', 10)),
         ];
     }
 

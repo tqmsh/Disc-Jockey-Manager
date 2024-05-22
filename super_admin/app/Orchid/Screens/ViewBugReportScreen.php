@@ -24,7 +24,7 @@ class ViewBugReportScreen extends Screen
     public function query(): iterable
     {
         return [
-            'bug_reports' => BugReport::filter(request(['severity', 'status']))->latest('bug_reports.created_at')->paginate(10)
+            'bug_reports' => BugReport::filter(request(['severity', 'status']))->latest('bug_reports.created_at')->paginate(request()->query('pagesize', 10))
         ];
     }
 
