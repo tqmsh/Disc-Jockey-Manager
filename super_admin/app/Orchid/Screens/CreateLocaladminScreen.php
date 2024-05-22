@@ -237,7 +237,13 @@ class CreateLocaladminScreen extends Screen
                 return redirect()->route('platform.localadmin.list');
             }else{
                 //duplicate email found
-                Toast::error('Email or Username already exists.');
+                if(!$this->validEmail($request->input('email'))){
+                    Toast::error('Email already exists.');
+
+                }else{
+                    Toast::error('Username already exists.');
+
+                }
                 return redirect()->route('platform.localadmin.create', request(['firstname', 'lastname', 'name', 'phonenumber', 'email', 'password', 'school', 'country', 'state_province', 'county', 'city_municipality']));
 
             }

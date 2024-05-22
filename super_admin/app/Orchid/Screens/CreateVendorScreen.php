@@ -315,7 +315,13 @@ class CreateVendorScreen extends Screen
 
                 //duplicate email found
                 //toast error message
-                Toast::error('Email or Username already exists.');
+                if(!$this->validEmail($request->input('email'))){
+                    Toast::error('Email already exists.');
+
+                }else{
+                    Toast::error('Username already exists.');
+
+                }
                 return redirect()->route('platform.vendor.create', request(['firstname', 'lastname', 'name', 'company_name', 'website', 'category_id', 'email', 'password', 'phonenumber', 'region_ids', 'address', 'country', 'state_province', 'zip_postal', 'city']));
 
             }

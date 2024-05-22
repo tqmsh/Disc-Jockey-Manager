@@ -282,7 +282,13 @@ class CreateStudentScreen extends Screen
             }else{
                 //duplicate email found
                 //show an error toast
-                Toast::error('Email or Username already exists.');
+                if(!$this->validEmail($request->input('email'))){
+                    Toast::error('Email already exists.');
+
+                }else{
+                    Toast::error('Username already exists.');
+
+                }
                 return redirect()->route('platform.student.create', request(['firstname', 'lastname', 'name', 'phonenumber', 'email', 'school', 'country', 'state_province', 'county', 'city_municipality', 'grade', 'allergies']));
 
 

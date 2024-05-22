@@ -91,21 +91,21 @@ class CreateEventScreen extends Screen
                     ->horizontal()
                     ->allowInput()
                     ->enableTime(),
-                    
+
                 Input::make('event_address')
                     ->title('Event Address')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. 2381 Ogilvie Rd')
                     ->horizontal(),
-                    
+
                 Input::make('event_zip_postal')
                     ->title('Event Zip/Postal')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. K1J 7N4')
                     ->horizontal(),
-                    
+
                 Select::make('venue_id')
                     ->title('Venue')
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
@@ -152,21 +152,21 @@ class CreateEventScreen extends Screen
                     ->placeholder('Ex. No Violence')
                     ->horizontal()
                     ->rows(5),
-                
+
                 Input::make('ticket_price')
                     ->title('Ticket Price $')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. 29.99')
-                    ->horizontal(), 
+                    ->horizontal(),
 
-     
+
                 Input::make('capacity')
                     ->title('Event Capacity')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. 100')
-                    ->horizontal(), 
+                    ->horizontal(),
 
                 Select::make('interested_vendor_categories')
                     ->title('Interested Vendor Categories')
@@ -226,12 +226,12 @@ class CreateEventScreen extends Screen
 
             Events::create($formFields);
 
-            Toast::success('Event Added Succesfully');
-            
+            Toast::success('Event Added Successfully');
+
             return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
-            
+
             Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
         }
     }
