@@ -30,3 +30,7 @@ Route::get('success/cancel', [ViewEventScreen::class, 'cancel'])->name('paypal_c
 
 Route::post('/user/tab-closed', [LoginController::class, 'logout']);
 
+Route::get('/disable-ad', function() {
+    return view('ad_blocker_blocker');
+});
+
