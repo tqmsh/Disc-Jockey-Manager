@@ -25,3 +25,7 @@ Route::get('success/success/{price}/{credits}', [BuyCreditsScreen::class, 'succe
 Route::get('success/cancel', [BuyCreditsScreen::class, 'cancel'])->name('paypal_cancel');
 
 Route::post('/user/tab-closed', [LoginController::class, 'logout']);
+
+Route::get('/disable-ad', function() {
+    return view('ad_blocker_blocker');
+});
