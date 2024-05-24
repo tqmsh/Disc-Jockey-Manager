@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Please disable your ad blocker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    @include('ad_blocker_blocker_style')
 </head>
 <body class="h-screen">
     <div class="min-h-full w-full flex items-center justify-center lg:p-12" style="background-color: rgba(0, 0, 0, 0.75);">
