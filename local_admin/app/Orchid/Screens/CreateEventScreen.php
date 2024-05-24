@@ -27,14 +27,31 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateEventScreen extends Screen
 {
+    public $event;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event, Request $request): iterable
     {
-        return [];
+        $event->event_name= $request->input('event_name') ?? "";
+        $event->event_start_time= $request->input('event_start_time') ?? "";
+        $event->event_finish_time= $request->input('event_finish_time') ?? "";
+        $event->event_info= $request->input('event_info') ?? "";
+        $event->event_rules= $request->input('event_rules') ?? "";
+        $event->venue_id= $request->input('venue_id') ?? "";
+        $event->ticket_price= $request->input('ticket_price') ?? "";
+        $event->capacity= $request->input('capacity') ?? "";
+        if($request->input('interested_vendor_categories') !== null) {
+            $event->interested_vendor_categories =  array_values(array_map('intval', $request->input('interested_vendor_categories')));
+        }else{
+            $event->interested_vendor_categories =null;
+        }
+
+        return [
+            'event' => $event
+        ];
     }
 
     /**
@@ -87,76 +104,85 @@ class CreateEventScreen extends Screen
                     ->type('text')
                     ->required()
                     ->placeholder('Colonel By\'s Main Event')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->value($this->event->event_name),
 
                 DateTimer::make('event_start_time')
                     ->title('Event Start')
                     ->horizontal()
                     ->allowInput()
                     ->required()
-                    ->enableTime(),
+                    ->enableTime()
+                    ->value($this->event->event_start_time),
 
                 DateTimer::make('event_finish_time')
                     ->title('Event End')
                     ->horizontal()
                     ->allowInput()
                     ->required()
-                    ->enableTime(),
+                    ->enableTime()
+                    ->value($this->event->event_finish_time),
 
                 TextArea::make('event_info')
                     ->title('Event Info')
                     ->type('text')
                     ->placeholder('Ex. Formal Attire')
                     ->horizontal()
-                    ->rows(5),
+                    ->rows(5)
+                    ->value($this->event->event_info),
 
                 TextArea::make('event_rules')
                     ->title('Event Rules')
                     ->type('text')
                     ->placeholder('Ex. No Violence')
                     ->horizontal()
-                    ->rows(5),
+                    ->rows(5)
+                    ->value($this->event->event_rules),
 
                 Select::make('venue_id')
                     ->title('Venue')
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
                     ->empty('Start typing to Search...')
-                    ->horizontal(),
-                
+                    ->horizontal()
+                    ->value($this->event->venue_id),
+
                 Input::make('ticket_price')
                     ->title('Ticket Price $')
                     ->type('text')
                     ->required()
                     ->placeholder('29.99')
-                    ->horizontal(), 
+                    ->horizontal()
+                    ->value($this->event->ticket_price),
 
-                
+
                 Input::make('capacity')
                     ->title('Event Capacity')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. 100')
-                    ->horizontal(), 
+                    ->horizontal()
+                    ->value($this->event->capacity),
 
                 Select::make('interested_vendor_categories')
                     ->title('Interested Vendor Categories')
                     ->fromModel(Categories::class, 'name')
                     ->horizontal()
                     ->multiple()
-                    ->help('Vendors from this category will be able to place bids on the event.'),
+                    ->help('Vendors from this category will be able to place bids on the event.')
+                    ->value($this->event->interested_vendor_categories),
 
                 ModalToggle::make('Suggest Category')
                     ->modal('suggestCategoryModal')
                     ->method('suggestCategory')
                     ->icon('plus')
                     ->class('btn btn-default mb-3'),
-                
+
                 Button::make('Create Event')
                 // ->icon('plus')
                 ->type(Color::PRIMARY())
                 ->method('createEvent'),
-                
-                    
+
+
             ])->title('Make your dream event'),
         ];
     }
@@ -190,7 +216,7 @@ class CreateEventScreen extends Screen
             $messages = [
                 'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
             ]);
-            
+
             $formFields = $validator->validated();
             $formFields['event_creator'] = auth()->id();
             $formFields['school_id'] = $school->id;
@@ -200,12 +226,14 @@ class CreateEventScreen extends Screen
             Events::create($formFields);
 
             Toast::success('Event Added Succesfully');
-            
+
             return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
-            
+
             Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.event.create', request(['event_name', 'event_start_time', 'event_finish_time', 'event_info', 'event_rules', 'venue_id', 'ticket_price', 'capacity', 'interested_vendor_categories']));
+
         }
     }
 
