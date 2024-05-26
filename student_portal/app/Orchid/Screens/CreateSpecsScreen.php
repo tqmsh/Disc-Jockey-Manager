@@ -82,7 +82,7 @@ class CreateSpecsScreen extends Screen
                         ->value(Specs::where('student_user_id', auth()->user()->id)->first()->gender ?? ""),
                     Input::make('age')
                         ->title('Age')
-                        ->type('text')
+                        ->type('number')
                         ->horizontal(),
 
                     Input::make('height')
@@ -173,20 +173,20 @@ class CreateSpecsScreen extends Screen
                             'rounded' => 'Rounded',
                             'heart-shaped' => 'Heart-shaped',
                         ]),
-                    
 
-                    
+
+
 
                     Input::make('bust')
                         ->title('Bust (cm)')
                         ->type('text')
                         ->horizontal(),
-                        
+
                     Input::make('waist')
                         ->title('Waist (cm)')
                         ->type('text')
                         ->horizontal(),
-                        
+
                     Input::make('hips')
                         ->title('Hips (cm)')
                         ->type('text')
@@ -217,9 +217,9 @@ class CreateSpecsScreen extends Screen
                         ->icon('check')
                         ->method('createSpecs')
 
-                
-                
-            
+
+
+
         ]),
     ];
 }
@@ -254,11 +254,11 @@ class CreateSpecsScreen extends Screen
             Specs::updateOrCreate($formFields);
 
             Toast::success('Specs Added Succesfully');
-            
+
             return redirect()->route('platform.studentSpecs.list');
 
         }catch(Exception $e){
-            
+
             Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
         }
     }
