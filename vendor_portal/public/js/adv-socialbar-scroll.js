@@ -1,6 +1,6 @@
-let e = document.createElement("div")
+var e=document.createElement('div');
 
-e.id = 'aFtGokRPHIMJ';
+e.id='aChBjqEXzGJk';
 e.style.display='none';
 
 document.body.appendChild(e);
