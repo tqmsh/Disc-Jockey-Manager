@@ -102,9 +102,9 @@ class CreateStudentScreen extends Screen
                         ->href('/sample_students_upload.csv')
                 ]),
             ])
-            ->title('Mass Import Students')
-            ->applyButton('Import')
-            ->withoutCloseButton(),
+                ->title('Mass Import Students')
+                ->applyButton('Import')
+                ->withoutCloseButton(),
 
             Layout::rows([
 
@@ -261,7 +261,7 @@ class CreateStudentScreen extends Screen
             //show an error toast
             Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
         }
-}
+    }
 
     //this method will mass import schools from a csv file
     public function massImport(Request $request){
@@ -456,7 +456,7 @@ class CreateStudentScreen extends Screen
         }
         $school = $school_query->get();
 
-        if(is_null($school)){
+        if(is_null($school->value('id'))){
 
             throw New Exception('You are trying to enter a invalid school');
 
@@ -477,9 +477,7 @@ class CreateStudentScreen extends Screen
             $school_query = $school_query->where('city_municipality', $city_municipality);
         }
         $school = $school_query->get();
-
-        if(is_null($school)){
-
+        if(is_null($school->value('id'))){
             throw New Exception('You are trying to enter a invalid school');
 
         } else{
