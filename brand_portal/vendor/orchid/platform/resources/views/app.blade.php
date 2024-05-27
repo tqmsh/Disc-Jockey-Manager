@@ -48,7 +48,7 @@
 </head>
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }}" data-controller="pull-to-refresh">
-
+    
 <div class="container-fluid" data-controller="@yield('controller')" @yield('controller-data')>
 
     <div class="row">
@@ -68,15 +68,5 @@
 </div>
 
 @stack('scripts')
-
-<script src="{{ asset('js/adv-socialbar-scroll.js') }}"></script>
-<script type="text/javascript">
-    if(document.getElementById('aFtGokRPHIMJ') == null){
-        var currentUrl = window.location.href;
-        var baseUrl = currentUrl.split('/').slice(0, 3).join('/');
-
-        window.location.replace(baseUrl + "/disable-ad");
-    }
-</script>
 </body>
 </html>
