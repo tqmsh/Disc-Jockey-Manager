@@ -103,9 +103,8 @@ class ViewLoginAsScreen extends Screen
 
         // Redirect to other portal website
         $baseURL = $la_session->portalToTarget();
-
-        dd("http://{$baseURL}/login-as/{$la_session->la_key}");
-        //return redirect()->away("https://{$baseURL}/login-as/{$la_session->la_key}");
+        
+        return redirect()->away("https://{$baseURL}/login-as/{$la_session->la_key}");
     }
 
     private function returnFilteredUsers() {
