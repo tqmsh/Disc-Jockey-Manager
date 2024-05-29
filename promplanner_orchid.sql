@@ -469,21 +469,6 @@ CREATE TABLE `couples` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `login_as`
---
-
-CREATE TABLE `login_as` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `la_key` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `portal` tinyint(4) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `couple_requests`
 --
 
@@ -2247,15 +2232,6 @@ ALTER TABLE `couples`
   ADD KEY `event_id` (`event_id`);
 
 --
--- Indexes for table `login_as`
---
-ALTER TABLE `login_as`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `account_user_id` (`user_id`),
-  ADD KEY `login_as_key` (`la_key`),
-  ADD KEY `login_as_portal` (`portal`);
-
---
 -- Indexes for table `couple_requests`
 --
 ALTER TABLE `couple_requests`
@@ -2969,12 +2945,6 @@ ALTER TABLE `localadmins`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
--- AUTO_INCREMENT for table `login_as`
---
-ALTER TABLE `login_as`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
-
---
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -3293,12 +3263,6 @@ ALTER TABLE `couples`
   ADD CONSTRAINT `event_id_foreign` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_user_id_foreign_1` FOREIGN KEY (`student_user_id_1`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_user_id_foreign_2` FOREIGN KEY (`student_user_id_2`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `login_as`
---
-ALTER TABLE `login_as`
-  ADD CONSTRAINT `acc_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `couple_requests`
