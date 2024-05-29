@@ -107,6 +107,7 @@ use App\Orchid\Screens\CreateDisplayAdScreen;
 use App\Orchid\Screens\EditDisplayAdScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
 use App\Orchid\Screens\ViewAllPromfluencerScreen;
+use App\Orchid\Screens\ViewLoginAsScreen;
 use App\Orchid\Screens\ViewPromfluencerDetailedScreen;
 use App\Orchid\Screens\ViewPromfluencerScreen;
 use App\Orchid\Screens\ViewVideoTutorialScreen;
@@ -342,6 +343,9 @@ Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->
 
 // Video Tutorials
 Route::screen('/video-tutorials', ViewVideoTutorialScreen::class)->name('platform.video-tutorials.view');
+
+// Login as
+Route::screen('/login-as', ViewLoginAsScreen::class)->name('platform.login-as.view');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

@@ -26,6 +26,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Session;
 use App\Notifications\GeneralNotification;
 use App\Models\Specs;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class LoginController extends Controller
 {
@@ -338,5 +339,29 @@ class LoginController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect('/');
+    }
+
+    public function loginAs(Request $request, string $key) {
+        $query = \App\Models\LoginAs::where('la_key', $key)->where('portal', 3);
+
+        if($query->exists()) {
+            // Log out user before signing in as another user
+            if($this->guard->check()) {
+                $this->guard->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            }
+
+            // Login into target user
+            FacadesAuth::loginUsingId($query->first()->user_id);
+            $this->guard->loginUsingId($query->first()->user_id);
+            $query->delete();
+            $this->setStartTimeInSession();
+
+            return $this->sendLoginResponse($request);
+        } else {
+            // Show "Not Found" screen.
+            abort(404);
+        }
     }
 }

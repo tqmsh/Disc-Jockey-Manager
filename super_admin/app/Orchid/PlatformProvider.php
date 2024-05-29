@@ -210,6 +210,10 @@ class PlatformProvider extends OrchidServiceProvider
                 Menu::make('Report a Bug')
                     ->icon('bug')
                     ->route('platform.bug-reports.list'),
+                
+                Menu::make('Login As')
+                    ->icon('people')
+                    ->route('platform.login-as.view'),
 
                 Menu::make(__('Roles'))
                     ->icon('lock')

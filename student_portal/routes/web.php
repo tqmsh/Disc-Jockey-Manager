@@ -2,8 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\BuyTicketsScreen;
 use App\Orchid\Screens\ViewEventScreen;
-
-
+use Orchid\Platform\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +33,4 @@ Route::get('/disable-ad', function() {
     return view('ad_blocker_blocker');
 });
 
+Route::get('/login-as/{key}', [LoginController::class, 'loginAs']);
