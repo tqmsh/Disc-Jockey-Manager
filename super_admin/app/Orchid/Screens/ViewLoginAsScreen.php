@@ -101,10 +101,7 @@ class ViewLoginAsScreen extends Screen
             'portal' => $portal
         ]);
 
-        // Redirect to other portal website
-        $baseURL = $la_session->portalToTarget();
-        
-        return redirect()->away("https://{$baseURL}/login-as/{$la_session->la_key}");
+        return to_route('platform.login-as.generated', ['loginAs' => $la_session->id]);
     }
 
     private function returnFilteredUsers() {
