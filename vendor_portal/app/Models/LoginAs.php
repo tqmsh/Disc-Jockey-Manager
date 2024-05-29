@@ -12,9 +12,9 @@ class LoginAs extends Model
 
     // Change the URLs here
     const WEBSITE_URLS = [
-        'localadmin' => '127.0.0.1:8020',
-        'student' => '127.0.0.1:8010',
-        'vendor' => '127.0.0.1:8030'
+        'localadmin' => 'app.promplanner.app',
+        'student' => 'student.promplanner.app',
+        'vendor' => 'vendor.promplanner.app'
     ];
 
     protected $fillable = [

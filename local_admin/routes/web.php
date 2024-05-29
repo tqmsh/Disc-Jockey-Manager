@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Orchid\Platform\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------

@@ -41,10 +41,6 @@ class ViewLoginAsScreen extends Screen
         return 'Login As';
     }
 
-    public function description(): ?string
-    {
-        return 'Select a user group and region (optional).';
-    }
     /**
      * Button commands.
      *
@@ -108,7 +104,7 @@ class ViewLoginAsScreen extends Screen
         // Redirect to other portal website
         $baseURL = $la_session->portalToTarget();
 
-        dd("https://{$baseURL}/login-as/{$la_session->la_key}");
+        dd("http://{$baseURL}/login-as/{$la_session->la_key}");
         //return redirect()->away("https://{$baseURL}/login-as/{$la_session->la_key}");
     }
 
