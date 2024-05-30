@@ -126,12 +126,12 @@ class ViewLoginAsScreen extends Screen
         // Exclude super admins from base query
         $query = DB::table('users')->whereNot('role', 1);
 
-        if(request('login_as_name') !== null) {
-           $query->where('name', 'like', request('login_as_name'));
+        if(request('login_as_email') !== null) {
+            return $query->where('email', 'like', '%' . request('login_as_email') . '%');
         }
 
-        if(request('login_as_email') !== null) {
-            return $query->where('email', 'like', request('login_as_email'));
+        if(request('login_as_name') !== null) {
+           $query->where('name', 'like', '%' . request('login_as_name') . '%');
         }
 
         if(request('login_as_region') == null && request('login_as_role') !== null) {
