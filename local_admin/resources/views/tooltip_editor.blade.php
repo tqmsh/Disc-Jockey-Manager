@@ -27,7 +27,7 @@
 
         <!--- Tooltip player -->
         <script type='text/javascript'>
-            const tour = new Shepherd.Tour({
+            let tour = new Shepherd.Tour({
                 defaultStepOptions: {
                     classes: 'shadow-md bg-purple-dark', // a separate CSS file
                     scrollTo: true
@@ -89,6 +89,5 @@
     @endpush
 </head>
 <body>
-<button id="start" onclick="tour.start()">Start tour</button>
 
 </body>

@@ -87,7 +87,7 @@ class PlatformProvider extends OrchidServiceProvider
             // Menu::make('Contracts')
             //     ->icon('doc')
             //     ->route('platform.contract.list'),
-          
+
             Menu::make('Prom Profit')
                 ->icon('money')
                 ->route('platform.profit.list'),
@@ -95,10 +95,46 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Checklists')
                 ->icon('list-check')
                 ->route('platform.checklist.list'),
-        
+
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.guide.list'),
+
+            Menu::make('Prom Planner Profiles')
+                ->icon('arrow-down')
+                ->list([
+                    Menu::make('Facebook')
+                        ->icon('book-open')
+                        ->url('https://www.facebook.com/promplannerapp'),
+
+                    Menu::make('Instagram')
+                        ->icon('book-open')
+                        ->url('https://www.instagram.com/promplannerapp/'),
+
+                    Menu::make('Twitter')
+                        ->icon('book-open')
+                        ->url('https://x.com/promplannertool'),
+
+                    Menu::make('Pinterest')
+                        ->icon('book-open')
+                        ->url('https://www.pinterest.ca/promplannerapp/'),
+
+                    Menu::make('YouTube')
+                        ->icon('book-open')
+                        ->url('https://www.youtube.com/@promplanner'),
+
+                    Menu::make('TikTok')
+                        ->icon('book-open')
+                        ->url('https://www.tiktok.com/@promplannerapp'),
+
+                    Menu::make('Sound Cloud')
+                        ->icon('book-open')
+                        ->url('https://soundcloud.com/prom-planner'),
+
+                    Menu::make('Linkedin')
+                        ->icon('book-open')
+                        ->url('https://www.linkedin.com/company/promplanner/'),
+                ]),
 
             // Moved to How To Contact Us top bar
             // Menu::make('Report a Bug')
@@ -137,7 +173,7 @@ class PlatformProvider extends OrchidServiceProvider
             //     ->title('PLACEHOLDERS')
             //     ->icon('arrow-down')
             //     ->size()
-            //     ->list([    
+            //     ->list([
             //             Menu::make('Email sender')
             //                 ->icon('envelope-letter')
             //                 ->route('platform.email')
