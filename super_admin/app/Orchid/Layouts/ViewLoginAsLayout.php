@@ -30,7 +30,7 @@ class ViewLoginAsLayout extends Table
     {
         return [
             TD::make()
-                ->render(function(User $user) {
+                ->render(function($user) {
                     return Button::make('Login As')
                                 ->icon('login')
                                 ->type(Color::DEFAULT())
@@ -38,21 +38,36 @@ class ViewLoginAsLayout extends Table
                 }),
             
             TD::make('role', 'Role')
-                ->render(function(User $user) {
+                ->render(function($user) {
                     return Roles::where('id', $user->role)->first()->name;
                 }),
 
-            TD::make('name', 'Name'),
+            TD::make('Name')
+                ->render(function($user) {
+                    return e($user->name);
+                }),
 
-            TD::make('firstname', 'First Name')
+            TD::make('First Name')
+                ->render(function($user) {
+                    return e($user->firstname);
+                })
                 ->defaultHidden(),
-            TD::make('lastname', 'Last Name')
+
+            TD::make('Last Name')
+                ->render(function($user) {
+                    return e($user->lastname);
+                })
                 ->defaultHidden(),
             
-            TD::make('email', 'Email'),
+            TD::make('Email')
+                ->render(function($user) {
+                    return e($user->email);
+                }),
 
-            TD::make('phonenumber', 'Phone Number')
-                ->defaultHidden()
+            TD::make('Phone Number')
+                ->render(function($user) {
+                    return e($user->phonenumber == null || $user->phonenumber == "" ? "N/A" : $user->phonenumber);
+                }),
         ];
     }
 }
