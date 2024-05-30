@@ -28,7 +28,7 @@ class ViewLoginAsScreen extends Screen
     public function query(): iterable
     {
         return [
-            'users' => $this->returnFilteredUsers()->paginate(10) ?? []
+            'users' => $this->returnFilteredUsers()->paginate(10)
         ];
     }
 
