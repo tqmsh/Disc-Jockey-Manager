@@ -127,7 +127,7 @@ class ViewLoginAsScreen extends Screen
         $query = DB::table('users')->whereNot('role', 1);
 
         if(request('login_as_email') !== null) {
-            return $query->where('email', 'like', '%' . request('login_as_email') . '%');
+            return $query->where('email', request('login_as_email'));
         }
 
         if(request('login_as_name') !== null) {
