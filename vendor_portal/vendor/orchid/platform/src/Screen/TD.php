@@ -390,4 +390,11 @@ class TD extends Cell
 
         return $filter;
     }
+
+    # this is a custom method added so we can check name in template
+    # used to make select all checkboxes
+    public function name()
+    {
+        return $this->name;
+    }
 }
