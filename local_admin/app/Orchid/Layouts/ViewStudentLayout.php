@@ -22,7 +22,6 @@ class ViewStudentLayout extends Table
      * @var string
      */
     protected $target = 'students';
-
     /**
      * Get the table cells to be displayed.
      *
@@ -56,7 +55,7 @@ class ViewStudentLayout extends Table
                     return Link::make($email)
                         ->route('platform.student.edit', $student);
                 }),
-                
+
             TD::make('phonenumber', 'Phone Number')
                 ->render(function (Student $student) {
                     return Link::make($student->phonenumber)
@@ -65,8 +64,13 @@ class ViewStudentLayout extends Table
 
             TD::make()
                 ->render(function (Student $student) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['student'=> $student-> id]) ->icon('pencil');
+                    return Button::make('Edit')
+                        ->type(Color::PRIMARY())
+                        ->method('redirect', ['student'=> $student-> id, 'type' => 'students'])
+                        ->icon('pencil');
                 }),
         ];
     }
+
+
 }
