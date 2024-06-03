@@ -31,7 +31,7 @@ class ViewLimoGroupLayout extends Table
     {
         return [
 
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (LimoGroup $limoGroup){
                     return CheckBox::make('limoGroups[]')
                         ->value($limoGroup->id)

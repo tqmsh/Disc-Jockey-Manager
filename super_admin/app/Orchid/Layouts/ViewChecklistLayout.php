@@ -31,7 +31,7 @@ class ViewChecklistLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Checklist $checklist){
                     return CheckBox::make('checklists[]')
                         ->value($checklist->id)

@@ -33,7 +33,7 @@ class ViewVendorLayout extends Table
     {
         return [
             
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Vendors $vendor){
                     return CheckBox::make('vendors[]')
                         ->value($vendor->user_id)
