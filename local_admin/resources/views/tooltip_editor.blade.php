@@ -27,10 +27,7 @@
 
         <!--- Tooltip player -->
         <script type='text/javascript'>
-            if (typeof tour !== 'undefined') {
-                let tour =""
-            }
-            tour = new Shepherd.Tour({
+            var tour = new Shepherd.Tour({
                 defaultStepOptions: {
                     classes: 'shadow-md bg-purple-dark', // a separate CSS file
                     scrollTo: true
