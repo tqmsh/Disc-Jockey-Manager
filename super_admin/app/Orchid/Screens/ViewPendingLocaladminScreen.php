@@ -31,7 +31,7 @@ class ViewPendingLocaladminScreen extends Screen
         return [
             'pending_localadmins' => Localadmin::latest('localadmins.created_at')
                                     ->filter(request(['country', 'state_province', 'school', 'school_board']))
-                                    ->where('localadmins.account_status', 0)->paginate(request()->query('pagesize', 10))
+                                    ->where('localadmins.account_status', 0)->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 

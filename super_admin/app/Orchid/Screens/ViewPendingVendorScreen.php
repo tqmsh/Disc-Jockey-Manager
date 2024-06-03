@@ -30,7 +30,7 @@ class ViewPendingVendorScreen extends Screen
     public function query(): iterable
     {
         return [
-            'pending_vendors' => Vendors::latest('vendors.created_at')->where('vendors.account_status', 0)->filter(request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']))->paginate(request()->query('pagesize', 10)),
+            'pending_vendors' => Vendors::latest('vendors.created_at')->where('vendors.account_status', 0)->filter(request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']))->paginate(min(request()->query('pagesize', 10), 100)),
         ];
     }
 

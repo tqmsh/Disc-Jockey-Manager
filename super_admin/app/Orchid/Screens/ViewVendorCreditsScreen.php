@@ -32,7 +32,7 @@ class ViewVendorCreditsScreen extends Screen
     public function query(): iterable
     {
         return [
-            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']))->where('vendors.account_status', 1)->paginate(request()->query('pagesize', 10))
+            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']))->where('vendors.account_status', 1)->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 

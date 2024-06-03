@@ -48,7 +48,7 @@ class ViewEventStudentScreen extends Screen
             'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(request()->query('pagesize', 20)),
             'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))->filter($filters)->paginate(request()->query('pagesize', 20)),
             'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(request()->query('pagesize', 20)),
-            'tables' => Seating::where('event_id', $event->id)->paginate(request()->query('pagesize', 10)),
+            'tables' => Seating::where('event_id', $event->id)->paginate(min(request()->query('pagesize', 10), 100)),
             'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(request()->query('pagesize', 20)),
         ];
     }

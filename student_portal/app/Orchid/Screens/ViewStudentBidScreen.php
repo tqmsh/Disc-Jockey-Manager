@@ -39,11 +39,11 @@ class ViewStudentBidScreen extends Screen
     public function query(): iterable
     {
         return [
-            'pendingBids' => StudentBids::filter(request(['category_id']))->where('student_user_id', Auth::user()->id)->where('status', 0)->latest()->paginate(request()->query('pagesize', 10)),
-            'previousBids' => StudentBids::filter(request(['category_id']))->where('student_user_id', Auth::user()->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(request()->query('pagesize', 10)),
+            'pendingBids' => StudentBids::filter(request(['category_id']))->where('student_user_id', Auth::user()->id)->where('status', 0)->latest()->paginate(min(request()->query('pagesize', 10), 100)),
+            'previousBids' => StudentBids::filter(request(['category_id']))->where('student_user_id', Auth::user()->id)->whereNot('status', 0)->orderBy('status')->latest()->paginate(min(request()->query('pagesize', 10), 100)),
             'previousLimoBids' => LimoGroupBid::filter(request(['category_id']))->where('limo_group_id', Auth::user()->limoGroup ? Auth::user()->limoGroup->id : 0)->whereNot('status', 0)->orderBy('status')
-            ->latest()->paginate(request()->query('pagesize', 10)),
-            'previousBeautyBids' => BeautyGroupBid::filter(request(['category_id']))->where('beauty_group_id', Auth::user()->beautyGroup ? Auth::user()->beautyGroup->id : 0)->whereNot('status', 0)->orderBy('status')->latest()->paginate(request()->query('pagesize', 10)),
+            ->latest()->paginate(min(request()->query('pagesize', 10), 100)),
+            'previousBeautyBids' => BeautyGroupBid::filter(request(['category_id']))->where('beauty_group_id', Auth::user()->beautyGroup ? Auth::user()->beautyGroup->id : 0)->whereNot('status', 0)->orderBy('status')->latest()->paginate(min(request()->query('pagesize', 10), 100)),
         ];
     }
 

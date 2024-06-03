@@ -26,9 +26,9 @@ class ViewAdScreen extends Screen
     public function query(): iterable
     {
         return [
-            "campaignsActive"=>Campaign::where('user_id', Auth::user()->id)->where("active", 1)->paginate(request()->query('pagesize', 10)),
-            "campaignsInactive"=>Campaign::where('user_id', Auth::user()->id)->where("active", 2)->paginate(request()->query('pagesize', 10)),
-            "campaignsPending"=>Campaign::where('user_id', Auth::user()->id)->where("active", 0)->paginate(request()->query('pagesize', 10)),
+            "campaignsActive"=>Campaign::where('user_id', Auth::user()->id)->where("active", 1)->paginate(min(request()->query('pagesize', 10), 100)),
+            "campaignsInactive"=>Campaign::where('user_id', Auth::user()->id)->where("active", 2)->paginate(min(request()->query('pagesize', 10), 100)),
+            "campaignsPending"=>Campaign::where('user_id', Auth::user()->id)->where("active", 0)->paginate(min(request()->query('pagesize', 10), 100)),
 
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('user_id', Auth::user()->id)->where('active', 1)->get()))],

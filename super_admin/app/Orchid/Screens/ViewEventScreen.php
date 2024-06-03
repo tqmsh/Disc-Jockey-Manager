@@ -27,7 +27,7 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         return [
-            'events' => Events::latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(request()->query('pagesize', 10))
+            'events' => Events::latest('events.created_at')->filter(request(['country', 'state_province', 'school', 'school_board']))->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 

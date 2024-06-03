@@ -22,7 +22,7 @@ class ViewBeautyGroupMembersScreen extends Screen
 
         return [
             'beautyGroup' => $beautyGroup,
-            'members' => $beautyGroup->members()->paginate(request()->query('pagesize', 10))
+            'members' => $beautyGroup->members()->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 

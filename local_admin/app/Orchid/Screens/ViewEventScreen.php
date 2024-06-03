@@ -29,7 +29,7 @@ class ViewEventScreen extends Screen
     public function query(): iterable
     {
         return [
-            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->filter(request(['event', 'sort_option',]))->latest('events.created_at')->paginate(request()->query('pagesize', 10)),
+            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->filter(request(['event', 'sort_option',]))->latest('events.created_at')->paginate(min(request()->query('pagesize', 10), 100)),
         ];
     }
 

@@ -18,7 +18,7 @@ class ViewLimoGroupScreen extends Screen
     public function query(): iterable
     {
         return [
-            'limoGroups' => LimoGroup::where('school_id', Localadmin::where("user_id",Auth::user()->id)->first()->school_id)->latest()->paginate(request()->query('pagesize', 10))
+            'limoGroups' => LimoGroup::where('school_id', Localadmin::where("user_id",Auth::user()->id)->first()->school_id)->latest()->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 

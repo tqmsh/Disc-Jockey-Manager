@@ -28,7 +28,7 @@ class ViewUserChecklistItemsScreen extends Screen
         return [
             'user' => $user,
             'checklist' => $checklist,
-            'checklist_items' => ChecklistItem::where('checklist_id', $checklist->id)->latest()->paginate(request()->query('pagesize', 10))
+            'checklist_items' => ChecklistItem::where('checklist_id', $checklist->id)->latest()->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 
