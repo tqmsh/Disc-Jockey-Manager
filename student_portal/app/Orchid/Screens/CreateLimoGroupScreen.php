@@ -73,18 +73,18 @@ class CreateLimoGroupScreen extends Screen
                     ->placeholder('Enter the date for your limo group')
                     ->horizontal()
                     ->required(),
-                
+
                 Input::make('pickup_location')
                     ->title('Pickup Location')
                     ->placeholder('Enter the pickup location for your limo group')
                     ->horizontal()
                     ->required(),
-                
+
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
                     ->placeholder('Enter the dropoff location for your limo group')
                     ->horizontal()
-                    ->required(),       
+                    ->required(),
 
                 DateTimer::make('depart_time')
                     ->title('Depart Time')
@@ -92,14 +92,14 @@ class CreateLimoGroupScreen extends Screen
                     ->enableTime()
                     ->horizontal()
                     ->required(),
-                
+
                 Datetimer::make('dropoff_time')
                     ->title('Dropoff Time')
                     ->placeholder('Enter the dropoff time for your limo group')
                     ->enableTime()
                     ->horizontal()
                     ->required(),
-                
+
                 Input::make('capacity')
                     ->title('Capacity')
                     ->type('number')
@@ -107,13 +107,13 @@ class CreateLimoGroupScreen extends Screen
                     ->help('Including youself')
                     ->horizontal()
                     ->required(),
-                
+
                 TextArea::make('notes')
                     ->title('Notes')
                     ->placeholder('Enter any notes for your limo group')
                     ->help('Notes can be seen by all limo group members')
                     ->rows(8)
-                    ->horizontal()                   
+                    ->horizontal()
             ])
         ];
     }
@@ -170,6 +170,7 @@ class CreateLimoGroupScreen extends Screen
 
         }catch(Exception $e){
             Toast::error('There was an error creating the limo group. Error code: ' . $e->getMessage());
+            return back()->withInput();
         }
 
     }

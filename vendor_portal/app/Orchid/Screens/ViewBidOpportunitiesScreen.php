@@ -48,12 +48,12 @@ class ViewBidOpportunitiesScreen extends Screen
             'events' => Events::filter(request(['region_id']))
                 ->whereIn('region_id', $this->paidRegionIds)
                 ->whereJsonContains('interested_vendor_categories', Auth::user()->vendor->category_id)
-                ->paginate(10),
+                ->paginate(min(request()->query('pagesize', 10), 100)),
             'students' => Student::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))
                 ->whereJsonContains('interested_vendor_categories', Auth::user()->vendor->category_id)
-                ->paginate(10),
-            'limo_groups' => (stripos(Auth::user()->vendor->category->name, 'limo') !== false) ? LimoGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
-            'beauty_groups' => (stripos(Auth::user()->vendor->category->name, 'salon') !== false) ? BeautyGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(10) : null,
+                ->paginate(min(request()->query('pagesize', 10), 100)),
+            'limo_groups' => (stripos(Auth::user()->vendor->category->name, 'limo') !== false) ? LimoGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(min(request()->query('pagesize', 10), 100)) : null,
+            'beauty_groups' => (stripos(Auth::user()->vendor->category->name, 'salon') !== false) ? BeautyGroup::whereIn('school_id', School::whereIn('region_id', $this->paidRegionIds)->pluck('id'))->paginate(min(request()->query('pagesize', 10), 100)) : null,
         ];
     }
 

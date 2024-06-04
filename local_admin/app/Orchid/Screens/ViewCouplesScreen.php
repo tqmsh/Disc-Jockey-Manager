@@ -27,7 +27,7 @@ class ViewCouplesScreen extends Screen
         return [
             'couples' => Couple::filter(request(['event_id']))->latest('couples.created_at')
                 ->whereIn('event_id', Events::whereIn("school_id", Localadmin::where('user_id', Auth::user()->id)->pluck('school_id'))->pluck("id"))
-                ->paginate(20)
+                ->paginate(request()->query('pagesize', 20))
         ];
     }
 

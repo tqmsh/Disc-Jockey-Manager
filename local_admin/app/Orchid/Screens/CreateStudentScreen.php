@@ -31,14 +31,27 @@ class CreateStudentScreen extends Screen
 {
     public $requiredFields = ['firstname', 'lastname', 'email', 'password', 'phonenumber', 'allergies', 'grade'];
     public $dupes =[];
+
+    public $student;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Student $student, Request $request): iterable
     {
-        return [];
+        $student->firstname = $request->input('firstname') ?? "";
+        $student->lastname = $request->input('lastname') ?? "";
+        $student->name = $request->input('name') ?? "";
+        $student->phonenumber = $request->input('phonenumber') ?? "";
+        $student->email = $request->input('email') ?? "";
+        $student->grade = intval($request->input('grade')) ?? "";
+        $student->allergies = $request->input('allergies') ?? "";
+
+
+        return [
+            'student'=>$student
+        ];
     }
 
     /**
@@ -110,21 +123,24 @@ class CreateStudentScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. John'),
+                    ->placeholder('Ex. John')
+                    ->value($this->student->firstname),
 
                 Input::make('lastname')
                     ->title('Last Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Doe'),
+                    ->placeholder('Ex. Doe')
+                    ->value($this->student->lastname),
 
                 Input::make('name')
                     ->title('Username')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. KingKhan435'),
+                    ->placeholder('Ex. KingKhan435')
+                    ->value($this->student->name),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')
@@ -132,14 +148,16 @@ class CreateStudentScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 859-5863'),
+                    ->placeholder('Ex. (613) 859-5863')
+                    ->value($this->student->phonenumber),
 
                 Input::make('email')
                     ->title('Email')
                     ->type('email')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
+                    ->placeholder('Ex. johndoe@gmail.com')
+                    ->value($this->student->email),
 
                 Password::make('password')
                     ->title('Password')
@@ -157,9 +175,10 @@ class CreateStudentScreen extends Screen
                         '10' => 10,
                         '11' => 11,
                         '12' => 12,
-                    ]),
+                    ])
+                    ->value($this->student->grade),
 
-                    Select::make('allergies')
+                Select::make('allergies')
                     ->title('Allergies')
                     ->horizontal()
                     ->allowAdd()
@@ -173,7 +192,8 @@ class CreateStudentScreen extends Screen
                         'Wheat' => 'Wheat',
                         'Soy' => 'Soy',
                         'Fish' => 'Fish',
-                    ]),
+                    ])
+                    ->value($this->student->allergies),
 
                 Button::make('Add')
                 ->icon('plus')
@@ -260,6 +280,8 @@ class CreateStudentScreen extends Screen
 
             //notify the user
             Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.student.create', request(['firstname', 'lastname', 'name', 'phonenumber', 'email', 'grade', 'allergies']));
+
         }
     }
 

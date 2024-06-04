@@ -73,33 +73,33 @@ class CreateBeautyGroupScreen extends Screen
                     ->placeholder('Enter the date for your beauty group')
                     ->horizontal()
                     ->required(),
-                
+
                 Input::make('pickup_location')
                     ->title('Pickup Location')
                     ->placeholder('Enter the pickup location for your beauty group')
                     ->horizontal()
                     ->required(),
-                
+
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
                     ->placeholder('Enter the dropoff location for your beauty group')
                     ->horizontal()
                     ->required(),
-                
+
                 DateTimer::make('depart_time')
                     ->title('Depart Time')
                     ->placeholder('Enter the depart time for your beauty group')
                     ->enableTime()
                     ->horizontal()
                     ->required(),
-                
+
                 Datetimer::make('dropoff_time')
                     ->title('Dropoff Time')
                     ->placeholder('Enter the dropoff time for your beauty group')
                     ->enableTime()
                     ->horizontal()
                     ->required(),
-                
+
                 Input::make('capacity')
                     ->title('Capacity')
                     ->type('number')
@@ -107,13 +107,13 @@ class CreateBeautyGroupScreen extends Screen
                     ->help('Including youself')
                     ->horizontal()
                     ->required(),
-                
+
                 TextArea::make('notes')
                     ->title('Notes')
                     ->placeholder('Enter any notes for your beauty group')
                     ->help('Notes can be seen by all beauty group members')
                     ->rows(8)
-                    ->horizontal()                   
+                    ->horizontal()
             ])
         ];
     }
@@ -170,6 +170,7 @@ class CreateBeautyGroupScreen extends Screen
 
         }catch(Exception $e){
             Toast::error('There was an error creating the beauty group. Error code: ' . $e->getMessage());
+            return back()->withInput();
         }
 
     }

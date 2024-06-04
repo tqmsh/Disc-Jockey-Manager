@@ -21,14 +21,32 @@ use Illuminate\Support\Facades\Auth;
 
 class CreateBeautyGroupScreen extends Screen
 {
+    public $beautyGroup;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(BeautyGroup $beautyGroup, Request $request): iterable
     {
-        return [];
+        $beautyGroup->school = $request->input('school') ?? "";
+        $beautyGroup->creator_user_id = intval($request->input('creator_user_id')) ?? "";
+        $beautyGroup->country = $request->input('country') ?? "";
+        $beautyGroup->state_province = $request->input('state_province') ?? "";
+        $beautyGroup->county = $request->input('county') ?? "";
+        $beautyGroup->name = $request->input('name') ?? "";
+        $beautyGroup->date = $request->input('date') ?? "";
+        $beautyGroup->pickup_location = $request->input('pickup_location') ?? "";
+        $beautyGroup->dropoff_location = $request->input('dropoff_location') ?? "";
+        $beautyGroup->depart_time = $request->input('depart_time') ?? "";
+        $beautyGroup->dropoff_time = $request->input('dropoff_time') ?? "";
+        $beautyGroup->capacity = $request->input('capacity') ?? "";
+        $beautyGroup->notes = $request->input('notes') ?? "";
+
+
+        return [
+            'beautyGroup' => $beautyGroup
+        ];
     }
 
     /**
@@ -68,7 +86,7 @@ class CreateBeautyGroupScreen extends Screen
     public function layout(): iterable
     {
         return [
-            
+
             Layout::rows([
 
                 Select::make('creator_user_id')
@@ -77,7 +95,8 @@ class CreateBeautyGroupScreen extends Screen
                     ->options(Student::pluck('email', 'user_id'))
                     ->horizontal()
                     ->required()
-                    ->empty('Start typing to search...'),
+                    ->empty('Start typing to search...')
+                    ->value($this->beautyGroup->creator_user_id),
 
                 Select::make('school')
                     ->title('School')
@@ -85,77 +104,89 @@ class CreateBeautyGroupScreen extends Screen
                     ->options(School::pluck('school_name', 'school_name'))
                     ->horizontal()
                     ->required()
-                    ->empty('Start typing to search...'),
+                    ->empty('Start typing to search...')
+                    ->value($this->beautyGroup->school),
 
                 Input::make('country')
                     ->title('Country')
                     ->placeholder('Enter the country for this beauty group')
                     ->horizontal()
-                    ->required(),
+                    ->required()
+                    ->value($this->beautyGroup->country),
 
                 Input::make('state_province')
                     ->title('State/Province')
                     ->placeholder('Enter the state/province for this beauty group')
                     ->horizontal()
-                    ->required(),
+                    ->required()
+                    ->value($this->beautyGroup->state_province),
 
                 Input::make('county')
                     ->title('County')
                     ->placeholder('Enter the county for this beauty group')
                     ->horizontal()
-                    ->required(),
+                    ->required()
+                    ->value($this->beautyGroup->county),
 
                 Input::make('name')
                     ->title('Beauty Group Name')
                     ->placeholder('Enter a name for your beauty group')
                     ->horizontal()
-                    ->required(),
+                    ->required()
+                    ->value($this->beautyGroup->name),
 
                 DateTimer::make('date')
                     ->title('Date')
                     ->placeholder('Enter the date for your beauty group')
                     ->horizontal()
-                    ->required(),
-                
+                    ->required()
+                    ->value($this->beautyGroup->date),
+
                 Input::make('pickup_location')
                     ->title('Pickup Location')
                     ->placeholder('Enter the pickup location for your beauty group')
                     ->horizontal()
-                    ->required(),
-                
+                    ->required()
+                    ->value($this->beautyGroup->pickup_location),
+
                 Input::make('dropoff_location')
                     ->title('Dropoff Location')
                     ->placeholder('Enter the dropoff location for your beauty group')
                     ->horizontal()
-                    ->required(),
-                
+                    ->required()
+                    ->value($this->beautyGroup->dropoff_location),
+
                 DateTimer::make('depart_time')
                     ->title('Depart Time')
                     ->placeholder('Enter the depart time for your beauty group')
                     ->enableTime()
                     ->horizontal()
-                    ->required(),
-                
+                    ->required()
+                    ->value($this->beautyGroup->depart_time),
+
                 Datetimer::make('dropoff_time')
                     ->title('Dropoff Time')
                     ->placeholder('Enter the dropoff time for your beauty group')
                     ->enableTime()
                     ->horizontal()
-                    ->required(),
-                
+                    ->required()
+                    ->value($this->beautyGroup->dropoff_time),
+
                 Input::make('capacity')
                     ->title('Capacity')
                     ->type('number')
                     ->placeholder('Enter the capacity for your beauty group')
                     ->help('Including youself')
-                    ->horizontal(),
-                
+                    ->horizontal()
+                    ->value($this->beautyGroup->capacity),
+
                 TextArea::make('notes')
                     ->title('Notes')
                     ->placeholder('Enter any notes for your beauty group')
                     ->help('Notes can be seen by all beauty group members')
                     ->rows(8)
-                    ->horizontal()                   
+                    ->horizontal()
+                    ->value($this->beautyGroup->notes),
             ])
         ];
     }
@@ -220,6 +251,7 @@ class CreateBeautyGroupScreen extends Screen
 
         }catch(Exception $e){
             Toast::error('There was an error creating the beauty group. Error code: ' . $e->getMessage());
+            return redirect()->route('platform.limo-groups.create', request(['creator_user_id', 'school', 'country', 'state_province', 'county', 'name', 'date', 'pickup_location', 'dropoff_location', 'depart_time', 'dropoff_time', 'capacity', 'notes']));
         }
     }
 

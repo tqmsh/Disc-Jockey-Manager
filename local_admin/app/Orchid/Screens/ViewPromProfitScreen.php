@@ -23,7 +23,7 @@ class ViewPromProfitScreen extends Screen
     public function query(): iterable
     {
         return [
-            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->paginate(10),
+            'events' => Events::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->latest('events.created_at')->paginate(min(request()->query('pagesize', 10), 100)),
         ];
     }
 
