@@ -268,7 +268,7 @@ class ViewBeautyGroupScreen extends Screen
                 'Members in Group' => [
                     Layout::table('current_beauty_group_members', [
 
-                        TD::make()
+                        TD::make('checkboxes')
                             ->render(function (BeautyGroupMember $student){
                                 return ($student->beautyGroup->creator_user_id == Auth::user()->id) ? 
                                  CheckBox::make('members[]')

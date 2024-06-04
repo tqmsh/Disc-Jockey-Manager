@@ -15,7 +15,7 @@ class ViewSongsLayoutNoEdit extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Song $song) {
                     return CheckBox::make('selectedSongs[]')
                         ->value($song->id)

@@ -276,7 +276,7 @@ class ViewLimoGroupScreen extends Screen
                 'Members in Group' => [
                     Layout::table('current_limo_group_members', [
 
-                        TD::make()
+                        TD::make('checkboxes')
                             ->render(function (LimoGroupMember $student){
                                 return ($student->limoGroup->creator_user_id == Auth::user()->id) ? 
                                  CheckBox::make('members[]')

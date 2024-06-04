@@ -30,7 +30,7 @@ class ViewUnattendingStudentLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Student $student){
                     return CheckBox::make('unattendingStudents[]')
                         ->value($student->user_id)
