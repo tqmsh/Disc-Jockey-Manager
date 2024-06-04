@@ -24,7 +24,7 @@ class ViewChecklistScreen extends Screen
     public function query(): iterable
     {
         return [
-            'checklists' => Checklist::filter(request(['type']))->latest()->paginate(10)
+            'checklists' => Checklist::filter(request(['type']))->latest()->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 
