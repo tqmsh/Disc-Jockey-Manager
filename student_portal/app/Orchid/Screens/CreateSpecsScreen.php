@@ -260,6 +260,7 @@ class CreateSpecsScreen extends Screen
         }catch(Exception $e){
 
             Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 }

@@ -23,14 +23,38 @@ use Orchid\Screen\Fields\DateTimer;
 
 class CreateEventScreen extends Screen
 {
+    public $event;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Events $event, Request $request): iterable
     {
-        return [];
+        $event->event_name = $request->input('event_name') ?? "";
+        $event->event_start_time = $request->input('event_start_time') ?? "";
+        $event->event_finish_time = $request->input('event_finish_time') ?? "";
+        $event->event_address = $request->input('event_address') ?? "";
+        $event->event_zip_postal = $request->input('event_zip_postal') ?? "";
+        $event->venue_id = $request->input('venue_id') ?? "";
+        $event->school = $request->input('school') ?? "";
+        $event->country = $request->input('country') ?? "";
+        $event->county = $request->input('county') ?? "";
+        $event->state_province = $request->input('state_province') ?? "";
+        $event->event_info = $request->input('event_info') ?? "";
+        $event->event_rules = $request->input('event_rules') ?? "";
+        $event->ticket_price = $request->input('ticket_price') ?? "";
+        $event->capacity = $request->input('capacity') ?? "";
+
+        if($request->input('interested_vendor_categories') !== null) {
+            $event->interested_vendor_categories =  array_values(array_map('intval', $request->input('interested_vendor_categories')));
+        }else{
+            $event->interested_vendor_categories =null;
+        }
+
+        return [
+            'event' => $event
+        ];
     }
 
     /**
@@ -76,67 +100,78 @@ class CreateEventScreen extends Screen
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. Prom 2022')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->value($this->event->event_name),
 
                 DateTimer::make('event_start_time')
                     ->title('Event Start')
                     ->required()
                     ->horizontal()
                     ->allowInput()
-                    ->enableTime(),
+                    ->enableTime()
+                    ->value($this->event->event_start_time),
 
                 DateTimer::make('event_finish_time')
                     ->title('Event End')
                     ->required()
                     ->horizontal()
                     ->allowInput()
-                    ->enableTime(),
-                    
+                    ->enableTime()
+                    ->value($this->event->event_finish_time),
+
+
                 Input::make('event_address')
                     ->title('Event Address')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. 2381 Ogilvie Rd')
-                    ->horizontal(),
-                    
+                    ->horizontal()
+                    ->value($this->event->event_address),
+
                 Input::make('event_zip_postal')
                     ->title('Event Zip/Postal')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. K1J 7N4')
-                    ->horizontal(),
-                    
+                    ->horizontal()
+                    ->value($this->event->event_zip_postal),
+
                 Select::make('venue_id')
                     ->title('Venue')
                     ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
-                    ->horizontal(),
+                    ->horizontal()
+                    ->value($this->event->venue_id),
 
                 Select::make('school')
                     ->title('School')
                     ->required()
                     ->horizontal()
                     ->empty('Start typing to Search...')
-                    ->fromModel(School::class, 'school_name', 'school_name'),
+                    ->fromModel(School::class, 'school_name', 'school_name')
+                    ->value($this->event->school),
 
                 Select::make('country')
                     ->title('Country')
                     ->required()
                     ->empty('Start typing to Search...')
                     ->horizontal()
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->fromModel(School::class, 'country', 'country')
+                    ->value($this->event->country),
 
                 Select::make('county')
                     ->title('County')
                     ->required()
                     ->empty('Start typing to Search...')
                     ->horizontal()
-                    ->fromModel(School::class, 'county', 'county'),
+                    ->fromModel(School::class, 'county', 'county')
+                    ->value($this->event->county),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->empty('Start typing to Search...')
                     ->horizontal()
-                    ->fromModel(School::class, 'state_province', 'state_province'),
+                    ->fromModel(School::class, 'state_province', 'state_province')
+                    ->value($this->event->state_province),
 
                 TextArea::make('event_info')
                     ->title('Event Info')
@@ -144,36 +179,41 @@ class CreateEventScreen extends Screen
                     ->required()
                     ->placeholder('Ex. Formal Attire')
                     ->horizontal()
-                    ->rows(5),
+                    ->rows(5)
+                    ->value($this->event->event_info),
 
                 TextArea::make('event_rules')
                     ->title('Event Rules')
                     ->required()
                     ->placeholder('Ex. No Violence')
                     ->horizontal()
-                    ->rows(5),
-                
+                    ->rows(5)
+                    ->value($this->event->event_rules),
+
                 Input::make('ticket_price')
                     ->title('Ticket Price $')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. 29.99')
-                    ->horizontal(), 
+                    ->horizontal()
+                    ->value($this->event->ticket_price),
 
-     
+
                 Input::make('capacity')
                     ->title('Event Capacity')
                     ->type('text')
                     ->required()
                     ->placeholder('Ex. 100')
-                    ->horizontal(), 
+                    ->horizontal()
+                    ->value($this->event->capacity),
 
                 Select::make('interested_vendor_categories')
                     ->title('Interested Vendor Categories')
                     ->fromModel(Categories::class, 'name')
                     ->horizontal()
                     ->multiple()
-                    ->help('Vendors from this category will be able to place bids on the event.'),
+                    ->help('Vendors from this category will be able to place bids on the event.')
+                    ->value($this->event->interested_vendor_categories),
             ]),
         ];
     }
@@ -183,10 +223,10 @@ class CreateEventScreen extends Screen
         try{
 
             $school_id = School::where('school_name', $request->input('school'))
-                                ->where('county', $request->input('county'))
-                                ->where('state_province', $request->input('state_province'))
-                                ->where('country', $request->input('country'))
-                                ->get('id')->value('id');
+                ->where('county', $request->input('county'))
+                ->where('state_province', $request->input('state_province'))
+                ->where('country', $request->input('country'))
+                ->get('id')->value('id');
 
             if(is_null($school_id)){
                 throw New Exception('You are trying to enter a invalid school');
@@ -215,9 +255,9 @@ class CreateEventScreen extends Screen
                 'interested_vendor_categories' => 'nullable|array',
                 'interested_vendor_categories.*' => Rule::in(Categories::all()->pluck('id')),
             ],
-            $messages = [
-                'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
-            ]);
+                $messages = [
+                    'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
+                ]);
 
             $formFields = $validator->validated();
             // dd($formFields);
@@ -226,13 +266,15 @@ class CreateEventScreen extends Screen
 
             Events::create($formFields);
 
-            Toast::success('Event Added Succesfully');
-            
+            Toast::success('Event Added Successfully');
+
             return redirect()->route('platform.event.list');
 
         }catch(Exception $e){
-            
+
             Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.event.create', request(['event_name', 'event_start_time', 'event_finish_time', 'event_address', 'event_zip_postal',  'venue_id', 'school', 'country', 'county', 'state_province', 'event_info', 'event_rules', 'ticket_price', 'capacity', 'interested_vendor_categories']));
+
         }
     }
 }

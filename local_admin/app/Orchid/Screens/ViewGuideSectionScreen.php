@@ -19,7 +19,7 @@ class ViewGuideSectionScreen extends Screen
     {
         return [
             'guide' => $guide,
-            'sections' => $guide->sections()->orderBy('ordering', 'asc')->paginate(20),
+            'sections' => $guide->sections()->orderBy('ordering', 'asc')->paginate(request()->query('pagesize', 20)),
         ];
     }
 

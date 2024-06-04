@@ -27,15 +27,39 @@ class CreateVendorScreen extends Screen
     public $requiredFields = ['country', 'company_name', 'firstname', 'lastname', 'category_name', 'address', 'city', 'state_province', 'zip_postal', 'phonenumber', 'website', 'email', 'password'];
 
     public $dupes =[];
+    public $vendor;
 
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Vendors $vendor, Request $request): iterable
     {
-        return [];
+
+        $vendor->firstname = $request->input('firstname') ?? "";
+        $vendor->lastname = $request->input('lastname') ?? "";
+        $vendor->name = $request->input('name') ?? "";
+        $vendor->company_name = $request->input('company_name') ?? "";
+        $vendor->website = $request->input('website') ?? "";
+        $vendor->category_id = intval($request->input('category_id')) ?? "";
+        $vendor->email = $request->input('email') ?? "";
+        $vendor->phonenumber = $request->input('phonenumber') ?? "";
+
+        if($request->input('region_ids') !== null) {
+            $vendor->region_ids =  array_values(array_map('intval', $request->input('region_ids')));
+        }else{
+            $vendor->region_ids =null;
+        }
+        $vendor->address = $request->input('address') ?? "";
+        $vendor->country = $request->input('country') ?? "";
+        $vendor->state_province = $request->input('state_province') ?? "";
+        $vendor->zip_postal = $request->input('zip_postal') ?? "";
+        $vendor->city = $request->input('city') ?? "";
+
+        return [
+            'vendor'=>$vendor
+        ];
     }
 
     /**
@@ -79,6 +103,7 @@ class CreateVendorScreen extends Screen
      */
     public function layout(): iterable
     {
+
         return [
 
             Layout::modal('massImportModal',[
@@ -113,61 +138,69 @@ class CreateVendorScreen extends Screen
 
 
             Layout::rows([
-
                 Input::make('firstname')
                     ->title('First Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. John'),
+                    ->placeholder('Ex. John')
+                    ->value($this->vendor->firstname),
 
                 Input::make('lastname')
                     ->title('Last Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Doe'),
+                    ->placeholder('Ex. Doe')
+                    ->value($this->vendor->lastname),
 
                 Input::make('name')
                     ->title('Username')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. KingKhan435'),
+                    ->placeholder('Ex. KingKhan435')
+                    ->value($this->vendor->name),
 
                 Input::make('company_name')
                     ->title('Company Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Disco Rockerz'),
+                    ->placeholder('Disco Rockerz')
+                    ->value($this->vendor->company_name),
 
                 Input::make('website')
                     ->title('Company Website')
                     ->type('url')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. https://disco.com'),
+                    ->placeholder('Ex. https://disco.com')
+                    ->value($this->vendor->website),
 
                 Select::make('category_id')
                     ->title('Category')
                     ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
-                    ->fromQuery(Categories::query()->where('status', 1), 'name'),
+                    ->fromQuery(Categories::query()->where('status', 1), 'name')
+                    ->value($this->vendor->category_id),
+
 
                 Input::make('email')
                     ->title('Company Email')
                     ->type('email')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
+                    ->placeholder('Ex. johndoe@gmail.com')
+                    ->value($this->vendor->email),
 
                 Password::make('password')
                     ->title('Password')
                     ->type('password')
                     ->required()
-                    ->horizontal(),
+                    ->horizontal()
+                    ->value($this->vendor->password),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')
@@ -175,7 +208,8 @@ class CreateVendorScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 859-5863'),
+                    ->placeholder('Ex. (613) 859-5863')
+                    ->value($this->vendor->phonenumber),
 
                 Select::make('region_ids')
                     ->title('Paid Regions')
@@ -184,39 +218,45 @@ class CreateVendorScreen extends Screen
                     ->horizontal()
                     ->multiple()
                     ->help('Select the paid regions you want to add to the vendors')
-                    ->placeholder('Start typing to search...'),
+                    ->placeholder('Start typing to search...')
+                    ->value($this->vendor->region_ids),
 
                 Input::make('address')
                     ->title('Address')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. 1234 Main St.'),
+                    ->placeholder('Ex. 1234 Main St.')
+                    ->value($this->vendor->address),
 
                 Select::make('country')
                     ->title('Country')
                     ->empty('Start typing to Search...')
                     ->required()
                     ->horizontal()
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->fromModel(School::class, 'country', 'country')
+                    ->value($this->vendor->country),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->required()
                     ->empty('Start typing to Search...')
-                    ->fromModel(School::class, 'state_province', 'state_province'),
+                    ->fromModel(School::class, 'state_province', 'state_province')
+                    ->value($this->vendor->state_province),
 
                 Input::make('zip_postal')
                     ->title('Zip/Postal Code')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. K1A 0B1'),
+                    ->placeholder('Ex. K1A 0B1')
+                    ->value($this->vendor->zip_postal),
 
                 Input::make('city')
                     ->title('City')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Ottawa'),
+                    ->placeholder('Ex. Ottawa')
+                    ->value($this->vendor->city),
 
             ]),
         ];
@@ -275,13 +315,23 @@ class CreateVendorScreen extends Screen
 
                 //duplicate email found
                 //toast error message
-                Toast::error('Email or Username already exists.');
+                if(!$this->validEmail($request->input('email'))){
+                    Toast::error('Email already exists.');
+
+                }else{
+                    Toast::error('Username already exists.');
+
+                }
+                return redirect()->route('platform.vendor.create', request(['firstname', 'lastname', 'name', 'company_name', 'website', 'category_id', 'email', 'password', 'phonenumber', 'region_ids', 'address', 'country', 'state_province', 'zip_postal', 'city']));
+
             }
 
         }catch(Exception $e){
 
             //toast error message
             Alert::error('There was an error creating this vendor Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.vendor.create', request(['firstname', 'lastname', 'name', 'company_name', 'website', 'category_id', 'email', 'password', 'phonenumber', 'region_ids', 'address', 'country', 'state_province', 'zip_postal', 'city']));
+
         }
     }
 

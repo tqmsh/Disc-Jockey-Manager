@@ -84,7 +84,7 @@ class CreateCandidateScreen extends Screen
                 Select::make('candidate.id')
                 ->options(function(){
                     $arr= array();
-                    $event_attendees = EventAttendees::where('event_id', $this->election->event_id) ->paginate(20);
+                    $event_attendees = EventAttendees::where('event_id', $this->election->event_id) ->paginate(request()->query('pagesize', 20));
                     foreach($event_attendees as $attendee){
                         $student = Student::where('user_id', $attendee->user_id)->first();
                         if ($this->election->school_id == $student->school_id){

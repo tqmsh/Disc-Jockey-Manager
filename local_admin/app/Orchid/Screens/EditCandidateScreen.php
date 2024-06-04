@@ -32,7 +32,7 @@ class EditCandidateScreen extends Screen
     public function query(Candidate $candidate): iterable
     {
         $position = Position::where('id',$candidate->position_id)->first();
-        $positions = Position::where('election_id',$candidate->election_id)->paginate(20);
+        $positions = Position::where('election_id',$candidate->election_id)->paginate(request()->query('pagesize', 20));
         $election = Election::where('id', $candidate->election_id)->first();
         
         abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $election->school_id, 403, 'You are not authorized to view this page.');

@@ -57,7 +57,7 @@ class CreateBeautyGroupBidScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [ 
+        return [
 
             Button::make('Send Bid (50 credits)')
                 ->icon('plus')
@@ -67,7 +67,7 @@ class CreateBeautyGroupBidScreen extends Screen
                 ->icon('arrow-left')
                 ->route('platform.bidopportunities.list')
         ];
-        
+
     }
 
     /**
@@ -130,7 +130,7 @@ class CreateBeautyGroupBidScreen extends Screen
                     })
                     ->required()
                     ->empty('Start typing to search...')
-                    ->help('Select the package you would like to bid on for this event.'), 
+                    ->help('Select the package you would like to bid on for this event.'),
 
                 TextArea::make('notes')
                     ->title('Bid Notes')
@@ -158,12 +158,12 @@ class CreateBeautyGroupBidScreen extends Screen
 
         $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
-            try{   
+            try{
 
                 if ((Auth::user()->vendor->credits) >= 50) {
 
                     if($this->validBid($beautyGroup)){
-                        
+
                         BeautyGroupBid::create([
                             'user_id' => $vendor->user_id,
                             'beauty_group_id' => $beautyGroup->id,
@@ -185,19 +185,20 @@ class CreateBeautyGroupBidScreen extends Screen
                             'message' => 'You have a new bid for your beauty group: ' . $beautyGroup->name,
                             'action' => '/admin/beauty-groups',
                         ]));
-                            
+
                         Toast::success('Bid created succesfully');
-                            
+
                         return redirect()->route('platform.bidopportunities.list');
                     }else{
                         Toast::error('Bid already exists');
                     }
                 } else {
                     Toast::error('Insuficient Credits');
-                    return redirect()->route('platform.shop'); 
+                    return redirect()->route('platform.shop');
                 }
             }catch(Exception $e){
                 Alert::error('Error: ' . $e->getMessage());
+                return back()->withInput();
             }
     }
 
