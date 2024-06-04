@@ -32,7 +32,7 @@ class ViewStudentScreen extends Screen
         return [
             'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))->latest('students.created_at')->where('account_status', 1)
                         ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->pluck('school_id'))
-                        ->paginate(20)
+                        ->paginate(request()->query('pagesize', 20))
         ];
     }
 

@@ -54,11 +54,11 @@ class ViewLimoGroupScreen extends Screen
         return [
             'owned_limo_group' => ($owned_limo_group != null) ? $owned_limo_group : null,
             'current_limo_group' => ($current_limo_group != null) ? $current_limo_group : null,
-            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members()->paginate(10) 
-                                    : (($owned_limo_group != null) ? $owned_limo_group->members()->paginate(10)
+            'current_limo_group_members' => ($current_limo_group != null) ? $current_limo_group->members()->paginate(min(request()->query('pagesize', 10), 100)) 
+                                    : (($owned_limo_group != null) ? $owned_limo_group->members()->paginate(min(request()->query('pagesize', 10), 100))
                                     : []),
-            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(10),
-            'limoBids' => LimoGroupBid::where('limo_group_id', ($owned_limo_group != null) ? $owned_limo_group->id : 0)->where('status', 0)->paginate(10),
+            'limo_group_invitations' => LimoGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(min(request()->query('pagesize', 10), 100)),
+            'limoBids' => LimoGroupBid::where('limo_group_id', ($owned_limo_group != null) ? $owned_limo_group->id : 0)->where('status', 0)->paginate(min(request()->query('pagesize', 10), 100)),
             'default' => null,
         ];
     }

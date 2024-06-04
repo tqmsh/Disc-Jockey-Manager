@@ -20,7 +20,7 @@ class ViewGuideSectionScreen extends Screen
         abort_if($guide->category != 4, 403, 'You are not authorized to view this page.');
         return [
             'guide' => $guide,
-            'sections' => $guide->sections()->orderBy('ordering', 'asc')->paginate(20),
+            'sections' => $guide->sections()->orderBy('ordering', 'asc')->paginate(request()->query('pagesize', 20)),
         ];
     }
 

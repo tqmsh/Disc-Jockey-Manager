@@ -25,7 +25,7 @@ use App\Notifications\GeneralNotification;
 class CreateEventBidScreen extends Screen
 {
     public $event;
-    public $vendor; 
+    public $vendor;
 
     /**
      * Query data.
@@ -35,7 +35,7 @@ class CreateEventBidScreen extends Screen
     public function query(Events $event): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-        abort_if(is_null($event->interested_vendor_categories) or !in_array($this->vendor->category_id, $event->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');   
+        abort_if(is_null($event->interested_vendor_categories) or !in_array($this->vendor->category_id, $event->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');
         return [
             'event' => $event
         ];
@@ -124,7 +124,7 @@ class CreateEventBidScreen extends Screen
                     })
                     ->required()
                     ->empty('Start typing to search...')
-                    ->help('Select the package you would like to bid on for this event.'), 
+                    ->help('Select the package you would like to bid on for this event.'),
 
                 TextArea::make('notes')
                     ->title('Bid Notes')
@@ -137,7 +137,7 @@ class CreateEventBidScreen extends Screen
                     ->placeholder('Enter your contact instructions')
                     ->rows(5)
                     ->help('Enter any instructions you would like.'),
-            
+
             ])->title('Your Bid'),
             Layout::rows([
                 Button::make('Send Bid (50 credits)')
@@ -154,11 +154,11 @@ class CreateEventBidScreen extends Screen
         $vendor = Vendors::where('user_id', Auth::id())->first();
         $localAdmins = User::where('role', 2)->whereIn('id', Localadmin::where('school_id', $event->school_id)->get('user_id')->toArray())->get();
 
-            try{  
+            try{
 
                 if ((Auth::user()->vendor->credits) >= 50) {
                     if($this->validBid($event)){
-                        
+
                         EventBids::create([
                             'user_id' => $vendor->user_id,
                             'event_id' => $event->id,
@@ -181,9 +181,9 @@ class CreateEventBidScreen extends Screen
                                 'action' => '/admin/events/bids/' . $event->id,
                             ]));
                         }
-                            
+
                         Toast::success('Bid created succesfully');
-                            
+
                         return redirect()->route('platform.bidopportunities.list');
                     }else{
                         Toast::error('Bid already exists');
@@ -192,10 +192,11 @@ class CreateEventBidScreen extends Screen
                 Toast::error('Insuficient Credits');
                 return redirect()->route('platform.shop');
             }
-    
+
         }catch(Exception $e){
             Alert::error('Error: ' . $e->getMessage());
-        }
+            return back()->withInput();
+            }
     }
 
     private function validBid(Events $event){

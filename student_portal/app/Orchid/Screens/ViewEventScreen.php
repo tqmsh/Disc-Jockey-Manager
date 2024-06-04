@@ -37,9 +37,9 @@ class ViewEventScreen extends Screen
         $invitedEvents = EventAttendees::where('user_id', Auth::id())->where('invitation_status', 0)->where('invited', 1)->get('event_id');
 
         return [
-            'events' => Events::where('school_id', Auth::user()->student->school_id)->latest('events.created_at')->paginate(10),
-            'registered_events' => Events::whereIn('id', $registered_event_ids)->latest('events.created_at')->paginate(10),
-            'eventInvitations' => Events::whereIn('id', $invitedEvents)->latest('events.created_at')->paginate(10)
+            'events' => Events::where('school_id', Auth::user()->student->school_id)->latest('events.created_at')->paginate(min(request()->query('pagesize', 10), 100)),
+            'registered_events' => Events::whereIn('id', $registered_event_ids)->latest('events.created_at')->paginate(min(request()->query('pagesize', 10), 100)),
+            'eventInvitations' => Events::whereIn('id', $invitedEvents)->latest('events.created_at')->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 
