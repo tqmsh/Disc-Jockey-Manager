@@ -110,7 +110,9 @@ return [
 
     'resource' => [
         'stylesheets' => [],
-        'scripts'     => [],
+        'scripts'     => [
+            '/js/poll.js',
+        ],
     ],
 
     /*
