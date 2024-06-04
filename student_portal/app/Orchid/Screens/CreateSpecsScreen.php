@@ -82,7 +82,7 @@ class CreateSpecsScreen extends Screen
                         ->value(Specs::where('student_user_id', auth()->user()->id)->first()->gender ?? ""),
                     Input::make('age')
                         ->title('Age')
-                        ->type('text')
+                        ->type('number')
                         ->horizontal(),
 
                     Input::make('height')
