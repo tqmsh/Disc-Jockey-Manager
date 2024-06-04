@@ -6,6 +6,7 @@ use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Localadmin;
 use App\Models\School;
+use App\Models\TourElement;
 use App\Models\Vendors;
 use App\Models\Student;
 use App\Models\Events;
@@ -125,6 +126,7 @@ class ExampleScreen extends Screen
         $totalExpenses = $expensesRecord ? $expensesRecord->actual : "No expenses";
 
         $this->campaigns = Campaign::where("region_id", School::find(Localadmin::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
+        $this->tourElements = TourElement::where("screen", 1);
         return [
             "ad_ids" =>"",
             'charts'  => [
@@ -231,6 +233,23 @@ class ExampleScreen extends Screen
             ];
         }
         usort($arr_ads, [$this, 'customSort']);
+
+
+        $arr_ads = [];
+        foreach ($this->campaigns as $campaign){
+            if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
+
+            $arr_ads[] = ["id"=>$campaign->id,
+                "forward_url"=>$campaign->website,
+                "image_url"=>$campaign->image,
+                "title"=>$campaign->title,
+                "category"=>Categories::where("id", $campaign->category_id)->first()->name,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name ?? "N/A",
+                "order"=>Categories::where("id", $campaign->category_id)->first()->order_num
+            ];
+        }
+        usort($arr_ads, [$this, 'customSort']);
+
         return [
 
             Layout::metrics([
@@ -248,6 +267,7 @@ class ExampleScreen extends Screen
                 'Total Revenue' => 'metrics.totalRevenue',
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
+
             Layout::view("tooltip_editor"),
             //Layout::view("card_style"),
 

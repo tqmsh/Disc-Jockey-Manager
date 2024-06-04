@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time Range Toggle</title>
-    <!-- Include Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
    <style>
        .shepherd-content {
            background: #FAF9F6;
@@ -35,7 +32,7 @@
             });
 
             tour.addStep({
-                id: 'reportabug',
+                id: '1',
                 title: 'Report a Bug',
                 text: 'Here is a place you can report bugs. We are in beta right now and want feedback to refine the system..',
                 attachTo: { element: '#reportabug', on: 'bottom' },
@@ -46,7 +43,7 @@
             });
 
             tour.addStep({
-                id: 'roadmap',
+                id: '2',
                 title: 'Roadmap',
                 text: 'The roadmap describes features that are currently available and those that will be available in future releases.',
                 attachTo: { element: '#roadmap', on: 'left' },
@@ -58,7 +55,7 @@
             });
 
             tour.addStep({
-                id: 'socials',
+                id: '3',
                 title: 'Socials',
                 text: 'All the social networks that prom planner belongs to and you are more than free to communicate with us on any of these.',
                 attachTo: { element: '#socials', on: 'top' },
@@ -72,7 +69,7 @@
             });
 
             tour.addStep({
-                id: 'Sitewide Notice',
+                id: '4',
                 title: 'Sitewide Notice',
                 text: 'This is a sitewide notice, provides information about the prom planner.',
                 attachTo: { element: '.h3.text-black.font-bold', on: 'top' },
