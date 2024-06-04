@@ -129,6 +129,8 @@
         @endphp
     @endforeach
 @endforeach
+<script src="{{ asset("js/adv-socialbar-scroll.js")}}" defer></script>
+<script src="{{ asset("js/settings-modal-form.js")}}" defer></script>
 <script type="text/javascript">
     function incrementCampaignClick(campaign_id) {
         var url = 'https://api.promplanner.app/api/campaign_click/' + encodeURIComponent(campaign_id);

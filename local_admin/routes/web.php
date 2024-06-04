@@ -17,3 +17,7 @@ Route::get('/', function(){
 });
 
 Route::post('/user/tab-closed', [LoginController::class, 'logout']);
+
+Route::get('/disable-ad', function() {
+    return view('ad_blocker_blocker');
+});
