@@ -16,12 +16,10 @@ class TourElement extends Model
     protected $fillable = [
         'id',
         'screen',
-        'tour',
+        'title',
         'element',
+        'description',
         'order_element',
-        'next_btn',
-        'back_btn',
-        'end_btn'
     ];
 
 

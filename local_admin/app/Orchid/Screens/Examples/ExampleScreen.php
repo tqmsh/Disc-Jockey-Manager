@@ -41,6 +41,7 @@ class ExampleScreen extends Screen
     erat in luctus.';
 
     public $campaigns;
+    public $tourElements;
     function customSort($a, $b): int
     {
         // Compare order_num values
@@ -126,7 +127,7 @@ class ExampleScreen extends Screen
         $totalExpenses = $expensesRecord ? $expensesRecord->actual : "No expenses";
 
         $this->campaigns = Campaign::where("region_id", School::find(Localadmin::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
-        $this->tourElements = TourElement::where("screen", 1);
+        $this->tourElements = TourElement::where("screen", 1)->get()->toArray();
         return [
             "ad_ids" =>"",
             'charts'  => [
@@ -235,20 +236,13 @@ class ExampleScreen extends Screen
         usort($arr_ads, [$this, 'customSort']);
 
 
-        $arr_ads = [];
-        foreach ($this->campaigns as $campaign){
-            if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
+        $arr_tourels = [];
+        foreach ($this->tourElements as $tel){
+            array_push($arr_tourels, $tel);
 
-            $arr_ads[] = ["id"=>$campaign->id,
-                "forward_url"=>$campaign->website,
-                "image_url"=>$campaign->image,
-                "title"=>$campaign->title,
-                "category"=>Categories::where("id", $campaign->category_id)->first()->name,
-                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name ?? "N/A",
-                "order"=>Categories::where("id", $campaign->category_id)->first()->order_num
-            ];
         }
-        usort($arr_ads, [$this, 'customSort']);
+        //check for sort.
+       // usort($arr_ads, [$this, 'customSort']);
 
         return [
 
@@ -268,7 +262,7 @@ class ExampleScreen extends Screen
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
 
-            Layout::view("tooltip_editor"),
+            Layout::view("single_tour_element",  ["elements"=>$arr_tourels]),
             //Layout::view("card_style"),
 
             //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
