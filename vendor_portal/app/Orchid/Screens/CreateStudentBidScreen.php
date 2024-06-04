@@ -34,7 +34,7 @@ class CreateStudentBidScreen extends Screen
     public function query(Student $student): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-
+        abort_if(is_null($student->interested_vendor_categories) or !in_array($this->vendor->category_id, $student->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');   
         return [
             'student' => $student
         ];
@@ -47,7 +47,7 @@ class CreateStudentBidScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Create Bid For: ' . $this->student->firstname . ' ' . $this->student->lastname ;
+        return 'Create Bid For: ' . $this->student->user->name;
     }
 
     /**
@@ -78,8 +78,7 @@ class CreateStudentBidScreen extends Screen
     {
         return [
             Layout::legend('student',[
-                Sight::make('firstname', 'First Name'),
-                Sight::make('lastname', 'Last Name'),
+                Sight::make('username', 'Username')->render(fn ($student) => $student->user->name),
                 Sight::make('email', 'Email'),
                 Sight::make('region', 'Region')->render(function(){
 
@@ -137,7 +136,13 @@ class CreateStudentBidScreen extends Screen
                     ->rows(5)
                     ->help('Enter any instructions you would like.')
 
-            ])->title('Your Bid')
+            ])->title('Your Bid'),
+
+            Layout::rows([
+                Button::make('Send Bid (50 credits)')
+                ->icon('plus')
+                ->method('createBid'),
+                ])
         ];
     }
 

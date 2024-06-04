@@ -35,7 +35,7 @@ class CreateEventBidScreen extends Screen
     public function query(Events $event): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-        
+        abort_if(is_null($event->interested_vendor_categories) or !in_array($this->vendor->category_id, $event->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');   
         return [
             'event' => $event
         ];
@@ -136,9 +136,16 @@ class CreateEventBidScreen extends Screen
                     ->title('Contact Instructions')
                     ->placeholder('Enter your contact instructions')
                     ->rows(5)
-                    ->help('Enter any instructions you would like.')
+                    ->help('Enter any instructions you would like.'),
+            
+            ])->title('Your Bid'),
+            Layout::rows([
+                Button::make('Send Bid (50 credits)')
+                ->icon('plus')
+                ->method('createBid'),
+                ])
 
-            ])->title('Your Bid')
+
         ];
     }
 

@@ -15,3 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return view('welcome');
 });
+
+Route::get('/disable-ad', function() {
+    return view('ad_blocker_blocker');
+});

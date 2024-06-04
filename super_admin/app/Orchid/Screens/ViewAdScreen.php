@@ -2,8 +2,10 @@
 
 namespace App\Orchid\Screens;
 
+use App\Classes\DisplayAdData;
 use Exception;
 use App\Models\Campaign;
+use App\Models\DisplayAds;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -15,7 +17,13 @@ use App\Orchid\Layouts\ViewAdLayoutActive;
 use App\Orchid\Layouts\ViewAdLayoutPending;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Models\Vendors;
-
+use App\Orchid\Layouts\FilterAdActive;
+use App\Orchid\Layouts\FilterAdInactive;
+use App\Orchid\Layouts\FilterAdPending;
+use App\Orchid\Layouts\FilterAdSpots;
+use App\Orchid\Layouts\FilterDisplayAd;
+use App\Orchid\Layouts\ViewDisplayAd;
+use App\Orchid\Layouts\ViewAdSpots;
 
 class ViewAdScreen extends Screen
 {
@@ -27,9 +35,12 @@ class ViewAdScreen extends Screen
     public function query(): iterable
     {
         return [
-            "campaignsActive"=>Campaign::where("active", 1)->paginate(10),
-            "campaignsInactive"=>Campaign::where("active", 2)->paginate(10),
-            "campaignsPending"=>Campaign::where("active", 0)->paginate(10),
+          "campaignsActive"=>Campaign::where("active", 1)->filter(request('active_campaigns_filters') ?? [])->paginate(10),
+          "campaignsInactive"=>Campaign::where("active", 2)->filter(request('inactive_campaigns_filters') ?? [])->paginate(10),
+          "campaignsPending"=>Campaign::where("active", 0)->filter(request('pending_campaigns_filters') ?? [])->paginate(10),
+          "campaignsDisplayAds" =>  DisplayAds::filter(request('display_ads_filters') ?? [])->paginate(10),
+          "campaignsAdSpots" => request('ad_spots_filters') == null ? [] : app(DisplayAdData::class)->getAllAdSpots(request('ad_spots_filters')),
+
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('active', 1)->get()))],
                 'inactiveAds' => ['value' =>  number_format(count(Campaign::where('active', 2)->get()))],
@@ -56,6 +67,10 @@ class ViewAdScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Create Display Ad')
+                ->icon('plus')
+                ->route('platform.ad.create.display-ad'),
+
             Button::make('Delete Selected Campaigns')
                 ->icon('trash')
                 ->method('deleteAds')
@@ -80,11 +95,15 @@ class ViewAdScreen extends Screen
                 'Inactive Campaigns' => 'metrics.inactiveAds',
                 'Total Campaigns' => 'metrics.total',
             ]),
+
             Layout::tabs([
-                "Pending Campaigns" => [ViewAdLayoutPending::class],
-                "Active Campaigns" => [ViewAdLayoutActive::class],
-                "Inactive Campaigns" => [ViewAdLayoutInactive::class],
-            ])
+              "Pending Campaigns" => [FilterAdPending::class, ViewAdLayoutPending::class],
+              "Active Campaigns" => [FilterAdActive::class, ViewAdLayoutActive::class],
+              "Inactive Campaigns" => [FilterAdInactive::class, ViewAdLayoutInactive::class],
+              "Display Ads" => [FilterDisplayAd::class, ViewDisplayAd::class],
+              "Ad Spots" => [FilterAdSpots::class, ViewAdSpots::class]
+            ])->activeTab(request('active_tab') ?? 'Pending Campaigns')
+          
         ];
     }
 
@@ -131,5 +150,71 @@ class ViewAdScreen extends Screen
 
     public function redirect($campaign_id){
         return redirect()->route('platform.ad.edit', $campaign_id);
+    }
+
+    public function redirectDisplayAd($display_ad_id) {
+        return to_route('platform.ad.edit.display-ad', $display_ad_id);
+    }
+  
+    public function redirectSamePage() {
+        return to_route('platform.ad.list');
+    }
+ 
+    public function filterPendingCampaigns()
+    {
+        return redirect()->route('platform.ad.list', [
+            'pending_campaigns_filters' => [
+                'title' => request('pending_campaigns_title'),
+                'category_id' => request('pending_campaigns_category_id'),
+                'region_id' => request('pending_campaigns_region_id'),
+            ], 
+            'active_tab' => 'Pending Campaigns',
+        ]);
+    }
+
+    public function filterActiveCampaigns()
+    {
+        return redirect()->route('platform.ad.list', [
+            'active_campaigns_filters' => [
+                'title' => request('active_campaigns_title'),
+                'category_id' => request('active_campaigns_category_id'),
+                'region_id' => request('active_campaigns_region_id'),
+            ], 
+            'active_tab' => 'Active Campaigns',
+        ]);
+    }
+
+    public function filterInactiveCampaigns()
+    {
+        return redirect()->route('platform.ad.list', [
+            'inactive_campaigns_filters' => [
+                'title' => request('inactive_campaigns_title'),
+                'category_id' => request('inactive_campaigns_category_id'),
+                'region_id' => request('inactive_campaigns_region_id'),
+            ], 
+            'active_tab' => 'Inactive Campaigns',
+        ]);
+    }
+
+    public function filterDisplayAds()
+    {
+        return redirect()->route('platform.ad.list', [
+            'display_ads_filters' => [
+                'route_uri' => request('display_ads_route_uri'),
+                'portal' => request('display_ads_portal'),
+                'region_id' => request('display_ads_region_id'),
+            ], 
+            'active_tab' => 'Display Ads',
+        ]);
+    }
+
+    public function filterAdSpots() {
+        return redirect()->route('platform.ad.list', [
+            'ad_spots_filters' => [
+                'region_id' => request('ad_spots_region_id'),
+                'view_open_spots' => request('ad_spots_view_open_spots')
+            ],
+            'active_tab' => 'Ad Spots'
+        ]);
     }
 }

@@ -50,7 +50,13 @@ class ViewStudentLayout extends Table
                 }),
             TD::make('email', 'Email')
                 ->render(function (Student $student) {
-                    return Link::make($student->email)
+                    $email = $student->email;
+
+                    if (strlen($email) > 10) {
+                        $email = substr($email, 0, 10) . '...';
+                    }
+
+                    return Link::make($email)
                         ->route('platform.student.edit', $student);
                 }),
             TD::make('country', 'Country')
@@ -58,11 +64,19 @@ class ViewStudentLayout extends Table
                     return Link::make(User::find($student->user_id)->country)
                         ->route('platform.student.edit', $student);
                 }),
-            TD::make('school', 'School')
+            
+            TD::make('school_name', 'School')
                 ->render(function (Student $student) {
-                    return Link::make($student->school)
+                    $schoolName = $student->school;
+
+                    if (strlen($schoolName) > 10) {
+                        $schoolName = substr($schoolName, 0, 10) . '...';
+                    }
+
+                    return Link::make($schoolName)
                         ->route('platform.student.edit', $student);
                 }),
+
             TD::make('grade', 'Grade')
                 ->render(function (Student $student) {
                     return Link::make($student->grade)
@@ -75,10 +89,15 @@ class ViewStudentLayout extends Table
                 }),
             TD::make('allergies', 'Allergies')
                 ->render(function (Student $student) {
-                    return Link::make($student->allergies)
+                    $allergies = $student->allergies;
+
+                    if (strlen($allergies) > 10) {
+                        $allergies = substr($allergies, 0, 10) . '...';
+                    }
+
+                    return Link::make($allergies)
                         ->route('platform.student.edit', $student);
                 }),
-
                 
             TD::make()
                 ->render(function (Student $student) {

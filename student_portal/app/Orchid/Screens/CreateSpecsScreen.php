@@ -73,15 +73,13 @@ class CreateSpecsScreen extends Screen
                 Layout::rows([
 
                     Select::make('gender')
-                        ->title('Gender')
+                        ->title('Interested Prom Purchases')
                         ->horizontal()
-                        ->allowAdd()
-                        ->empty("No Selection")
                         ->options([
                             'female' => 'Female',
                             'male' => 'Male',
-                            'other' => 'other',
-                        ]),
+                        ])
+                        ->value(Specs::where('student_user_id', auth()->user()->id)->first()->gender ?? ""),
                     Input::make('age')
                         ->title('Age')
                         ->type('text')
@@ -206,6 +204,7 @@ class CreateSpecsScreen extends Screen
                             'muscular' => 'Muscular',
                             'average' => 'Average',
                             'stocky' => 'Stocky',
+                            'curvy' => 'Curvy'
                         ]),
 
                     TextArea::make('notes')

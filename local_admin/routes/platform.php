@@ -7,7 +7,7 @@ use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
@@ -40,7 +40,7 @@ use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\CreateBannedSongsScreen;
 use App\Orchid\Screens\CreateFoodScreen;
 use App\Orchid\Screens\EditFoodScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
 use App\Orchid\Screens\ViewLimoGroupMembersScreen;
@@ -57,14 +57,20 @@ use App\Orchid\Screens\ViewPromActualScreen;
 use App\Http\Controllers\BudgetPDFController;
 use App\Http\Controllers\ActualPDFController;
 use App\Orchid\Screens\EditActualScreen;
+
+use App\Orchid\Screens\ViewCoupleDetailsScreen;
+use App\Orchid\Screens\ViewCouplesScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateBugReportScreen;
-
+use App\Orchid\Screens\ViewChecklistItemScreen;
+use App\Orchid\Screens\ViewChecklistScreen;
 
 use App\Orchid\Screens\CreatePromHistoryScreen;
 use App\Orchid\Screens\EditPromHistoryScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
+use App\Orchid\Screens\ViewEventDetailedBidScreen;
+
 
 use App\Orchid\Screens\ViewAllPollsScreen;
 use App\Orchid\Screens\CreatePollScreen;
@@ -84,7 +90,11 @@ use App\Orchid\Screens\ViewPastPollsScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Main Menu');
+    });
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
@@ -112,6 +122,9 @@ Route::screen('/pendingstudents', ViewPendingStudentScreen::class)->name('platfo
 
 Route::screen('/events/bids/{event_id}', ViewEventBidScreen::class)->name('platform.eventBids.list');
 
+// detailed bid screen
+Route::screen('/events/bids/{event}/{eventBid}', ViewEventDetailedBidScreen::class)->name('platform.eventBids.view');
+
 Route::screen('/events/students/{event_id}', ViewEventStudentScreen::class)->name('platform.eventStudents.list');
 
 Route::screen('/events/suggestVendor', SuggestVendorScreen::class)->name('platform.suggestVendor.create');
@@ -120,13 +133,13 @@ Route::screen('/events/prom-history/create/{event_id}', CreatePromHistoryScreen:
 
 Route::screen('/events/prom-history/edit/{event_id}', EditPromHistoryScreen::class)->name('platform.eventHistory.edit');
 
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 Route::screen('/events/{event_id}/song-requests', ViewSongRequestsScreen::class)->name('platform.songreq.list');
 Route::screen('/events/{event_id}/banned-songs', ViewBannedSongsScreen::class)->name('platform.bannedSongs.list');
@@ -134,12 +147,10 @@ Route::screen('/events/{event_id}/banned-songs/add', CreateBannedSongsScreen::cl
 Route::screen('/events/{event_id}/menu', ViewEventFoodScreen::class)->name('platform.eventFood.list');
 Route::screen('/events/{event_id}/menu/add-item', CreateFoodScreen::class)->name('platform.eventFood.create');
 Route::screen('/events/{event_id}/menu/{food_id}/edit', EditFoodScreen::class)->name('platform.eventFood.edit');
-
-
-
-
 Route::screen('/events/{song_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
+Route::screen('/couples', ViewCouplesScreen::class)->name('platform.couples.list');
+Route::screen('/couples/{couple}', ViewCoupleDetailsScreen::class)->name('platform.couples.info');
 
 //Election
 Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');
@@ -171,7 +182,13 @@ Route::screen('/beauty-groups/{beauty_group_id}/members', ViewBeautyGroupMembers
 Route::screen('/contact-students', ContactStudentScreen::class)->name('platform.contact-students');
 
 // Contracts
-Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+//Route::screen('/contracts', ViewContractScreen::class)->name('platform.contract.list');
+
+// Checklists
+Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
+
+// Checklist Items
+Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
@@ -190,11 +207,7 @@ Route::screen('profile', UserProfileScreen::class)
 
 // Example...
 Route::screen('dashboard', ExampleScreen::class)
-    ->name('platform.example')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->push('Main Menu');
-    });
+    ->name('platform.example');
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
 Route::screen('example-layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');

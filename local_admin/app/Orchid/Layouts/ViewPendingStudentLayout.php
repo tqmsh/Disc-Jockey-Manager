@@ -65,37 +65,37 @@ class ViewPendingStudentLayout extends Table
                 ->render(function (Student $student) {
                     return Link::make($student->grade)
                         ->route('platform.student.edit', $student);
-                }),
+                })->defaultHidden(),
 
             TD::make('ticketstatus', 'Ticket Status')
                 ->render(function (Student $student) {
                     return Link::make($student->ticketstatus)
                         ->route('platform.student.edit', $student);
-                }),
+                })->defaultHidden(),
 
             TD::make('school', 'School')
                 ->render(function (Student $student) {
                     return Link::make($student->school)
                         ->route('platform.student.edit', $student);
-                }),
+                })->defaultHidden(),
             
             TD::make('country', 'Country')
                 ->render(function (Student $student) {
                     return Link::make(School::find($student->school_id)->country)
                         ->route('platform.student.edit', $student);
-                }),
+                })->defaultHidden(),
 
             TD::make('state_province', 'State/Province')
                 ->render(function (Student $student) {
                     return Link::make(School::find($student->school_id)->state_province)
                         ->route('platform.student.edit', $student);
-                }),
+                })->defaultHidden(),
 
             TD::make('county', 'County')
                 ->render(function (Student $student) {
                     return Link::make(School::find($student->school_id)->county)
                         ->route('platform.student.edit', $student);
-                }),
+                })->defaultHidden(),
         ];
     }
 }

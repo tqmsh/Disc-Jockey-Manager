@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Orchid\Screens\CreateBannedSongsScreen;
 use App\Orchid\Screens\EditSongScreen;
 use App\Orchid\Screens\ViewBannedSongsScreen;
+use App\Orchid\Screens\ViewCoupleDetailsScreen;
+use App\Orchid\Screens\ViewCouplesScreen;
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
@@ -12,15 +14,16 @@ use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSongsScreen;
-use App\Orchid\Screens\EditCourseScreen;
+use App\Orchid\Screens\EditGuideScreen;
 use App\Orchid\Screens\EditRegionScreen;
 use App\Orchid\Screens\EditSchoolScreen;
 use App\Orchid\Screens\EditVendorScreen;
 use App\Orchid\Screens\ViewAllBidScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\ViewRegionScreen;
 use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\ViewVendorScreen;
+use App\Orchid\Screens\ViewDetailedVendorScreen;
 use App\Orchid\Screens\CreateEventScreen;
 use App\Orchid\Screens\EditStudentScreen;
 use App\Orchid\Screens\EmailSenderScreen;
@@ -65,9 +68,8 @@ use App\Orchid\Screens\ViewEventStudentScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
 use App\Orchid\Screens\ViewSongRequestsScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
-use App\Orchid\Screens\EditCourseSectionScreen;
 use App\Orchid\Screens\EditSectionLessonScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewPendingVendorScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewPendingStudentScreen;
@@ -83,14 +85,31 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\ViewContractScreen;
 use App\Orchid\Screens\CreateContractScreen;
+use App\Orchid\Screens\CreateNoticeScreen;
 use App\Orchid\Screens\CreateUniversalExpenseRevenueScreen;
 use App\Orchid\Screens\EditBugReportScreen;
+use App\Orchid\Screens\EditChecklistItemScreen;
+use App\Orchid\Screens\EditChecklistScreen;
 use App\Orchid\Screens\EditContractScreen;
+use App\Orchid\Screens\EditNoticeScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\EditStudentBidScreen;
 use App\Orchid\Screens\EditUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewChecklistItemScreen;
+use App\Orchid\Screens\ViewChecklistScreen;
+use App\Orchid\Screens\ViewChecklistUsersScreen;
+use App\Orchid\Screens\ViewNoticeScreen;
 use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
+use App\Orchid\Screens\ViewUserChecklistItemsScreen;
+use App\Orchid\Screens\CreateChecklistScreen;
+use App\Orchid\Screens\CreateDisplayAdScreen;
+use App\Orchid\Screens\EditDisplayAdScreen;
+use App\Orchid\Screens\EditGuideSectionScreen;
+use App\Orchid\Screens\ViewAllPromfluencerScreen;
+use App\Orchid\Screens\ViewPromfluencerDetailedScreen;
+use App\Orchid\Screens\ViewPromfluencerScreen;
+use App\Orchid\Screens\ViewVideoTutorialScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,7 +124,11 @@ use App\Orchid\Screens\ViewUniversalExpenseRevenueScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main')
+->breadcrumbs(function (Trail $trail) {
+    return $trail
+        ->push('Main Menu');
+});
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
@@ -121,6 +144,9 @@ Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platf
 
 //show vendors screen
 Route::screen('/vendors', ViewVendorScreen::class)->name('platform.vendor.list');
+
+// Show paid regions of venders
+Route::screen('/vendors/{vendor}/paid', ViewDetailedVendorScreen::class)->name('platform.vendor.detailed');
 
 //show create vendors screen
 Route::screen('/vendors/create', CreateVendorScreen::class)->name('platform.vendor.create');
@@ -207,32 +233,40 @@ Route::screen('/events/{event_id}/banned-songs', ViewBannedSongsScreen::class)->
 Route::screen('/events/{event_id}/banned-songs/add', CreateBannedSongsScreen::class)->name('platform.bannedSongs.create');
 Route::screen('/events/{song_id}/{event_id}/requesters', ViewRequestersScreen::class)->name('platform.songRequesters.list');
 
-//view courses screen route
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+//view guides screen route
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-//edit course screen route
-Route::screen('/courses/{course}/edit', EditCourseScreen::class)->name('platform.course.edit');
+//edit guide screen route
+Route::screen('/guides/{guide}/edit', EditGuideScreen::class)->name('platform.guide.edit');
 
-//view course section screen route
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+//view guide section screen route
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-//edit course section screen route
-Route::screen('/courses/{course}/sections/{section}/edit', EditCourseSectionScreen::class)->name('platform.courseSection.edit');
+//edit guide section screen route
+Route::screen('/guides/{guide}/sections/{section}/edit', EditGuideSectionScreen::class)->name('platform.guideSection.edit');
 
-//view lessons in a course section screen route
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+//view lessons in a guide section screen route
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-//edit lesson in a course section screen route
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/edit', EditSectionLessonScreen::class)->name('platform.sectionLesson.edit');
+//edit lesson in a guide section screen route
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/edit', EditSectionLessonScreen::class)->name('platform.sectionLesson.edit');
 
 //view a single section lesson screen route
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 //create a section lesson screen route
-Route::screen('/courses/{course}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
+Route::screen('/guides/{guide}/sections/{section}/lessons/create', CreateSectionLessonScreen::class)->name('platform.sectionLesson.create');
 
+// Campaigns
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+
+// Display Ads (ad blockers block routes with "display ads" in it, so we go with propoganda)
+Route::screen('/campaigns/propoganda/create', CreateDisplayAdScreen::class)->name('platform.ad.create.display-ad');
+Route::screen('/campaigns/propoganda/{display_ad}/edit', EditDisplayAdScreen::class)->name('platform.ad.edit.display-ad');
+
+Route::screen('/couples', ViewCouplesScreen::class)->name('platform.couples.list');
+Route::screen('/couples/{couple}', ViewCoupleDetailsScreen::class)->name('platform.couples.info');
 
 //Election
 Route::screen('/events/promvote/{event_id}', ViewElectionScreen::class)->name('platform.eventPromvote.list');
@@ -281,10 +315,33 @@ Route::screen('/expenses-revenues', ViewUniversalExpenseRevenueScreen::class)->n
 Route::screen('/expenses-revenues/create', CreateUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.create');
 Route::screen('/expenses-revenues/{expenseRevenue}/edit', EditUniversalExpenseRevenueScreen::class)->name('platform.universal-expense-revenue.edit');
 
+// Notices
+Route::screen('/notices', ViewNoticeScreen::class)->name('platform.notice.list');
+Route::screen('/notices/create', CreateNoticeScreen::class)->name('platform.notice.create');
+Route::screen('/notices/{notice}/edit', EditNoticeScreen::class)->name('platform.notice.edit');
+
+// Checklists
+Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
+Route::screen('/checklists/create', CreateChecklistScreen::class)->name('platform.checklist.create');
+Route::screen('/checklists/{checklist}/edit', EditChecklistScreen::class)->name('platform.checklist.edit');
+Route::screen('/checklists/{checklist}/users', ViewChecklistUsersScreen::class)->name('platform.checklist.users');
+Route::screen('/checklists/{checklist}/users/{user}/items', ViewUserChecklistItemsScreen::class)->name('platform.checklist.users.view');
+
+// Checklist Items
+Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
+Route::screen('/checklists/{checklist}/items/{checklist_item}/edit', EditChecklistItemScreen::class)->name('platform.checklist-items.edit');
+
+// Promfluence
+Route::screen('/promfluence', ViewPromfluencerScreen::class)->name('platform.promfluencer.list');
+Route::screen('/promfluence/{promfluencer_id}', ViewPromfluencerDetailedScreen::class)->name('platform.promfluencer.view');
+
 // Bug Reports
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
 Route::screen('/bug-reports/{bug_report}/edit', EditBugReportScreen::class)->name('platform.bug-reports.edit');
 Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
+
+// Video Tutorials
+Route::screen('/video-tutorials', ViewVideoTutorialScreen::class)->name('platform.video-tutorials.view');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
@@ -324,11 +381,7 @@ Route::screen('roles', RoleListScreen::class)
 
 // Example...
 Route::screen('dashboard', ExampleScreen::class)
-    ->name('platform.example')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->push('Main Menu');
-    });
+    ->name('platform.example');
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
 Route::screen('example-layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');
