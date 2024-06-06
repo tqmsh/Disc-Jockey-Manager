@@ -64,7 +64,7 @@ class ViewStudentLayout extends Table
                     return Link::make(User::find($student->user_id)->country)
                         ->route('platform.student.edit', $student);
                 }),
-            
+
             TD::make('school_name', 'School')
                 ->render(function (Student $student) {
                     $schoolName = $student->school;
@@ -98,10 +98,10 @@ class ViewStudentLayout extends Table
                     return Link::make($allergies)
                         ->route('platform.student.edit', $student);
                 }),
-                
+
             TD::make()
                 ->render(function (Student $student) {
-                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['student'=> $student-> id]) ->icon('pencil');
+                    return Button::make('Edit')-> type(Color::PRIMARY())->  method('redirect', ['student'=> $student-> id,  'type' => 'students']) ->icon('pencil');
                 }),
         ];
     }
