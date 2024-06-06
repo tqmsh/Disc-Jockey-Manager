@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 use App\Orchid\Screens\CreateBannedSongsScreen;
+use App\Orchid\Screens\CreateTourElementScreen;
 use App\Orchid\Screens\EditSongScreen;
+use App\Orchid\Screens\EditTourElementScreen;
+use App\Orchid\Screens\ViewAllTourElementScreen;
 use App\Orchid\Screens\ViewBannedSongsScreen;
 use App\Orchid\Screens\ViewCoupleDetailsScreen;
 use App\Orchid\Screens\ViewCouplesScreen;
@@ -342,6 +345,11 @@ Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->
 
 // Video Tutorials
 Route::screen('/video-tutorials', ViewVideoTutorialScreen::class)->name('platform.video-tutorials.view');
+
+// Tour Stuff
+Route::screen('/tourel/create', CreateTourElementScreen::class)->name('platform.tour-element.create');
+Route::screen('/tourel/{tourElement}/edit', EditTourElementScreen::class)->name('platform.tour-element.edit');
+Route::screen('/tourel', ViewAllTourElementScreen::class)->name('platform.tour-element.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

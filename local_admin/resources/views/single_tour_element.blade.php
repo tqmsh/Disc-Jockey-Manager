@@ -29,16 +29,32 @@
             });
         </script>
 
+    @php
+    $i = -1;
+    @endphp
     @foreach ($elements as $el)
-        <script type='text/javascript'>
+            <script type='text/javascript'>
             tour.addStep({
                 id: '{{$el['order_element']}}',
                 title: '{{$el['title']}}',
                 text: '{{$el['description']}}',
                 attachTo: { element: '{{$el['element']}}', on: 'bottom' },
                 buttons: [
+                @php
+                   $i++;
+                @endphp
+                @if($i == 0)
                     { text: 'Next', action: tour.next },
                     { text: 'End', action: tour.cancel },
+                @elseif($i==count($elements)-1)
+                    { text: 'Back', action: tour.back },
+                    { text: 'End', action: tour.cancel },
+                @else
+                    { text: 'Next', action: tour.next },
+                    { text: 'Back', action: tour.back },
+                    { text: 'End', action: tour.cancel },
+                @endif
+
                 ]
             });
 

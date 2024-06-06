@@ -2,7 +2,19 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\TourElement;
+use App\Models\TourScreen;
+use App\Orchid\Layouts\ViewTourElementLayout;
+use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class ViewAllTourElementScreen extends Screen
 {
@@ -13,7 +25,9 @@ class ViewAllTourElementScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'tourElements' => TourElement::latest()->filter(request(['screen','search_input_by', 'name_filter']))->paginate(10)
+        ];
     }
 
     /**
@@ -23,7 +37,7 @@ class ViewAllTourElementScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'ViewAllTourElementScreen';
+        return 'View All Tour Element Screen';
     }
 
     /**
@@ -33,7 +47,16 @@ class ViewAllTourElementScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+        Link::make('Add New')
+            ->route('platform.tour-element.create')
+            ->icon('plus'),
+
+         Button::make('Delete Selected Tour Elements')
+             ->method('deleteTourElement')
+             ->icon('trash')
+             ->confirm('Are you sure you want to delete the selected beauty groups?'),
+        ];
     }
 
     /**
@@ -43,6 +66,57 @@ class ViewAllTourElementScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+
+            Layout::rows([
+
+                Group::make([
+
+                    Select::make('screen')
+                        ->title('Screen')
+                        ->placeholder('Select the Screen for the Element')
+                        ->options(TourScreen::pluck('screen', 'id'))
+                        ->horizontal()
+                        ->empty('Start typing to search...'),
+
+                    Select::make('search_input_by')
+                        ->title('Search By:')
+                        ->options([
+                            'title'   => 'Title',
+                            'element' => 'Element',
+
+                        ]),
+
+                    Input::make('name_filter')
+                        ->title('Enter:')
+                        ->placeholder('No input')
+
+                ]),
+
+
+            Button::make('Filter')
+                ->icon('filter')
+                ->method('filter')
+                ->type(Color::DEFAULT()),
+        ]),
+            ViewTourElementLayout::class
+        ];
     }
+
+    public function redirect(){
+        if(request('type') == 'edit'){
+            return redirect()->route('platform.tour-element.edit', request('tour_element_id'));
+        }
+    }
+
+    public function deleteTourElement(){
+        TourElement::whereIn('id', request('tourElement'))->delete();
+        Toast::success('Selected Tour Elements Deleted Successfully');
+    }
+
+    public function filter(){
+
+        return redirect()->route('platform.tour-element.list', request(['screen', 'search_input_by', 'name_filter']));
+    }
+
 }

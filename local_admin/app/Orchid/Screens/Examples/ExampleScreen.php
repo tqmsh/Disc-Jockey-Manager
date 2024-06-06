@@ -127,7 +127,7 @@ class ExampleScreen extends Screen
         $totalExpenses = $expensesRecord ? $expensesRecord->actual : "No expenses";
 
         $this->campaigns = Campaign::where("region_id", School::find(Localadmin::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
-        $this->tourElements = TourElement::where("screen", 1)->get()->toArray();
+        $this->tourElements = TourElement::where("screen", 1)->orderBy('order_element', 'asc')->get()->toArray();
         return [
             "ad_ids" =>"",
             'charts'  => [
@@ -239,10 +239,7 @@ class ExampleScreen extends Screen
         $arr_tourels = [];
         foreach ($this->tourElements as $tel){
             array_push($arr_tourels, $tel);
-
         }
-        //check for sort.
-       // usort($arr_ads, [$this, 'customSort']);
 
         return [
 
