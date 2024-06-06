@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Election;
 use App\Models\ElectionVote;
 use App\Models\Candidate;
+use App\Models\EventAttendees;
+use App\Models\Localadmin;
 use App\Models\Position;
 
 class PromVoteController extends Controller
@@ -22,6 +24,24 @@ class PromVoteController extends Controller
      */
     public function getVoteData($event_id, $user_id)
     {
+        // Only allow the attending student whose vote is being checked, super admins,
+        // and local admins for the event's school to get vote data.
+        $auth_user = request()->user();
+        if (!(
+            (
+                $auth_user->id == $user_id
+                and EventAttendees::where('user_id', $user_id)
+                    ->where('event_id', $event_id)
+                    ->exists()
+            )
+            or $auth_user->role == 1
+            or Localadmin::where('user_id', $auth_user->id)
+                ->where('school_id', Events::findOrFail($event_id)->school_id)
+                ->exists()
+        )) {
+            return response()->json(['message' => 'You are not authorized to get the vote data'], 401);
+        }
+
         $vote_data = [];
         $election = Election::firstWhere('event_id', $event_id);
 
