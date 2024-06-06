@@ -23,7 +23,7 @@ class ViewSongsScreen extends Screen
         return [
             'songs' => Song::filter($filters)
                 ->latest('songs.created_at')
-                ->paginate(10)
+                ->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 

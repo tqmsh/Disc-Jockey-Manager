@@ -30,7 +30,7 @@ class ViewLocaladminLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Localadmin $Localadmin){
                     return CheckBox::make('localadmins[]')
                         ->value($Localadmin->user_id)

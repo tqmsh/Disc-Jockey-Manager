@@ -31,7 +31,7 @@ class ViewSectionLessonLayout extends Table
     protected function columns(): iterable
     {
         return [
-          TD::make()
+          TD::make('checkboxes')
                 ->render(function (Lesson $lesson){
                     return CheckBox::make('lessons[]')
                         ->value($lesson->id)

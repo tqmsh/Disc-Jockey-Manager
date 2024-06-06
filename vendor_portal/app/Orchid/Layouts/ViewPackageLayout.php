@@ -30,7 +30,7 @@ class ViewPackageLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (VendorPackage $package){
                     return CheckBox::make('vendorPackages[]')
                         ->value($package->id)

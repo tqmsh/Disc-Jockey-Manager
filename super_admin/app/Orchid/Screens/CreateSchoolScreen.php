@@ -21,15 +21,39 @@ use Orchid\Screen\Actions\ModalToggle;
 class CreateSchoolScreen extends Screen
 {
     public $requiredFields = ['nces_id', 'country', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'phone_number', 'total_students', 'school_data', 'region'];
-
+    public $school;
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(School $school, Request $request): iterable
     {
-        return [];
+        $school->nces_id = $request->input('nces_id') ?? "";
+        $school->school_name = $request->input('school_name') ?? "";
+        $school->country = $request->input('country') ?? "";
+        $school->state_province = $request->input('state_province') ?? "";
+        $school->region_id = intval($request->input('region_id')) ?? "";
+        $school->school_board = $request->input('school_board') ?? "";
+        $school->address = $request->input('address') ?? "";
+        $school->zip_postal = $request->input('zip_postal') ?? "";
+        $school->phone_number = $request->input('phone_number') ?? "";
+        $school->fax = $request->input('fax') ?? "";
+        $school->metropolitan_region = $request->input('metropolitan_region') ?? "";
+        $school->city_municipality = $request->input('city_municipality') ?? "";
+        $school->state_province = $request->input('state_province') ?? "";
+        $school->county = $request->input('county') ?? "";
+        $school->website = $request->input('website') ?? "";
+        $school->school_data = $request->input('school_data') ?? "";
+        $school->firstname = $request->input('firstname') ?? "";
+        $school->lastname = $request->input('lastname') ?? "";
+        $school->teacher_cell = $request->input('teacher_cell') ?? "";
+        $school->teacher_email = $request->input('teacher_email') ?? "";
+        $school->total_students = $request->input('total_students') ?? "";
+
+        return [
+            'school'=>$school
+        ];
     }
 
     /**
@@ -109,62 +133,71 @@ class CreateSchoolScreen extends Screen
             ->withoutCloseButton(),
 
             Layout::rows([
-
                 Input::make('nces_id')
                     ->title('NCES ID')
                     ->type('number')
                     ->horizontal()
                     ->required()
-                    ->placeholder('Ex. 546879123'),
+                    ->placeholder('Ex. 546879123')
+                    ->value($this->school->nces_id),
 
                 Input::make('school_name')
                     ->title('School Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Colonel By Secondary School'),
+                    ->placeholder('Ex. Colonel By Secondary School')
+                    ->value($this->school->school_name),
 
                 Input::make('country')
                     ->title('Country')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Canada'),
+                    ->placeholder('Ex. Canada')
+                    ->value($this->school->country),
 
-                Input::make('state_province')
+
+            Input::make('state_province')
                     ->title('State/Province')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Ontario'),
+                    ->placeholder('Ex. Ontario')
+                    ->value($this->school->state_province),
+
 
                 Select::make('region_id')
                     ->title('Region')
                     ->required()
                     ->horizontal()
                     ->empty('Start typing to Search...')
-                    ->fromQuery(Region::query(), 'name'),
+                    ->fromQuery(Region::query(), 'name')
+                    ->value($this->school->region_id),
 
                 Input::make('school_board')
                     ->title('School Board')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. OCDSB'),
+                    ->placeholder('Ex. OCDSB')
+                    ->value($this->school->school_board),
 
                 Input::make('address')
                     ->title('Address')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. 2381 Ogilvie Rd'),
+                    ->placeholder('Ex. 2381 Ogilvie Rd')
+                    ->value($this->school->address),
 
                 Input::make('zip_postal')
                     ->title('Zip/Postal')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. K1J 7N4'),
+                    ->placeholder('Ex. K1J 7N4')
+                    ->value($this->school->zip_postal),
 
                 Input::make('phone_number')
                     ->title('Phone Number')
@@ -172,68 +205,77 @@ class CreateSchoolScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 859-5863'),
+                    ->placeholder('Ex. (613) 859-5863')
+                    ->value($this->school->phone_number),
 
                 Input::make('fax')
                     ->title('Fax Number')
                     ->type('number')
                     ->horizontal()
-                    ->placeholder('Ex. 546879123'),
+                    ->placeholder('Ex. 546879123')
+                    ->value($this->school->fax),
 
                 Input::make('metropolitan_region')
                     ->title('Metropolitan Region')
                     ->type('text')
                     ->horizontal()
                     ->required()
-                    ->placeholder('Ex. Greater Ottawa Metropolitan Area'),
+                    ->placeholder('Ex. Greater Ottawa Metropolitan Area')
+                    ->value($this->school->metropolitan_region),
 
                 Input::make('city_municipality')
                     ->title('City/Municipality')
                     ->type('text')
                     ->horizontal()
                     ->required()
-                    ->placeholder('Ex. Ottawa'),
+                    ->placeholder('Ex. Ottawa')
+                    ->value($this->school->city_municipality),
 
                 Input::make('county')
                     ->title('County')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Suffolk County'),
+                    ->placeholder('Ex. Suffolk County')
+                    ->value($this->school->county),
 
                 Input::make('website')
                     ->title('Website')
                     ->type('url')
                     ->horizontal()
-                    ->placeholder('Ex. https://colonelby.com'),
+                    ->placeholder('Ex. https://colonelby.com')
+                    ->value($this->school->website),
 
                 Input::make('school_data')
                     ->title('School Data')
                     ->type('text')
                     ->horizontal()
-                    ->placeholder('Ex. www.colonelby.com?Search=1&InstName=newton&State=25&SchoolType=1'),
+                    ->placeholder('Ex. www.colonelby.com?Search=1&InstName=newton&State=25&SchoolType=1')
+                    ->value($this->school->school_data),
 
                 Input::make('firstname')
                     ->title('Teacher First Name')
                     ->type('text')
                     ->horizontal()
                     ->required()
-                    ->placeholder('Ex. John'),
+                    ->placeholder('Ex. John')
+                    ->value($this->school->firstname),
 
                 Input::make('lastname')
                     ->title('Teacher Last Name')
                     ->type('text')
                     ->horizontal()
                     ->required()
-                    ->placeholder('Ex. Doe'),
-
+                    ->placeholder('Ex. Doe')
+                    ->value($this->school->lastname),
 
                 Input::make('teacher_email')
                     ->title('Teacher Email')
                     ->type('email')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
+                    ->placeholder('Ex. johndoe@gmail.com')
+                    ->value($this->school->teacher_email),
 
                 Input::make('teacher_cell')
                     ->title('Teacher Contact Number')
@@ -241,13 +283,15 @@ class CreateSchoolScreen extends Screen
                     ->required()
                     ->mask('(999) 999-9999')
                     ->horizontal()
-                    ->placeholder('Ex. (613) 852-4563'),
+                    ->placeholder('Ex. (613) 852-4563')
+                    ->value($this->school->teacher_cell),
 
                 Input::make('total_students')
                     ->title('Total Students')
                     ->type('number')
                     ->horizontal()
-                    ->placeholder('Ex. 1024'),
+                    ->placeholder('Ex. 1024')
+                    ->value($this->school->total_students),
             ]),
         ];
     }
@@ -277,12 +321,16 @@ class CreateSchoolScreen extends Screen
             }else{
 
                 //duplicate school found
+
                 Toast::error('School already exists or email already in use.');
+                return redirect()->route('platform.school.create',request(['nces_id', 'school_name', 'country', 'state_province', 'region_id', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'metropolitan_region', 'city_municipality', 'county', 'website', 'school_data', 'firstname', 'lastname', 'teacher_email', 'teacher_cell', 'total_students' ]));
+
             }
 
         }catch(Exception $e){
 
             Alert::error('There was an error creating this school. Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.school.create',request(['nces_id', 'school_name', 'country', 'state_province', 'region_id', 'school_board', 'address', 'zip_postal', 'phone_number', 'fax', 'metropolitan_region', 'city_municipality', 'county', 'website', 'school_data', 'firstname', 'lastname', 'teacher_email', 'teacher_cell', 'total_students' ]));
         }
     }
 
