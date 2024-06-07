@@ -1,7 +1,7 @@
 @empty(!$title)
     <fieldset>
             <div class="col p-0 px-3">
-                <legend class="text-black text-black mt-2 mx-2">
+                <legend class="text-black text-black mt-2 mx-2" id="TitleScreenVerbiage">
                     {{ $title }}
                 </legend>
             </div>
@@ -9,6 +9,7 @@
 @endempty
 
 <div class="bg-white rounded shadow-sm mb-3"
+     id="tableLabel"
      data-controller="table"
      data-table-slug="{{$slug}}"
 >

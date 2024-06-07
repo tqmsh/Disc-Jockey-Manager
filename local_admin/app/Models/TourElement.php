@@ -16,10 +16,14 @@ class TourElement extends Model
     protected $fillable = [
         'id',
         'screen',
+        'portal',
         'title',
         'element',
         'description',
         'order_element',
+        'extra',
+        'created_at',
+        'updated_at'
     ];
 
 

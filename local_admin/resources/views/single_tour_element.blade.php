@@ -31,6 +31,8 @@
 
     @php
     $i = -1;
+
+
     @endphp
     @foreach ($elements as $el)
             <script type='text/javascript'>

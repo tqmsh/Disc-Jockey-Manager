@@ -44,7 +44,12 @@ class ViewTourElementLayout extends Table
 
             TD::make('screen', 'Screen')
                 ->render(function (TourElement $tourElement) {
-                    return e($tourElement->screenOwner->screen);
+                    return e($tourElement->screen);
+                }),
+
+            TD::make('portal', 'Portal')
+                ->render(function(TourElement $tourElement){
+                    return e($tourElement->portalToName());
                 }),
 
             TD::make('title', 'Title')
@@ -60,6 +65,11 @@ class ViewTourElementLayout extends Table
             TD::make('order_element', 'Order of the elements')
                 ->render(function (TourElement $tourElement) {
                     return e($tourElement->order_element);
+                }),
+
+            TD::make('extra', 'Route If Needed')
+                ->render(function (TourElement $tourElement) {
+                    return e($tourElement->extra);
                 }),
 
 

@@ -41,7 +41,6 @@ class ExampleScreen extends Screen
     erat in luctus.';
 
     public $campaigns;
-    public $tourElements;
     function customSort($a, $b): int
     {
         // Compare order_num values
@@ -127,7 +126,7 @@ class ExampleScreen extends Screen
         $totalExpenses = $expensesRecord ? $expensesRecord->actual : "No expenses";
 
         $this->campaigns = Campaign::where("region_id", School::find(Localadmin::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
-        $this->tourElements = TourElement::where("screen", 1)->orderBy('order_element', 'asc')->get()->toArray();
+
         return [
             "ad_ids" =>"",
             'charts'  => [
@@ -236,11 +235,6 @@ class ExampleScreen extends Screen
         usort($arr_ads, [$this, 'customSort']);
 
 
-        $arr_tourels = [];
-        foreach ($this->tourElements as $tel){
-            array_push($arr_tourels, $tel);
-        }
-
         return [
 
             Layout::metrics([
@@ -259,7 +253,6 @@ class ExampleScreen extends Screen
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
 
-            Layout::view("single_tour_element",  ["elements"=>$arr_tourels]),
             //Layout::view("card_style"),
 
             //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),

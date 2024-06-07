@@ -75,7 +75,7 @@ class ViewAllTourElementScreen extends Screen
                     Select::make('screen')
                         ->title('Screen')
                         ->placeholder('Select the Screen for the Element')
-                        ->options(TourScreen::pluck('screen', 'id'))
+                        ->fromModel(TourElement::class, 'screen', 'screen')
                         ->horizontal()
                         ->empty('Start typing to search...'),
 

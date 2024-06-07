@@ -12,6 +12,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use PHPUnit\Util\Exception;
 
 class CreateTourElementScreen extends Screen
 {
@@ -64,14 +65,24 @@ class CreateTourElementScreen extends Screen
         return [
             Layout::rows([
 
-                Select::make('screen')
-                    ->title('Screen')
-                    ->placeholder('Select the Screen for the Element')
-                    ->options(TourScreen::pluck('screen', 'id'))
+                Input::make('screen')
+                    ->title('Screen URI')
+                    ->placeholder('Enter the Screen for the Element')
                     ->horizontal()
-                    ->required()
-                    ->empty('Start typing to search...')
                     ->required(),
+
+
+                Select::make('portal')
+                    ->title('Portal')
+                    ->empty('What portal should this be in?')
+                    ->required()
+                    ->horizontal()
+                    ->options([
+                        0 => 'Local Admin',
+                        1 => 'Student',
+                        2 => 'Vendor'
+                    ]),
+
 
                 Input::make('title')
                     ->title('Title of Popup Element')
@@ -98,33 +109,54 @@ class CreateTourElementScreen extends Screen
                     ->horizontal()
                     ->required(),
 
+                Input::make('extra')
+                    ->title('Route If Needed')
+                    ->placeholder('Enter the route uri if needed for element id')
+                    ->horizontal(),
+
 
                 ])
 
             ];
     }
 
+    private function validOrderOfEl($order, $portal, $screen){
+        return count(TourElement::where('order_element', $order)->where('portal', $portal)->where('screen', $screen)->get()) == 0;
+    }
+
+
     public function createTourEl(Request $request){
 
         try{
             $fields = $request->validate([
                 'screen' => 'required',
+                'portal'=>'required',
                 'title' => 'required',
                 'element' => 'required',
                 'description' => 'required',
                 'order_element' => 'required',
+                'extra' => 'nullable',
+
             ]);
 
-            $tourEl = TourElement::create($fields);
+            if(!($this->validOrderOfEl($fields['order_element'], $fields['portal'], $fields['screen']))){
+                throw New Exception('Order Number Already Exists For This Portal and Screen. ');
+                //return;
 
-            $tourEl->save();
+            }else {
 
-            Toast::success('Element created successfully!');
-            return redirect()->route('platform.tour-element.list');
+                $tourEl = TourElement::create($fields);
 
+                $tourEl->save();
 
+                Toast::success('Element created successfully!');
+                return redirect()->route('platform.tour-element.list');
+
+            }
         }catch(Exception $e){
             Toast::error('There was an error creating the element. Error code: ' . $e->getMessage());
+            return back()->withInput();
+
         }
     }
 

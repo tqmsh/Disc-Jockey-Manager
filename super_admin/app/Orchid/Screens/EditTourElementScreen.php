@@ -13,6 +13,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use PHPUnit\Util\Exception;
 
 class EditTourElementScreen extends Screen
 {
@@ -73,15 +74,25 @@ class EditTourElementScreen extends Screen
         return [
             Layout::rows([
 
-                Select::make('screen')
-                    ->title('Screen')
-                    ->placeholder('Select the Screen for the Element')
-                    ->options(TourScreen::pluck('screen', 'id'))
+                Input::make('screen')
+                    ->title('Screen URI')
+                    ->placeholder('Enter the Screen for the Element')
                     ->horizontal()
                     ->required()
-                    ->empty('Start typing to search...')
-                    ->required()
                     ->value($this->tourElement->screen),
+
+                Select::make('portal')
+                    ->title('Portal')
+                    ->empty('What portal should this be in?')
+                    ->required()
+                    ->horizontal()
+                    ->options([
+                        0 => 'Local Admin',
+                        1 => 'Student',
+                        2 => 'Vendor'
+                    ])
+                    ->value($this->tourElement->portal),
+
 
                 Input::make('title')
                     ->title('Title of Popup Element')
@@ -112,28 +123,51 @@ class EditTourElementScreen extends Screen
                     ->required()
                     ->value($this->tourElement->order_element),
 
+                Input::make('extra')
+                    ->title('Route If Needed')
+                    ->placeholder('Enter the route uri if needed for element id')
+                    ->horizontal()
+                    ->value($this->tourElement->extra),
+
 
             ])
         ];
     }
+    private function validOrderOfEl($tourElement, $order, $portal, $screen){
+        return count(TourElement::whereNot('id', $tourElement->id)->where('order_element', $order)->where('portal', $portal)->where('screen', $screen)->get()) == 0;
+    }
+
 
 
     public function updateTourEl(Request $request, TourElement $tourElement){
 
         $fields = $request->validate([
+
             'screen' => 'required',
+            'portal'=>'required',
             'title' => 'required',
             'element' => 'required',
-            'description' => 'nullable',
+            'description' => 'required',
             'order_element' => 'required',
+            'extra' => 'nullable',
+
         ]);
 
         try{
-            $tourElement->update($fields);
-            Toast::success('Tour Element Updated');
-            return redirect()->route('platform.tour-element.list');
+
+            if(!($this->validOrderOfEl($tourElement, $fields['order_element'], $fields['portal'], $fields['screen']))){
+                throw New Exception('Order Number Already Exists For This Portal and Screen. ');
+                //return;
+
+            }else {
+                $tourElement->update($fields);
+                Toast::success('Tour Element Updated');
+                return redirect()->route('platform.tour-element.list');
+            }
         } catch(Exception $e){
             Toast::error('Error Updating Tour Element. Error Code: ' . $e->getMessage());
+            return back()->withInput();
+
         }
     }
 

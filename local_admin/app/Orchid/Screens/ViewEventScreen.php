@@ -124,7 +124,8 @@ class ViewEventScreen extends Screen
 
             ViewEventLayout::class,
 
-         Layout::view("events_tour"),
+            //Layout::view("events_tour"),
+
 
         ];
     }

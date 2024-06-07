@@ -17,19 +17,23 @@ class TourElement extends Model
     protected $fillable = [
         'id',
         'screen',
+        'portal',
         'title',
         'element',
         'description',
         'order_element',
+        'extra',
         'created_at',
         'updated_at'
     ];
 
-    public function screenOwner()
-    {
-        return $this->belongsTo(TourScreen::class, 'screen', 'id');
+    public function portalToName() : string {
+        return match($this->portal) {
+            0 => 'Local Admin',
+            1 => 'Student',
+            2 => 'Vendor'
+        };
     }
-
     public function scopeFilter($query, array $filters){
 
         try{
