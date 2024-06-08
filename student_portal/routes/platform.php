@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-
+use App\Orchid\Screens\PromDateScreen;
+use App\Orchid\Screens\ViewCoupleDetailsScreen;
 use Tabuna\Breadcrumbs\Trail;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewSpecsScreen;
 use App\Orchid\Screens\EditSpecsScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\ViewVotingScreen;
 use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\CreateSpecsScreen;
@@ -32,7 +33,9 @@ use App\Orchid\Screens\ContactLocalAdminScreen;
 use App\Orchid\Screens\CreateBeautyGroupScreen;
 use App\Orchid\Screens\CreateBugReportScreen;
 use App\Orchid\Screens\CreateSongRequestScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\EditPromfluencerScreen;
+use App\Orchid\Screens\EditPromfluenceScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewDressWishlistScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\ViewEventInformationScreen;
@@ -42,9 +45,16 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
+use App\Orchid\Screens\ViewBeautyGroupDetailedBidScreen;
 use App\Orchid\Screens\ViewSingleFoodScreen;
 use App\Orchid\Screens\ViewBugReportDetailedScreen;
 use App\Orchid\Screens\ViewBugReportScreen;
+use App\Orchid\Screens\ViewChecklistItemScreen;
+use App\Orchid\Screens\ViewChecklistScreen;
+use App\Orchid\Screens\ViewLimoGroupDetailedBidScreen;
+use App\Orchid\Screens\ViewPromfluencerScreen;
+use App\Orchid\Screens\ViewPromfluenceScreen;
+use App\Orchid\Screens\ViewStudentBidDetailedBidScreen;
 
 use App\Orchid\Screens\ViewPollScreen;
 use App\Orchid\Screens\VotePollScreen;
@@ -63,7 +73,11 @@ use App\Orchid\Screens\ViewPollResultScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Main Menu');
+    });
 
 //show events screen
 Route::middleware(['cors'])->group(function () {
@@ -92,16 +106,26 @@ Route::screen('/events/election/vote/{position}', ViewVotingScreen::class)->name
 
 Route::screen('/events/election/winners/{election}', ViewWinnersScreen::class)->name('platform.election.winners');
 
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+
+// View PromDate
+Route::screen('/promdate', PromDateScreen::class)->name('platform.promdate');
+// View Couple Details
+Route::screen('/couple/{couple}', ViewCoupleDetailsScreen::class)->name("platform.couple");
 
 //view student bid screen
 Route::screen('/bids', ViewStudentBidScreen::class)->name('platform.studentBids.list');
+
+// detailed bid screens
+Route::screen('/bids/beauty-group/{beautyGroupBid}', ViewBeautyGroupDetailedBidScreen::class)->name('platform.studentBids.beautyGroup.view');
+Route::screen('/bids/limo-group/{limoGroupBid}', ViewLimoGroupDetailedBidScreen::class)->name('platform.studentBids.limoGroup.view');
+Route::screen('/bids/student-bids/{studentBid}', ViewStudentBidDetailedBidScreen::class)->name('platform.studentBids.studentBid.view');
 
 //student specs
 Route::screen('/my-specs', ViewSpecsScreen::class)->name('platform.studentSpecs.list');
@@ -131,6 +155,16 @@ Route::screen('/beauty-groups/{beautyGroup}/edit', EditBeautyGroupScreen::class)
 
 Route::screen('/contact-prom-committees', ContactLocalAdminScreen::class)->name('platform.contact-prom-committees');
 
+// Checklists
+Route::screen('/checklists', ViewChecklistScreen::class)->name('platform.checklist.list');
+
+// Checklist Items
+Route::screen('/checklists/{checklist}/items', ViewChecklistItemScreen::class)->name('platform.checklist-items.list');
+
+// Promfluence
+Route::screen('/promfluence', ViewPromfluencerScreen::class)->name('platform.promfluencer.view');
+Route::screen('/promfluence/edit', EditPromfluencerScreen::class)->name('platform.promfluencer.edit');
+
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
@@ -147,11 +181,7 @@ Route::screen('profile', UserProfileScreen::class)
 
 // Example...
 Route::screen('dashboard', ExampleScreen::class)
-    ->name('platform.example')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->push('Main Menu');
-    });
+    ->name('platform.example');
 
 Route::screen('dresses', ViewDressListScreen::class)
     ->name('platform.dresses')
@@ -187,3 +217,4 @@ Route::screen('polls', ViewPollScreen::class)->name('platform.polls.list');
 Route::screen('polls/past', ViewPastPollScreen::class)->name('platform.poll.past');
 Route::screen('polls/vote/{poll}', VotePollScreen::class)->name('platform.poll.vote');
 Route::screen('polls/result/{poll}', ViewPollResultScreen::class)->name('platform.poll.result');
+

@@ -20,7 +20,7 @@ use Orchid\Screen\Actions\ModalToggle;
 
 class CreateSchoolScreen extends Screen
 {
-    public $requiredFields = ['nces_id', 'country', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'metropolitan_region', 'phone_number', 'fax', 'website', 'total_students', 'school_data', 'region'];
+    public $requiredFields = ['nces_id', 'country', 'school_name', 'school_board', 'county', 'address', 'city_municipality', 'state_province', 'zip_postal', 'phone_number', 'total_students', 'school_data', 'region'];
 
     /**
      * Query data.
@@ -97,7 +97,7 @@ class CreateSchoolScreen extends Screen
                             • fax <br>
                             • website <br>
                             • total_students <br>
-                            • school_data 
+                            • school_data <br>
                             • region<br>'),
                         Link::make('Download Sample CSV')
                             ->icon('download')
@@ -205,7 +205,7 @@ class CreateSchoolScreen extends Screen
                     ->title('Website')
                     ->type('url')
                     ->horizontal()
-                    ->placeholder('Ex. www.colonelby.com'),
+                    ->placeholder('Ex. https://colonelby.com'),
 
                 Input::make('school_data')
                     ->title('School Data')
@@ -320,12 +320,9 @@ class CreateSchoolScreen extends Screen
                     'city_municipality' => $schools[$i]['city_municipality'],
                     'state_province' => $schools[$i]['state_province'],
                     'zip_postal' => $schools[$i]['zip_postal'],
-                    'metropolitan_region' => $schools[$i]['metropolitan_region'],
                     'phone_number' => $schools[$i]['phone_number'],
-                    'fax' => $schools[$i]['fax'],
                     'region_id' => $region_id,
                     'country' => $schools[$i]['country'],
-                    'website' => $schools[$i]['website'],
                     'total_students' => $schools[$i]['total_students'],
                     'school_data' => $schools[$i]['school_data'],
                     'created_at' => new DateTime()

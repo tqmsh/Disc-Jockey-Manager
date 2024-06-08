@@ -43,6 +43,12 @@ class ViewRegisteredEventLayout extends Table
                                 ->type(Color::LIGHT())
                                 ->method('redirect', ['event_id' => $event->id, 'type' => 'eventInformation']);
                 }),
+
+            TD::make('event_start_time', 'Event Start Date')
+                ->render(function (Events $event) {
+                    return e($event->event_start_time);
+                }),
+
             TD::make()
                 ->width('100px')
                 ->align(TD::ALIGN_RIGHT)
@@ -74,48 +80,43 @@ class ViewRegisteredEventLayout extends Table
                 }), 
 
             
-            // Buy tickets button
-            TD::make()
-                ->render(function (Events $event) {
-                    $eventAttendee = EventAttendees::where('user_id', Auth::user()->id)
-                    ->where('event_id', $event->id)
-                    ->first();
+            //! Buy tickets button un-comment when good to go
+            // TD::make()
+            //     ->render(function (Events $event) {
+            //         $eventAttendee = EventAttendees::where('user_id', Auth::user()->id)
+            //         ->where('event_id', $event->id)
+            //         ->first();
 
-                    if ($eventAttendee->ticketstatus == 'Unpaid') {
-                        return Link::make('Buy Tickets')
-                            ->icon('money')
-                            ->route('paypal', ['event_id' => $event->id])
-                            ->type(Color::PRIMARY());
-                    } else if ($eventAttendee->ticketstatus == 'paid'){
-                        return Button::make('Tickets Bought')
-                            ->icon('check')
-                            ->method('redirect', ['event_id' => $event->id, 'type' => 'ticketBought'])
-                            ->type(Color::SUCCESS());
-                    }
-                }),
+            //         if ($eventAttendee->ticketstatus == 'Unpaid') {
+            //             return Link::make('Buy Tickets')
+            //                 ->icon('money')
+            //                 ->route('paypal', ['event_id' => $event->id])
+            //                 ->type(Color::PRIMARY());
+            //         } else if ($eventAttendee->ticketstatus == 'paid'){
+            //             return Button::make('Tickets Bought')
+            //                 ->icon('check')
+            //                 ->method('redirect', ['event_id' => $event->id, 'type' => 'ticketBought'])
+            //                 ->type(Color::SUCCESS());
+            //         }
+            //     }),
             
-
-            TD::make('event_start_time', 'Event Start Date')
-                ->render(function (Events $event) {
-                    return e($event->event_start_time);
-                }),
             TD::make('event_address', 'Event Address')
                 ->render(function (Events $event) {
                     return e($event->event_address);
-                }),
+                })->defaultHidden(),
             TD::make('event_zip_postal', 'Event Zip/Postal')
                 ->render(function (Events $event) {
                     return e($event->event_zip_postal);
-                }),
+                })->defaultHidden(),
             TD::make('event_info', 'Event Info')
                 ->render(function (Events $event) {
                     return e($event->event_info);
-                }),
+                })->defaultHidden(),
 
             TD::make('event_rules', 'Event Rules')
                 ->render(function (Events $event) {
                     return e($event->event_rules);
-                }),
+                })->defaultHidden(),
 
     
         ];    

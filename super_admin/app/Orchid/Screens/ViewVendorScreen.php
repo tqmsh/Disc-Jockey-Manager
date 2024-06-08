@@ -5,6 +5,7 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\User;
 use App\Models\Vendors;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
@@ -29,7 +30,7 @@ class ViewVendorScreen extends Screen
     public function query(): iterable
     {
         return [
-            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province']))->where('vendors.account_status', 1)->paginate(10)
+            'vendors' => Vendors::latest('vendors.created_at')->filter(request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']))->where('vendors.account_status', 1)->paginate(10)
         ];
     }
 
@@ -90,14 +91,27 @@ class ViewVendorScreen extends Screen
                         ->empty('No Selection')
                         ->fromQuery(Categories::query(), 'name')
                         ->placeholder('Select Category'),
-                    
+
                     Select::make('state_province')
                         ->title('State/Province')
                         ->empty('No Selection')
                         ->fromModel(Vendors::class, 'state_province', 'state_province'),
 
+
+                    Select::make('search_input_by')
+                        ->title('Search By:')
+                        ->options([
+                            'company_name'   => 'Company Name',
+                            'email' => 'Email',
+
+                        ]),
+
+
+                    Input::make('name_filter')
+                        ->title('Enter:')
+                        ->placeholder('No input')
                 ]),
-                
+
                 Button::make('Filter')
                     ->icon('filter')
                     ->method('filter')
@@ -169,18 +183,24 @@ class ViewVendorScreen extends Screen
 
     public function filter(){
 
-        return redirect()->route('platform.vendor.list', request(['country', 'category_id', 'state_province']));
+        return redirect()->route('platform.vendor.list', request(['country', 'category_id', 'state_province', 'search_input_by', 'name_filter']));
     }
 
     public function redirect($vendor){
-        return redirect()-> route('platform.vendor.edit', $vendor);
+
+        if(request('type') == "view"){
+            return redirect()->route('platform.vendor.detailed', $vendor);
+        }
+        else if(request('type') == "edit"){
+            return redirect()-> route('platform.vendor.edit', $vendor);
+        }
     }
 
-    public function deleteVendors(Request $request){  
+    public function deleteVendors(Request $request){
 
         //get all vendors from post request
         $vendor_ids = $request->get('vendors');
-        
+
         try{
 
             //if the array is not empty

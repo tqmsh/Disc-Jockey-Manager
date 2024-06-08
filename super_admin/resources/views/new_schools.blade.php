@@ -15,11 +15,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Schools</small>
 
         <!-- Toggle Buttons -->
-        <div class="flex space-x-2 mb-3 mt-2 mb-2">
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn1 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="24">24hr</button>
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn1 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
@@ -33,11 +33,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Students</small>
 
         <!-- Toggle Buttons -->
-        <div class="flex space-x-2 mb-3 mt-2">
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn2 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24hr</button>
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn2 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
@@ -51,11 +51,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Vendors</small>
 
         <!-- Toggle Buttons -->
-        <div class="flex space-x-2 mb-3 mt-2">
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn3 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24hr</button>
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn3 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
@@ -69,11 +69,11 @@
         <small class="ml-1 mb-6 text-gray-600">New Brands</small>
 
         <!-- Toggle Buttons -->
-        <div class="flex space-x-2 mb-3 mt-2">
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24 Hours</button>
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7 Days</button>
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30 Days</button>
-            <button class="toggle-btn4 text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90 Days</button>
+        <div class="grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-x-0 mb-3 mt-2 mb-2">
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300 text-white" data-range="24">24hr</button>
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="7">7d</button>
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="30">30d</button>
+            <button class="toggle-btn4 w-10 h-10 flex items-center justify-center text-xs px-2 py-2 rounded-full focus:outline-none bg-gray-300" data-range="90">90d</button>
         </div>
 
         <!-- Placeholder for Content -->
@@ -88,13 +88,21 @@
 <!-- Include JavaScript -->
 @push('scripts')
     <script defer>
-        document.addEventListener('DOMContentLoaded', function () {
+        if (document.readyState !== 'loading') {
+            //when switching tabs or on login, document is already ready so you can call loadmetrics directly.
+            loadMetrics();
+        } else {
+            document.addEventListener('DOMContentLoaded', function () {
+                // Reloading the page, we must wait till all the DOM is loaded, to call loadmetrics.
+                loadMetrics();
+            });
+        }
+        function loadMetrics() {
             // Get all toggle buttons for each section
             const toggleButtons1 = document.querySelectorAll('.toggle-btn1');
             const toggleButtons2 = document.querySelectorAll('.toggle-btn2');
             const toggleButtons3 = document.querySelectorAll('.toggle-btn3');
             const toggleButtons4 = document.querySelectorAll('.toggle-btn4');
-
 
 
             // The number of schools by different time periods
@@ -154,18 +162,16 @@
 
 
             // Value that is displayed when you reload the page
-            document.getElementById('selectedRange1').innerText =  `${totalSchools1}`;
-            document.getElementById('selectedRange2').innerText =  `${totalStudents1}`;
-            document.getElementById('selectedRange3').innerText =  `${totalVendors1}`;
-            document.getElementById('selectedRange4').innerText =  `${totalBrands1}`;
-
-
+            document.getElementById('selectedRange1').innerText = `${totalSchools1}`;
+            document.getElementById('selectedRange2').innerText = `${totalStudents1}`;
+            document.getElementById('selectedRange3').innerText = `${totalVendors1}`;
+            document.getElementById('selectedRange4').innerText = `${totalBrands1}`;
 
 
             // What happens when you click a button for SCHOOLS
             toggleButtons1.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Makes all buttons unselected 
+                    // Makes all buttons unselected
                     toggleButtons1.forEach(btn => {
                         btn.classList.remove('bg-blue-500', 'text-white');
                     });
@@ -185,13 +191,13 @@
                         document.getElementById('selectedRange1').innerText = `${totalSchools30}`;
                     } else if (selectedRange == 90) {
                         document.getElementById('selectedRange1').innerText = `${totalSchools90}`;
-                    }                
+                    }
                 });
             });
 
             toggleButtons2.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Makes all buttons unselected 
+                    // Makes all buttons unselected
                     toggleButtons2.forEach(btn => {
                         btn.classList.remove('bg-blue-500', 'text-white');
                     });
@@ -211,13 +217,13 @@
                         document.getElementById('selectedRange2').innerText = `${totalStudents30}`;
                     } else if (selectedRange == 90) {
                         document.getElementById('selectedRange2').innerText = `${totalStudents90}`;
-                    }                
+                    }
                 });
             });
 
             toggleButtons3.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Makes all buttons unselected 
+                    // Makes all buttons unselected
                     toggleButtons3.forEach(btn => {
                         btn.classList.remove('bg-blue-500', 'text-white');
                     });
@@ -237,13 +243,13 @@
                         document.getElementById('selectedRange3').innerText = `${totalVendors30}`;
                     } else if (selectedRange == 90) {
                         document.getElementById('selectedRange3').innerText = `${totalVendors90}`;
-                    }                
+                    }
                 });
             });
 
             toggleButtons4.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Makes all buttons unselected 
+                    // Makes all buttons unselected
                     toggleButtons4.forEach(btn => {
                         btn.classList.remove('bg-blue-500', 'text-white');
                     });
@@ -263,10 +269,10 @@
                         document.getElementById('selectedRange4').innerText = `${totalBrands30}`;
                     } else if (selectedRange == 90) {
                         document.getElementById('selectedRange4').innerText = `${totalBrands90}`;
-                    }                
+                    }
                 });
             });
-        });
+        }
     </script>
 @endpush
 

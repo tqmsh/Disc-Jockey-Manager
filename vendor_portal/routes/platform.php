@@ -11,7 +11,7 @@ use App\Orchid\Screens\EditAdScreen;
 use App\Orchid\Screens\ViewAdScreen;
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\CreateAdScreen;
-use App\Orchid\Screens\ViewCourseScreen;
+use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\EditLimoBidScreen;
 use App\Orchid\Screens\EditPackageScreen;
 use App\Orchid\Screens\ViewPackageScreen;
@@ -27,7 +27,7 @@ use App\Orchid\Screens\CreateStudentBidScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use App\Orchid\Screens\ViewSingleLessonScreen;
-use App\Orchid\Screens\ViewCourseSectionScreen;
+use App\Orchid\Screens\ViewGuideSectionScreen;
 use App\Orchid\Screens\ViewSectionLessonScreen;
 use App\Orchid\Screens\CreateLimoGroupBidScreen;
 use App\Orchid\Screens\CreateBeautyGroupBidScreen;
@@ -55,7 +55,11 @@ use App\Orchid\Screens\ViewBugReportScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main');
+Route::screen('main', ExampleScreen::class)->name('platform.main')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Main Menu');
+    });
 
 //show events screen
 Route::screen('/bidopportunities', ViewBidOpportunitiesScreen::class)->name('platform.bidopportunities.list');
@@ -66,11 +70,13 @@ Route::screen('/packages/create', CreatePackageScreen::class)->name('platform.pa
 
 Route::screen('/packages/{package}/edit', EditPackageScreen::class)->name('platform.package.edit');
 
-Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
+//!Un-comment when the feature is good to go
 
-Route::screen('/campaigns/create', CreateAdScreen::class)->name('platform.ad.create');
+// Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 
-Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+// Route::screen('/campaigns/create', CreateAdScreen::class)->name('platform.ad.create');
+
+// Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
 Route::screen('/event-bid/{event}/create', CreateEventBidScreen::class)->name('platform.bid.create');
 
@@ -90,28 +96,27 @@ Route::screen('/event-bid/{eventBid}/edit', EditEventBidScreen::class)->name('pl
 
 Route::screen('/studen-tbid/{studentBid}/edit', EditStudentBidScreen::class)->name('platform.studentBid.edit');
 
-Route::screen('/courses', ViewCourseScreen::class)->name('platform.course.list');
+Route::screen('/guides', ViewGuideScreen::class)->name('platform.guide.list');
 
-Route::screen('/courses/{course}/sections', ViewCourseSectionScreen::class)->name('platform.courseSection.list');
+Route::screen('/guides/{guide}/sections', ViewGuideSectionScreen::class)->name('platform.guideSection.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons', ViewSectionLessonScreen::class)->name('platform.sectionLesson.list');
 
-Route::screen('/courses/{course}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
+Route::screen('/guides/{guide}/sections/{section}/lessons/{lesson}/view', ViewSingleLessonScreen::class)->name('platform.singleLesson.list');
 
 // Bug Reports
 Route::screen('/bug-reports/create', CreateBugReportScreen::class)->name('platform.bug-reports.create');
 Route::screen('/bug-reports', ViewBugReportScreen::class)->name('platform.bug-reports.list');
 Route::screen('/bug-reports/{bug_report}', ViewBugReportDetailedScreen::class)->name('platform.bug-reports.view');
 
-// $vendor = Vendors::where('user_id', Auth::user()->id)->first();
-
-Route::screen('/shop', BuyCreditsScreen::class)
-    ->name('platform.shop')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->parent('platform.index')
-            ->push(__('Shop'), route('platform.shop'));
-    });
+//!Un-comment when the feature is good to go
+// Route::screen('/shop', BuyCreditsScreen::class)
+//     ->name('platform.shop')
+//     ->breadcrumbs(function (Trail $trail) {
+//         return $trail
+//             ->parent('platform.index')
+//             ->push(__('Shop'), route('platform.shop'));
+//     });
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
@@ -151,11 +156,7 @@ Route::screen('roles', RoleListScreen::class)
 
 // Example...
 Route::screen('dashboard', ExampleScreen::class)
-    ->name('platform.example')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->push('Main Menu');
-    });
+    ->name('platform.example');
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
 Route::screen('example-layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');

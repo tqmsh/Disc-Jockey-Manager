@@ -12,8 +12,10 @@ use App\Models\Events;
 use App\Models\EventAttendees;
 use App\Models\EventBids;
 use App\Models\ActualExpenseRevenue;
+use App\Models\DisplayAds;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -78,6 +80,22 @@ class ExampleScreen extends Screen
 
         $user = Auth::user();
         $localAdmin = LocalAdmin::where('user_id', $user->id)->first();
+        
+        $now = Carbon::now();
+
+        // Remaining Days Until Next Event
+        $closestAttendingEvent = Events::where('school_id', $localAdmin->school_id)
+            ->where('event_start_time', '>', $now)->oldest('event_start_time')->first();
+        // Check if an event has been found
+        if($closestAttendingEvent !== null) {
+            $eventStartTime = $closestAttendingEvent->event_start_time;
+            $eventStartTime = Carbon::parse($eventStartTime);
+            $daysLeftUntilEvent = $now->diffInDays($eventStartTime, false);
+        }
+
+        if (!isset($daysLeftUntilEvent) || $daysLeftUntilEvent < 0) {
+            $daysLeftUntilEvent = "No Upcoming Events";
+        }
 
         // Pending Students
         $schoolId = $localAdmin->school_id;
@@ -145,7 +163,9 @@ class ExampleScreen extends Screen
                 'totalRevenue'         => $totalRevenue,
                 'totalExpenses'        => $totalExpenses,
                 'totalStudents'        => $numberOfStudents,
-                'totalPendingStudents' => $pendingStudents,
+                // Replaced pending students with days left until event
+                // 'totalPendingStudents' => $pendingStudents,
+                'daysLeftUntilEvent'   => $daysLeftUntilEvent,
                 'totalTicketsSold'     => $paidAttendeesCount,
                 'directBidsReceived'   => $DirectBidsRecieved,
                 'directBidsRepliedTo'  => $DirectBidsRepliedTo,
@@ -199,12 +219,14 @@ class ExampleScreen extends Screen
 
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
+            if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
+
             $arr_ads[] = ["id"=>$campaign->id,
                 "forward_url"=>$campaign->website,
                 "image_url"=>$campaign->image,
                 "title"=>$campaign->title,
                 "category"=>Categories::where("id", $campaign->category_id)->first()->name,
-                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name ?? "N/A",
                 "order"=>Categories::where("id", $campaign->category_id)->first()->order_num
             ];
         }
@@ -212,7 +234,9 @@ class ExampleScreen extends Screen
         return [
             Layout::metrics([
                 'Total Students' => 'metrics.totalStudents',
-                'Remaining Students to onboard' => 'metrics.totalPendingStudents',
+                // Replaced pending students with days until next event
+                // 'Remaining Students to onboard' => 'metrics.totalPendingStudents',
+                'Remaining Days Until Next Event' => 'metrics.daysLeftUntilEvent',
                 'Total Prom Night Tickets Sold' => 'metrics.totalTicketsSold',
                 'Prom Night Tickets Sold %' => 'metrics.paidAttendeesCountPercentage',
             ]),
@@ -222,9 +246,9 @@ class ExampleScreen extends Screen
                 'Total Revenue' => 'metrics.totalRevenue',
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
-            Layout::view("card_style"),
+            //Layout::view("card_style"),
 
-            Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
+            //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];
     }
 

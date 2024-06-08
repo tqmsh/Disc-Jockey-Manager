@@ -38,7 +38,7 @@ class PlatformProvider extends OrchidServiceProvider
 
         return [
             //FARHAN AND ANDY WAS HERE 😉
-            
+
             //MONEY MAKER
             Menu::make('Dashboard')
             ->icon('home')
@@ -58,7 +58,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('List')
                         ->icon('list')
                         ->route('platform.student.list'),
-                        
+
                     //pending student nav option
                     Menu::make('Pending Students')
                         ->icon('user-follow')
@@ -66,6 +66,10 @@ class PlatformProvider extends OrchidServiceProvider
                                     return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
                                 })
                         ->route('platform.pendingstudent.list'),
+
+                    Menu::make('List of Couples')
+                        ->icon('fa.children')
+                        ->route('platform.couples.list'),
                 ]),
 
             Menu::make("Groups")
@@ -84,40 +88,55 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('bar-chart')
                 ->route('platform.all.polls'),
 
-            Menu::make('Contracts')
-                ->icon('doc')
-                ->route('platform.contract.list'),
+            // Menu::make('Contracts')
+            //     ->icon('doc')
+            //     ->route('platform.contract.list'),
           
             Menu::make('Prom Profit')
                 ->icon('money')
                 ->route('platform.profit.list'),
-            
-            Menu::make('Report a Bug')
-                ->icon('bug')
-                ->route('platform.bug-reports.list'),
+
+            Menu::make('Checklists')
+                ->icon('list-check')
+                ->route('platform.checklist.list'),
         
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
-                ->route('platform.course.list'),
-            
-            Menu::make('Prom Planner Sites')
+                ->route('platform.guide.list'),
+
+            // Moved to How To Contact Us top bar
+            // Menu::make('Report a Bug')
+            //     ->icon('bug')
+            //     ->route('platform.bug-reports.list'),
+
+            Menu::make('National Prom Sites')
                 ->icon('arrow-down')
                 ->list([
+                    Menu::make('National Proms')
+                        ->icon('ps.national-proms')
+                        ->url('https://nationalproms.com'),
+
                     Menu::make('Prom Planner')
                         ->icon('ps.prom-planner')
                         ->url('https://promplanner.app/'),
-                    // No prom marketing for local_admin
-                    Menu::make('Prom Radio')
-                        ->icon('ps.prom-radio')
-                        ->url('https://promradio.com/'),
-                    Menu::make('Prom Teen')
-                        ->icon('ps.prom-teen')
-                        ->url('https://promteen.com/'),
+
+                    Menu::make('Prom Committee Expo')
+                        ->icon('ps.prom-committee-expo')
+                        ->url('https://promcommitteeexpo.com'),
+
+                    Menu::make('Prom Show')
+                        ->icon('ps.prom-show')
+                        ->url('https://promshow.com'),
+
                     Menu::make('Prom Vendors')
                         ->icon('ps.prom-vendor')
                         ->url('https://promvendors.com/'),
-                ]),
 
+                    Menu::make('Prom Teen')
+                        ->icon('ps.prom-teen')
+                        ->url('https://promteen.com/'),
+
+                ]),
             // Menu::make('Examples Layouts')
             //     ->title('PLACEHOLDERS')
             //     ->icon('arrow-down')

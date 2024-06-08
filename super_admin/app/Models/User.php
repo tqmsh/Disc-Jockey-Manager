@@ -85,6 +85,11 @@ class User extends Authenticatable
         'created_at',
     ];
 
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'user_id');
+    }
+
     //relationsip with packages
     public function packages()
     {
@@ -107,5 +112,10 @@ class User extends Authenticatable
     public function studentBids()
     {
         return $this->hasMany(StudentBids::class, 'user_id');
+    }
+
+    public function fullName()
+    {
+        return $this->firstname." ".$this->lastname;
     }
 }

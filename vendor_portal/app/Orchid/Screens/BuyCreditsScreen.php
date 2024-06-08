@@ -106,7 +106,8 @@ class BuyCreditsScreen extends Screen
                 }
             }
         } else {
-            return redirect()->route('paypal_cancel');
+            Toast::error('There was an error while trying to buy credits');
+            return redirect()->route('platform.shop');
         }
         
     }
@@ -148,13 +149,15 @@ class BuyCreditsScreen extends Screen
             return redirect()->route('platform.shop');
 
         } else { 
-            return redirect()->route('paypal_cancel');
+            Toast::error('There was an error while trying to buy credits');
+            return redirect()->route('platform.shop');
 
         }
     }
 
     public function cancel() {
-        Toast::error('Error');
+        Toast::error('Cancelled buying credits');
+        return redirect()->route('platform.shop');
     }
 
 }

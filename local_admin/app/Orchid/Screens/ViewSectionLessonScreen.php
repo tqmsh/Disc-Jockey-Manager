@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\Course;
+use App\Models\Guide;
 use App\Models\Section;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
@@ -10,7 +10,7 @@ use App\Orchid\Layouts\ViewSectionLessonLayout;
 
 class ViewSectionLessonScreen extends Screen
 {
-    public $course;
+    public $guide;
     public $section;
     public $lessons;
     /**
@@ -18,10 +18,10 @@ class ViewSectionLessonScreen extends Screen
      *
      * @return array
      */
-    public function query(Course $course, Section $section): iterable
+    public function query(Guide $guide, Section $section): iterable
     {
         return [
-            'course' => $course,
+            'guide' => $guide,
             'section' => $section,
             'lessons' => $section->lessons()->orderBy('ordering', 'asc')->paginate(20),
         ];
@@ -39,7 +39,7 @@ class ViewSectionLessonScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Course: ' . $this->course->course_name . ' | Section: ' . $this->section->section_name;
+        return 'Guide: ' . $this->guide->guide_name . ' | Section: ' . $this->section->section_name;
     }
 
     /**
@@ -52,7 +52,7 @@ class ViewSectionLessonScreen extends Screen
         return [
             
             Link::make('Back to Section List')
-                ->route('platform.courseSection.list', ['course' => $this->course])
+                ->route('platform.guideSection.list', ['guide' => $this->guide])
                 ->icon('arrow-left')
         ];
     }
@@ -69,9 +69,9 @@ class ViewSectionLessonScreen extends Screen
         ];
     }
 
-    public function redirect(Course $course, Section $section){
+    public function redirect(Guide $guide, Section $section){
         if(request('type') == "view"){
-            return redirect()->route('platform.singleLesson.list',  ['course' => $course, 'section' => $section, 'lesson' => request('lesson_id')]);
+            return redirect()->route('platform.singleLesson.list',  ['guide' => $guide, 'section' => $section, 'lesson' => request('lesson_id')]);
         }
     }
 }

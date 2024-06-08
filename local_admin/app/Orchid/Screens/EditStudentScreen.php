@@ -16,6 +16,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class EditStudentScreen extends Screen
 {
@@ -139,27 +140,31 @@ class EditStudentScreen extends Screen
     public function update(Student $student, Request $request)
     {
         try{
-
+            $request->validate([
+                'firstname' => 'required|max:255',
+                'lastname' => 'required|max:255',
+                'email' => [
+                    'required',
+                    'email',
+                    'max:255',
+                    Rule::unique('users')->ignore($student->user_id),
+                ],
+                'grade' => 'required|integer|in:9,10,11,12',
+                'phonenumber' => 'required|max:20',
+                'allergies' => 'nullable|max:255',
+            ]);
             $studentTableFields = $this->getStudentFields($request);
 
             $userTableFields = $this->getUserFields($request);
 
-            //check for duplicate
-            if($this->validEmail($request, $student)){
-                
-                //email not changed
-                $student->update($studentTableFields);
-                
-                User::where('id', $student->user_id)->update($userTableFields);
-                
-                Toast::success('You have successfully updated: ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
-
-                return redirect()->route('platform.student.list');
+            //email not changed
+            $student->update($studentTableFields);
             
-            }else{
-                //duplicate email found
-                Toast::error('Email already exists.');
-            }
+            User::where('id', $student->user_id)->update($userTableFields);
+            
+            Toast::success('You have successfully updated: ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+
+            return redirect()->route('platform.student.list');
 
         }catch(Exception $e){
 
@@ -181,11 +186,6 @@ class EditStudentScreen extends Screen
             
             Alert::error('There was an error deleting this student. Error Code: ' . $e->getMessage());
         }
-    }
-
-    //check for duplicate emails
-    private function validEmail($request, $student){
-        return count(User::whereNot('id', $student->user_id)->where('email', $request->input('email'))->get()) == 0;
     }
 
     //this functions returns the values that need to be inserted in the localadmin table in the db

@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Examples;
 
 use App\Models\Campaign;
 use App\Models\Categories;
+use App\Models\DisplayAds;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Vendors;
@@ -197,6 +198,8 @@ class ExampleScreen extends Screen
         
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
+            if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
+            
             $arr_ads[] = ["id"=>$campaign->id,
                 "forward_url"=>$campaign->website,
                 "image_url"=>$campaign->image,
@@ -262,9 +265,9 @@ class ExampleScreen extends Screen
             //     'Total Earnings' => 'metrics.total',
             // ]),
 
-            Layout::view("card_style"),
+            //Layout::view("card_style"),
 
-            Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
+            //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
 
         ];
     }

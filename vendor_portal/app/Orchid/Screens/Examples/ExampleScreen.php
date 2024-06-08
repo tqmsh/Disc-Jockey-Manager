@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Examples;
 
 use App\Models\Campaign;
 use App\Models\Categories;
+use App\Models\DisplayAds;
 use App\Models\Vendors;
 use App\Models\EventBids;
 use App\Models\StudentBids;
@@ -177,12 +178,14 @@ class ExampleScreen extends Screen
     {
         $arr_ads = [];
         foreach ($this->campaigns as $campaign){
+            if(DisplayAds::where('campaign_id', $campaign->id)->exists()) continue;
+            
             $arr_ads[] = ["id"=>$campaign->id,
                 "forward_url"=>$campaign->website,
                 "image_url"=>$campaign->image,
                 "title"=>$campaign->title,
                 "category"=>Categories::where("id", $campaign->category_id)->first()->name,
-                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name,
+                "company"=>Vendors::where("user_id", $campaign->user_id)->first()->company_name ?? "N/A",
                 "order"=>Categories::where("id", $campaign->category_id)->first()->order_num
             ];
         }
@@ -195,9 +198,9 @@ class ExampleScreen extends Screen
                 'Wishlist mentions' => 'metrics.wishlistMentions',
             ]),
 
-            Layout::view("card_style"),
+            //Layout::view("card_style"),
 
-            Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
+            //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];
     }
 
