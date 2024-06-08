@@ -36,8 +36,8 @@ class ViewChecklistUsersScreen extends Screen
 
         return [
             'checklist' => $checklist,
-            'completed' => $this->paginate($completed, 10, options: ['path' => "/admin/checklists/{$checklist->id}/users"]),
-            'incomplete' => $this->paginate($incomplete, 10, options: ['path' => "/admin/checklists/{$checklist->id}/users"])
+            'completed' => $this->paginate($completed, request()->query('pagesize', 10), options: ['path' => "/admin/checklists/{$checklist->id}/users"]),
+            'incomplete' => $this->paginate($incomplete, request()->query('pagesize', 10), options: ['path' => "/admin/checklists/{$checklist->id}/users"])
         ];
     }
 

@@ -66,7 +66,7 @@ class ViewUniversalExpenseRevenueScreen extends Screen
     {
         return [
             Layout::table('expenses', [
-                TD::make()
+                TD::make('checkboxes')
                     ->render(function (UniversalExpenseRevenue $expense){
                         return CheckBox::make('selectedExpensesRevenues[]')
                             ->value($expense->id)
@@ -98,7 +98,7 @@ class ViewUniversalExpenseRevenueScreen extends Screen
             ])->title('Expenses'),
 
             Layout::table('revenues', [
-                TD::make()
+                TD::make('checkboxes')
                     ->render(function (UniversalExpenseRevenue $revenue){
                         return CheckBox::make('selectedExpensesRevenues[]')
                             ->value($revenue->id)

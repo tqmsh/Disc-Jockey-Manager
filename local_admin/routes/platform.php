@@ -90,11 +90,9 @@ use App\Orchid\Screens\ViewPastPollsScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->push('Main Menu');
-    });
+
+Route::redirect('/main', '/admin/dashboard')->name('platform.main');
+
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');

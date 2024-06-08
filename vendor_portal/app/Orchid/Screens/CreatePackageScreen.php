@@ -97,11 +97,11 @@ class CreatePackageScreen extends Screen
     public function createPackage(Request $request){
 
         try{
-            
+
             if($this->validPackage($request)){
 
                 $input = $request->all();
-    
+
                 $input['user_id'] = Auth::user()->id;
 
                 $package = VendorPackage::create($input);
@@ -118,6 +118,7 @@ class CreatePackageScreen extends Screen
 
         } catch (Exception $e) {
             Alert::error('Error: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 

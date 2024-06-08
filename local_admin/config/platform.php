@@ -111,7 +111,7 @@ return [
     'resource' => [
         'stylesheets' => [],
         'scripts'     => [
-            '/js/poll.js',
+            '/js/checkAll.js',
         ],
     ],
 

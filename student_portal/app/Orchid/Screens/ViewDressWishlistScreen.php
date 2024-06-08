@@ -38,7 +38,7 @@ class ViewDressWishlistScreen extends Screen
         $dresses = Dress::whereIn('dresses.id', $wishlistDressesIds)
             ->filter($request->only(['sort', 'filter']))
             ->latest('created_at')
-            ->paginate();
+            ->paginate(min(request()->query('pagesize', 10), 100));
 
         return [
             'wishlistDresses' => $dresses,

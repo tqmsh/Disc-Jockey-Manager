@@ -35,7 +35,7 @@ class CreateBannedSongsScreen extends Screen
             ->whereNotIn('id', $noPlaySongIds)
             ->where('status', 1)
             ->latest('songs.created_at')
-            ->paginate(10);
+            ->paginate(min(request()->query('pagesize', 10), 100));
 
         return [
             'event' => $event,
