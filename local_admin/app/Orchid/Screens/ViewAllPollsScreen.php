@@ -57,11 +57,6 @@ class ViewAllPollsScreen extends Screen
             DropDown::make('Poll Options')
                 ->icon('options-vertical')
                 ->list([
-    
-                    Link::make('Edit Poll')
-                        ->icon('pencil'),
-                        // ->route('platform.poll.edit',$this->election->id),
-    
                     Button::make('Delete Poll')
                         ->icon('trash')
                         ->method('deletePolls')

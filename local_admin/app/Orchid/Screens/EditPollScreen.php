@@ -30,8 +30,8 @@ class EditPollScreen extends Screen
      */
     public function query(Poll $poll): iterable
     {
-        $poll['start_date'] = Carbon::parse($poll->start_date)->format('d-m-Y');
-        $poll['end_date'] = Carbon::parse($poll->end_date)->format('d-m-Y');
+        $poll['start_date'] = Carbon::parse($poll->start_date)->format('m/d/Y');
+        $poll['end_date'] = Carbon::parse($poll->end_date)->format('m/d/Y');
 
         $options = PollOption::where('poll_id', $poll->id)->get();
         // dd($options[0]->title);
@@ -91,11 +91,15 @@ class EditPollScreen extends Screen
             $electionField = $request->all();
 
             $electionField['start_date'] = Carbon::createFromFormat('m/d/Y', $request->start_date)->startOfDay();
-            $electionField['end_date'] = Carbon::createFromFormat('m/d/Y', $request->end_date)->endOfDay();
+            $electionField['end_date'] = Carbon::createFromFormat('m/d/Y', $request->end_date)->startOfDay();
             
             $poll->update($electionField);
 
-            $options = collect($request->only(['option_1', 'option_2', 'option_3']))->filter(); // Filter to remove null or empty values
+            $options = collect($request->all())->filter(function ($value, $key) {
+                return strpos($key, 'option_') === 0;
+            }, ARRAY_FILTER_USE_BOTH);
+
+            // dd($options);
 
             $existingOptions = PollOption::where('poll_id', $poll->id)->pluck('title', 'id');
 
@@ -123,7 +127,10 @@ class EditPollScreen extends Screen
                 $correct_poll = Poll::where('school_id', $school_id)->latest()->first();
                 $poll_id = $correct_poll->id;
 
+                // dd($value);
+
                 if (!PollOption::where('poll_id', $poll_id)->where('title', $value)->exists()) {
+                    // dd($value);
                     PollOption::create([
                         'title' => $value,
                         'poll_id' => $poll_id,
