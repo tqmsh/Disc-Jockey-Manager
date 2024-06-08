@@ -65,7 +65,7 @@ class ViewNoticeScreen extends Screen
     {
         return [
             Layout::table('notices', [
-                TD::make()
+                TD::make('checkboxes')
                     ->render(function (Notice $notice) {
                         return CheckBox::make('notices[]')
                             ->value($notice->id)

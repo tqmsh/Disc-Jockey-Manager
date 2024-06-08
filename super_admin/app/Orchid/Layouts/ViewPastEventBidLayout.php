@@ -33,7 +33,7 @@ class ViewPastEventBidLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (EventBids $bid){
                     return CheckBox::make('bids[]')
                         ->value($bid->id)

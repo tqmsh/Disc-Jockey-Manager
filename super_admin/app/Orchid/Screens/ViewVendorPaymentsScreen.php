@@ -36,7 +36,7 @@ class ViewVendorPaymentsScreen extends Screen
         return [
             'vendor' => $vendor,
             'user' => User::find($vendor->user_id),
-            'payments' => Payment::latest('payments.created_at')->where('user_id', $vendor->user_id)->paginate(10),
+            'payments' => Payment::latest('payments.created_at')->where('user_id', $vendor->user_id)->paginate(min(request()->query('pagesize', 10), 100)),
         ];
     }
 

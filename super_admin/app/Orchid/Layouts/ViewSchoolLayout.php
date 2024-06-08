@@ -32,7 +32,7 @@ class ViewSchoolLayout extends Table
     {
         return [
             
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (School $school){
                     return CheckBox::make('schools[]')
                         ->value($school->id)

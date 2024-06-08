@@ -44,12 +44,12 @@ class ViewEventStudentScreen extends Screen
         $filters = $request->get('filter') ?? [];
         return [
             'event' => $event,
-            'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter($filters)->paginate(20),
-            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(20),
-            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))->filter($filters)->paginate(20),
-            'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(20),
-            'tables' => Seating::where('event_id', $event->id)->paginate(10),
-            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(20),
+            'students' => Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->get(['user_id']))->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'unattending_students' => Student::whereNotIn('user_id', EventAttendees::where('event_id', $event->id)->where('invitation_status', 1)->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'seatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->where('table_approved', 1)->whereNotNull('table_id')->get(['user_id']))->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'unseatedStudents' =>  Student::whereIn('students.user_id', EventAttendees::where('event_id', $event->id)->whereNull('table_id')->get(['user_id']))->where('school_id', $event->school_id)->filter($filters)->paginate(request()->query('pagesize', 20)),
+            'tables' => Seating::where('event_id', $event->id)->paginate(min(request()->query('pagesize', 10), 100)),
+            'table_proposals' => EventAttendees::where('event_id', $event->id)->where('table_approved', 0)->paginate(request()->query('pagesize', 20)),
         ];
     }
 
@@ -80,7 +80,7 @@ class ViewEventStudentScreen extends Screen
                         ->method('addStudents')
                         ->confirm('Are you sure you want to add the selected students to: ' . $this->event->event_name . '?')
                         ->icon('plus'),
-                    
+
                     Button::make('Invite Selected Students')
                         ->method('inviteStudents')
                         ->confirm('Are you sure you want to invite the selected students to: ' . $this->event->event_name . '? Duplicate invitations will be ignored.')
@@ -121,7 +121,7 @@ class ViewEventStudentScreen extends Screen
                     ]),
                 ]),
             ])
-            ->title('Edit Seating')            
+            ->title('Edit Seating')
             ->applyButton('Update Seating')
             ->withoutCloseButton(),
 
@@ -142,7 +142,7 @@ class ViewEventStudentScreen extends Screen
                     ]),
                 ]),
             ])
-            ->title('Edit table')            
+            ->title('Edit table')
             ->applyButton('Update Table')
             ->withoutCloseButton(),
 
@@ -192,7 +192,7 @@ class ViewEventStudentScreen extends Screen
                     ViewUnattendingStudentLayout::class
                 ],
             ]),
-            
+
             Layout::tabs([
                 'Seated Students' => [
                     Layout::table('seatedStudents', [
@@ -205,12 +205,12 @@ class ViewEventStudentScreen extends Screen
                                         ->icon('pencil');
                             }),
 
-                            
+
                             TD::make('Student Name')
                             ->render(function (Student $student) {
                                 return $student->firstname . ' ' . $student->lastname;
                             }),
-                            
+
                             TD::make('Student Email')
                             ->render(function (Student $student) {
                                 return $student->email;
@@ -222,7 +222,7 @@ class ViewEventStudentScreen extends Screen
                                     $table = Seating::find(EventAttendees::where('user_id', $student->user_id)->where('event_id', $this->event->id)->where('table_approved', '1')->pluck('table_id'))->value('tablename');
                                     return e($table);
                                 }),
-                            
+
                         TD::make('Phone Number')
                             ->render(function (Student $student) {
                                 return $student->phonenumber;
@@ -252,14 +252,14 @@ class ViewEventStudentScreen extends Screen
                             ->render(function (Student $student) {
                                 return $student->email;
                             }),
-                        
+
                         TD::make('Phone Number')
                             ->render(function (Student $student) {
                                 return $student->phonenumber;
                             }),
-                    ])                
+                    ])
                 ],
-                
+
                 'Tables' => [
 
                     Layout::table('tables', [
@@ -343,7 +343,7 @@ class ViewEventStudentScreen extends Screen
                                 $student = Student::where('user_id',$proposal->user_id)->get(['firstname','lastname']);
                                 return e($student[0]->firstname . ' ' . $student[0]->lastname);
                             }),
-                            
+
                         TD::make('Accept')
                             ->render(function (EventAttendees $proposal) {
                                 return Button::make('Accept')
@@ -362,7 +362,7 @@ class ViewEventStudentScreen extends Screen
 
 
                     ])
-                ]  
+                ]
             ]),
         ];
 
@@ -434,7 +434,7 @@ class ViewEventStudentScreen extends Screen
                 return;
 
             } else{
-                
+
                 $old_entry = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->whereNot('table_id', '<=>', $requested_table_id)->first();
                 $old_seating = Seating::find($old_entry->table_id);
                 if (!is_null($old_seating)) {
@@ -457,15 +457,15 @@ class ViewEventStudentScreen extends Screen
     }
 
     public function deleteStudents(Request $request, Events $event)
-    {   
+    {
         //get all students from post request
         $students = $request->get('students');
-        
+
         try{
-            
+
             //if the array is not empty
             if(!empty($students)){
-                
+
                 //loop through the students and delete them from db
                 foreach($students as $student){
                     EventAttendees::where('user_id', $student)->where('event_id', $event->id)->delete();
@@ -550,14 +550,14 @@ class ViewEventStudentScreen extends Screen
             if(!empty($table_id) && $table_id != $current_table_id){
 
                 if($table_id == 'remove'){
-                    
+
                     $attendee = EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->get();
                     Seating::find($attendee[0]->table_id)->increment('capacity');
                     $attendee[0]->table_id = null;
                     $attendee[0]->save();
 
                     Toast::success('Student seating removed succesfully');
-                } else{        
+                } else{
 
                     //update the student seating in the db
                     EventAttendees::where('user_id', $user_id)->where('event_id', $event->id)->update([
@@ -666,6 +666,14 @@ class ViewEventStudentScreen extends Screen
 
         }catch(Exception $e){
             Alert::error('There was a error trying to edit the table. Error Message: ' . $e->getMessage());
+        }
+    }
+
+    public function redirect()
+    {
+        if (request('type') == 'students') {
+
+            return redirect()->route('platform.student.edit', request('student'));
         }
     }
 }

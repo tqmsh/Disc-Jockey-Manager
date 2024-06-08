@@ -30,7 +30,7 @@ class ViewChecklistItemsLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (ChecklistItem $checklist_item){
                     return CheckBox::make('checklist_items[]')
                         ->value($checklist_item->id)
