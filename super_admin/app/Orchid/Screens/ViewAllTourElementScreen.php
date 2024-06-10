@@ -26,7 +26,7 @@ class ViewAllTourElementScreen extends Screen
     public function query(): iterable
     {
         return [
-            'tourElements' => TourElement::latest()->filter(request(['screen','search_input_by', 'name_filter']))->paginate(10)
+            'tourElements' => TourElement::latest()->filter(request(['portal','screen','search_input_by', 'name_filter']))->paginate(10)
         ];
     }
 
@@ -72,11 +72,18 @@ class ViewAllTourElementScreen extends Screen
 
                 Group::make([
 
+                    Select::make('portal')
+                        ->title('Portal')
+                        ->empty('No Selection')
+                        ->options(array_filter([
+                            0 => 'Local Admin',
+                            1 => 'Student',
+                            2 => 'Vendor' ])),
+
                     Select::make('screen')
                         ->title('Screen')
                         ->placeholder('Select the Screen for the Element')
                         ->fromModel(TourElement::class, 'screen', 'screen')
-                        ->horizontal()
                         ->empty('Start typing to search...'),
 
                     Select::make('search_input_by')
@@ -116,7 +123,7 @@ class ViewAllTourElementScreen extends Screen
 
     public function filter(){
 
-        return redirect()->route('platform.tour-element.list', request(['screen', 'search_input_by', 'name_filter']));
+        return redirect()->route('platform.tour-element.list', request(['portal','screen', 'search_input_by', 'name_filter']));
     }
 
 }

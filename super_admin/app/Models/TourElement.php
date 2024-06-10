@@ -42,6 +42,10 @@ class TourElement extends Model
                 $query->where('screen', 'like', '%' . request('screen') . '%');
             }
 
+            if(isset($filters['portal'])){
+                $query->where('portal', '=' . request('portal') . '%');
+            }
+
             if(isset($filters['name_filter']) && isset($filters['search_input_by'])){
                 $query->where($filters['search_input_by'], 'like', '%' . request('name_filter') . '%');
             }
