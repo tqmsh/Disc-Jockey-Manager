@@ -70,11 +70,6 @@ class CreatePollScreen extends Screen
 
     public function create(Request $request, Poll $poll)
     {
-        // dd($request->all());
-        // dd('123');
-        // dd('Create Poll');
-        // $options = collect($request->except(['title', 'description', 'start_date', 'end_date']))->filter(); // filter to remove null or empty values
-        // dd($options);
 
         try{
 
