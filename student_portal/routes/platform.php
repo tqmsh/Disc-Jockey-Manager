@@ -56,6 +56,10 @@ use App\Orchid\Screens\ViewPromfluencerScreen;
 use App\Orchid\Screens\ViewPromfluenceScreen;
 use App\Orchid\Screens\ViewStudentBidDetailedBidScreen;
 
+use App\Orchid\Screens\ViewPollScreen;
+use App\Orchid\Screens\VotePollScreen;
+use App\Orchid\Screens\ViewPastPollScreen;
+use App\Orchid\Screens\ViewPollResultScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -206,3 +210,9 @@ Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.exampl
 Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
 
 //Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+Route::screen('polls', ViewPollScreen::class)->name('platform.polls.list');
+Route::screen('polls/past', ViewPastPollScreen::class)->name('platform.poll.past');
+Route::screen('polls/vote/{poll}', VotePollScreen::class)->name('platform.poll.vote');
+Route::screen('polls/result/{poll}', ViewPollResultScreen::class)->name('platform.poll.result');
+

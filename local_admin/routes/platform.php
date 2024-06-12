@@ -72,6 +72,11 @@ use App\Orchid\Screens\ViewBugReportScreen;
 use App\Orchid\Screens\ViewEventDetailedBidScreen;
 
 
+use App\Orchid\Screens\ViewAllPollsScreen;
+use App\Orchid\Screens\CreatePollScreen;
+use App\Orchid\Screens\EditPollScreen;
+use App\Orchid\Screens\ViewPollResultScreen;
+use App\Orchid\Screens\ViewPastPollsScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -243,3 +248,19 @@ Route::screen('/events/{event_id}/actual/view-pdf', ViewPromBudgetScreen::class)
 Route::get('/events/{event_id}/actual/download-pdf', [ActualPDFController::class, 'downloadPDF'])->name('platform.actual.downloadPDF');
 
 Route::screen('/events/{event_id}/actual/download-pdf', ViewPromBudgetScreen::class)->name('platform.actual.downloadPDF.switch');
+
+
+Route::screen('/polls', ViewAllPollsScreen::class)->name('platform.all.polls');
+
+Route::get('/polls/create/store', [CreatePollScreen::class, 'create'])->name('poll.create');
+
+
+Route::screen('/polls/create', CreatePollScreen::class)->name('platform.create.poll');
+
+Route::screen('/polls/{poll}/edit', EditPollScreen::class)->name('platform.poll.edit');
+
+Route::put('/update/{poll}', [EditPollScreen::class, 'update'])->name('poll.update');
+
+Route::screen('polls/result/{poll}', ViewPollResultScreen::class)->name('platform.poll.result');   
+
+Route::screen('polls/past/polls', ViewPastPollsScreen::class)->name('platform.past.polls');
