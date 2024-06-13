@@ -10,20 +10,20 @@
 </div>
 
 @error('email')
-    <span class="d-block invalid-feedback text-danger">
-            {{ $errors->first('email') }}
-    </span>
+<span class="d-block invalid-feedback text-danger">
+    {{ $errors->first('email') }}
+</span>
 @enderror
 
 <div class="mb-3">
     <input type="hidden" name="remember" value="true">
-
+    
     {!!  \Orchid\Screen\Fields\Password::make('password')
-            ->required()
-            ->autocomplete('current-password')
-            ->tabindex(1)
-            ->autofocus()
-            ->placeholder(__('Enter your password'))
+    ->required()
+    ->autocomplete('current-password')
+    ->tabindex(1)
+    ->autofocus()
+    ->placeholder(__('Enter your password'))
     !!}
 </div>
 
@@ -39,3 +39,11 @@
         </button>
     </div>
 </div>
+
+<style>
+    input[type='password'],
+    div[data-controller="password"]{
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+</style>
