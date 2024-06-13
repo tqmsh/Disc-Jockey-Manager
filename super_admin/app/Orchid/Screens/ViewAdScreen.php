@@ -5,7 +5,10 @@ namespace App\Orchid\Screens;
 use App\Classes\DisplayAdData;
 use Exception;
 use App\Models\Campaign;
+use App\Models\Categories;
 use App\Models\DisplayAds;
+use App\Models\LoginAds;
+use App\Models\Region;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -17,13 +20,16 @@ use App\Orchid\Layouts\ViewAdLayoutActive;
 use App\Orchid\Layouts\ViewAdLayoutPending;
 use App\Orchid\Layouts\ViewAdLayoutInactive;
 use App\Models\Vendors;
+use App\Orchid\Layouts\CreateLoginAd;
 use App\Orchid\Layouts\FilterAdActive;
 use App\Orchid\Layouts\FilterAdInactive;
 use App\Orchid\Layouts\FilterAdPending;
 use App\Orchid\Layouts\FilterAdSpots;
 use App\Orchid\Layouts\FilterDisplayAd;
+use App\Orchid\Layouts\FilterLoginAds;
 use App\Orchid\Layouts\ViewDisplayAd;
 use App\Orchid\Layouts\ViewAdSpots;
+use App\Orchid\Layouts\ViewLoginAds;
 
 class ViewAdScreen extends Screen
 {
@@ -40,7 +46,7 @@ class ViewAdScreen extends Screen
           "campaignsPending"=>Campaign::where("active", 0)->filter(request('pending_campaigns_filters') ?? [])->paginate(min(request()->query('pagesize', 10), 100)),
           "campaignsDisplayAds" =>  DisplayAds::filter(request('display_ads_filters') ?? [])->paginate(min(request()->query('pagesize', 10), 100)),
           "campaignsAdSpots" => request('ad_spots_filters') == null ? [] : app(DisplayAdData::class)->getAllAdSpots(request('ad_spots_filters')),
-
+          "campaignsLoginAds" => LoginAds::filter(request('login_ads_filters') ?? [])->paginate(min(request()->query('pagesize', 10), 100)),
             'metrics' => [
                 'activeAds'    => ['value' => number_format(count(Campaign::where('active', 1)->get()))],
                 'inactiveAds' => ['value' =>  number_format(count(Campaign::where('active', 2)->get()))],
@@ -101,7 +107,8 @@ class ViewAdScreen extends Screen
               "Active Campaigns" => [FilterAdActive::class, ViewAdLayoutActive::class],
               "Inactive Campaigns" => [FilterAdInactive::class, ViewAdLayoutInactive::class],
               "Display Ads" => [FilterDisplayAd::class, ViewDisplayAd::class],
-              "Ad Spots" => [FilterAdSpots::class, ViewAdSpots::class]
+              "Ad Spots" => [FilterAdSpots::class, ViewAdSpots::class],
+              "Login/Register Ads" => [FilterLoginAds::class, ViewLoginAds::class, CreateLoginAd::class]
             ])->activeTab(request('active_tab') ?? 'Pending Campaigns')
           
         ];
@@ -146,6 +153,45 @@ class ViewAdScreen extends Screen
         Toast::success('Campaign updated successfully!');
 
         return redirect()->route('platform.ad.list');
+    }
+
+    public function createLoginAd(Request $request) {
+        try {
+            $data = $request->validate([
+                'title' => 'required',
+                'subtitle' => 'required',
+                'button_title' => 'required',
+                'website' => 'required',
+                'image' => 'required',
+                'portal' => 'required'
+            ]);
+
+            $campaign = Campaign::create([
+                "user_id" => 197, //!NEED TO OPTIMIZE THIS LATER
+                "category_id" => Categories::all()->first()->id,
+                "region_id" => Region::all()->first()->id,
+                "title" => $data['title'],
+                "image" => $data['image'],
+                "website" => $data['website'],
+                "clicks" => 0,
+                "impressions" => 0,
+                'active' => 1
+            ]);
+
+            // Make LoginAds model with website and image removed from array.
+            LoginAds::create(
+                array_merge(
+                    array_diff_key($data, array_flip(['website', 'image'])),
+                    ['campaign_id' => $campaign->id]
+                )
+            );
+
+            Toast::success('Login ad created successfully!');
+
+            return to_route('platform.ad.list', ['active_tab' => 'Login/Register Ads']);
+        } catch(\Exception $e) {
+            Alert::error('There was a error trying to create a login ad. Error Message: ' . $e->getMessage());
+        }
     }
 
     public function redirect($campaign_id){
@@ -215,6 +261,15 @@ class ViewAdScreen extends Screen
                 'view_open_spots' => request('ad_spots_view_open_spots')
             ],
             'active_tab' => 'Ad Spots'
+        ]);
+    }
+
+    public function filterLoginAds() {
+        return redirect()->route('platform.ad.list', [
+            'login_ads_filters' => [
+                'portal' => request('login_ads_portal')
+            ],
+            'active_tab' => 'Login/Register Ads'
         ]);
     }
 }
