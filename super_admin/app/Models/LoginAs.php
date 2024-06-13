@@ -10,13 +10,6 @@ class LoginAs extends Model
 {
     use HasFactory, AsSource;
 
-    // Change the URLs here
-    const WEBSITE_URLS = [
-        'localadmin' => 'app.promplanner.app',
-        'student' => 'student.promplanner.app',
-        'vendor' => 'vendor.promplanner.app'
-    ];
-
     protected $fillable = [
         'id',
         'la_key',
@@ -36,10 +29,31 @@ class LoginAs extends Model
     }
 
     public function portalToTarget() : string {
+        $correctURLs = $this->getCorrectURLs();
+
         return match((int)$this->portal) {
-            2 => self::WEBSITE_URLS['localadmin'],
-            3 => self::WEBSITE_URLS['student'],
-            4 => self::WEBSITE_URLS['vendor']
+            2 => $correctURLs['localadmin'],
+            3 => $correctURLs['student'],
+            4 => $correctURLs['vendor']
+        };
+    }
+
+    private function getCorrectURLs() : array {
+        $prodURLs = [
+            'localadmin' => 'app.promplanner.net', 
+            'student' => 'student.promplanner.net', 
+            'vendor' => 'vendor.promplanner.net'
+        ];
+
+        $devURLs = [
+            'localadmin' => 'app.promplanner.app',
+            'student' => 'student.promplanner.app',
+            'vendor' => 'vendor.promplanner.app'
+        ];
+
+        return match(true) {
+            str_contains(url()->current(), '.promplanner.net') => $prodURLs,
+            str_contains(url()->current(), '.promplanner.app') => $devURLs
         };
     }
 }
