@@ -39,21 +39,12 @@ class LoginAs extends Model
     }
 
     private function getCorrectURLs() : array {
-        $prodURLs = [
-            'localadmin' => 'app.promplanner.net', 
-            'student' => 'student.promplanner.net', 
-            'vendor' => 'vendor.promplanner.net'
-        ];
+        $suffix = str_contains(url()->current(), '.promplanner.app') ? 'app' : 'net';
 
-        $devURLs = [
-            'localadmin' => 'app.promplanner.app',
-            'student' => 'student.promplanner.app',
-            'vendor' => 'vendor.promplanner.app'
+        return [
+            'localadmin' => "app.promplanner.{$suffix}",
+            'student' => "student.promplanner.{$suffix}",
+            'vendor' => "vendor.promplanner.{$suffix}"
         ];
-
-        return match(true) {
-            str_contains(url()->current(), '.promplanner.net') => $prodURLs,
-            str_contains(url()->current(), '.promplanner.app') => $devURLs
-        };
     }
 }
