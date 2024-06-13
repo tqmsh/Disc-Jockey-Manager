@@ -205,6 +205,10 @@ class ViewAdScreen extends Screen
     public function redirectSamePage() {
         return to_route('platform.ad.list');
     }
+
+    public function redirectLoginAd($login_ad_id) {
+        return to_route('platform.ad.login-ad.edit', $login_ad_id);
+    }
  
     public function filterPendingCampaigns()
     {

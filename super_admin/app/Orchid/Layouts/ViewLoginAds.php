@@ -4,10 +4,12 @@ namespace App\Orchid\Layouts;
 
 use App\Models\Campaign;
 use App\Models\LoginAds;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Orchid\Support\Color;
 
 class ViewLoginAds extends Table
 {
@@ -34,6 +36,16 @@ class ViewLoginAds extends Table
                     return CheckBox::make('campaignsSelected[]')
                             ->value($lgAd->campaign_id)
                             ->checked(false);
+                }),
+
+            TD::make()
+                ->width('80')
+                ->align(TD::ALIGN_LEFT)
+                ->render(function(LoginAds $lgAd) {
+                    return Button::make('Edit')
+                            ->type(Color::PRIMARY())
+                            ->method('redirectLoginAd', ['login_ad_id' => $lgAd->id])
+                            ->icon('pencil');
                 }),
 
             TD::make('Portal')
