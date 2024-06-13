@@ -29,7 +29,7 @@ class ViewEventFoodLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Food $food){
                     return CheckBox::make('items[]')
                         ->value($food->id)

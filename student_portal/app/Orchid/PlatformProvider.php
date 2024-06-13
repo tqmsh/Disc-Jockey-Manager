@@ -65,6 +65,14 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.beauty-groups'),
             ]),
 
+
+            Menu::make('Polls')
+            ->icon('bar-chart')
+            ->route('platform.polls.list'),
+
+            Menu::make('My Specs')
+            ->icon('brush')
+            ->route('platform.studentSpecs.list'),
             Menu::make("PromDate")
                 ->icon('fa.children')
                 ->route('platform.promdate'),

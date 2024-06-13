@@ -56,6 +56,10 @@ use App\Orchid\Screens\ViewPromfluencerScreen;
 use App\Orchid\Screens\ViewPromfluenceScreen;
 use App\Orchid\Screens\ViewStudentBidDetailedBidScreen;
 
+use App\Orchid\Screens\ViewPollScreen;
+use App\Orchid\Screens\VotePollScreen;
+use App\Orchid\Screens\ViewPastPollScreen;
+use App\Orchid\Screens\ViewPollResultScreen;
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -69,11 +73,9 @@ use App\Orchid\Screens\ViewStudentBidDetailedBidScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->push('Main Menu');
-    });
+Route::redirect('/main', '/admin/dashboard')->name('platform.main');
+
+
 
 //show events screen
 Route::middleware(['cors'])->group(function () {
@@ -208,3 +210,9 @@ Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.exampl
 Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
 
 //Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+Route::screen('polls', ViewPollScreen::class)->name('platform.polls.list');
+Route::screen('polls/past', ViewPastPollScreen::class)->name('platform.poll.past');
+Route::screen('polls/vote/{poll}', VotePollScreen::class)->name('platform.poll.vote');
+Route::screen('polls/result/{poll}', ViewPollResultScreen::class)->name('platform.poll.result');
+

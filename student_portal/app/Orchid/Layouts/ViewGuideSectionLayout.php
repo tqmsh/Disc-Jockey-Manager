@@ -29,7 +29,7 @@ class ViewGuideSectionLayout extends Table
     protected function columns(): iterable
     {
         return [
-          TD::make()
+          TD::make('checkboxes')
                 ->render(function (Section $section){
                     return CheckBox::make('sections[]')
                         ->value($section->id)

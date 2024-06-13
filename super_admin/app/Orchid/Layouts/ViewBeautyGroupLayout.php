@@ -31,7 +31,7 @@ class ViewBeautyGroupLayout extends Table
     {
         return [
 
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (BeautyGroup $beautyGroup){
                     return CheckBox::make('beautyGroups[]')
                         ->value($beautyGroup->id)

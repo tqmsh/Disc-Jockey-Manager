@@ -32,7 +32,7 @@ class ViewIncompleteChecklistUsersLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (User $user){
                     return CheckBox::make('users[]')
                         ->value($user->id)

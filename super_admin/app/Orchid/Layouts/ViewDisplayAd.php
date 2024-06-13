@@ -33,7 +33,7 @@ class ViewDisplayAd extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (DisplayAds $display_ad){
                     return CheckBox::make('campaignsSelected[]')
                         ->value($display_ad->campaign->id)

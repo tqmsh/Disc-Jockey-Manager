@@ -137,6 +137,7 @@ class CreateContractScreen extends Screen
             return redirect()->route('platform.contract.list');
         } catch (Exception $e) {
             Alert::error('There was an error adding the contract. Error code: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 
@@ -198,8 +199,8 @@ class CreateContractScreen extends Screen
         }
     }
 
-    /** 
-     * Get an array from a CSV file. 
+    /**
+     * Get an array from a CSV file.
      */
     public function csvToArray($filename='', $delimiter=',') {
         if (!is_readable($filename)) {
