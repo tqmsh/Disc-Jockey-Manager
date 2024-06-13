@@ -51,11 +51,11 @@ class ViewBeautyGroupScreen extends Screen
         return [
             'owned_beauty_group' => ($owned_beauty_group != null) ? $owned_beauty_group : null,
             'current_beauty_group' => ($current_beauty_group != null) ? $current_beauty_group : null,
-            'current_beauty_group_members' => ($current_beauty_group != null) ? $current_beauty_group->members()->paginate(10) 
-                                    : (($owned_beauty_group != null) ? $owned_beauty_group->members()->paginate(10)
+            'current_beauty_group_members' => ($current_beauty_group != null) ? $current_beauty_group->members()->paginate(min(request()->query('pagesize', 10), 100)) 
+                                    : (($owned_beauty_group != null) ? $owned_beauty_group->members()->paginate(min(request()->query('pagesize', 10), 100))
                                     : []),
-            'beauty_group_invitations' => BeautyGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(10),
-            'beautyBids' => BeautyGroupBid::where('beauty_group_id', ($owned_beauty_group != null) ? $owned_beauty_group->id : 0)->where('status', 0)->paginate(10),
+            'beauty_group_invitations' => BeautyGroupMember::where('invitee_user_id', Auth::user()->id)->where('status', 0)->paginate(min(request()->query('pagesize', 10), 100)),
+            'beautyBids' => BeautyGroupBid::where('beauty_group_id', ($owned_beauty_group != null) ? $owned_beauty_group->id : 0)->where('status', 0)->paginate(min(request()->query('pagesize', 10), 100)),
             'default' => null,
         ];
     }
@@ -268,7 +268,7 @@ class ViewBeautyGroupScreen extends Screen
                 'Members in Group' => [
                     Layout::table('current_beauty_group_members', [
 
-                        TD::make()
+                        TD::make('checkboxes')
                             ->render(function (BeautyGroupMember $student){
                                 return ($student->beautyGroup->creator_user_id == Auth::user()->id) ? 
                                  CheckBox::make('members[]')

@@ -31,7 +31,7 @@ class ViewRegionLayout extends Table
     {
         return [
 
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Region $region){
                     return CheckBox::make('regions[]')
                         ->value($region->id)

@@ -14,6 +14,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\LocaladminController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\EventAttendeesController;
+use App\Http\Controllers\PromVoteController;
 use App\Http\Controllers\SeatingController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SongController;
@@ -89,4 +90,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/requestSong', [SongController::class, 'requestSong']);
 
     Route::delete('/deleteSongRequest', [SongController::class, 'deleteSongRequest']);
+
+    // PromVote data
+    Route::get('/voteData/{event_id}/{user_id}', [PromVoteController::class, 'getVoteData']);
 });

@@ -32,7 +32,7 @@ class ViewPositionLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Position $position){
                     return CheckBox::make('positions[]')
                         ->value($position->id)

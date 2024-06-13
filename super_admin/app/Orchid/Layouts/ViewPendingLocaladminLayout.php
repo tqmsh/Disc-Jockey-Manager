@@ -32,7 +32,7 @@ class ViewPendingLocaladminLayout extends Table
     {
 
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Localadmin $Localadmin){
                     return CheckBox::make('localadmins[]')
                         ->value($Localadmin->user_id)

@@ -30,7 +30,7 @@ class ViewAdLayoutActive extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Campaign $campaign){
                     return CheckBox::make('campaignsSelected[]')
                         ->value($campaign->id)

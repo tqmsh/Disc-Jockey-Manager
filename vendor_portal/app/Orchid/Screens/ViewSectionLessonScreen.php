@@ -24,7 +24,7 @@ class ViewSectionLessonScreen extends Screen
         return [
             'guide' => $guide,
             'section' => $section,
-            'lessons' => $section->lessons()->orderBy('ordering', 'asc')->paginate(20),
+            'lessons' => $section->lessons()->orderBy('ordering', 'asc')->paginate(request()->query('pagesize', 20)),
         ];
     }
 

@@ -31,7 +31,7 @@ class ViewPendingCategoryLayout extends Table
     {
         return [
             
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Categories $category){
                     return CheckBox::make('pending_categories[]')
                         ->value($category->id)

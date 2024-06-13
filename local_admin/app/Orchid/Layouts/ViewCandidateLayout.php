@@ -32,7 +32,7 @@ class ViewCandidateLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Candidate $candidate){
                     return CheckBox::make('candidates[]')
                         ->value($candidate->id)
