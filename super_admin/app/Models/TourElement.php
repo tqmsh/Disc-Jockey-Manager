@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
@@ -28,7 +29,8 @@ class TourElement extends Model
     ];
 
     public function portalToName() : string {
-        return match($this->portal) {
+        return match(intval($this->portal)) {
+
             0 => 'Local Admin',
             1 => 'Student',
             2 => 'Vendor'
@@ -39,11 +41,12 @@ class TourElement extends Model
         try{
 
             if(isset($filters['screen'])){
-                $query->where('screen', 'like', '%' . request('screen') . '%');
+                $query ->where('screen', $filters['screen']);
             }
 
+
             if(isset($filters['portal'])){
-                $query->where('portal', '=' . request('portal') . '%');
+                $query ->where('portal', $filters['portal']);
             }
 
             if(isset($filters['name_filter']) && isset($filters['search_input_by'])){
