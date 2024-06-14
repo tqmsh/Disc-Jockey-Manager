@@ -22,6 +22,7 @@ ARG $mail_username=""
 ARG $mail_password=""
 ARG $paypal_sandbox_client_id=""
 ARG $paypal_sandbox_client_secret=""
+ARG $asset_url=""
 
 # Set important variables
 ENV APP_URL=$app_url
@@ -41,6 +42,8 @@ ENV MAIL_USERNAME=$mail_username
 ENV MAIL_PASSWORD=$mail_password
 ENV PAYPAL_SANDBOX_CLIENT_ID=$paypal_sandbox_client_id
 ENV PAYPAL_SANDBOX_CLIENT_SECRET=$paypal_sandbox_client_secret
+
+ENV ASSET_URL=$asset_url
 
 ARG source_folder="super_admin"
 # Command to copy a specific portal's contents
