@@ -55,7 +55,7 @@ class ViewAllTourElementScreen extends Screen
          Button::make('Delete Selected Tour Elements')
              ->method('deleteTourElement')
              ->icon('trash')
-             ->confirm('Are you sure you want to delete the selected beauty groups?'),
+             ->confirm('Are you sure you want to delete the selected tour elements?'),
         ];
     }
 
