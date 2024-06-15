@@ -6,7 +6,6 @@ use App\Models\Campaign;
 use App\Models\Categories;
 use App\Models\Localadmin;
 use App\Models\School;
-use App\Models\TourElement;
 use App\Models\Vendors;
 use App\Models\Student;
 use App\Models\Events;
@@ -14,6 +13,7 @@ use App\Models\EventAttendees;
 use App\Models\EventBids;
 use App\Models\ActualExpenseRevenue;
 use App\Models\DisplayAds;
+use App\Orchid\Filters\StudentNumFilter;
 use App\Orchid\Layouts\Examples\ChartBarExample;
 use App\Orchid\Layouts\Examples\ChartLineExample;
 use Carbon\Carbon;
@@ -23,7 +23,9 @@ use Illuminate\Support\Str;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Repository;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
@@ -39,8 +41,32 @@ class ExampleScreen extends Screen
     urna etiam, primis ut lacus habitasse malesuada ut. Lectus aptent malesuada mattis ut etiam fusce nec sed viverra,
     semper mattis viverra malesuada quam metus vulputate torquent magna, lobortis nec nostra nibh sollicitudin
     erat in luctus.';
+    public
+ $campaigns;
 
-    public $campaigns;
+    public $startdate;
+
+    public $enddate;
+
+    public $schoolId;
+
+    /**
+     * @param $Student_nums, to perform parsing for new students created pie chart
+     * @return array[]
+     */
+    private function student_num_calc($Student_nums){
+        $sn_keys = array();
+        $sn_counts = array();
+        $sn=array();
+        foreach ($Student_nums as $p=>$val) {
+            array_push($sn_keys, $val["date(created_at)"]);
+            array_push($sn_counts, $val["count(*)"]);
+
+        }
+        $sn = [$sn_keys, $sn_counts];
+        return $sn;
+    }
+
     function customSort($a, $b): int
     {
         // Compare order_num values
@@ -63,7 +89,7 @@ class ExampleScreen extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Request $request): iterable
     {
 
         // Questions
@@ -78,6 +104,9 @@ class ExampleScreen extends Screen
         // 1 == accepted
         // 0 == Pending
         // 2 == Rejected
+
+        $this->startdate = $request->input('startdate') ?? "";
+        $this->enddate = $request->input('enddate') ?? "";
 
         $user = Auth::user();
         $localAdmin = LocalAdmin::where('user_id', $user->id)->first();
@@ -100,6 +129,23 @@ class ExampleScreen extends Screen
 
         // Pending Students
         $schoolId = $localAdmin->school_id;
+        $events = Events::where('school_id', $schoolId)->get();
+        $profits = array();
+        $profit_keys = array();
+        foreach($events as $e){
+            $expense = ActualExpenseRevenue::where('event_id', $e['id'])->where('type', 1)->sum('actual');
+            $revenue = ActualExpenseRevenue::where('event_id', $e['id'])->where('type', 2)->sum('actual');
+
+            if($expense== null){
+                $expense = 0;
+            }
+            if($revenue== null){
+                $expense = 0;
+            }
+            array_push($profits,  ($revenue-$expense));
+            array_push($profit_keys,  ($e['event_name']));
+        }
+
         $numberOfStudents = Student::where('school_id', $schoolId)->count();
         $pendingStudents  = Student::where('school_id', $schoolId)->where('account_status', 0)->count();
 
@@ -114,7 +160,7 @@ class ExampleScreen extends Screen
         //get the count of all bids placed on all events at the currently authenticated user's school
         $DirectBidsRecieved = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->count();
 
-        // Direct Bids Replied tolar
+        // Direct Bids Replied to
         $DirectBidsRepliedTo = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->whereIn('status', [1,2])->count();
 
         // Total Revenue:
@@ -126,30 +172,26 @@ class ExampleScreen extends Screen
         $totalExpenses = $expensesRecord ? $expensesRecord->actual : "No expenses";
 
         $this->campaigns = Campaign::where("region_id", School::find(Localadmin::where("user_id", Auth::user()->id)->first()->school_id)->region_id)->where("active", 1)->get();
+        $Student_nums = Student::filters([StudentNumFilter::class])->get();
 
+        $sn = $this->student_num_calc($Student_nums);
         return [
             "ad_ids" =>"",
             'charts'  => [
                 [
-                    'name'   => 'Some Data',
-                    'values' => [25, 40, 30, 35, 8, 52, 17],
-                    'labels' => ['12am-3am', '3am-6am', '6am-9am', '9am-12pm', '12pm-3pm', '3pm-6pm', '6pm-9pm'],
+                    'name'   => 'New Students Over a Period',
+                    'values' => $sn[1],
+                    'labels' => $sn[0],
                 ],
+
+            ],
+
+            'chartProfit' => [
                 [
-                    'name'   => 'Another Set',
-                    'values' => [25, 50, -10, 15, 18, 32, 27],
-                    'labels' => ['12am-3am', '3am-6am', '6am-9am', '9am-12pm', '12pm-3pm', '3pm-6pm', '6pm-9pm'],
-                ],
-                [
-                    'name'   => 'Yet Another',
-                    'values' => [15, 20, -3, -15, 58, 12, -17],
-                    'labels' => ['12am-3am', '3am-6am', '6am-9am', '9am-12pm', '12pm-3pm', '3pm-6pm', '6pm-9pm'],
-                ],
-                [
-                    'name'   => 'And Last',
-                    'values' => [10, 33, -8, -3, 70, 20, -34],
-                    'labels' => ['12am-3am', '3am-6am', '6am-9am', '9am-12pm', '12pm-3pm', '3pm-6pm', '6pm-9pm'],
-                ],
+                    'name'=> 'Profit by Event',
+                    'values'=> $profits,
+                    'labels' => $profit_keys
+                ]
             ],
             'table'   => [
                 new Repository(['id' => 100, 'name' => self::TEXT_EXAMPLE, 'price' => 10.24, 'created_at' => '01.01.2020']),
@@ -233,10 +275,7 @@ class ExampleScreen extends Screen
             ];
         }
         usort($arr_ads, [$this, 'customSort']);
-
-
         return [
-
             Layout::metrics([
                 'Total Students' => 'metrics.totalStudents',
                 // Replaced pending students with days until next event
@@ -245,7 +284,6 @@ class ExampleScreen extends Screen
                 'Total Prom Night Tickets Sold' => 'metrics.totalTicketsSold',
                 'Prom Night Tickets Sold %' => 'metrics.paidAttendeesCountPercentage',
             ]),
-
             Layout::metrics([
                 'Direct Bids received' => 'metrics.directBidsReceived',
                 'Direct Bids replied' => 'metrics.directBidsRepliedTo',
@@ -253,10 +291,40 @@ class ExampleScreen extends Screen
                 'Total Expenses' => 'metrics.totalExpenses',
             ]),
 
+            Layout::rows([
+                DateTimer::make('startdate')
+                    ->title('Starting date')
+                    ->format('Y-m-d')
+                    ->value($this->startdate),
+
+                DateTimer::make('enddate')
+                    ->title('End date')
+                    ->format('Y-m-d')
+                    ->value($this->enddate),
+
+                Button::make('Submit!')
+                    ->method('rel'),
+
+            ]),
+
+
+            ChartLineExample::make('charts', 'New Students')
+                ->description('New Students Created Over Time Period.'),
+
+
+
+
+            ChartBarExample::make('chartProfit', 'Profit By Event')
+            ->description('Events and how much profit made for each one. ')
             //Layout::view("card_style"),
 
             //Layout::columns([Layout::view("ad_marquee", ["ads"=>$arr_ads])]),
         ];
     }
+    public function rel(){
+        return redirect()->route('platform.example', request(['startdate', 'enddate', 'schoolId'=>$this->schoolId]));
+
+    }
+
 
 }
