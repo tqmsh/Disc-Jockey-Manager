@@ -46,13 +46,13 @@ class CreateSongRequestScreen extends Screen
 
         $userSongRequests = Song::whereIn('id', $songRequestIds)
             ->filter($filters)
-            ->paginate(10);
+            ->paginate(min(request()->query('pagesize', 10), 100));
 
         $songs = Song::whereNotIn('id', $noPlaySongIds)
             ->whereNotIn('id', $songRequestIds)
             ->where('status', '1')
             ->filter($filters)
-            ->paginate(10);
+            ->paginate(min(request()->query('pagesize', 10), 100));
 
         return [
             "event" => $event,

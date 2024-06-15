@@ -83,6 +83,10 @@ class PlatformProvider extends OrchidServiceProvider
                     ->icon('fa.shirt')
                     ->route('platform.beauty-groups'),
                 ]),
+            
+            Menu::make('Polls')
+                ->icon('bar-chart')
+                ->route('platform.all.polls'),
 
             // Menu::make('Contracts')
             //     ->icon('doc')

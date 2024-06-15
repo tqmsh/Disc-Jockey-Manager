@@ -30,7 +30,7 @@ class ViewGuideLayout extends Table
     protected function columns(): iterable
     {
         return [
-          TD::make()
+          TD::make('checkboxes')
                 ->render(function (Guide $guide){
                     return CheckBox::make('guides[]')
                         ->value($guide->id)

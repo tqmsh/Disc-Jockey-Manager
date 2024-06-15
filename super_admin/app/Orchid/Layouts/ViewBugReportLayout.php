@@ -30,7 +30,7 @@ class ViewBugReportLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (BugReport $bug_report){
                     return CheckBox::make('bug_reports[]')
                         ->value($bug_report->id)

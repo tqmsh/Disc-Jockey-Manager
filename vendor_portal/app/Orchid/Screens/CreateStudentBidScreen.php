@@ -34,7 +34,7 @@ class CreateStudentBidScreen extends Screen
     public function query(Student $student): iterable
     {
         $this->vendor = Vendors::where('user_id', Auth::user()->id)->first();
-        abort_if(is_null($student->interested_vendor_categories) or !in_array($this->vendor->category_id, $student->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');   
+        abort_if(is_null($student->interested_vendor_categories) or !in_array($this->vendor->category_id, $student->interested_vendor_categories, true), 403, 'You are not authorized to view this page.');
         return [
             'student' => $student
         ];
@@ -122,7 +122,7 @@ class CreateStudentBidScreen extends Screen
                     })
                     ->required()
                     ->empty('Start typing to search...')
-                    ->help('Select the package you would like to bid on for this event.'), 
+                    ->help('Select the package you would like to bid on for this event.'),
 
                 TextArea::make('notes')
                     ->title('Bid Notes')
@@ -150,11 +150,11 @@ class CreateStudentBidScreen extends Screen
 
         $vendor = Vendors::where('user_id', Auth::user()->id)->first();
 
-            try{   
+            try{
 
                 if ((Auth::user()->vendor->credits) >= 50) {
                     if($this->validBid($student)){
-                        
+
                         StudentBids::create([
                             'user_id' => $vendor->user_id,
                             'student_user_id' => $student->user_id,
@@ -176,9 +176,9 @@ class CreateStudentBidScreen extends Screen
                             'message' => 'You have a new bid placed on you from: ' . $vendor->company_name,
                             'action' => '/admin/bids',
                         ]));
-                            
+
                         Toast::success('Bid created succesfully');
-                            
+
                         return redirect()->route('platform.bidopportunities.list');
                     }else{
                         Toast::error('Bid already exists');
@@ -189,6 +189,7 @@ class CreateStudentBidScreen extends Screen
                 }
             }catch(Exception $e){
                 Alert::error('Error: ' . $e->getMessage());
+                return back()->withInput();
             }
     }
 

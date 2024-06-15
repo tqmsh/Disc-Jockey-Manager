@@ -16,7 +16,7 @@ class ViewGuideScreen extends Screen
     public function query(): iterable
     {
         return [
-            'guides' => Guide::orderBy('ordering', 'asc')->where('category', 3)->paginate(20),
+            'guides' => Guide::orderBy('ordering', 'asc')->where('category', 3)->paginate(request()->query('pagesize', 20)),
         ];
     }
 

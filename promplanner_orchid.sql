@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2024 at 09:51 PM
+-- Generation Time: Jun 13, 2024 at 11:50 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -975,6 +975,38 @@ DELIMITER $$
 CREATE TRIGGER `delete_localadmin` BEFORE DELETE ON `localadmins` FOR EACH ROW DELETE FROM users WHERE id = old.user_id
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_ads`
+--
+
+CREATE TABLE `login_ads` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `portal` tinyint(4) NOT NULL,
+  `campaign_id` bigint(20) UNSIGNED NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subtitle` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `button_title` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_as`
+--
+
+CREATE TABLE `login_as` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `la_key` bigint(20) NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `portal` tinyint(4) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2409,6 +2441,21 @@ ALTER TABLE `localadmins`
   ADD KEY `school_id` (`school_id`);
 
 --
+-- Indexes for table `login_ads`
+--
+ALTER TABLE `login_ads`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `campaign_id` (`campaign_id`);
+
+--
+-- Indexes for table `login_as`
+--
+ALTER TABLE `login_as`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `la_key` (`la_key`,`user_id`,`portal`),
+  ADD KEY `acc_user_id` (`user_id`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -2945,6 +2992,18 @@ ALTER TABLE `localadmins`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
+-- AUTO_INCREMENT for table `login_ads`
+--
+ALTER TABLE `login_ads`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `login_as`
+--
+ALTER TABLE `login_as`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -3399,6 +3458,18 @@ ALTER TABLE `limo_group_members`
 ALTER TABLE `localadmins`
   ADD CONSTRAINT `localadmin_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `localadmins_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `login_ads`
+--
+ALTER TABLE `login_ads`
+  ADD CONSTRAINT `camp_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `login_as`
+--
+ALTER TABLE `login_as`
+  ADD CONSTRAINT `acc_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `national_candidates`

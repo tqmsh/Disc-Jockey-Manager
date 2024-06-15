@@ -2,8 +2,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Orchid\Screens\BuyTicketsScreen;
 use App\Orchid\Screens\ViewEventScreen;
-
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +30,30 @@ Route::get('success/cancel', [ViewEventScreen::class, 'cancel'])->name('paypal_c
 
 Route::post('/user/tab-closed', [LoginController::class, 'logout']);
 
+Route::get('/disable-ad', function() {
+    return view('ad_blocker_blocker');
+});
+
+Route::get('/login-as/{key}', function(Request $request, string $key) {
+    $query = \App\Models\LoginAs::where('la_key', $key)->where('portal', 3);
+
+    if($query->exists()) {
+        // Log out user before signing in as another user
+        if(Auth::check()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
+        // Login into target user
+        Auth::loginUsingId($query->first()->user_id);
+        $request->session()->regenerate();
+
+        $query->delete();
+
+        return redirect('/admin/dashboard');
+    } else {
+        // Show "Not Found" screen.
+        abort(404);
+    }
+});

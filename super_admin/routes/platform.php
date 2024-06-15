@@ -109,7 +109,10 @@ use App\Orchid\Screens\CreateChecklistScreen;
 use App\Orchid\Screens\CreateDisplayAdScreen;
 use App\Orchid\Screens\EditDisplayAdScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
+use App\Orchid\Screens\EditLoginAdScreen;
 use App\Orchid\Screens\ViewAllPromfluencerScreen;
+use App\Orchid\Screens\ViewLoginAsGeneratedScreen;
+use App\Orchid\Screens\ViewLoginAsScreen;
 use App\Orchid\Screens\ViewPromfluencerDetailedScreen;
 use App\Orchid\Screens\ViewPromfluencerScreen;
 use App\Orchid\Screens\ViewVideoTutorialScreen;
@@ -127,11 +130,7 @@ use App\Orchid\Screens\ViewVideoTutorialScreen;
 
 
 // Orchid main menu
-Route::screen('main', ExampleScreen::class)->name('platform.main')
-->breadcrumbs(function (Trail $trail) {
-    return $trail
-        ->push('Main Menu');
-});
+Route::redirect('/main', '/admin/dashboard')->name('platform.main');
 
 //show email sender
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
@@ -264,6 +263,9 @@ Route::screen('/guides/{guide}/sections/{section}/lessons/create', CreateSection
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
 
+// Login Ads
+Route::screen('/campaigns/login-ad/{loginAd}/edit', EditLoginAdScreen::class)->name('platform.ad.login-ad.edit');
+
 // Display Ads (ad blockers block routes with "display ads" in it, so we go with propoganda)
 Route::screen('/campaigns/propoganda/create', CreateDisplayAdScreen::class)->name('platform.ad.create.display-ad');
 Route::screen('/campaigns/propoganda/{display_ad}/edit', EditDisplayAdScreen::class)->name('platform.ad.edit.display-ad');
@@ -350,6 +352,10 @@ Route::screen('/video-tutorials', ViewVideoTutorialScreen::class)->name('platfor
 Route::screen('/tourel/create', CreateTourElementScreen::class)->name('platform.tour-element.create');
 Route::screen('/tourel/{tourElement}/edit', EditTourElementScreen::class)->name('platform.tour-element.edit');
 Route::screen('/tourel', ViewAllTourElementScreen::class)->name('platform.tour-element.list');
+
+// Login as
+Route::screen('/login-as', ViewLoginAsScreen::class)->name('platform.login-as.view');
+Route::screen('/login-as/generated/{loginAs}', ViewLoginAsGeneratedScreen::class)->name('platform.login-as.generated');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

@@ -56,7 +56,7 @@
 </head>
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }}" data-controller="pull-to-refresh">
-
+    
 <div class="container-fluid" data-controller="@yield('controller')" @yield('controller-data')>
 
     <div class="row">
@@ -76,7 +76,5 @@
 </div>
 
 @stack('scripts')
-
-
 </body>
 </html>

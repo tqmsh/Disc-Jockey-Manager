@@ -99,13 +99,14 @@ class CreateChecklistScreen extends Screen
             ]);
 
             // create new checklist
-            Checklist::create($fields);          
+            Checklist::create($fields);
 
             Toast::success('Checklist created successfully');
 
             return to_route('platform.checklist.list');
         } catch(\Exception $e) {
             Toast::error('There was an error creating the checklist. Error code: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 }

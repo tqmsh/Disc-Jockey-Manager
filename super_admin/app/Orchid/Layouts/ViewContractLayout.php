@@ -30,7 +30,7 @@ class ViewContractLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Contract $contract) {
                     return CheckBox::make('contracts[]')
                         ->value($contract->id)
