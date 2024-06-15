@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 13, 2024 at 11:50 PM
+-- Generation Time: Jun 15, 2024 at 10:36 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -989,8 +989,8 @@ CREATE TABLE `login_ads` (
   `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `subtitle` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `button_title` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` int(11) DEFAULT NULL,
-  `updated_at` int(11) DEFAULT NULL
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1001,7 +1001,7 @@ CREATE TABLE `login_ads` (
 
 CREATE TABLE `login_as` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `la_key` bigint(20) NOT NULL,
+  `la_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `portal` tinyint(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1915,6 +1915,114 @@ CREATE TABLE `student_specs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tour_element`
+--
+
+CREATE TABLE `tour_element` (
+  `id` int(11) NOT NULL,
+  `screen` text NOT NULL,
+  `portal` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `element` text NOT NULL,
+  `description` text NOT NULL,
+  `order_element` int(11) NOT NULL,
+  `extra` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tour_element`
+--
+
+INSERT INTO `tour_element` (`id`, `screen`, `portal`, `title`, `element`, `description`, `order_element`, `extra`, `created_at`, `updated_at`) VALUES
+(1, 'admin/dashboard', 0, 'Report a bug', '#reportabug', 'Here is a place you can report bugs. We are in beta right now and want feedback to refine the system', 2, '', NULL, NULL),
+(2, 'admin/dashboard', 0, 'Roadmap', '#roadmap', 'The roadmap describes features that are currently available and those that will be available in future releases.', 1, '', NULL, NULL),
+(4, 'admin/dashboard', 0, 'Socials', '#socials', 'All the social networks that prom planner belongs to and you are more than free to communicate with us on any of these.', 3, '', '2024-06-05 22:19:00', '2024-06-05 22:41:14'),
+(5, 'admin/dashboard', 0, 'Sitewide Notice', '#siteWideNotice', 'This is a sitewide notice, provides information about the prom planner', 4, NULL, '2024-06-06 22:00:44', '2024-06-07 07:30:50'),
+(6, 'admin/events', 0, 'Add New Event', 'a[href', 'Here is a place where you can configure new events for your prom committee.', 1, 'admin/events/create', '2024-06-06 22:00:44', '2024-06-07 07:45:00'),
+(7, 'admin/events', 0, 'Suggest Vendor', 'a[href', 'Here you can suggest a vendor to be added to our system for prom events', 2, 'admin/events/suggestVendor', '2024-06-07 07:52:47', '2024-06-07 07:52:47'),
+(8, 'admin/events', 0, 'Delete Record', 'button[formaction', 'Select any events you want to delete in the table below and press this button to do so', 3, 'admin/events/deleteEvents', '2024-06-07 07:54:08', '2024-06-07 07:54:08'),
+(9, 'admin/events', 0, 'Filter Records', 'button[formaction', 'Filter existing events by country, province etc..', 4, 'admin/events/filter', '2024-06-07 07:55:30', '2024-06-07 07:55:30'),
+(10, 'admin/events', 0, 'Configure Columns', '#configureColumns', 'Configure existing columns (see which columns you want to see).', 5, NULL, '2024-06-07 08:40:44', '2024-06-07 08:40:44'),
+(11, 'admin/events', 0, 'See All Records', '#tableLabel', 'Here you can see all records and view students', 6, NULL, '2024-06-07 08:44:02', '2024-06-07 08:44:02'),
+(12, 'admin/students', 0, 'Create New Students', 'a[href', 'Here you can add new students', 1, 'admin/students/create', '2024-06-07 09:03:38', '2024-06-07 09:03:38'),
+(13, 'admin/students', 0, 'Delete Students', 'button[formaction', 'Select any students you want to delete in the table below and press this button to do so', 2, 'admin/students/deleteStudents', '2024-06-07 09:04:50', '2024-06-07 09:04:50'),
+(14, 'admin/students', 0, 'Contact Students', 'a[href', 'Contact students to send a student an email.', 3, 'admin/contact-students', '2024-06-07 09:05:54', '2024-06-07 09:05:54'),
+(15, 'admin/students', 0, 'Filter Students', 'button[formaction', 'Here you can filter students by event or ticket status as well as order students.', 4, 'admin/students/filter', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(16, 'admin/students', 0, 'Configure Columns', '#configureColumns', 'Configure existing columns (see which columns you want to see).', 5, NULL, '2024-06-07 09:33:56', '2024-06-07 09:33:56'),
+(17, 'admin/students', 0, 'View Records', '#tableLabel', 'Here you can view all records for students', 6, NULL, '2024-06-07 09:59:36', '2024-06-07 09:59:36'),
+(18, 'admin/pendingstudents', 0, 'Accept Students', 'button[formaction', 'Here you can accept students that have registered.', 1, 'admin/pendingstudents/acceptStudents', '2024-06-07 10:17:57', '2024-06-07 10:20:00'),
+(19, 'admin/pendingstudents', 0, 'Reject Students', 'button[formaction', 'Here you can reject students that have registered', 2, 'admin/pendingstudents/deleteStudents', '2024-06-07 10:19:38', '2024-06-07 10:19:38'),
+(20, 'admin/pendingstudents', 0, 'Filter Pending Students', 'button[formaction', 'Here you can filter pending students event/ticket status or order the table however you please', 3, 'admin/pendingstudents/filter', '2024-06-07 10:22:32', '2024-06-07 10:22:32'),
+(21, 'admin/pendingstudents', 0, 'View Records', '#tableLabel', 'Here you can view all pending students', 4, NULL, '2024-06-07 10:23:47', '2024-06-07 10:23:47'),
+(22, 'admin/couples', 0, 'Filter Couples', 'button[formaction', 'Here you can filter couples in your school by event.', 1, 'admin/couples/filter', '2024-06-13 21:16:40', '2024-06-13 21:16:40'),
+(23, 'admin/couples', 0, 'View Records', '#tableLabel', 'Here you can view all couples', 2, NULL, '2024-06-13 21:17:46', '2024-06-13 21:17:46'),
+(24, 'admin/limo-groups', 0, 'View Limo Groups', '#tableLabel', 'View different limo groups and see their members by selecting members.', 1, NULL, '2024-06-13 21:21:43', '2024-06-13 21:21:43'),
+(25, 'admin/beauty-groups', 0, 'View Beauty Groups', '#tableLabel', 'View different beauty groups and see their members', 1, NULL, '2024-06-13 21:22:32', '2024-06-13 21:22:32'),
+(26, 'admin/profit', 0, 'View Profit', '#tableLabel', 'You can view the budget and your actual profit for different events here.', 1, NULL, '2024-06-13 23:01:15', '2024-06-13 23:01:15'),
+(27, 'admin/profit', 0, 'Configure Columns', '#configureColumns', 'You can configure the columns you want to see here.', 2, NULL, '2024-06-13 23:03:04', '2024-06-13 23:03:04'),
+(28, 'admin/checklists', 0, 'View Checklists', '#tableLabel', 'View items in the checklist', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(29, 'admin/guides', 0, 'View Guides', '#tableLabel', 'View all guides that provide lessons about prom for you!', 1, NULL, '2024-06-13 23:24:54', '2024-06-13 23:24:54'),
+(30, 'admin/dashboard', 2, 'Report a bug', '#reportabug', 'Here is a place you can report bugs. We are in beta right now and want feedback to refine the system', 2, '', NULL, NULL),
+(31, 'admin/dashboard', 2, 'Roadmap', '#roadmap', 'The roadmap describes features that are currently available and those that will be available in future releases.', 1, '', NULL, NULL),
+(32, 'admin/dashboard', 2, 'Socials', '#socials', 'All the social networks that prom planner belongs to and you are more than free to communicate with us on any of these.', 3, '', '2024-06-05 22:19:00', '2024-06-05 22:41:14'),
+(33, 'admin/dashboard', 2, 'Sitewide Notice', '#siteWideNotice', 'This is a sitewide notice, provides information about the prom planner', 4, NULL, '2024-06-06 22:00:44', '2024-06-07 07:30:50'),
+(34, 'admin/guides', 2, 'View Guides', '#tableLabel', 'View all guides that provide lessons about prom for you!', 1, NULL, '2024-06-13 23:24:54', '2024-06-13 23:24:54'),
+(35, 'admin/bidopportunities', 2, 'View Bids', '#titlebig', 'View bids in each category', 4, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(36, 'admin/bidopportunities', 2, 'Events B2B Bids', '#button-tab-events-b2b', 'You can view bids for B2B', 1, '', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(37, 'admin/bidopportunities', 2, 'Students B2C Bids', '#button-tab-students-b2c', 'You can view bids for B2C', 2, '', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(38, 'admin/bidopportunities', 2, 'Limo Group Bids', '#button-tab-limo-groups', 'You can view bids for limo groups', 3, '', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(39, 'admin/bidopportunities', 2, 'Filter Bid Opportunities', 'button[formaction', 'Filter bids by region', 5, 'admin/bidopportunities/filter', '2024-06-07 07:54:08', '2024-06-07 07:54:08'),
+(40, 'admin/bidopportunities', 2, 'Suggest Category', 'button[formaction', 'Suggest a category to add. ', 6, 'admin/bidopportunities/createCategory', '2024-06-07 07:55:30', '2024-06-07 07:55:30'),
+(41, 'admin/bids/history', 2, 'View Previous Bids', '#titlebig', 'View bids in each category', 4, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(42, 'admin/bids/history', 2, 'Events Bids', '#button-tab-event-bids', 'You can view bids for events', 1, '', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(43, 'admin/bids/history', 2, 'Students Bids', '#button-tab-student-bids', 'You can view bids for students', 2, '', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(44, 'admin/bids/history', 2, 'Limo Group Bids', '#button-tab-limo-groups', 'You can view bids for limo groups', 3, '', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(45, 'admin/bids/history', 2, 'Filter Bid Opportunities', 'button[formaction', 'Filter bids by region', 5, 'admin/bids/history/filter', '2024-06-07 07:54:08', '2024-06-07 07:54:08'),
+(46, 'admin/packages', 2, 'Create New Package', 'a[href', 'Here you can add new packages', 1, 'admin/packages/create', '2024-06-07 09:03:38', '2024-06-07 09:03:38'),
+(47, 'admin/packages', 2, 'Delete Packages', 'button[formaction', 'Select any packages you want to delete in the table below and press this button to do so', 2, 'admin/packages/deletePackages', '2024-06-07 09:04:50', '2024-06-07 09:04:50'),
+(48, 'admin/packages', 2, 'View Records', '#tableLabel', 'Here you can view all records for packages', 6, NULL, '2024-06-07 09:59:36', '2024-06-07 09:59:36'),
+(49, 'admin/dashboard', 1, 'Report a bug', '#reportabug', 'Here is a place you can report bugs. We are in beta right now and want feedback to refine the system', 2, '', NULL, NULL),
+(50, 'admin/dashboard', 1, 'Roadmap', '#roadmap', 'The roadmap describes features that are currently available and those that will be available in future releases.', 1, '', NULL, NULL),
+(51, 'admin/dashboard', 1, 'Socials', '#socials', 'All the social networks that prom planner belongs to and you are more than free to communicate with us on any of these.', 3, '', '2024-06-05 22:19:00', '2024-06-05 22:41:14'),
+(52, 'admin/dashboard', 1, 'Sitewide Notice', '#siteWideNotice', 'This is a sitewide notice, provides information about the prom planner', 4, NULL, '2024-06-06 22:00:44', '2024-06-07 07:30:50'),
+(53, 'admin/my-specs', 1, 'View Specs', '#titlebig', 'View the specs in each category', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(54, 'admin/my-specs', 1, 'Edit/See Specs', '#modals-container', 'You can view the specs here and edit them in the button above', 2, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(55, 'admin/checklists', 1, 'View Checklists', '#tableLabel', 'View items in the checklist', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(56, 'admin/dresses', 1, 'View Dresses', '#tableLabel', 'View all dresses', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(57, 'admin/dresses', 1, 'Add to Wishlist', 'a[href', 'You can add to wishlists here', 2, 'admin/dresses/wishlist', '2024-06-07 09:05:54', '2024-06-07 09:05:54'),
+(58, 'admin/dresses', 1, 'Claim dress', 'button[formaction', 'Here you can claim a dress just for you', 3, 'admin/dresses/noClaimedDress', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(59, 'admin/promfluence', 1, 'View promfluence', '#titlebig', 'View prom personal info', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(60, 'admin/promfluence', 1, 'Edit promfluence', 'a[href', 'Edit the prom personal info here.', 2, 'admin/promfluence/edit', '2024-06-07 09:05:54', '2024-06-07 09:05:54'),
+(61, 'admin/promfluence', 1, 'Delete promfluence', 'button[formaction', 'Here you can delete your promfluence info', 3, 'admin/promfluence/deletePromfluencer', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(62, 'admin/guides', 1, 'View Guides', '#tableLabel', 'View all guides that provide lessons about prom for you!', 1, NULL, '2024-06-13 23:24:54', '2024-06-13 23:24:54'),
+(63, 'admin/promdate', 1, 'Prom Date', '#titlebig', 'View prom dates here and perform any actions using the \"actions\" button', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(64, 'admin/promdate', 1, 'Singles Prom Date', '#button-tab-singles', 'View singles available for prom dates', 2, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(65, 'admin/promdate', 1, 'Couples Prom Date', '#button-tab-couples', 'View couples available for prom dates', 3, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(66, 'admin/beauty-groups', 1, 'Beauty Groups', '#titlebig', 'View your own beauty group, and invitations to others. ', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(67, 'admin/beauty-groups', 1, 'Beauty group info', '#button-tab-beauty-group-info', 'View beauty groups info. ', 2, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(68, 'admin/beauty-groups', 1, 'Members in group', '#button-tab-members-in-group', 'View all your group members', 3, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(69, 'admin/beauty-groups', 1, 'Beauty group invitations', '#button-tab-received-beauty-group-invitations', 'View your beauty group invitations', 4, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(70, 'admin/limo-groups', 1, 'Limo Groups', '#titlebig', 'View your own limo group, and invitations to others. ', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(71, 'admin/limo-groups', 1, 'Limo group info', '#button-tab-limo-group-info', 'View limo groups info. ', 2, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(72, 'admin/limo-groups', 1, 'Members in group', '#button-tab-members-in-group', 'View all your group members', 3, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(73, 'admin/limo-groups', 1, 'Limo group invitations', '#button-tab-received-limo-group-invitations', 'View your limo group invitations', 4, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(74, 'admin/limo-groups', 1, 'Limo group bids', '#button-tab-pending-bids', 'View your limo group bids', 5, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(75, 'admin/limo-groups', 1, 'Send a message', 'button[formaction', 'Here you can send an email to anyone. ', 6, 'admin/limo-groups/sendMessage', '2024-06-07 09:13:02', '2024-06-07 09:13:02'),
+(76, 'admin/events', 1, 'Contact prom committee', 'a[href', 'Contact your prom committee', 4, 'admin/contact-prom-committees', '2024-06-07 09:05:54', '2024-06-07 09:05:54'),
+(77, 'admin/events', 1, 'All events', '#button-tab-all-events', 'View all events here', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(78, 'admin/events', 1, 'View your registered event', '#button-tab-your-registered-events', 'View all your registered events', 2, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(79, 'admin/events', 1, 'Event invitations', '#button-tab-event-invitations', 'View your event invitations', 3, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(80, 'admin/bids', 1, 'pending bids', '#button-tab-pending-bids', 'View pending bids here', 1, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(81, 'admin/bids', 1, 'Previous bids', '#button-tab-previous-bids', 'View your previous bids here. ', 2, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(82, 'admin/bids', 1, 'Limo group bids', '#button-tab-limo-group-bids', 'View your limo group bids', 3, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(83, 'admin/bids', 1, 'Beauty group bids', '#button-tab-beauty-group-bids', 'View your beauty group bids', 4, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40'),
+(84, 'admin/bids', 1, 'Bids', '#titlebig', 'Prom related vendors can place bids to provide you a service/product. ', 5, NULL, '2024-06-13 23:08:40', '2024-06-13 23:08:40');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `universal_expenses_revenues`
 --
 
@@ -2728,6 +2836,12 @@ ALTER TABLE `student_specs`
   ADD KEY `student_user_id_specs` (`student_user_id`);
 
 --
+-- Indexes for table `tour_element`
+--
+ALTER TABLE `tour_element`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `universal_expenses_revenues`
 --
 ALTER TABLE `universal_expenses_revenues`
@@ -2995,7 +3109,7 @@ ALTER TABLE `localadmins`
 -- AUTO_INCREMENT for table `login_ads`
 --
 ALTER TABLE `login_ads`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `login_as`
@@ -3188,6 +3302,12 @@ ALTER TABLE `student_poll_votes`
 --
 ALTER TABLE `student_specs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `tour_element`
+--
+ALTER TABLE `tour_element`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `universal_expenses_revenues`
@@ -3458,12 +3578,6 @@ ALTER TABLE `limo_group_members`
 ALTER TABLE `localadmins`
   ADD CONSTRAINT `localadmin_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `localadmins_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `login_ads`
---
-ALTER TABLE `login_ads`
-  ADD CONSTRAINT `camp_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `login_as`
