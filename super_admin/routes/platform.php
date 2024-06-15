@@ -106,6 +106,7 @@ use App\Orchid\Screens\CreateChecklistScreen;
 use App\Orchid\Screens\CreateDisplayAdScreen;
 use App\Orchid\Screens\EditDisplayAdScreen;
 use App\Orchid\Screens\EditGuideSectionScreen;
+use App\Orchid\Screens\EditLoginAdScreen;
 use App\Orchid\Screens\ViewAllPromfluencerScreen;
 use App\Orchid\Screens\ViewLoginAsGeneratedScreen;
 use App\Orchid\Screens\ViewLoginAsScreen;
@@ -258,6 +259,9 @@ Route::screen('/guides/{guide}/sections/{section}/lessons/create', CreateSection
 // Campaigns
 Route::screen('/campaigns', ViewAdScreen::class)->name('platform.ad.list');
 Route::screen('/campaigns/{ad}/edit', EditAdScreen::class)->name('platform.ad.edit');
+
+// Login Ads
+Route::screen('/campaigns/login-ad/{loginAd}/edit', EditLoginAdScreen::class)->name('platform.ad.login-ad.edit');
 
 // Display Ads (ad blockers block routes with "display ads" in it, so we go with propoganda)
 Route::screen('/campaigns/propoganda/create', CreateDisplayAdScreen::class)->name('platform.ad.create.display-ad');
