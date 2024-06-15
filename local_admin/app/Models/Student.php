@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use App\Models\Localadmin;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 use Orchid\Support\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ class Student extends Model
 {
     use HasFactory;
     use AsSource;
+    use Filterable;
 
     protected $fillable = [
         'user_id',
@@ -30,7 +32,7 @@ class Student extends Model
         'school',
         'allergies',
     ];
-    
+
     public function scopeFilter($query, array $filters){
         try{
 
@@ -50,7 +52,7 @@ class Student extends Model
             if(!empty($filters['grade'])){
                 $query->where('grade', 'like', '%' . $filters['grade'] . '%');
             }
-            
+
             if(isset($filters['event_id']) || isset($filters['ticketstatus'])){
                 $query->join('event_attendees', 'students.user_id', '=', 'event_attendees.user_id');
                 (isset($filters['event_id'])) ? $query->where('event_attendees.event_id', $filters['event_id']) : null;

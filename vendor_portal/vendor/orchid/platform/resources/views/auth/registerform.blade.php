@@ -103,7 +103,7 @@
         <div class="mb-3">
 
             <label class="form-label">
-                {{ __('Catagory') }}
+                {{ __('Category') }}
             </label>
 
             {!! \Orchid\Screen\Fields\Select::make('category_id')->fromQuery(App\Models\Categories::query()->where('status', 1), 'name')->autofocus()->empty('Start typing to search...') !!}
@@ -147,13 +147,11 @@
         </div>
     </div>    
     
-    <div class="mt-5 row align-items-center">
-        <div class="col-md-12 col-xs-12">
-            <button id="button-login" type="submit" class="btn btn-default btn-block" tabindex="3" style="width:470px">
-                <x-orchid-icon path="check" class="small me-2" />
-                {{ __('Register') }}
-            </button>
-        </div>
-        <a href="/admin/login" class="form-label text-base mt-4 align-items-center">Log In</a>
+    <div id="button-div">
+        <button id="button-login" type="submit" class="btn btn-default btn-block" tabindex="3">
+            <x-orchid-icon path="check" class="small me-2" />
+            {{ __('Register') }}
+        </button>
+        <a href="/admin/login" class="form-label text-base mt-4 align-items-center" style="font-size:0.9rem">Already have an account? Sign-in here.</a>
     </div>
 </div>
