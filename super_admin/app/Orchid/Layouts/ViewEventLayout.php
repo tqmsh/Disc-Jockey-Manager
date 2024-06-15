@@ -97,7 +97,7 @@ class ViewEventLayout extends Table
         ];
         
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Events $event){
                     return CheckBox::make('events[]')
                         ->value($event->id)

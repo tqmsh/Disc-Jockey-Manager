@@ -25,8 +25,8 @@ class ViewCategoryScreen extends Screen
     public function query(): iterable
     {
         return [
-            'categories' => Categories::latest()->where('status', 1)->paginate(8),
-            'pending_categories' => Categories::latest()->where('status', 0)->paginate(8)
+            'categories' => Categories::latest()->where('status', 1)->paginate(min(request()->query('pagesize', 10), 100)),
+            'pending_categories' => Categories::latest()->where('status', 0)->paginate(min(request()->query('pagesize', 10), 100))
         ];
     }
 

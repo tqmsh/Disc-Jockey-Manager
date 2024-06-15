@@ -31,7 +31,7 @@ class ViewRequestersLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function ($requester) {
                     return CheckBox::make('requesterList[]')
                         ->value($requester)

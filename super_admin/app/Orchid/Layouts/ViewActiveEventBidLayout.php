@@ -34,7 +34,7 @@ class ViewActiveEventBidLayout extends Table
     {
         return [
 
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (EventBids $bid){
                     return CheckBox::make('bids[]')
                         ->value($bid->id)

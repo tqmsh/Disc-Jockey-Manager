@@ -24,15 +24,32 @@ class CreateStudentScreen extends Screen
 {
     public $requiredFields = ['firstname', 'lastname', 'email', 'county', 'password', 'phonenumber', 'allergies', 'grade', 'school', 'state_province', 'country'];
     public $dupes =[];
+    public $student;
 
     /**
      * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Student $student, Request $request): iterable
     {
-        return [];
+        $student->firstname = $request->input('firstname') ?? "";
+        $student->lastname = $request->input('lastname') ?? "";
+        $student->name = $request->input('name') ?? "";
+        $student->phonenumber = $request->input('phonenumber') ?? "";
+        $student->email = $request->input('email') ?? "";
+        $student->school = $request->input('school') ?? "";
+        $student->country = $request->input('country') ?? "";
+        $student->state_province = $request->input('state_province') ?? "";
+        $student->county = $request->input('county') ?? "";
+        $student->city_municipality = $request->input('city_municipality') ?? "";
+        $student->grade = intval($request->input('grade')) ?? "";
+        $student->allergies = $request->input('allergies') ?? "";
+
+
+        return [
+            'student'=>$student
+        ];
     }
 
     /**
@@ -102,9 +119,9 @@ class CreateStudentScreen extends Screen
                         ->href('/sample_students_upload.csv')
                 ]),
             ])
-            ->title('Mass Import Students')
-            ->applyButton('Import')
-            ->withoutCloseButton(),
+                ->title('Mass Import Students')
+                ->applyButton('Import')
+                ->withoutCloseButton(),
 
             Layout::rows([
 
@@ -113,21 +130,24 @@ class CreateStudentScreen extends Screen
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. John'),
+                    ->placeholder('Ex. John')
+                    ->value($this->student->firstname),
 
                 Input::make('lastname')
                     ->title('Last Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. Doe'),
+                    ->placeholder('Ex. Doe')
+                    ->value($this->student->lastname),
 
                 Input::make('name')
                     ->title('Username')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. KingKhan435'),
+                    ->placeholder('Ex. KingKhan435')
+                    ->value($this->student->name),
 
                 Input::make('phonenumber')
                     ->title('Phone Number')
@@ -135,14 +155,16 @@ class CreateStudentScreen extends Screen
                     ->mask('(999) 999-9999')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. (613) 859-5863'),
+                    ->placeholder('Ex. (613) 859-5863')
+                    ->value($this->student->phonenumber),
 
                 Input::make('email')
                     ->title('Email')
                     ->type('email')
                     ->required()
                     ->horizontal()
-                    ->placeholder('Ex. johndoe@gmail.com'),
+                    ->placeholder('Ex. johndoe@gmail.com')
+                    ->value($this->student->email),
 
                 Password::make('password')
                     ->title('Password')
@@ -155,7 +177,8 @@ class CreateStudentScreen extends Screen
                     ->required()
                     ->empty('Start typing to search...')
                     ->horizontal()
-                    ->fromModel(School::class, 'school_name', 'school_name'),
+                    ->fromModel(School::class, 'school_name', 'school_name')
+                    ->value($this->student->school),
 
                 Select::make('country')
                     ->title('Country')
@@ -163,26 +186,30 @@ class CreateStudentScreen extends Screen
                     ->horizontal()
                     ->empty('Start typing to search...')
                     ->required()
-                    ->fromModel(School::class, 'country', 'country'),
+                    ->fromModel(School::class, 'country', 'country')
+                    ->value($this->student->country),
 
                 Select::make('state_province')
                     ->title('State/Province')
                     ->horizontal()
                     ->empty('Start typing to search...')
                     ->required()
-                    ->fromModel(School::class, 'state_province', 'state_province'),
+                    ->fromModel(School::class, 'state_province', 'state_province')
+                    ->value($this->student->state_province),
 
                 Select::make('county')
                     ->title('County (USA Only)')
                     ->horizontal()
                     ->empty('Start typing to search...')
-                    ->fromModel(School::class, 'county', 'county'),
+                    ->fromModel(School::class, 'county', 'county')
+                    ->value($this->student->county),
 
                 Select::make('city_municipality')
                     ->title('City/Municipality (Canada Only)')
                     ->horizontal()
                     ->empty('Start typing to search...')
-                    ->fromModel(School::class, 'city_municipality', 'city_municipality'),
+                    ->fromModel(School::class, 'city_municipality', 'city_municipality')
+                    ->value($this->student->city_municipality),
 
                 Select::make('grade')
                     ->title('Grade')
@@ -194,7 +221,8 @@ class CreateStudentScreen extends Screen
                         '10' => 10,
                         '11' => 11,
                         '12' => 12,
-                    ]),
+                    ])
+                    ->value($this->student->grade),
 
                 Select::make('allergies')
                     ->title('Allergies')
@@ -210,7 +238,8 @@ class CreateStudentScreen extends Screen
                         'Wheat' => 'Wheat',
                         'Soy' => 'Soy',
                         'Fish' => 'Fish',
-                    ]),
+                    ])
+                    ->value($this->student->allergies),
             ]),
         ];
     }
@@ -253,15 +282,25 @@ class CreateStudentScreen extends Screen
             }else{
                 //duplicate email found
                 //show an error toast
-                Toast::error('Email or Username already exists.');
+                if(!$this->validEmail($request->input('email'))){
+                    Toast::error('Email already exists.');
+
+                }else{
+                    Toast::error('Username already exists.');
+
+                }
+                return redirect()->route('platform.student.create', request(['firstname', 'lastname', 'name', 'phonenumber', 'email', 'school', 'country', 'state_province', 'county', 'city_municipality', 'grade', 'allergies']));
+
+
             }
 
         }catch(Exception $e){
 
             //show an error toast
             Alert::error('There was an error creating this student. Error Code: ' . $e->getMessage());
+            return redirect()->route('platform.student.create', request(['firstname', 'lastname', 'name', 'phonenumber', 'email',  'school', 'country', 'state_province', 'county', 'city_municipality', 'grade', 'allergies']));
         }
-}
+    }
 
     //this method will mass import schools from a csv file
     public function massImport(Request $request){
@@ -456,7 +495,7 @@ class CreateStudentScreen extends Screen
         }
         $school = $school_query->get();
 
-        if(is_null($school)){
+        if(is_null($school->value('id'))){
 
             throw New Exception('You are trying to enter a invalid school');
 
@@ -477,9 +516,7 @@ class CreateStudentScreen extends Screen
             $school_query = $school_query->where('city_municipality', $city_municipality);
         }
         $school = $school_query->get();
-
-        if(is_null($school)){
-
+        if(is_null($school->value('id'))){
             throw New Exception('You are trying to enter a invalid school');
 
         } else{

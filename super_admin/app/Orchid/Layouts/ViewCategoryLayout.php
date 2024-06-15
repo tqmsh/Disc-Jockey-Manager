@@ -31,7 +31,7 @@ class ViewCategoryLayout extends Table
     {
         return [
             
-            TD::make()
+            TD::make('checkboxes')
                 ->render(function (Categories $category){
                     return CheckBox::make('categories[]')
                         ->value($category->id)

@@ -75,12 +75,12 @@ class EditSpecsScreen extends Screen
     public function layout(): iterable
     {
         return [
-       
+
                 Layout::rows([
 
                     Input::make('age')
                         ->title('Age')
-                        ->type('text')
+                        ->type('number')
                         ->horizontal()
                         ->value($this->specs->age),
 
@@ -98,13 +98,13 @@ class EditSpecsScreen extends Screen
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->height),
-                    
+
                     Input::make('weight')
                         ->title('Weight (pounds)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->weight),
-                    
+
                     Select::make('hair_colour')
                         ->title('Hair Color')
                         ->type('text')
@@ -154,12 +154,12 @@ class EditSpecsScreen extends Screen
                             'olive' => 'Olive',
                             'dark' => 'Dark',
                         ]),
-                        
+
                     Select::make('eye_colour')
                         ->title('Eye Colour')
                         ->type('text')
                         ->allowAdd()
-                        ->horizontal()                        
+                        ->horizontal()
                         ->value($this->specs->eye_colour)
                         ->empty("No Selection")
                         ->options([
@@ -170,7 +170,7 @@ class EditSpecsScreen extends Screen
                             'green' => 'Green',
                             'hazel' => 'Hazel',
                         ]),
-                        
+
                     Select::make('lip_style')
                         ->title('Lip Style')
                         ->type('text')
@@ -187,25 +187,25 @@ class EditSpecsScreen extends Screen
                             'rounded' => 'Rounded',
                             'heart-shaped' => 'Heart-shaped',
                         ]),
-                        
+
                     Input::make('bust')
                         ->title('Bust (cm)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->bust),
-                        
+
                     Input::make('waist')
                         ->title('Waist (cm)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->waist),
-                        
+
                     Input::make('hips')
                         ->title('Hips (cm)')
                         ->type('text')
                         ->horizontal()
                         ->value($this->specs->hips),
-                        
+
                     TextArea::make('notes')
                         ->title('Notes')
                         ->type('text')
@@ -223,7 +223,7 @@ class EditSpecsScreen extends Screen
                         ->options([
                             'slim' => 'Slim',
                             'athletic' => 'Athletic',
-                            'muscular' => 'Muscular',                                
+                            'muscular' => 'Muscular',
                             'average' => 'Average',
                             'stocky' => 'Stocky',
                             'curvy' => 'Curvy'
@@ -233,12 +233,12 @@ class EditSpecsScreen extends Screen
                         ->icon('check')
                         ->method('update'),
 
-                    
+
 
                 ]),
             ];
     }
-    
+
 
     public function update(Specs $specs, Request $request)
     {
