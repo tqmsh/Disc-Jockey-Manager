@@ -351,10 +351,6 @@ Route::screen('/tourel/create', CreateTourElementScreen::class)->name('platform.
 Route::screen('/tourel/{tourElement}/edit', EditTourElementScreen::class)->name('platform.tour-element.edit');
 Route::screen('/tourel', ViewAllTourElementScreen::class)->name('platform.tour-element.list');
 
-// Login as
-Route::screen('/login-as', ViewLoginAsScreen::class)->name('platform.login-as.view');
-Route::screen('/login-as/generated/{loginAs}', ViewLoginAsGeneratedScreen::class)->name('platform.login-as.generated');
-
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
