@@ -9,6 +9,7 @@
 @endempty
 
 <div class="bg-white rounded shadow-sm mb-3"
+     id="tableLabel"
      data-controller="table"
      data-table-slug="{{$slug}}"
 >
