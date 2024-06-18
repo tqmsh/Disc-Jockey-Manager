@@ -78,11 +78,11 @@ class ViewEventScreen extends Screen
     public function layout(): iterable
     {
         return [
-            
+
             Layout::rows([
 
                 Group::make([
-                    
+
                     Select::make('event')
                         ->title('Search Events')
                         ->help('Type in boxes to search')
@@ -104,7 +104,7 @@ class ViewEventScreen extends Screen
                         ->help('Type in boxes to search')
                         ->empty('No selection')
                         ->fromQuery(Events::query()->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name', 'event_name'),
-                    
+
                     Select::make('sort_option')
                         ->title('Order Events By')
                         ->empty('No selection')
@@ -115,14 +115,18 @@ class ViewEventScreen extends Screen
                             'event_finish_time DESC' => 'End Date/Time (Latest First)',
                         ])
                 ]),
-                
+
                 Button::make('Filter')
                     ->icon('filter')
                     ->method('filter')
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewEventLayout::class
+            ViewEventLayout::class,
+
+            //Layout::view("events_tour"),
+
+
         ];
     }
 
@@ -131,10 +135,10 @@ class ViewEventScreen extends Screen
     }
 
     public function deleteEvents(Request $request)
-    {   
+    {
         //get all localadmins from post request
         $events = $request->get('events');
-        
+
         try{
 
             //if the array is not empty
