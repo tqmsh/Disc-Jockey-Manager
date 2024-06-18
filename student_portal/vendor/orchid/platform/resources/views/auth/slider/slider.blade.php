@@ -29,7 +29,7 @@
             @endforeach
 
             @if($ads->isEmpty())
-                <div style="height: 100vh; width:100%; background-color:black; display:flex; justify-content:center; align-items:center; position:relative;">
+                <div style="min-height: 100vh; width:100%; background-color:black; display:flex; justify-content:center; align-items:center; position:relative;">
                     <div id="pp_noa_container" style="display: flex; align-items: center; gap: 32px;">
                         <img style="width: 100px;" src="{{ asset('image/Prom_VP_Line.png') }}" alt="Prom Planner Logo">
                         <span style="color: white; font-size: 4.5rem; text-align: center;">Prom Planner</span>
