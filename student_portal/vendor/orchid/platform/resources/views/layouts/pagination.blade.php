@@ -4,6 +4,7 @@
                 <div class="btn-group dropup d-inline-block">
                     <button type="button"
                             class="btn btn-sm btn-link dropdown-toggle p-0 m-0"
+                            id="configureColumns"
                             data-bs-toggle="dropdown"
                             aria-haspopup="true"
                             data-bs-boundary="viewport"

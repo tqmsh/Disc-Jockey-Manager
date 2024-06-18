@@ -144,7 +144,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Couples')
                         ->icon('fa.children')
                         ->route('platform.couples.list'),
-                    
+
                     Menu::make('Promfluence')
                         ->icon('feed')
                         ->route('platform.promfluencer.list'),
@@ -194,7 +194,7 @@ class PlatformProvider extends OrchidServiceProvider
                     ->route('platform.guide.list'),
 
             ]),
-        
+
             Menu::make('Maintenance')
             ->icon('arrow-down')
             ->list([
@@ -214,6 +214,10 @@ class PlatformProvider extends OrchidServiceProvider
                 Menu::make('Login As')
                     ->icon('people')
                     ->route('platform.login-as.view'),
+
+                Menu::make('Guided Tours')
+                    ->icon('directions')
+                    ->route('platform.tour-element.list'),
 
                 Menu::make(__('Roles'))
                     ->icon('lock')

@@ -16,7 +16,7 @@
                             @php
                             // Remove video tutorial url HTML from title.
                             $title = app()->view->getSections()['title'] ?? config('app.name');
-                            echo strip_tags($title); 
+                            echo strip_tags($title);
                             @endphp
                         </span>
                     </a>
@@ -108,9 +108,9 @@
 
                         @media only screen and (max-width: 770px) {
                             #promplanner-propoganda {
-                                justify-content: center !important; 
+                                justify-content: center !important;
                                 align-items: center !important;
-                            }    
+                            }
                         }
 
                         @media only screen and (max-width: 400px) {
@@ -130,14 +130,14 @@
                 @endif
             @endif
         @endif
-        
+
         @if(!is_null($notice))
             <div class="layout d-flex">
                 <span class="text-info d-flex align-items-center me-3">
                     <x-orchid-icon path="circle"/>
                 </span>
                 <div>
-                    <h2 class="h3 text-black font-bold">{{ $notice->title }}</h2>
+                    <h2 class="h3 text-black font-bold" id="siteWideNotice">{{ $notice->title }}</h2>
                     @if(!is_null($notice->subtitle))
                         <small class="text-muted fw-bold">{{ $notice->subtitle }}</small>
                     @endif
@@ -187,9 +187,9 @@
 
                         @media only screen and (max-width: 770px) {
                             #promplanner-propoganda {
-                                justify-content: center !important; 
+                                justify-content: center !important;
                                 align-items: center !important;
-                            }    
+                            }
                         }
 
                         @media only screen and (max-width: 400px) {
@@ -209,7 +209,7 @@
                 @endif
             @endif
         @endif
-        
+
         @if(Breadcrumbs::has())
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb px-4 mb-2">
@@ -223,7 +223,7 @@
 
         <div class="@hasSection('navbar') @else d-none d-md-block @endif layout v-md-center">
             <header class="d-none d-md-block col-xs-12 col-md p-0">
-                <h1 class="m-0 fw-light h3 text-black">@yield('title')</h1>
+                <h1 class="m-0 fw-light h3 text-black" id="titlebig">@yield('title')</h1>
                 <small class="text-muted" title="@yield('description')">@yield('description')</small>
             </header>
             <nav class="col-xs-12 col-md-auto ms-auto p-0">
