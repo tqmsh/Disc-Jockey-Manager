@@ -106,7 +106,7 @@
     .lgs_button {
         height: 45px;
         min-width: 165px;
-        bottom: 1.2rem;
+        bottom: 8rem;
         left: 50%;
         padding: 0 1rem;
         background-color: purple;
