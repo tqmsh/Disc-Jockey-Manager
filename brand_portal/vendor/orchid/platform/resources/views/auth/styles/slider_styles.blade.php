@@ -19,7 +19,7 @@
         width: 100%;
         height: 100%;
     }
-
+    
     .login_slide > a:first-child > img {
         object-fit: cover;
         object-position: center;
@@ -30,7 +30,7 @@
         transition-delay: 0ms;
         z-index: 1;
     }
-
+    
     span[data-slider-position] {
         position: absolute;
         bottom: 0.5rem;
@@ -72,7 +72,7 @@
     .login_slider_button:hover {
         border: 2px solid white;
     }
-
+    
     .lgs_text_container,
     .lgs_button {
         position: absolute;
@@ -80,7 +80,7 @@
         transform: translateX(-50%);
         color: white;
     }
-
+    
     .lgs_text_container {
         display: flex;
         flex-direction: column;
@@ -91,22 +91,22 @@
         left: 50%;
         transform: translateY(-50%) translateX(-50%);
     }
-
+    
     .lgs_title {
         font-size: 2rem;
         font-weight: bold;
         text-align: center;
     }
-
+    
     .lgs_subtitle {
         font-size: 1.3rem;
         text-align: center;
     }
-
+    
     .lgs_button {
         height: 45px;
         min-width: 165px;
-        bottom: 1.2rem;
+        bottom: 8rem;
         left: 50%;
         padding: 0 1rem;
         background-color: purple;
@@ -114,33 +114,67 @@
         border: none;
         border-radius: 30px;
     }
-
+    
     @media screen and (max-width: 1024px) {
         .login_slider_container,
         body > div > div.row > div.col.min-vh-100.overflow-hidden > div {
             width: 100vw;
         }
     }
+    
+    @media screen and (max-width: 1250px) {
+        #pp_noa_container {
+            flex-direction: column;
+            gap: 16px !important;
+        }
+        
+        #pp_noa_container span {
+            font-size: 4rem !important;
+        }
+    }
+    
+    @media screen and (max-width: 768px) {
+        #pp_noa_container img {
+            width: 80px !important;
+        }
+        #pp_noa_container span {
+            font-size: 3.2rem !important;
+        }
+    }
+    
+    @media screen and (max-width: 425px) {
+        #pp_noa_container span {
+            font-size: 3rem !important;
+        }
+    }
 </style>
 
 <script type="text/javascript">
+    if(window.slideSwitcherID !== undefined) {
+        clearInterval(window.slideSwitcherID);
+    }
+    
     lgs_buttons = document.querySelectorAll('[data-slider-button]');
     lgs_position = document.querySelector('[data-slider-position]');
-
-    allowChangeSlides = !([0, 1].includes(document.querySelectorAll('.login_slide').length));
-
-    // msPerSlide = 8000;
-
-    // slideSwitcherID = setInterval(switchSlides, msPerSlide);
-
-    lgs_position.innerHTML = '1/' + document.querySelectorAll('.login_slide').length;
+    
+    slide_length = document.querySelectorAll('.login_slide').length;
+    allowChangeSlides = !([0, 1].includes(slide_length));
+    
+    msPerSlide = 3000;
+    
+    window.slideSwitcherID = setInterval(switchSlides, msPerSlide);
+    
+    if(slide_length > 0) {
+        lgs_position.innerHTML = '1/' + slide_length;
+    } 
+    
     
     lgs_buttons.forEach(button => {
         button.addEventListener('click', () => {
             if(!allowChangeSlides) {
                 return;
             }
-
+            
             switchSlides(button);
         });
     });
@@ -149,7 +183,7 @@
         if(button === undefined) {
             button = lgs_buttons[1]; 
         }
-
+        
         offset = button.dataset.sliderButton === 'next' ? 1 : -1;
         slides = button.closest('[data-lgs-slider]').querySelector('[data-lgs-slides]');
         
@@ -162,10 +196,10 @@
             newIndex = 0;
         } 
         
-        // clearInterval(slideSwitcherID);
-        // slideSwitcherID = setInterval(switchSlides, msPerSlide);
+        clearInterval(window.slideSwitcherID);
+        window.slideSwitcherID = setInterval(switchSlides, msPerSlide);
         
-
+        
         lgs_position.innerHTML = `${newIndex + 1}/${document.querySelectorAll('.login_slide').length}`;
         slides.children[newIndex].dataset.active = true;
         delete activeSlide.dataset.active;
