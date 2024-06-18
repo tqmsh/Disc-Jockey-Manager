@@ -150,15 +150,19 @@
 </style>
 
 <script type="text/javascript">
+    if(window.slideSwitcherID !== undefined) {
+        clearInterval(window.slideSwitcherID);
+    }
+    
     lgs_buttons = document.querySelectorAll('[data-slider-button]');
     lgs_position = document.querySelector('[data-slider-position]');
     
     slide_length = document.querySelectorAll('.login_slide').length;
     allowChangeSlides = !([0, 1].includes(slide_length));
     
-    // msPerSlide = 8000;
+    msPerSlide = 3000;
     
-    // slideSwitcherID = setInterval(switchSlides, msPerSlide);
+    window.slideSwitcherID = setInterval(switchSlides, msPerSlide);
     
     if(slide_length > 0) {
         lgs_position.innerHTML = '1/' + slide_length;
@@ -192,8 +196,8 @@
             newIndex = 0;
         } 
         
-        // clearInterval(slideSwitcherID);
-        // slideSwitcherID = setInterval(switchSlides, msPerSlide);
+        clearInterval(window.slideSwitcherID);
+        window.slideSwitcherID = setInterval(switchSlides, msPerSlide);
         
         
         lgs_position.innerHTML = `${newIndex + 1}/${document.querySelectorAll('.login_slide').length}`;
