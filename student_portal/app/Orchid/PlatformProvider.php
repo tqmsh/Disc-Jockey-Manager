@@ -33,13 +33,13 @@ class PlatformProvider extends OrchidServiceProvider
         abort_if(Auth::user()->role != 3, 403, 'You are not authorized to view this page.');
 
         return [
-            
+
             //MONEY MAKER
             Menu::make('Dashboard')
                 ->icon('home')
                 ->title('CORE')
                 ->route('platform.example'),
-            
+
             Menu::make('My Specs')
                 ->icon('brush')
                 ->route('platform.studentSpecs.list'),
@@ -81,15 +81,15 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Dresses')
                 ->icon('fa.person-dress')
                 ->route('platform.dresses'),
-            
+
             Menu::make('Checklists')
                 ->icon('list-check')
                 ->route('platform.checklist.list'),
-            
+
             Menu::make('Promfluence')
                 ->icon('feed')
                 ->route('platform.promfluencer.view'),
-                
+
             Menu::make('Prom Planner Guide')
                 ->icon('book-open')
                 ->route('platform.guide.list'),
@@ -98,6 +98,42 @@ class PlatformProvider extends OrchidServiceProvider
             // Menu::make('Report a Bug')
             //     ->icon('bug')
             //     ->route('platform.bug-reports.list'),
+            Menu::make('Prom Planner Profiles')
+                ->icon('arrow-down')
+                ->list([
+                    Menu::make('Facebook')
+                        ->icon('book-open')
+                        ->url('https://www.facebook.com/promplannerapp'),
+
+                    Menu::make('Instagram')
+                        ->icon('book-open')
+                        ->url('https://www.instagram.com/promplannerapp/'),
+
+                    Menu::make('Twitter')
+                        ->icon('book-open')
+                        ->url('https://x.com/promplannertool'),
+
+                    Menu::make('Pinterest')
+                        ->icon('book-open')
+                        ->url('https://www.pinterest.ca/promplannerapp/'),
+
+                    Menu::make('YouTube')
+                        ->icon('book-open')
+                        ->url('https://www.youtube.com/@promplanner'),
+
+                    Menu::make('TikTok')
+                        ->icon('book-open')
+                        ->url('https://www.tiktok.com/@promplannerapp'),
+
+                    Menu::make('Sound Cloud')
+                        ->icon('book-open')
+                        ->url('https://soundcloud.com/prom-planner'),
+
+                    Menu::make('Linkedin')
+                        ->icon('book-open')
+                        ->url('https://www.linkedin.com/company/promplanner/'),
+                ]),
+
 
             Menu::make('National Prom Sites')
                 ->icon('arrow-down')
@@ -121,7 +157,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Prom Vendors')
                         ->icon('ps.prom-vendor')
                         ->url('https://promvendors.com/'),
-                        
+
                     Menu::make('Prom Teen')
                         ->icon('ps.prom-teen')
                         ->url('https://promteen.com/'),

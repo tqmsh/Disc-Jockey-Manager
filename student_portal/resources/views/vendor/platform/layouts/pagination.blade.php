@@ -3,6 +3,7 @@
             @if(isset($columns) && \Orchid\Screen\TD::isShowVisibleColumns($columns))
                 <div class="btn-group dropup d-inline-block">
                     <button type="button"
+                            id="configureColumns"
                             class="btn btn-sm btn-link dropdown-toggle p-0 m-0"
                             data-bs-toggle="dropdown"
                             aria-haspopup="true"
