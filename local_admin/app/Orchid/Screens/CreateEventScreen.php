@@ -6,6 +6,10 @@ use Exception;
 use App\Models\Events;
 use App\Models\School;
 use App\Models\Vendors;
+use App\Models\Clients;
+use App\Models\Staffs;
+use App\Models\Systems;
+use App\Models\Song;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use App\Models\Categories;
@@ -18,7 +22,6 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\DateTimer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -28,6 +31,7 @@ use Orchid\Screen\Actions\ModalToggle;
 class CreateEventScreen extends Screen
 {
     public $event;
+    
     /**
      * Query data.
      *
@@ -35,19 +39,16 @@ class CreateEventScreen extends Screen
      */
     public function query(Events $event, Request $request): iterable
     {
-        $event->event_name= $request->input('event_name') ?? "";
-        $event->event_start_time= $request->input('event_start_time') ?? "";
-        $event->event_finish_time= $request->input('event_finish_time') ?? "";
-        $event->event_info= $request->input('event_info') ?? "";
-        $event->event_rules= $request->input('event_rules') ?? "";
-        $event->venue_id= $request->input('venue_id') ?? "";
-        $event->ticket_price= $request->input('ticket_price') ?? "";
-        $event->capacity= $request->input('capacity') ?? "";
-        if($request->input('interested_vendor_categories') !== null) {
-            $event->interested_vendor_categories =  array_values(array_map('intval', $request->input('interested_vendor_categories')));
-        }else{
-            $event->interested_vendor_categories =null;
-        }
+        $event->event_name = $request->input('event_name') ?? "";
+        $event->event_date = $request->input('event_date') ?? "";
+        $event->event_loadin_time = $request->input('event_loadin_time') ?? "";
+        $event->event_start_time = $request->input('event_start_time') ?? "";
+        $event->event_finish_time = $request->input('event_finish_time') ?? "";
+        $event->venue_id = $request->input('venue_id') ?? "";
+        $event->client_id = $request->input('client_id') ?? "";
+        $event->staff_id = $request->input('staff_id') ?? "";
+        $event->system_id = $request->input('system_id') ?? "";
+        $event->song_ids = $request->input('song_ids') ?? [];
 
         return [
             'event' => $event
@@ -98,78 +99,85 @@ class CreateEventScreen extends Screen
                 ->applyButton('Suggest'),
 
             Layout::rows([
-
                 Input::make('event_name')
                     ->title('Event Name')
                     ->type('text')
                     ->required()
-                    ->placeholder('Colonel By\'s Main Event')
                     ->horizontal()
                     ->value($this->event->event_name),
 
-                DateTimer::make('event_start_time')
-                    ->title('Event Start')
+                Select::make('client_id')
+                    ->title('Client')
+                    ->fromQuery(Clients::query(), 'full_name')
+                    ->required()
+                    ->horizontal()
+                    ->value($this->event->client_id)
+                    ->empty('Start typing to search...'),
+
+                DateTimer::make('event_date')
+                    ->title('Event Date')
+                    ->required()
                     ->horizontal()
                     ->allowInput()
+                    ->enableTime(false)
+                    ->value($this->event->event_date),
+
+                DateTimer::make('event_loadin_time')
+                    ->title('Event Loadin Time')
                     ->required()
+                    ->horizontal()
+                    ->allowInput()
+                    ->enableTime()
+                    ->value($this->event->event_loadin_time),
+
+                DateTimer::make('event_start_time')
+                    ->title('Event Start')
+                    ->required()
+                    ->horizontal()
+                    ->allowInput()
                     ->enableTime()
                     ->value($this->event->event_start_time),
 
                 DateTimer::make('event_finish_time')
                     ->title('Event End')
+                    ->required()
                     ->horizontal()
                     ->allowInput()
-                    ->required()
                     ->enableTime()
                     ->value($this->event->event_finish_time),
 
-                TextArea::make('event_info')
-                    ->title('Event Info')
-                    ->type('text')
-                    ->placeholder('Ex. Formal Attire')
-                    ->horizontal()
-                    ->rows(5)
-                    ->value($this->event->event_info),
-
-                TextArea::make('event_rules')
-                    ->title('Event Rules')
-                    ->type('text')
-                    ->placeholder('Ex. No Violence')
-                    ->horizontal()
-                    ->rows(5)
-                    ->value($this->event->event_rules),
-
                 Select::make('venue_id')
                     ->title('Venue')
-                    ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
-                    ->empty('Start typing to Search...')
-                    ->horizontal()
-                    ->value($this->event->venue_id),
-
-                Input::make('ticket_price')
-                    ->title('Ticket Price $')
-                    ->type('text')
                     ->required()
-                    ->placeholder('29.99')
+                    ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%Venue%')->first()->id), 'company_name')
                     ->horizontal()
-                    ->value($this->event->ticket_price),
+                    ->value($this->event->venue_id)
+                    ->empty('Start typing to search...'),
 
-
-                Input::make('capacity')
-                    ->title('Event Capacity')
-                    ->type('text')
+                Select::make('staff_id')
+                    ->title('Staff')
                     ->required()
-                    ->placeholder('Ex. 100')
+                    ->fromQuery(Staffs::query(), 'full_name')
                     ->horizontal()
-                    ->value($this->event->capacity),
+                    ->value($this->event->staff_id)
+                    ->empty('Start typing to search...'),
 
-                Select::make('interested_vendor_categories')
-                    ->title('Interested Vendor Categories')
-                    ->fromModel(Categories::class, 'name')
+                Select::make('system_id')
+                    ->title('System')
+                    ->required()
+                    ->fromQuery(Systems::query(), 'full_name')
                     ->horizontal()
+                    ->value($this->event->system_id)
+                    ->empty('Start typing to search...'),
+
+                Select::make('song_ids')
+                    ->title('Songs')
+                    ->required()
                     ->multiple()
-                    ->help('Vendors from this category will be able to place bids on the event.')
-                    ->value($this->event->interested_vendor_categories),
+                    ->fromQuery(Song::query(), 'title')
+                    ->horizontal()
+                    ->value($this->event->song_ids)
+                    ->empty('Start typing to search...'),
 
                 ModalToggle::make('Suggest Category')
                     ->modal('suggestCategoryModal')
@@ -178,26 +186,20 @@ class CreateEventScreen extends Screen
                     ->class('btn btn-default mb-3'),
 
                 Button::make('Create Event')
-                // ->icon('plus')
-                ->type(Color::PRIMARY())
-                ->method('createEvent'),
-
-
+                    ->type(Color::PRIMARY())
+                    ->method('createEvent'),
             ])->title('Make your dream event'),
         ];
     }
 
     public function createEvent(Request $request){
-
-        $school = School::where('id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->first();
-
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 'event_name' => 'required|max:255',
+                'event_date' => 'required|date',
+                'event_loadin_time' => 'required|date',
                 'event_start_time' => 'required|date',
                 'event_finish_time' => 'required|date|after_or_equal:event_start_time',
-                'event_info' => 'nullable|max:429496729',
-                'event_rules' => 'nullable|max:429496729',
                 'venue_id' => [
                     'nullable',
                     'int',
@@ -208,34 +210,30 @@ class CreateEventScreen extends Screen
                         )->pluck('id')
                     )
                 ],
-                'ticket_price' => 'required|numeric|gte:0',
-                'capacity' => 'required|integer|max:4294967295|gte:0',
+                'client_id' => 'nullable|int|exists:clients,id',
+                'staff_id' => 'nullable|int|exists:staffs,id',
+                'system_id' => 'nullable|int|exists:systems,id',
+                'song_ids' => 'nullable|array',
                 'interested_vendor_categories' => 'nullable|array',
                 'interested_vendor_categories.*' => Rule::in(Categories::all()->pluck('id')),
-            ],
-            $messages = [
-                'interested_vendor_categories.*.in' => 'The interested vendor categories are invalid.'
             ]);
 
-            $formFields = $validator->validated();
-            $formFields['event_creator'] = auth()->id();
-            $formFields['school_id'] = $school->id;
-            $formFields['school'] = $school->school_name;
-            $formFields['region_id'] = $school->region_id;
+            $validated = $validator->validated();
+            $validated['interested_vendor_categories'] = $validated['interested_vendor_categories'] ?? null;
+            $validated['event_creator'] = auth()->id();
 
-            Events::create($formFields);
+            Events::create($validated);
 
-            Toast::success('Event Added Succesfully');
+            Toast::success('Event Added Successfully');
 
             return redirect()->route('platform.event.list');
 
-        }catch(Exception $e){
-
+        } catch (Exception $e) {
             Alert::error('There was an error creating this event. Error Code: ' . $e->getMessage());
-            return redirect()->route('platform.event.create', request(['event_name', 'event_start_time', 'event_finish_time', 'event_info', 'event_rules', 'venue_id', 'ticket_price', 'capacity', 'interested_vendor_categories']));
-
+            return redirect()->route('platform.event.create', $request->except('_token'));
         }
     }
+
 
     public function suggestCategory()
     {
@@ -243,6 +241,6 @@ class CreateEventScreen extends Screen
             'category_name' => 'required|max:255|unique:categories,name',
         ]);
         Categories::create(['name' => $validator->validated()['category_name']]);
-        Toast::success('Category suggested succesfully');
+        Toast::success('Category suggested successfully');
     }
 }

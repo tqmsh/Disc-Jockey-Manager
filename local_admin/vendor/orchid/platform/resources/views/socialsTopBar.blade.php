@@ -1,6 +1,6 @@
 <div class="layout v-md-center">
     <header class="d-none d-md-block col-xs-12 col-md p-0">
-        <h1 class="m-0 fw-light h3 text-black">Prom Planner</h1>
+        <h1 class="m-0 fw-light h3 text-black">Disc Jockey Manager</h1>
         <small class="text-muted" title="How to contact us">How To Contact Us</small>
     </header>
     <nav class="col-xs-12 col-md-auto ms-auto p-0">

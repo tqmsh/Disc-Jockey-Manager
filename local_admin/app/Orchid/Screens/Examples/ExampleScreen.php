@@ -114,8 +114,9 @@ class ExampleScreen extends Screen
         $now = Carbon::now();
 
         // Remaining Days Until Next Event
-        $closestAttendingEvent = Events::where('school_id', $localAdmin->school_id)
-            ->where('event_start_time', '>', $now)->oldest('event_start_time')->first();
+        $closestAttendingEvent = Events::where('event_start_time', '>', $now)
+        ->oldest('event_start_time')->first(); # 修改
+    
         // Check if an event has been found
         if($closestAttendingEvent !== null) {
             $eventStartTime = $closestAttendingEvent->event_start_time;
@@ -128,8 +129,8 @@ class ExampleScreen extends Screen
         }
 
         // Pending Students
-        $schoolId = $localAdmin->school_id;
-        $events = Events::where('school_id', $schoolId)->get();
+        // $schoolId = $localAdmin->school_id;
+        $events = Events::get();
         $profits = array();
         $profit_keys = array();
         foreach($events as $e){
@@ -146,22 +147,23 @@ class ExampleScreen extends Screen
             array_push($profit_keys,  ($e['event_name']));
         }
 
-        $numberOfStudents = Student::where('school_id', $schoolId)->count();
-        $pendingStudents  = Student::where('school_id', $schoolId)->where('account_status', 0)->count();
-
+        $numberOfStudents = Student::count();
+        $pendingStudents  = Student::where('account_status', 0)->count();
+        
         // Total tickets Sold
-        $newestEvent = Events::where('event_creator', $user->id)->latest('created_at')->first();
+        $newestEvent = Events::latest('created_at')->first();
         $newestEventId = !is_null($newestEvent) ? $newestEvent->id : 0;
         $paidAttendeesCount = EventAttendees::where('event_id', $newestEventId)->where('ticketstatus', 'paid')->count();
+        
 
         $paidAttendeesCountPercentage = (!is_null($newestEvent) && $newestEvent->capacity > 0) ? number_format(($paidAttendeesCount / $newestEvent->capacity) * 100, 2) . " %" : "Capacity Not Set";
 
         // Direct Bids recieved
-        //get the count of all bids placed on all events at the currently authenticated user's school
-        $DirectBidsRecieved = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->count();
+        // Get the count of all bids placed on all events
+        $DirectBidsRecieved = EventBids::count();
 
         // Direct Bids Replied to
-        $DirectBidsRepliedTo = EventBids::whereIn('event_id', Events::where('school_id', $schoolId)->pluck('id'))->whereIn('status', [1,2])->count();
+        $DirectBidsRepliedTo = EventBids::whereIn('status', [1, 2])->count();
 
         // Total Revenue:
         $revenueRecord = ActualExpenseRevenue::where('event_id', $newestEventId)->where('type', 2)->first();

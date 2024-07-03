@@ -16,7 +16,7 @@
     <span class="thumb-sm">
         <img src="{{ URL::asset('/image/Prom_VP_Line.png') }}"  style="height: 29.59px; width:40px;"> </span>
     <p class="ms-3 my-0 d-none d-sm-block">
-        PromPlanner
+        Disc Jockey Manager
     </p>
 </div>
 

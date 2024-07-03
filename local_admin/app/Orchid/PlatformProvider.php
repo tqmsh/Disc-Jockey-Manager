@@ -40,139 +40,139 @@ class PlatformProvider extends OrchidServiceProvider
             //FARHAN AND ANDY WAS HERE 😉
 
             //MONEY MAKER
-            Menu::make('Dashboard')
-            ->icon('home')
-            ->title('CORE')
-            ->route('platform.example'),
+            // Menu::make('Dashboard')
+            // ->icon('home')
+            // ->title('CORE')
+            // ->route('platform.example'),
 
             //student nav option
             Menu::make('Events')
             ->icon('diamond')
             ->route('platform.event.list'),
 
-            Menu::make('Students')
-                ->icon('graduation')
-                ->size()
-                ->list([
-                    //student nav option
-                    Menu::make('List')
-                        ->icon('list')
-                        ->route('platform.student.list'),
+            // Menu::make('Students')
+            //     ->icon('graduation')
+            //     ->size()
+            //     ->list([
+            //         //student nav option
+            //         Menu::make('List')
+            //             ->icon('list')
+            //             ->route('platform.student.list'),
 
-                    //pending student nav option
-                    Menu::make('Pending Students')
-                        ->icon('user-follow')
-                        ->badge(function () {
-                                    return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
-                                })
-                        ->route('platform.pendingstudent.list'),
+            //         //pending student nav option
+            //         Menu::make('Pending Students')
+            //             ->icon('user-follow')
+            //             ->badge(function () {
+            //                         return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
+            //                     })
+            //             ->route('platform.pendingstudent.list'),
 
-                    Menu::make('List of Couples')
-                        ->icon('fa.children')
-                        ->route('platform.couples.list'),
-                ]),
+            //         Menu::make('List of Couples')
+            //             ->icon('fa.children')
+            //             ->route('platform.couples.list'),
+            //     ]),
 
-            Menu::make("Groups")
-                ->icon('organization')
-                ->list([
-                    Menu::make('Limo Groups')
-                    ->icon('fa.car')
-                    ->route('platform.limo-groups'),
+            // Menu::make("Groups")
+            //     ->icon('organization')
+            //     ->list([
+            //         Menu::make('Limo Groups')
+            //         ->icon('fa.car')
+            //         ->route('platform.limo-groups'),
 
-                    Menu::make('Beauty Groups')
-                    ->icon('fa.shirt')
-                    ->route('platform.beauty-groups'),
-                ]),
+            //         Menu::make('Beauty Groups')
+            //         ->icon('fa.shirt')
+            //         ->route('platform.beauty-groups'),
+            //     ]),
             
-            Menu::make('Polls')
-                ->icon('bar-chart')
-                ->route('platform.all.polls'),
+            // Menu::make('Polls')
+            //     ->icon('bar-chart')
+            //     ->route('platform.all.polls'),
 
             // Menu::make('Contracts')
             //     ->icon('doc')
             //     ->route('platform.contract.list'),
 
-            Menu::make('Prom Profit')
-                ->icon('money')
-                ->route('platform.profit.list'),
+            // Menu::make('Prom Profit')
+            //     ->icon('money')
+            //     ->route('platform.profit.list'),
 
-            Menu::make('Checklists')
-                ->icon('list-check')
-                ->route('platform.checklist.list'),
+            // Menu::make('Checklists')
+            //     ->icon('list-check')
+            //     ->route('platform.checklist.list'),
 
-            Menu::make('Prom Planner Guide')
-                ->icon('book-open')
-                ->route('platform.guide.list'),
+            // Menu::make('Prom Planner Guide')
+            //     ->icon('book-open')
+            //     ->route('platform.guide.list'),
 
-            Menu::make('Prom Planner Profiles')
-                ->icon('arrow-down')
-                ->list([
-                    Menu::make('Facebook')
-                        ->icon('book-open')
-                        ->url('https://www.facebook.com/promplannerapp'),
+            // Menu::make('Prom Planner Profiles')
+            //     ->icon('arrow-down')
+            //     ->list([
+            //         Menu::make('Facebook')
+            //             ->icon('book-open')
+            //             ->url('https://www.facebook.com/promplannerapp'),
 
-                    Menu::make('Instagram')
-                        ->icon('book-open')
-                        ->url('https://www.instagram.com/promplannerapp/'),
+            //         Menu::make('Instagram')
+            //             ->icon('book-open')
+            //             ->url('https://www.instagram.com/promplannerapp/'),
 
-                    Menu::make('Twitter')
-                        ->icon('book-open')
-                        ->url('https://x.com/promplannertool'),
+            //         Menu::make('Twitter')
+            //             ->icon('book-open')
+            //             ->url('https://x.com/promplannertool'),
 
-                    Menu::make('Pinterest')
-                        ->icon('book-open')
-                        ->url('https://www.pinterest.ca/promplannerapp/'),
+            //         Menu::make('Pinterest')
+            //             ->icon('book-open')
+            //             ->url('https://www.pinterest.ca/promplannerapp/'),
 
-                    Menu::make('YouTube')
-                        ->icon('book-open')
-                        ->url('https://www.youtube.com/@promplanner'),
+            //         Menu::make('YouTube')
+            //             ->icon('book-open')
+            //             ->url('https://www.youtube.com/@promplanner'),
 
-                    Menu::make('TikTok')
-                        ->icon('book-open')
-                        ->url('https://www.tiktok.com/@promplannerapp'),
+            //         Menu::make('TikTok')
+            //             ->icon('book-open')
+            //             ->url('https://www.tiktok.com/@promplannerapp'),
 
-                    Menu::make('Sound Cloud')
-                        ->icon('book-open')
-                        ->url('https://soundcloud.com/prom-planner'),
+            //         Menu::make('Sound Cloud')
+            //             ->icon('book-open')
+            //             ->url('https://soundcloud.com/prom-planner'),
 
-                    Menu::make('Linkedin')
-                        ->icon('book-open')
-                        ->url('https://www.linkedin.com/company/promplanner/'),
-                ]),
+            //         Menu::make('Linkedin')
+            //             ->icon('book-open')
+            //             ->url('https://www.linkedin.com/company/promplanner/'),
+            //     ]),
 
             // Moved to How To Contact Us top bar
             // Menu::make('Report a Bug')
             //     ->icon('bug')
             //     ->route('platform.bug-reports.list'),
 
-            Menu::make('National Prom Sites')
-                ->icon('arrow-down')
-                ->list([
-                    Menu::make('National Proms')
-                        ->icon('ps.national-proms')
-                        ->url('https://nationalproms.com'),
+            // Menu::make('National Prom Sites')
+            //     ->icon('arrow-down')
+            //     ->list([
+            //         Menu::make('National Proms')
+            //             ->icon('ps.national-proms')
+            //             ->url('https://nationalproms.com'),
 
-                    Menu::make('Prom Planner')
-                        ->icon('ps.prom-planner')
-                        ->url('https://promplanner.app/'),
+            //         Menu::make('Prom Planner')
+            //             ->icon('ps.prom-planner')
+            //             ->url('https://promplanner.app/'),
 
-                    Menu::make('Prom Committee Expo')
-                        ->icon('ps.prom-committee-expo')
-                        ->url('https://promcommitteeexpo.com'),
+            //         Menu::make('Prom Committee Expo')
+            //             ->icon('ps.prom-committee-expo')
+            //             ->url('https://promcommitteeexpo.com'),
 
-                    Menu::make('Prom Show')
-                        ->icon('ps.prom-show')
-                        ->url('https://promshow.com'),
+            //         Menu::make('Prom Show')
+            //             ->icon('ps.prom-show')
+            //             ->url('https://promshow.com'),
 
-                    Menu::make('Prom Vendors')
-                        ->icon('ps.prom-vendor')
-                        ->url('https://promvendors.com/'),
+            //         Menu::make('Prom Vendors')
+            //             ->icon('ps.prom-vendor')
+            //             ->url('https://promvendors.com/'),
 
-                    Menu::make('Prom Teen')
-                        ->icon('ps.prom-teen')
-                        ->url('https://promteen.com/'),
+            //         Menu::make('Prom Teen')
+            //             ->icon('ps.prom-teen')
+            //             ->url('https://promteen.com/'),
 
-                ]),
+            //     ]),
             // Menu::make('Examples Layouts')
             //     ->title('PLACEHOLDERS')
             //     ->icon('arrow-down')

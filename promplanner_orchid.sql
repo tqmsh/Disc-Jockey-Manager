@@ -605,6 +605,69 @@ CREATE TABLE `election_winners` (
 -- Table structure for table `events`
 --
 
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS `events`;  
+
+DROP TABLE IF EXISTS `events`;
+
+CREATE TABLE `events` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `event_creator` bigint(20) UNSIGNED NOT NULL,
+  `event_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_id` bigint(20) UNSIGNED NOT NULL,
+  `event_date` datetime DEFAULT NULL,
+  `event_loadin_time` datetime DEFAULT NULL,
+  `event_start_time` datetime DEFAULT NULL,
+  `event_finish_time` datetime DEFAULT NULL,
+  `venue_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `staff_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `system_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `song_ids` JSON NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `client_id` (`client_id`),
+  KEY `venue_id` (`venue_id`),
+  KEY `staff_id` (`staff_id`),
+  KEY `event_creator` (`event_creator`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+INSERT INTO `events` (
+    `id`, 
+    `event_creator`, 
+    `event_name`, 
+    `client_id`, 
+    `event_date`, 
+    `event_loadin_time`, 
+    `event_start_time`, 
+    `event_finish_time`, 
+    `venue_id`, 
+    `staff_id`, 
+    `system_id`, 
+    `song_ids`, 
+    `created_at`, 
+    `updated_at`
+) 
+VALUES (
+    1, 
+    108, 
+    'Cool Kidz Party', 
+    1,  
+    '2023-07-15', 
+    '2023-07-15 14:00:00', 
+    '2023-07-15 18:00:00', 
+    '2023-07-15 23:00:00', 
+    6, 
+    1, 
+    1, 
+    '[1, 2]', 
+    '2023-07-01 10:00:00', 
+    '2023-07-01 10:00:00'
+);
+
+
 CREATE TABLE `events` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `event_creator` bigint(20) UNSIGNED NOT NULL,
@@ -637,12 +700,14 @@ INSERT INTO `events` (`id`, `event_creator`, `school_id`, `region_id`, `venue_id
 (14, 13, 51, 1, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', 1, 100, 10.5, NULL, '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
 (15, 151, 51, 1, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', 1, 100, 10.5, NULL, '2022-12-02 01:03:59', '2022-12-02 01:03:59');
 
+
+
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `events_historical_records`
 --
-
 CREATE TABLE `events_historical_records` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `event_id` bigint(20) UNSIGNED NOT NULL,
@@ -1138,13 +1203,12 @@ CREATE TABLE `notices` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
 -- Dumping data for table `notices`
 --
 
 INSERT INTO `notices` (`id`, `dashboard`, `title`, `subtitle`, `url`, `created_at`, `updated_at`) VALUES
-(1, 2, 'This is a Test BOY', 'This is a test test test test test test test', 'https://www.youtube.com/watch?v=KNuoGeD9Qeo&t=122s', '2024-04-15 05:26:28', '2024-04-15 05:26:28'),
-(2, 3, 'TESSSSST', 'TESSSSSTTESSSSSTTESSSSSTTESSSSST', NULL, '2024-04-28 03:16:33', '2024-04-28 03:16:33');
+(1, 2, 'Upcoming Event: DJ Equipment Check', 'Reminder: Ensure all DJ equipment is ready for upcoming event', NULL, '2024-04-15 05:26:28', '2024-04-15 05:26:28'),
+(2, 3, 'Event Feedback Request', 'Please provide feedback on the recent event experience', NULL, '2024-04-28 03:16:33', '2024-04-28 03:16:33');
 
 -- --------------------------------------------------------
 
@@ -1746,7 +1810,7 @@ INSERT INTO `sessions` (`id`, `user_id`, `time`, `role`, `created_at`, `updated_
 -- Table structure for table `songs`
 --
 
-CREATE TABLE `songs` (
+CREATE TABLE `songs` ( -- song 传送门
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `artists` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -2130,7 +2194,7 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 -- Table structure for table `vendors`
 --
 
-CREATE TABLE `vendors` (
+CREATE TABLE `vendors` ( -- venue 传送门
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -2162,6 +2226,72 @@ INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `account_status`, `compan
 (14, 209, 18, 1, 'New Vendor LLC', '1234 Main St', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', '(123) 456-789_', 'https://amazon.com', 'newvendor@test.com', 0, '2023-07-29 23:39:18', '2023-07-29 23:42:31'),
 (15, 210, 19, 1, 'Salon Pros', 'Salon Orad', 'Ottawa', 'Ontario', 'Canada', 'K1A 7G7', '(456) 123-7895', 'https://amazon.com', 'salonpros@gmail.com', 0, '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
 (16, 211, 12, 0, 'NewMan Inc', 'NewManInc 123', 'Ottawa', 'Ontario', 'Canada', 'K1K2G6', '(445) 454-5454', 'https://promplanner.app/prom-planner-team/', 'NewManInc@gmail.com', 0, '2023-08-19 05:12:18', '2023-08-19 05:12:18');
+ 
+ 
+-- 新增的
+
+DROP TABLE IF EXISTS `clients`;
+
+CREATE TABLE `clients` ( -- clients 传送门
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `full_name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(20),
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+--
+-- Dumping data for table `clients`
+--
+INSERT INTO `clients` (`full_name`, `email`, `phone`, `created_at`, `updated_at`)
+VALUES
+    ('John Doe', 'john.doe@example.com', '123-456-7890', NOW(), NOW()),
+    ('Jane Smith', 'jane.smith@example.com', '987-654-3210', NOW(), NOW()),
+    ('Michael Johnson', 'michael.johnson@example.com', NULL, NOW(), NOW()),
+    ('Emily Brown', 'emily.brown@example.com', NULL, NOW(), NOW());
+
+
+--
+-- Dumping data for table `staffs`
+--
+DROP TABLE IF EXISTS `staffs`;
+
+CREATE TABLE `staffs` ( -- staffs 传送门
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `full_name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(20),
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO `staffs` (`full_name`, `email`, `phone`, `created_at`, `updated_at`)
+VALUES
+    ('Alice Johnson', 'alice.johnson@example.com', '111-222-3333', NOW(), NOW()),
+    ('Bob Williams', 'bob.williams@example.com', '444-555-6666', NOW(), NOW()),
+    ('Carol Davis', 'carol.davis@example.com', NULL, NOW(), NOW()),
+    ('David Martinez', 'david.martinez@example.com', NULL, NOW(), NOW());
+
+
+
+-- Drop table if exists `systems`
+DROP TABLE IF EXISTS `systems`;
+
+-- Create table `systems`
+CREATE TABLE `systems` ( -- systems 传送门
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `full_name` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Inserting sample data into `systems`
+INSERT INTO `systems` (`full_name`, `description`, `created_at`, `updated_at`)
+VALUES
+    ('Sound System', 'Advanced sound system for events', NOW(), NOW()),
+    ('Lighting System', 'State-of-the-art lighting setup', NOW(), NOW()),
+    ('Projection System', 'High-definition projection system', NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -2437,15 +2567,15 @@ ALTER TABLE `election_winners`
 --
 -- Indexes for table `events`
 --
-ALTER TABLE `events`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `events_school_index` (`school`),
-  ADD KEY `event_creator` (`event_creator`),
-  ADD KEY `event_creator_2` (`event_creator`),
-  ADD KEY `school_id` (`school_id`),
-  ADD KEY `school` (`school`),
-  ADD KEY `venue_id` (`venue_id`),
-  ADD KEY `region_id` (`region_id`);
+-- ALTER TABLE `events`
+--   ADD PRIMARY KEY (`id`),
+--   ADD KEY `events_school_index` (`school`),
+--   ADD KEY `event_creator` (`event_creator`),
+--   ADD KEY `event_creator_2` (`event_creator`),
+--   ADD KEY `school_id` (`school_id`),
+--   ADD KEY `school` (`school`),
+--   ADD KEY `venue_id` (`venue_id`),
+--   ADD KEY `region_id` (`region_id`);
 
 --
 -- Indexes for table `events_historical_records`
@@ -3495,13 +3625,13 @@ ALTER TABLE `election_winners`
   ADD CONSTRAINT `election_winner_candidate_id` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `election_winner_position_id` FOREIGN KEY (`position_id`) REFERENCES `positions` (`id`) ON DELETE CASCADE;
 
---
--- Constraints for table `events`
---
-ALTER TABLE `events`
-  ADD CONSTRAINT `events_event_creator_foreign` FOREIGN KEY (`event_creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `events_school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `venue_id` FOREIGN KEY (`venue_id`) REFERENCES `vendors` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+-- --
+-- -- Constraints for table `events`
+-- --
+-- ALTER TABLE `events`
+--   ADD CONSTRAINT `events_event_creator_foreign` FOREIGN KEY (`event_creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+--   ADD CONSTRAINT `events_school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+--   ADD CONSTRAINT `venue_id` FOREIGN KEY (`venue_id`) REFERENCES `vendors` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `events_historical_records`

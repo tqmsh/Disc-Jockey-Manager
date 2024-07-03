@@ -6,7 +6,7 @@
     <div class="d-flex flex-column" style="height: 100%; justify-content:space-between;">
         <a class="d-flex justify-content-center align-items-center mb-4" style="height:max-content; gap:16px;" href="{{Dashboard::prefix()}}">
             <img src="{{ URL::asset('/image/Prom_VP_Line.png') }}"  style="height: 40px;">
-            <span style="font-size:2rem;">Prom Planner</span>
+            <span style="font-size:2rem;">Disc Jockey Manager</span>
         </a>
         
         <div class="w-100 d-flex flex-column align-items-center" style="">
