@@ -602,14 +602,13 @@ CREATE TABLE `election_winners` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `events`
+-- Table structure for table `events` events 传送门
 --
 
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `events`;  
-
-DROP TABLE IF EXISTS `events`;
+ 
 
 CREATE TABLE `events` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -666,42 +665,7 @@ VALUES (
     '2023-07-01 10:00:00', 
     '2023-07-01 10:00:00'
 );
-
-
-CREATE TABLE `events` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `event_creator` bigint(20) UNSIGNED NOT NULL,
-  `school_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `region_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `venue_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `event_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `event_start_time` datetime DEFAULT NULL,
-  `event_finish_time` datetime DEFAULT NULL,
-  `school` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `event_address` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `event_zip_postal` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `event_info` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `event_rules` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `open` tinyint(1) DEFAULT 1 COMMENT '1 = Open, 0 = Closed',
-  `capacity` int(11) DEFAULT NULL,
-  `ticket_price` float DEFAULT NULL,
-  `interested_vendor_categories` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`interested_vendor_categories`)),
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `events`
---
-
-INSERT INTO `events` (`id`, `event_creator`, `school_id`, `region_id`, `venue_id`, `event_name`, `event_start_time`, `event_finish_time`, `school`, `event_address`, `event_zip_postal`, `event_info`, `event_rules`, `open`, `capacity`, `ticket_price`, `interested_vendor_categories`, `created_at`, `updated_at`) VALUES
-(6, 108, 32, 12, 9, 'Cool Kidz Party', '2022-11-11 15:05:41', '2022-11-18 15:05:41', 'Cool School', '789 Cool Street', 'ILK OL8', 'Cool dresses ', 'ONLY COOL KIDS ALLOWED', 1, 100, 10.5, NULL, '2022-11-04 19:05:41', '2022-11-15 01:34:49'),
-(13, 13, 53, 1, NULL, 'Colonel By\'s Main Event', '2022-11-21 12:00:00', '2022-11-22 12:00:00', 'Colonel By Secondary School', '2381 Ogilvie Rd', 'K1J 7N4', 'Formal Attire', 'No Violence', 1, 100, 10.5, NULL, '2022-11-20 11:16:51', '2022-11-20 11:16:51'),
-(14, 13, 51, 1, NULL, 'Digitera\'s Main DJ Event', '2022-11-20 12:00:00', '2022-11-26 12:00:00', 'Digitera School of Digital Marketing & Software', '1125 Colonel By Dr Rm 102', 'K1S 5B6', 'PART ON!!!!', 'No rules', 1, 100, 10.5, NULL, '2022-11-20 11:25:03', '2022-11-20 11:25:03'),
-(15, 151, 51, 1, NULL, 'The Perfect Event For You!', '2022-12-02 12:00:00', '2022-12-03 12:00:00', 'Digitera School of Digital Marketing & Software', '123 Hey Road', 'KIU 84O', 'I ain\'t got nothing', 'None', 1, 100, 10.5, NULL, '2022-12-02 01:03:59', '2022-12-02 01:03:59');
-
-
-
+ 
 
 -- --------------------------------------------------------
 
@@ -2254,23 +2218,32 @@ VALUES
 --
 -- Dumping data for table `staffs`
 --
-DROP TABLE IF EXISTS `staffs`;
 
-CREATE TABLE `staffs` ( -- staffs 传送门
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `full_name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(20),
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE staffs ( -- staffs 传送门
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    position ENUM('DJ', 'MC', 'Attendant', 'Tech', 'Dancer', 'Roadie') NOT NULL,
+    gender ENUM('Male', 'Female') NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    cell VARCHAR(20),
+    age INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-INSERT INTO `staffs` (`full_name`, `email`, `phone`, `created_at`, `updated_at`)
+
+INSERT INTO staffs (first_name, last_name, position, gender, email, cell, age, created_at, updated_at)
 VALUES
-    ('Alice Johnson', 'alice.johnson@example.com', '111-222-3333', NOW(), NOW()),
-    ('Bob Williams', 'bob.williams@example.com', '444-555-6666', NOW(), NOW()),
-    ('Carol Davis', 'carol.davis@example.com', NULL, NOW(), NOW()),
-    ('David Martinez', 'david.martinez@example.com', NULL, NOW(), NOW());
+    ('Alice', 'Johnson', 'DJ', 'Female', 'alice.johnson@example.com', '111-222-3333', 28, NOW(), NOW()),
+    ('Bob', 'Williams', 'MC', 'Male', 'bob.williams@example.com', '444-555-6666', 32, NOW(), NOW()),
+    ('Carol', 'Davis', 'Attendant', 'Female', 'carol.davis@example.com', NULL, 27, NOW(), NOW()),
+    ('David', 'Martinez', 'Tech', 'Male', 'david.martinez@example.com', NULL, 30, NOW(), NOW());
+
+
+
+
+
 
 
 

@@ -50,27 +50,23 @@ class PlatformProvider extends OrchidServiceProvider
             ->icon('diamond')
             ->route('platform.event.list'),
 
-            // Menu::make('Students')
-            //     ->icon('graduation')
-            //     ->size()
-            //     ->list([
-            //         //student nav option
-            //         Menu::make('List')
-            //             ->icon('list')
-            //             ->route('platform.student.list'),
+            Menu::make('Staffs')
+                ->icon('people')
+                ->size()
+                ->list([
+                    //student nav option
+                    Menu::make('List')
+                        ->icon('list')
+                        ->route('platform.student.list'),
 
-            //         //pending student nav option
-            //         Menu::make('Pending Students')
-            //             ->icon('user-follow')
-            //             ->badge(function () {
-            //                         return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
-            //                     })
-            //             ->route('platform.pendingstudent.list'),
-
-            //         Menu::make('List of Couples')
-            //             ->icon('fa.children')
-            //             ->route('platform.couples.list'),
-            //     ]),
+                    //pending student nav option
+                    Menu::make('Pending Staffs')
+                        ->icon('user-follow')
+                        ->badge(function () {
+                                    return count(Student::where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id'))->where('account_status', 0)->get());
+                                })
+                        ->route('platform.pendingstudent.list'),
+                ]),
 
             // Menu::make("Groups")
             //     ->icon('organization')

@@ -154,7 +154,10 @@ class EditEventScreen extends Screen
 
                 Select::make('staff_id')
                     ->title('Staff')
-                    ->fromQuery(Staffs::query(), 'full_name')
+                    ->fromQuery(
+                        Staffs::query()->selectRaw("id, CONCAT(first_name, ' ', last_name) AS name"),
+                        'name' 
+                    )
                     ->horizontal()
                     ->value($this->event->staff_id)
                     ->empty('Start typing to search...'),

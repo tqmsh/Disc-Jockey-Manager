@@ -5,14 +5,12 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\User;
 use App\Models\Events;
-use App\Models\Student;
+use App\Models\Staffs; // Updated
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
-use App\Models\Localadmin;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
@@ -20,135 +18,70 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use App\Orchid\Layouts\ViewStudentLayout;
 
-class ViewStudentScreen extends Screen
+class ViewStudentScreen extends Screen // Updated class name
 {
-    /**
-     * Query data.
-     *
-     * @return array
-     */
     public function query(): iterable
     {
         return [
-            'students' => Student::filter(request(['sort_option','event_id', 'ticketstatus']))->latest('students.created_at')->where('account_status', 1)
-                        ->where('school_id', Localadmin::where('user_id', Auth::user()->id)->pluck('school_id'))
-                        ->paginate(request()->query('pagesize', 20))
+            'staffs' => Staffs::latest('created_at')
+                ->paginate(request()->query('pagesize', 20))
         ];
     }
 
-
-    /**
-     * Display header name.
-     *
-     * @return string|null
-     */
     public function name(): ?string
     {
-        return 'Students';
+        return 'Staffs'; // Updated
     }
 
-    /**
-     * Button commands.
-     *
-     * @return \Orchid\Screen\Action[]
-     */
     public function commandBar(): iterable
     {
         return [
-            Link::make('Add New Students')
+            Link::make('Add New Staff')
                 ->icon('plus')
                 ->route('platform.student.create'),
 
-            Button::make('Delete Selected Students')
+            Button::make('Delete Selected Staff')
                 ->icon('trash')
-                ->method('deleteStudents')
-                ->confirm(__('Are you sure you want to delete the selected students?')),
+                ->method('deleteStaffs')
+                ->confirm(__('Are you sure you want to delete the selected staff?')),
 
-            Link::make('Contact Students')
+            Link::make('Contact Staff')
                 ->icon('comment')
                 ->route('platform.contact-students'),
-                
+
             Link::make('Back')
                 ->icon('arrow-left')
-                ->route('platform.student.list')
+                ->route('platform.student.list'),
         ];
     }
 
-    /**
-     * Views.
-     *
-     * @return \Orchid\Screen\Layout[]|string[]
-     */
     public function layout(): iterable
     {
         return [
             Layout::rows([
-
-                Group::make([
-
-                    Select::make('sort_option')
-                        ->title('Order Students By:')
-                        ->empty('No selection')
-                        ->help('Start typing in boxes to search')
-                        ->options([
-                            'firstname' => 'First Name',
-                            'lastname' => 'Last Name',
-                            'grade' => 'Grade'
-                        ]),
-
-                    Select::make('event_id')
-                        ->title('Event:')
-                        ->empty('No selection')
-                        ->fromQuery(Events::query()->where('school_id', Localadmin::where('user_id', Auth::user()->id)->get('school_id')->value('school_id')), 'event_name'),
-
-                    Select::make('ticketstatus')
-                        ->title('Ticket Status')
-                        ->empty('No selection')
-                        ->options([
-                            'Paid' => 'Paid',
-                            'Unpaid' => 'Unpaid'
-                        ]),
-                ]),
-                    
-                Button::make('Filter')
+                Button::make('Filter') // Optional
                     ->icon('filter')
                     ->method('filter')
                     ->type(Color::DEFAULT()),
             ]),
-                
-            ViewStudentLayout::class
+            
+            // ViewStudentLayout::class // Ensure this points to the correct layout
         ];
     }
 
-    public function filter(){
-        return redirect()->route('platform.student.list', request(['sort_option', 'ticketstatus', 'event_id']));
-    }
-
-        
-    public function redirect($student){
-        return redirect()->route('platform.student.edit', $student);
-    }
-
-    public function deleteStudents(Request $request)
+    public function deleteStaffs(Request $request) // Updated method name
     {   
-        //get all students from post request
-        $students = $request->get('students');
+        $staffs = $request->get('staffs');
         
-        try{
-
-            //if the array is not empty
-            if(!empty($students)){
-
-                User::whereIn('id', $students)->delete();
-
-                Toast::success('Selected students deleted succesfully');
-
-            }else{
-                Toast::warning('Please select students in order to delete them');
+        try {
+            if (!empty($staffs)) {
+                Staff::whereIn('id', $staffs)->delete();
+                Toast::success('Selected staff deleted successfully');
+            } else {
+                Toast::warning('Please select staff in order to delete them');
             }
-
-        }catch(Exception $e){
-            Alert::error('There was a error trying to deleted the selected students. Error Message: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Alert::error('There was an error trying to delete the selected staff. Error Message: ' . $e->getMessage());
         }
     }
 }
