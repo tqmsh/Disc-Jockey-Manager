@@ -1,8 +1,6 @@
 # Disc Jockey Manager
-
+A software developed by Tianqin Meng during his COOP at Digitera
 ## Back-end Overview
-
-**Destination URL:** [https://discjockeymanager.com/](https://discjockeymanager.com/)
 
 **FTP:** Coming soon
 
@@ -15,9 +13,6 @@
 **GitHub:** Coming soon
 
 ## Project Overview
-
-### Website
-A WordPress website to sell the project: [https://discjockeymanager.com](https://discjockeymanager.com)
 
 ### Applications
 - **Super Admin PHP Web Application:** (Coming soon)
