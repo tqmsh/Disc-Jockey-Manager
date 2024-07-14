@@ -1,5 +1,5 @@
 # Disc Jockey Manager
-A software developed by Tianqin Meng during his COOP at Digitera
+A software developed by Tianqin Meng during his CO-OP at Digitera
 ## Back-end Overview
 
 **FTP:** Coming soon
