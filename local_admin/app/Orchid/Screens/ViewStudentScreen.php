@@ -65,7 +65,7 @@ class ViewStudentScreen extends Screen // Updated class name
                     ->type(Color::DEFAULT()),
             ]),
             
-            // ViewStudentLayout::class // Ensure this points to the correct layout
+            ViewStudentLayout::class // Ensure this points to the correct layout
         ];
     }
 
@@ -75,7 +75,7 @@ class ViewStudentScreen extends Screen // Updated class name
         
         try {
             if (!empty($staffs)) {
-                Staff::whereIn('id', $staffs)->delete();
+                Staffs::whereIn('id', $staffs)->delete();
                 Toast::success('Selected staff deleted successfully');
             } else {
                 Toast::warning('Please select staff in order to delete them');

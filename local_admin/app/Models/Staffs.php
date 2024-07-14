@@ -10,8 +10,11 @@ class Staffs extends Model
 {
     use HasFactory;
     use AsSource;
+ 
+    protected $table = 'staffs';
 
-    # 这里得以后改动
-    
+    protected $fillable = [
+        'first_name', 'last_name', 'position', 'gender', 'email', 'cell', 'age'
+    ];
  
 }

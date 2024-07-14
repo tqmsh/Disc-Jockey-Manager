@@ -4,7 +4,7 @@ namespace App\Orchid\Screens;
 
 use Exception;
 use App\Models\User;
-use App\Models\Student;
+use App\Models\Staffs;
 use Orchid\Screen\Screen;
 use App\Models\Localadmin;
 use Illuminate\Http\Request;
@@ -20,37 +20,17 @@ use Illuminate\Validation\Rule;
 
 class EditStudentScreen extends Screen
 {
-    public $student;
-    public $school;
-
-    /**
-     * Query data.
-     *
-     * @return array
-     */
-    public function query(Student $student): iterable
+    public $staff;
+    public function query(Staffs $staff): iterable
     {
-        abort_if(Localadmin::where('user_id', Auth::user()->id)->first()->school_id != $student->school_id, 403, 'You are not authorized to view this page.');
         return [
-            'student' => $student
+            'staff' => $staff
         ];
     }
-
-    /**
-     * Display header name.
-     *
-     * @return string|null
-     */
     public function name(): ?string
     {
-        return 'Edit Student: ' . $this->student->firstname . ' ' . $this->student->lastname;
+        return 'Edit Staff: ' . $this->staff->first_name . ' ' . $this->staff->last_name;
     }
-
-    /**
-     * Button commands.
-     *
-     * @return \Orchid\Screen\Action[]
-     */
     public function commandBar(): iterable
     {
         return [
@@ -58,7 +38,7 @@ class EditStudentScreen extends Screen
                 ->icon('check')
                 ->method('update'),
 
-            Button::make('Delete Student')
+            Button::make('Delete Staff')
                 ->icon('trash')
                 ->method('delete'),
 
@@ -67,155 +47,137 @@ class EditStudentScreen extends Screen
                 ->route('platform.student.list')
         ];
     }
-
-
-    /**
-     * Views.
-     *
-     * @return \Orchid\Screen\Layout[]|string[]
-     */
     public function layout(): iterable
     {
-   
         return [
-
             Layout::rows([
-
-                Input::make('firstname')
+                Input::make('first_name')
                     ->title('First Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->value($this->student->firstname),
+                    ->value($this->staff->first_name),
 
-                Input::make('lastname')
+                Input::make('last_name')
                     ->title('Last Name')
                     ->type('text')
                     ->required()
                     ->horizontal()
-                    ->value($this->student->lastname),
+                    ->value($this->staff->last_name),
+
+                Select::make('position')
+                    ->title('Position')
+                    ->required()
+                    ->horizontal()
+                    ->options([
+                        'DJ' => 'DJ',
+                        'MC' => 'MC',
+                        'Attendant' => 'Attendant',
+                        'Tech' => 'Tech',
+                        'Dancer' => 'Dancer',
+                        'Roadie' => 'Roadie',
+                    ])
+                    ->value($this->staff->position),
+
+                Select::make('gender')
+                    ->title('Gender')
+                    ->required()
+                    ->horizontal()
+                    ->options([
+                        'Male' => 'Male',
+                        'Female' => 'Female',
+                    ])
+                    ->value($this->staff->gender),
 
                 Input::make('email')
                     ->title('Email')
                     ->type('email')
                     ->required()
                     ->horizontal()
-                    ->value($this->student->email),
-                   
-                Input::make('grade')
-                    ->title('Grade')
+                    ->value($this->staff->email),
+
+                Input::make('cell')
+                    ->title('Phone Number')
+                    ->type('text')
+                    ->horizontal()
+                    ->value($this->staff->cell),
+
+                Input::make('age')
+                    ->title('Age')
                     ->type('number')
                     ->required()
                     ->horizontal()
-                    ->value($this->student->grade),
-
-                Input::make('phonenumber')
-                    ->title('Phone Number')
-                    ->type('text')
-                    ->required()
-                    ->horizontal()
-                    ->mask('(999) 999-9999')
-                    ->placeholder('Ex. (613) 859-5863')
-                    ->value($this->student->phonenumber),
-
-                Select::make('allergies')
-                    ->title('Allergies')
-                    ->horizontal()
-                    ->allowAdd()
-                    ->value($this->student->allergies)
-                    ->options([
-                        'Peanuts' => 'Peanuts',
-                        'Tree Nuts' => 'Tree Nuts',
-                        'Shellfish' => 'Shellfish',
-                        'Milk' => 'Milk',
-                        'Eggs' => 'Eggs',
-                        'Wheat' => 'Wheat',
-                        'Soy' => 'Soy',
-                        'Fish' => 'Fish',
-                    ]),                           
+                    ->value($this->staff->age),
             ]),
         ];
     }
 
-    public function update(Student $student, Request $request)
+    public function update(Staffs $staff, Request $request)
     {
-        try{
+        try {
             $request->validate([
-                'firstname' => 'required|max:255',
-                'lastname' => 'required|max:255',
+                'first_name' => 'required|max:255',
+                'last_name' => 'required|max:255',
                 'email' => [
                     'required',
                     'email',
                     'max:255',
-                    Rule::unique('users')->ignore($student->user_id),
+                    Rule::unique('staffs')->ignore($staff->id), // Change to 'staffs'
                 ],
-                'grade' => 'required|integer|in:9,10,11,12',
-                'phonenumber' => 'required|max:20',
-                'allergies' => 'nullable|max:255',
+                'position' => 'required',
+                'gender' => 'required',
+                'cell' => 'nullable|max:20',
+                'age' => 'nullable|integer',
             ]);
-            $studentTableFields = $this->getStudentFields($request);
+    
+            $staffTableFields = $this->getStaffFields($request);
+    
+            // Update staff record
+            $staff->update($staffTableFields);
+    
+            Toast::success('You have successfully updated: ' . $request->input('first_name') . ' ' . $request->input('last_name') . '.');
+    
+            return redirect()->route('platform.student.list'); // Adjust the redirect if necessary
+    
+        } catch (Exception $e) {
+            Alert::error('There was an error editing this staff. Error Code: ' . $e->getMessage());
+        }
+    }
 
-            $userTableFields = $this->getUserFields($request);
+    public function delete(Staffs $staff)
+    {
+        try {
+            User::where('id', $staff->user_id)->delete();
+            $staff->delete();
 
-            //email not changed
-            $student->update($studentTableFields);
-            
-            User::where('id', $student->user_id)->update($userTableFields);
-            
-            Toast::success('You have successfully updated: ' . $request->input('firstname') . ' ' . $request->input('lastname') . '.');
+            Toast::info('You have successfully deleted the staff.');
 
-            return redirect()->route('platform.student.list');
+            return redirect()->route('platform.staff.list');
 
-        }catch(Exception $e){
-
-            Alert::error('There was an error editing this student. Error Code: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Alert::error('There was an error deleting this staff. Error Code: ' . $e->getMessage());
         }
     } 
-
-    public function delete(Student $student)
+    private function getStaffFields($request)
     {
-        try{
-
-            User::where('id', $student->user_id)->delete();
-
-            Toast::info('You have successfully deleted the student.');
-
-            return redirect()->route('platform.student.list');
-
-        }catch(Exception $e){
-            
-            Alert::error('There was an error deleting this student. Error Code: ' . $e->getMessage());
-        }
+        return [
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'position' => $request->input('position'),
+            'gender' => $request->input('gender'),
+            'email' => $request->input('email'),
+            'cell' => $request->input('cell'),
+            'age' => $request->input('age'),
+        ];
     }
 
-    //this functions returns the values that need to be inserted in the localadmin table in the db
-    private function getStudentFields($request){
-
-        $studentTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
+    private function getUserFields($request)
+    {
+        return [
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
             'email' => $request->input('email'),
-            'grade' => $request->input('grade'),
-            'phonenumber' => $request->input('phonenumber'),
-            'ticketstatus' => $request->input('ticketstatus'),
-            'school' => $request->input('school'),
-            'event_id' => $request->input('event_id'),
-            'allergies' => $request->input('allergies'),
+            'cell' => $request->input('cell'),
         ];
-        
-        return $studentTableFields;
-    }
-
-    //this functions returns the values that need to be inserted in the user table in the db
-    private function getUserFields($request){
-
-        $userTableFields = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'phonenumber' => $request->input('phonenumber'),
-        ];
-        
-        return $userTableFields;
     }
 }
