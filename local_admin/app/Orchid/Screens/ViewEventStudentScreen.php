@@ -23,7 +23,7 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\DropDown;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
-use App\Orchid\Layouts\ViewStudentLayout;
+use App\Orchid\Layouts\ViewStaffLayout;
 use App\Notifications\GeneralNotification;
 use App\Orchid\Layouts\ViewUnattendingStudentLayout;
 use App\Orchid\Layouts\ViewUnattendingStudentInviteLayout;
@@ -181,7 +181,7 @@ class ViewEventStudentScreen extends Screen
 
             Layout::tabs([
                 'Attending Students' => [
-                    ViewStudentLayout::class
+                    ViewStaffLayout::class
                 ],
 
                 'Invite Students' => [

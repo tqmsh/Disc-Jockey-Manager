@@ -9,15 +9,23 @@ use App\Orchid\Screens\EditEventScreen;
 use App\Orchid\Screens\ViewEventScreen;
 use App\Orchid\Screens\ViewGuideScreen;
 use App\Orchid\Screens\CreateEventScreen;
-use App\Orchid\Screens\EditStudentScreen;
+
+use App\Orchid\Screens\EditStaffScreen;
+use App\Orchid\Screens\EditVenueScreen;
+
 use App\Orchid\Screens\EmailSenderScreen;
-use App\Orchid\Screens\ViewStudentScreen;
+use App\Orchid\Screens\ViewStaffScreen;
+use App\Orchid\Screens\ViewVenueScreen;
+
 use App\Orchid\Screens\ViewWinnersScreen;
 use App\Orchid\Screens\EditElectionScreen;
 use App\Orchid\Screens\EditPositionScreen;
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
-use App\Orchid\Screens\CreateStudentScreen;
+
+use App\Orchid\Screens\CreateStaffScreen;
+use App\Orchid\Screens\CreateVenueScreen;
+
 use App\Orchid\Screens\EditCandidateScreen;
 use App\Orchid\Screens\SuggestVendorScreen;
 use App\Orchid\Screens\ViewCandidateScreen;
@@ -98,13 +106,20 @@ Route::redirect('/main', '/admin/dashboard')->name('platform.main');
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 
 //show students screen
-Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
+Route::screen('/students', ViewStaffScreen::class)->name('platform.student.list');
 
 //show create student screen
-Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
+Route::screen('/students/create', CreateStaffScreen::class)->name('platform.student.create');
 
 //show edit students screen
-Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
+Route::screen('/students/{student}/edit', EditStaffScreen::class)->name('platform.student.edit');
+
+
+# Venue
+Route::screen('/venues', ViewVenueScreen::class)->name('platform.venue.list');
+Route::screen('/venues/create', CreateVenueScreen::class)->name('platform.venue.create');
+Route::screen('/venues/{venue}/edit', EditVenueScreen::class)->name('platform.venue.edit');
+
 
 //show events screen
 Route::screen('/events', ViewEventScreen::class)->name('platform.event.list');

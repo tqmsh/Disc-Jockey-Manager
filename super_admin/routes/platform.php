@@ -28,16 +28,16 @@ use App\Orchid\Screens\ViewSchoolScreen;
 use App\Orchid\Screens\ViewVendorScreen;
 use App\Orchid\Screens\ViewDetailedVendorScreen;
 use App\Orchid\Screens\CreateEventScreen;
-use App\Orchid\Screens\EditStudentScreen;
+use App\Orchid\Screens\EditStaffScreen;
 use App\Orchid\Screens\EmailSenderScreen;
-use App\Orchid\Screens\ViewStudentScreen;
+use App\Orchid\Screens\ViewStaffScreen;
 use App\Orchid\Screens\CreateSchoolScreen;
 use App\Orchid\Screens\CreateVendorScreen;
 use App\Orchid\Screens\EditCategoryScreen;
 use App\Orchid\Screens\EditEventBidScreen;
 use App\Orchid\Screens\ViewCategoryScreen;
 use App\Orchid\Screens\ViewEventBidScreen;
-use App\Orchid\Screens\CreateStudentScreen;
+use App\Orchid\Screens\CreateStaffScreen;
 
 use App\Orchid\Screens\ViewElectionScreen;
 use App\Orchid\Screens\CreateElectionScreen;
@@ -136,13 +136,13 @@ Route::redirect('/main', '/admin/dashboard')->name('platform.main');
 Route::screen('/email', EmailSenderScreen::class)->name('platform.email');
 
 //show students screen
-Route::screen('/students', ViewStudentScreen::class)->name('platform.student.list');
+Route::screen('/students', ViewStaffScreen::class)->name('platform.student.list');
 
 //show create student screen
-Route::screen('/students/create', CreateStudentScreen::class)->name('platform.student.create');
+Route::screen('/students/create', CreateStaffScreen::class)->name('platform.student.create');
 
 //show edit students screen
-Route::screen('/students/{student}/edit', EditStudentScreen::class)->name('platform.student.edit');
+Route::screen('/students/{student}/edit', EditStaffScreen::class)->name('platform.student.edit');
 
 //show vendors screen
 Route::screen('/vendors', ViewVendorScreen::class)->name('platform.vendor.list');

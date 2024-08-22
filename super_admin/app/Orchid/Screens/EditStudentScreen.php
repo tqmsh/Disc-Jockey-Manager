@@ -17,7 +17,7 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
-class EditStudentScreen extends Screen
+class EditStaffScreen extends Screen
 {
     public $student;
     public $school;

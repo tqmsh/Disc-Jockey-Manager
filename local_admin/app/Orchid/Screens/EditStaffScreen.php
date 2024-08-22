@@ -18,7 +18,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class EditStudentScreen extends Screen
+class EditStaffScreen extends Screen
 {
     public $staff;
     public function query(Staffs $staff): iterable

@@ -16,9 +16,9 @@ use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Facades\Auth;
-use App\Orchid\Layouts\ViewStudentLayout;
+use App\Orchid\Layouts\ViewStaffLayout;
 
-class ViewStudentScreen extends Screen // Updated class name
+class ViewStaffScreen extends Screen // Updated class name
 {
     public function query(): iterable
     {
@@ -65,7 +65,7 @@ class ViewStudentScreen extends Screen // Updated class name
                     ->type(Color::DEFAULT()),
             ]),
             
-            ViewStudentLayout::class // Ensure this points to the correct layout
+            ViewStaffLayout::class // Ensure this points to the correct layout
         ];
     }
 

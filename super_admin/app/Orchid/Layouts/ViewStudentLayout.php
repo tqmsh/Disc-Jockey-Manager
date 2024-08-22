@@ -11,7 +11,7 @@ use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Color;
 
-class ViewStudentLayout extends Table
+class ViewStaffLayout extends Table
 {
     /**
      * Data source.

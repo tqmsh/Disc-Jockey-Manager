@@ -5,7 +5,7 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
-use App\Models\Vendors;
+use App\Models\Venues;
 use App\Models\Clients;
 use App\Models\Staffs;
 use App\Models\Systems;
@@ -149,7 +149,7 @@ class CreateEventScreen extends Screen
                 Select::make('venue_id')
                     ->title('Venue')
                     ->required()
-                    ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%Venue%')->first()->id), 'company_name')
+                    ->fromQuery(Venues::query(), 'name')
                     ->horizontal()
                     ->value($this->event->venue_id)
                     ->empty('Start typing to search...'),

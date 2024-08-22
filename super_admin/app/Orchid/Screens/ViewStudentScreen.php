@@ -16,9 +16,9 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
-use App\Orchid\Layouts\ViewStudentLayout;
+use App\Orchid\Layouts\ViewStaffLayout;
 
-class ViewStudentScreen extends Screen
+class ViewStaffScreen extends Screen
 {
     /**
      * Query data.
@@ -129,7 +129,7 @@ class ViewStudentScreen extends Screen
                     ->type(Color::DEFAULT()),
             ]),
 
-            ViewStudentLayout::class
+            ViewStaffLayout::class
         ];
     }
 

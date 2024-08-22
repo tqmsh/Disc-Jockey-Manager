@@ -27,7 +27,7 @@ use Orchid\Screen\Actions\ModalToggle;
 
 
 
-class CreateStudentScreen extends Screen
+class CreateStaffScreen extends Screen
 {
     public $requiredFields = ['firstname', 'lastname', 'position', 'gender', 'email'];
     public $staff;

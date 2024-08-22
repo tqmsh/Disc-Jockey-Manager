@@ -2153,44 +2153,43 @@ INSERT INTO `users` (`id`, `name`, `firstname`, `lastname`, `email`, `phonenumbe
 (218, 'Real', 'Real', 'Person', 'fake_email_address@example.net', '(456)-789-1011', 3, 'Canada', NULL, 1, NULL, '$2y$10$6aN7aF65E0b5LFGM.QUmEuXWp7tKx/v7czro4kFDobMY7kC.tj/aS', NULL, NULL, '2024-02-25 04:50:21', '2024-02-25 04:50:21');
 
 -- --------------------------------------------------------
+DROP TABLE `venues`;
 
 --
--- Table structure for table `vendors`
+-- Table structure for table `venues`
 --
-
-CREATE TABLE `vendors` ( -- venue 传送门
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `category_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `account_status` int(11) NOT NULL DEFAULT 0,
-  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `venues` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `state_province` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `zip_postal` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phonenumber` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `website` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `website` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `credits` int(11) NOT NULL DEFAULT 0,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `vendors`
---
 
-INSERT INTO `vendors` (`id`, `user_id`, `category_id`, `account_status`, `company_name`, `address`, `city`, `state_province`, `country`, `zip_postal`, `phonenumber`, `website`, `email`, `credits`, `created_at`, `updated_at`) VALUES
-(2, 181, 13, 1, 'Update Vendor', 'Update Vendor', 'Ottawa', 'Ontario', 'Costa Rica', 'K1K 2G6', '(455) 674-9877', 'https://laravel.com/docs/9.x/requests#retrieving-a-portion-of-the-input-data', 'UpdateVendor@hotmail.com', 0, '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
-(6, 188, 9, 1, 'Bidenn Corporatione', '4735 lol street', 'nah', 'nah', 'USA', '2353', 'dssdddsddss', 'https://www.youtube.com/', 'bidenjoe@isuck.com', 0, '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
-(8, 190, 10, 1, 'Trump Party', '87 Dolla Dolla Bills', 'Money Land', 'fsdfs', 'USA', 'sdfsdf', 'dssdddsddss', 'https://www.youtube.com/', 'trumpman@maga.com', 0, '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
-(9, 196, 9, 1, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', '(454) 546-4566', 'https://www.donaldjtrump.com/', 'donaldtrump@trump.com', 0, '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
-(10, 197, 18, 1, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', '(454) 654-6546', 'https://promplanner.app/', 'vendor001@promplanner.com', 10, '2023-01-21 02:41:46', '2023-10-01 02:43:53'),
-(14, 209, 18, 1, 'New Vendor LLC', '1234 Main St', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', '(123) 456-789_', 'https://amazon.com', 'newvendor@test.com', 0, '2023-07-29 23:39:18', '2023-07-29 23:42:31'),
-(15, 210, 19, 1, 'Salon Pros', 'Salon Orad', 'Ottawa', 'Ontario', 'Canada', 'K1A 7G7', '(456) 123-7895', 'https://amazon.com', 'salonpros@gmail.com', 0, '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
-(16, 211, 12, 0, 'NewMan Inc', 'NewManInc 123', 'Ottawa', 'Ontario', 'Canada', 'K1K2G6', '(445) 454-5454', 'https://promplanner.app/prom-planner-team/', 'NewManInc@gmail.com', 0, '2023-08-19 05:12:18', '2023-08-19 05:12:18');
- 
+--
+-- Dumping data for table `venues`
+--
+INSERT INTO `venues` (`id`, `name`, `address`, `city`, `state_province`, `country`, `zip_postal`, `website`, `contact_first_name`, `contact_last_name`, `email`, `phone`, `created_at`, `updated_at`) VALUES
+(2, 'Update Vendor', 'Update Vendor', 'Ottawa', 'Ontario', 'Costa Rica', 'K1K 2G6', 'https://laravel.com/docs/9.x/requests#retrieving-a-portion-of-the-input-data', 'Update', 'Vendor', 'UpdateVendor@hotmail.com', '(455) 674-9877', '2022-12-26 02:01:31', '2023-01-09 04:21:18'),
+(6, 'VENUE Bidenn Corporatione', '4735 lol street', 'nah', 'nah', 'USA', '2353', 'https://www.youtube.com/', 'Joe', 'Biden', 'bidenjoe@isuck.com', 'dssdddsddss', '2023-01-09 04:14:52', '2023-01-09 04:14:52'),
+(8, 'Trump Party', '87 Dolla Dolla Bills', 'Money Land', 'fsdfs', 'USA', 'sdfsdf', 'https://www.youtube.com/', 'Donald', 'Trump', 'trumpman@maga.com', 'dssdddsddss', '2023-01-09 04:18:15', '2023-01-09 04:18:15'),
+(9, 'Trump Venue Industries', '123 MAGA', 'New York', 'Oklahoma', 'USA', '4567', 'https://www.donaldjtrump.com/', 'Donald', 'Trump', 'donaldtrump@trump.com', '(454) 546-4566', '2023-01-17 01:10:39', '2023-01-17 01:10:39'),
+(10, 'Money Jockeys', '420 Money Lane', 'Ottawa', 'Ontario', 'Canada', 'LOL 8HA', 'https://promplanner.app/', 'Vendor', '001', 'vendor001@promplanner.com', '(454) 654-6546', '2023-01-21 02:41:46', '2023-10-01 02:43:53'),
+(14, 'New Vendor LLC', '1234 Main St', 'Ottawa', 'Ontario', 'Canada', 'K1K 2G6', 'https://amazon.com', 'New', 'Vendor', 'newvendor@test.com', '(123) 456-789_', '2023-07-29 23:39:18', '2023-07-29 23:42:31'),
+(15, 'Salon Pros', 'Salon Orad', 'Ottawa', 'Ontario', 'Canada', 'K1A 7G7', 'https://amazon.com', 'Salon', 'Pros', 'salonpros@gmail.com', '(456) 123-7895', '2023-08-01 22:31:18', '2023-08-01 22:31:18'),
+(16, 'NewMan Inc', 'NewManInc 123', 'Ottawa', 'Ontario', 'Canada', 'K1K2G6', 'https://promplanner.app/prom-planner-team/', 'NewMan', 'Inc', 'NewManInc@gmail.com', '(445) 454-5454', '2023-08-19 05:12:18', '2023-08-19 05:12:18');
+
  
 -- 新增的
 

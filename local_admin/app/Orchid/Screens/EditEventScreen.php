@@ -5,8 +5,8 @@ namespace App\Orchid\Screens;
 use Exception;
 use App\Models\Events;
 use App\Models\School;
-use App\Models\Vendors;
-use App\Models\Clients; // Edit, cloned vendors into clients
+use App\Models\Venues;
+use App\Models\Clients;  
 use App\Models\Staffs; 
 use App\Models\Systems; 
 use App\Models\Song; 
@@ -147,7 +147,7 @@ class EditEventScreen extends Screen
                 // edit: deleted event_address, event_zip_postal, event_info, event_rules, ticket_price, capacity, 
                 Select::make('venue_id')
                     ->title('Venue')
-                    ->fromQuery(Vendors::query()->where('category_id', Categories::where('name', 'LIKE', '%'. 'Venue' . '%')->first()->id), 'company_name')
+                    ->fromQuery(Venues::query(), 'name')
                     ->horizontal()
                     ->value($this->event->venue_id)
                     ->empty('Start typing to search...'),
@@ -194,32 +194,24 @@ class EditEventScreen extends Screen
                 'event_loadin_time' => 'required|date',
                 'event_start_time' => 'required|date',
                 'event_finish_time' => 'required|date|after_or_equal:event_start_time',
-                'venue_id' => [
-                    'nullable',
-                    'int',
-                    Rule::in(
-                        Vendors::where(
-                            'category_id',
-                            Categories::where('name', 'Venue')->first()->id
-                        )->pluck('id')
-                    )
-                ],
+                'venue_id' => 'nullable|int|exists:venues,id',
                 'client_id' => 'nullable|int|exists:clients,id',
                 'staff_id' => 'nullable|int|exists:staffs,id',
                 'system_id' => 'nullable|int|exists:systems,id',
                 'song_ids' => 'nullable|array',
             ]);
-    
+
             $validated = $validator->validated();
             $event->update($validated);
-    
+
             Toast::success('You have successfully updated ' . $request->input('event_name') . '.');
-    
+
             return redirect()->route('platform.event.list');
         } catch (Exception $e) {
             Alert::error('There was an error editing this event. Error Code: ' . $e->getMessage());
         }
     }
+
     
     
 

@@ -20,7 +20,7 @@ use Orchid\Screen\Fields\Password;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\ModalToggle;
 
-class CreateStudentScreen extends Screen
+class CreateStaffScreen extends Screen
 {
     public $requiredFields = ['firstname', 'lastname', 'email', 'county', 'password', 'phonenumber', 'allergies', 'grade', 'school', 'state_province', 'country'];
     public $dupes =[];
